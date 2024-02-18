@@ -1,2 +1,2 @@
-# hcs-improvement-proposals
-HCS Working Group Improvement Proposals / Simple
+# hol-improvement-proposals
+Hashgraph Online Improvement Proposals
