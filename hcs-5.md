@@ -2,7 +2,6 @@
 
 ### Table of Contents
 
-
 ## Abstract
 
 This specification provides a standard way to "inscribe" **Hashinals** utilizing the Hedera Consensus Service, Hedera Token Service, and HCS-1.
@@ -16,7 +15,8 @@ Token creators and downstream consumers would like for the whole of NFT metadata
 **Hashinals** are created on the Hedera Token Service, but inscribed on the Hedera Consensus Service through the means of a guarded registry [HCS-2].
 
 ### Metadata
-**Hashinals** are discovered through the `metadata` field on every new Serial Number minted onto tokens via the Hedera Token Service. The metadata field must use a valid HRL to reference the Topic ID in which an HCS-1 file is inscribed onto.
+
+**Hashinals** are discovered through the `metadata` field on every new Serial Number minted onto tokens via the Hedera Token Service. The metadata field must use a valid HRL (Hedera Resource Locater) to reference the Topic ID in which an HCS-1 file is inscribed onto.
 
 The format of the field is as follows:
 `hcs://{hcsStandard}/{topicId}`
@@ -28,9 +28,37 @@ For example, a valid `metadata` field would be:
 `hcs://1/0.0.3601682`
 
 ### Inscription Numbers
+
 All Hashinals will receive an inscription number, starting from `1`. This number indicates the order in which the Hashinal was "inscribed". Inscription numbers are calculated by looking at the `consensus_timestamp` at the time of a TokenMintTransaction whose metadata follows the specification correctly.
 
 #### Validation
+
 Hashinals must:
- - Use a valid [HCS-1](hcs-1.md) file. Tokens minted with invalid HCS-1 files will be considered invalid and ignored.
- - Follow the format for metadata specified in [Metadata](#metadata)
+
+- Use a valid [HCS-1](hcs-1.md) file. Tokens minted with invalid HCS-1 files will be considered invalid and ignored.
+- Follow the format for metadata specified in [Metadata](#metadata)
+- Be minted after 2024-03-03 at 10PM UTC. Tokens minted with a valid HRL before this date will not be assigned an inscription number.
+
+#### Inscription Registry
+
+All valid Hashinals, will be registered in a private Topic ID managed by the HCS Council for the convenience of the ecosystem. Each message in this topic will include the following fields
+
+`p` the protocol used by the registry, which will always be `hcs-5` for the moment
+`op` the operation being executed. For the moment `register` is the only valid operation
+`t_id` the topic where the valid [HCS-1](hcs-1) file is located.
+`ht_id` the Token ID for the registered inscription
+`sn` the serial number of the registered inscription
+`m` any optional metadata the indexer might want included
+`type` any valid mimeType of the inscription.
+
+```
+{
+  "p": "hcs-5",
+  "op": "register",
+  "t_id": "0.0.3541181",
+  "ht_id": "0.0.11111",
+  "sn": 1,
+  "m": "Inscribed by 0.0.1234145 on TurtleMoon"
+  “type”: “image/png” // or any other valid mime type
+}
+```
