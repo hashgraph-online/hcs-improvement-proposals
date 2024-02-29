@@ -4,6 +4,7 @@
 - [HCS-1 Standard: File Data Management with Hedera Consensus Service](#hcs-1-standard-file-data-management-with-hedera-consensus-service)
     - [Table of Contents](#table-of-contents)
   - [Abstract](#abstract)
+  - [Motivation](#motivation)
   - [HCS Topic Validation](#hcs-topic-validation)
     - [Memo Structure](#memo-structure)
   - [Encoding and Chunking](#encoding-and-chunking)
@@ -13,7 +14,10 @@
 
 ## Abstract
 
-The HCS-1 standard provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS). This process is agnostic of the implementation details, focusing on the JSON structure and the use of a registry for efficient data management.
+The HCS-1 standard provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS). This process is agnostic of the implementation details, focusing on the JSON structure and the use of a Topic ID for efficient data management.
+
+## Motivation
+Storing data on-chain has become increasingly important for verification, immutability, and scale of web3 applications. This specification will enable future use cases like **Hashinals**, truly *decentralized* applications, and enhanced peer-to-peer communication without the need of typical cloud infrastructure.
 
 ## HCS Topic Validation
  HCS-1 topics must

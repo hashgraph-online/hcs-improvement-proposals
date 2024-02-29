@@ -4,15 +4,16 @@
 
 ## Abstract
 
-This specification provides a standard way to "inscribe" **Hashinals** utilizing the Hedera Consensus Service, Hedera Token Service, and HCS-1.
+This specification provides a standard way to "inscribe" **Hashinals** utilizing the Hedera Consensus and Hedera Token Services. **Hashinals** borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the [Hedera Hashgraph](https://hedera.com).
 
 ## Motivation
 
-Token creators and downstream consumers would like for the whole of NFT metadata to be written directly to the HashGraph, as opposed to off-chain mediums like IPFS, Arweave, etc. Metadata stored in this manner would reduce coupling to those off-chain stores, and should improve future compatibility with services like the Smart Contract Service, and Hedera Consensus Service. In this manner, the entirety of the NFT is truly "on-chain"
+Token creators and downstream consumers would like for the whole of NFT metadata to be written directly to the HashGraph, as opposed to off-chain mediums like IPFS, Arweave, etc. Metadata stored in this manner would reduce coupling to those off-chain stores, and should improve future compatibility with services like the Smart Contract Service, and Hedera Consensus Service. In this manner, the entirety of the NFT is truly "on-chain".
 
 ## Specification
 
-**Hashinals** are created on the Hedera Token Service, but inscribed on the Hedera Consensus Service through the means of a guarded registry [HCS-2].
+**Hashinals** are minted with the [Hedera Token Service (HTS)](https://hedera.com/token-service) and securelsecorded on the Hedera Consensus Service using a [HCS-2 guarded registry](hcs-2.md). Unlike typical NFTs on Hedera, metadata is stored as valid [HCS-1](hcs-1.md) files.
+
 
 ### Metadata
 
@@ -21,15 +22,23 @@ Token creators and downstream consumers would like for the whole of NFT metadata
 The format of the field is as follows:
 `hcs://{hcsStandard}/{topicId}`
 
-`hcsStandard` tells you which HCS standard to use when referencing the Topic ID. At this time, this will always be `1`
-`topicId` is a valid Topic ID in which the data is written to
+`hcsStandard` tells you which HCS standard to use when referencing the Topic ID. At this time, this field will always be `1`.
 
-For example, a valid `metadata` field would be:
+`topicId` is a valid HCS-1 Topic ID in which data for this NFT written to. Please note that while other popular metadata standards will work, a JSON file following the [HIP-412](https://hips.hedera.com/hip/hip-412) is recommended for your Hashinals to work properly in the Hedera ecosystem.
+
+#### Metadata Example
+The following is a valid example of the metadata string saved onto the serial number of an NFT on HTS:
 `hcs://1/0.0.3601682`
 
 ### Inscription Numbers
 
-All Hashinals will receive an inscription number, starting from `1`. This number indicates the order in which the Hashinal was "inscribed". Inscription numbers are calculated by looking at the `consensus_timestamp` at the time of a TokenMintTransaction whose metadata follows the specification correctly.
+Like Serial Numbers on individual Token IDs, Inscription Numbers are essentially an HCS Registry that describe the order in which **Hashinals** are "inscribed". The key facets that are followed for determining these numbers is:
+- First is first and determined entirely by the HashGraph.
+- Easy to understand and replicate.
+
+Inscription numbers start from `1`.
+
+Order is determined by sorting the `consensus_timestamp` at the time of a TokenMintTransaction. Invalid mints will not be assigned inscription numbers.
 
 #### Validation
 
@@ -41,15 +50,29 @@ Hashinals must:
 
 #### Inscription Registry
 
-All valid Hashinals, will be registered in a private Topic ID managed by the HCS Council for the convenience of the ecosystem. Each message in this topic will include the following fields
+All valid Hashinals, will be registered in a private Topic ID managed by the HCS Council for the convenience of the ecosystem. The registry serves a dual purpose of recording inscription numbers and providing a database for applications to explore the Hashinals ecosystem.
 
-`p` the protocol used by the registry, which will always be `hcs-5` for the moment
-`op` the operation being executed. For the moment `register` is the only valid operation
-`t_id` the topic where the valid [HCS-1](hcs-1) file is located.
-`ht_id` the Token ID for the registered inscription
-`sn` the serial number of the registered inscription
-`m` any optional metadata the indexer might want included
-`type` any valid mimeType of the inscription.
+The process of maintaining a registry can be replicated outside of the Council, but must follow the specification to be valid.
+
+#### Submitting to the Registry
+Messages must be submitted as valid JSON and use the Registry fields as described below.
+
+#### Registry fields
+
+| Field  | Description                                                | Example Value |
+|--------|------------------------------------------------------------|---------------|
+| `p`    | The protocol used by the registry. Should always be `hcs-5` unless superseded.       | `hcs-5`
+| `op`   | The operation being executed.  | `register` or `reset`
+| `t_id` | The topic where the valid [HCS-1](hcs-1) file or new registry is located.  | `0.0.3541181` |
+| `ht_id`| The Token ID for the registered inscription                | `0.0.11111`   |
+| `sn`   | The serial number of the registered inscription            | `1`           |
+| `inscription_number`   | The inscription number for combination of `sn` and `ht_id` | `1`    |
+| `m`    | Any optional metadata the indexer might want included      | `Inscribed by 0.0.1234145 on TurtleMoon` |
+| `type` | Any valid mimeType of the inscription.                     | `image/png`   |
+
+#### Register Inscriptions
+
+Valid register messages will have the following format on the **Hashinals** Topic ID. Registration is merely the process of indexing inscription numbers for valid serials on Token IDs.
 
 ```
 {
@@ -57,8 +80,21 @@ All valid Hashinals, will be registered in a private Topic ID managed by the HCS
   "op": "register",
   "t_id": "0.0.3541181",
   "ht_id": "0.0.11111",
+  "inscription_number": 1,
   "sn": 1,
   "m": "Inscribed by 0.0.1234145 on TurtleMoon"
   “type”: “image/png” // or any other valid mime type
+}
+```
+
+#### Reset Registry
+In rare events, it could be required to "Reset" the registry. This is a fallback mechanism that should be exercised with extreme caution. On reset, a new Topic ID is provided which will serve as the defacto replacement of the Hashinals Registry.
+
+```
+{
+  "p": "hcs-5",
+  "op": "reset",
+  "t_id": "0.0.999999",
+  "m": "The world is on fire. We had to move."
 }
 ```
