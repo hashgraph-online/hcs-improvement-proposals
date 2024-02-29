@@ -2,6 +2,23 @@
 
 ### Table of Contents
 
+- [HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**](#hcs-5-standard-tokenized-hcs-1-files-hashinals)
+    - [Table of Contents](#table-of-contents)
+  - [Abstract](#abstract)
+  - [Motivation](#motivation)
+  - [Specification](#specification)
+    - [Metadata](#metadata)
+      - [Metadata Example](#metadata-example)
+    - [Inscription Numbers](#inscription-numbers)
+      - [Validation](#validation)
+      - [Inscription Registry](#inscription-registry)
+      - [Submitting to the Registry](#submitting-to-the-registry)
+      - [Registry fields](#registry-fields)
+      - [Register Inscriptions](#register-inscriptions)
+      - [Reset Registry](#reset-registry)
+    - [User Process for inscribing Hashinals](#user-process-for-inscribing-hashinals)
+    - [Conclusion](#conclusion)
+
 ## Abstract
 
 This specification provides a standard way to "inscribe" **Hashinals** utilizing the Hedera Consensus and Hedera Token Services. **Hashinals** borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the [Hedera Hashgraph](https://hedera.com).
@@ -32,13 +49,13 @@ The following is a valid example of the metadata string saved onto the serial nu
 
 ### Inscription Numbers
 
-Like Serial Numbers on individual Token IDs, Inscription Numbers are essentially an HCS Registry that describe the order in which **Hashinals** are "inscribed". The key facets that are followed for determining these numbers is:
+Like Serial Numbers on individual Token IDs, Inscription Numbers are essentially an HCS Registry that describe the order in which **Hashinals** are "inscribed". The key facets that are followed for determining these numbers are that:
 - First is first and determined entirely by the HashGraph.
-- Easy to understand and replicate.
+- The process is easy to understand and replicate.
 
 Inscription numbers start from `1`.
 
-Order is determined by sorting the `consensus_timestamp` at the time of a TokenMintTransaction. Invalid mints will not be assigned inscription numbers.
+Order is determined by sorting the `consensus_timestamp` on TokenMintTransactions which correctly follow [validation](#validation) requirements. Invalid mints will not be assigned inscription numbers.
 
 #### Validation
 
@@ -101,3 +118,6 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
 
 ### User Process for inscribing Hashinals
 [Patches insert diagrams here]
+
+### Conclusion
+tbd
