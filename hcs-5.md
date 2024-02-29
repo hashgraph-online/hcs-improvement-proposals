@@ -98,3 +98,6 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
   "m": "The world is on fire. We had to move."
 }
 ```
+
+### User Process for inscribing Hashinals
+[Patches insert diagrams here]
