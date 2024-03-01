@@ -29,8 +29,7 @@ Token creators and downstream consumers would like for the whole of NFT metadata
 
 ## Specification
 
-**Hashinals** are minted with the [Hedera Token Service (HTS)](https://hedera.com/token-service) and securelsecorded on the Hedera Consensus Service using a [HCS-2 guarded registry](hcs-2.md). Unlike typical NFTs on Hedera, metadata is stored as valid [HCS-1](hcs-1.md) files.
-
+**Hashinals** are minted with the [Hedera Token Service (HTS)](https://hedera.com/token-service) and securely recorded on the Hedera Consensus Service using a [HCS-2 guarded registry](hcs-2.md). Unlike typical NFTs on Hedera, metadata is stored as valid [HCS-1](hcs-1.md) files.
 
 ### Metadata
 
