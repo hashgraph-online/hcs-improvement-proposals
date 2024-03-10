@@ -1,0 +1,15 @@
+site_name: HashGraph Online
+theme:
+  name: material
+  logo: assets/logo.png
+  features:
+    - navigation.footer
+copyright: Copyright &copy; 2024 Hashgraph Online
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/mastodon 
+      link: https://fosstodon.org/@squidfunk
+plugins:
+  - social
+  - blog

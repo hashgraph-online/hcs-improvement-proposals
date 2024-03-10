@@ -127,7 +127,7 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
 ```
 
 ### User Process for inscribing Hashinals
-![HCS Protocol HRL Defintiion 2](https://github.com/hcs-working-group/hcs-improvement-proposals/assets/91838723/8e166eb3-ecac-4239-99d2-c961b1423e4b)
+![HCS Protocol HRL Defintion 2](./assets/hcs-5-lifecycle.png)
 
 
 ### Conclusion
