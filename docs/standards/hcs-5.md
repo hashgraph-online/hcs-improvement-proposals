@@ -1,9 +1,14 @@
+---
+description: This specification provides a standard way to "inscribe" Hashinals utilizing the Hedera Consensus and Hedera Token Services. Hashinals borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the Hedera Hashgraph.
+---
+
 # HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**
 
 ### Table of Contents
 
 - [HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**](#hcs-5-standard-tokenized-hcs-1-files-hashinals)
     - [Table of Contents](#table-of-contents)
+  - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
@@ -18,6 +23,10 @@
       - [Reset Registry](#reset-registry)
     - [User Process for inscribing Hashinals](#user-process-for-inscribing-hashinals)
     - [Conclusion](#conclusion)
+
+## Authors
+- Kantorcodes [https://twitter.com/kantorcodes]()
+- Patches [https://twitter.com/TMCC_Patches]()
 
 ## Abstract
 
@@ -128,7 +137,7 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
 ```
 
 ### User Process for inscribing Hashinals
-![HCS Protocol HRL Defintion 2](./assets/hcs-5-lifecycle.png)
+![HCS Protocol HRL Defintion 2](../assets/hcs-5-lifecycle.png)
 
 
 ### Conclusion

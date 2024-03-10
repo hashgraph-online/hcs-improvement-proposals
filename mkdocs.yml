@@ -2,14 +2,18 @@ site_name: HashGraph Online
 theme:
   name: material
   logo: assets/logo.png
+  favicon: assets/favicon.png
   features:
     - navigation.footer
+    - navigation.sections
+    - navigation.tabs
 copyright: Copyright &copy; 2024 Hashgraph Online
 extra:
   generator: false
-  social:
-    - icon: fontawesome/brands/mastodon 
-      link: https://fosstodon.org/@squidfunk
+  # social:
+  #   - icon: fontawesome/brands/mastodon
+  #     link: https://fosstodon.org/@squidfunk
 plugins:
   - social
-  - blog
+  - search
+  - mkdocs-nav-weight

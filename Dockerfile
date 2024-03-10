@@ -7,6 +7,7 @@ WORKDIR /docs
 # Install MkDocs and any required packages or extensions
 RUN pip install mkdocs
 RUN pip install "mkdocs-material[imaging]"
+RUN pip install mkdocs-nav-weight
 
 # You can also install additional MkDocs extensions here if needed, e.g.:
 # RUN pip install mkdocs-material

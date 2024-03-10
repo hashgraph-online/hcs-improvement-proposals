@@ -1,3 +1,7 @@
+---
+description: A formal set of definitions used within the HashGraph Consensus Standards Improvement proposals. These are NOT standards and should be used for reference only.
+---
+
 ### Definitions
 
 A formal set of definitions used within the HashGraph Consensus Standards Improvement proposals. These are **NOT** standards and should be used for reference only.
