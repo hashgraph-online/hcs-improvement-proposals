@@ -108,7 +108,6 @@ Valid register messages will have the following format on the **Hashinals** Topi
   "op": "register",
   "t_id": "0.0.3541181",
   "ht_id": "0.0.11111",
-  "inscription_number": 1,
   "sn": 1,
   "m": "Inscribed by 0.0.1234145 on TurtleMoon"
   “type”: “image/png” // or any other valid mime type
