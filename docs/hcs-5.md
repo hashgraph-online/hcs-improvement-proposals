@@ -60,7 +60,8 @@ The following is a valid example of the metadata string saved onto the serial nu
 ### Inscription Numbers
 
 Like Serial Numbers on individual Token IDs, Inscription Numbers are essentially an HCS Registry that describe the order in which **Hashinals** are "inscribed". The key facets that are followed for determining these numbers are that:
-- First is first and determined entirely by the HashGraph.
+
+- "First is first" and determined entirely by the HashGraph.
 - The process is easy to understand and replicate.
 
 Inscription numbers start from `1`.
@@ -131,4 +132,8 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
 
 
 ### Conclusion
-tbd
+The HCS-5 standard introduces a robust and on-chain method for inscribing NFT metadata directly onto the Hedera Hashgraph, named Hashinals. By integrating the Hedera Consensus Service (HCS) with the Hedera Token Service (HTS), it creates a decentralized and verifiable way to manage NFT metadata, ensuring the longevity and integrity of digital assets in the Hedera ecosystem.
+
+Adopting this standard addresses the drawbacks associated with relying on external storage systems by keeping the entirety of NFT data on-chain. This enhances the trust and value of NFTs by ensuring their metadata is immutable and perpetually accessible.
+
+The detailed specification provided here, from metadata structure to the inscription registry process, gives creators and users clear guidelines and tools for minting and managing Hashinals.

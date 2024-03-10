@@ -30,12 +30,11 @@ In summary, a valid HCS-1 Topic includes a SHA-256 hash of the file being upload
 
  The format for the memo is as follows:
 
- ```[hash]:[algo]:[encoding]:[protocol]```
+ ```[hash]:[algo]:[encoding]```
 
  - [hash] is the SHA-256 hash of the file being uploaded before any compression
  - [algo] is the compression algorithm being used, for example, `zstd`
  - [encoding] is the encoding used to store the compressed file
- - [protocol] is the protocol used to store the compressed file
 
  For example a valid memo would like:
 

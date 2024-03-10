@@ -9,8 +9,7 @@ A formal set of definitions used within the HashGraph Consensus Standards Improv
 #### Resource (Conceptual Addresses)
  - A resource is any piece of data on Hedera that is referenced by an entity id on Hedera / Hashgraphs. Valid entities are Topic IDs.
 
-
- #### Hashgraph Resource Locator
+#### Hashgraph Resource Locator
  The protocol for finding data inscribed on the Hedera Consensus Service, following the Hashgraph Consensus Standards.
  - an HRL locates a resource. The format for an HRL is as follows. A formal future hip will cover all cases for HRLs.
  - `hcs://{protocol_standard}/{resource_id}`
