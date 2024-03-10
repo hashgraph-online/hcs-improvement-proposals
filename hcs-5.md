@@ -40,7 +40,18 @@ The format of the field is as follows:
 
 `hcsStandard` tells you which HCS standard to use when referencing the Topic ID. At this time, this field will always be `1`.
 
-`topicId` is a valid HCS-1 Topic ID in which data for this NFT written to. Please note that while other popular metadata standards will work, a JSON file following the [HIP-412](https://hips.hedera.com/hip/hip-412) is recommended for your Hashinals to work properly in the Hedera ecosystem.
+`topicId` is a valid HCS-1 Topic ID in which data for this NFT written to. Please note that while other popular metadata standards will work, a JSON file following the [HIP-412](https://hips.hedera.com/hip/hip-412) is recommended for your Hashinals to work properly in the Hedera ecosystem. 
+
+Bare Minimal example of metadata
+
+```
+ {
+   "name": "My NFT",
+   "description": "My description",
+   "image": "",
+   "attributes": [],
+ }
+```
 
 #### Metadata Example
 The following is a valid example of the metadata string saved onto the serial number of an NFT on HTS:
@@ -75,6 +86,8 @@ Messages must be submitted as valid JSON and use the Registry fields as describe
 
 #### Registry fields
 
+The sum of all fields should not exceed 1024KB, or the registration will be invalid. 
+
 | Field  | Description                                                | Example Value |
 |--------|------------------------------------------------------------|---------------|
 | `p`    | The protocol used by the registry. Should always be `hcs-5` unless superseded.       | `hcs-5`
@@ -82,7 +95,6 @@ Messages must be submitted as valid JSON and use the Registry fields as describe
 | `t_id` | The topic where the valid [HCS-1](hcs-1) file or new registry is located.  | `0.0.3541181` |
 | `ht_id`| The Token ID for the registered inscription                | `0.0.11111`   |
 | `sn`   | The serial number of the registered inscription            | `1`           |
-| `inscription_number`   | The inscription number for combination of `sn` and `ht_id` | `1`    |
 | `m`    | Any optional metadata the indexer might want included      | `Inscribed by 0.0.1234145 on TurtleMoon` |
 | `type` | Any valid mimeType of the inscription.                     | `image/png`   |
 
