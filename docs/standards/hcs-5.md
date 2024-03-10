@@ -34,7 +34,7 @@ This specification provides a standard way to "inscribe" **Hashinals** utilizing
 
 ## Motivation
 
-Token creators and downstream consumers would like for the whole of NFT metadata to be written directly to the HashGraph, as opposed to off-chain mediums like IPFS, Arweave, etc. Metadata stored in this manner would reduce coupling to those off-chain stores, and should improve future compatibility with services like the Smart Contract Service, and Hedera Consensus Service. In this manner, the entirety of the NFT is truly "on-chain".
+Token creators and downstream consumers would like for the whole of NFT metadata to be written directly to the Hashgraph, as opposed to off-chain mediums like IPFS, Arweave, etc. Metadata stored in this manner would reduce coupling to those off-chain stores, and should improve future compatibility with services like the Smart Contract Service, and Hedera Consensus Service. In this manner, the entirety of the NFT is truly "on-chain".
 
 ## Specification
 
@@ -70,7 +70,7 @@ The following is a valid example of the metadata string saved onto the serial nu
 
 Like Serial Numbers on individual Token IDs, Inscription Numbers are essentially an HCS Registry that describe the order in which **Hashinals** are "inscribed". The key facets that are followed for determining these numbers are that:
 
-- "First is first" and determined entirely by the HashGraph.
+- "First is first" and determined entirely by the Hashgraph.
 - The process is easy to understand and replicate.
 
 Inscription numbers start from `1`.

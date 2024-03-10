@@ -1,10 +1,10 @@
 ---
-description: A formal set of definitions used within the HashGraph Consensus Standards Improvement proposals. These are NOT standards and should be used for reference only.
+description: A formal set of definitions used within the Hashgraph Consensus Standards Improvement proposals. These are NOT standards and should be used for reference only.
 ---
 
 ### Definitions
 
-A formal set of definitions used within the HashGraph Consensus Standards Improvement proposals. These are **NOT** standards and should be used for reference only.
+A formal set of definitions used within the Hashgraph Consensus Standards Improvement proposals. These are **NOT** standards and should be used for reference only.
 
 #### Spheres
  - Spheres are the HCS equivalent of DNS. Every Sphere is a Topic ID which includes the current records.
@@ -15,7 +15,8 @@ A formal set of definitions used within the HashGraph Consensus Standards Improv
 
 #### Hashgraph Resource Locator
  The protocol for finding data inscribed on the Hedera Consensus Service, following the Hashgraph Consensus Standards.
- - an HRL locates a resource. The format for an HRL is as follows. A formal future hip will cover all cases for HRLs.
+ 
+ - an HRL locates a resource. The format for an HRL is as follows. A formal future HCS will cover all cases for HRLs.
  - `hcs://{protocol_standard}/{resource_id}`
    - `protocol_number` should always be a valid HCS standard, eg `1`
    - `resource_id` should always be a valid [Resource](#resource-conceptual-addresses)
@@ -30,7 +31,7 @@ Topic Ids which are managed by the HCS Council for the convenience of the ecosys
 #### Hashnet
 A fully rendered decentralized application, composed of valid HTML Markup, JavaScript, and CSS which is inscribed following HCS standards.
 
-#### HashGraph Package Management (HPM)
+#### Hashgraph Package Management (HPM)
    - A registry of pointers to various scripts that clients can download to create Hashnets.
    - The registry will be browsable on hpm.h
    - HPMs can be installed through inscriptions reference to develop Hashnets eg ```<script src=”hpm.h/date-fns” />```
