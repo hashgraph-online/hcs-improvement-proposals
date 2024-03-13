@@ -28,10 +28,10 @@ Topic Ids which are managed by the community for the convenience of the ecosyste
 #### Guarded Registries
 Topic Ids which are managed by the HCS Council for the convenience of the ecosystem. These topics should be private topics to ensure proper validation of messages. [HCS](hcs-2.md) will cover this idea in detail.
 
-#### Hashnet
+#### Hashsite
 A fully rendered decentralized application, composed of valid HTML Markup, JavaScript, and CSS which is inscribed following HCS standards.
 
 #### Hashgraph Package Management (HPM)
-   - A registry of pointers to various scripts that clients can download to create Hashnets.
+   - A registry of pointers to various scripts that clients can download to create Hashsites.
    - The registry will be browsable on hpm.h
-   - HPMs can be installed through inscriptions reference to develop Hashnets eg ```<script src=”hpm.h/date-fns” />```
+   - HPMs can be installed through inscriptions reference to develop Hashsites eg ```<script src=”hpm.h/date-fns” />```
