@@ -105,7 +105,7 @@ The sum of all fields should not exceed 1024KB, or the registration will be inva
 |--------|------------------------------------------------------------|---------------|
 | `p`    | The protocol used by the registry. Should always be `hcs-5` unless superseded.       | `hcs-5`
 | `op`   | The operation being executed.  | `register` or `reset`
-| `t_id` | The topic where the valid [HCS-1](hcs-1) file or new registry is located.  | `0.0.3541181` |
+| `t_id` | The topic where the valid [HCS-1](hcs-1.md) file or new registry is located.  | `0.0.3541181` |
 | `ht_id`| The Token ID for the registered inscription                | `0.0.11111`   |
 | `sn`   | The serial number of the registered inscription            | `1`           |
 | `m`    | Any optional metadata the indexer might want included      | `Inscribed by 0.0.1234145 on TurtleMoon` |
