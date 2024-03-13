@@ -1,0 +1,1011 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.">
+      
+      
+      
+      
+        <link rel="prev" href="../hcs-2/">
+      
+      
+        <link rel="next" href="../hcs-5/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+    
+    
+      
+        <title>HCS-20 Standard: Auditable Points Standard on Hedera - Hashgraph Online</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.7e359304.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="HCS-20 Standard: Auditable Points Standard on Hedera - Hashgraph Online" >
+      
+        <meta  property="og:description"  content="HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals." >
+      
+        <meta  property="og:image"  content="./assets/images/social/standards/hcs-20.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="None" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="HCS-20 Standard: Auditable Points Standard on Hedera - Hashgraph Online" >
+      
+        <meta  name="twitter:description"  content="HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals." >
+      
+        <meta  name="twitter:image"  content="./assets/images/social/standards/hcs-20.png" >
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#hcs-20-standard-auditable-points-standard-on-hedera" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Hashgraph Online" class="md-header__button md-logo" aria-label="Hashgraph Online" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Hashgraph Online
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              HCS-20 Standard: Auditable Points Standard on Hedera
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+    
+  
+  Hashgraph Online
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../definitions/" class="md-tabs__link">
+        
+  
+    
+  
+  Definitions
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../tooling/" class="md-tabs__link">
+        
+  
+    
+  
+  Tooling
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../hcs-1/" class="md-tabs__link">
+          
+  
+  Standards
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Hashgraph Online" class="md-nav__button md-logo" aria-label="Hashgraph Online" data-md-component="logo">
+      
+  <img src="../../assets/logo.png" alt="logo">
+
+    </a>
+    Hashgraph Online
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Hashgraph Online
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../definitions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definitions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tooling/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tooling
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Standards
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Standards
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hcs-1/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HCS-1 Standard: File Data Management with Hedera Consensus Service
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hcs-2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HCS-2 Standard: Topic Registries
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    HCS-20 Standard: Auditable Points Standard on Hedera
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    HCS-20 Standard: Auditable Points Standard on Hedera
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-published" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status: Published
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Status: Published">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solving-the-auditable-points-challenge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solving the Auditable Points Challenge
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-role-of-hedera" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Role of Hedera
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Role of Hedera">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hederas-main-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hedera's Main Features:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#harnessing-hcs-20-with-the-turtle-moon-hcs-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Harnessing HCS-20 with the Turtle Moon HCS App
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-operational-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Two Operational Modes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two Operational Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-public-topic-id-for-inscriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main public topic Id for inscriptions:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations-and-state-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operations and State Calculation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations and State Calculation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validity-of-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validity of Transactions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hcs-5/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HCS-5 Standard: Tokenized HCS-1 Files, Hashinals
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#status-published" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status: Published
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Status: Published">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#authors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Authors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solving-the-auditable-points-challenge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solving the Auditable Points Challenge
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-role-of-hedera" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Role of Hedera
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Role of Hedera">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hederas-main-features" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hedera's Main Features:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#harnessing-hcs-20-with-the-turtle-moon-hcs-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      Harnessing HCS-20 with the Turtle Moon HCS App
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-operational-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Two Operational Modes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Two Operational Modes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-public-topic-id-for-inscriptions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main public topic Id for inscriptions:
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#operations-and-state-calculation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operations and State Calculation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations and State Calculation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#key-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#validity-of-transactions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validity of Transactions
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="hcs-20-standard-auditable-points-standard-on-hedera">HCS-20 Standard: Auditable Points Standard on Hedera</h1>
+<h3 id="status-published">Status: Published</h3>
+<ul>
+<li><a href="#hcs-20-standard-auditable-points-standard-on-hedera">HCS-20 Standard: Auditable Points Standard on Hedera</a><ul>
+<li><a href="#authors">Authors</a></li>
+</ul>
+</li>
+<li><a href="#solving-the-auditable-points-challenge">Solving the Auditable Points Challenge</a></li>
+<li><a href="#the-role-of-hedera">The Role of Hedera</a><ul>
+<li><a href="#hederas-main-features">Hedera's Main Features:</a></li>
+</ul>
+</li>
+<li><a href="#harnessing-hcs-20-with-the-turtle-moon-hcs-app">Harnessing HCS-20 with the Turtle Moon HCS App</a></li>
+<li><a href="#two-operational-modes">Two Operational Modes</a><ul>
+<li><a href="#main-public-topic-id-for-inscriptions">Main public topic Id for inscriptions:</a></li>
+</ul>
+</li>
+<li><a href="#operations-and-state-calculation">Operations and State Calculation</a><ul>
+<li><a href="#key-operations">Key Operations</a></li>
+<li><a href="#validity-of-transactions">Validity of Transactions</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<h4 id="authors">Authors</h4>
+<ul>
+<li>Patches <a href="">https://twitter.com/TMCC_Patches</a></li>
+</ul>
+<p><strong>HCS-20</strong> is a new proposed standard (created by @TurtelMoonCC &amp; @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.</p>
+<h2 id="solving-the-auditable-points-challenge">Solving the Auditable Points Challenge</h2>
+<p>The HCS-20 standard emerges as a solution to a pressing problem in the web2 and web3 world: the need for a transparent, auditable, and versatile control system for points. Its primary benefits include:</p>
+<ul>
+<li><strong>Public Audit-ability</strong>: Creates audit log for transparency in point transactions.</li>
+<li><strong>No LP or Value Expectation Issues</strong>: Streamlines operations without liquidity, compliance, or value complications. Great for loyalty points, gaming points, etc.</li>
+<li><strong>Control Flexibility</strong>: If in private mode, it offers the creator the power to oversee all point movements.</li>
+</ul>
+<blockquote>
+<p><strong>WARNING</strong>
+THIS IS IN ALPHA
+The Indexer will be updated periodically and the way transactions are calculated may change as the standard matures.
+No points are intended to have any value.</p>
+</blockquote>
+<h2 id="the-role-of-hedera">The Role of Hedera</h2>
+<p>Hedera stands out as a superb platform for documenting point movements due to its inherent benefits, such as high efficiency, robust security, cheap consistent costs, and a user-friendly ecosystem.</p>
+<h3 id="hederas-main-features">Hedera's Main Features:</h3>
+<ul>
+<li>ABFT Security</li>
+<li>3.5 seconds to finality</li>
+<li>$0.0001 per inscription on HCS (pegged to USD)</li>
+<li>Low energy usage</li>
+<li>10,000 tps</li>
+</ul>
+<h2 id="harnessing-hcs-20-with-the-turtle-moon-hcs-app">Harnessing HCS-20 with the Turtle Moon HCS App</h2>
+<p>The Turtle Moon App simplifies the creation and management of HCS-20 points. Here's how you can leverage its features:</p>
+<ul>
+<li><strong>Download and Install</strong>: Available for Mac, Windows, and Linux. <a href="#">Install here</a>.</li>
+<li><strong>Create and Interact</strong>: Easily initiate a new topic, add wallet and topic ID details, and create JSON for HCS-20 points.</li>
+<li><strong>Submit and Read</strong>: Deploy your points and track point balances through topic ID indexing.</li>
+</ul>
+<p>This codebase is in ALPHA, meaning there are a lot of bugs that are still needing to be fixed and enhancements to be integrated. USE AT YOUR OWN RISK. This software is provided as is and Turtle Moon is not responsible for any issues using the software.</p>
+<h2 id="two-operational-modes">Two Operational Modes</h2>
+<ul>
+<li><strong>Private Mode with Submit Key</strong>: This mode offers control over data posted to a topic, ideal for most use cases where authorized parties require exclusive write access.</li>
+<li><strong>Public Mode without Submit Key</strong>: Allows open, public transactions, suitable for decentralized applications where transparency is key, and open mints are wanted.</li>
+</ul>
+<h3 id="main-public-topic-id-for-inscriptions">Main public topic Id for inscriptions:</h3>
+<ul>
+<li><code>0.0.4350190</code></li>
+</ul>
+<h2 id="operations-and-state-calculation">Operations and State Calculation</h2>
+<p>HCS-20 standardizes operations like deploying, minting, burning, and transferring points. The state of these points is determined by aggregating these operations on the HCS topic IDs.</p>
+<h3 id="key-operations">Key Operations</h3>
+<ul>
+<li><strong>Deploy Point Contract</strong>: Initialize a new asset.</li>
+<li><strong>Mint Point</strong>: Generate and assign new points.</li>
+<li><strong>Burn Point</strong>: Remove points from circulation.</li>
+<li><strong>Transfer Point</strong>: Facilitate point movement between accounts.</li>
+</ul>
+<h3 id="validity-of-transactions">Validity of Transactions</h3>
+<p>Transactions are valid based on several criteria, including the balance availability at the time of inscription and the consensus timestamp order. For public mode operations, the payer account ID must match the account from which points are removed.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>The HCS-20 standard, complemented by the Turtle Moon App, offers a robust framework for creating an auditable point systems on Hedera Consensus Service Topic IDs.</p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../hcs-2/" class="md-footer__link md-footer__link--prev" aria-label="Previous: HCS-2 Standard: Topic Registries">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                HCS-2 Standard: Topic Registries
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../hcs-5/" class="md-footer__link md-footer__link--next" aria-label="Next: HCS-5 Standard: Tokenized HCS-1 Files, Hashinals">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                HCS-5 Standard: Tokenized HCS-1 Files, Hashinals
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2024 Hashgraph Online
+    </div>
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.footer", "navigation.sections", "navigation.tabs"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      
+    
+  </body>
+</html>
