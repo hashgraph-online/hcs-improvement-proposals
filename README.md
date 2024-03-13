@@ -15,4 +15,4 @@ TBD
 ### Deploying new changes
 
 - Ensure all of your changes are merged into `main`
-- From `main` run `mkdocs gh-deploy`
+- From `gh-pages` run `git pull origin main && mkdocs gh-deploy`
