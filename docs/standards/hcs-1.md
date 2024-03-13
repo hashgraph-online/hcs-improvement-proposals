@@ -1,8 +1,16 @@
+---
+description: The HCS-1 standard provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS). This process is agnostic of the implementation details, focusing on the JSON structure and the use of a Topic ID for efficient data management.
+---
+
 # HCS-1 Standard: File Data Management with Hedera Consensus Service
+
+### Status: Published
 
 ### Table of Contents
 - [HCS-1 Standard: File Data Management with Hedera Consensus Service](#hcs-1-standard-file-data-management-with-hedera-consensus-service)
+    - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
+  - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [HCS Topic Validation](#hcs-topic-validation)
@@ -11,6 +19,9 @@
     - [Uploading to HCS](#uploading-to-hcs)
   - [Retrieving and Reassembling](#retrieving-and-reassembling)
   - [Conclusion](#conclusion)
+
+## Authors
+- Kantorcodes [https://twitter.com/kantorcodes]()
 
 ## Abstract
 
@@ -21,6 +32,7 @@ Storing data on-chain has become increasingly important for verification, immuta
 
 ## HCS Topic Validation
  HCS-1 topics must
+
   - include a SHA-256 hash of the file being uploaded, the compression algorithm being used, and the encoding as the **memo**. Viewers of HCS-1 data will read the memo to understand if the file data is valid by comparing the file hash to the memo. Please read [Memo Structure](#memo-structure) for details on how to properly generate a memo.
   - include a Submit Key. HCS-1 Topics without a Submit Key will automatically be marked as invalid files, and will be ignored.
   - NOT include an Admin Key. HCS-1 Topics with an Admin Key will automatically be marked as invalid files, and will be ignored. This ensures that data cannot be deleted, reducing risk for all participants in the protocol.
@@ -30,16 +42,15 @@ In summary, a valid HCS-1 Topic includes a SHA-256 hash of the file being upload
 
  The format for the memo is as follows:
 
- ```[hash]:[algo]:[encoding]:[protocol]```
+ ```[hash]:[algo]:[encoding]```
 
  - [hash] is the SHA-256 hash of the file being uploaded before any compression
  - [algo] is the compression algorithm being used, for example, `zstd`
  - [encoding] is the encoding used to store the compressed file
- - [protocol] is the protocol used to store the compressed file
 
  For example a valid memo would like:
 
- ```532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25:zstd:base64:hcs1```
+ ```532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25:zstd:base64```
 
  At this time, only zstd and base64 encoding are supported. If you'd like a different compression algorithm or encoding to be approved, please raise a pull request.
 

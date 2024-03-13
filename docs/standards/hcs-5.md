@@ -1,9 +1,17 @@
+---
+description: This specification provides a standard way to "inscribe" Hashinals utilizing the Hedera Consensus and Hedera Token Services. Hashinals borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the Hedera Hashgraph.
+---
+
 # HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**
+
+### Status: Published
 
 ### Table of Contents
 
 - [HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**](#hcs-5-standard-tokenized-hcs-1-files-hashinals)
+    - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
+  - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
@@ -19,13 +27,17 @@
     - [User Process for inscribing Hashinals](#user-process-for-inscribing-hashinals)
     - [Conclusion](#conclusion)
 
+## Authors
+- Kantorcodes [https://twitter.com/kantorcodes]()
+- Patches [https://twitter.com/TMCC_Patches]()
+
 ## Abstract
 
 This specification provides a standard way to "inscribe" **Hashinals** utilizing the Hedera Consensus and Hedera Token Services. **Hashinals** borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the [Hedera Hashgraph](https://hedera.com).
 
 ## Motivation
 
-Token creators and downstream consumers would like for the whole of NFT metadata to be written directly to the HashGraph, as opposed to off-chain mediums like IPFS, Arweave, etc. Metadata stored in this manner would reduce coupling to those off-chain stores, and should improve future compatibility with services like the Smart Contract Service, and Hedera Consensus Service. In this manner, the entirety of the NFT is truly "on-chain".
+Token creators and downstream consumers would like for the whole of NFT metadata to be written directly to the Hashgraph, as opposed to off-chain mediums like IPFS, Arweave, etc. Metadata stored in this manner would reduce coupling to those off-chain stores, and should improve future compatibility with services like the Smart Contract Service, and Hedera Consensus Service. In this manner, the entirety of the NFT is truly "on-chain".
 
 ## Specification
 
@@ -60,7 +72,8 @@ The following is a valid example of the metadata string saved onto the serial nu
 ### Inscription Numbers
 
 Like Serial Numbers on individual Token IDs, Inscription Numbers are essentially an HCS Registry that describe the order in which **Hashinals** are "inscribed". The key facets that are followed for determining these numbers are that:
-- First is first and determined entirely by the HashGraph.
+
+- "First is first" and determined entirely by the Hashgraph.
 - The process is easy to understand and replicate.
 
 Inscription numbers start from `1`.
@@ -73,7 +86,7 @@ Hashinals must:
 
 - Use a valid [HCS-1](hcs-1.md) file. Tokens minted with invalid HCS-1 files will be considered invalid and ignored.
 - Follow the format for metadata specified in [Metadata](#metadata)
-- Be minted after 2024-03-03 at 10PM UTC. Tokens minted with a valid HRL before this date will not be assigned an inscription number.
+- Be minted after 11:07:25.6556 AM Mar 5, 2024, EST (1709654845.655672003). Tokens minted with a valid HRL before this date will not be assigned an inscription number.
 
 #### Inscription Registry
 
@@ -127,8 +140,12 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
 ```
 
 ### User Process for inscribing Hashinals
-![HCS Protocol HRL Defintiion 2](https://github.com/hcs-working-group/hcs-improvement-proposals/assets/91838723/8e166eb3-ecac-4239-99d2-c961b1423e4b)
+![HCS Protocol HRL Defintion 2](../assets/hcs-5-lifecycle.png)
 
 
 ### Conclusion
-tbd
+The HCS-5 standard introduces a robust and on-chain method for inscribing NFT metadata directly onto the Hedera Hashgraph, named Hashinals. By integrating the Hedera Consensus Service (HCS) with the Hedera Token Service (HTS), it creates a decentralized and verifiable way to manage NFT metadata, ensuring the longevity and integrity of digital assets in the Hedera ecosystem.
+
+Adopting this standard addresses the drawbacks associated with relying on external storage systems by keeping the entirety of NFT data on-chain. This enhances the trust and value of NFTs by ensuring their metadata is immutable and perpetually accessible.
+
+The detailed specification provided here, from metadata structure to the inscription registry process, gives creators and users clear guidelines and tools for minting and managing Hashinals.
