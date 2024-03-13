@@ -871,11 +871,13 @@ For example:
 <p>Each chunk is uploaded to a Hedera Consensus Service topic as an HCS message. Keep in mind that because of the <code>o</code> property in the JSON schema, the sequence number that the chunk is uploaded in does not matter. This enables uploading many chunks in parallel.</p>
 <h2 id="retrieving-and-reassembling">Retrieving and Reassembling</h2>
 <p>To display the data, the application retrieves all chunk messages from the specified HCS topic. Chunks are sorted by their order index (<code>o</code>) and concatenated based on their content (<code>c</code>). The combined base64 string is then decoded back into binary data for display.</p>
-<p>The complete steps are:
-1. Fetch all messages from the Topic ID, and sort them by their index <code>o</code>
-2. Concatenate the messages together, and decompress the file using a <code>zstd</code> decoding library.
-3. Ensure the memo of the Topic ID matches the SHA-256 hash of the decompressed file data.
-4. Convert the uncompressed base64 string into binary data</p>
+<p>The complete steps are:</p>
+<ol>
+<li>Fetch all messages from the Topic ID, and sort them by their index <code>o</code></li>
+<li>Concatenate the messages together, and decompress the file using a <code>zstd</code> decoding library.</li>
+<li>Ensure the memo of the Topic ID matches the SHA-256 hash of the decompressed file data.</li>
+<li>Convert the uncompressed base64 string into binary data</li>
+</ol>
 <h2 id="conclusion">Conclusion</h2>
 <p>The HCS-1 standard outlines a robust protocol for managing file data sets of all sizes and mime types within the Hedera Consensus Service, leveraging JSON for data structuring and a registry for efficient topic management. This approach ensures data integrity, facilitates easy data retrieval, and supports scalable application development on Hedera.</p>
 
