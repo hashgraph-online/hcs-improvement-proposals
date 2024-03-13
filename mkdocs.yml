@@ -1,5 +1,5 @@
 site_name: Hashgraph Online
-site_url: hashgraphonline.com
+site_url: https://hashgraphonline.com
 theme:
   name: material
   logo: assets/logo.png
