@@ -83,7 +83,7 @@ Hashinals must:
 
 - Use a valid [HCS-1](hcs-1.md) file. Tokens minted with invalid HCS-1 files will be considered invalid and ignored.
 - Follow the format for metadata specified in [Metadata](#metadata)
-- Be minted after 2024-03-03 at 10PM UTC. Tokens minted with a valid HRL before this date will not be assigned an inscription number.
+- Be minted after 11:07:25.6556 AM Mar 5, 2024, EST (1709654845.655672003). Tokens minted with a valid HRL before this date will not be assigned an inscription number.
 
 #### Inscription Registry
 
