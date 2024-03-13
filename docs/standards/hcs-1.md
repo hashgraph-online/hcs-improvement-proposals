@@ -90,6 +90,7 @@ Each chunk is uploaded to a Hedera Consensus Service topic as an HCS message. Ke
 To display the data, the application retrieves all chunk messages from the specified HCS topic. Chunks are sorted by their order index (`o`) and concatenated based on their content (`c`). The combined base64 string is then decoded back into binary data for display.
 
 The complete steps are:
+
 1. Fetch all messages from the Topic ID, and sort them by their index `o`
 2. Concatenate the messages together, and decompress the file using a `zstd` decoding library.
 3. Ensure the memo of the Topic ID matches the SHA-256 hash of the decompressed file data.
