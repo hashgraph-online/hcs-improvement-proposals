@@ -4,8 +4,11 @@ description: The HCS-1 standard provides a systematic approach to encode, chunk,
 
 # HCS-1 Standard: File Data Management with Hedera Consensus Service
 
+### Status: Published
+
 ### Table of Contents
 - [HCS-1 Standard: File Data Management with Hedera Consensus Service](#hcs-1-standard-file-data-management-with-hedera-consensus-service)
+    - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Abstract](#abstract)

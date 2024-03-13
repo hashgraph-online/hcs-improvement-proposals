@@ -4,6 +4,8 @@ description: HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGra
 
 # HCS-20 Standard: Auditable Points Standard on Hedera
 
+### Status: Published
+
 - [HCS-20 Standard: Auditable Points Standard on Hedera](#hcs-20-standard-auditable-points-standard-on-hedera)
       - [Authors](#authors)
   - [Solving the Auditable Points Challenge](#solving-the-auditable-points-challenge)

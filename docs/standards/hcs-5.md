@@ -4,9 +4,12 @@ description: This specification provides a standard way to "inscribe" Hashinals 
 
 # HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**
 
+### Status: Published
+
 ### Table of Contents
 
 - [HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**](#hcs-5-standard-tokenized-hcs-1-files-hashinals)
+    - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Abstract](#abstract)
