@@ -26,7 +26,7 @@ A formal set of definitions used within the Hashgraph Consensus Standards Improv
 Topic Ids which are managed by the community for the convenience of the ecosystem. These topics are public and not managed by a specific entity. Proceed with caution when consuming data inscribed on these topics.
 
 #### Guarded Registries
-Topic Ids which are managed by the HCS Council for the convenience of the ecosystem. These topics should be private topics to ensure proper validation of messages. [HCS](hcs-2.md) will cover this idea in detail.
+Topic Ids which are managed by the HCS Council for the convenience of the ecosystem. These topics should be private topics to ensure proper validation of messages. [HCS](./standards/hcs-2.md) will cover this idea in detail.
 
 #### Hashsite
 A fully rendered decentralized application, composed of valid HTML Markup, JavaScript, and CSS which is inscribed following HCS standards.

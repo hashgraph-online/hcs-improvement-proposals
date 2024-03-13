@@ -1,4 +1,5 @@
 site_name: Hashgraph Online
+site_url: hashgraphonline.com
 theme:
   name: material
   logo: assets/logo.png
@@ -10,9 +11,9 @@ theme:
 copyright: Copyright &copy; 2024 Hashgraph Online
 extra:
   generator: false
-  # social:
-  #   - icon: fontawesome/brands/mastodon
-  #     link: https://fosstodon.org/@squidfunk
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/HashgraphOnline
 plugins:
   - social
   - search

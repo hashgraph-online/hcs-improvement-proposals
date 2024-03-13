@@ -41,7 +41,7 @@ Token creators and downstream consumers would like for the whole of NFT metadata
 
 ## Specification
 
-**Hashinals** are minted with the [Hedera Token Service (HTS)](https://hedera.com/token-service) and securely recorded on the Hedera Consensus Service using a [HCS-2 guarded registry](hcs-2.md). Unlike typical NFTs on Hedera, metadata is stored as valid [HCS-1](hcs-1.md) files.
+**Hashinals** are minted with the [Hedera Token Service (HTS)](https://hedera.com/token-service) and securely recorded on the Hedera Consensus Service using a [HCS-2 guarded registry](hcs-2.md). Unlike typical NFTs on Hedera, metadata is stored as valid [HCS-1](./hcs-1.md) files.
 
 ### Metadata
 
@@ -84,7 +84,7 @@ Order is determined by sorting the `consensus_timestamp` on TokenMintTransaction
 
 Hashinals must:
 
-- Use a valid [HCS-1](hcs-1.md) file. Tokens minted with invalid HCS-1 files will be considered invalid and ignored.
+- Use a valid [HCS-1](./hcs-1.md) file. Tokens minted with invalid HCS-1 files will be considered invalid and ignored.
 - Follow the format for metadata specified in [Metadata](#metadata)
 - Be minted after 11:07:25.6556 AM Mar 5, 2024, EST (1709654845.655672003). Tokens minted with a valid HRL before this date will not be assigned an inscription number.
 
