@@ -59,8 +59,10 @@ Bare Minimal example of metadata
 ```
  {
    "name": "My NFT",
+   "creator": "Creator Name",
    "description": "My description",
-   "image": "",
+   "image": "hcs://1/0.0.12345",
+   "type": "image/png",
    "attributes": [],
  }
 ```
