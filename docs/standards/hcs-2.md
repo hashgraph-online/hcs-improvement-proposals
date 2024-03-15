@@ -1,14 +1,10 @@
----
-description: This specification provides a standard way to create a new registry for a sub-standard like HCS-1.
----
-
-# HCS-2 Standard: Topic Registries
+# HCS-2 Standard: Advanced Topic Registries
 
 ### Status: Draft
 
 ### Table of Contents
 
-- [HCS-2 Standard: Topic Registries](#hcs-2-standard-topic-registries)
+- [HCS-2 Standard: Advanced Topic Registries](#hcs-2-standard-advanced-topic-registries)
     - [Status: Draft](#status-draft)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
@@ -22,10 +18,181 @@ description: This specification provides a standard way to create a new registry
 
 ## Abstract
 
-This specification provides a standard way to group Topic IDs that follow a particular standard into a single Topic for finding all related data.
+This standard introduces advanced methodologies for managing and interacting with Topic Registries within the HCS framework. It focuses on enabling dynamic metadata, versioning, and comprehensive file management through unique identifiers and protocols.
 
 ## Motivation
 
-Downstream clients would like an easy way to consume and identify related data in a standardized format.
+The advent of dynamic metadata and the need for detailed version histories and state management in decentralized environments have necessitated the development of more sophisticated Topic Registries. This standard aims to provide a robust framework for indexing, retrieving, and interpreting diverse data types, enhancing the utility and scalability of NFTs, and facilitating advanced web functionalities like full site recursion.
 
 ## Specification
+
+### Registry Format and Usage
+
+The registry should adopt a standardized format to ensure consistent access and interpretation. The following fields are introduced:
+
+| Field     | Description                                                        | Example Value          |
+|-----------|--------------------------------------------------------------------|------------------------|
+| `p`       | Protocol used by the registry, typically `hcs-2` for this standard.| `hcs-2`                |
+| `op`      | Operation being executed (register, delete, update).               | `register`             |
+| `t_id`    | Topic ID where the registry information is stored.                 | `0.0.1234567`          |
+| `uid`     | Sequence number for files or states within the registry.         | `42`            |
+| `m`       | Optional metadata providing additional context.                    | `Update for Q2 release`|
+
+`m` - memo is restricted to 500 charcters 
+
+### Operations
+
+- **Register**: Adds new entries or versions to the registry.
+- **Delete**: Removes entries based on UID.
+- **Update**: Modifies existing entries, typically by incrementing the serial number and updating the metadata.
+
+
+### Memo for Indexers and Browsers
+
+A memo system is defined for indexers and browsers to understand the data's state and interpret it accordingly. The memo format follows:
+
+`[protocol_standard]:[indexed]`
+
+| Field     | Description                                                        | Example Value          |
+|-----------|--------------------------------------------------------------------|------------------------|
+| `protocol_standard`       | Protocol used by the registry, `hcs-2` for this standard.| `hcs-2`                |
+| `indexed`     | Boolean value of if all messages need pulled down or only the last / newwest message | `true`           |
+
+### Indexed Registry Mechanics
+
+- Expectation for new records to be continually added.
+- Indexers should gather all files and metadata listed in the registry.
+- Processing state should start from the first message and proceed to the last sequential message number.
+
+
+### Non-Indexed Registry Mechanics
+
+- Expectation for new records to be continually added.
+- Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution. 
+- Processing state should start from the first message and proceed to the last sequential message number.
+
+
+### Use Cases and Functionalities
+
+- Dynamic metadata enables NFTs and other assets to reflect changes and updates over time.
+- Full version history allows for a complete understanding of an item's evolution.
+- Enhanced file and website management through recursive indexing and state awareness.
+
+### Example URI Format
+
+Registry links should follow a consistent format to ensure easy access and interpretation:
+
+`hcs://2/{topic_id}`
+
+This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.
+
+
+#### Register
+
+Register new entries or versions to the registry using the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "TOPIC_ID_TO_REGISTER",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO",
+}
+```
+
+#### Delete
+
+Remove entries based on UID or sequence number of the message on the topic id
+
+```json
+{
+  "p": "hcs-2",
+  "op": "delete",
+  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+#### Update
+
+Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata. Use the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
+  "t_id": "NEW_TOPIC_ID_TO_REGISTER",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+### Memo for Indexers and Browsers
+
+This standard also introduces a memo system for indexers and browsers to understand the data's state and interpret it accordingly. The memo format follows:
+
+`[protocol_standard]:[indexed]`
+
+### Example Memo Format
+
+`hcs-2:true`
+
+
+
+### Example HRL Format
+
+Registry links should follow a consistent format to ensure easy access and interpretation:
+
+`hcs://2/{topic_id}`
+
+This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.
+
+## Examples of Usage
+
+This section provides detailed examples of how the `register`, `delete`, and `update` operations can be used in practice, aligning with the HCS-2 standard's goals and mechanisms.
+
+### Register Operation Example
+
+To register a new topic in the Topic Registry:
+
+```json
+{
+  "p": "hcs-20",
+  "op": "register",
+  "name": "MyFirstTopic",
+  "metadata": "hcs://1/0.0.123456",
+  "t_id": "0.0.9876543",
+  "m": "Initial registration of MyFirstTopic"
+}
+```
+
+### Update Operation Example
+
+To update an existing topic in the Topic Registry:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "45",
+  "t_id": "new_topic_id",
+  "m": "Updated to reflect changes in documentation and structure."
+}
+```
+
+## Validation
+
+Each field within the JSON structure for the `register`, `delete`, and `update` operations must meet specific criteria to be considered valid:
+
+- **`p` (Protocol)**: Must be a string matching `hcs-2`. This validates that the entry adheres to the current standard.
+- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed.
+- **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
+- **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
+- **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
+
+### Attributes Validation
+
+Specific validation rules for each attribute ensure that users adhere to the format and standards expected within the HCS framework, enhancing interoperability and consistency.
+
