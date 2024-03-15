@@ -44,7 +44,7 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 - **Register**: Adds new entries or versions to the registry.
 - **Delete**: Removes entries based on UID.
-- **Update**: Modifies existing entries, by changing the referenced serial number and updating the t_id and metadata pointers.
+- **Update**: Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers.
 
 
 ### Memo for Indexers and Browsers
