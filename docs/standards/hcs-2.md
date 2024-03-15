@@ -44,7 +44,7 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 - **Register**: Adds new entries or versions to the registry.
 - **Delete**: Removes entries based on UID.
-- **Update**: Modifies existing entries, typically by incrementing the serial number and updating the metadata.
+- **Update**: Modifies existing entries, by changing the referenced serial number and updating the t_id and metadata pointers.
 
 
 ### Memo for Indexers and Browsers
@@ -56,7 +56,12 @@ A memo system is defined for indexers and browsers to understand the data's stat
 | Field     | Description                                                        | Example Value          |
 |-----------|--------------------------------------------------------------------|------------------------|
 | `protocol_standard`       | Protocol used by the registry, `hcs-2` for this standard.| `hcs-2`                |
-| `indexed`     | Boolean value of if all messages need pulled down or only the last / newwest message | `true`           |
+| `indexed`     | Boolean value of if all messages need pulled down or only the last / newest message | `true`           |
+
+
+### Example Memo Format
+
+`hcs-2:true`
 
 ### Indexed Registry Mechanics
 
@@ -126,59 +131,6 @@ Modify existing entries, completed by updating the uid or sequence number and up
   "t_id": "NEW_TOPIC_ID_TO_REGISTER",
   "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
   "m": "OPTIONAL_MEMO"
-}
-```
-
-### Memo for Indexers and Browsers
-
-This standard also introduces a memo system for indexers and browsers to understand the data's state and interpret it accordingly. The memo format follows:
-
-`[protocol_standard]:[indexed]`
-
-### Example Memo Format
-
-`hcs-2:true`
-
-
-
-### Example HRL Format
-
-Registry links should follow a consistent format to ensure easy access and interpretation:
-
-`hcs://2/{topic_id}`
-
-This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.
-
-## Examples of Usage
-
-This section provides detailed examples of how the `register`, `delete`, and `update` operations can be used in practice, aligning with the HCS-2 standard's goals and mechanisms.
-
-### Register Operation Example
-
-To register a new topic in the Topic Registry:
-
-```json
-{
-  "p": "hcs-20",
-  "op": "register",
-  "name": "MyFirstTopic",
-  "metadata": "hcs://1/0.0.123456",
-  "t_id": "0.0.9876543",
-  "m": "Initial registration of MyFirstTopic"
-}
-```
-
-### Update Operation Example
-
-To update an existing topic in the Topic Registry:
-
-```json
-{
-  "p": "hcs-2",
-  "op": "update",
-  "uid": "45",
-  "t_id": "new_topic_id",
-  "m": "Updated to reflect changes in documentation and structure."
 }
 ```
 
