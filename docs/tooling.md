@@ -9,7 +9,7 @@ Welcome to the HCS Community Tools page! Here, we showcase innovative tools deve
 - **Description:** A web interface to easily inscribe valid HCS-1 Files and Hashinals on Hedera.
 - **Link:** [https://tier.bot/inscribe](https://tier.bot/inscribe)
 - **Highlight:** [Twitter Highlight](https://twitter.com/TierBotAI/status/1766626142499606801)
-![Screenshot](./assets/inscription-tools.png)
+![Screenshot](./assets/inscribe.png)
 
 ### Turtlemoon Inscription Tools
 
@@ -23,7 +23,7 @@ Welcome to the HCS Community Tools page! Here, we showcase innovative tools deve
 - **Description:** A web interface to easily find inscription numbers.
 - **Link:** [https://www.hashinals.com](https://www.hashinals.com)
 - **Highlight:** [Twitter Highlight](https://twitter.com/TurtleMoonCC/status/1766901983204483241)
-![Screenshot](./assets/hashinals-db.jpeg)
+![Screenshot](./assets/hashinals-db.png)
 
 ### Tierbot Analytics
 
