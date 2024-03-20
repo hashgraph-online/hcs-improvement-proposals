@@ -79,13 +79,14 @@ Each message follows this format.
 }
 ```
 
+Clients, dApps, gateways, etc, will read the most recent sequence number's `t_id` to locate the current `metadata` of this Dynamic **Hashinal**
+
 ### Validation
 
-Dynamic Hashinals are only valid when
+Dynamic **Hashinals** are only valid when
 
 - Their HCS-2 Topic ID is `non-indexed`
 - The latest message in the HCS-2 Topic ID has a valid [HCS-1 Topic ID](./hcs-1.md) for the `t_id` field
 - They specify a `ttl` that is at least `86400` (1 day)
-
 
 ### Conclusion
