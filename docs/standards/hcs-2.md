@@ -12,9 +12,11 @@
   - [Motivation](#motivation)
   - [Specification](#specification)
 
-## Authors
-- Kantorcodes [https://twitter.com/kantorcodes]()
+## Primary Author
 - Patches [https://twitter.com/TMCC_Patches]()
+
+## Additional Authors
+- Kantorcodes [https://twitter.com/kantorcodes]()
 
 ## Abstract
 
@@ -56,21 +58,39 @@ A memo system is defined for indexers and browsers to understand the data's stat
 | Field     | Description                                                        | Example Value          |
 |-----------|--------------------------------------------------------------------|------------------------|
 | `protocol_standard`       | Protocol used by the registry, `hcs-2` for this standard.| `hcs-2`                |
-| `indexed`     | Boolean value of if all messages need pulled down or only the last / newest message | `true`           |
+| `indexed`     | enum value of if all messages need pulled down or only the last / newest message | `0`           |
+
+
+| Indexed enum     | Description                                                       
+|-----------|-------------------------------------------------------------------------------------------|
+| `0`       | The topic id is indexed, and all messages should be read
+| `1`     | The topic id is not indexed, and only the last message should be used to determine state / topic data
 
 
 ### Example Memo Format
 
-`hcs-2:true`
+`hcs-2:0`
 
-### Indexed Registry Mechanics
+### Indexed Registry Mechanics [enum: 0]
+Uses:
+Topic ids used for registiers where you need all records to get the data you need to execute logic. Typically good for most registeries. 
+
+Examples:
+1. User registry for profiles of a video game
+2. A registry for posts on a social media site for a specific user
 
 - Expectation for new records to be continually added.
 - Indexers should gather all files and metadata listed in the registry.
 - Processing state should start from the first message and proceed to the last sequential message number.
 
 
-### Non-Indexed Registry Mechanics
+### Non-Indexed Registry Mechanics [enum: 1]
+Uses:
+Topic ids used for dynamic state of an entity. The latest message being used is the current state of the entity being defined
+
+Examples:
+1. A description for a product on a ecom site
+2. A state of an NFT for a video game 
 
 - Expectation for new records to be continually added.
 - Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution. 
@@ -106,6 +126,17 @@ Register new entries or versions to the registry using the following JSON struct
 }
 ```
 
+example useage:
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "register t",
+}
+```
+
 #### Delete
 
 Remove entries based on UID or sequence number of the message on the topic id
@@ -116,6 +147,16 @@ Remove entries based on UID or sequence number of the message on the topic id
   "op": "delete",
   "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
   "m": "OPTIONAL_MEMO"
+}
+```
+
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "delete",
+  "uid": "33",
+  "m": "remove hashsite from users bookmark"
 }
 ```
 
@@ -134,6 +175,18 @@ Modify existing entries, completed by updating the uid or sequence number and up
 }
 ```
 
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "60",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "update sequence number 60 to a new topic id and metadata"
+}
+```
+
 ## Validation
 
 Each field within the JSON structure for the `register`, `delete`, and `update` operations must meet specific criteria to be considered valid:
@@ -148,3 +201,6 @@ Each field within the JSON structure for the `register`, `delete`, and `update` 
 
 Specific validation rules for each attribute ensure that users adhere to the format and standards expected within the HCS framework, enhancing interoperability and consistency.
 
+### Conclusion
+
+HCS-2 creates a method of connecting data and enabling dynamic state registries 
