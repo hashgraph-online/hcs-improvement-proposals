@@ -53,12 +53,13 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 A memo system is defined for indexers and browsers to understand the data's state and interpret it accordingly. The memo format follows:
 
-`[protocol_standard]:[indexed]`
+`[protocol_standard]:[indexed]:[ttl]`
 
 | Field     | Description                                                        | Example Value          |
 |-----------|--------------------------------------------------------------------|------------------------|
 | `protocol_standard`       | Protocol used by the registry, `hcs-2` for this standard.| `hcs-2`                |
 | `indexed`     | enum value of if all messages need pulled down or only the last / newest message | `0`           |
+| `ttl`               | a numeric value, representing the number of seconds which external infrastructure can use to determine how long messages in this registry should be stored in cache | `60`
 
 
 | Indexed enum     | Description                                                       
@@ -95,6 +96,10 @@ Examples:
 - Expectation for new records to be continually added.
 - Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution. 
 - Processing state should start from the first message and proceed to the last sequential message number.
+
+## TTL Use Cases
+
+External infrastructure, dApps, clients should utilize the TTL as a reference point for how long to cache data, before attempting to fetch new messages from the registry. The default suggested value is 86400 (one day). Certain use cases might opt for lower or higher TTL values. For scalability, it is imperative to pick values that make the most sense. 
 
 
 ### Use Cases and Functionalities
@@ -196,6 +201,7 @@ Each field within the JSON structure for the `register`, `delete`, and `update` 
 - **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
 - **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
 - **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
+- **`ttl`**: An optional field providing an override to the TTL in the memo. Typically not required. 
 
 ### Attributes Validation
 
