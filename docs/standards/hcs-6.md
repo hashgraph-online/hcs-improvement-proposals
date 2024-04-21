@@ -15,6 +15,7 @@
     - [Metadata](#metadata)
     - [Submitting Messages](#submitting-messages)
     - [Validation](#validation)
+    - [Limitations](#limitations)
     - [Conclusion](#conclusion)
 
 ## Authors
@@ -36,7 +37,7 @@ The list above is non-exhaustive and can be expanded to many use cases.
 
 ## Specification
 
-Creating a Dynamic **Hashinal** involves two steps.
+Creating a Dynamic **Hashinal** involves four steps.
 
 1. Creating a valid, `non-indexed` [HCS-2](./hcs-2.md) Topic ID
 2. Minting a new Serial Number on a Token ID following the [Metadata](#metadata) format
@@ -51,7 +52,7 @@ The `memo` field for Dynamic Hashinals must follow this format to be valid.
 
 ``hcs-2:non-indexed:{ttl}`
 
-The only variable element in the memo would be the `ttl` field. We suggest a longer `ttl` as this is the time in seconds, that gateways and clients will store the previous version of your `metadata` in their cache. In the future, gateways and clients may decide to prioritize Topics with longer `metadata`, impose fees, etc. The minimum `ttl` must be `86400` (1 day) to be valid.
+The only variable element in the memo would be the `ttl` field. We suggest a longer `ttl` as this is the time in seconds that gateways and clients will store the previous version of your `metadata` in their cache. In the future, gateways and clients may decide to prioritize Topics with longer `metadata` by imposing fees, introducing rate limits, etc. The minimum `ttl` must be `60` (1 minute) to be valid, and the suggested minimum would be `86400` (1 day)
 
 ### Metadata
 
@@ -62,6 +63,11 @@ The format of the `metadata` on a dynamic **Hashinal** is as follows:
 `hcs://hcs-2/{topicId}`
 
 `topicId` is a valid HCS-2 Topic ID in which data for this NFT written to.
+
+The purpose of including the file standard in the HRL is to enable client applications to make logical decisions based on its existence. For example:
+
+-  a client might decide to use a different gateway to load immutable (HCS-5) versus Dynamic (HCS-6) Hashinals without needing to load the `memo` for each topic.
+-  analytics and indexer applications can search for all NFTs that include a HCS-2 HRL.
 
 ### Submitting Messages
 
@@ -89,4 +95,25 @@ Dynamic **Hashinals** are only valid when
 - The latest message in the HCS-2 Topic ID has a valid [HCS-1 Topic ID](./hcs-1.md) for the `t_id` field
 - They specify a `ttl` that is at least `86400` (1 day)
 
+
+### Limitations
+
+While HCS-6 is built on HCS-2, it includes some important limitations to improve UX.
+
+1. Inscribed messages cannot utilize recursion in submitted messages to the registry. For example, the following would be invalid
+
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  // an HCS-2 Topic ID
+  "t_id": "0.0.12345",
+  "m": "Pointing metadata to another registry.",
+}
+```
+
+2. HCS-6 will always use a `non-indexed` Topic ID. `update` and `delete` operations will not be valid.
+
 ### Conclusion
+
+HCS-6 clearly defines how to inscribe Dynamic Hashinals on the Hedera Hashgraph utilizing the Consensus Service. Note, to avoid all doubt, operations and functionality not written within this standard are invalid and should not be assumed.
