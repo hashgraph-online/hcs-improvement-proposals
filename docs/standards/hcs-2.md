@@ -12,10 +12,12 @@
   - [Motivation](#motivation)
   - [Specification](#specification)
 
-## Primary Author
+## Authors
+ 
+### Primary Author
 - Patches [https://twitter.com/TMCC_Patches]()
 
-## Additional Authors
+### Additional Authors
 - Kantorcodes [https://twitter.com/kantorcodes]()
 
 ## Abstract
@@ -44,10 +46,95 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 ### Operations
 
-- **Register**: Adds new entries or versions to the registry.
-- **Delete**: Removes entries based on UID.
-- **Update**: Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers.
+| Operation     | Description                                                        | Usable in non-indexed topic          |
+|-----------|--------------------------------------------------------------------|------------------------|
+| `Register` | Adds new entries or versions to the registry.| ✅              |
+| `Delete`  | Removes entries based on UID.               | ❌             |
+| `Update`  | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers  | ❌         |
 
+
+#### Register
+
+Registration allows creating additional entries / versions to the Topic. Utilize the follow JSON structure for valid messages.
+
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "TOPIC_ID_TO_REGISTER",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO",
+}
+```
+
+example useage:
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "register t",
+}
+```
+
+#### Delete
+
+Remove entries based on UID or sequence number of the message on the topic id. 
+
+**This operation is invalid for non-indexed topics**
+
+Use the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "delete",
+  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "delete",
+  "uid": "33",
+  "m": "remove hashsite from users bookmark"
+}
+```
+
+#### Update
+
+Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata. 
+
+**This operation is invalid for non-indexed topics**
+
+Use the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
+  "t_id": "NEW_TOPIC_ID_TO_REGISTER",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "60",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "update sequence number 60 to a new topic id and metadata"
+}
+```
 
 ### Memo for Indexers and Browsers
 
@@ -117,87 +204,12 @@ Registry links should follow a consistent format to ensure easy access and inter
 This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.
 
 
-#### Register
-
-Register new entries or versions to the registry using the following JSON structure:
-
-```json
-{
-  "p": "hcs-2",
-  "op": "register",
-  "t_id": "TOPIC_ID_TO_REGISTER",
-  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
-  "m": "OPTIONAL_MEMO",
-}
-```
-
-example useage:
-```json
-{
-  "p": "hcs-2",
-  "op": "register",
-  "t_id": "0.0.123456",
-  "metadata": "hcs://1/0.0.456789",
-  "m": "register t",
-}
-```
-
-#### Delete
-
-Remove entries based on UID or sequence number of the message on the topic id
-
-```json
-{
-  "p": "hcs-2",
-  "op": "delete",
-  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
-  "m": "OPTIONAL_MEMO"
-}
-```
-
-example usage:
-```json
-{
-  "p": "hcs-2",
-  "op": "delete",
-  "uid": "33",
-  "m": "remove hashsite from users bookmark"
-}
-```
-
-#### Update
-
-Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata. Use the following JSON structure:
-
-```json
-{
-  "p": "hcs-2",
-  "op": "update",
-  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
-  "t_id": "NEW_TOPIC_ID_TO_REGISTER",
-  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
-  "m": "OPTIONAL_MEMO"
-}
-```
-
-example usage:
-```json
-{
-  "p": "hcs-2",
-  "op": "update",
-  "uid": "60",
-  "t_id": "0.0.123456",
-  "metadata": "hcs://1/0.0.456789",
-  "m": "update sequence number 60 to a new topic id and metadata"
-}
-```
-
 ## Validation
 
 Each field within the JSON structure for the `register`, `delete`, and `update` operations must meet specific criteria to be considered valid:
 
 - **`p` (Protocol)**: Must be a string matching `hcs-2`. This validates that the entry adheres to the current standard.
-- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed.
+- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed. Note, `update` and `delete` would not be valid or needed operations for a `non-indexed` topic. 
 - **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
 - **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
 - **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
