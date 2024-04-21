@@ -8,14 +8,33 @@
     - [Status: Draft](#status-draft)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
+    - [Primary Author](#primary-author)
+    - [Additional Authors](#additional-authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
+    - [Registry Format and Usage](#registry-format-and-usage)
+    - [Operations](#operations)
+      - [Register](#register)
+      - [Delete](#delete)
+      - [Update](#update)
+    - [Memo for Indexers and Browsers](#memo-for-indexers-and-browsers)
+    - [Example Memo Format](#example-memo-format)
+    - [Indexed Registry Mechanics \[enum: 0\]](#indexed-registry-mechanics-enum-0)
+    - [Non-Indexed Registry Mechanics \[enum: 1\]](#non-indexed-registry-mechanics-enum-1)
+  - [TTL Use Cases](#ttl-use-cases)
+    - [Use Cases and Functionalities](#use-cases-and-functionalities)
+    - [Example URI Format](#example-uri-format)
+  - [Validation](#validation)
+    - [Attributes Validation](#attributes-validation)
+    - [Conclusion](#conclusion)
 
-## Primary Author
+## Authors
+ 
+### Primary Author
 - Patches [https://twitter.com/TMCC_Patches]()
 
-## Additional Authors
+### Additional Authors
 - Kantorcodes [https://twitter.com/kantorcodes]()
 
 ## Abstract
@@ -44,21 +63,107 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 ### Operations
 
-- **Register**: Adds new entries or versions to the registry.
-- **Delete**: Removes entries based on UID.
-- **Update**: Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers.
+| Operation     | Description                                                        | Usable in non-indexed topic          |
+|-----------|--------------------------------------------------------------------|------------------------|
+| `Register` | Adds new entries or versions to the registry.| ✅              |
+| `Delete`  | Removes entries based on UID.               | ❌             |
+| `Update`  | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers  | ❌         |
 
+
+#### Register
+
+Registration allows creating additional entries / versions to the Topic. Utilize the follow JSON structure for valid messages.
+
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "TOPIC_ID_TO_REGISTER",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO",
+}
+```
+
+example useage:
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "register t",
+}
+```
+
+#### Delete
+
+Remove entries based on UID or sequence number of the message on the topic id. 
+
+**This operation is invalid for non-indexed topics**
+
+Use the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "delete",
+  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "delete",
+  "uid": "33",
+  "m": "remove hashsite from users bookmark"
+}
+```
+
+#### Update
+
+Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata. 
+
+**This operation is invalid for non-indexed topics**
+
+Use the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
+  "t_id": "NEW_TOPIC_ID_TO_REGISTER",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "update",
+  "uid": "60",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "update sequence number 60 to a new topic id and metadata"
+}
+```
 
 ### Memo for Indexers and Browsers
 
 A memo system is defined for indexers and browsers to understand the data's state and interpret it accordingly. The memo format follows:
 
-`[protocol_standard]:[indexed]`
+`[protocol_standard]:[indexed]:[ttl]`
 
 | Field     | Description                                                        | Example Value          |
 |-----------|--------------------------------------------------------------------|------------------------|
 | `protocol_standard`       | Protocol used by the registry, `hcs-2` for this standard.| `hcs-2`                |
 | `indexed`     | enum value of if all messages need pulled down or only the last / newest message | `0`           |
+| `ttl`               | a numeric value, representing the number of seconds which external infrastructure can use to determine how long messages in this registry should be stored in cache | `60`
 
 
 | Indexed enum     | Description                                                       
@@ -96,6 +201,10 @@ Examples:
 - Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution. 
 - Processing state should start from the first message and proceed to the last sequential message number.
 
+## TTL Use Cases
+
+External infrastructure, dApps, clients should utilize the TTL as a reference point for how long to cache data, before attempting to fetch new messages from the registry. The default suggested value is 86400 (one day). Certain use cases might opt for lower or higher TTL values. For scalability, it is imperative to pick values that make the most sense. 
+
 
 ### Use Cases and Functionalities
 
@@ -112,90 +221,16 @@ Registry links should follow a consistent format to ensure easy access and inter
 This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.
 
 
-#### Register
-
-Register new entries or versions to the registry using the following JSON structure:
-
-```json
-{
-  "p": "hcs-2",
-  "op": "register",
-  "t_id": "TOPIC_ID_TO_REGISTER",
-  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
-  "m": "OPTIONAL_MEMO",
-}
-```
-
-example useage:
-```json
-{
-  "p": "hcs-2",
-  "op": "register",
-  "t_id": "0.0.123456",
-  "metadata": "hcs://1/0.0.456789",
-  "m": "register t",
-}
-```
-
-#### Delete
-
-Remove entries based on UID or sequence number of the message on the topic id
-
-```json
-{
-  "p": "hcs-2",
-  "op": "delete",
-  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
-  "m": "OPTIONAL_MEMO"
-}
-```
-
-example usage:
-```json
-{
-  "p": "hcs-2",
-  "op": "delete",
-  "uid": "33",
-  "m": "remove hashsite from users bookmark"
-}
-```
-
-#### Update
-
-Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata. Use the following JSON structure:
-
-```json
-{
-  "p": "hcs-2",
-  "op": "update",
-  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
-  "t_id": "NEW_TOPIC_ID_TO_REGISTER",
-  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
-  "m": "OPTIONAL_MEMO"
-}
-```
-
-example usage:
-```json
-{
-  "p": "hcs-2",
-  "op": "update",
-  "uid": "60",
-  "t_id": "0.0.123456",
-  "metadata": "hcs://1/0.0.456789",
-  "m": "update sequence number 60 to a new topic id and metadata"
-}
-```
-
 ## Validation
 
 Each field within the JSON structure for the `register`, `delete`, and `update` operations must meet specific criteria to be considered valid:
 
 - **`p` (Protocol)**: Must be a string matching `hcs-2`. This validates that the entry adheres to the current standard.
-- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed.
+- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed. Note, `update` and `delete` would not be valid or needed operations for a `non-indexed` topic. 
 - **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
 - **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
 - **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
+- **`ttl`**: An optional field providing an override to the TTL in the memo. Typically not required. 
 
 ### Attributes Validation
 
