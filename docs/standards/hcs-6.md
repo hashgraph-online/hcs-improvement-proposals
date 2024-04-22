@@ -52,17 +52,17 @@ The `memo` field for Dynamic Hashinals must follow this format to be valid.
 
 ``hcs-2:non-indexed:{ttl}`
 
-The only variable element in the memo would be the `ttl` field. We suggest a longer `ttl` as this is the time in seconds that gateways and clients will store the previous version of your `metadata` in their cache. In the future, gateways and clients may decide to prioritize Topics with longer `metadata` by imposing fees, introducing rate limits, etc. The minimum `ttl` must be `60` (1 minute) to be valid, and the suggested minimum would be `86400` (1 day)
+The only variable element in the memo would be the `ttl` field. We suggest a longer `ttl` as this is the time in seconds that gateways and clients will store the previous version of your `metadata` in their cache. In the future, gateways and clients may decide to prioritize Topics with longer `metadata` by imposing fees, introducing rate limits, etc. The minimum `ttl` must be `3600` (1 hour) to be valid, and the suggested minimum would be `86400` (1 day)
 
 ### Metadata
 
-Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-2` hcsStandard instead of `HCS-1`.
+Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-2` hcsStandard instead of `HCS-1`. The resulting hrl minted onto a serial number includes the protocol number `6`
 
 The format of the `metadata` on a dynamic **Hashinal** is as follows:
 
-`hcs://hcs-2/{topicId}`
+`hcs://6/{topicId}`
 
-`topicId` is a valid HCS-2 Topic ID in which data for this NFT written to.
+`topicId` is a valid HCS-2 Registry Topic ID in which data for this NFT will be or is written to.
 
 The purpose of including the file standard in the HRL is to enable client applications to make logical decisions based on its existence. For example:
 
@@ -93,7 +93,7 @@ Dynamic **Hashinals** are only valid when
 
 - Their HCS-2 Topic ID is `non-indexed`
 - The latest message in the HCS-2 Topic ID has a valid [HCS-1 Topic ID](./hcs-1.md) for the `t_id` field
-- They specify a `ttl` that is at least `86400` (1 day)
+- They specify a `ttl` that is at least `3600` (1 day)
 
 
 ### Limitations
