@@ -157,7 +157,7 @@ A memo system is defined for indexers and browsers to understand the data's stat
 
 ### Example Memo Format
 
-`hcs-2:0`
+`hcs-2:0:60`
 
 ### Indexed Registry Mechanics [enum: 0]
 Uses:
