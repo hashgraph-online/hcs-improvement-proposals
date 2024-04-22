@@ -8,9 +8,27 @@
     - [Status: Draft](#status-draft)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
+    - [Primary Author](#primary-author)
+    - [Additional Authors](#additional-authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
+    - [Registry Format and Usage](#registry-format-and-usage)
+    - [Operations](#operations)
+      - [Register](#register)
+      - [Delete](#delete)
+      - [Update](#update)
+      - [Migrate](#migrate)
+    - [Memo for Indexers and Browsers](#memo-for-indexers-and-browsers)
+    - [Example Memo Format](#example-memo-format)
+    - [Indexed Registry Mechanics \[enum: 0\]](#indexed-registry-mechanics-enum-0)
+    - [Non-Indexed Registry Mechanics \[enum: 1\]](#non-indexed-registry-mechanics-enum-1)
+  - [TTL Use Cases](#ttl-use-cases)
+    - [Use Cases and Functionalities](#use-cases-and-functionalities)
+    - [Example URI Format](#example-uri-format)
+  - [Validation](#validation)
+    - [Attributes Validation](#attributes-validation)
+    - [Conclusion](#conclusion)
 
 ## Authors
  
@@ -48,7 +66,8 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 | Operation     | Description                                                        | Usable in non-indexed topic          |
 |-----------|--------------------------------------------------------------------|------------------------|
-| `Register` | Adds new entries or versions to the registry.| ✅              |
+| `Register` | Adds new entries or versions to the registry.| ✅   
+| `Migrate`  | Moves messages to a new Topic ID. Previous messages are invalidated and new state is computed from the new Topic.  | ✅         |           |
 | `Delete`  | Removes entries based on UID.               | ❌             |
 | `Update`  | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers  | ❌         |
 
@@ -133,6 +152,33 @@ example usage:
   "t_id": "0.0.123456",
   "metadata": "hcs://1/0.0.456789",
   "m": "update sequence number 60 to a new topic id and metadata"
+}
+```
+
+#### Migrate
+
+This operation is irreversible, and can only exist once within a Topic Id. New messages after a `migrate` operation are invalid. All HRLs pointing to this Topic ID, should use the new Topic Id to compute state.
+
+Use the following JSON structure:
+
+```json
+{
+  "p": "hcs-2",
+  "op": "migrate",
+  "t_id": "NEW_TOPIC_ID_TO_MIGRATE_TO",
+  "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
+  "m": "OPTIONAL_MEMO"
+}
+```
+
+example usage:
+```json
+{
+  "p": "hcs-2",
+  "op": "migrate",
+  "t_id": "0.0.123456",
+  "metadata": "hcs://1/0.0.456789",
+  "m": "All hope is lost. We're moving on."
 }
 ```
 
