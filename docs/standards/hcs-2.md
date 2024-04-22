@@ -31,7 +31,7 @@
     - [Conclusion](#conclusion)
 
 ## Authors
- 
+
 ### Primary Author
 - Patches [https://twitter.com/TMCC_Patches]()
 
@@ -60,13 +60,13 @@ The registry should adopt a standardized format to ensure consistent access and 
 | `uid`     | Sequence number for files or states within the registry.         | `42`            |
 | `m`       | Optional metadata providing additional context.                    | `Update for Q2 release`|
 
-`m` - memo is restricted to 500 charcters 
+`m` - memo is restricted to 500 characters
 
 ### Operations
 
 | Operation     | Description                                                        | Usable in non-indexed topic          |
 |-----------|--------------------------------------------------------------------|------------------------|
-| `Register` | Adds new entries or versions to the registry.| ✅   
+| `Register` | Adds new entries or versions to the registry.| ✅
 | `Migrate`  | Moves messages to a new Topic ID. Previous messages are invalidated and new state is computed from the new Topic.  | ✅         |           |
 | `Delete`  | Removes entries based on UID.               | ❌             |
 | `Update`  | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers  | ❌         |
@@ -99,7 +99,7 @@ example useage:
 
 #### Delete
 
-Remove entries based on UID or sequence number of the message on the topic id. 
+Remove entries based on UID or sequence number of the message on the topic id.
 
 **This operation is invalid for non-indexed topics**
 
@@ -126,7 +126,7 @@ example usage:
 
 #### Update
 
-Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata. 
+Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata.
 
 **This operation is invalid for non-indexed topics**
 
@@ -195,7 +195,7 @@ A memo system is defined for indexers and browsers to understand the data's stat
 | `ttl`               | a numeric value, representing the number of seconds which external infrastructure can use to determine how long messages in this registry should be stored in cache | `60`
 
 
-| Indexed enum     | Description                                                       
+| Indexed enum     | Description
 |-----------|-------------------------------------------------------------------------------------------|
 | `0`       | The topic id is indexed, and all messages should be read
 | `1`     | The topic id is not indexed, and only the last message should be used to determine state / topic data
@@ -207,7 +207,7 @@ A memo system is defined for indexers and browsers to understand the data's stat
 
 ### Indexed Registry Mechanics [enum: 0]
 Uses:
-Topic ids used for registiers where you need all records to get the data you need to execute logic. Typically good for most registeries. 
+Topic ids used for registiers where you need all records to get the data you need to execute logic. Typically good for most registeries.
 
 Examples:
 1. User registry for profiles of a video game
@@ -224,15 +224,15 @@ Topic ids used for dynamic state of an entity. The latest message being used is 
 
 Examples:
 1. A description for a product on a ecom site
-2. A state of an NFT for a video game 
+2. A state of an NFT for a video game
 
 - Expectation for new records to be continually added.
-- Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution. 
+- Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution.
 - Processing state should start from the first message and proceed to the last sequential message number.
 
 ## TTL Use Cases
 
-External infrastructure, dApps, clients should utilize the TTL as a reference point for how long to cache data, before attempting to fetch new messages from the registry. The default suggested value is 86400 (one day). Certain use cases might opt for lower or higher TTL values. For scalability, it is imperative to pick values that make the most sense. 
+External infrastructure, dApps, clients should utilize the TTL as a reference point for how long to cache data, before attempting to fetch new messages from the registry. The default suggested value is 86400 (one day). Certain use cases might opt for lower or higher TTL values. For scalability, it is imperative to pick values that make the most sense.
 
 
 ### Use Cases and Functionalities
@@ -255,11 +255,11 @@ This facilitates direct access to specific registry entries and simplifies integ
 Each field within the JSON structure for the `register`, `delete`, and `update` operations must meet specific criteria to be considered valid:
 
 - **`p` (Protocol)**: Must be a string matching `hcs-2`. This validates that the entry adheres to the current standard.
-- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed. Note, `update` and `delete` would not be valid or needed operations for a `non-indexed` topic. 
+- **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed. Note, `update` and `delete` would not be valid or needed operations for a `non-indexed` topic.
 - **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
 - **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
 - **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
-- **`ttl`**: An optional field providing an override to the TTL in the memo. Typically not required. 
+- **`ttl`**: An optional field providing an override to the TTL in the memo. Typically not required.
 
 ### Attributes Validation
 
@@ -267,4 +267,4 @@ Specific validation rules for each attribute ensure that users adhere to the for
 
 ### Conclusion
 
-HCS-2 creates a method of connecting data and enabling dynamic state registries 
+HCS-2 creates a method of connecting data and enabling dynamic state registries
