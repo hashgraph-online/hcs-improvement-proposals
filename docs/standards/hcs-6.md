@@ -21,6 +21,9 @@
 ## Authors
 - Kantorcodes [https://twitter.com/kantorcodes]()
 
+### Additional Authors
+- Patches [https://twitter.com/tmcc_patches]()
+
 ## Abstract
 
 This standard introduces a way to inscribe **Hashinals** whose `metadata` can be updated at a whim by utilizing an [HCS-2](./hcs-2.md), non-indexed Topic ID.
@@ -94,6 +97,7 @@ Dynamic **Hashinals** are only valid when
 - Their HCS-2 Topic ID is `non-indexed`
 - The latest message in the HCS-2 Topic ID has a valid [HCS-1 Topic ID](./hcs-1.md) for the `t_id` field
 - They specify a `ttl` that is at least `3600` (1 day)
+- It is created after `1713886229389232400` nanosecond timestamp
 
 
 ### Limitations
