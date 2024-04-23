@@ -19,6 +19,7 @@
       - [Delete](#delete)
       - [Update](#update)
       - [Migrate](#migrate)
+    - [Retrieval](#retrieval)
     - [Memo for Indexers and Browsers](#memo-for-indexers-and-browsers)
     - [Example Memo Format](#example-memo-format)
     - [Indexed Registry Mechanics \[enum: 0\]](#indexed-registry-mechanics-enum-0)
@@ -64,12 +65,14 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 ### Operations
 
-| Operation     | Description                                                        | Usable in non-indexed topic          |
-|-----------|--------------------------------------------------------------------|------------------------|
-| `Register` | Adds new entries or versions to the registry.| ✅
-| `Migrate`  | Moves messages to a new Topic ID. Previous messages are invalidated and new state is computed from the new Topic.  | ✅         |           |
-| `Delete`  | Removes entries based on UID.               | ❌             |
-| `Update`  | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers  | ❌         |
+A list of all operations available for this standard. Note, operations that are not finalized should not be used in production applications.
+
+| Operation  | Description                                                                                      | Usable in non-indexed topic | Finalized |
+|------------|--------------------------------------------------------------------------------------------------|----------------------------|-----------|
+| `Register` | Adds new entries or versions to the registry.                                                    | ✅                         | ✅        |
+| `Migrate`  | Moves messages to a new Topic ID. Previous messages are archived and new state is computed from the new Topic. The new Topic should either replicate all the data, or create a snapshot with a pointer to the old Topic. | ✅                         | ❌        |
+| `Delete`   | Removes entries based on UID.                                                                    | ❌                         | ✅        |
+| `Update`   | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers. | ❌                         | ✅        |
 
 
 #### Register
@@ -157,7 +160,13 @@ example usage:
 
 #### Migrate
 
-This operation is irreversible, and can only exist once within a Topic Id. New messages after a `migrate` operation are invalid. All HRLs pointing to this Topic ID, should use the new Topic Id to compute state.
+
+This operation is irreversible, and can only exist once within a Topic Id. New messages after a `migrate` operation are invalid. It is suggested to replicate all data from the previous Topic or create a snapshot with a pointer to the old Topic.
+
+### Retrieval
+All HRLs pointing to the original Topic, should utilize the new `t_id` to compute state. Additionally, root Topic Ids with more than 3 `migrate` operations in any part of the chain would be considered invalid. This safeguard would prevent infinite recursion.
+
+**Note, this operation is not finalized and should not be used in production.**
 
 Use the following JSON structure:
 
