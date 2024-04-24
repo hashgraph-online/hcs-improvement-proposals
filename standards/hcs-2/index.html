@@ -6,8 +6,6 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="This specification provides a standard way to create a new registry for a sub-standard like HCS-1.">
-      
       
       
         <link rel="canonical" href="https://hashgraphonline.com/standards/hcs-2/">
@@ -24,7 +22,7 @@
     
     
       
-        <title>HCS-2 Standard: Topic Registries - Hashgraph Online</title>
+        <title>HCS-2 Standard: Advanced Topic Registries - Hashgraph Online</title>
       
     
     
@@ -56,9 +54,9 @@
       
         <meta  property="og:type"  content="website" >
       
-        <meta  property="og:title"  content="HCS-2 Standard: Topic Registries - Hashgraph Online" >
+        <meta  property="og:title"  content="HCS-2 Standard: Advanced Topic Registries - Hashgraph Online" >
       
-        <meta  property="og:description"  content="This specification provides a standard way to create a new registry for a sub-standard like HCS-1." >
+        <meta  property="og:description"  content="None" >
       
         <meta  property="og:image"  content="https://hashgraphonline.com/assets/images/social/standards/hcs-2.png" >
       
@@ -72,9 +70,9 @@
       
         <meta  name="twitter:card"  content="summary_large_image" >
       
-        <meta  name="twitter:title"  content="HCS-2 Standard: Topic Registries - Hashgraph Online" >
+        <meta  name="twitter:title"  content="HCS-2 Standard: Advanced Topic Registries - Hashgraph Online" >
       
-        <meta  name="twitter:description"  content="This specification provides a standard way to create a new registry for a sub-standard like HCS-1." >
+        <meta  name="twitter:description"  content="None" >
       
         <meta  name="twitter:image"  content="https://hashgraphonline.com/assets/images/social/standards/hcs-2.png" >
       
@@ -92,7 +90,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#hcs-2-standard-topic-registries" class="md-skip">
+        <a href="#hcs-2-standard-advanced-topic-registries" class="md-skip">
           Skip to content
         </a>
       
@@ -125,7 +123,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              HCS-2 Standard: Topic Registries
+              HCS-2 Standard: Advanced Topic Registries
             
           </span>
         </div>
@@ -438,7 +436,7 @@
           
   
   <span class="md-ellipsis">
-    HCS-2 Standard: Topic Registries
+    HCS-2 Standard: Advanced Topic Registries
   </span>
   
 
@@ -449,7 +447,7 @@
         
   
   <span class="md-ellipsis">
-    HCS-2 Standard: Topic Registries
+    HCS-2 Standard: Advanced Topic Registries
   </span>
   
 
@@ -471,9 +469,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#status-draft" class="md-nav__link">
+  <a href="#status-published" class="md-nav__link">
     <span class="md-ellipsis">
-      Status: Draft
+      Status: Published
     </span>
   </a>
   
@@ -494,6 +492,30 @@
       Authors
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Authors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#primary-author" class="md-nav__link">
+    <span class="md-ellipsis">
+      Primary Author
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-authors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Authors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -521,6 +543,183 @@
       Specification
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-format-and-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Format and Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#register" class="md-nav__link">
+    <span class="md-ellipsis">
+      Register
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delete
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    <span class="md-ellipsis">
+      Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migrate
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      Retrieval
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memo-for-indexers-and-browsers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memo for Indexers and Browsers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-memo-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Memo Format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexed-registry-mechanics-enum-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      Indexed Registry Mechanics [enum: 0]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-indexed-registry-mechanics-enum-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Indexed Registry Mechanics [enum: 1]
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ttl-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      TTL Use Cases
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TTL Use Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases-and-functionalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases and Functionalities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-uri-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example URI Format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attributes-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attributes Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -575,6 +774,27 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hcs-6/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    HCS-6 Standard: Dynamic Hashinals
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -609,9 +829,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#status-draft" class="md-nav__link">
+  <a href="#status-published" class="md-nav__link">
     <span class="md-ellipsis">
-      Status: Draft
+      Status: Published
     </span>
   </a>
   
@@ -632,6 +852,30 @@
       Authors
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="Authors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#primary-author" class="md-nav__link">
+    <span class="md-ellipsis">
+      Primary Author
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#additional-authors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Authors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -660,6 +904,183 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Specification">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#registry-format-and-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Format and Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#register" class="md-nav__link">
+    <span class="md-ellipsis">
+      Register
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    <span class="md-ellipsis">
+      Delete
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    <span class="md-ellipsis">
+      Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Migrate
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      Retrieval
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memo-for-indexers-and-browsers" class="md-nav__link">
+    <span class="md-ellipsis">
+      Memo for Indexers and Browsers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-memo-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Memo Format
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indexed-registry-mechanics-enum-0" class="md-nav__link">
+    <span class="md-ellipsis">
+      Indexed Registry Mechanics [enum: 0]
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-indexed-registry-mechanics-enum-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Non-Indexed Registry Mechanics [enum: 1]
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ttl-use-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      TTL Use Cases
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TTL Use Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#use-cases-and-functionalities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Use Cases and Functionalities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-uri-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example URI Format
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Validation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attributes-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attributes Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -677,30 +1098,319 @@
                   
 
 
-<h1 id="hcs-2-standard-topic-registries">HCS-2 Standard: Topic Registries</h1>
-<h3 id="status-draft">Status: Draft</h3>
+<h1 id="hcs-2-standard-advanced-topic-registries">HCS-2 Standard: Advanced Topic Registries</h1>
+<h3 id="status-published">Status: Published</h3>
 <h3 id="table-of-contents">Table of Contents</h3>
 <ul>
-<li><a href="#hcs-2-standard-topic-registries">HCS-2 Standard: Topic Registries</a><ul>
-<li><a href="#status-draft">Status: Draft</a></li>
+<li><a href="#hcs-2-standard-advanced-topic-registries">HCS-2 Standard: Advanced Topic Registries</a><ul>
+<li><a href="#status-published">Status: Published</a></li>
 <li><a href="#table-of-contents">Table of Contents</a></li>
 </ul>
 </li>
-<li><a href="#authors">Authors</a></li>
+<li><a href="#authors">Authors</a><ul>
+<li><a href="#primary-author">Primary Author</a></li>
+<li><a href="#additional-authors">Additional Authors</a></li>
+</ul>
+</li>
 <li><a href="#abstract">Abstract</a></li>
 <li><a href="#motivation">Motivation</a></li>
-<li><a href="#specification">Specification</a></li>
+<li><a href="#specification">Specification</a><ul>
+<li><a href="#registry-format-and-usage">Registry Format and Usage</a></li>
+<li><a href="#operations">Operations</a></li>
+<li><a href="#register">Register</a></li>
+<li><a href="#delete">Delete</a></li>
+<li><a href="#update">Update</a></li>
+<li><a href="#migrate">Migrate</a></li>
+<li><a href="#retrieval">Retrieval</a></li>
+<li><a href="#memo-for-indexers-and-browsers">Memo for Indexers and Browsers</a></li>
+<li><a href="#example-memo-format">Example Memo Format</a></li>
+<li><a href="#indexed-registry-mechanics-enum-0">Indexed Registry Mechanics [enum: 0]</a></li>
+<li><a href="#non-indexed-registry-mechanics-enum-1">Non-Indexed Registry Mechanics [enum: 1]</a></li>
+</ul>
+</li>
+<li><a href="#ttl-use-cases">TTL Use Cases</a><ul>
+<li><a href="#use-cases-and-functionalities">Use Cases and Functionalities</a></li>
+<li><a href="#example-uri-format">Example URI Format</a></li>
+</ul>
+</li>
+<li><a href="#validation">Validation</a><ul>
+<li><a href="#attributes-validation">Attributes Validation</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
 </ul>
 <h2 id="authors">Authors</h2>
+<h3 id="primary-author">Primary Author</h3>
 <ul>
-<li>Kantorcodes <a href="">https://twitter.com/kantorcodes</a></li>
 <li>Patches <a href="">https://twitter.com/TMCC_Patches</a></li>
 </ul>
+<h3 id="additional-authors">Additional Authors</h3>
+<ul>
+<li>Kantorcodes <a href="">https://twitter.com/kantorcodes</a></li>
+</ul>
 <h2 id="abstract">Abstract</h2>
-<p>This specification provides a standard way to group Topic IDs that follow a particular standard into a single Topic for finding all related data.</p>
+<p>This standard introduces advanced methodologies for managing and interacting with Topic Registries within the HCS framework. It focuses on enabling dynamic metadata, versioning, and comprehensive file management through unique identifiers and protocols.</p>
 <h2 id="motivation">Motivation</h2>
-<p>Downstream clients would like an easy way to consume and identify related data in a standardized format.</p>
+<p>The advent of dynamic metadata and the need for detailed version histories and state management in decentralized environments have necessitated the development of more sophisticated Topic Registries. This standard aims to provide a robust framework for indexing, retrieving, and interpreting diverse data types, enhancing the utility and scalability of NFTs, and facilitating advanced web functionalities like full site recursion.</p>
 <h2 id="specification">Specification</h2>
+<h3 id="registry-format-and-usage">Registry Format and Usage</h3>
+<p>The registry should adopt a standardized format to ensure consistent access and interpretation. The following fields are introduced:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Example Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>Protocol used by the registry, typically <code>hcs-2</code> for this standard.</td>
+<td><code>hcs-2</code></td>
+</tr>
+<tr>
+<td><code>op</code></td>
+<td>Operation being executed (register, delete, update).</td>
+<td><code>register</code></td>
+</tr>
+<tr>
+<td><code>t_id</code></td>
+<td>Topic ID where the registry information is stored.</td>
+<td><code>0.0.1234567</code></td>
+</tr>
+<tr>
+<td><code>uid</code></td>
+<td>Sequence number for files or states within the registry.</td>
+<td><code>42</code></td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>Optional metadata providing additional context.</td>
+<td><code>Update for Q2 release</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>m</code> - memo is restricted to 500 characters</p>
+<h3 id="operations">Operations</h3>
+<p>A list of all operations available for this standard. Note, operations that are not finalized should not be used in production applications.</p>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Description</th>
+<th>Usable in non-indexed topic</th>
+<th>Finalized</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Register</code></td>
+<td>Adds new entries or versions to the registry.</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>Migrate</code></td>
+<td>Moves messages to a new Topic ID. Previous messages are archived and new state is computed from the new Topic. The new Topic should either replicate all the data, or create a snapshot with a pointer to the old Topic.</td>
+<td>✅</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>Delete</code></td>
+<td>Removes entries based on UID.</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>Update</code></td>
+<td>Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers.</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h4 id="register">Register</h4>
+<p>Registration allows creating additional entries / versions to the Topic. Utilize the follow JSON structure for valid messages.</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;register&quot;,
+  &quot;t_id&quot;: &quot;TOPIC_ID_TO_REGISTER&quot;,
+  &quot;metadata&quot;: &quot;OPTIONAL_METADATA (HIP-412 compliant)&quot;,
+  &quot;m&quot;: &quot;OPTIONAL_MEMO&quot;,
+}
+</code></pre>
+<p>example useage:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;register&quot;,
+  &quot;t_id&quot;: &quot;0.0.123456&quot;,
+  &quot;metadata&quot;: &quot;hcs://1/0.0.456789&quot;,
+  &quot;m&quot;: &quot;register t&quot;,
+}
+</code></pre>
+<h4 id="delete">Delete</h4>
+<p>Remove entries based on UID or sequence number of the message on the topic id.</p>
+<p><strong>This operation is invalid for non-indexed topics</strong></p>
+<p>Use the following JSON structure:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;delete&quot;,
+  &quot;uid&quot;: &quot;SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE&quot;,
+  &quot;m&quot;: &quot;OPTIONAL_MEMO&quot;
+}
+</code></pre>
+<p>example usage:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;delete&quot;,
+  &quot;uid&quot;: &quot;33&quot;,
+  &quot;m&quot;: &quot;remove hashsite from users bookmark&quot;
+}
+</code></pre>
+<h4 id="update">Update</h4>
+<p>Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata.</p>
+<p><strong>This operation is invalid for non-indexed topics</strong></p>
+<p>Use the following JSON structure:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;update&quot;,
+  &quot;uid&quot;: &quot;SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE&quot;,
+  &quot;t_id&quot;: &quot;NEW_TOPIC_ID_TO_REGISTER&quot;,
+  &quot;metadata&quot;: &quot;OPTIONAL_METADATA (HIP-412 compliant)&quot;,
+  &quot;m&quot;: &quot;OPTIONAL_MEMO&quot;
+}
+</code></pre>
+<p>example usage:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;update&quot;,
+  &quot;uid&quot;: &quot;60&quot;,
+  &quot;t_id&quot;: &quot;0.0.123456&quot;,
+  &quot;metadata&quot;: &quot;hcs://1/0.0.456789&quot;,
+  &quot;m&quot;: &quot;update sequence number 60 to a new topic id and metadata&quot;
+}
+</code></pre>
+<h4 id="migrate">Migrate</h4>
+<p>This operation is irreversible, and can only exist once within a Topic Id. New messages after a <code>migrate</code> operation are invalid. It is suggested to replicate all data from the previous Topic or create a snapshot with a pointer to the old Topic.</p>
+<h3 id="retrieval">Retrieval</h3>
+<p>All HRLs pointing to the original Topic, should utilize the new <code>t_id</code> to compute state. Additionally, root Topic Ids with more than 3 <code>migrate</code> operations in any part of the chain would be considered invalid. This safeguard would prevent infinite recursion.</p>
+<p><strong>Note, this operation is not finalized and should not be used in production.</strong></p>
+<p>Use the following JSON structure:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;migrate&quot;,
+  &quot;t_id&quot;: &quot;NEW_TOPIC_ID_TO_MIGRATE_TO&quot;,
+  &quot;metadata&quot;: &quot;OPTIONAL_METADATA (HIP-412 compliant)&quot;,
+  &quot;m&quot;: &quot;OPTIONAL_MEMO&quot;
+}
+</code></pre>
+<p>example usage:</p>
+<pre><code class="language-json">{
+  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;op&quot;: &quot;migrate&quot;,
+  &quot;t_id&quot;: &quot;0.0.123456&quot;,
+  &quot;metadata&quot;: &quot;hcs://1/0.0.456789&quot;,
+  &quot;m&quot;: &quot;All hope is lost. We're moving on.&quot;
+}
+</code></pre>
+<h3 id="memo-for-indexers-and-browsers">Memo for Indexers and Browsers</h3>
+<p>A memo system is defined for indexers and browsers to understand the data's state and interpret it accordingly. The memo format follows:</p>
+<p><code>[protocol_standard]:[indexed]:[ttl]</code></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+<th>Example Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>protocol_standard</code></td>
+<td>Protocol used by the registry, <code>hcs-2</code> for this standard.</td>
+<td><code>hcs-2</code></td>
+</tr>
+<tr>
+<td><code>indexed</code></td>
+<td>enum value of if all messages need pulled down or only the last / newest message</td>
+<td><code>0</code></td>
+</tr>
+<tr>
+<td><code>ttl</code></td>
+<td>a numeric value, representing the number of seconds which external infrastructure can use to determine how long messages in this registry should be stored in cache</td>
+<td><code>60</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Indexed enum</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>The topic id is indexed, and all messages should be read</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>The topic id is not indexed, and only the last message should be used to determine state / topic data</td>
+</tr>
+</tbody>
+</table>
+<h3 id="example-memo-format">Example Memo Format</h3>
+<p><code>hcs-2:0:60</code></p>
+<h3 id="indexed-registry-mechanics-enum-0">Indexed Registry Mechanics [enum: 0]</h3>
+<p>Uses:
+Topic ids used for registiers where you need all records to get the data you need to execute logic. Typically good for most registeries.</p>
+<p>Examples:
+1. User registry for profiles of a video game
+2. A registry for posts on a social media site for a specific user</p>
+<ul>
+<li>Expectation for new records to be continually added.</li>
+<li>Indexers should gather all files and metadata listed in the registry.</li>
+<li>Processing state should start from the first message and proceed to the last sequential message number.</li>
+</ul>
+<h3 id="non-indexed-registry-mechanics-enum-1">Non-Indexed Registry Mechanics [enum: 1]</h3>
+<p>Uses:
+Topic ids used for dynamic state of an entity. The latest message being used is the current state of the entity being defined</p>
+<p>Examples:
+1. A description for a product on a ecom site
+2. A state of an NFT for a video game</p>
+<ul>
+<li>Expectation for new records to be continually added.</li>
+<li>Indexers should gather <code>only the last message</code> and metadata in that message will determine the protocol and execution.</li>
+<li>Processing state should start from the first message and proceed to the last sequential message number.</li>
+</ul>
+<h2 id="ttl-use-cases">TTL Use Cases</h2>
+<p>External infrastructure, dApps, clients should utilize the TTL as a reference point for how long to cache data, before attempting to fetch new messages from the registry. The default suggested value is 86400 (one day). Certain use cases might opt for lower or higher TTL values. For scalability, it is imperative to pick values that make the most sense.</p>
+<h3 id="use-cases-and-functionalities">Use Cases and Functionalities</h3>
+<ul>
+<li>Dynamic metadata enables NFTs and other assets to reflect changes and updates over time.</li>
+<li>Full version history allows for a complete understanding of an item's evolution.</li>
+<li>Enhanced file and website management through recursive indexing and state awareness.</li>
+</ul>
+<h3 id="example-uri-format">Example URI Format</h3>
+<p>Registry links should follow a consistent format to ensure easy access and interpretation:</p>
+<p><code>hcs://2/{topic_id}</code></p>
+<p>This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.</p>
+<h2 id="validation">Validation</h2>
+<p>Each field within the JSON structure for the <code>register</code>, <code>delete</code>, and <code>update</code> operations must meet specific criteria to be considered valid:</p>
+<ul>
+<li><strong><code>p</code> (Protocol)</strong>: Must be a string matching <code>hcs-2</code>. This validates that the entry adheres to the current standard.</li>
+<li><strong><code>op</code> (Operation)</strong>: Must be one of <code>register</code>, <code>delete</code>, or <code>update</code>. This indicates the action being performed. Note, <code>update</code> and <code>delete</code> would not be valid or needed operations for a <code>non-indexed</code> topic.</li>
+<li><strong><code>t_id</code> (Topic ID)</strong>: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., <code>0.0.123456</code>).</li>
+<li><strong><code>uid</code> (Unique Identifier)</strong>: Must be a valid sequence number or unique identifier relevant to the operation.</li>
+<li><strong><code>m</code> (Memo)</strong>: An optional field providing additional context or information. Limited to 500 characters.</li>
+<li><strong><code>ttl</code></strong>: An optional field providing an override to the TTL in the memo. Typically not required.</li>
+</ul>
+<h3 id="attributes-validation">Attributes Validation</h3>
+<p>Specific validation rules for each attribute ensure that users adhere to the format and standards expected within the HCS framework, enhancing interoperability and consistency.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>HCS-2 creates a method of connecting data and enabling dynamic state registries</p>
 
 
 
