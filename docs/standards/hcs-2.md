@@ -1,11 +1,11 @@
 # HCS-2 Standard: Advanced Topic Registries
 
-### Status: Draft
+### Status: Published
 
 ### Table of Contents
 
 - [HCS-2 Standard: Advanced Topic Registries](#hcs-2-standard-advanced-topic-registries)
-    - [Status: Draft](#status-draft)
+    - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
     - [Primary Author](#primary-author)

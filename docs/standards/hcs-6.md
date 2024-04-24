@@ -1,13 +1,14 @@
 # HCS-6 Standard: Dynamic Hashinals
 
-### Status: Draft
+### Status: Published
 
 ### Table of Contents
 
 - [HCS-6 Standard: Dynamic Hashinals](#hcs-6-standard-dynamic-hashinals)
-    - [Status: Draft](#status-draft)
+    - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
+    - [Additional Authors](#additional-authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
@@ -26,7 +27,7 @@
 
 ## Abstract
 
-This standard introduces a way to inscribe **Hashinals** whose `metadata` can be updated at a whim by utilizing an [HCS-2](./hcs-2.md), non-indexed Topic ID.
+This standard introduces a way to inscribe and tokenize **Hashinals** whose `metadata` can be updated at a whim by utilizing an [HCS-2](./hcs-2.md), non-indexed Topic ID.
 
 ## Motivation
 
@@ -59,7 +60,7 @@ The only variable element in the memo would be the `ttl` field. We suggest a lon
 
 ### Metadata
 
-Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-2` hcsStandard instead of `HCS-1`. The resulting hrl minted onto a serial number includes the protocol number `6`
+Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-2` hcsStandard instead of `HCS-1`. The resulting [HRL](../definitions.md) minted onto a serial number includes the protocol number `6`
 
 The format of the `metadata` on a dynamic **Hashinal** is as follows:
 
