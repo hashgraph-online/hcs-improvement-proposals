@@ -600,9 +600,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creating-an-hcs-2-topic-id" class="md-nav__link">
+  <a href="#creating-an-hcs-6-topic-id" class="md-nav__link">
     <span class="md-ellipsis">
-      Creating an HCS-2 Topic ID
+      Creating an HCS-6 Topic ID
     </span>
   </a>
   
@@ -771,9 +771,9 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#creating-an-hcs-2-topic-id" class="md-nav__link">
+  <a href="#creating-an-hcs-6-topic-id" class="md-nav__link">
     <span class="md-ellipsis">
-      Creating an HCS-2 Topic ID
+      Creating an HCS-6 Topic ID
     </span>
   </a>
   
@@ -860,7 +860,7 @@
 <li><a href="#abstract">Abstract</a></li>
 <li><a href="#motivation">Motivation</a></li>
 <li><a href="#specification">Specification</a><ul>
-<li><a href="#creating-an-hcs-2-topic-id">Creating an HCS-2 Topic ID</a></li>
+<li><a href="#creating-an-hcs-6-topic-id">Creating an HCS-6 Topic ID</a></li>
 <li><a href="#metadata">Metadata</a></li>
 <li><a href="#submitting-messages">Submitting Messages</a></li>
 <li><a href="#validation">Validation</a></li>
@@ -878,7 +878,7 @@
 <li>Patches <a href="">https://twitter.com/tmcc_patches</a></li>
 </ul>
 <h2 id="abstract">Abstract</h2>
-<p>This standard introduces a way to inscribe and tokenize <strong>Hashinals</strong> whose <code>metadata</code> can be updated at a whim by utilizing an <a href="../hcs-2/">HCS-2</a>, non-indexed Topic ID.</p>
+<p>This standard is a sub-standard of <a href="../hcs-2/">HCS-2</a> which introduces a way to inscribe and tokenize <strong>Hashinals</strong> whose <code>metadata</code> can be updated at a whim by utilizing a non-indexed Topic ID. The latest message points to the current <code>metadata</code> for an NFT.</p>
 <h2 id="motivation">Motivation</h2>
 <p>Creators of NFT Collections, sometimes desire the ability to change the metadata of an NFT, for example in cases of:</p>
 <ul>
@@ -888,33 +888,34 @@
 </ul>
 <p>The list above is non-exhaustive and can be expanded to many use cases.</p>
 <h2 id="specification">Specification</h2>
+<p>HCS-6 is largely built on top of <a href="../hcs-2/">HCS-2</a> which describes how Advanced Topic Registries work. Please read that document for further clarity.</p>
 <p>Creating a Dynamic <strong>Hashinal</strong> involves four steps.</p>
 <ol>
-<li>Creating a valid, <code>non-indexed</code> <a href="../hcs-2/">HCS-2</a> Topic ID</li>
+<li>Creating a valid, <code>non-indexed</code> <a href="#creating-an-hcs-6-topic-id">HCS-6</a> Topic ID</li>
 <li>Minting a new Serial Number on a Token ID following the <a href="#metadata">Metadata</a> format</li>
 <li>Creating a valid <a href="../hcs-1/">HCS-1</a> Topic ID</li>
-<li>Submitting a valid message to the HCS-2 Topic ID with the HCS-1 file.</li>
+<li>Submitting a valid message to the HCS-6 Topic ID with the HCS-1 file.</li>
 </ol>
-<p>Steps 2-4 can be repeated every time the NFT will be updated.</p>
-<h3 id="creating-an-hcs-2-topic-id">Creating an HCS-2 Topic ID</h3>
+<p>Steps 2-4 can be repeated every time the NFT will be updated. </p>
+<h3 id="creating-an-hcs-6-topic-id">Creating an HCS-6 Topic ID</h3>
 <p>The <code>memo</code> field for Dynamic Hashinals must follow this format to be valid.</p>
-<p><code>`hcs-2:non-indexed:{ttl}</code></p>
+<p><code>`hcs-6:non-indexed:{ttl}</code></p>
 <p>The only variable element in the memo would be the <code>ttl</code> field. We suggest a longer <code>ttl</code> as this is the time in seconds that gateways and clients will store the previous version of your <code>metadata</code> in their cache. In the future, gateways and clients may decide to prioritize Topics with longer <code>metadata</code> by imposing fees, introducing rate limits, etc. The minimum <code>ttl</code> must be <code>3600</code> (1 hour) to be valid, and the suggested minimum would be <code>86400</code> (1 day)</p>
 <h3 id="metadata">Metadata</h3>
-<p>Dynamic <strong>Hashinals</strong> follow all of the same rules described in <a href="../hcs-5/">HCS-5</a>, with one main exception being that they will utilize the <code>HCS-2</code> hcsStandard instead of <code>HCS-1</code>. The resulting <a href="../../definitions/">HRL</a> minted onto a serial number includes the protocol number <code>6</code></p>
+<p>Dynamic <strong>Hashinals</strong> follow all of the same rules described in <a href="../hcs-5/">HCS-5</a>, with one main exception being that they will utilize the <code>HCS-6</code> hcsStandard instead of <code>HCS-1</code>. The resulting <a href="../../definitions/">HRL</a> minted onto a serial number includes the protocol number <code>6</code></p>
 <p>The format of the <code>metadata</code> on a dynamic <strong>Hashinal</strong> is as follows:</p>
 <p><code>hcs://6/{topicId}</code></p>
-<p><code>topicId</code> is a valid HCS-2 Registry Topic ID in which data for this NFT will be or is written to.</p>
+<p><code>topicId</code> is a valid HCS-6 Registry Topic ID in which data for this NFT will be or is written to.</p>
 <p>The purpose of including the file standard in the HRL is to enable client applications to make logical decisions based on its existence. For example:</p>
 <ul>
 <li>a client might decide to use a different gateway to load immutable (HCS-5) versus Dynamic (HCS-6) Hashinals without needing to load the <code>memo</code> for each topic.</li>
-<li>analytics and indexer applications can search for all NFTs that include a HCS-2 HRL.</li>
+<li>analytics and indexer applications can search for all NFTs that include a HCS-6 HRL.</li>
 </ul>
 <h3 id="submitting-messages">Submitting Messages</h3>
-<p>In a <code>non-indexed</code> Topic ID, the most recent <code>register</code> operation is the current pointer for your metadata. You can submit a new message to update the <code>metadata</code> within the <code>ttl</code> specified on the <code>memo</code> of your HCS-2 Topic ID.</p>
+<p>In a <code>non-indexed</code> Topic ID, the most recent <code>register</code> operation is the current pointer for your metadata. You can submit a new message to update the <code>metadata</code> within the <code>ttl</code> specified on the <code>memo</code> of your HCS-6 Topic ID.</p>
 <p>Each message follows this format.</p>
 <pre><code class="language-json">{
-  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;p&quot;: &quot;hcs-6&quot;,
   &quot;op&quot;: &quot;register&quot;,
   // the HCS-1 Topic ID
   &quot;t_id&quot;: &quot;0.0.12345&quot;,
@@ -925,9 +926,9 @@
 <h3 id="validation">Validation</h3>
 <p>Dynamic <strong>Hashinals</strong> are only valid when</p>
 <ul>
-<li>Their HCS-2 Topic ID is <code>non-indexed</code></li>
-<li>The latest message in the HCS-2 Topic ID has a valid <a href="../hcs-1/">HCS-1 Topic ID</a> for the <code>t_id</code> field</li>
-<li>They specify a <code>ttl</code> that is at least <code>3600</code> (1 day)</li>
+<li>Their HCS-6 Topic ID is <code>non-indexed</code></li>
+<li>The latest message in the HCS-6 Topic ID has a valid <a href="../hcs-1/">HCS-1 Topic ID</a> for the <code>t_id</code> field</li>
+<li>They specify a <code>ttl</code> that is at least <code>3600</code> (1 hour)</li>
 <li>It is created after <code>1713886229389232400</code> nanosecond timestamp</li>
 </ul>
 <h3 id="limitations">Limitations</h3>
@@ -936,9 +937,9 @@
 <li>Inscribed messages cannot utilize recursion in submitted messages to the registry. For example, the following would be invalid</li>
 </ol>
 <pre><code class="language-json">{
-  &quot;p&quot;: &quot;hcs-2&quot;,
+  &quot;p&quot;: &quot;hcs-6&quot;,
   &quot;op&quot;: &quot;register&quot;,
-  // an HCS-2 Topic ID
+  // an HCS-6 Topic ID
   &quot;t_id&quot;: &quot;0.0.12345&quot;,
   &quot;m&quot;: &quot;Pointing metadata to another registry.&quot;,
 }
