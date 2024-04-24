@@ -97,7 +97,7 @@ Dynamic **Hashinals** are only valid when
 
 - Their HCS-2 Topic ID is `non-indexed`
 - The latest message in the HCS-2 Topic ID has a valid [HCS-1 Topic ID](./hcs-1.md) for the `t_id` field
-- They specify a `ttl` that is at least `3600` (1 day)
+- They specify a `ttl` that is at least `3600` (1 hour)
 - It is created after `1713886229389232400` nanosecond timestamp
 
 

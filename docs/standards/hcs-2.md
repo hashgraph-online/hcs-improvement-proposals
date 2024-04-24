@@ -268,7 +268,7 @@ Each field within the JSON structure for the `register`, `delete`, and `update` 
 - **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
 - **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
 - **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
-- **`ttl`**: An optional field providing an override to the TTL in the memo. Typically not required.
+- **`ttl` (Time to live)**: An optional field providing an override to the TTL in the memo. Typically not required.
 
 ### Attributes Validation
 
