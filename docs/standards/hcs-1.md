@@ -26,57 +26,51 @@ description: The HCS-1 standard provides a systematic approach to encode, chunk,
 ### Additional Authors
 - Patches [https://twitter.com/tmcc_patches]()
 
-## Abstract
+### Abstract
+The HCS-1 standard offers a structured method to encode, chunk, upload, retrieve, and reassemble file data using Hedera Consensus Service (HCS). This standard focuses on the JSON structure and Topic ID for effective data management, regardless of implementation details.
 
-The HCS-1 standard provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS). This process is agnostic of the implementation details, focusing on the JSON structure and the use of a Topic ID for efficient data management.
+### Motivation
+Storing data on-chain is vital for verification, immutability, and scaling web3 applications. This specification supports use cases like Hashinals, decentralized applications, and enhanced peer-to-peer communication without relying on cloud infrastructure.
 
-## Motivation
-Storing data on-chain has become increasingly important for verification, immutability, and scale of web3 applications. This specification will enable future use cases like **Hashinals**, truly *decentralized* applications, and enhanced peer-to-peer communication without the need of typical cloud infrastructure.
+### HCS Topic Validation
+HCS-1 topics must:
 
-## HCS Topic Validation
- HCS-1 topics must
-
-  - include a SHA-256 hash of the file being uploaded, the compression algorithm being used, and the encoding as the **memo**. Viewers of HCS-1 data will read the memo to understand if the file data is valid by comparing the file hash to the memo. Please read [Memo Structure](#memo-structure) for details on how to properly generate a memo.
-  - include a Submit Key. HCS-1 Topics without a Submit Key will automatically be marked as invalid files, and will be ignored.
-  - NOT include an Admin Key. HCS-1 Topics with an Admin Key will automatically be marked as invalid files, and will be ignored. This ensures that data cannot be deleted, reducing risk for all participants in the protocol.
-In summary, a valid HCS-1 Topic includes a SHA-256 hash of the file being uploaded in its memo, a submit key, and no admin key.
+1. **Include a SHA-256 Hash**: The memo should contain the file's SHA-256 hash, compression algorithm, and encoding. This ensures data validity by comparing the file hash to the memo.
+2. **Submit Key**: Topics must have a Submit Key. Topics without this key are invalid and ignored.
+3. **No Admin Key**: Topics with an Admin Key are invalid and ignored, ensuring data cannot be deleted, reducing protocol risk.
 
 ### Memo Structure
+The memo format is:
 
- The format for the memo is as follows:
+```
+[hash]:[algo]:[encoding]
+```
 
- ```[hash]:[algo]:[encoding]```
+- **[hash]**: SHA-256 hash of the file before compression.
+- **[algo]**: Compression algorithm (e.g., zstd).
+- **[encoding]**: Encoding method (e.g., base64).
 
- - [hash] is the SHA-256 hash of the file being uploaded before any compression
- - [algo] is the compression algorithm being used, for example, `zstd`
- - [encoding] is the encoding used to store the compressed file
+Example:
 
- For example a valid memo would like:
+```
+532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25:zstd:base64
+```
 
- ```532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25:zstd:base64```
+Only `zstd` and `base64` are currently supported.
 
- At this time, only zstd and base64 encoding are supported. If you'd like a different compression algorithm or encoding to be approved, please raise a pull request.
+### Encoding and Chunking
+Steps to format file data for HCS:
 
-## Encoding and Chunking
+1. **Compression**: Compress the file using `zstd` (e.g., using MongoDB library in NodeJS).
+    ```javascript
+    const compressedFile = await compress(file, 10);
+    ```
+2. **Base64 Encoding**: Convert the compressed data (buffer) to a base64 string.
+3. **Chunking**: Split the base64 string into chunks ≤ 1024 bytes, encapsulated in JSON objects with:
+   - `o`: Order index.
+   - `c`: Chunk content.
 
-Before uploading to HCS, file data must be formatted correctly by following these three steps
-
-1. The entire file should be compressed using zstd, this ensures cost-savings on all ends of the protocol in a lossless format.
-  - Plenty of implementations for zSTD exist, for example, using NodeJS you could use the MongoDB library: https://github.com/mongodb-js/zstd/tree/main
-  - ``` const compressedFile = await compress(file, 10);  ```
-  - We recommend using a compression level of 10, but any compression level should work.
-2. After compressing, the resulting data (typically a buffer) should be converted into a base64 string
-3. The final base64 string should chunked into segments no greater than 1024 bytes. Each chunk is encapsulated in a JSON object with two attributes:
-
-- `o`: The order index indicating the chunk's sequence in the overall file.
-- `c`: The chunk's content, a substring of the base64-encoded file. The first chunk aka, `o = 0` should include a data prefix for the mime type.
-
-The format for the data prefix is
-```data:[mimeType];base64```
-For example:
-```data:image/png;base64,```
-
-The format for each chunk in a message is as follows:
+Example chunk format:
 ```json
 {
   "o": 0,
@@ -85,20 +79,15 @@ The format for each chunk in a message is as follows:
 ```
 
 ### Uploading to HCS
+Upload each chunk as an HCS message to a Hedera Consensus Service topic. The order of upload doesn't matter due to the `o` property in the JSON schema, allowing parallel uploads.
 
-Each chunk is uploaded to a Hedera Consensus Service topic as an HCS message. Keep in mind that because of the `o` property in the JSON schema, the sequence number that the chunk is uploaded in does not matter. This enables uploading many chunks in parallel.
+### Retrieving and Reassembling
+Steps to display the data:
 
-## Retrieving and Reassembling
+1. **Fetch Messages**: Retrieve all chunk messages from the Topic ID and sort by `o`.
+2. **Concatenate and Decompress**: Combine the chunks and decompress using a `zstd` decoding library.
+3. **Verify Hash**: Ensure the Topic ID memo matches the SHA-256 hash of the decompressed data.
+4. **Decode**: Convert the uncompressed base64 string back into binary data.
 
-To display the data, the application retrieves all chunk messages from the specified HCS topic. Chunks are sorted by their order index (`o`) and concatenated based on their content (`c`). The combined base64 string is then decoded back into binary data for display.
-
-The complete steps are:
-
-1. Fetch all messages from the Topic ID, and sort them by their index `o`
-2. Concatenate the messages together, and decompress the file using a `zstd` decoding library.
-3. Ensure the memo of the Topic ID matches the SHA-256 hash of the decompressed file data.
-4. Convert the uncompressed base64 string into binary data
-
-## Conclusion
-
-The HCS-1 standard outlines a robust protocol for managing file data sets of all sizes and mime types within the Hedera Consensus Service, leveraging JSON for data structuring and a registry for efficient topic management. This approach ensures data integrity, facilitates easy data retrieval, and supports scalable application development on Hedera.
+### Conclusion
+The HCS-1 standard provides a reliable protocol for managing file data within Hedera Consensus Service. It leverages JSON for data structuring and a registry for efficient topic management, ensuring data integrity and facilitating scalable application development on Hedera.
