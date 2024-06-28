@@ -14,6 +14,7 @@
     - [Creating an HCS-7 Topic ID](#creating-an-hcs-7-topic-id)
     - [Metadata](#metadata)
     - [Submitting Messages](#submitting-messages)
+    - [Configuration Message](#configuration-message)
     - [Validation](#validation)
     - [Rendering](#rendering)
     - [Examples](#examples)
@@ -96,9 +97,25 @@ Registering config follows this format:
 }
 ```
 
-The smart contract function must be public, and not mutate state(nonpayable) or the Smart Hashinal will not render. To reduce message size, `payable`, `stateMutability`, and `type` fields should be excluded. This is to ensure that execution is free.
+Registering valid HCS-1 Topics to choose from follows this format:
 
-These excluded fields are assumed to have the following defaults when calling the method:
+```json
+{
+  "p": "hcs-7",
+  "op": "register",
+  // the HCS-1 Topic ID
+  "t_id": "0.0.12345",
+  "m": "Version 1"
+}
+```
+
+### Configuration Message
+
+The ABI provided to the configuration must be public, and not mutate state(nonpayable) or the Smart Hashinal will not render.
+
+To reduce message size, `payable`, `stateMutability`, and `type` fields should be excluded from the JSON.
+
+To ensure execution is free, these excluded fields are assumed to have the following defaults when calling the method.
 
 ```json
 { "payable": false, "stateMutability": "nonpayable", "type": "function" }
@@ -119,18 +136,6 @@ These excluded fields are assumed to have the following defaults when calling th
 | `c.abi.outputs`     | Array of output parameters for the method (empty in this case). |
 | `m`                 | Memo field for the message, here it is "config".                |
 
-Registering valid HCS-1 Topics to choose from follows this format:
-
-```json
-{
-  "p": "hcs-7",
-  "op": "register",
-  // the HCS-1 Topic ID
-  "t_id": "0.0.12345",
-  "m": "Version 1"
-}
-```
-
 ### Validation
 
 Dynamic **Hashinals** are only valid when
@@ -145,7 +150,8 @@ Dynamic **Hashinals** are only valid when
 Unlike HCS-6, the latest Sequence Number does not determine which metadata to display. Instead, the output of calling the ABI described in the `configuration` message would return an Integer that maps to a sequence number to choose from.
 
 ### Examples
- TBD example smart contract implementations
+
+TBD example smart contract implementations
 
 ### Limitations
 
