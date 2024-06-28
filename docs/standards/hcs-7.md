@@ -76,7 +76,6 @@ Registering config follows this format:
   "p": "hcs-7",
   "op": "register",
   "c": {
-    "m": "run",
     "abi": {
       "constant": false,
       "inputs": [
@@ -127,8 +126,7 @@ To ensure execution is free, these excluded fields are assumed to have the follo
 | ------------------- | --------------------------------------------------------------- |
 | `p`                 | Protocol identifier, here it is "hcs-7".                        |
 | `op`                | Operation type, here it is "register".                          |
-| `c`                 | Configuration object containing method details.                 |
-| `c.m`               | Method name, here it is "run".                                  |
+| `c`                 | Configuration object containing method details.                
 | `c.abi`             | ABI definition for the method.                                  |
 | `c.abi.constant`    | Indicates if the method is constant.                            |
 | `c.abi.inputs`      | Array of input parameters for the method.                       |
@@ -136,11 +134,11 @@ To ensure execution is free, these excluded fields are assumed to have the follo
 | `c.abi.inputs.type` | Type of the input parameter, here it is "address".              |
 | `c.abi.name`        | Method name, here it is "run".                                  |
 | `c.abi.outputs`     | Array of output parameters for the method (empty in this case). |
-| `m`                 | Memo field for the message, here it is "config".                |
+| `m`                 | Should always be "config"          |
 
 ### Validation
 
-Dynamic **Hashinals** are only valid when
+Smart **Hashinals** are only valid when
 
 - Their HCS-7 Topic ID is `indexed`
 - Valid [HCS-1 Topic IDs](./hcs-1.md) are registered with a `t_id` field
