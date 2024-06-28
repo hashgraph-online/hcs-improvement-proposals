@@ -72,7 +72,6 @@ Registering config follows this format:
 {
   "p": "hcs-7",
   "op": "register",
-  // the HCS-1 Topic ID
   "c": {
     "m": "run",
     "abi": {
