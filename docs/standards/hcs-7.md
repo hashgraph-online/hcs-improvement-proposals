@@ -37,9 +37,11 @@ HCS-6 introduced a novel way of updating metadata of a Hashinal dynamically by r
 - When experience points in-game drop increase to a certain point
 - When price of an asset changes
 
+These kinds of use cases, while possible with HCS-6, would require submitting many messages to the Topic Id. HCS-7, through trustless, programmatic, verifiable execution solves for this.
+
 ## Specification
 
-HCS-6 is largely built on top of [HCS-6](./hcs-6.md) which describes how Dynamic Hashinals work. Please read that document for further clarity.
+HCS-7 is largely built on top of [HCS-6](./hcs-6.md) which describes how Dynamic Hashinals work. Please read that document for further clarity.
 
 **Smart Hashinals** follow the same steps for tokenization.
 
