@@ -58,7 +58,7 @@ The registry should adopt a standardized format to ensure consistent access and 
 | `p`       | Protocol used by the registry, typically `hcs-2` for this standard.| `hcs-2`                |
 | `op`      | Operation being executed (register, delete, update).               | `register`             |
 | `t_id`    | Topic ID where the registry information is stored.                 | `0.0.1234567`          |
-| `uid`     | Sequence number for files or states within the registry.         | `42`            |
+| `sid`     | Sequence number for files or states within the registry.         | `42`            |
 | `m`       | Optional metadata providing additional context.                    | `Update for Q2 release`|
 
 `m` - memo is restricted to 500 characters
@@ -71,7 +71,7 @@ A list of all operations available for this standard. Note, operations that are 
 |------------|--------------------------------------------------------------------------------------------------|----------------------------|-----------|
 | `Register` | Adds new entries or versions to the registry.                                                    | ✅                         | ✅        |
 | `Migrate`  | Moves messages to a new Topic ID. Previous messages are archived and new state is computed from the new Topic. The new Topic should either replicate all the data, or create a snapshot with a pointer to the old Topic. | ✅                         | ❌        |
-| `Delete`   | Removes entries based on UID.                                                                    | ❌                         | ✅        |
+| `Delete`   | Removes entries based on sid.                                                                    | ❌                         | ✅        |
 | `Update`   | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers. | ❌                         | ✅        |
 
 
@@ -102,7 +102,7 @@ example useage:
 
 #### Delete
 
-Remove entries based on UID or sequence number of the message on the topic id.
+Remove entries based on sid or sequence number of the message on the topic id.
 
 **This operation is invalid for non-indexed topics**
 
@@ -112,7 +112,7 @@ Use the following JSON structure:
 {
   "p": "hcs-2",
   "op": "delete",
-  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
+  "sid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_DELETE",
   "m": "OPTIONAL_MEMO"
 }
 ```
@@ -122,14 +122,14 @@ example usage:
 {
   "p": "hcs-2",
   "op": "delete",
-  "uid": "33",
+  "sid": "33",
   "m": "remove hashsite from users bookmark"
 }
 ```
 
 #### Update
 
-Modify existing entries, completed by updating the uid or sequence number and updating that record with new metadata.
+Modify existing entries, completed by updating the sid or sequence number and updating that record with new metadata.
 
 **This operation is invalid for non-indexed topics**
 
@@ -139,7 +139,7 @@ Use the following JSON structure:
 {
   "p": "hcs-2",
   "op": "update",
-  "uid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
+  "sid": "SEQUENCE_NUMBER_OF_REGISTER_MESSAGE_TO_UPDATE",
   "t_id": "NEW_TOPIC_ID_TO_REGISTER",
   "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
   "m": "OPTIONAL_MEMO"
@@ -151,7 +151,7 @@ example usage:
 {
   "p": "hcs-2",
   "op": "update",
-  "uid": "60",
+  "sid": "60",
   "t_id": "0.0.123456",
   "metadata": "hcs://1/0.0.456789",
   "m": "update sequence number 60 to a new topic id and metadata"
@@ -266,7 +266,7 @@ Each field within the JSON structure for the `register`, `delete`, and `update` 
 - **`p` (Protocol)**: Must be a string matching `hcs-2`. This validates that the entry adheres to the current standard.
 - **`op` (Operation)**: Must be one of `register`, `delete`, or `update`. This indicates the action being performed. Note, `update` and `delete` would not be valid or needed operations for a `non-indexed` topic.
 - **`t_id` (Topic ID)**: Should match the Hedera account ID format, which is three groups of numbers separated by periods (e.g., `0.0.123456`).
-- **`uid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
+- **`sid` (Unique Identifier)**: Must be a valid sequence number or unique identifier relevant to the operation.
 - **`m` (Memo)**: An optional field providing additional context or information. Limited to 500 characters.
 - **`ttl` (Time to live)**: An optional field providing an override to the TTL in the memo. Typically not required.
 
