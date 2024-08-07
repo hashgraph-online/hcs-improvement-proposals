@@ -51,4 +51,4 @@ To avoid this, poll authors can create a HCS topic with a submit key. This locks
 
 ## Specification
 
-Detailed specifications are under development. 
+Detailed specifications are under development. Please contact the author for more details.
