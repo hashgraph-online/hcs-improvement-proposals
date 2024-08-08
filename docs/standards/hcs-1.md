@@ -11,14 +11,15 @@ description: The HCS-1 standard provides a systematic approach to encode, chunk,
     - [Status: Published](#status-published)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
-  - [Abstract](#abstract)
-  - [Motivation](#motivation)
-  - [HCS Topic Validation](#hcs-topic-validation)
+    - [Additional Authors](#additional-authors)
+    - [Abstract](#abstract)
+    - [Motivation](#motivation)
+    - [HCS Topic Validation](#hcs-topic-validation)
     - [Memo Structure](#memo-structure)
-  - [Encoding and Chunking](#encoding-and-chunking)
+    - [Encoding and Chunking](#encoding-and-chunking)
     - [Uploading to HCS](#uploading-to-hcs)
-  - [Retrieving and Reassembling](#retrieving-and-reassembling)
-  - [Conclusion](#conclusion)
+    - [Retrieving and Reassembling](#retrieving-and-reassembling)
+    - [Conclusion](#conclusion)
 
 ## Authors
 - Kantorcodes [https://twitter.com/kantorcodes]()
@@ -59,6 +60,7 @@ Example:
 Only `zstd` and `base64` are currently supported.
 
 ### Encoding and Chunking
+
 Steps to format file data for HCS:
 
 1. **Compression**: Compress the file using `zstd` (e.g., using MongoDB library in NodeJS).
@@ -69,11 +71,21 @@ Steps to format file data for HCS:
 3. **Chunking**: Split the base64 string into chunks ≤ 1024 bytes, encapsulated in JSON objects with:
    - `o`: Order index.
    - `c`: Chunk content.
+   - The first chunk (`o = 0`) should always include a Data URL for the MIME type.
 
-Example chunk format:
+Example chunk format for the first chunk:
 ```json
 {
   "o": 0,
+  "c": "data:application/json;base64,KLUv/QBgTQgA1tA2JDCpOAcExEyulW/ZFLGFTQN5UtM154jIkTHzZrZdfzARFBRUICwALQAuALABadbZXzh4p7arCM9uPbtrrjUCDXN4DDh/b42mhM4ukaZlJRrx33ei9BcCy6Oeyd95VmenTJU4AgB1lCxxoYwiQ2cIlTsYi8cmyAJWeYPg71tFVTi7JLk5U7bufM7eHIzFY81KGiwYpfP3jVRCKBxzSCASjoFoK9Te6OzO4AIUDaK55hZmCZUzBvZGzYVROktCC27rw3DhiirxhNLJisrPTtRa/E08H2rh2dtWzt8DDyAQrqke4hTsxj5LzQsXDwZrR9YhygdxPYg0jEQUNEfIEunMkUlvYciyGQ=="
+}
+```
+
+Example chunk format for next chunks
+
+```json
+{
+  "o": 1,
   "c": "base64-encoded-chunk"
 }
 ```
