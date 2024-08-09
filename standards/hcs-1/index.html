@@ -848,19 +848,18 @@
 <li><a href="#table-of-contents">Table of Contents</a></li>
 </ul>
 </li>
-<li><a href="#authors">Authors</a></li>
+<li><a href="#authors">Authors</a><ul>
+<li><a href="#additional-authors">Additional Authors</a></li>
 <li><a href="#abstract">Abstract</a></li>
 <li><a href="#motivation">Motivation</a></li>
-<li><a href="#hcs-topic-validation">HCS Topic Validation</a><ul>
+<li><a href="#hcs-topic-validation">HCS Topic Validation</a></li>
 <li><a href="#memo-structure">Memo Structure</a></li>
-</ul>
-</li>
-<li><a href="#encoding-and-chunking">Encoding and Chunking</a><ul>
+<li><a href="#encoding-and-chunking">Encoding and Chunking</a></li>
 <li><a href="#uploading-to-hcs">Uploading to HCS</a></li>
-</ul>
-</li>
 <li><a href="#retrieving-and-reassembling">Retrieving and Reassembling</a></li>
 <li><a href="#conclusion">Conclusion</a></li>
+</ul>
+</li>
 </ul>
 <h2 id="authors">Authors</h2>
 <ul>
@@ -904,10 +903,17 @@
 <li><strong>Chunking</strong>: Split the base64 string into chunks ≤ 1024 bytes, encapsulated in JSON objects with:</li>
 <li><code>o</code>: Order index.</li>
 <li><code>c</code>: Chunk content.</li>
+<li>The first chunk (<code>o = 0</code>) should always include a Data URL for the MIME type.</li>
 </ol>
-<p>Example chunk format:</p>
+<p>Example chunk format for the first chunk:</p>
 <pre><code class="language-json">{
   &quot;o&quot;: 0,
+  &quot;c&quot;: &quot;data:application/json;base64,KLUv/QBgTQgA1tA2JDCpOAcExEyulW/ZFLGFTQN5UtM154jIkTHzZrZdfzARFBRUICwALQAuALABadbZXzh4p7arCM9uPbtrrjUCDXN4DDh/b42mhM4ukaZlJRrx33ei9BcCy6Oeyd95VmenTJU4AgB1lCxxoYwiQ2cIlTsYi8cmyAJWeYPg71tFVTi7JLk5U7bufM7eHIzFY81KGiwYpfP3jVRCKBxzSCASjoFoK9Te6OzO4AIUDaK55hZmCZUzBvZGzYVROktCC27rw3DhiirxhNLJisrPTtRa/E08H2rh2dtWzt8DDyAQrqke4hTsxj5LzQsXDwZrR9YhygdxPYg0jEQUNEfIEunMkUlvYciyGQ==&quot;
+}
+</code></pre>
+<p>Example chunk format for next chunks</p>
+<pre><code class="language-json">{
+  &quot;o&quot;: 1,
   &quot;c&quot;: &quot;base64-encoded-chunk&quot;
 }
 </code></pre>
