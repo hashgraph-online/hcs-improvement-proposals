@@ -1,70 +1,246 @@
-# HCS-3 Standard: Recursion and Cross-Chain References with Hedera Consensus Service **
+# HCS-3 Standard: Recursion within Hedera Consensus Service
 
-### Status: Published
+## Status: Published
 
-### Table of Contents
+## Table of Contents
 
-- [Status: Published](#status-published)
-- [Table of Contents](#table-of-contents)
-- [Authors](#authors)
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Specification](#specification)
-  - [Protocol Overview](#protocol-overview)
-  - [Recursion in HCS](#recursion-in-hcs)
-  - [Cross-Chain Recursion](#cross-chain-recursion)
+- [HCS-3 Standard: Recursion within Hedera Consensus Service](#hcs-3-standard-recursion-within-hedera-consensus-service)
+  - [Status: Published](#status-published)
+  - [Table of Contents](#table-of-contents)
+  - [Abstract](#abstract)
+  - [Motivation](#motivation)
+  - [Specification](#specification)
+    - [Protocol Overview](#protocol-overview)
+    - [Resource Referencing](#resource-referencing)
+    - [CDN Integration](#cdn-integration)
   - [Implementation Guidelines](#implementation-guidelines)
+    - [Resource Loading](#resource-loading)
+    - [Error Handling](#error-handling)
+    - [Caching](#caching)
+    - [Configuration Variables](#configuration-variables)
+    - [Data Attributes](#data-attributes)
+  - [Examples](#examples)
+    - [JavaScript](#javascript)
+    - [CSS](#css)
+    - [Image](#image)
+    - [WebAssembly Module](#webassembly-module)
+    - [JSON Data](#json-data)
+    - [Audio](#audio)
+    - [Video](#video)
   - [Security Considerations](#security-considerations)
   - [Future Work](#future-work)
   - [Conclusion](#conclusion)
 
-## Primary Author
-- Patches [https://twitter.com/TMCC_Patches]()
-
-## Secondary Authors
-- Kantorcodes [https://twitter.com/kantorcodes]()
-
 ## Abstract
-This document introduces HCS-3, a protocol extension for the Hedera Consensus Service, enabling recursive referencing of inscriptions and cross-chain data access. It expands Hedera's capabilities to interact with other blockchain platforms, facilitating a more interconnected and versatile DLT ecosystem.
+
+This document introduces HCS-3, a protocol extension for the Hedera Consensus Service (HCS), enabling recursive referencing of inscriptions within the Hedera network. HCS-3 aims to standardize the method of referencing and loading resources stored as HCS messages, facilitating the creation of complex, interconnected decentralized applications.
 
 ## Motivation
-The aim of HCS-3 is to leverage Hedera's high-throughput, low-latency consensus mechanism for broader blockchain interoperability. This includes enabling complex data structures and references to cross-chain assets and data on traditional blockchains like Bitcoin. The protocol seeks to foster a new level of integration for decentralized applications.
+
+The primary goal of HCS-3 is to leverage Hedera's high-throughput, low-latency consensus mechanism to enable complex data structures and references within the Hedera network. By standardizing resource referencing and loading, HCS-3 seeks to foster a new level of integration for decentralized applications built on Hedera.
 
 ## Specification
+
 ### Protocol Overview
-HCS-3 extends the existing `hcs://{protocol number}/{topic_id}` URL structure for referencing within and across blockchain networks, supporting complex data structures and cross-chain interactions.
 
-## Recursion in HCS
-Describes how inscriptions within the Hedera network can reference other inscriptions, including the technical syntax and formatting guidelines necessary for creating these references.
+HCS-3 extends the existing HCS messaging system by introducing a standardized URL structure for referencing resources within the Hedera network. This structure supports intra-network interactions and complex data structures.
 
-### Syntax and Format
-The specific syntax for creating recursive references within HCS includes using the structure `hcs://{protocol number}/{topic id}`. This system includes built-in error checking and resolution mechanisms to ensure the integrity of references.
+### Resource Referencing
 
-### Examples
-Examples of recursive referencing within HCS highlight the practical applications of this feature. For instance, referencing another inscription within the network could be formatted as `hcs://1/0.0.1234567`.
+Resources are referenced using the following URL structure:
 
-## Cross-Chain Recursion
-Explores the techniques and protocols for referencing data on other blockchain platforms, ensuring interoperability through various addressing schemes.
+```
+hcs://{protocol_number}/{topic_id}
+```
 
-### Mechanisms for Referencing Off-Chain Files
-Outlines the methods used to reference data across different blockchain platforms, enhancing the Hedera network's interoperability with other chains.
+- `protocol_number`: Identifies the specific HCS protocol version.
+- `topic_id`: The Hedera topic ID where the resource is stored.
 
-### Supported Chains and Protocols
-- **Hashinals (Hedera):** Using `hcs://{protocol number}/{topic id}`, e.g., `hcs://2/0.0.1234567`.
-- **Ordinals (Bitcoin):** Using `ord://{inscription id}`, e.g., `ord://2dadf42c853ecd21347bd84a921703cdece93d0a579be16bceb382e14a7d304bi0`.
+### CDN Integration
 
-### CDN Formats
-For accessing referenced data, the following CDN formats are used:
-- Ordinals.com provides previews of Bitcoin Ordinals inscriptions, accessible via URLs like `https://ordinals.com/preview/{inscription id}`, e.g., `https://ordinals.com/preview/779b53221183cdee5168671b696cf99f60b6be0ce596777ec5f066bf9be44fbfi0`.
+To facilitate efficient resource loading, HCS-3 supports integration with Content Delivery Networks (CDNs) like TierBot. The standard CDN URL format is:
 
+```
+https://{cdn_domain}/api/hashinals-cdn/{topic_id}?network={network}
+```
 
-### Implementation Guidelines
-Defines how to retrieve and digest data from files stored in valid hcs-1 format, focusing on handling references to other chain inscriptions.
-- **Procedure**: When processing data from hcs-1 files, search for “src”, “href”, “link” tags for references to other networks, and utilize CDNs for accessing the necessary files and data.
-- **CDN Format Examples**: For accessing Ordinals data, use `https://ordinals.com/preview/{inscription id}`.
+- `cdn_domain`: The domain of the CDN service.
+- `topic_id`: The Hedera topic ID of the resource.
+- `network`: The Hedera network (e.g., 'mainnet', 'testnet').
+
+Example using the TierBot CDN:
+
+```
+https://tier.bot/api/hashinals-cdn/0.0.1234567?network=mainnet
+```
+
+## Implementation Guidelines
+
+### Resource Loading
+
+1. Parse [HRLs](../definitions.md) inside of HTML elements to extract the topic ID and protocol number.
+2. Use the extracted information to construct the appropriate CDN URL or Mirror Node API URL.
+3. Fetch the resource from the CDN or Mirror Node API.
+4. Process and render the resource based on its type (e.g., script, stylesheet, image).
+
+### Error Handling
+
+1. Implement retry logic for failed resource loads.
+2. Provide fallback mechanisms for unavailable resources.
+3. Log and report errors to facilitate debugging and monitoring.
+
+### Caching
+
+1. Implement client-side caching to improve performance and reduce network requests.
+2. Respect cache control headers provided by the CDN.
+3. Implement a cache invalidation strategy to ensure resource freshness.
+
+### Configuration Variables
+
+The following configuration variables can be detected within a script configuration file.
+
+- **`cdnUrl`**: The base URL for the CDN where resources are loaded.
+- **`network`**: Specifies the Hedera network, such as `mainnet` or `testnet`.
+- **`retryAttempts`**: Number of retry attempts for failed resource fetches.
+- **`retryBackoff`**: Time in milliseconds between retry attempts, with exponential backoff.
+- **`debug`**: Toggles debug logging.
+- **`showLoadingIndicator`**: If set to true, displays loading status in the console.
+- **`loadingCallbackName`**: The name of the global function to call when the loading status changes.
+
+Example script:
+
+```javascript
+ <script
+      data-hcs-config
+      data-hcs-cdn-url="https://tier.bot/api/hashinals-cdn/"
+      data-hcs-network="mainnet"
+      data-hcs-debug="true"
+      data-hcs-retry-attempts="5"
+      data-hcs-retry-backoff="500"
+      data-hcs-show-loading-indicator="true"
+      data-hcs-loading-callback-name="setLoadingIndicator"
+    ></script>
+```
+
+### Data Attributes
+
+To ensure proper loading and execution of resources, the following data attributes are used in HTML elements:
+
+- **`data-src`**: Specifies the HCS URL to load the resource from.
+- **`data-script-id`**: A unique identifier for the script or resource being loaded.
+- **`data-required`**: Marks the resource as required, causing the process to halt if it fails to load.
+- **`data-load-order`**: Specifies the load order for resources, ensuring proper sequence.
+- **`data-network`**: Overrides the default network configuration for specific resources.
+
+## Examples
+
+Below are detailed examples of how to reference and use various resource types using the HCS-3 standard:
+
+### JavaScript
+
+```html
+<script
+  data-src="hcs://1/0.0.6614307"
+  data-script-id="threejs"
+  data-required="true"
+  data-load-order="1"
+  data-network="mainnet"
+></script>
+```
+
+This script tag loads a JavaScript file (Three.js) from the specified HCS topic. It's marked as required and set to load first.
+
+### CSS
+
+```html
+<link
+  rel="stylesheet"
+  data-src="hcs://1/0.0.6633438"
+  data-script-id="nes-css"
+  data-load-order="2"
+/>
+```
+
+This link tag loads a CSS file (NES.css) from the specified HCS topic, set to load second.
+
+### Image
+
+```html
+<img
+  data-src="hcs://1/0.0.6529019"
+  alt="Hedera Logo"
+  data-load-order="3"
+/>
+```
+
+This img tag loads an image from the specified HCS topic, set to load third.
+
+### WebAssembly Module
+
+```html
+<script
+  data-src="hcs://1/0.0.6628687"
+  type="application/wasm"
+  data-script-id="rust-wasm"
+  data-load-order="4"
+></script>
+```
+
+This script tag loads a WebAssembly module from the specified HCS topic, set to load fourth.
+
+### JSON Data
+
+```html
+<script
+  data-src="hcs://1/0.0.6650001"
+  type="application/json"
+  data-script-id="config-data"
+  data-load-order="5"
+></script>
+```
+
+This script tag loads a JSON data file from the specified HCS topic, set to load fifth.
+
+### Audio
+
+```html
+<audio
+  data-src="hcs://1/0.0.6660001"
+  data-load-order="6"
+  controls
+></audio>
+```
+
+This audio tag loads an audio file from the specified HCS topic, set to load sixth.
+
+### Video
+
+```html
+<video
+  data-src="hcs://1/0.0.6670001"
+  data-load-order="7"
+  controls
+  width="640"
+  height="360"
+></video>
+```
+
+This video tag loads a video file from the specified HCS topic, set to load seventh.
+
+## Security Considerations
+
+1. Implement content integrity checks to ensure loaded resources haven't been tampered with.
+2. Use HTTPS for all CDN connections to prevent man-in-the-middle attacks.
+3. Implement strict CORS policies to prevent unauthorized resource access.
+4. Regularly audit referenced resources for potential security vulnerabilities.
 
 ## Future Work
-The roadmap for HCS-3 includes adding support for more chains through community PRs, with planned updates for Ethereum (Ethscriptions) and Dogecoin (Doginals) references.
 
-### Conclusion
-HCS-3 will bring dynamic loading of applications being inscribed onto the hashgraph. The ability to standardize references to data in hashscriptions allow an interweiving of hcs-1 files stored on hedera and files stored on chain on bitcoin to create seamless expereinces of on chain data.
+1. Explore integration with other Hedera services for enhanced functionality.
+2. Develop standardized tools and libraries to simplify HCS-3 implementation.
+3. Investigate cross-chain resource referencing capabilities.
+4. Enhance support for complex data structures and resource dependencies.
+
+## Conclusion
+
+HCS-3 provides a standardized method for referencing and loading resources within the Hedera network, enabling the creation of more complex and interconnected decentralized applications. By leveraging CDN integration and providing clear implementation guidelines, HCS-3 ensures efficient and reliable access to referenced inscriptions, fostering a new ecosystem of dynamic, on-chain applications on the Hedera network.
