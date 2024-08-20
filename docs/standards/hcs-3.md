@@ -2,11 +2,11 @@
 
 ## Status: Published
 
-## Table of Contents
+## Table of Contentss
 
 - [HCS-3 Standard: Recursion within Hedera Consensus Service](#hcs-3-standard-recursion-within-hedera-consensus-service)
   - [Status: Published](#status-published)
-  - [Table of Contents](#table-of-contents)
+  - [Table of Contentss](#table-of-contentss)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
@@ -43,11 +43,11 @@ The primary goal of HCS-3 is to leverage Hedera's high-throughput, low-latency c
 
 ### Protocol Overview
 
-HCS-3 extends the existing HCS messaging system by introducing a standardized URL structure for referencing resources within the Hedera network. This structure supports intra-network interactions and complex data structures.
+HCS-3 extends HCS by introducing a standardized way to reference on-graph files inside of applications.
 
 ### Resource Referencing
 
-Resources are referenced using the following URL structure:
+Resources are referenced using the following [HRL](../definitions.md) structure:
 
 ```
 hcs://{protocol_number}/{topic_id}
@@ -58,7 +58,7 @@ hcs://{protocol_number}/{topic_id}
 
 ### CDN Integration
 
-To facilitate efficient resource loading, HCS-3 supports integration with Content Delivery Networks (CDNs) like TierBot. The standard CDN URL format is:
+To facilitate efficient resource loading, HCS-3 supports integration with Content Delivery Networks (CDNs). CDNs typically do the heavy lifting of retrieving all messages for an HCS-1 file and combining them for usage. The standard CDN URL format is:
 
 ```
 https://{cdn_domain}/api/hashinals-cdn/{topic_id}?network={network}
@@ -97,19 +97,22 @@ https://tier.bot/api/hashinals-cdn/0.0.1234567?network=mainnet
 
 ### Configuration Variables
 
-The following configuration variables can be detected within a script configuration file.
+The following configuration variables can be detected within a script configuration file. An implementation client should seek to use these variables to provide flexibility for end-users.
 
-- **`cdnUrl`**: The base URL for the CDN where resources are loaded.
-- **`network`**: Specifies the Hedera network, such as `mainnet` or `testnet`.
-- **`retryAttempts`**: Number of retry attempts for failed resource fetches.
-- **`retryBackoff`**: Time in milliseconds between retry attempts, with exponential backoff.
-- **`debug`**: Toggles debug logging.
-- **`showLoadingIndicator`**: If set to true, displays loading status in the console.
-- **`loadingCallbackName`**: The name of the global function to call when the loading status changes.
+| **Configuration Variable** | **Description**                                                                 | **Default Value**              |
+|----------------------------|---------------------------------------------------------------------------------|--------------------------------|
+| `cdnUrl`                   | The base URL for the CDN where resources are loaded.                             | `https://tier.bot/api/hashinals-cdn/` |
+| `network`                  | Specifies the Hedera network, such as `mainnet` or `testnet`.                    | `mainnet`                      |
+| `retryAttempts`            | Number of retry attempts for failed resource fetches.                            | `3`                            |
+| `retryBackoff`             | Time in milliseconds between retry attempts, with exponential backoff.           | `300`                          |
+| `debug`                    | Toggles debug logging.                                                           | `false`                        |
+| `showLoadingIndicator`     | If set to true, displays loading status in the console.                          | `false`                        |
+| `loadingCallbackName`      | The name of the global function to call when the loading status changes.          | `null`                         |
+
 
 Example script:
 
-```javascript
+```html
  <script
       data-hcs-config
       data-hcs-cdn-url="https://tier.bot/api/hashinals-cdn/"
@@ -124,13 +127,16 @@ Example script:
 
 ### Data Attributes
 
-To ensure proper loading and execution of resources, the following data attributes are used in HTML elements:
+To ensure proper loading and execution of resources, the following data attributes are used in HTML elements. 
 
-- **`data-src`**: Specifies the HCS URL to load the resource from.
-- **`data-script-id`**: A unique identifier for the script or resource being loaded.
-- **`data-required`**: Marks the resource as required, causing the process to halt if it fails to load.
-- **`data-load-order`**: Specifies the load order for resources, ensuring proper sequence.
-- **`data-network`**: Overrides the default network configuration for specific resources.
+| **Attribute**        | **Description**                                                                 | **Default Value**   |
+|----------------------|---------------------------------------------------------------------------------|---------------------|
+| `data-src`           | Specifies the HCS URL to load the resource from.                                 | `null`              |
+| `data-script-id`     | A unique identifier for the script or resource being loaded.                     | `null`              |
+| `data-required`      | Marks the resource as required, causing the process to halt if it fails to load. | `false`             |
+| `data-load-order`    | Specifies the load order for resources, ensuring proper sequence.                | `undefined` (loads last if not specified) |
+| `data-network`       | Overrides the default network configuration for specific resources.              | `mainnet`           |
+
 
 ## Examples
 
@@ -243,4 +249,4 @@ This video tag loads a video file from the specified HCS topic, set to load seve
 
 ## Conclusion
 
-HCS-3 provides a standardized method for referencing and loading resources within the Hedera network, enabling the creation of more complex and interconnected decentralized applications. By leveraging CDN integration and providing clear implementation guidelines, HCS-3 ensures efficient and reliable access to referenced inscriptions, fostering a new ecosystem of dynamic, on-chain applications on the Hedera network.
+HCS-3 provides a standardized method for referencing and loading resources within the Hedera network, enabling the creation of more complex and interconnected decentralized applications. By leveraging CDN integration and providing clear implementation guidelines, HCS-3 ensures efficient and reliable access to referenced inscriptions, fostering a new ecosystem of dynamic, on-graph applications on the Hedera network.
