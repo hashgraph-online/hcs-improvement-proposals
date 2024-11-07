@@ -78,7 +78,7 @@ https://kiloscribe.com/api/hashinals-cdn/0.0.1234567?network=mainnet
 
 ### Resource Loading
 
-1. Parse [HRLs](../Definitions.md) inside of HTML elements to extract the topic ID and protocol number.
+1. Parse [HRLs](../definitions.md) inside of HTML elements to extract the topic ID and protocol number.
 2. Use the extracted information to construct the appropriate CDN URL or Mirror Node API URL.
 3. Fetch the resource from the CDN or Mirror Node API.
 4. Process and render the resource based on its type (e.g., script, stylesheet, image).
