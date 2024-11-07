@@ -1,0 +1,44 @@
+case-studies:
+  label: Case Studies
+  permalink: /case-studies
+  description: Case Studies for applications built using Hashgraph Online.
+
+defi:
+  label: DeFi
+  permalink: /defi
+  description: Decentralized Finance (DeFi) related content
+
+hedera:
+  label: Hedera
+  permalink: /hedera
+  description: Topics related to the Hedera network and ecosystem
+
+hcs-20:
+  label: HCS-20
+  permalink: /hcs-20
+  description: Information about the HCS-20 token standard
+
+bonzo-finance:
+  label: Bonzo Finance
+  permalink: /bonzo-finance
+  description: Content related to Bonzo Finance project
+
+dao:
+  label: DAO
+  permalink: /dao
+  description: Topics related to Decentralized Autonomous Organizations
+
+hcs:
+  label: HCS
+  permalink: /hcs
+  description: Information about Hedera Consensus Service
+
+web3:
+  label: Web3
+  permalink: /web3
+  description: Content related to Web3 technologies and applications
+
+blockchain:
+  label: Blockchain
+  permalink: /blockchain
+  description: Topics covering blockchain technology and its applications

@@ -2,7 +2,7 @@
 description: A formal set of definitions used within the Hashgraph Consensus Standards Improvement proposals. These are NOT standards and should be used for reference only.
 ---
 
-### Definitions
+# Definitions
 
 A formal set of definitions used within the Hashgraph Consensus Standards Improvement proposals. These are **NOT** standards and should be used for reference only.
 

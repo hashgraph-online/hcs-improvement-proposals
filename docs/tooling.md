@@ -4,12 +4,10 @@ Welcome to the HCS Community Tools page! Here, we showcase innovative tools deve
 
 ## Tools List
 
-### Tierbot Inscription Tools
+### KiloScribe Inscription Tools
 
 - **Description:** A web interface to easily inscribe valid HCS-1 Files and Hashinals on Hedera.
-- **Link:** [https://tier.bot/inscribe](https://tier.bot/inscribe)
-- **Highlight:** [Twitter Highlight](https://twitter.com/TierBotAI/status/1766626142499606801)
-![Screenshot](./assets/inscribe.png)
+- **Link:** [https://kiloscribe.com/inscribe](https://kiloscribe.com/inscribe)
 
 ### Turtlemoon Inscription Tools
 

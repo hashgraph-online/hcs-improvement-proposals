@@ -34,10 +34,10 @@
 ## Authors
 
 ### Primary Author
-- Patches [https://twitter.com/TMCC_Patches]()
+- Patches [https://twitter.com/TMCC_Patches](https://twitter.com/TMCC_Patches)
 
 ### Additional Authors
-- Kantorcodes [https://twitter.com/kantorcodes]()
+- Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
 
 ## Abstract
 

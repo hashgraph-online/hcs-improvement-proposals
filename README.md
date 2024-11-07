@@ -1,18 +1,41 @@
-# hcs-improvement-proposals
-Hashgraph Online Improvement Proposals
+# Website
 
-### Proposal Process
-TBD
+This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
 
 ### Installation
-- `brew install python3`
-- `pip install mkdocs`
 
-### Development
-- Refer to docs on mkdocs for more information: [https://www.mkdocs.org/getting-started/#deploying](https://www.mkdocs.org/getting-started/#deploying)
-- `mkdocs serve`
+```
+$ yarn
+```
 
-### Deploying new changes
+### Local Development
 
-- Ensure all of your changes are merged into `main`
-- From `gh-pages` run `git pull origin main && mkdocs gh-deploy`
+```
+$ yarn start
+```
+
+This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+
+### Build
+
+```
+$ yarn build
+```
+
+This command generates static content into the `build` directory and can be served using any static contents hosting service.
+
+### Deployment
+
+Using SSH:
+
+```
+$ USE_SSH=true yarn deploy
+```
+
+Not using SSH:
+
+```
+$ GIT_USER=<Your GitHub username> yarn deploy
+```
+
+If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.

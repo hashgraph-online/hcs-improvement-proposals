@@ -1,25 +1,45 @@
-# Use a base image with Python installed (e.g., the official Python image)
-FROM python:3
+# syntax=docker/dockerfile:1
 
-# Set a working directory (optional but recommended)
-WORKDIR /docs
+# Stage 1: Base image.
+## Start with a base image containing NodeJS so we can build Docusaurus.
+FROM node:lts as base
+## Disable colour output from yarn to make logs easier to read.
+ENV FORCE_COLOR=0
+## Enable corepack.
+RUN corepack enable
+## Set the working directory to `/opt/docusaurus`.
+WORKDIR /opt/docusaurus
 
-# Install MkDocs and any required packages or extensions
-RUN pip install mkdocs
-RUN pip install "mkdocs-material[imaging]"
-RUN pip install mkdocs-nav-weight
+# Stage 2a: Development mode.
+FROM base as dev
+## Set the working directory to `/opt/docusaurus`.
+WORKDIR /opt/docusaurus
+## Expose the port that Docusaurus will run on.
+EXPOSE 3000
+## Run the development server.
+CMD [ -d "node_modules" ] && npm run start --host 0.0.0.0 --poll 1000 || npm run install && npm run start --host 0.0.0.0 --poll 1000
 
-# You can also install additional MkDocs extensions here if needed, e.g.:
-# RUN pip install mkdocs-material
+# Stage 2b: Production build mode.
+FROM base as prod
+## Set the working directory to `/opt/docusaurus`.
+WORKDIR /opt/docusaurus
+## Copy over the source code.
+COPY . /opt/docusaurus/
+## Install dependencies with `--immutable` to ensure reproducibility.
+RUN npm ci
+## Build the static site.
+RUN npm run build
 
-# Add your documentation to the image
-COPY . /docs
+# Stage 3a: Serve with `docusaurus serve`.
+FROM prod as serve
+## Expose the port that Docusaurus will run on.
+EXPOSE 3000
+## Run the production server.
+CMD ["npm", "run", "serve", "--", "--host", "0.0.0.0", "--no-open"]
 
-# Build the MkDocs site
-RUN mkdocs build
-
-# Expose the default MkDocs port
-EXPOSE 8000
-
-# By default, serve the MkDocs site when the container starts
-CMD ["mkdocs", "serve", "-a", "0.0.0.0:8000"]
+# Stage 3b: Serve with Caddy.
+FROM caddy:2-alpine as caddy
+## Copy the Caddyfile.
+COPY --from=prod /opt/docusaurus/Caddyfile /etc/caddy/Caddyfile
+## Copy the Docusaurus build output.
+COPY --from=prod /opt/docusaurus/build /var/docusaurus

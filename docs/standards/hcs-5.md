@@ -28,8 +28,8 @@ description: This specification provides a standard way to "inscribe" Hashinals 
     - [Conclusion](#conclusion)
 
 ## Authors
-- Kantorcodes [https://twitter.com/kantorcodes]()
-- Patches [https://twitter.com/TMCC_Patches]()
+- Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
+- Patches [https://twitter.com/TMCC_Patches](https://twitter.com/TMCC_Patches)
 
 ## Abstract
 

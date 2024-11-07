@@ -20,10 +20,10 @@
     - [Conclusion](#conclusion)
 
 ## Authors
-- Kantorcodes [https://twitter.com/kantorcodes]()
+- Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
 
 ### Additional Authors
-- Patches [https://twitter.com/tmcc_patches]()
+- Patches [https://twitter.com/tmcc_patches](https://twitter.com/tmcc_patches)
 
 ## Abstract
 
@@ -56,13 +56,13 @@ Steps 2-4 can be repeated every time the NFT will be updated.
 
 The `memo` field for Dynamic Hashinals must follow this format to be valid.
 
-``hcs-6:non-indexed:{ttl}`
+```hcs-6:non-indexed:{ttl}```
 
 The only variable element in the memo would be the `ttl` field. We suggest a longer `ttl` as this is the time in seconds that gateways and clients will store the previous version of your `metadata` in their cache. In the future, gateways and clients may decide to prioritize Topics with longer `metadata` by imposing fees, introducing rate limits, etc. The minimum `ttl` must be `3600` (1 hour) to be valid, and the suggested minimum would be `86400` (1 day)
 
 ### Metadata
 
-Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-6` hcsStandard instead of `HCS-1`. The resulting [HRL](../definitions.md) minted onto a serial number includes the protocol number `6`
+Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-6` hcsStandard instead of `HCS-1`. The resulting [HRL](../Definitions.md) minted onto a serial number includes the protocol number `6`
 
 The format of the `metadata` on a dynamic **Hashinal** is as follows:
 
