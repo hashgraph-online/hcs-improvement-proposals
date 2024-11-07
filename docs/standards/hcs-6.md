@@ -62,7 +62,7 @@ The only variable element in the memo would be the `ttl` field. We suggest a lon
 
 ### Metadata
 
-Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-6` hcsStandard instead of `HCS-1`. The resulting [HRL](../Definitions.md) minted onto a serial number includes the protocol number `6`
+Dynamic **Hashinals** follow all of the same rules described in [HCS-5](./hcs-5.md), with one main exception being that they will utilize the `HCS-6` hcsStandard instead of `HCS-1`. The resulting [HRL](../definitions.md) minted onto a serial number includes the protocol number `6`
 
 The format of the `metadata` on a dynamic **Hashinal** is as follows:
 

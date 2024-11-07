@@ -47,7 +47,7 @@ HCS-3 extends HCS by introducing a standardized way to reference on-graph files 
 
 ### Resource Referencing
 
-Resources are referenced using the following [HRL](../Definitions.md) structure:
+Resources are referenced using the following [HRL](../definitions.md) structure:
 
 ```
 hcs://{protocol_number}/{topic_id}
