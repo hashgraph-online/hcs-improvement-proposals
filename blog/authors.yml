@@ -1,0 +1,20 @@
+brady:
+  name: Brady Gentile
+  title: Co-Founder, Bonzo Finance
+  url: https://bonzo.finance/
+  image_url: https://pbs.twimg.com/profile_images/1604349881388306432/oYJVJ5ta_400x400.jpg
+  page:
+    # customize the url of the author page at /blog/authors/<permalink>
+    permalink: '/brady-gentile'
+  socials:
+    x: bmgentile
+    linkedin: bradygentile
+    github: bmgentile
+
+kantorcodes:
+  name: Michael Kantor
+  title: President, Hashgraph Online DAO
+  url: https://github.com/kantorcodes
+  image_url: https://avatars.githubusercontent.com/u/6068672?s=400&u=304bc9f4512c677786835926a69deb67d75ec7fc&v=4
+  page:
+    permalink: '/kantorcodes'

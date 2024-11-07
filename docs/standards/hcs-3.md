@@ -47,7 +47,7 @@ HCS-3 extends HCS by introducing a standardized way to reference on-graph files 
 
 ### Resource Referencing
 
-Resources are referenced using the following [HRL](../definitions.md) structure:
+Resources are referenced using the following [HRL](../Definitions.md) structure:
 
 ```
 hcs://{protocol_number}/{topic_id}
@@ -71,14 +71,14 @@ https://{cdn_domain}/api/hashinals-cdn/{topic_id}?network={network}
 Example using the TierBot CDN:
 
 ```
-https://tier.bot/api/hashinals-cdn/0.0.1234567?network=mainnet
+https://kiloscribe.com/api/hashinals-cdn/0.0.1234567?network=mainnet
 ```
 
 ## Implementation Guidelines
 
 ### Resource Loading
 
-1. Parse [HRLs](../definitions.md) inside of HTML elements to extract the topic ID and protocol number.
+1. Parse [HRLs](../Definitions.md) inside of HTML elements to extract the topic ID and protocol number.
 2. Use the extracted information to construct the appropriate CDN URL or Mirror Node API URL.
 3. Fetch the resource from the CDN or Mirror Node API.
 4. Process and render the resource based on its type (e.g., script, stylesheet, image).
@@ -101,7 +101,7 @@ The following configuration variables can be detected within a script configurat
 
 | **Configuration Variable** | **Description**                                                                 | **Default Value**              |
 |----------------------------|---------------------------------------------------------------------------------|--------------------------------|
-| `cdnUrl`                   | The base URL for the CDN where resources are loaded.                             | `https://tier.bot/api/hashinals-cdn/` |
+| `cdnUrl`                   | The base URL for the CDN where resources are loaded.                             | `https://kiloscribe.com/api/hashinals-cdn/` |
 | `network`                  | Specifies the Hedera network, such as `mainnet` or `testnet`.                    | `mainnet`                      |
 | `retryAttempts`            | Number of retry attempts for failed resource fetches.                            | `3`                            |
 | `retryBackoff`             | Time in milliseconds between retry attempts, with exponential backoff.           | `300`                          |
@@ -115,7 +115,7 @@ Example script:
 ```html
  <script
       data-hcs-config
-      data-hcs-cdn-url="https://tier.bot/api/hashinals-cdn/"
+      data-hcs-cdn-url="https://kiloscribe.com/api/hashinals-cdn/"
       data-hcs-network="mainnet"
       data-hcs-debug="true"
       data-hcs-retry-attempts="5"

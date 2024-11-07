@@ -20,7 +20,7 @@ description: HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGra
   - [Conclusion](#conclusion)
 
 #### Authors
-- Patches [https://twitter.com/TMCC_Patches]()
+- Patches [https://twitter.com/TMCC_Patches](https://twitter.com/TMCC_Patches)
 
 **HCS-20** is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.
 
