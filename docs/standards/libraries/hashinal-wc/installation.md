@@ -12,12 +12,26 @@ If you're looking for more information on Hedera Wallet Connect, see the [Hedera
 
 - [Installation](#installation)
   - [Table of Contents](#table-of-contents)
-  - [Prerequisites](#prerequisites)
+  - [For inscribed HTML files (UMD)](#for-inscribed-html-files-umd)
+  - [Prerequisites for ESM / dApps](#prerequisites-for-esm--dapps)
   - [Installation](#installation-1)
     - [Using npm](#using-npm)
     - [Using yarn](#using-yarn)
 
-## Prerequisites
+## For inscribed HTML files (UMD)
+
+No installation needed.
+
+1. Follow the instructions in [Recursion](/standards/libraries/hashinal-wc/recursion) to create your Hashinal.
+2. Reference the script directly in your HTML.
+
+```html
+<script data-src="hcs://1/0.0.7473819" data-script-id="wallet-connect"></script>
+```
+
+## Prerequisites for ESM / dApps
+
+Note: Skip this section if you are using this inside of an HTML Hashinal.
 
 Before integrating Hashinals Wallet Connect:
 
