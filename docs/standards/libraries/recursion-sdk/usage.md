@@ -11,7 +11,12 @@ Let's build a simple 3D scene using ThreeJS loaded through HCS-3 recursion.
 
 > **Note**: Before proceeding, you'll need to include the latest HCS-3 Recursion SDK. 
 > 1. Visit the [HCS Recursion SDK repository](https://github.com/hashgraph-online/hcs-recursion-sdk/blob/main/dist/hcs-recursion-sdk.js)
-> 2. Copy the contents of `hcs-recursion-sdk.js`
+> 2. Copy the contents of `hcs-recursion-sdk.js` into a script tag:
+> ```html
+> <script id="hcs-sdk">
+>     // Paste the copied SDK code here
+> </script>
+> ```
 > 3. Add it to your HTML file before any other HCS-3 related scripts using a script tag:
 
 ```html

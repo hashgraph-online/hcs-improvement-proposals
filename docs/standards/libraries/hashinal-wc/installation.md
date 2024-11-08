@@ -22,7 +22,7 @@ If you're looking for more information on Hedera Wallet Connect, see the [Hedera
 
 No installation needed.
 
-1. Follow the instructions in [Recursion](/standards/libraries/hashinal-wc/recursion) to create your Hashinal.
+1. Follow the instructions in [Recursion](../recursion-sdk/usage.md) to create your Hashinal.
 2. Reference the script directly in your HTML.
 
 ```html
