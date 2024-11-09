@@ -290,13 +290,13 @@ const VisionSection: React.FC = () => {
         >
           <ObjectiveCard
             icon={<FaNetworkWired className='text-5xl text-blue-400' />}
-            title='Hedera-Based Standards'
-            description='Develop and promote standards for a fully on-chain internet built on Hedera, utilizing the Hedera Consensus Service for secure and efficient data consensus.'
+            title='HCS Standards'
+            description='Develop and promote standards for a fully on-chain internet utilizing the Hedera Consensus Service.'
           />
           <ObjectiveCard
             icon={<FaHandshake className='text-5xl text-green-400' />}
             title='Ecosystem Support'
-            description='Provide logistical support to companies and developers implementing Hedera-based technologies, fostering growth of the on-chain internet ecosystem.'
+            description='Provide logistical support to companies and developers implementing HCS standards.'
           />
           <ObjectiveCard
             icon={<FaCode className='text-5xl text-purple-400' />}
@@ -417,7 +417,7 @@ const StandardsSection: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Hedera Standards
+          HCS Standards
         </motion.h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
           <StandardCard
