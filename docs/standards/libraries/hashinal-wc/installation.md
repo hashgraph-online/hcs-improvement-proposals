@@ -22,12 +22,14 @@ If you're looking for more information on Hedera Wallet Connect, see the [Hedera
 
 No installation needed.
 
-1. Follow the instructions in [Recursion](../recursion-sdk/usage.md) to create your Hashinal.
+1. Follow the instructions in [Recursion](../recursion-sdk/what-is-recursion.md) to create your Hashinal.
 2. Reference the script directly in your HTML.
 
 ```html
-<script data-src="hcs://1/0.0.7473819" data-script-id="wallet-connect"></script>
+<script data-src="hcs://1/0.0.7522981" data-script-id="wallet-connect"></script>
 ```
+
+The current version of `hashinal-wc` can always be found in the [topics](./topics.md) section.
 
 ## Prerequisites for ESM / dApps
 
@@ -58,11 +60,11 @@ Install the Hashinals Wallet Connect package using npm or yarn. Note, you will a
 ### Using npm
 
 ```bash
-npm install @hashgraph-online/hashinal-wc @hashgraph/sdk @hashgraph/proto @hashgraph/hedera-wallet-connect @walletconnect/modal @walletconnect/qrcode-modal @walletconnect/utils  @walletconnect/modal-core
+npm install @hashgraphonline/hashinal-wc @hashgraph/sdk @hashgraph/proto @hashgraph/hedera-wallet-connect @walletconnect/modal @walletconnect/qrcode-modal @walletconnect/utils  @walletconnect/modal-core
 ```
 
 ### Using yarn
 
 ```bash
-yarn add @hashgraph-online/hashinal-wc @hashgraph/sdk @hashgraph/proto @hashgraph/hedera-wallet-connect @walletconnect/modal @walletconnect/qrcode-modal @walletconnect/utils  @walletconnect/modal-core
+yarn add @hashgraphonline/hashinal-wc @hashgraph/sdk @hashgraph/proto @hashgraph/hedera-wallet-connect @walletconnect/modal @walletconnect/qrcode-modal @walletconnect/utils  @walletconnect/modal-core
 ```
