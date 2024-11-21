@@ -16,36 +16,16 @@ npx create-next-app@latest my-hedera-app
 cd my-hedera-app
 ```
 
-### Step 2: Configure Next.js
-
-Create or update `next.config.js`:
-
-```javascript
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-    webpack: (config) => {
-        config.resolve.fallback = {
-            ...config.resolve.fallback,
-            "crypto": require.resolve("crypto-browserify"),
-            "stream": require.resolve("stream-browserify"),
-            "buffer": require.resolve("buffer"),
-        };
-        return config;
-    },
-}
-
-module.exports = nextConfig
-```
-
-### Step 3: Create WalletProvider
+### Step 2: Create WalletProvider
 
 Create `providers/WalletProvider.tsx`:
 
 ```typescript
 'use client';
 
-import { HashinalsWalletConnectSDK } from '@hashgraph/hedera-wallet-connect';
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
+import { PrivateKey } from '@hashgraph/hedera-wallet-connect';
 
 interface WalletContextType {
     connect: () => Promise<void>;
@@ -53,6 +33,16 @@ interface WalletContextType {
     accountId: string | null;
     balance: number | null;
     isConnecting: boolean;
+    submitHCS2Message: (message: HCS2Message, topicId: string, submitKey?: string) => Promise<any>;
+}
+
+interface HCS2Message {
+  p: 'hcs-2';
+  op: 'register' | 'delete' | 'update' | 'migrate';
+  t_id?: string;
+  uid?: string;
+  metadata?: string;
+  m?: string;
 }
 
 const WalletContext = createContext<WalletContextType>({} as WalletContextType);
@@ -123,6 +113,41 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const submitHCS2Message = useCallback(async (
+        message: HCS2Message,
+        topicId: string, 
+        submitKey?: string
+    ) => {
+        try {
+            const sdk = HashinalsWalletConnectSDK.getInstance();
+            
+            // Validate message format
+            if (message.m && message.m.length > 500) {
+                throw new Error("Memo must not exceed 500 characters");
+            }
+            
+            if (!message.p || message.p !== 'hcs-2') {
+                throw new Error("Invalid protocol. Must be 'hcs-2'");
+            }
+            
+            // Convert message to string
+            const messageString = JSON.stringify(message);
+            
+            // If a submit key is provided, convert it to a PrivateKey object
+            const privateKey = submitKey ? PrivateKey.fromString(submitKey) : undefined;
+            
+            const receipt = await sdk.submitMessageToTopic(topicId, messageString, privateKey);
+            
+            console.log("HCS-2 message submitted successfully!");
+            console.log("Transaction ID:", receipt.transactionId.toString());
+            
+            return receipt;
+        } catch (error) {
+            console.error("Error submitting HCS-2 message:", error);
+            throw error;
+        }
+    }, []);
+
     return (
         <WalletContext.Provider
             value={{
@@ -130,7 +155,8 @@ export function WalletProvider({ children }: { children: ReactNode }) {
                 disconnect,
                 accountId,
                 balance,
-                isConnecting
+                isConnecting,
+                submitHCS2Message,
             }}
         >
             {children}
@@ -141,7 +167,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
 export const useWallet = () => useContext(WalletContext);
 ```
 
-### Step 4: Update Root Layout
+### Step 3: Update Root Layout
 
 Update `app/layout.tsx`:
 
@@ -165,7 +191,7 @@ export default function RootLayout({
 }
 ```
 
-### Step 5: Create Wallet Component
+### Step 4: Create Wallet Component
 
 Create `components/WalletButton.tsx`:
 
@@ -195,7 +221,7 @@ export function WalletButton() {
 }
 ```
 
-### Step 6: Use in Page
+### Step 5: Use in Page
 
 Update `app/page.tsx`:
 
@@ -249,6 +275,85 @@ export function SendButton() {
             Send 1 HBAR
         </button>
     );
+}
+```
+
+### Register Topic Example
+
+Here's an example of how to use the `submitHCS2Message` function to register a new topic:
+
+```typescript
+// RegisterTopicComponent.tsx
+import { useWallet } from './WalletProvider';
+
+export function RegisterTopicComponent() {
+  const { submitHCS2Message } = useWallet();
+
+  const handleRegisterTopic = async () => {
+    try {
+      const topicId = "0.0.12345"; // Your HCS topic ID
+      
+      // Example of registering a new topic
+      const registerMessage: HCS2Message = {
+        p: "hcs-2",
+        op: "register",
+        t_id: "0.0.456789",
+        metadata: "hcs://1/0.0.456789",
+        m: "register new topic"
+      };
+
+      const receipt = await submitHCS2Message(registerMessage, topicId);
+      console.log("Topic registered successfully:", receipt);
+    } catch (error) {
+      console.error("Failed to register topic:", error);
+    }
+  };
+
+  return (
+    <button onClick={handleRegisterTopic}>
+      Register Topic
+    </button>
+  );
+}
+```
+
+### Update Topic Example
+
+Here's an example of updating an existing topic:
+
+```typescript
+// UpdateTopicComponent.tsx
+import { useWallet } from './WalletProvider';
+
+export function UpdateTopicComponent() {
+  const { submitHCS2Message } = useWallet();
+
+  const handleUpdateTopic = async () => {
+    try {
+      const topicId = "0.0.12345"; // Your HCS topic ID
+      
+      // Example of updating an existing topic
+      const updateMessage: HCS2Message = {
+        p: "hcs-2",
+        op: "update",
+        uid: "60", // sequence number of the message to update
+        t_id: "0.0.123456",
+        metadata: "hcs://1/0.0.456789",
+        m: "update sequence number 60 to a new topic id and metadata"
+      };
+
+      const receipt = await submitHCS2Message(updateMessage, topicId);
+      console.log("Topic updated successfully:", receipt);
+    } catch (error) {
+      console.error("Failed to update topic:", error);
+    }
+  };
+
+  return (
+    <button onClick={handleUpdateTopic}>
+      Update Topic
+    </button>
+  );
 }
 ```
 
