@@ -1,4 +1,4 @@
-# HCS-7: Smart Contract Driven Dynamic Metadata
+# HCS-7: Smart Hashinals: A Micro-DSL for Deterministic Topic Selection.
 
 ## Status: Published
 
