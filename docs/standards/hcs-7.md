@@ -1,6 +1,8 @@
 # HCS-7: Smart Hashinals: A Micro-DSL for Deterministic Topic Selection.
 
-## Status: Published
+## Status: Draft
+
+This standard is current in Draft mode, and should not be used in production.
 
 ## Authors
 - Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
@@ -106,6 +108,25 @@ These kinds of use cases, while possible with HCS-6, would require submitting ma
   - `stateData`: Contract return value types
 - `c.outputType`: Output specification
   - Must return valid topic ID
+
+**Required WASM Functions:**
+The WASM module must implement two functions:
+
+1. `process_state(state_json: &str, messages_json: &str) -> String`
+   - Processes the state data and messages to determine the output topic ID
+   - `state_json`: JSON string containing the state data from EVM calls
+   - `messages_json`: JSON string containing the array of registered messages
+   - Returns: A valid topic ID as a string
+
+2. `get_params() -> String`
+   - Returns a JSON string describing the required parameters and their types
+   - Example return value:
+     ```json
+     {
+       "minted": "number",
+       "tokensRemaining": "number"
+     }
+     ```
 
 **Example WASM Code:**
 ```rust
