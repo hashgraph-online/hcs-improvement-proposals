@@ -178,7 +178,7 @@ const AnalyticsClientPage = () => {
               color='rgb(98, 79, 255)'
               data={data.chartData}
               dataKey='nfts'
-              description='Total NFTs minted on the platform'
+              description='Total Hashinals Minted'
               gradientId='nftGradient'
               startColor='#624fff'
               endColor='#624fff'
