@@ -8,6 +8,11 @@ export type MonthlyStatsResponse = {
     transactionCount: number;
     topicCount: number;
     nftCount: number;
+    hcs20Stats: {
+      transactionCount: number;
+      totalHolders: number;
+      mintedSupply: number;
+    };
     createdAt: Date;
     updatedAt: Date;
   }[];
@@ -16,9 +21,10 @@ export type MonthlyStatsResponse = {
 
 export type ChartDataPoint = {
   date: string;
-  transactions: number;
-  topics: number;
   nfts: number;
+  hcs1Transactions: number;
+  hcs20Transactions: number;
+  topics: number;
 };
 
 const fetchMonthlyStats = async (): Promise<MonthlyStatsResponse> => {
@@ -30,10 +36,7 @@ const fetchMonthlyStats = async (): Promise<MonthlyStatsResponse> => {
 };
 
 export const useMonthlyStats = () => {
-  const [data, setData] = useState<{
-    chartData: ChartDataPoint[];
-    totalNfts: number;
-  } | null>(null);
+  const [data, setData] = useState<{ chartData: ChartDataPoint[]; totalNfts: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
@@ -43,10 +46,11 @@ export const useMonthlyStats = () => {
         const rawData = await fetchMonthlyStats();
 
         const chartData = rawData.monthlyStats.map((stat) => ({
-          date: `${stat.year}-${String(stat.month).padStart(2, '0')}`,
-          transactions: stat.transactionCount,
-          topics: stat.topicCount,
+          date: stat.monthFormatted,
           nfts: stat.nftCount,
+          hcs1Transactions: stat.transactionCount,
+          hcs20Transactions: stat.hcs20Stats.transactionCount,
+          topics: stat.topicCount,
         }));
 
         setData({
@@ -54,7 +58,7 @@ export const useMonthlyStats = () => {
           totalNfts: rawData.totalNfts,
         });
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Unknown error'));
+        setError(err as Error);
       } finally {
         setIsLoading(false);
       }

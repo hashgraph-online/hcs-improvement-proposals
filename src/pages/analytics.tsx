@@ -8,8 +8,6 @@ import {
   Tooltip,
   XAxis,
   YAxis,
-  BarChart,
-  Bar,
 } from 'recharts';
 import Typography from '../components/Typography';
 import { Card } from '../components/ui/card';
@@ -17,6 +15,7 @@ import { formatNumber } from '../lib/format';
 import { useMonthlyStats } from '../hooks/useMonthlyStats';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import React from 'react';
 
 type ChartCardProps = {
   title: string;
@@ -100,10 +99,7 @@ const ChartCard = ({
                   const rawValue = payload[0].value as number;
                   return (
                     <div className='rounded-lg bg-background/95 p-4 shadow-lg ring-1 ring-black/5 backdrop-blur-md'>
-                      <Typography
-                        variant='h6'
-                        className='text-muted-foreground'
-                      >
+                      <Typography variant='h6' className='text-muted-foreground'>
                         {payload[0].payload.date}
                       </Typography>
                       <div className='group/tooltip relative'>
@@ -137,16 +133,16 @@ const ChartCard = ({
 
 const AnalyticsClientPage = () => {
   const { data, isLoading } = useMonthlyStats();
-
   const { siteConfig } = useDocusaurusContext();
 
   if (isLoading || !data) {
+    console.log('data is', data)
     return (
       <Layout
         title={`Analytics | ${siteConfig.title}`}
-        description='Learn about the companies and organizations that are building Hashgraph Online'
+        description='The data behind Hashgraph Online'
       >
-        <div className='min-h-screen bg-gradient-to-b from-background/10 to-background/80 p-4'>
+        <div className='min-h-screen bg-slate-200 p-4'>
           <div className='container mx-auto'>
             <div className='h-96 animate-pulse rounded-lg bg-muted' />
           </div>
@@ -155,28 +151,29 @@ const AnalyticsClientPage = () => {
     );
   }
 
-  const totalTransactions = data.chartData.reduce(
-    (acc, curr) => acc + curr.transactions,
-    0
-  );
-  const totalTopics = data.chartData.reduce(
-    (acc, curr) => acc + curr.topics,
-    0
-  );
+  const chartData = data.chartData.map((stat) => ({
+    date: stat.date,
+    nfts: stat.nfts,
+    hcs1Transactions: stat.hcs1Transactions,
+    hcs20Transactions: stat.hcs20Transactions,
+    topics: stat.topics,
+  }));
+
+  console.log('chart data is', chartData)
 
   return (
     <Layout
       title={`Analytics | ${siteConfig.title}`}
       description='The data behind Hashgraph Online'
     >
-      <div className='bg-slate-200 min-h-screen p-4'>
+      <div className='min-h-screen bg-slate-200 p-4'>
         <div className='container mx-auto space-y-8'>
-          <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-3'>
+          <div className='grid gap-6 md:grid-cols-2 lg:grid-cols-4'>
             <ChartCard
-              title='NFTs Minted'
+              title='Hashinals'
               value={formatNumber(data.totalNfts)}
               color='rgb(98, 79, 255)'
-              data={data.chartData}
+              data={chartData}
               dataKey='nfts'
               description='Total Hashinals Minted'
               gradientId='nftGradient'
@@ -184,21 +181,32 @@ const AnalyticsClientPage = () => {
               endColor='#624fff'
             />
             <ChartCard
-              title='Transactions'
-              value={formatNumber(totalTransactions)}
+              title='HCS-1 Transactions'
+              value={formatNumber(chartData.reduce((acc, curr) => acc + curr.hcs1Transactions, 0))}
               color='rgb(48, 183, 82)'
-              data={data.chartData}
-              dataKey='transactions'
-              description='Total transactions processed'
-              gradientId='txGradient'
+              data={chartData}
+              dataKey='hcs1Transactions'
+              description='Total HCS-1 transactions'
+              gradientId='hcs1Gradient'
               startColor='#30b752'
               endColor='#30b752'
             />
             <ChartCard
+              title='HCS-20 Transactions'
+              value={formatNumber(chartData.reduce((acc, curr) => acc + curr.hcs20Transactions, 0))}
+              color='rgb(45, 212, 191)'
+              data={chartData}
+              dataKey='hcs20Transactions'
+              description='Total HCS-20 transactions'
+              gradientId='hcs20Gradient'
+              startColor='#2dd4bf'
+              endColor='#2dd4bf'
+            />
+            <ChartCard
               title='Topics'
-              value={formatNumber(totalTopics)}
+              value={formatNumber(chartData.reduce((acc, curr) => acc + curr.topics, 0))}
               color='rgb(64, 25, 232)'
-              data={data.chartData}
+              data={chartData}
               dataKey='topics'
               description='Total topics created'
               gradientId='topicGradient'
@@ -209,14 +217,32 @@ const AnalyticsClientPage = () => {
 
           <Card className='p-6 overflow-hidden bg-white dark:bg-gray-900'>
             <Typography variant='h4' className='mb-6'>
-              Activity Comparison
+              Monthly Activity Overview
             </Typography>
-            <div className='h-[400px]'>
+            <div className='h-[500px]'>
               <ResponsiveContainer width='100%' height='100%'>
-                <BarChart
-                  data={data.chartData}
+                <AreaChart
+                  data={chartData}
                   margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
                 >
+                  <defs>
+                    <linearGradient id='nftGradientCombined' x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='5%' stopColor='#624fff' stopOpacity={0.8} />
+                      <stop offset='95%' stopColor='#624fff' stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient id='hcs1GradientCombined' x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='5%' stopColor='#30b752' stopOpacity={0.8} />
+                      <stop offset='95%' stopColor='#30b752' stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient id='hcs20GradientCombined' x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='5%' stopColor='#2dd4bf' stopOpacity={0.8} />
+                      <stop offset='95%' stopColor='#2dd4bf' stopOpacity={0.2} />
+                    </linearGradient>
+                    <linearGradient id='topicGradientCombined' x1='0' y1='0' x2='0' y2='1'>
+                      <stop offset='5%' stopColor='#4019e8' stopOpacity={0.8} />
+                      <stop offset='95%' stopColor='#4019e8' stopOpacity={0.2} />
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray='3 3' opacity={0.1} />
                   <XAxis
                     dataKey='date'
@@ -224,6 +250,7 @@ const AnalyticsClientPage = () => {
                     fontSize={12}
                     tickLine={false}
                     axisLine={false}
+                    tick={{ fill: 'currentColor' }}
                   />
                   <YAxis
                     stroke='currentColor'
@@ -231,56 +258,28 @@ const AnalyticsClientPage = () => {
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={formatNumber}
+                    tick={{ fill: 'currentColor' }}
                   />
                   <Tooltip
                     content={({ active, payload }) => {
-                      if (active && payload && payload.length) {
+                      if (active && payload?.length) {
                         return (
                           <div className='rounded-lg bg-background/95 p-4 shadow-lg ring-1 ring-black/5 backdrop-blur-md'>
-                            <Typography
-                              variant='h6'
-                              className='text-muted-foreground'
-                            >
+                            <Typography variant='h6' className='text-muted-foreground'>
                               {payload[0].payload.date}
                             </Typography>
-                            <div className='space-y-1'>
-                              <div className='group/tooltip relative'>
-                                <Typography
-                                  variant='p'
-                                  className='text-[rgb(98,79,255)]'
-                                >
-                                  NFTs:{' '}
-                                  {formatNumber(payload[0].value as number)}
-                                </Typography>
-                                <div className='absolute -bottom-4 left-0 opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 text-xs font-mono text-muted-foreground'>
-                                  {payload[0].value}
-                                </div>
-                              </div>
-                              <div className='group/tooltip relative'>
-                                <Typography
-                                  variant='p'
-                                  className='text-[rgb(48,183,82)]'
-                                >
-                                  Transactions:{' '}
-                                  {formatNumber(payload[1].value as number)}
-                                </Typography>
-                                <div className='absolute -bottom-4 left-0 opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 text-xs font-mono text-muted-foreground'>
-                                  {payload[1].value}
-                                </div>
-                              </div>
-                              <div className='group/tooltip relative'>
-                                <Typography
-                                  variant='p'
-                                  className='text-[rgb(64,25,232)]'
-                                >
-                                  Topics:{' '}
-                                  {formatNumber(payload[2].value as number)}
-                                </Typography>
-                                <div className='absolute -bottom-4 left-0 opacity-0 group-hover/tooltip:opacity-100 transition-opacity duration-200 text-xs font-mono text-muted-foreground'>
-                                  {payload[2].value}
-                                </div>
-                              </div>
-                            </div>
+                            <Typography variant='p' className='text-[#624fff]'>
+                              NFTs: {formatNumber(payload[0].value)}
+                            </Typography>
+                            <Typography variant='p' className='text-[#30b752]'>
+                              HCS-1: {formatNumber(payload[1].value)}
+                            </Typography>
+                            <Typography variant='p' className='text-[#2dd4bf]'>
+                              HCS-20: {formatNumber(payload[2].value)}
+                            </Typography>
+                            <Typography variant='p' className='text-[#4019e8]'>
+                              Topics: {formatNumber(payload[3].value)}
+                            </Typography>
                           </div>
                         );
                       }
@@ -288,25 +287,39 @@ const AnalyticsClientPage = () => {
                     }}
                   />
                   <Legend />
-                  <Bar
+                  <Area
+                    type='monotone'
                     dataKey='nfts'
+                    stroke='#624fff'
+                    fillOpacity={1}
+                    fill='url(#nftGradientCombined)'
                     name='NFTs'
-                    fill='rgb(98, 79, 255)'
-                    radius={[4, 4, 0, 0]}
                   />
-                  <Bar
-                    dataKey='transactions'
-                    name='Transactions'
-                    fill='rgb(48, 183, 82)'
-                    radius={[4, 4, 0, 0]}
+                  <Area
+                    type='monotone'
+                    dataKey='hcs1Transactions'
+                    stroke='#30b752'
+                    fillOpacity={1}
+                    fill='url(#hcs1GradientCombined)'
+                    name='HCS-1'
                   />
-                  <Bar
+                  <Area
+                    type='monotone'
+                    dataKey='hcs20Transactions'
+                    stroke='#2dd4bf'
+                    fillOpacity={1}
+                    fill='url(#hcs20GradientCombined)'
+                    name='HCS-20'
+                  />
+                  <Area
+                    type='monotone'
                     dataKey='topics'
+                    stroke='#4019e8'
+                    fillOpacity={1}
+                    fill='url(#topicGradientCombined)'
                     name='Topics'
-                    fill='rgb(64, 25, 232)'
-                    radius={[4, 4, 0, 0]}
                   />
-                </BarChart>
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </Card>
