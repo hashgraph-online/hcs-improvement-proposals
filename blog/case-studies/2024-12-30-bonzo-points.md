@@ -10,7 +10,7 @@ date: 2024-12-30T08:34:27-05:00
 
 ## Bonzo Finance: The Liquidity Layer of Hedera
 
-Bonzo Finance's mission is to become The Liquidity Layer of the Hedera DeFi ecosystem — unlocking previously dormant liquidity and enabling lending & borrowing capabilities that were previously not possible for retail and institutional users. Bonzo Finance harnesses the full potential of Hedera's EVM equivalence, tooling, and mirror node infrastructure, with a symbiosis that ensures a high efficiency, low cost, and user friendly experience.
+[Bonzo Finance's](https://bonzo.finance) mission is to become The Liquidity Layer of the Hedera DeFi ecosystem — unlocking previously dormant liquidity and enabling lending & borrowing capabilities that were previously not possible for retail and institutional users. Bonzo Finance harnesses the full potential of Hedera's EVM equivalence, tooling, and mirror node infrastructure, with a symbiosis that ensures a high efficiency, low cost, and user friendly experience.
 
 Bonzo Finance supports a diverse range of assets, including $HBAR, HTS tokens, and stablecoins, such as $USDC, enabling users to lend and borrow in an overcollateralized fashion across a broad spectrum of the Hedera economy.
 
@@ -32,4 +32,4 @@ The decentralized architecture of HCS-20 not only incentivizes the lending and b
 
 ## Points Leaderboard
 
-When visiting the points leaderboard on Bonzo Finance, users have the ability to view the points they’ve accumulated, their ranking, and a link to the HashScan explorer, showcasing a verifiable and timestamped entry for points earned.
+When visiting the [points leaderboard](https://app.bonzo.finance/points) on Bonzo Finance, users have the ability to view the points they’ve accumulated, their ranking, and a link to the HashScan explorer, showcasing a verifiable and timestamped entry for points earned.
