@@ -32,4 +32,6 @@ The decentralized architecture of HCS-20 not only incentivizes the lending and b
 
 ## Points Leaderboard
 
+![Bonzo Finance Points Leaderboard](/use-cases/bonzo.png)
+
 When visiting the [points leaderboard](https://app.bonzo.finance/points) on Bonzo Finance, users have the ability to view the points they’ve accumulated, their ranking, and a link to the HashScan explorer, showcasing a verifiable and timestamped entry for points earned.
