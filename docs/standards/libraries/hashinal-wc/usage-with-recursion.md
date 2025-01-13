@@ -24,7 +24,7 @@ Before you begin, see the [installation guide](./installation.md) and [recursion
 
     <!-- Load WalletConnect SDK via HCS-3 -->
     <script
-      data-src="hcs://1/0.0.7337015"
+      data-src="hcs://1/0.0.7797532"
       data-script-id="wallet-connect"
       data-load-order="1"
     ></script>
@@ -113,7 +113,7 @@ Before you begin, see the [installation guide](./installation.md) and [recursion
 
 ## Key Points
 
-1. The WalletConnect SDK is loaded via HCS-3 recursion from topic `0.0.7337015`
+1. The WalletConnect SDK is loaded via HCS-3 recursion from topic `0.0.7797532`
 2. The `HCSReady` callback ensures our code runs after the SDK is loaded
 3. No build step or additional inscriptions needed - everything runs in the browser
 
