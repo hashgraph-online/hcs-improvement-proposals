@@ -18,3 +18,4 @@ The inscribed Topic Ids for Hashinal Wallet Connect are updated regularly to sup
 | v1.0.82 | 0.0.7522981 | UMD  |
 | v1.0.86 | 0.0.7770334 | UMD  |
 | v1.0.88 | 0.0.7797532 | UMD  |
+| v1.0.92 | 0.0.8084872 | UMD  |
