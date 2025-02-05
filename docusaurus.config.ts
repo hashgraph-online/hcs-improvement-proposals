@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Hashgraph Online',
   // tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.png',
+  favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
   url: 'https://hgo-website.pages.dev',
@@ -66,7 +66,7 @@ const config: Config = {
       title: 'Hashgraph Online',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'img/logo.png',
+        src: 'img/moonscape.svg',
       },
       style: 'dark',
       items: [
