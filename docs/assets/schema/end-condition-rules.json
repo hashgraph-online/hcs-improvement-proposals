@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rockvt.com/schemas/end-condition-rules",
+  "properties": {
+      "schema": { "const": "hcs9" },
+      "rules": {
+        "type": "array",
+        "items": { "$ref": "rule" }
+      }
+    },
+    "required": ["schema", "rules"]
+}

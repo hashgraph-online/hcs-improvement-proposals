@@ -1,0 +1,13 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rockvt.com/schemas/token-gate",
+    "type": "object",
+    "properties": {
+      "tokens": {
+        "type": "array",
+        "items": { "$ref": "token-data" }
+      },
+      "snapshotDate": { "type": "string" }
+    },
+    "required": ["tokens", "snapshotDate"]
+  }
