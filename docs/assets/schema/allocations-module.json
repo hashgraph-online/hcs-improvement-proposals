@@ -1,0 +1,121 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rockvt.com/schemas/allocations-module",
+    "oneOf": [
+        {
+            "$ref": "#/$defs/singleAllocation"
+        },
+        {
+            "$ref": "#/$defs/fixedAllocation"
+        },
+        {
+            "$ref": "#/$defs/csvAllocation"
+        },
+        {
+            "$ref": "#/$defs/tokenGateAllocation"
+        }
+    ],
+    "$defs": {
+        "singleAllocation": {
+            "type": "object",
+            "properties": {
+                "schema": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "const": "single"
+                }
+            },
+            "required": [
+                "schema",
+                "name"
+            ]
+        },
+        "fixedAllocation": {
+            "type": "object",
+            "properties": {
+                "schema": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "const": "fixed"
+                },
+                "weight": {
+                    "type": "number"
+                }
+            },
+            "required": [
+                "schema",
+                "name",
+                "weight"
+            ]
+        },
+        "csvAllocation": {
+            "type": "object",
+            "properties": {
+                "schema": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "const": "csv"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "csv": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "schema",
+                "name"
+            ],
+            "oneOf": [
+                "uri",
+                "csv"
+            ]
+        },
+        "tokenGateAllocation": {
+            "type": "object",
+            "properties": {
+                "schema": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string",
+                    "const": "tokengate"
+                },
+                "uuid": {
+                    "type": "string"
+                },
+                "uri": {
+                    "type": "string"
+                },
+                "csv": {
+                    "type": "string"
+                },
+                "tokenGate": {
+                    "type": { "$ref": "token-gate"}
+                },
+                "rules": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "rules"
+                    }
+                }
+            },
+            
+            "required": [
+                "schema",
+                "name",
+                "tokenGate"
+            ]
+        }
+    }
+}

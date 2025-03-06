@@ -1,0 +1,12 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rockvt.com/schemas/option-module",
+    "type": "object",
+    "properties": {
+      "schema": { "type" : "string" },
+      "id": { "type": "integer" },
+      "title": { "type": "string" },
+      "description": { "type": "string" }
+    },
+    "required": ["schema", "id", "title", "description"]
+  }

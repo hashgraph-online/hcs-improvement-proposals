@@ -1,0 +1,9 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rockvt.com/schemas/update-settings",
+    "type": "object",
+    "properties": {
+      "startDate": { "type": "boolean" },
+      "endCondition": { "type": "boolean" }
+    }
+  }

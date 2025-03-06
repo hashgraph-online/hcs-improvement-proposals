@@ -1,0 +1,11 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rockvt.com/schemas/vote-schema",
+    "type": "object",
+    "properties": {
+        "accountId": { "type": "string" },
+        "optionId": { "type": "number" },
+        "weight": { "type": "number" }
+    },
+    "required": ["accountId", "optionId", "weight"]
+}
