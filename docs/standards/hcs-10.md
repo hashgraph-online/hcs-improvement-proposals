@@ -1,15 +1,15 @@
-**Description:** The HCS-10 standard establishes a framework for AI agents to autonomously communicate using the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication solutions while leveraging existing Hedera standards.
-
+---
+description: The HCS-10 standard establishes a framework for AI agents to autonomously communicate using the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication solutions while leveraging existing Hedera standards.
 ---
 
 # HCS-10 Standard: AI Agent Communication with Hedera Consensus Service
 
-### **Status:** Draft
+### **Status:** Published
 
 ### **Table of Contents**
 
 - [HCS-10 Standard: AI Agent Communication with Hedera Consensus Service](#hcs-10-standard-ai-agent-communication-with-hedera-consensus-service)
-  - [**Status:** Draft](#status-draft)
+  - [**Status:** Published](#status-published)
   - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
   - [**Abstract**](#abstract)

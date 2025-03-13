@@ -1,26 +1,30 @@
 # HCS-11 Standard: Profile Standard
 
-### Status: Draft
+### Status: Published
 
 ### Version: 1.0
 
 ### Table of Contents
 
 - [HCS-11 Standard: Profile Standard](#hcs-11-standard-profile-standard)
-  - [Status: Draft](#status-draft)
+  - [Status: Published](#status-published)
   - [Version: 1.0](#version-10)
   - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
+    - [Profile Architecture](#profile-architecture)
     - [Account Memo Structure](#account-memo-structure)
     - [Base Profile Schema](#base-profile-schema)
     - [Profile Types](#profile-types)
+      - [Profile Type Hierarchy](#profile-type-hierarchy)
       - [Common Fields for All Types](#common-fields-for-all-types)
       - [Personal Profile Fields](#personal-profile-fields)
       - [Organization Profile Fields](#organization-profile-fields)
       - [AI Agent Profile Fields](#ai-agent-profile-fields)
+    - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
+    - [Profile Update Flow](#profile-update-flow)
     - [Field Specifications](#field-specifications)
       - [AI Agent Endpoints](#ai-agent-endpoints)
       - [AI Agent Metadata](#ai-agent-metadata)
@@ -53,6 +57,29 @@ As the Hedera ecosystem grows, there is an increasing need for a standardized wa
 
 ## Specification
 
+### Profile Architecture
+
+The HCS-11 standard uses Hedera accounts and HCS-1 topics to store profile information:
+
+```
+┌───────────────────┐     ┌──────────────────┐     ┌───────────────────┐
+│                   │     │                  │     │                   │
+│  Hedera Account   │────▶│  Account Memo    │────▶│  HCS-1 Topic      │
+│                   │     │  hcs-11:{topicId}│     │  Profile Data     │
+│                   │     │                  │     │                   │
+└───────────────────┘     └──────────────────┘     └───────────────────┘
+          │                                                  ▲
+          │                                                  │
+          │                                                  │
+          │                                                  │
+          ▼                                                  │
+┌───────────────────┐                                        │
+│                   │                                        │
+│  Applications     │────────────────────────────────────────┘
+│                   │            Read Profile
+└───────────────────┘
+```
+
 ### Account Memo Structure
 
 The account memo must contain a valid HCS-1 Topic ID that stores the profile data. This approach ensures:
@@ -78,6 +105,33 @@ All profiles share these common fields:
 | extensions   | object | Yes      | Container for custom data and future fields             |
 
 ### Profile Types
+
+#### Profile Type Hierarchy
+
+HCS-11 supports three main profile types with specialized fields:
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                                                         │
+│                    Base Profile                         │
+│                                                         │
+│ - version         - socials[]         - extensions      │
+│ - type            - bio               - metadata        │
+│ - name            - profileImage                        │
+│ - alias                                                 │
+└───────────┬─────────────────┬──────────────────────────┘
+            │                 │                           │
+            ▼                 ▼                           ▼
+┌───────────────────┐ ┌───────────────────┐ ┌───────────────────────┐
+│                   │ │                   │ │                       │
+│  Personal Profile │ │    Organization   │ │     AI Agent          │
+│                   │ │      Profile      │ │      Profile          │
+│ - displayPrefs    │ │ - orgDetails      │ │   - aiAgent            │
+│ - privacy         │ │ - contacts[]      │ │   - capabilities[]    │
+│                   │ │                   │ │   - inboundTopicId    │
+│                   │ │                   │ │   - outboundTopicId   │
+└───────────────────┘ └───────────────────┘ └───────────────────────┘
+```
 
 #### Common Fields for All Types
 
@@ -106,14 +160,14 @@ All profiles share these common fields:
 
 #### Organization Profile Fields
 
-| Field                     | Type      | Required | Description                                    |
-| ------------------------- | --------- | -------- | ---------------------------------------------- | ---------------------------- |
-| orgDetails.type           | string    | Yes      | One of: "company", "dao", "nonprofit", "other" |
-| orgDetails.registrationId | string    | No       | Legal registration identifier                  |
-| orgDetails.foundedDate    | string    | No       | Organization founding date                     |
-| orgDetails.size           | string    | No       | Organization size category                     |
-| contacts[]                | role      | string   | Yes                                            | Contact role in organization |
-| contacts[]                | accountId | string   | Yes                                            | Hedera account ID of contact |
+| Field                     | Type   | Required | Description                                    |
+| ------------------------- | ------ | -------- | ---------------------------------------------- |
+| orgDetails.type           | string | Yes      | One of: "company", "dao", "nonprofit", "other" |
+| orgDetails.registrationId | string | No       | Legal registration identifier                  |
+| orgDetails.foundedDate    | string | No       | Organization founding date                     |
+| orgDetails.size           | string | No       | Organization size category                     |
+| contacts[].role           | string | Yes      | Contact role in organization                   |
+| contacts[].accountId      | string | Yes      | Hedera account ID of contact                   |
 
 #### AI Agent Profile Fields
 
@@ -130,6 +184,67 @@ All profiles share these common fields:
 | aiAgent.permissions     | string[] | Yes      | Web3 permissions for blockchain interaction           |
 
 \*Required if aiAgent.enabled is true and using HCS-10
+
+### HCS-10 Integration for AI Agents
+
+AI agent profiles can include HCS-10 communication channels:
+
+```
+┌─────────────────────┐                             ┌─────────────────────┐
+│                     │                             │                     │
+│   AI Agent Account  │                             │   Client Account    │
+│                     │                             │                     │
+└─────────┬───────────┘                             └─────────┬───────────┘
+          │                                                   │
+          │   ┌───────────────────────────────┐              │
+          │   │   HCS-11 Profile Topic        │              │
+          ├──▶│   {                           │◀─────────────┤
+          │   │     "type": "ai_agent",       │   Discovers  │
+          │   │     "aiAgent": {              │   profile    │
+          │   │       "inboundTopicId": "...", │              │
+          │   │       "outboundTopicId": "..." │              │
+          │   │     }                         │              │
+          │   │   }                           │              │
+          │   └───────────────────────────────┘              │
+          │                                                   │
+          │                                                   │
+          ▼                                                   ▼
+┌─────────────────────┐                             ┌─────────────────────┐
+│                     │                             │                     │
+│   Inbound Topic     │◀─────────────────────────────│   Connection        │
+│   (Connection       │      Connection Request     │   Initiated         │
+│    Requests)        │                             │                     │
+└─────────────────────┘                             └─────────────────────┘
+```
+
+### Profile Update Flow
+
+Profiles can be updated by submitting new messages to the HCS-1 topic:
+
+```
+┌───────────────────┐            ┌───────────────────┐
+│                   │            │                   │
+│  Account Owner    │────────────▶  Create/Update    │
+│                   │            │  Profile Data     │
+└───────────────────┘            └────────┬──────────┘
+                                          │
+                                          ▼
+┌───────────────────┐            ┌───────────────────┐
+│                   │            │                   │
+│  Applications     │◀───────────┤   HCS-1 Topic     │
+│  Read Latest      │            │   (Profile Data)  │
+│  Profile Version  │            │                   │
+└───────────────────┘            └───────────────────┘
+                                          │
+                                          │
+                                          ▼
+                                 ┌───────────────────┐
+                                 │                   │
+                                 │   Version History │
+                                 │   (Optional)      │
+                                 │                   │
+                                 └───────────────────┘
+```
 
 ### Field Specifications
 
