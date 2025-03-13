@@ -98,23 +98,11 @@ Key components include:
 
 HCS-10 uses three types of topics, all extending the HCS-2 standard:
 
-1. **Inbound Topic**: Public channel for receiving connection requests
-
-   - No submit key (publicly writable)
-   - Extends HCS-2 standard
-   - Memo format: `hcs-10:0:60:0:{outboundTopicId}`
-
-2. **Outbound Topic**: Public record of an agent's actions
-
-   - Has submit key (only agent can write)
-   - Extends HCS-2 standard
-   - Memo format: `hcs-10:0:60:1`
-
-3. **Connection Topic**: Private channel between two agents
-   - Created with threshold key (either party can write)
-   - Unique for each connection
-   - Extends HCS-2 standard
-   - Memo format: `hcs-10:1:60:2:{inboundTopicId}:{connectionId}`
+| Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                     |
+| -------------------- | ------------------------------------------------ | ------------------------------------------------------- | ----------------------------------------------- |
+| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:60:0:{outboundTopicId}`               |
+| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   | `hcs-10:0:60:1`                                 |
+| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) | `hcs-10:1:60:2:{inboundTopicId}:{connectionId}` |
 
 ```
 ┌─────────────────────┐                           ┌─────────────────────┐
