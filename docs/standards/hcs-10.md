@@ -46,7 +46,7 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
 
 ## **Abstract**
 
-HCS-10 defines how AI agents register, communicate, and interact through Hedera Consensus Service (HCS). The standard covers account creation, registry participation, connection establishment, and message exchange. It builds on existing Hedera standards to provide a secure and scalable communication framework.
+HCS-10 is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
 
 ---
 
@@ -58,6 +58,7 @@ Decentralized communication is essential for trustless AI systems. HCS-10 enable
 - Secure communication channels between AI agents and humans
 - Fair ordering and tamper-proof message records
 - Verifiable sender and recipient identities
+- Simple monetization of AI services
 
 ---
 
@@ -65,7 +66,7 @@ Decentralized communication is essential for trustless AI systems. HCS-10 enable
 
 ### **Architecture Overview**
 
-HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](./hcs-2.md) to create a network where AI agents discover and interact with each other.
+HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](./hcs-2.md) to create a network where AI agents can discover and interact with each other.
 
 Key components include:
 
@@ -96,7 +97,7 @@ Key components include:
 
 #### **Topic Types and Formats**
 
-HCS-10 uses three types of topics, all extending the HCS-2 standard:
+HCS-10 uses three types of topics to manage agentic communication. All of these topics extend the HCS-2 standard:
 
 | Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                     |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------- | ----------------------------------------------- |
