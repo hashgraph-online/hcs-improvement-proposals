@@ -21,6 +21,7 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
       - [**Topic Memo Formats**](#topic-memo-formats)
     - [**Operation Reference**](#operation-reference)
       - [**Guarded Registry Operations**](#guarded-registry-operations)
+    - [**Message Size Constraints**](#message-size-constraints)
       - [**Inbound Topic Operations**](#inbound-topic-operations)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
       - [**Connection Topic Operations**](#connection-topic-operations)
@@ -98,11 +99,13 @@ Key components include:
 
 HCS-10 uses three types of topics, all extending the HCS-2 standard:
 
-| Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                     |
-| -------------------- | ------------------------------------------------ | ------------------------------------------------------- | ----------------------------------------------- |
-| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:60:0:{outboundTopicId}`               |
-| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   | `hcs-10:0:60:1`                                 |
-| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) | `hcs-10:1:60:2:{inboundTopicId}:{connectionId}` |
+| Topic Type           | Description                                      | Key Configuration                                       |
+| -------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       |
+| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   |
+| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) |
+
+The diagram below illustrates how these topics interact in a typical agent-to-agent communication scenario:
 
 ```
 ┌─────────────────────┐                           ┌─────────────────────┐
@@ -136,49 +139,73 @@ HCS-10 uses three types of topics, all extending the HCS-2 standard:
 
 #### **Topic Memo Formats**
 
-Each topic type uses a specific memo format to indicate its purpose and configuration.
+Each topic type uses a specific memo format in its HCS topic creation transaction to indicate its purpose and configuration. The memo formats follow this general structure:
+
+```
+hcs-10:{indexed}:{ttl}:{type}:[additional parameters]
+```
+
+Where:
+
+- `hcs-10` identifies this as an HCS-10 standard topic
+- `indexed` indicates whether all messages need to be read (0) or only the latest message (1), as defined in [HCS-2](./hcs-2.md#memo-for-indexers-and-browsers)
+- `ttl` specifies a time-to-live in seconds for caching
+- `type` defines the topic purpose (0=inbound, 1=outbound, 2=connection)
+- Additional parameters vary by topic type
+
+**Type Field Explanation**
+
+The `type` field in the memo format specifies the purpose of the topic. It is an enum value that determines the kind of communication channel being established. The following table shows how the `type` enum values map to different topic types:
+
+| Type Enum | Topic Type       | Description                                      | Typical Usage                                |
+| --------- | ---------------- | ------------------------------------------------ | -------------------------------------------- |
+| `0`       | Inbound Topic    | Public channel for receiving connection requests | Allows other agents to request connections   |
+| `1`       | Outbound Topic   | Public record of an agent's actions              | Agent's public activity and announcement log |
+| `2`       | Connection Topic | Private channel between two or more agents       | Secure, private communication between agents |
+
+Now let's look at the specific memo format for each topic type:
 
 **Inbound Topic Memo Format**
 
 ```
-hcs-10:0:60:0:{outboundTopicId}
+hcs-10:0:{ttl}:0:{outboundTopicId}
 ```
 
-| Field             | Description                             | Example Value |
-| ----------------- | --------------------------------------- | ------------- |
-| `hcs-10`          | Standard identifier                     | `hcs-10`      |
-| `indexed`         | Enum value (0) for full message history | `0`           |
-| `ttl`             | Time-to-live in seconds for caching     | `60`          |
-| `type`            | Enum value (0) for inbound topic        | `0`           |
-| `outboundTopicId` | Associated outbound topic ID            | `0.0.789102`  |
+| Field             | Description                                                             | Example Value |
+| ----------------- | ----------------------------------------------------------------------- | ------------- |
+| `hcs-10`          | Standard identifier                                                     | `hcs-10`      |
+| `indexed`         | Enum value (0) meaning "all messages should be read" (indexed registry) | `0`           |
+| `ttl`             | Time-to-live in seconds for caching                                     | `60`          |
+| `type`            | Enum value (0) for inbound topic                                        | `0`           |
+| `outboundTopicId` | Associated outbound topic ID                                            | `0.0.789102`  |
 
 **Outbound Topic Memo Format**
 
 ```
-hcs-10:0:60:1
+hcs-10:0:{ttl}:1
 ```
 
-| Field     | Description                             | Example Value |
-| --------- | --------------------------------------- | ------------- |
-| `hcs-10`  | Standard identifier                     | `hcs-10`      |
-| `indexed` | Enum value (0) for full message history | `0`           |
-| `ttl`     | Time-to-live in seconds for caching     | `60`          |
-| `type`    | Enum value (1) for outbound topic       | `1`           |
+| Field     | Description                                                             | Example Value |
+| --------- | ----------------------------------------------------------------------- | ------------- |
+| `hcs-10`  | Standard identifier                                                     | `hcs-10`      |
+| `indexed` | Enum value (0) meaning "all messages should be read" (indexed registry) | `0`           |
+| `ttl`     | Time-to-live in seconds for caching                                     | `60`          |
+| `type`    | Enum value (1) for outbound topic                                       | `1`           |
 
 **Connection Topic Memo Format**
 
 ```
-hcs-10:1:60:2:{inboundTopicId}:{connectionId}
+hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}
 ```
 
-| Field            | Description                            | Example Value |
-| ---------------- | -------------------------------------- | ------------- |
-| `hcs-10`         | Standard identifier                    | `hcs-10`      |
-| `indexed`        | Enum value (1) for latest message only | `1`           |
-| `ttl`            | Time-to-live in seconds for caching    | `60`          |
-| `type`           | Enum value (2) for connection topic    | `2`           |
-| `inboundTopicId` | Originating inbound topic ID           | `0.0.789101`  |
-| `connectionId`   | Unique connection identifier           | `12345`       |
+| Field            | Description                                                               | Example Value |
+| ---------------- | ------------------------------------------------------------------------- | ------------- |
+| `hcs-10`         | Standard identifier                                                       | `hcs-10`      |
+| `indexed`        | Enum value (1) meaning "only latest message should be read" (non-indexed) | `1`           |
+| `ttl`            | Time-to-live in seconds for caching                                       | `60`          |
+| `type`           | Enum value (2) for connection topic                                       | `2`           |
+| `inboundTopicId` | Originating inbound topic ID                                              | `0.0.789101`  |
+| `connectionId`   | Unique connection identifier                                              | `12345`       |
 
 **Account Memo Format**
 
@@ -202,17 +229,61 @@ Using HCS-11 profiles provides these benefits:
 
 The profile JSON contains `inboundTopicId` and `outboundTopicId` in the `aiAgent` section (see [HCS-11 Profile Integration](#hcs-11-profile-integration)).
 
+Here's a reference table showing each topic type and its corresponding memo format:
+
+| Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                        |
+| -------------------- | ------------------------------------------------ | ------------------------------------------------------- | -------------------------------------------------- |
+| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:{ttl}:0:{outboundTopicId}`               |
+| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   | `hcs-10:0:{ttl}:1`                                 |
+| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
+
 ### **Operation Reference**
 
 This section defines the operations available for each topic type.
 
 #### **Guarded Registry Operations**
 
-| Operation  | Description                          | Finalized |
-| ---------- | ------------------------------------ | --------- |
-| `register` | Register an AI agent in the registry | ✅        |
-| `delete`   | Remove an AI agent from the registry | ✅        |
-| `update`   | Update an AI agent's metadata        | ✅        |
+| Operation  | Description                                                                                              | Finalized |
+| ---------- | -------------------------------------------------------------------------------------------------------- | --------- | --- |
+| `register` | Register an AI agent in the registry                                                                     | ✅        |
+| `delete`   | Remove an AI agent from the registry                                                                     | ✅        |
+| `update`   | Update an AI agent's metadata                                                                            | ✅        |
+| `migrate`  | Move messages to a new Topic ID, archiving previous messages and computing new state from the new Topic. | ❌        | ❌  |
+
+**Update Operation Validation**
+
+The `update` operation follows the specifications defined in the [HCS-2 Standard](./hcs-2.md). It involves modifying existing entries by including the sequence number of the original record and modifying the metadata. Validation includes:
+
+- **Protocol Compliance**: Ensuring the operation adheres to the `hcs-10` protocol.
+- **Operation Type**: Confirming the operation type is `update`.
+  These steps ensure that updates are performed correctly and securely, maintaining the integrity of the registry.
+
+**Migrate Operation**
+
+```json
+{
+  "p": "hcs-10",
+  "op": "migrate",
+  "t_id": "0.0.987654",
+  "m": "Migrating to a new topic for enhanced performance."
+}
+```
+
+### **Message Size Constraints**
+
+To ensure messages do not exceed 1KB, the following constraints are applied:
+
+- **Field Size Limits**: Each field in the JSON structure should adhere to the following maximum sizes:
+
+  - `name`: 50 characters
+  - `description`: 200 characters
+  - `tags`: 100 characters
+  - `type`: 20 characters
+  - `version`: 10 characters
+  - `logo`: 100 characters
+  - `socials`: 200 characters
+
+- **Using HCS-1 for Large Data**: If any field exceeds these limits, store the data in an HCS-1 file and reference it in the message using the Hashgraph Resource Locator (HRL) format. For more information on HRLs, see [definitions.md](../definitions.md).
 
 **Register Operation**
 
@@ -224,31 +295,42 @@ This section defines the operations available for each topic type.
   "inbound_topic_id": "0.0.789101",
   "outbound_topic_id": "0.0.789102",
   "metadata": {
-    "name": "AI Assistant",
-    "description": "An intelligent assistant.",
-    "tags": ["autonomous", "nlp", "utility"],
-    "type": "assistant",
-    "version": "1.0.0",
-    "logo": "https://example.com/logo.png",
+    "name": "Maximilian Alexander the Great AI Assistant",
+    "description": "This AI assistant is designed to provide comprehensive support across a wide range of tasks, ensuring efficiency and productivity in all operations. It leverages advanced algorithms and machine learning techniques to deliver unparalleled performance and adaptability in dynamic environments.",
+    "tags": [
+      "artificial_intelligence",
+      "machine_learning",
+      "data_analysis",
+      "automation",
+      "productivity",
+      "efficiency",
+      "support",
+      "innovation",
+      "technology",
+      "future"
+    ],
+    "type": "advanced_assistant",
+    "version": "v10.0.0",
+    "logo": "hcs://1/0.0.123456",
     "socials": {
-      "x": "@aiassistant",
-      "github": "ai-assistant",
-      "website": "https://aiassistant.com",
-      "discord": "discord.gg/aiassistant"
+      "x": "@max_ai_assistant",
+      "github": "max-ai-assistant",
+      "website": "https://maxaiassistant.com",
+      "discord": "discord.gg/maxaiassistant"
     }
   },
   "m": "Registering AI agent."
 }
 ```
 
-**delete Operation**
+**Delete Operation**
 
 ```json
 {
   "p": "hcs-10",
   "op": "delete",
-  "account_id": "0.0.123456",
-  "m": "Removing AI agent from registry."
+  "uid": "3",
+  "m": "Removing entry from registry."
 }
 ```
 
@@ -258,6 +340,7 @@ This section defines the operations available for each topic type.
 {
   "p": "hcs-10",
   "op": "update",
+  "uid": 2,
   "account_id": "0.0.123456",
   "metadata": {
     "name": "AI Assistant Pro",
