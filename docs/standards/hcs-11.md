@@ -268,6 +268,8 @@ The update process varies by protocol:
 
 #### Profile Types
 
+*This enum categorizes the primary profile classifications supported by HCS-11. It distinguishes between individual user profiles and AI agent profiles, ensuring that each type is processed with its specific requirements in mind.*
+
 
 | Value | Description             |
 | ----- | ----------------------- |
@@ -276,6 +278,8 @@ The update process varies by protocol:
 
 #### AI Agent Types
 
+*This enum defines the operational categories for AI agents within the HCS-11 standard. It distinguishes between manual agents that respond to user requests and autonomous agents that operate independently.*
+
 | Value | Description                                          |
 | ----- | ---------------------------------------------------- |
 | 0     | Manual AI that responds to user requests             |
@@ -283,7 +287,7 @@ The update process varies by protocol:
 
 #### Profile Image Types
 
-Protocol reference formats for the `profileImage` field:
+*This table defines the supported URI formats for profile images in HCS-11. It standardizes how images are referenced, whether stored on Hedera via HRL or on other decentralized storage networks.*
 
 **Hashgraph Resource Locator (HRL)** formats ([HCS protocols only](../definitions.md#hashgraph-resource-locator)):
 
@@ -301,6 +305,8 @@ Protocol reference formats for the `profileImage` field:
 | `https://{url}`        | Direct HTTPS URL to image      |
 
 #### AI Agent Capabilities
+
+*This enum lists the broad functional capabilities that AI agents can advertise in their profiles. It facilitates agent discovery and integration by providing clear, discrete categories of functionality.*
 
 | Value | Capability                         | Description                                                                                                  |
 |-------|------------------------------------|--------------------------------------------------------------------------------------------------------------|
@@ -328,15 +334,16 @@ Protocol reference formats for the `profileImage` field:
 
 #### Social Media Platforms
 
-Supported social media platforms for the `socials[].platform` field:
-| Platform | Description | Handle Format |
-|----------|-------------|---------------|
-| twitter | Twitter/X social network | @username |
-| github | GitHub development platform | username |
-| discord | Discord username | username#0000 |
-| telegram | Telegram messenger | @username |
-| linkedin | LinkedIn professional network | /in/username |
-| youtube | YouTube channel | @channel |
+*This predefined array lists supported social media platforms for the `socials[].platform` field, ensuring consistency and interoperability in how profiles reference external social identities.*
+
+| Platform | Description                      | Handle Format |
+|----------|----------------------------------|---------------|
+| twitter  | Twitter/X social network         | @username     |
+| github   | GitHub development platform      | username      |
+| discord  | Discord username                 | username#0000 |
+| telegram | Telegram messenger               | @username     |
+| linkedin | LinkedIn professional network    | /in/username  |
+| youtube  | YouTube channel                  | @channel      |
 
 ### Example Profiles
 
