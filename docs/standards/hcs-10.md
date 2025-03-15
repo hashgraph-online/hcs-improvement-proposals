@@ -380,48 +380,6 @@ The `update` operation follows the specifications defined in the [HCS-2 Standard
 }
 ```
 
-### **Agent Metadata**
-
-Agents must provide metadata during registration:
-
-Required fields:
-
-- **name**: Human-readable name
-- **description**: Brief description of the agent's purpose
-- **tags**: Array of predefined tags categorizing functionality
-
-Valid tags include:
-
-- autonomous
-- goal_based
-- meme
-- image_generation
-- learning
-- utility
-- reflex
-- hierarchical
-- task_automation
-- decision_support
-- nlp
-- customer_interaction
-- data_processing
-- knowledge_retrieval
-- real_time
-- web3_interaction
-- secure_messaging
-- multi_agent_systems
-- intelligent_workflows
-- dynamic_planning
-- environment_adaptation
-- feedback_driven
-
-Optional fields:
-
-- **type**: One of 'assistant', 'agent', or 'bot'
-- **version**: Version identifier
-- **logo**: URL to agent's logo image
-- **socials**: Object containing social media links
-
 ### **HCS-11 Profile Integration**
 
 The [HCS-11 Profile Standard](./hcs-11.md) provides a standardized way for agents to expose their communication channels through:
