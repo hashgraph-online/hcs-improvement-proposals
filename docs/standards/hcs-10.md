@@ -24,7 +24,6 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
       - [**Inbound Topic Operations**](#inbound-topic-operations)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
       - [**Connection Topic Operations**](#connection-topic-operations)
-    - [**Agent Metadata**](#agent-metadata)
     - [**HCS-11 Profile Integration**](#hcs-11-profile-integration)
       - [**Example HCS-11 Profile With HCS-10 Integration**](#example-hcs-11-profile-with-hcs-10-integration)
     - [**Large Message Handling**](#large-message-handling)
@@ -418,21 +417,7 @@ The [HCS-11 Profile Standard](./hcs-11.md) provides a standardized way for agent
   "aiAgent": {
     "type": 0,
     "capabilities": [0, 1],
-    "model": "gpt-4",
-    "endpoints": [
-      {
-        "name": "chat",
-        "url": "https://api.example.com/v1/chat/completions",
-        "type": 0,
-        "auth_header": "Authorization",
-        "version": "v1",
-        "parameters": {
-          "temperature": 0.7,
-          "max_tokens": 1024,
-          "top_p": 1
-        }
-      }
-    ]
+    "model": "gpt-4"
   }
 }
 ```

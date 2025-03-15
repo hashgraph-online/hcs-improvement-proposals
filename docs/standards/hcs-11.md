@@ -24,13 +24,10 @@
       - [AI Agent Profile Fields](#ai-agent-profile-fields)
     - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
     - [Profile Update Flow](#profile-update-flow)
-    - [Field Specifications](#field-specifications)
-      - [AI Agent Endpoints](#ai-agent-endpoints)
     - [Enums and Constants](#enums-and-constants)
       - [Profile Types](#profile-types-1)
       - [AI Agent Types](#ai-agent-types)
       - [Profile Image Types](#profile-image-types)
-      - [Endpoint Types](#endpoint-types)
       - [AI Agent Capabilities](#ai-agent-capabilities)
     - [Predefined Arrays](#predefined-arrays)
       - [Social Media Platforms](#social-media-platforms)
@@ -122,18 +119,18 @@ This approach ensures:
 
 All profiles share these common fields:
 
-| Field           | Type     | Required | Description                                                                                        |
-| --------------- | -------- | -------- | -------------------------------------------------------------------------------------------------- |
-| version         | string   | Yes      | Standard version (e.g., "1.0")                                                                     |
-| type            | number   | Yes      | Profile type enum (0=personal, 1=ai_agent)                                                         |
-| display_name    | string   | Yes      | Display name for the profile                                                                       |
-| alias           | string   | No       | Alternative identifier                                                                             |
-| bio             | string   | No       | Brief description or biography                                                                     |
-| socials         | array    | No       | Array of social media links                                                                        |
-| profileImage    | string   | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
-| properties      | object   | No       | Additional unstructured profile properties                                                         |
-| inboundTopicId  | string   | No       | [HCS-10](./hcs-10.md) inbound communication topic                                                  |
-| outboundTopicId | string   | No       | [HCS-10](./hcs-10.md) action record topic                                                          |
+| Field           | Type   | Required | Description                                                                                        |
+| --------------- | ------ | -------- | -------------------------------------------------------------------------------------------------- |
+| version         | string | Yes      | Standard version (e.g., "1.0")                                                                     |
+| type            | number | Yes      | Profile type enum (0=personal, 1=ai_agent)                                                         |
+| display_name    | string | Yes      | Display name for the profile                                                                       |
+| alias           | string | No       | Alternative identifier                                                                             |
+| bio             | string | No       | Brief description or biography                                                                     |
+| socials         | array  | No       | Array of social media links                                                                        |
+| profileImage    | string | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
+| properties      | object | No       | Additional unstructured profile properties                                                         |
+| inboundTopicId  | string | No       | [HCS-10](./hcs-10.md) inbound communication topic                                                  |
+| outboundTopicId | string | No       | [HCS-10](./hcs-10.md) action record topic                                                          |
 
 ### Profile Types
 
@@ -160,17 +157,17 @@ HCS-11 supports two main profile types with specialized fields:
 │                      │                 │                      │
 │   - language         │                 │   - aiAgent          │
 │   - timezone         │                 │   - capabilities     │
-│                      │                 │   - endpoints        │
+│                      │                 │                      │
 └──────────────────────┘                 └──────────────────────┘
 ```
 
 #### Common Fields for All Types
 
-| Object    | Field    | Type   | Required | Description                |
-| --------- | -------- | ------ | -------- | -------------------------- |
-| socials[] | platform | string | Yes      | Social media platform name |
-| socials[] | handle   | string | Yes      | Username on the platform   |
-| any[]     | properties | object | No     | Optional properties of any kind | 
+| Object    | Field      | Type   | Required | Description                     |
+| --------- | ---------- | ------ | -------- | ------------------------------- |
+| socials[] | platform   | string | Yes      | Social media platform name      |
+| socials[] | handle     | string | Yes      | Username on the platform        |
+| any[]     | properties | object | No       | Optional properties of any kind |
 
 The `properties` field is an unstructured JSON object that can contain any custom data the user wishes to include. There are no predefined fields or structure for this object, allowing for maximum flexibility and extensibility. Users can store any relevant information that isn't covered by the standard fields.
 
@@ -183,11 +180,11 @@ The `properties` field is an unstructured JSON object that can contain any custo
 
 #### AI Agent Profile Fields
 
-| Field                | Type     | Required | Description                                              |
-| -------------------- | -------- | -------- | -------------------------------------------------------- |
-| aiAgent.type         | number   | Yes      | AI agent type enum (0=manual, 1=autonomous)              |
-| aiAgent.capabilities | number[] | Yes      | List of capability enums (see Capabilities section)      |
-| aiAgent.model        | string   | Yes      | AI model identifier                                      |
+| Field                | Type     | Required | Description                                         |
+| -------------------- | -------- | -------- | --------------------------------------------------- |
+| aiAgent.type         | number   | Yes      | AI agent type enum (0=manual, 1=autonomous)         |
+| aiAgent.capabilities | number[] | Yes      | List of capability enums (see Capabilities section) |
+| aiAgent.model        | string   | Yes      | AI model identifier                                 |
 
 ### HCS-10 Integration for AI Agents
 
@@ -268,8 +265,7 @@ The update process varies by protocol:
 
 #### Profile Types
 
-*This enum categorizes the primary profile classifications supported by HCS-11. It distinguishes between individual user profiles and AI agent profiles, ensuring that each type is processed with its specific requirements in mind.*
-
+_This enum categorizes the primary profile classifications supported by HCS-11. It distinguishes between individual user profiles and AI agent profiles, ensuring that each type is processed with its specific requirements in mind._
 
 | Value | Description             |
 | ----- | ----------------------- |
@@ -278,16 +274,16 @@ The update process varies by protocol:
 
 #### AI Agent Types
 
-*This enum defines the operational categories for AI agents within the HCS-11 standard. It distinguishes between manual agents that respond to user requests and autonomous agents that operate independently.*
+_This enum defines the operational categories for AI agents within the HCS-11 standard. It distinguishes between manual agents that respond to user requests and autonomous agents that operate independently._
 
-| Value | Description                                          |
-| ----- | ---------------------------------------------------- |
-| 0     | Manual AI that responds to user requests             |
-| 1     | Autonomous AI that operates independently            |
+| Value | Description                               |
+| ----- | ----------------------------------------- |
+| 0     | Manual AI that responds to user requests  |
+| 1     | Autonomous AI that operates independently |
 
 #### Profile Image Types
 
-*This table defines the supported URI formats for profile images in HCS-11. It standardizes how images are referenced, whether stored on Hedera via HRL or on other decentralized storage networks.*
+_This table defines the supported URI formats for profile images in HCS-11. It standardizes how images are referenced, whether stored on Hedera via HRL or on other decentralized storage networks._
 
 **Hashgraph Resource Locator (HRL)** formats ([HCS protocols only](../definitions.md#hashgraph-resource-locator)):
 
@@ -306,44 +302,44 @@ The update process varies by protocol:
 
 #### AI Agent Capabilities
 
-*This enum lists the broad functional capabilities that AI agents can advertise in their profiles. It facilitates agent discovery and integration by providing clear, discrete categories of functionality.*
+_This enum lists the broad functional capabilities that AI agents can advertise in their profiles. It facilitates agent discovery and integration by providing clear, discrete categories of functionality._
 
-| Value | Capability                         | Description                                                                                                  |
-|-------|------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| 0     | Text Generation                    | Generate coherent, human-like text for content creation, chat, and narrative tasks.                          |
-| 1     | Image Generation                   | Create or modify visual content based on text prompts or algorithmic inputs.                                 |
-| 2     | Audio Generation                   | Synthesize speech, music, or soundscapes from textual or data-driven inputs.                                 |
-| 3     | Video Generation                   | Produce dynamic visual content, animations, or edited video outputs.                                         |
-| 4     | Code Generation                    | Produce dynamic code content based on text prompts.                                                          |
-| 5     | Language Translation               | Convert text or speech between languages in real time to enable multilingual interactions.                   |
-| 6     | Summarization & Content Extraction | Distill lengthy content into concise summaries or extract key information for quick insights.                |
-| 7     | Knowledge Retrieval & Reasoning    | Access, organize, and infer from structured and unstructured data to support informed decision-making.       |
-| 8     | Data Integration & Visualization   | Aggregate disparate data sources and present insights through clear, visual representations.                 |
-| 9     | Market Intelligence                | Analyze financial and economic data to offer strategic insights and forecast trends.                         |
-| 10    | Transaction Analytics              | Monitor and analyze financial or on-chain transactions for pattern detection and operational validation.     |
-| 11    | Smart Contract Audit               | Evaluate decentralized code for vulnerabilities, performance issues, and compliance within blockchain systems.|
-| 12    | Governance Facilitation            | Support decentralized decision-making through proposal evaluation, voting, and consensus mechanisms.         |
-| 13    | Security Monitoring                | Detect, alert, and respond to security threats, anomalies, and unauthorized access in real time.             |
-| 14    | Compliance & Regulatory Analysis   | Ensure operations adhere to legal, regulatory, and internal standards.                                       |
-| 15    | Fraud Detection & Prevention       | Identify and mitigate fraudulent activities through pattern recognition and risk assessment.                 |
-| 16    | Multi-Agent Coordination           | Enable seamless collaboration and communication among multiple autonomous agents.                            |
-| 17    | API Integration & Orchestration    | Connect and manage interactions with external systems, services, and data sources through standardized APIs. |
-| 18    | Workflow Automation                | Automate routine tasks and processes to streamline operations and improve efficiency.                        |
+| Value | Capability                         | Description                                                                                                    |
+| ----- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| 0     | Text Generation                    | Generate coherent, human-like text for content creation, chat, and narrative tasks.                            |
+| 1     | Image Generation                   | Create or modify visual content based on text prompts or algorithmic inputs.                                   |
+| 2     | Audio Generation                   | Synthesize speech, music, or soundscapes from textual or data-driven inputs.                                   |
+| 3     | Video Generation                   | Produce dynamic visual content, animations, or edited video outputs.                                           |
+| 4     | Code Generation                    | Produce dynamic code content based on text prompts.                                                            |
+| 5     | Language Translation               | Convert text or speech between languages in real time to enable multilingual interactions.                     |
+| 6     | Summarization & Content Extraction | Distill lengthy content into concise summaries or extract key information for quick insights.                  |
+| 7     | Knowledge Retrieval & Reasoning    | Access, organize, and infer from structured and unstructured data to support informed decision-making.         |
+| 8     | Data Integration & Visualization   | Aggregate disparate data sources and present insights through clear, visual representations.                   |
+| 9     | Market Intelligence                | Analyze financial and economic data to offer strategic insights and forecast trends.                           |
+| 10    | Transaction Analytics              | Monitor and analyze financial or on-chain transactions for pattern detection and operational validation.       |
+| 11    | Smart Contract Audit               | Evaluate decentralized code for vulnerabilities, performance issues, and compliance within blockchain systems. |
+| 12    | Governance Facilitation            | Support decentralized decision-making through proposal evaluation, voting, and consensus mechanisms.           |
+| 13    | Security Monitoring                | Detect, alert, and respond to security threats, anomalies, and unauthorized access in real time.               |
+| 14    | Compliance & Regulatory Analysis   | Ensure operations adhere to legal, regulatory, and internal standards.                                         |
+| 15    | Fraud Detection & Prevention       | Identify and mitigate fraudulent activities through pattern recognition and risk assessment.                   |
+| 16    | Multi-Agent Coordination           | Enable seamless collaboration and communication among multiple autonomous agents.                              |
+| 17    | API Integration & Orchestration    | Connect and manage interactions with external systems, services, and data sources through standardized APIs.   |
+| 18    | Workflow Automation                | Automate routine tasks and processes to streamline operations and improve efficiency.                          |
 
 ### Predefined Arrays
 
 #### Social Media Platforms
 
-*This predefined array lists supported social media platforms for the `socials[].platform` field, ensuring consistency and interoperability in how profiles reference external social identities.*
+_This predefined array lists supported social media platforms for the `socials[].platform` field, ensuring consistency and interoperability in how profiles reference external social identities._
 
-| Platform | Description                      | Handle Format |
-|----------|----------------------------------|---------------|
-| twitter  | Twitter/X social network         | @username     |
-| github   | GitHub development platform      | username      |
-| discord  | Discord username                 | username#0000 |
-| telegram | Telegram messenger               | @username     |
-| linkedin | LinkedIn professional network    | /in/username  |
-| youtube  | YouTube channel                  | @channel      |
+| Platform | Description                   | Handle Format |
+| -------- | ----------------------------- | ------------- |
+| twitter  | Twitter/X social network      | @username     |
+| github   | GitHub development platform   | username      |
+| discord  | Discord username              | username#0000 |
+| telegram | Telegram messenger            | @username     |
+| linkedin | LinkedIn professional network | /in/username  |
+| youtube  | YouTube channel               | @channel      |
 
 ### Example Profiles
 
@@ -406,21 +402,7 @@ AI Agent Profile with HCS-10:
   "aiAgent": {
     "type": 0,
     "capabilities": [0, 1],
-    "model": "gpt-4",
-    "endpoints": [
-      {
-        "name": "chat",
-        "url": "https://api.example.com/v1/chat/completions",
-        "type": 0,
-        "auth_header": "Authorization",
-        "version": "v1",
-        "parameters": {
-          "temperature": 0.7,
-          "max_tokens": 1024,
-          "top_p": 1
-        }
-      }
-    ]
+    "model": "gpt-4"
   }
 }
 ```
