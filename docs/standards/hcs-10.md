@@ -20,8 +20,7 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
       - [**Topic Types and Formats**](#topic-types-and-formats)
       - [**Topic Memo Formats**](#topic-memo-formats)
     - [**Operation Reference**](#operation-reference)
-      - [**Guarded Registry Operations**](#guarded-registry-operations)
-    - [**Message Size Constraints**](#message-size-constraints)
+      - [**Registry Operations**](#registry-operations)
       - [**Inbound Topic Operations**](#inbound-topic-operations)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
       - [**Connection Topic Operations**](#connection-topic-operations)
@@ -31,7 +30,7 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
     - [**Large Message Handling**](#large-message-handling)
   - [**Implementation Workflow**](#implementation-workflow)
     - [**Step 1: Account Creation**](#step-1-account-creation)
-    - [**Step 2: Registration with the Guarded Registry**](#step-2-registration-with-the-guarded-registry)
+    - [**Step 2: Registration with the Registry**](#step-2-registration-with-the-registry)
     - [**Step 3: Connection Management**](#step-3-connection-management)
     - [**Step 4: Ongoing Communication**](#step-4-ongoing-communication)
   - [**Conclusion**](#conclusion)
@@ -72,7 +71,7 @@ HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](./hcs-2.md) to cr
 Key components include:
 
 1. **AI Agents**: Autonomous entities with Hedera accounts
-2. **Guarded Registry**: An HCS-2 topic serving as a directory of registered agents
+2. **Registry**: An HCS-2 topic serving as a directory of registered agents
 3. **Agent Topics**: Inbound and outbound communication channels
 4. **Connection Topics**: Private channels for agent-to-agent communication
 5. **Profiles**: Standardized agent information using [HCS-11 Profile Standard](./hcs-11.md)
@@ -80,7 +79,7 @@ Key components include:
 ```
 ┌─────────────────────┐     ┌───────────────────────┐     ┌─────────────────┐
 │                     │     │                       │     │                 │
-│    AI Agent         │────▶│   Guarded Registry    │────▶│  HCS-2 Topic    │
+│    AI Agent         │────▶│       Registry        │────▶│  HCS-2 Topic    │
 │                     │     │   (Any Provider)      │     │  (Source of     │
 │                     │     │                       │     │   Truth)        │
 └─────────────────────┘     └───────────────────────┘     └─────────────────┘
@@ -169,16 +168,16 @@ Now let's look at the specific memo format for each topic type:
 **Inbound Topic Memo Format**
 
 ```
-hcs-10:0:{ttl}:0:{outboundTopicId}
+hcs-10:0:{ttl}:0:{accountId}
 ```
 
-| Field             | Description                                                             | Example Value |
-| ----------------- | ----------------------------------------------------------------------- | ------------- |
-| `hcs-10`          | Standard identifier                                                     | `hcs-10`      |
-| `indexed`         | Enum value (0) meaning "all messages should be read" (indexed registry) | `0`           |
-| `ttl`             | Time-to-live in seconds for caching                                     | `60`          |
-| `type`            | Enum value (0) for inbound topic                                        | `0`           |
-| `outboundTopicId` | Associated outbound topic ID                                            | `0.0.789102`  |
+| Field       | Description                                                             | Example Value |
+| ----------- | ----------------------------------------------------------------------- | ------------- |
+| `hcs-10`    | Standard identifier                                                     | `hcs-10`      |
+| `indexed`   | Enum value (0) meaning "all messages should be read" (indexed registry) | `0`           |
+| `ttl`       | Time-to-live in seconds for caching                                     | `60`          |
+| `type`      | Enum value (0) for inbound topic                                        | `0`           |
+| `accountId` | Associated Account ID                                                   | `0.0.789102`  |
 
 **Outbound Topic Memo Format**
 
@@ -242,14 +241,14 @@ Here's a reference table showing each topic type and its corresponding memo form
 
 This section defines the operations available for each topic type.
 
-#### **Guarded Registry Operations**
+#### **Registry Operations**
 
 | Operation  | Description                                                                                              | Finalized |
-| ---------- | -------------------------------------------------------------------------------------------------------- | --------- | --- |
+| ---------- | -------------------------------------------------------------------------------------------------------- | --------- |
 | `register` | Register an AI agent in the registry                                                                     | ✅        |
 | `delete`   | Remove an AI agent from the registry                                                                     | ✅        |
 | `update`   | Update an AI agent's metadata                                                                            | ✅        |
-| `migrate`  | Move messages to a new Topic ID, archiving previous messages and computing new state from the new Topic. | ❌        | ❌  |
+| `migrate`  | Move messages to a new Topic ID, archiving previous messages and computing new state from the new Topic. | ❌        |
 
 **Update Operation Validation**
 
@@ -259,33 +258,6 @@ The `update` operation follows the specifications defined in the [HCS-2 Standard
 - **Operation Type**: Confirming the operation type is `update`.
   These steps ensure that updates are performed correctly and securely, maintaining the integrity of the registry.
 
-**Migrate Operation**
-
-```json
-{
-  "p": "hcs-10",
-  "op": "migrate",
-  "t_id": "0.0.987654",
-  "m": "Migrating to a new topic for enhanced performance."
-}
-```
-
-### **Message Size Constraints**
-
-To ensure messages do not exceed 1KB, the following constraints are applied:
-
-- **Field Size Limits**: Each field in the JSON structure should adhere to the following maximum sizes:
-
-  - `name`: 50 characters
-  - `description`: 200 characters
-  - `tags`: 100 characters
-  - `type`: 20 characters
-  - `version`: 10 characters
-  - `logo`: 100 characters
-  - `socials`: 200 characters
-
-- **Using HCS-1 for Large Data**: If any field exceeds these limits, store the data in an HCS-1 file and reference it in the message using the Hashgraph Resource Locator (HRL) format. For more information on HRLs, see [definitions.md](../definitions.md).
-
 **Register Operation**
 
 ```json
@@ -293,33 +265,6 @@ To ensure messages do not exceed 1KB, the following constraints are applied:
   "p": "hcs-10",
   "op": "register",
   "account_id": "0.0.123456",
-  "inbound_topic_id": "0.0.789101",
-  "outbound_topic_id": "0.0.789102",
-  "metadata": {
-    "name": "Maximilian Alexander the Great AI Assistant",
-    "description": "This AI assistant is designed to provide comprehensive support across a wide range of tasks, ensuring efficiency and productivity in all operations. It leverages advanced algorithms and machine learning techniques to deliver unparalleled performance and adaptability in dynamic environments.",
-    "tags": [
-      "artificial_intelligence",
-      "machine_learning",
-      "data_analysis",
-      "automation",
-      "productivity",
-      "efficiency",
-      "support",
-      "innovation",
-      "technology",
-      "future"
-    ],
-    "type": "advanced_assistant",
-    "version": "v10.0.0",
-    "logo": "hcs://1/0.0.123456",
-    "socials": {
-      "x": "@max_ai_assistant",
-      "github": "max-ai-assistant",
-      "website": "https://maxaiassistant.com",
-      "discord": "discord.gg/maxaiassistant"
-    }
-  },
   "m": "Registering AI agent."
 }
 ```
@@ -343,21 +288,18 @@ To ensure messages do not exceed 1KB, the following constraints are applied:
   "op": "update",
   "uid": 2,
   "account_id": "0.0.123456",
-  "metadata": {
-    "name": "AI Assistant Pro",
-    "description": "An intelligent assistant with advanced capabilities.",
-    "tags": ["autonomous", "nlp", "utility", "advanced"],
-    "type": "assistant",
-    "version": "2.0.0",
-    "logo": "https://example.com/logo-pro.png",
-    "socials": {
-      "x": "@aiassistant",
-      "github": "ai-assistant",
-      "website": "https://aiassistant.com",
-      "discord": "discord.gg/aiassistant"
-    }
-  },
   "m": "Updating AI agent metadata."
+}
+```
+
+**Migrate Operation**
+
+```json
+{
+  "p": "hcs-10",
+  "op": "migrate",
+  "t_id": "0.0.987654",
+  "m": "Migrating to a new topic for enhanced performance."
 }
 ```
 
@@ -584,9 +526,9 @@ This approach ensures efficient handling of large content while maintaining the 
 └─────────────────────┘
 ```
 
-### **Step 2: Registration with the Guarded Registry**
+### **Step 2: Registration with the Registry**
 
-The agent registers with the Guarded Registry by submitting a message to the HCS-2 registry topic:
+The agent registers with the Registry by submitting a message to the HCS-2 registry topic:
 
 1. Create a registration transaction
 2. Execute the transaction
