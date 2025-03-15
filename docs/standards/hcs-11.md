@@ -32,7 +32,6 @@
       - [Profile Image Types](#profile-image-types)
       - [Endpoint Types](#endpoint-types)
       - [AI Agent Capabilities](#ai-agent-capabilities)
-      - [Profile Tags](#profile-tags)
     - [Predefined Arrays](#predefined-arrays)
       - [Social Media Platforms](#social-media-platforms)
     - [Example Profiles](#example-profiles)
@@ -132,7 +131,6 @@ All profiles share these common fields:
 | bio             | string   | No       | Brief description or biography                                                                     |
 | socials         | array    | No       | Array of social media links                                                                        |
 | profileImage    | string   | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
-| tags            | number[] | No       | Array of standardized tag enums                                                                    |
 | properties      | object   | No       | Additional unstructured profile properties                                                         |
 | inboundTopicId  | string   | No       | [HCS-10](./hcs-10.md) inbound communication topic                                                  |
 | outboundTopicId | string   | No       | [HCS-10](./hcs-10.md) action record topic                                                          |
@@ -151,7 +149,7 @@ HCS-11 supports two main profile types with specialized fields:
 │   - version        - socials[]        - properties           │
 │   - type           - bio              - inboundTopicId       │
 │   - display_name   - profileImage     - outboundTopicId      │
-│   - alias          - tags                                    │
+│   - alias                                                    │
 └──────────┬───────────────────────────────────────┬───────────┘
            │                                       │
            │                                       │
@@ -186,10 +184,9 @@ The `properties` field is an unstructured JSON object that can contain any custo
 
 | Field                | Type     | Required | Description                                              |
 | -------------------- | -------- | -------- | -------------------------------------------------------- |
-| aiAgent.type         | number   | Yes      | AI agent type enum (0=assistant, 1=autonomous, 2=hybrid) |
+| aiAgent.type         | number   | Yes      | AI agent type enum (0=manual, 1=autonomous)              |
 | aiAgent.capabilities | number[] | Yes      | List of capability enums (see Capabilities section)      |
 | aiAgent.model        | string   | Yes      | AI model identifier                                      |
-| aiAgent.endpoints    | object[] | No       | API endpoints for interaction                            |
 
 ### HCS-10 Integration for AI Agents
 
@@ -266,39 +263,6 @@ The update process varies by protocol:
 - **IPFS**: New CIDs are created for updated profiles, requiring account memo updates
 - **Arweave**: New transaction IDs are created for updated profiles, requiring account memo updates
 
-### Field Specifications
-
-#### AI Agent Endpoints
-
-| Field       | Type   | Required | Description                                      |
-| ----------- | ------ | -------- | ------------------------------------------------ |
-| name        | string | Yes      | Endpoint identifier                              |
-| url         | string | Yes      | API endpoint URL                                 |
-| type        | number | Yes      | Endpoint type enum (0=rest, 1=websocket, 2=grpc) |
-| api_key     | string | No       | API key parameter name (if required)             |
-| auth_header | string | No       | Authorization header name (if required)          |
-| version     | string | No       | API version identifier                           |
-| parameters  | object | No       | Default inference parameters                     |
-
-Example endpoint configuration:
-
-```json
-"endpoints": [
-  {
-    "name": "chat",
-    "url": "https://api.example.com/v1/chat/completions",
-    "type": 0,
-    "auth_header": "Authorization",
-    "version": "v1",
-    "parameters": {
-      "temperature": 0.7,
-      "max_tokens": 1024,
-      "top_p": 1
-    }
-  }
-]
-```
-
 ### Enums and Constants
 
 #### Profile Types
@@ -312,9 +276,8 @@ Example endpoint configuration:
 
 | Value | Description                                          |
 | ----- | ---------------------------------------------------- |
-| 0     | Reactive AI that responds to user requests           |
-| 1     | Proactive AI that operates independently             |
-| 2     | Combination of assistant and autonomous capabilities |
+| 0     | Manual AI that responds to user requests             |
+| 1     | Autonomous AI that operates independently            |
 
 #### Profile Image Types
 
@@ -335,52 +298,29 @@ Protocol reference formats for the `profileImage` field:
 | `ar://{transactionId}` | Arweave transaction identifier |
 | `https://{url}`        | Direct HTTPS URL to image      |
 
-#### Endpoint Types
-
-| Value | Description                   |
-| ----- | ----------------------------- |
-| 0     | RESTful API endpoint          |
-| 1     | WebSocket connection endpoint |
-| 2     | gRPC service endpoint         |
-
 #### AI Agent Capabilities
 
-| Value | Capability                         | Description                                                                                                    |
-| ----- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| 0     | Text Generation                    | Generate coherent, human-like text for content creation, chat, and narrative tasks.                            |
-| 1     | Image Generation                   | Create or modify visual content based on text prompts or algorithmic inputs.                                   |
-| 2     | Audio Generation                   | Synthesize speech, music, or soundscapes from textual or data-driven inputs.                                   |
-| 3     | Video Generation                   | Produce dynamic visual content, animations, or edited video outputs.                                           |
-| 4     | Code Generation                    | Produce dynamic code content based on text prompts.                                                            |
-| 5     | Language Translation               | Convert text or speech between languages in real time to enable multilingual interactions.                     |
-| 6     | Summarization & Content Extraction | Distill lengthy content into concise summaries or extract key information for quick insights.                  |
-| 8     | Knowledge Retrieval & Reasoning    | Access, organize, and infer from structured and unstructured data to support informed decision-making.         |
-| 9     | Data Integration & Visualization   | Aggregate disparate data sources and present insights through clear, visual representations.                   |
-| 10    | Market Intelligence                | Analyze financial and economic data to offer strategic insights and forecast trends.                           |
-| 11    | Transaction Analytics              | Monitor and analyze financial or on-chain transactions for pattern detection and operational validation.       |
-| 12    | Smart Contract Audit               | Evaluate decentralized code for vulnerabilities, performance issues, and compliance within blockchain systems. |
-| 13    | Governance Facilitation            | Support decentralized decision-making through proposal evaluation, voting, and consensus mechanisms.           |
-| 14    | Security Monitoring                | Detect, alert, and respond to security threats, anomalies, and unauthorized access in real time.               |
-| 15    | Compliance & Regulatory Analysis   | Ensure operations adhere to legal, regulatory, and internal standards.                                         |
-| 16    | Fraud Detection & Prevention       | Identify and mitigate fraudulent activities through pattern recognition and risk assessment.                   |
-| 17    | Multi-Agent Coordination           | Enable seamless collaboration and communication among multiple autonomous agents.                              |
-| 18    | API Integration & Orchestration    | Connect and manage interactions with external systems, services, and data sources through standardized APIs.   |
-| 19    | Workflow Automation                | Automate routine tasks and processes to streamline operations and improve efficiency.                          |
-
-#### Profile Tags
-
-Standardized tags for the `tags` field:
-
-| Value | Tag        | Description             |
-| ----- | ---------- | ----------------------- |
-| 0     | Developer  | Software developer      |
-| 1     | Investor   | Investment professional |
-| 2     | Creator    | Content creator         |
-| 3     | Business   | Business account        |
-| 4     | Community  | Community leader/member |
-| 5     | Validator  | Network validator       |
-| 6     | Educator   | Educational content     |
-| 7     | Researcher | Research professional   |
+| Value | Capability                         | Description                                                                                                  |
+|-------|------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| 0     | Text Generation                    | Generate coherent, human-like text for content creation, chat, and narrative tasks.                          |
+| 1     | Image Generation                   | Create or modify visual content based on text prompts or algorithmic inputs.                                 |
+| 2     | Audio Generation                   | Synthesize speech, music, or soundscapes from textual or data-driven inputs.                                 |
+| 3     | Video Generation                   | Produce dynamic visual content, animations, or edited video outputs.                                         |
+| 4     | Code Generation                    | Produce dynamic code content based on text prompts.                                                          |
+| 5     | Language Translation               | Convert text or speech between languages in real time to enable multilingual interactions.                   |
+| 6     | Summarization & Content Extraction | Distill lengthy content into concise summaries or extract key information for quick insights.                |
+| 7     | Knowledge Retrieval & Reasoning    | Access, organize, and infer from structured and unstructured data to support informed decision-making.       |
+| 8     | Data Integration & Visualization   | Aggregate disparate data sources and present insights through clear, visual representations.                 |
+| 9     | Market Intelligence                | Analyze financial and economic data to offer strategic insights and forecast trends.                         |
+| 10    | Transaction Analytics              | Monitor and analyze financial or on-chain transactions for pattern detection and operational validation.     |
+| 11    | Smart Contract Audit               | Evaluate decentralized code for vulnerabilities, performance issues, and compliance within blockchain systems.|
+| 12    | Governance Facilitation            | Support decentralized decision-making through proposal evaluation, voting, and consensus mechanisms.         |
+| 13    | Security Monitoring                | Detect, alert, and respond to security threats, anomalies, and unauthorized access in real time.             |
+| 14    | Compliance & Regulatory Analysis   | Ensure operations adhere to legal, regulatory, and internal standards.                                       |
+| 15    | Fraud Detection & Prevention       | Identify and mitigate fraudulent activities through pattern recognition and risk assessment.                 |
+| 16    | Multi-Agent Coordination           | Enable seamless collaboration and communication among multiple autonomous agents.                            |
+| 17    | API Integration & Orchestration    | Connect and manage interactions with external systems, services, and data sources through standardized APIs. |
+| 18    | Workflow Automation                | Automate routine tasks and processes to streamline operations and improve efficiency.                        |
 
 ### Predefined Arrays
 
@@ -416,7 +356,6 @@ Personal Profile:
   "profileImage": "hcs://1/0.0.123456",
   "language": "en",
   "timezone": "UTC-5",
-  "tags": [0, 4],
   "properties": {
     "description": "Blockchain developer focused on Hedera ecosystem",
     "location": "San Francisco, CA",
@@ -441,7 +380,6 @@ AI Agent Profile with HCS-10:
   "profileImage": "ar://TQGxHPLpUcH7NG6rUYkzEnwD8_WqYQNPIoX5-0OoRXA",
   "inboundTopicId": "0.0.789101",
   "outboundTopicId": "0.0.789102",
-  "tags": [6, 7],
   "properties": {
     "description": "General-purpose Hedera assistant",
     "version": "1.0.0",
