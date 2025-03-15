@@ -21,25 +21,20 @@
       - [Profile Type Hierarchy](#profile-type-hierarchy)
       - [Common Fields for All Types](#common-fields-for-all-types)
       - [Personal Profile Fields](#personal-profile-fields)
-      - [Organization Profile Fields](#organization-profile-fields)
       - [AI Agent Profile Fields](#ai-agent-profile-fields)
     - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
     - [Profile Update Flow](#profile-update-flow)
     - [Field Specifications](#field-specifications)
       - [AI Agent Endpoints](#ai-agent-endpoints)
-      - [AI Agent Metadata](#ai-agent-metadata)
     - [Enums and Constants](#enums-and-constants)
       - [Profile Types](#profile-types-1)
-      - [Organization Types](#organization-types)
       - [AI Agent Types](#ai-agent-types)
       - [Profile Image Types](#profile-image-types)
       - [Endpoint Types](#endpoint-types)
+      - [AI Agent Capabilities](#ai-agent-capabilities)
+      - [Profile Tags](#profile-tags)
     - [Predefined Arrays](#predefined-arrays)
       - [Social Media Platforms](#social-media-platforms)
-      - [AI Agent Capabilities](#ai-agent-capabilities)
-      - [AI Agent Permissions](#ai-agent-permissions)
-    - [Metadata Tags](#metadata-tags)
-      - [Common Profile Tags](#common-profile-tags)
     - [Example Profiles](#example-profiles)
   - [Conclusion](#conclusion)
 
@@ -49,265 +44,332 @@
 
 ## Abstract
 
-The HCS-11 standard defines a systematic approach for managing profiles on the Hedera network through account memos. This standard introduces a structured way to store profile information for individuals, organizations, and AI agents, enabling rich identity management and interoperability across the Hedera ecosystem.
+The HCS-11 standard defines a systematic approach for managing profiles on the Hedera network through account memos. This standard introduces a structured way to store profile information for individuals and AI agents, enabling rich identity management and interoperability across the Hedera ecosystem.
 
 ## Motivation
 
-As the Hedera ecosystem grows, there is an increasing need for a standardized way to manage profiles for different types of entities. This standard aims to provide a consistent format for storing and retrieving profile information, enabling interoperability between different applications and services while supporting various profile types including personal accounts, organizations, and AI agents.
+As the Hedera ecosystem grows, there is an increasing need for a standardized way to manage profiles for different types of entities. This standard aims to provide a consistent format for storing and retrieving profile information, enabling interoperability between different applications and services while supporting various profile types including personal accounts and AI agents.
 
 ## Specification
 
 ### Profile Architecture
 
-The HCS-11 standard uses Hedera accounts and HCS-1 topics to store profile information:
+The HCS-11 standard uses Hedera accounts with a standardized memo format to reference profile information:
 
 ```
-┌───────────────────┐     ┌──────────────────┐     ┌───────────────────┐
-│                   │     │                  │     │                   │
-│  Hedera Account   │────▶│  Account Memo    │────▶│  HCS-1 Topic      │
-│                   │     │  hcs-11:{topicId}│     │  Profile Data     │
-│                   │     │                  │     │                   │
-└───────────────────┘     └──────────────────┘     └───────────────────┘
-          │                                                  ▲
-          │                                                  │
-          │                                                  │
-          │                                                  │
-          ▼                                                  │
-┌───────────────────┐                                        │
-│                   │                                        │
-│  Applications     │────────────────────────────────────────┘
-│                   │            Read Profile
-└───────────────────┘
+┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
+│                  │     │                  │     │                  │
+│  Hedera Account  │────▶│  Account Memo    │────▶│ Protocol Refs    │
+│                  │     │hcs-11:<prot_ref> │     │ - HCS-1          │
+│                  │     │                  │     │ - HCS-2          │
+└────────┬─────────┘     └──────────────────┘     │ - HTTP           │
+         │                                         │ - IPFS           │
+         │                                         │ - Arweave        │
+         │                                         │                  │
+         │                                         └──────────────────┘
+         │                                                  ▲
+         │                                                  │
+         │                                                  │
+         ▼                                                  │
+┌──────────────────┐                                        │
+│                  │                                        │
+│  Applications    │────────────────────────────────────────┘
+│                  │          Read Profile
+└──────────────────┘
 ```
 
 ### Account Memo Structure
 
-The account memo must contain a valid HCS-1 Topic ID that stores the profile data. This approach ensures:
+The account memo follows a standardized format to indicate where the profile data is stored:
 
-1. Profile data can be updated without changing the account memo
-2. Large profiles can be stored efficiently
-3. Profile history is maintained through the HCS topic
+```
+hcs-11:<protocol_reference>
+```
+
+Where:
+
+- `hcs-11` is the protocol identifier
+- `<protocol_reference>` can be either:
+  - A [Hashgraph Resource Locator (HRL)](../definitions.md#hashgraph-resource-locator) for HCS protocols
+  - Other URI formats for non-HCS protocols (IPFS, Arweave, HTTPS)
+
+Examples of valid memo formats:
+
+```
+# HRL references (HCS protocols)
+hcs-11:hcs://1/0.0.8768762
+hcs-11:hcs://2/0.0.8768762
+hcs-11:hcs://7/0.0.8768762
+
+# Non-HCS protocol references
+hcs-11:ipfs://QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX
+hcs-11:ar://TQGxHPLpUcH7NG6rUYkzEnwD8_WqYQNPIoX5-0OoRXA
+```
+
+This approach ensures:
+
+1. Profile data can be referenced using various protocols:
+   - HCS protocols with [HRL](../definitions.md#hashgraph-resource-locator) format:
+     - [HCS-1](./hcs-1.md): Static file storage
+     - [HCS-2](./hcs-2.md): Topic registry standard
+   - Non-HCS protocols:
+     - IPFS: Distributed file storage
+     - Arweave: Permanent storage
+2. Large profiles can be stored efficiently on the appropriate storage layer
+3. Profile history is maintained through the chosen protocol's mechanisms
+4. Interoperability with existing decentralized storage solutions
 
 ### Base Profile Schema
 
 All profiles share these common fields:
 
-| Field        | Type   | Required | Description                                             |
-| ------------ | ------ | -------- | ------------------------------------------------------- |
-| version      | string | Yes      | Standard version (e.g., "1.0")                          |
-| type         | string | Yes      | Profile type: "personal", "organization", or "ai_agent" |
-| name         | string | Yes      | Display name for the profile                            |
-| alias        | string | No       | Alternative identifier                                  |
-| bio          | string | No       | Brief description or biography                          |
-| socials      | array  | No       | Array of social media links                             |
-| profileImage | object | No       | Profile picture configuration                           |
-| metadata     | object | No       | Additional profile metadata                             |
-| extensions   | object | Yes      | Container for custom data and future fields             |
+| Field           | Type     | Required | Description                                                                                        |
+| --------------- | -------- | -------- | -------------------------------------------------------------------------------------------------- |
+| version         | string   | Yes      | Standard version (e.g., "1.0")                                                                     |
+| type            | number   | Yes      | Profile type enum (0=personal, 1=ai_agent)                                                         |
+| display_name    | string   | Yes      | Display name for the profile                                                                       |
+| alias           | string   | No       | Alternative identifier                                                                             |
+| bio             | string   | No       | Brief description or biography                                                                     |
+| socials         | array    | No       | Array of social media links                                                                        |
+| profileImage    | string   | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
+| tags            | number[] | No       | Array of standardized tag enums                                                                    |
+| properties      | object   | No       | Additional unstructured profile properties                                                         |
+| inboundTopicId  | string   | No       | [HCS-10](./hcs-10.md) inbound communication topic                                                  |
+| outboundTopicId | string   | No       | [HCS-10](./hcs-10.md) action record topic                                                          |
 
 ### Profile Types
 
 #### Profile Type Hierarchy
 
-HCS-11 supports three main profile types with specialized fields:
+HCS-11 supports two main profile types with specialized fields:
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                                                         │
-│                    Base Profile                         │
-│                                                         │
-│ - version         - socials[]         - extensions      │
-│ - type            - bio               - metadata        │
-│ - name            - profileImage                        │
-│ - alias                                                 │
-└───────────┬─────────────────┬──────────────────────────┘
-            │                 │                           │
-            ▼                 ▼                           ▼
-┌───────────────────┐ ┌───────────────────┐ ┌───────────────────────┐
-│                   │ │                   │ │                       │
-│  Personal Profile │ │    Organization   │ │     AI Agent          │
-│                   │ │      Profile      │ │      Profile          │
-│ - displayPrefs    │ │ - orgDetails      │ │   - aiAgent            │
-│ - privacy         │ │ - contacts[]      │ │   - capabilities[]    │
-│                   │ │                   │ │   - inboundTopicId    │
-│                   │ │                   │ │   - outboundTopicId   │
-└───────────────────┘ └───────────────────┘ └───────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                                                              │
+│                      Base Profile                            │
+│                                                              │
+│   - version        - socials[]        - properties           │
+│   - type           - bio              - inboundTopicId       │
+│   - display_name   - profileImage     - outboundTopicId      │
+│   - alias          - tags                                    │
+└──────────┬───────────────────────────────────────┬───────────┘
+           │                                       │
+           │                                       │
+           ▼                                       ▼
+┌──────────────────────┐                 ┌──────────────────────┐
+│                      │                 │                      │
+│   Personal Profile   │                 │   AI Agent Profile   │
+│                      │                 │                      │
+│   - language         │                 │   - aiAgent          │
+│   - timezone         │                 │   - capabilities     │
+│                      │                 │   - endpoints        │
+└──────────────────────┘                 └──────────────────────┘
 ```
 
 #### Common Fields for All Types
 
-| Object       | Field        | Type     | Required | Description                     |
-| ------------ | ------------ | -------- | -------- | ------------------------------- |
-| socials[]    | platform     | string   | Yes      | Social media platform name      |
-| socials[]    | handle       | string   | Yes      | Username on the platform        |
-| profileImage | type         | string   | Yes      | One of: "hcs1", "nft", "url"    |
-| profileImage | value        | string   | Yes      | Corresponding identifier or URL |
-| metadata     | description  | string   | No       | Extended profile description    |
-| metadata     | website      | string   | No       | Associated website              |
-| metadata     | location     | string   | No       | Geographic location             |
-| metadata     | tags         | string[] | No       | Profile categorization tags     |
-| metadata     | customFields | object   | No       | Additional custom metadata      |
+| Object    | Field    | Type   | Required | Description                |
+| --------- | -------- | ------ | -------- | -------------------------- |
+| socials[] | platform | string | Yes      | Social media platform name |
+| socials[] | handle   | string | Yes      | Username on the platform   |
+
+The `properties` field is an unstructured JSON object that can contain any custom data the user wishes to include. There are no predefined fields or structure for this object, allowing for maximum flexibility and extensibility. Users can store any relevant information that isn't covered by the standard fields.
 
 #### Personal Profile Fields
 
-| Field                       | Type    | Required | Description                     |
-| --------------------------- | ------- | -------- | ------------------------------- |
-| displayPreferences.theme    | string  | No       | UI theme preference             |
-| displayPreferences.language | string  | No       | Preferred language code         |
-| displayPreferences.timezone | string  | No       | Preferred timezone              |
-| privacy.showEmail           | boolean | No       | Email visibility setting        |
-| privacy.showLocation        | boolean | No       | Location visibility setting     |
-| privacy.showSocials         | boolean | No       | Social media visibility setting |
-
-#### Organization Profile Fields
-
-| Field                     | Type   | Required | Description                                    |
-| ------------------------- | ------ | -------- | ---------------------------------------------- |
-| orgDetails.type           | string | Yes      | One of: "company", "dao", "nonprofit", "other" |
-| orgDetails.registrationId | string | No       | Legal registration identifier                  |
-| orgDetails.foundedDate    | string | No       | Organization founding date                     |
-| orgDetails.size           | string | No       | Organization size category                     |
-| contacts[].role           | string | Yes      | Contact role in organization                   |
-| contacts[].accountId      | string | Yes      | Hedera account ID of contact                   |
+| Field    | Type   | Required | Description             |
+| -------- | ------ | -------- | ----------------------- |
+| language | string | No       | Preferred language code |
+| timezone | string | No       | Preferred timezone      |
 
 #### AI Agent Profile Fields
 
-| Field                   | Type     | Required | Description                                           |
-| ----------------------- | -------- | -------- | ----------------------------------------------------- |
-| aiAgent.enabled         | boolean  | Yes      | Whether AI capabilities are active                    |
-| aiAgent.type            | string   | Yes      | One of: "assistant", "autonomous", "hybrid"           |
-| aiAgent.capabilities    | string[] | Yes      | List of agent capabilities (see Capabilities section) |
-| aiAgent.model           | string   | Yes      | AI model identifier                                   |
-| aiAgent.inboundTopicId  | string   | Yes\*    | HCS-10 inbound communication topic                    |
-| aiAgent.outboundTopicId | string   | Yes\*    | HCS-10 action record topic                            |
-| aiAgent.endpoints       | object[] | No       | API endpoints for interaction                         |
-| aiAgent.metadata        | object   | No       | AI-specific metadata                                  |
-| aiAgent.permissions     | string[] | Yes      | Web3 permissions for blockchain interaction           |
-
-\*Required if aiAgent.enabled is true and using HCS-10
+| Field                | Type     | Required | Description                                              |
+| -------------------- | -------- | -------- | -------------------------------------------------------- |
+| aiAgent.type         | number   | Yes      | AI agent type enum (0=assistant, 1=autonomous, 2=hybrid) |
+| aiAgent.capabilities | number[] | Yes      | List of capability enums (see Capabilities section)      |
+| aiAgent.model        | string   | Yes      | AI model identifier                                      |
+| aiAgent.endpoints    | object[] | No       | API endpoints for interaction                            |
 
 ### HCS-10 Integration for AI Agents
 
-AI agent profiles can include HCS-10 communication channels:
+AI agent profiles can include [HCS-10](./hcs-10.md) communication channels:
 
 ```
-┌─────────────────────┐                             ┌─────────────────────┐
-│                     │                             │                     │
-│   AI Agent Account  │                             │   Client Account    │
-│                     │                             │                     │
-└─────────┬───────────┘                             └─────────┬───────────┘
-          │                                                   │
-          │   ┌───────────────────────────────┐              │
-          │   │   HCS-11 Profile Topic        │              │
-          ├──▶│   {                           │◀─────────────┤
-          │   │     "type": "ai_agent",       │   Discovers  │
-          │   │     "aiAgent": {              │   profile    │
-          │   │       "inboundTopicId": "...", │              │
-          │   │       "outboundTopicId": "..." │              │
-          │   │     }                         │              │
-          │   │   }                           │              │
-          │   └───────────────────────────────┘              │
-          │                                                   │
-          │                                                   │
-          ▼                                                   ▼
-┌─────────────────────┐                             ┌─────────────────────┐
-│                     │                             │                     │
-│   Inbound Topic     │◀─────────────────────────────│   Connection        │
-│   (Connection       │      Connection Request     │   Initiated         │
-│    Requests)        │                             │                     │
-└─────────────────────┘                             └─────────────────────┘
+┌──────────────────┐                    ┌──────────────────┐
+│                  │                    │                  │
+│ AI Agent Account │                    │ Client Account   │
+│                  │                    │                  │
+└────────┬─────────┘                    └────────┬─────────┘
+         │                                       │
+         │                                       │
+         │       ┌──────────────────┐            │
+         │       │                  │            │
+         ├──────▶│  HCS-11 Profile  │◀───────────┤
+         │       │  {               │  Discovers │
+         │       │    "type": 2,    │  profile   │
+         │       │    "inboundId":  │            │
+         │       │    "outboundId": │            │
+         │       │  }               │            │
+         │       │                  │            │
+         │       └──────────────────┘            │
+         │                                       │
+         │                                       │
+         ▼                                       ▼
+┌──────────────────┐                    ┌──────────────────┐
+│                  │                    │                  │
+│  Inbound Topic   │◀───────────────────│   Connection     │
+│  (Connection     │ Connection Request │   Initiated      │
+│   Requests)      │                    │                  │
+└──────────────────┘                    └──────────────────┘
 ```
+
+The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-10](./hcs-10.md) topics for bidirectional communication with AI agents.
 
 ### Profile Update Flow
 
-Profiles can be updated by submitting new messages to the HCS-1 topic:
+Profiles can be updated according to the protocol used for reference:
 
 ```
-┌───────────────────┐            ┌───────────────────┐
-│                   │            │                   │
-│  Account Owner    │────────────▶  Create/Update    │
-│                   │            │  Profile Data     │
-└───────────────────┘            └────────┬──────────┘
-                                          │
-                                          ▼
-┌───────────────────┐            ┌───────────────────┐
-│                   │            │                   │
-│  Applications     │◀───────────┤   HCS-1 Topic     │
-│  Read Latest      │            │   (Profile Data)  │
-│  Profile Version  │            │                   │
-└───────────────────┘            └───────────────────┘
-                                          │
-                                          │
-                                          ▼
-                                 ┌───────────────────┐
-                                 │                   │
-                                 │   Version History │
-                                 │   (Optional)      │
-                                 │                   │
-                                 └───────────────────┘
+┌──────────────────┐              ┌──────────────────┐
+│                  │              │                  │
+│  Account Owner   │─────────────▶│  Create/Update   │
+│                  │              │  Profile Data    │
+└──────────────────┘              └────────┬─────────┘
+                                           │
+                                           │
+                                           ▼
+┌──────────────────┐              ┌──────────────────┐
+│                  │              │                  │
+│  Applications    │◀─────────────│ Protocol Refs    │
+│  Read Latest     │              │ - HCS-1          │
+│  Profile Version │              │ - HCS-2          │
+│                  │              │ - HTTPS          │
+│                  │              │ - IPFS           │
+│                  │              │ - Arweave        │
+└──────────────────┘              └────────┬─────────┘
+                                           │
+                                           │
+                                           ▼
+                                 ┌──────────────────┐
+                                 │                  │
+                                 │ Version History  │
+                                 │ (If supported)   │
+                                 │                  │
+                                 └──────────────────┘
 ```
+
+The update process varies by protocol:
+
+- **[HCS-1](./hcs-1.md)**: Updates require new messages to the static file topic
+- **[HCS-2](./hcs-2.md)**: Updates are made by submitting new registry entries to the topic
+- **IPFS**: New CIDs are created for updated profiles, requiring account memo updates
+- **Arweave**: New transaction IDs are created for updated profiles, requiring account memo updates
 
 ### Field Specifications
 
 #### AI Agent Endpoints
 
-| Field | Type   | Required | Description                         |
-| ----- | ------ | -------- | ----------------------------------- |
-| name  | string | Yes      | Endpoint identifier                 |
-| url   | string | Yes      | API endpoint URL                    |
-| type  | string | Yes      | One of: "rest", "websocket", "grpc" |
+| Field       | Type   | Required | Description                                      |
+| ----------- | ------ | -------- | ------------------------------------------------ |
+| name        | string | Yes      | Endpoint identifier                              |
+| url         | string | Yes      | API endpoint URL                                 |
+| type        | number | Yes      | Endpoint type enum (0=rest, 1=websocket, 2=grpc) |
+| api_key     | string | No       | API key parameter name (if required)             |
+| auth_header | string | No       | Authorization header name (if required)          |
+| version     | string | No       | API version identifier                           |
+| parameters  | object | No       | Default inference parameters                     |
 
-#### AI Agent Metadata
+Example endpoint configuration:
 
-| Field              | Type   | Required | Description                   |
-| ------------------ | ------ | -------- | ----------------------------- |
-| description        | string | Yes      | AI agent description          |
-| version            | string | Yes      | Agent version number          |
-| training.dataset   | string | No       | Training dataset identifier   |
-| training.method    | string | No       | Training methodology          |
-| training.timestamp | number | No       | Training completion timestamp |
+```json
+"endpoints": [
+  {
+    "name": "chat",
+    "url": "https://api.example.com/v1/chat/completions",
+    "type": 0,
+    "auth_header": "Authorization",
+    "version": "v1",
+    "parameters": {
+      "temperature": 0.7,
+      "max_tokens": 1024,
+      "top_p": 1
+    }
+  }
+]
+```
 
 ### Enums and Constants
 
 #### Profile Types
 
-| Value        | Description               |
-| ------------ | ------------------------- |
-| personal     | Individual user profile   |
-| organization | Business or group profile |
-| ai_agent     | AI agent profile          |
-
-#### Organization Types
-
-| Value     | Description                           |
-| --------- | ------------------------------------- |
-| company   | Traditional business entity           |
-| dao       | Decentralized Autonomous Organization |
-| nonprofit | Non-profit organization               |
-| other     | Other organization types              |
+| Value | Description             |
+| ----- | ----------------------- |
+| 0     | Individual user profile |
+| 1     | AI agent profile        |
 
 #### AI Agent Types
 
-| Value      | Description                                          |
-| ---------- | ---------------------------------------------------- |
-| assistant  | Reactive AI that responds to user requests           |
-| autonomous | Proactive AI that operates independently             |
-| hybrid     | Combination of assistant and autonomous capabilities |
+| Value | Description                                          |
+| ----- | ---------------------------------------------------- |
+| 0     | Reactive AI that responds to user requests           |
+| 1     | Proactive AI that operates independently             |
+| 2     | Combination of assistant and autonomous capabilities |
 
 #### Profile Image Types
 
-| Value | Description                       |
-| ----- | --------------------------------- |
-| hcs1  | Image stored using HCS-1 standard |
-| nft   | NFT token ID reference            |
-| url   | Direct URL to image               |
+Protocol reference formats for the `profileImage` field:
+
+**Hashgraph Resource Locator (HRL)** formats ([HCS protocols only](../definitions.md#hashgraph-resource-locator)):
+
+| HRL Format          | Description                                           |
+| ------------------- | ----------------------------------------------------- |
+| `hcs://1/{topicId}` | Static file stored using [HCS-1](./hcs-1.md) standard |
+| `hcs://2/{topicId}` | Topic registry using [HCS-2](./hcs-2.md) standard     |
+
+**Other URI formats** (non-HCS protocols):
+
+| URI Format             | Description                    |
+| ---------------------- | ------------------------------ |
+| `ipfs://{cid}`         | IPFS content identifier        |
+| `ar://{transactionId}` | Arweave transaction identifier |
+| `https://{url}`        | Direct HTTPS URL to image      |
 
 #### Endpoint Types
 
-| Value     | Description                   |
-| --------- | ----------------------------- |
-| rest      | RESTful API endpoint          |
-| websocket | WebSocket connection endpoint |
-| grpc      | gRPC service endpoint         |
+| Value | Description                   |
+| ----- | ----------------------------- |
+| 0     | RESTful API endpoint          |
+| 1     | WebSocket connection endpoint |
+| 2     | gRPC service endpoint         |
+
+#### AI Agent Capabilities
+
+| Value | Capability            | Description                          |
+| ----- | --------------------- | ------------------------------------ |
+| 0     | Text Generation       | Create human-like text responses     |
+| 1     | Transaction Review    | Analyze Hedera transactions          |
+| 2     | Contract Analysis     | Review smart contract code           |
+| 3     | Token Monitoring      | Monitor token balances and transfers |
+| 4     | Market Analysis       | Analyze cryptocurrency markets       |
+| 5     | Sentiment Analysis    | Analyze community sentiment          |
+| 6     | Governance Assistance | Help with governance processes       |
+| 7     | DeFi Optimization     | Optimize DeFi strategies             |
+
+#### Profile Tags
+
+Standardized tags for the `tags` field:
+
+| Value | Tag        | Description             |
+| ----- | ---------- | ----------------------- |
+| 0     | Developer  | Software developer      |
+| 1     | Investor   | Investment professional |
+| 2     | Creator    | Content creator         |
+| 3     | Business   | Business account        |
+| 4     | Community  | Community leader/member |
+| 5     | Validator  | Network validator       |
+| 6     | Educator   | Educational content     |
+| 7     | Researcher | Research professional   |
 
 ### Predefined Arrays
 
@@ -323,52 +385,6 @@ Supported social media platforms for the `socials[].platform` field:
 | linkedin | LinkedIn professional network | /in/username |
 | youtube | YouTube channel | @channel |
 
-#### AI Agent Capabilities
-
-Technical capabilities of the AI model:
-
-| Capability              | Description                          |
-| ----------------------- | ------------------------------------ |
-| `text_generation`       | Create human-like text responses     |
-| `transaction_review`    | Analyze Hedera transactions          |
-| `contract_analysis`     | Review smart contract code           |
-| `token_monitoring`      | Monitor token balances and transfers |
-| `market_analysis`       | Analyze cryptocurrency markets       |
-| `sentiment_analysis`    | Analyze community sentiment          |
-| `governance_assistance` | Help with DAO governance             |
-| `defi_optimization`     | Optimize DeFi strategies             |
-
-#### AI Agent Permissions
-
-Web3-specific permissions for blockchain interaction:
-
-| Permission        | Description                                      | Security Level |
-| ----------------- | ------------------------------------------------ | -------------- |
-| `read_network`    | Read public blockchain data                      | Low            |
-| `read_account`    | View account information                         | Medium         |
-| `propose_tx`      | Propose transactions (user must sign)            | Medium         |
-| `propose_message` | Propose HCS messages (user must sign)            | Medium         |
-| `compose_tx`      | Create and sign transactions with restricted key | High           |
-| `sign_tx`         | Sign transactions with delegated key             | Very High      |
-| `manage_keys`     | Create or modify account keys                    | Extreme        |
-| `full_custody`    | Full control of user assets                      | Extreme        |
-
-### Metadata Tags
-
-#### Common Profile Tags
-
-Common values for `metadata.tags[]`:
-| Tag | Description |
-|-----|-------------|
-| developer | Software developer |
-| investor | Investment professional |
-| creator | Content creator |
-| business | Business account |
-| community | Community leader/member |
-| validator | Network validator |
-| educator | Educational content provider |
-| researcher | Research professional |
-
 ### Example Profiles
 
 Personal Profile:
@@ -376,10 +392,9 @@ Personal Profile:
 ```json
 {
   "version": "1.0",
-  "type": "personal",
-  "name": "John Doe",
+  "type": 0,
+  "display_name": "John Doe",
   "alias": "cryptodev",
-  "extensions": {},
   "socials": [
     {
       "platform": "twitter",
@@ -387,19 +402,18 @@ Personal Profile:
     }
   ],
   "bio": "Blockchain developer and Hedera enthusiast",
-  "profileImage": {
-    "type": "nft",
-    "value": "0.0.123456"
-  },
-  "displayPreferences": {
-    "theme": "dark",
-    "language": "en",
-    "timezone": "UTC-5"
-  },
-  "privacy": {
-    "showEmail": false,
-    "showLocation": true,
-    "showSocials": true
+  "profileImage": "hcs://1/0.0.123456",
+  "language": "en",
+  "timezone": "UTC-5",
+  "tags": [0, 4],
+  "properties": {
+    "description": "Blockchain developer focused on Hedera ecosystem",
+    "location": "San Francisco, CA",
+    "website": "https://johndoe.dev",
+    "github_stars": 142,
+    "favorite_projects": ["hedera", "ethereum", "ipfs"],
+    "years_experience": 5,
+    "available_for_hire": true
   }
 }
 ```
@@ -409,47 +423,50 @@ AI Agent Profile with HCS-10:
 ```json
 {
   "version": "1.0",
-  "type": "ai_agent",
-  "name": "AI Assistant Bot",
+  "type": 1,
+  "display_name": "AI Assistant Bot",
   "alias": "helper_bot",
-  "extensions": {
-    "customApp": {
-      "appData": "Custom application data"
-    }
-  },
   "bio": "I'm an AI assistant helping users with Hedera-related tasks",
-  "profileImage": {
-    "type": "hcs1",
-    "value": "0.0.123456"
+  "profileImage": "ar://TQGxHPLpUcH7NG6rUYkzEnwD8_WqYQNPIoX5-0OoRXA",
+  "inboundTopicId": "0.0.789101",
+  "outboundTopicId": "0.0.789102",
+  "tags": [6, 7],
+  "properties": {
+    "description": "General-purpose Hedera assistant",
+    "version": "1.0.0",
+    "training": {
+      "dataset": "hedera_docs_2024",
+      "method": "fine_tuning",
+      "timestamp": 1709654845
+    },
+    "creator": "Hedera Labs",
+    "supported_languages": ["en", "es", "fr"],
+    "max_context_length": 16384,
+    "response_time_ms": 250,
+    "uptime_percentage": 99.9
   },
   "aiAgent": {
-    "enabled": true,
-    "type": "assistant",
-    "capabilities": ["text_generation", "transaction_review"],
+    "type": 0,
+    "capabilities": [0, 1],
     "model": "gpt-4",
-    "inboundTopicId": "0.0.789101",
-    "outboundTopicId": "0.0.789102",
     "endpoints": [
       {
         "name": "chat",
-        "url": "https://api.example.com/chat",
-        "type": "rest"
+        "url": "https://api.example.com/v1/chat/completions",
+        "type": 0,
+        "auth_header": "Authorization",
+        "version": "v1",
+        "parameters": {
+          "temperature": 0.7,
+          "max_tokens": 1024,
+          "top_p": 1
+        }
       }
-    ],
-    "metadata": {
-      "description": "General-purpose Hedera assistant",
-      "version": "1.0.0",
-      "training": {
-        "dataset": "hedera_docs_2024",
-        "method": "fine_tuning",
-        "timestamp": 1709654845
-      }
-    },
-    "permissions": ["read_network", "propose_tx", "read_account"]
+    ]
   }
 }
 ```
 
 ## Conclusion
 
-The HCS-11 standard provides a simple, extensible framework for managing profiles on Hedera. With built-in versioning and extensions, it supports diverse use cases while maintaining compatibility as the standard evolves.
+The HCS-11 standard provides a simple, extensible framework for managing profiles on Hedera. With built-in versioning and a flexible structure, it supports diverse use cases while maintaining compatibility as the standard evolves.
