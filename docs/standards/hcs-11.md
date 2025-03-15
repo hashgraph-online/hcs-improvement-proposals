@@ -170,6 +170,7 @@ HCS-11 supports two main profile types with specialized fields:
 | --------- | -------- | ------ | -------- | -------------------------- |
 | socials[] | platform | string | Yes      | Social media platform name |
 | socials[] | handle   | string | Yes      | Username on the platform   |
+| any[]     | properties | object | No     | Optional properties of any kind | 
 
 The `properties` field is an unstructured JSON object that can contain any custom data the user wishes to include. There are no predefined fields or structure for this object, allowing for maximum flexibility and extensibility. Users can store any relevant information that isn't covered by the standard fields.
 
@@ -266,6 +267,7 @@ The update process varies by protocol:
 ### Enums and Constants
 
 #### Profile Types
+
 
 | Value | Description             |
 | ----- | ----------------------- |
