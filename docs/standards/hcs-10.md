@@ -417,7 +417,8 @@ The [HCS-11 Profile Standard](./hcs-11.md) provides a standardized way for agent
   "aiAgent": {
     "type": 0,
     "capabilities": [0, 1],
-    "model": "gpt-4"
+    "model": "gpt-4",
+    "creator": "Hashgraph Online"
   }
 }
 ```

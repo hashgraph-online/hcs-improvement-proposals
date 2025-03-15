@@ -185,6 +185,7 @@ The `properties` field is an unstructured JSON object that can contain any custo
 | aiAgent.type         | number   | Yes      | AI agent type enum (0=manual, 1=autonomous)         |
 | aiAgent.capabilities | number[] | Yes      | List of capability enums (see Capabilities section) |
 | aiAgent.model        | string   | Yes      | AI model identifier                                 |
+| aiAgent.creator      | string   | No       | Creator of this Agent                               |
 
 ### HCS-10 Integration for AI Agents
 
@@ -382,7 +383,7 @@ AI Agent Profile with HCS-10:
   "display_name": "AI Assistant Bot",
   "alias": "helper_bot",
   "bio": "I'm an AI assistant helping users with Hedera-related tasks",
-  "profileImage": "ar://TQGxHPLpUcH7NG6rUYkzEnwD8_WqYQNPIoX5-0OoRXA",
+  "profileImage": "hcs://1/0.0.12345",
   "inboundTopicId": "0.0.789101",
   "outboundTopicId": "0.0.789102",
   "properties": {
@@ -393,7 +394,6 @@ AI Agent Profile with HCS-10:
       "method": "fine_tuning",
       "timestamp": 1709654845
     },
-    "creator": "Hedera Labs",
     "supported_languages": ["en", "es", "fr"],
     "max_context_length": 16384,
     "response_time_ms": 250,
@@ -402,7 +402,8 @@ AI Agent Profile with HCS-10:
   "aiAgent": {
     "type": 0,
     "capabilities": [0, 1],
-    "model": "gpt-4"
+    "model": "gpt-4",
+    "creator": "Hashgraph Online"
   }
 }
 ```
