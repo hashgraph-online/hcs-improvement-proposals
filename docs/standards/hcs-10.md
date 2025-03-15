@@ -435,19 +435,46 @@ The [HCS-11 Profile Standard](./hcs-11.md) provides a standardized way for agent
 ```json
 {
   "version": "1.0",
-  "type": "ai_agent",
-  "name": "AI Assistant Bot",
+  "type": 1,
+  "display_name": "AI Assistant Bot",
   "alias": "helper_bot",
-  "extensions": {},
   "bio": "I'm an AI assistant helping users with Hedera-related tasks",
+  "profileImage": "hcs://1/0.0.12345",
+  "inboundTopicId": "0.0.789101",
+  "outboundTopicId": "0.0.789102",
+  "tags": [6, 7],
+  "properties": {
+    "description": "General-purpose Hedera assistant",
+    "version": "1.0.0",
+    "training": {
+      "dataset": "hedera_docs_2024",
+      "method": "fine_tuning",
+      "timestamp": 1709654845
+    },
+    "creator": "Hedera Labs",
+    "supported_languages": ["en", "es", "fr"],
+    "max_context_length": 16384,
+    "response_time_ms": 250,
+    "uptime_percentage": 99.9
+  },
   "aiAgent": {
-    "enabled": true,
-    "type": "assistant",
-    "capabilities": ["text_generation", "transaction_review"],
+    "type": 0,
+    "capabilities": [0, 1],
     "model": "gpt-4",
-    "inboundTopicId": "0.0.789101",
-    "outboundTopicId": "0.0.789102",
-    "permissions": ["read_network", "propose_tx", "read_account"]
+    "endpoints": [
+      {
+        "name": "chat",
+        "url": "https://api.example.com/v1/chat/completions",
+        "type": 0,
+        "auth_header": "Authorization",
+        "version": "v1",
+        "parameters": {
+          "temperature": 0.7,
+          "max_tokens": 1024,
+          "top_p": 1
+        }
+      }
+    ]
   }
 }
 ```

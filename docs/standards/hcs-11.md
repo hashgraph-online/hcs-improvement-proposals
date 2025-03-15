@@ -345,16 +345,27 @@ Protocol reference formats for the `profileImage` field:
 
 #### AI Agent Capabilities
 
-| Value | Capability            | Description                          |
-| ----- | --------------------- | ------------------------------------ |
-| 0     | Text Generation       | Create human-like text responses     |
-| 1     | Transaction Review    | Analyze Hedera transactions          |
-| 2     | Contract Analysis     | Review smart contract code           |
-| 3     | Token Monitoring      | Monitor token balances and transfers |
-| 4     | Market Analysis       | Analyze cryptocurrency markets       |
-| 5     | Sentiment Analysis    | Analyze community sentiment          |
-| 6     | Governance Assistance | Help with governance processes       |
-| 7     | DeFi Optimization     | Optimize DeFi strategies             |
+| Value | Capability                         | Description                                                                                                    |
+| ----- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| 0     | Text Generation                    | Generate coherent, human-like text for content creation, chat, and narrative tasks.                            |
+| 1     | Image Generation                   | Create or modify visual content based on text prompts or algorithmic inputs.                                   |
+| 2     | Audio Generation                   | Synthesize speech, music, or soundscapes from textual or data-driven inputs.                                   |
+| 3     | Video Generation                   | Produce dynamic visual content, animations, or edited video outputs.                                           |
+| 4     | Code Generation                    | Produce dynamic code content based on text prompts.                                                            |
+| 5     | Language Translation               | Convert text or speech between languages in real time to enable multilingual interactions.                     |
+| 6     | Summarization & Content Extraction | Distill lengthy content into concise summaries or extract key information for quick insights.                  |
+| 8     | Knowledge Retrieval & Reasoning    | Access, organize, and infer from structured and unstructured data to support informed decision-making.         |
+| 9     | Data Integration & Visualization   | Aggregate disparate data sources and present insights through clear, visual representations.                   |
+| 10    | Market Intelligence                | Analyze financial and economic data to offer strategic insights and forecast trends.                           |
+| 11    | Transaction Analytics              | Monitor and analyze financial or on-chain transactions for pattern detection and operational validation.       |
+| 12    | Smart Contract Audit               | Evaluate decentralized code for vulnerabilities, performance issues, and compliance within blockchain systems. |
+| 13    | Governance Facilitation            | Support decentralized decision-making through proposal evaluation, voting, and consensus mechanisms.           |
+| 14    | Security Monitoring                | Detect, alert, and respond to security threats, anomalies, and unauthorized access in real time.               |
+| 15    | Compliance & Regulatory Analysis   | Ensure operations adhere to legal, regulatory, and internal standards.                                         |
+| 16    | Fraud Detection & Prevention       | Identify and mitigate fraudulent activities through pattern recognition and risk assessment.                   |
+| 17    | Multi-Agent Coordination           | Enable seamless collaboration and communication among multiple autonomous agents.                              |
+| 18    | API Integration & Orchestration    | Connect and manage interactions with external systems, services, and data sources through standardized APIs.   |
+| 19    | Workflow Automation                | Automate routine tasks and processes to streamline operations and improve efficiency.                          |
 
 #### Profile Tags
 
