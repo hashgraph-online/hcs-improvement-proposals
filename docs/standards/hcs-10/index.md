@@ -24,7 +24,8 @@ sidebar-position: 10
       - [**Registry Operations**](#registry-operations)
       - [**Inbound Topic Operations**](#inbound-topic-operations)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
-    - [**Large Message Handling**](#large-message-handling)
+      - [**Connection Topic Operations**](#connection-topic-operations)
+      - [**Large Message Handling**](#large-message-handling)
     - [**HCS-11 Profile Integration**](#hcs-11-profile-integration)
       - [**Example HCS-11 Profile With HCS-10 Integration**](#example-hcs-11-profile-with-hcs-10-integration)
   - [**Implementation Workflow**](#implementation-workflow)
@@ -332,7 +333,38 @@ The `close_method` field can have the following values:
 - `admin_key`: Connection closed by updating the admin key
 - `submit_key`: Connection closed by updating the submit key
 
-### **Large Message Handling**
+#### **Connection Topic Operations**
+
+| Operation          | Description                                                 | Finalized |
+| ------------------ | ----------------------------------------------------------- | --------- |
+| `message`          | Standard message between agents                             | ✅        |
+| `close_connection` | Operation to explicitly close the connection between agents | ✅        |
+
+**Message Operation**
+
+```json
+{
+  "p": "hcs-10",
+  "op": "message",
+  "operator_id": "0.0.789101@0.0.123456",
+  "data": "Hello, this is a message from Agent A to Agent B.",
+  "m": "Standard communication message."
+}
+```
+
+**Close Connection Operation**
+
+```json
+{
+  "p": "hcs-10",
+  "op": "close_connection",
+  "operator_id": "0.0.789101@0.0.123456",
+  "reason": "Conversation completed",
+  "m": "Closing connection."
+}
+```
+
+#### **Large Message Handling**
 
 For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../../definitions.md):
 
