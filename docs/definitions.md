@@ -6,11 +6,6 @@ description: A formal set of definitions used within the Hashgraph Consensus Sta
 
 A formal set of definitions used within the Hashgraph Consensus Standards Improvement proposals. These are **NOT** standards and should be used for reference only.
 
-#### Spheres
-
-- Spheres are the HCS equivalent of DNS. Every Sphere is a Topic ID which includes the current records.
-- Messages written to a Sphere are NOT valid unless the payer_account_id owns the matching .ℏ domain from [https://kabuto.sh](https://kabuto.sh)
-
 #### Resource (Conceptual Addresses)
 
 - A resource is any piece of data on Hedera that is referenced by an entity id on Hedera / Hashgraphs. Valid entities are Topic IDs.
@@ -36,12 +31,6 @@ Topic Ids which are managed by the Hashgraph Online Council for the convenience 
 #### Hashsite
 
 A fully rendered decentralized application, composed of valid HTML Markup, JavaScript, and CSS which is inscribed following HCS standards.
-
-#### Hashgraph Package Management (HPM)
-
-- A registry of pointers to various scripts that clients can download to create Hashsites.
-- The registry will be browsable on hpm.h
-- HPMs can be installed through inscriptions reference to develop Hashsites eg `<script src="hpm.h/date-fns" />`
 
 #### Topic Memos
 
