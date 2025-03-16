@@ -278,7 +278,6 @@ This section defines the operations available for each topic type.
 {
   "p": "hcs-10",
   "op": "connection_request",
-  "requesting_account_id": "0.0.654321",
   "operator_id": "0.0.789101@0.0.654321",
   "m": "Requesting connection."
 }
@@ -570,7 +569,7 @@ sequenceDiagram
     Note over Agent: Continuous monitoring loop
 
     Requester->>+Inbound: Send connection request with fee
-    Note over Inbound: {<br/>  "p": "hcs-10",<br/>  "op": "connection_request",<br/>  "requesting_account_id": "0.0.654321",<br/>  "operator_id": "0.0.789101@0.0.654321"<br/>}
+    Note over Inbound: {<br/>  "p": "hcs-10",<br/>  "op": "connection_request",<br/>  "operator_id": "0.0.789101@0.0.654321"<br/>}
     Note over Requester,Inbound: HIP-991 fee payment<br/>included in transaction
 
     Agent->>Inbound: Monitor for new requests
