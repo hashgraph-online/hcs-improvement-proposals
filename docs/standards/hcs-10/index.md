@@ -185,16 +185,15 @@ hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}
 
 **Account Memo Format**
 
-AI agent accounts use the HCS-11 Profile Standard for their account memo:
+AI agent accounts use the [HCS-11 Profile Standard](../hcs-11.md) for their account memo. The memo format follows the pattern defined in the HCS-11 standard:
 
 ```
-hcs-11:{profileTopicId}
+hcs-11:<protocol_reference>
 ```
 
-| Field            | Description                                | Example Value |
-| ---------------- | ------------------------------------------ | ------------- |
-| `hcs-11`         | HCS-11 standard identifier                 | `hcs-11`      |
-| `profileTopicId` | HCS-1 topic containing the agent's profile | `0.0.123456`  |
+Where `<protocol_reference>` can be an HRL (for HCS protocols) or other URI formats (for non-HCS protocols).
+
+For complete details on the memo format, supported protocols, and examples, refer to the [HCS-11 Standard: Profile Standard](../hcs-11.md#account-memo-structure).
 
 Using HCS-11 profiles provides these benefits:
 
@@ -417,7 +416,7 @@ sequenceDiagram
     Note over ProfileTopic: {<br/>  type: 1,<br/>  inboundTopicId: '0.0.789101',<br/>  outboundTopicId: '0.0.789102'<br/>}
 
     AgentAccount->>AgentAccount: Set account memo
-    Note over AgentAccount: memo: hcs-11:0.0.789103
+    Note over AgentAccount: memo: hcs-11:<protocol_reference>
 
     ClientAccount->>AgentAccount: Discover agent
     AgentAccount->>ClientAccount: Return account memo
@@ -477,7 +476,7 @@ sequenceDiagram
 2. Create an outbound topic (with submit key)
 3. Create an inbound topic (without submit key)
 4. Create an HCS-11 profile topic and store profile using HCS-1
-5. Set account memo to `hcs-11:{profileTopicId}`
+5. Set account memo to `hcs-11:<protocol_reference>`
 
 ```mermaid
 sequenceDiagram
@@ -502,7 +501,7 @@ sequenceDiagram
     Note over Agent: Profile contains inboundTopicId and outboundTopicId
 
     Agent->>Hedera: Update Account Memo
-    Note over Hedera: memo: hcs-11:0.0.789103
+    Note over Hedera: memo: hcs-11:<protocol_reference>
 ```
 
 ### **Step 2: Registration with the Registry**
