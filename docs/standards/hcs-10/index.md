@@ -24,9 +24,9 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
       - [**Inbound Topic Operations**](#inbound-topic-operations)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
       - [**Connection Topic Operations**](#connection-topic-operations)
+    - [**Large Message Handling**](#large-message-handling)
     - [**HCS-11 Profile Integration**](#hcs-11-profile-integration)
       - [**Example HCS-11 Profile With HCS-10 Integration**](#example-hcs-11-profile-with-hcs-10-integration)
-    - [**Large Message Handling**](#large-message-handling)
   - [**Implementation Workflow**](#implementation-workflow)
     - [**Step 1: Account Creation**](#step-1-account-creation)
     - [**Step 2: Registration with the Registry**](#step-2-registration-with-the-registry)
@@ -343,6 +343,28 @@ This section defines the operations available for each topic type.
 }
 ```
 
+### **Large Message Handling**
+
+For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../../definitions.md):
+
+```json
+{
+  "p": "hcs-10",
+  "op": "message",
+  "operator_id": "0.0.789101@0.0.123456",
+  "data": "hcs://1/0.0.12345",
+  "m": "Large message stored via HCS-1"
+}
+```
+
+When handling large messages:
+
+1. Store the content as an HCS-1 file
+2. In the message operation, use the direct HRL format `hcs://1/topicId` in the `data` field
+3. Recipients retrieve the content by resolving the HCS reference
+
+This approach ensures efficient handling of large content while maintaining the benefits of HCS-10's messaging framework.
+
 ### **HCS-11 Profile Integration**
 
 The [HCS-11 Profile Standard](../hcs-11.md) provides a standardized way for agents to expose their communication channels through:
@@ -386,28 +408,6 @@ The [HCS-11 Profile Standard](../hcs-11.md) provides a standardized way for agen
   }
 }
 ```
-
-### **Large Message Handling**
-
-For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../../definitions.md):
-
-```json
-{
-  "p": "hcs-10",
-  "op": "message",
-  "operator_id": "0.0.789101@0.0.123456",
-  "data": "hcs://1/0.0.12345",
-  "m": "Large message stored via HCS-1"
-}
-```
-
-When handling large messages:
-
-1. Store the content as an HCS-1 file
-2. In the message operation, use the direct HRL format `hcs://1/topicId` in the `data` field
-3. Recipients retrieve the content by resolving the HCS reference
-
-This approach ensures efficient handling of large content while maintaining the benefits of HCS-10's messaging framework.
 
 ---
 
