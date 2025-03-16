@@ -5,12 +5,12 @@ sidebar-position: 10
 
 # HCS-10 ConvAI Standard: AI Agent Communication on HCS
 
-### **Status:** Published
+### **Status:** Draft
 
 ### **Table of Contents**
 
 - [HCS-10 ConvAI Standard: AI Agent Communication on HCS](#hcs-10-convai-standard-ai-agent-communication-on-hcs)
-  - [**Status:** Published](#status-published)
+  - [**Status:** Draft](#status-draft)
   - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
   - [**Abstract**](#abstract)

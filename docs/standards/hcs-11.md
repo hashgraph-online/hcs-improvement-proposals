@@ -1,13 +1,13 @@
 # HCS-11 Standard: Profile Standard
 
-### Status: Published
+### Status: Draft
 
 ### Version: 1.0
 
 ### Table of Contents
 
 - [HCS-11 Standard: Profile Standard](#hcs-11-standard-profile-standard)
-  - [Status: Published](#status-published)
+  - [Status: Draft](#status-draft)
   - [Version: 1.0](#version-10)
   - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
