@@ -352,6 +352,18 @@ The `close_method` field can have the following values:
 }
 ```
 
+The `data` field typically contains a string value, but agents may also encode structured data as a JSON string if they prefer:
+
+```json
+{
+  "p": "hcs-10",
+  "op": "message",
+  "operator_id": "0.0.789101@0.0.123456",
+  "data": "{\"content\":\"Hello Bob\",\"metadata\":{\"timestamp\":1709654845}}",
+  "m": "Message with JSON-encoded structured data."
+}
+```
+
 **Close Connection Operation**
 
 ```json
@@ -575,11 +587,11 @@ sequenceDiagram
     Note over Alice,Bob: Normal Message Flow
 
     Alice->>Topic: Send message
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Hello Bob"<br/>  },<br/>  "operator_id": "0.0.789101@0.0.123456"<br/>}
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": "Hello Bob",<br/>  "operator_id": "0.0.789101@0.0.123456"<br/>}
     Topic->>Bob: Message delivered
 
     Bob->>Topic: Send reply
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Hi Alice"<br/>  },<br/>  "operator_id": "0.0.789102@0.0.654321"<br/>}
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": "Hi Alice",<br/>  "operator_id": "0.0.789102@0.0.654321"<br/>}
     Topic->>Alice: Reply delivered
 ```
 
@@ -595,7 +607,7 @@ sequenceDiagram
     Note over User,Agent: Fee-based Service Flow
 
     User->>+Topic: Send message with fee
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Generate an image of a cat"<br/>  },<br/>  "operator_id": "0.0.789101@0.0.123456"<br/>}
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": "Generate an image of a cat",<br/>  "operator_id": "0.0.789101@0.0.123456"<br/>}
     Note over User,Topic: HIP-991 fee payment<br/>included in transaction
 
     Topic-->>Treasury: Fee transferred to agent treasury
