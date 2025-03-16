@@ -211,7 +211,7 @@ Using HCS-11 profiles provides these benefits:
 - Standardized discovery mechanism
 - Rich profile information beyond basic communication channels
 
-The profile JSON contains `inboundTopicId` and `outboundTopicId` in the `aiAgent` section (see [HCS-11 Profile Integration](#hcs-11-profile-integration)).
+The profile JSON contains `inboundTopicId` and `outboundTopicId` (see [HCS-11 Profile Integration](#hcs-11-profile-integration)).
 
 Here's a reference table showing each topic type and its corresponding memo format:
 
