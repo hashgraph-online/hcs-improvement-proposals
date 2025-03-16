@@ -52,26 +52,12 @@ As the Hedera ecosystem grows, there is an increasing need for a standardized wa
 
 The HCS-11 standard uses Hedera accounts with a standardized memo format to reference profile information:
 
-```
-┌──────────────────┐     ┌──────────────────┐     ┌──────────────────┐
-│                  │     │                  │     │                  │
-│  Hedera Account  │────▶│  Account Memo    │────▶│ Protocol Refs    │
-│                  │     │hcs-11:<prot_ref> │     │ - HCS-1          │
-│                  │     │                  │     │ - HCS-2          │
-└────────┬─────────┘     └──────────────────┘     │ - HTTP           │
-         │                                         │ - IPFS           │
-         │                                         │ - Arweave        │
-         │                                         │                  │
-         │                                         └──────────────────┘
-         │                                                  ▲
-         │                                                  │
-         │                                                  │
-         ▼                                                  │
-┌──────────────────┐                                        │
-│                  │                                        │
-│  Applications    │────────────────────────────────────────┘
-│                  │          Read Profile
-└──────────────────┘
+```mermaid
+flowchart TB
+    Account["Hedera Account"] --> Memo["Account Memo<br>hcs-11:&lt;prot_ref&gt;"]
+    Memo --> Protocols["Protocol References<br>- HCS-1<br>- HCS-2<br>- HTTP<br>- IPFS<br>- Arweave"]
+    Account --> Apps["Applications"]
+    Apps -->|"Read Profile"| Protocols
 ```
 
 ### Account Memo Structure
@@ -129,8 +115,8 @@ All profiles share these common fields:
 | socials         | array  | No       | Array of social media links                                                                        |
 | profileImage    | string | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
 | properties      | object | No       | Additional unstructured profile properties                                                         |
-| inboundTopicId  | string | No       | [HCS-10](./hcs-10.md) inbound communication topic                                                  |
-| outboundTopicId | string | No       | [HCS-10](./hcs-10.md) action record topic                                                          |
+| inboundTopicId  | string | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                       |
+| outboundTopicId | string | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                               |
 
 ### Profile Types
 
@@ -138,27 +124,33 @@ All profiles share these common fields:
 
 HCS-11 supports two main profile types with specialized fields:
 
-```
-┌──────────────────────────────────────────────────────────────┐
-│                                                              │
-│                      Base Profile                            │
-│                                                              │
-│   - version        - socials[]        - properties           │
-│   - type           - bio              - inboundTopicId       │
-│   - display_name   - profileImage     - outboundTopicId      │
-│   - alias                                                    │
-└──────────┬───────────────────────────────────────┬───────────┘
-           │                                       │
-           │                                       │
-           ▼                                       ▼
-┌──────────────────────┐                 ┌──────────────────────┐
-│                      │                 │                      │
-│   Personal Profile   │                 │   AI Agent Profile   │
-│                      │                 │                      │
-│   - language         │                 │   - aiAgent          │
-│   - timezone         │                 │   - capabilities     │
-│                      │                 │                      │
-└──────────────────────┘                 └──────────────────────┘
+```mermaid
+classDiagram
+    class BaseProfile {
+        version: string
+        type: number
+        display_name: string
+        alias: string
+        bio: string
+        socials: array
+        profileImage: string
+        properties: object
+        inboundTopicId: string
+        outboundTopicId: string
+    }
+
+    class PersonalProfile {
+        language: string
+        timezone: string
+    }
+
+    class AIAgentProfile {
+        aiAgent: object
+        capabilities: array
+    }
+
+    BaseProfile <|-- PersonalProfile
+    BaseProfile <|-- AIAgentProfile
 ```
 
 #### Common Fields for All Types
@@ -189,70 +181,52 @@ The `properties` field is an unstructured JSON object that can contain any custo
 
 ### HCS-10 Integration for AI Agents
 
-AI agent profiles can include [HCS-10](./hcs-10.md) communication channels:
+AI agent profiles can include [HCS-10](/docs/standards/hcs-10) communication channels:
 
-```
-┌──────────────────┐                    ┌──────────────────┐
-│                  │                    │                  │
-│ AI Agent Account │                    │ Client Account   │
-│                  │                    │                  │
-└────────┬─────────┘                    └────────┬─────────┘
-         │                                       │
-         │                                       │
-         │       ┌──────────────────┐            │
-         │       │                  │            │
-         ├──────▶│  HCS-11 Profile  │◀───────────┤
-         │       │  {               │  Discovers │
-         │       │    "type": 2,    │  profile   │
-         │       │    "inboundId":  │            │
-         │       │    "outboundId": │            │
-         │       │  }               │            │
-         │       │                  │            │
-         │       └──────────────────┘            │
-         │                                       │
-         │                                       │
-         ▼                                       ▼
-┌──────────────────┐                    ┌──────────────────┐
-│                  │                    │                  │
-│  Inbound Topic   │◀───────────────────│   Connection     │
-│  (Connection     │ Connection Request │   Initiated      │
-│   Requests)      │                    │                  │
-└──────────────────┘                    └──────────────────┘
+```mermaid
+sequenceDiagram
+    participant AgentAccount as AI Agent Account
+    participant ProfileTopic as HCS-11 Profile Topic
+    participant ClientAccount as Client Account
+    participant InboundTopic as Inbound Topic
+
+    AgentAccount->>ProfileTopic: Create and store profile
+    Note over ProfileTopic: {<br/>  "type": 1,<br/>  "inboundTopicId": "0.0.789101",<br/>  "outboundTopicId": "0.0.789102"<br/>}
+
+    AgentAccount->>AgentAccount: Set account memo
+    Note over AgentAccount: memo: hcs-11:0.0.789103
+
+    ClientAccount->>AgentAccount: Discover agent
+    AgentAccount->>ClientAccount: Return account memo
+
+    ClientAccount->>ProfileTopic: Resolve profile
+    ProfileTopic->>ClientAccount: Return profile data
+
+    ClientAccount->>InboundTopic: Send connection request
+    Note over InboundTopic: Connection request message
+
+    InboundTopic->>AgentAccount: Deliver request
 ```
 
-The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-10](./hcs-10.md) topics for bidirectional communication with AI agents.
+The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-10](/docs/standards/hcs-10) topics for bidirectional communication with AI agents.
 
 ### Profile Update Flow
 
 Profiles can be updated according to the protocol used for reference:
 
-```
-┌──────────────────┐              ┌──────────────────┐
-│                  │              │                  │
-│  Account Owner   │─────────────▶│  Create/Update   │
-│                  │              │  Profile Data    │
-└──────────────────┘              └────────┬─────────┘
-                                           │
-                                           │
-                                           ▼
-┌──────────────────┐              ┌──────────────────┐
-│                  │              │                  │
-│  Applications    │◀─────────────│ Protocol Refs    │
-│  Read Latest     │              │ - HCS-1          │
-│  Profile Version │              │ - HCS-2          │
-│                  │              │ - HTTPS          │
-│                  │              │ - IPFS           │
-│                  │              │ - Arweave        │
-└──────────────────┘              └────────┬─────────┘
-                                           │
-                                           │
-                                           ▼
-                                 ┌──────────────────┐
-                                 │                  │
-                                 │ Version History  │
-                                 │ (If supported)   │
-                                 │                  │
-                                 └──────────────────┘
+```mermaid
+sequenceDiagram
+    participant Owner as Account Owner
+    participant Storage as Storage Protocol
+    participant Apps as Applications
+
+    Owner->>Storage: 1. Create/Update Profile Data
+    Note over Storage: Store using HCS-1, HCS-2,<br/>IPFS, Arweave, or HTTPS
+
+    Apps->>Storage: 2. Read Latest Profile Version
+    Storage->>Apps: 3. Return Profile Data
+
+    Note over Storage: Each protocol handles updates differently:<br/>- HCS-1: New messages to topic<br/>- HCS-2: New registry entries<br/>- IPFS/Arweave: New content IDs + memo update
 ```
 
 The update process varies by protocol:

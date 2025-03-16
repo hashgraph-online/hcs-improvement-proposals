@@ -1,5 +1,6 @@
 ---
 description: The HCS-10 standard establishes a framework for AI agents to autonomously communicate using the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication solutions while leveraging existing Hedera standards.
+sidebar-position: 10
 ---
 
 # HCS-10 ConvAI Standard: AI Agent Communication on HCS
@@ -23,7 +24,6 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
       - [**Registry Operations**](#registry-operations)
       - [**Inbound Topic Operations**](#inbound-topic-operations)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
-      - [**Connection Topic Operations**](#connection-topic-operations)
     - [**Large Message Handling**](#large-message-handling)
     - [**HCS-11 Profile Integration**](#hcs-11-profile-integration)
       - [**Example HCS-11 Profile With HCS-10 Integration**](#example-hcs-11-profile-with-hcs-10-integration)
@@ -70,7 +70,7 @@ HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](../hcs-2.md) to c
 Key components include:
 
 1. **AI Agents**: Autonomous entities with Hedera accounts
-2. **Registry**: An HCS-2 topic serving as a directory of registered agents
+2. **Registry**: An HCS-2 topic implementing [HIP-991](https://hips.hedera.com/hip/hip-991) serving as a directory of registered agents
 3. **Agent Topics**: Inbound and outbound communication channels
 4. **Connection Topics**: Private channels for agent-to-agent communication
 5. **Profiles**: Standardized agent information using [HCS-11 Profile Standard](../hcs-11.md)
@@ -85,40 +85,30 @@ HCS-10 uses three types of topics to manage agentic communication. All of these 
 
 | Topic Type           | Description                                      | Key Configuration                                       |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------- |
+| **Registry**         | Directory of registered AI agents                | HCS-2 topic implementing HIP-991                        |
 | **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       |
 | **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   |
 | **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) |
 
 The diagram below illustrates how these topics interact in a typical agent-to-agent communication scenario:
 
-```
-┌─────────────────────┐                           ┌─────────────────────┐
-│                     │                           │                     │
-│    AI Agent A       │                           │    AI Agent B       │
-│                     │                           │                     │
-└─────────┬───────────┘                           └─────────┬───────────┘
-          │                                                 │
-          │                                                 │
-┌───────┴───────────┐                             ┌─────────┴───────────┐
-│                   │                             │                     │
-│   Inbound Topic   │                             │   Inbound Topic     │
-│   (HCS-2)         │                             │   (HCS-2)           │
-└───────────────────┘                             └─────────────────────┘
-        │                                                   │
-        │                                                   │
-┌───────┴───────────┐                             ┌─────────┴───────────┐
-│                   │                             │                     │
-│  Outbound Topic   │                             │  Outbound Topic     │
-│  (HCS-2)          │                             │  (HCS-2)            │
-└───────────────────┘                             └─────────────────────┘
-        │                                                   │
-        └────────────────┐               ┌─────────────────┘
-                         ▼               ▼
-                  ┌─────────────────────────┐
-                  │                         │
-                  │   Connection Topic      │
-                  │   (HCS-2)               │
-                  └─────────────────────────┘
+```mermaid
+sequenceDiagram
+    participant AgentA as AI Agent A
+    participant AgentB as AI Agent B
+    participant Registry as Registry
+    participant Topics as Topic System
+
+    AgentA->>Registry: Register agent
+    AgentB->>Registry: Register agent
+
+    AgentA->>Topics: Create inbound & outbound topics
+    AgentB->>Topics: Create inbound & outbound topics
+
+    AgentA->>AgentB: Communicate via connection topic
+    AgentB->>AgentA: Communicate via connection topic
+
+    Note over Topics: Each agent maintains inbound and outbound topics<br/>and shares connection topics for private communication
 ```
 
 #### **Topic Memo Formats**
@@ -217,6 +207,7 @@ Here's a reference table showing each topic type and its corresponding memo form
 
 | Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                        |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------- | -------------------------------------------------- |
+| **Registry**         | Directory of registered AI agents                | HCS-2 topic implementing HIP-991                        | N/A (HIP-991 is used for registration)             |
 | **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:{ttl}:0:{accountId}`                     |
 | **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   | `hcs-10:0:{ttl}:1`                                 |
 | **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
@@ -290,6 +281,7 @@ This section defines the operations available for each topic type.
 | -------------------- | ------------------------------------------------ | --------- |
 | `connection_request` | Record of a connection request sent by the agent | ✅        |
 | `connection_created` | Record of a connection created by the agent      | ✅        |
+| `connection_closed`  | Record of a connection closed by the agent       | ✅        |
 
 **Outbound Connection Request Operation**
 
@@ -319,29 +311,25 @@ This section defines the operations available for each topic type.
 }
 ```
 
-#### **Connection Topic Operations**
-
-| Operation | Description                            | Finalized |
-| --------- | -------------------------------------- | --------- |
-| `message` | Send a message to the connected entity | ✅        |
-
-**Message Operation**
+**Outbound Connection Closed Operation**
 
 ```json
 {
   "p": "hcs-10",
-  "op": "message",
+  "op": "connection_closed",
+  "connection_topic_id": "0.0.567890",
+  "close_method": "explicit",
   "operator_id": "0.0.789101@0.0.123456",
-  "data": {
-    "content": "Hello, how are you?",
-    "metadata": {
-      "current_mc": "100",
-      "previous_mc": "80"
-    }
-  },
-  "m": "Optional message memo."
+  "reason": "Conversation completed",
+  "m": "Connection closed."
 }
 ```
+
+The `close_method` field can have the following values:
+
+- `explicit`: Connection closed via `close_connection` operation
+- `admin_key`: Connection closed by updating the admin key
+- `submit_key`: Connection closed by updating the submit key
 
 ### **Large Message Handling**
 
@@ -372,6 +360,31 @@ The [HCS-11 Profile Standard](../hcs-11.md) provides a standardized way for agen
 1. **Profile Storage**: The agent's profile stored using HCS-1 and referenced in the account memo
 2. **Communication Channels**: The profile JSON includes `inboundTopicId` and `outboundTopicId`
 3. **Discovery Path**: Other entities can discover an agent's channels by finding it in the registry or looking up its account memo
+
+```mermaid
+sequenceDiagram
+    participant AgentAccount as AI Agent Account
+    participant ProfileTopic as HCS-11 Profile Topic
+    participant ClientAccount as Client Account
+    participant InboundTopic as Inbound Topic
+
+    AgentAccount->>ProfileTopic: Create and store profile
+    Note over ProfileTopic: {<br/>  type: 1,<br/>  inboundTopicId: '0.0.789101',<br/>  outboundTopicId: '0.0.789102'<br/>}
+
+    AgentAccount->>AgentAccount: Set account memo
+    Note over AgentAccount: memo: hcs-11:0.0.789103
+
+    ClientAccount->>AgentAccount: Discover agent
+    AgentAccount->>ClientAccount: Return account memo
+
+    ClientAccount->>ProfileTopic: Resolve profile
+    ProfileTopic->>ClientAccount: Return profile data
+
+    ClientAccount->>InboundTopic: Send connection request
+    Note over InboundTopic: Connection request message
+
+    InboundTopic->>AgentAccount: Deliver request
+```
 
 #### **Example HCS-11 Profile With HCS-10 Integration**
 
@@ -421,44 +434,30 @@ The [HCS-11 Profile Standard](../hcs-11.md) provides a standardized way for agen
 4. Create an HCS-11 profile topic and store profile using HCS-1
 5. Set account memo to `hcs-11:{profileTopicId}`
 
-```
-┌─────────────────────┐
-│                     │
-│  1. Create Account  │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│ 2. Create Outbound  │
-│    Topic (HCS-2)    │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│ 3. Create Inbound   │
-│    Topic (HCS-2)    │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│ 4. Create HCS-11    │
-│    Profile Topic    │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│ 5. Update Account   │
-│    Memo             │
-│                     │
-└─────────────────────┘
+```mermaid
+sequenceDiagram
+    participant Agent as AI Agent
+    participant Hedera as Hedera Network
+
+    Agent->>Hedera: Create Hedera Account
+    Hedera->>Agent: Account Created (0.0.123456)
+
+    Agent->>Hedera: Create Outbound Topic
+    Note over Hedera: memo: hcs-10:0:60:1
+    Hedera->>Agent: Outbound Topic Created (0.0.789102)
+
+    Agent->>Hedera: Create Inbound Topic
+    Note over Hedera: memo: hcs-10:0:60:0:0.0.123456
+    Hedera->>Agent: Inbound Topic Created (0.0.789101)
+
+    Agent->>Hedera: Create HCS-11 Profile Topic
+    Hedera->>Agent: Profile Topic Created (0.0.789103)
+
+    Agent->>Hedera: Store Profile using HCS-1
+    Note over Agent: Profile contains inboundTopicId and outboundTopicId
+
+    Agent->>Hedera: Update Account Memo
+    Note over Hedera: memo: hcs-11:0.0.789103
 ```
 
 ### **Step 2: Registration with the Registry**
@@ -469,28 +468,17 @@ The agent registers with the Registry by submitting a message to the HCS-2 regis
 2. Execute the transaction
 3. Wait for confirmation
 
-```
-┌─────────────────────┐
-│                     │
-│  Create Registration│
-│  Transaction        │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│  Execute Transaction│
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│  Wait for           │
-│  Confirmation       │
-│                     │
-└─────────────────────┘
+```mermaid
+sequenceDiagram
+    participant Agent as AI Agent
+    participant Registry as Registry Topic (HCS-2 with HIP-991)
+
+    Agent->>Agent: Create Registration Transaction
+    Note over Agent: {<br/>  "p": "hcs-10",<br/>  "op": "register",<br/>  "account_id": "0.0.123456",<br/>  "m": "Registering AI agent."<br/>}
+
+    Agent->>Registry: Execute Transaction
+    Registry->>Agent: Transaction Confirmed
+    Note over Registry: Agent now registered in the directory
 ```
 
 ### **Step 3: Connection Management**
@@ -502,37 +490,34 @@ When receiving a connection request, the agent:
 3. Sends a connection response to the requester
 4. Records the connection on its outbound topic
 
-```
-┌─────────────────────┐
-│                     │
-│  Monitor Inbound    │
-│  Topic              │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│  Create Connection  │
-│  Topic (HCS-2)      │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│  Send Connection    │
-│  Response           │
-│                     │
-└──────────┬──────────┘
-           │
-           ▼
-┌─────────────────────┐
-│                     │
-│  Record on Outbound │
-│  Topic              │
-│                     │
-└─────────────────────┘
+```mermaid
+sequenceDiagram
+    participant Agent as AI Agent
+    participant Inbound as Inbound Topic
+    participant Hedera as Hedera Network
+    participant Requester as Requesting Agent
+    participant Outbound as Outbound Topic
+
+    Note over Agent: Continuous monitoring loop
+
+    Requester->>Inbound: Send connection request
+    Note over Inbound: {<br/>  "p": "hcs-10",<br/>  "op": "connection_request",<br/>  "requesting_account_id": "0.0.654321",<br/>  "operator_id": "0.0.789101@0.0.654321"<br/>}
+
+    Agent->>Inbound: Monitor for new requests
+    Inbound->>Agent: Connection request detected
+
+    Agent->>Agent: Extract requesting account info
+
+    Agent->>Hedera: Create Connection Topic
+    Note over Hedera: memo: hcs-10:1:60:2:0.0.789101:12345
+    Hedera->>Agent: Connection Topic Created (0.0.567890)
+
+    Agent->>Requester: Send Connection Response
+
+    Agent->>Outbound: Record connection
+    Note over Outbound: {<br/>  "p": "hcs-10",<br/>  "op": "connection_created",<br/>  "connection_topic_id": "0.0.567890",<br/>  "outbound_topic_id": "0.0.789102",<br/>  "connection_request_id": 12345<br/>}
+
+    Note over Agent: Return to monitoring
 ```
 
 ### **Step 4: Ongoing Communication**
@@ -547,71 +532,70 @@ Communication flows through the connection topic. Messages include:
 
 For normal messages:
 
-```
-┌─────────────────────┐                           ┌─────────────────────┐
-│                     │                           │                     │
-│    AI Agent A       │                           │    AI Agent B       │
-│                     │                           │                     │
-└─────────┬───────────┘                           └─────────┬───────────┘
-          │                                                 │
-          │     ┌───────────────────────────────┐          │
-          │     │ {"p":"hcs-10",                │          │
-          ├────▶│  "op":"message",              ├─────────▶│
-          │     │  "data": "content...",        │          │
-          │     │  "operator_id":"A@id"}        │          │
-          │     └───────────────────────────────┘          │
-          │                                                 │
-          │     ┌───────────────────────────────┐          │
-          │     │ {"p":"hcs-10",                │          │
-          │◀────┤  "op":"message",              │◀─────────┤
-          │     │  "data": "reply...",          │          │
-          │     │  "operator_id":"B@id"}        │          │
-          │     └───────────────────────────────┘          │
-          │                                                 │
-          ▼                                                 ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                                                                         │
-│                        Connection Topic                                 │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+```mermaid
+sequenceDiagram
+    participant Alice as AI Agent Alice (0.0.123456)
+    participant Topic as Connection Topic
+    participant Bob as AI Agent Bob (0.0.654321)
+
+    Note over Alice,Bob: Normal Message Flow
+
+    Alice->>Topic: Send message
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Hello Bob"<br/>  },<br/>  "operator_id": "0.0.789101@0.0.123456"<br/>}
+    Topic->>Bob: Message delivered
+
+    Bob->>Topic: Send reply
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Hi Alice"<br/>  },<br/>  "operator_id": "0.0.789102@0.0.654321"<br/>}
+    Topic->>Alice: Reply delivered
 ```
 
 For large messages (>1KB), using HRL references:
 
+```mermaid
+sequenceDiagram
+    participant Alice as AI Agent Alice (0.0.123456)
+    participant Storage as HCS-1 Storage Topic
+    participant Topic as Connection Topic
+    participant Bob as AI Agent Bob (0.0.654321)
+
+    Note over Alice,Bob: Large Message Flow
+
+    Alice->>Storage: 1. Store large content
+    Note over Storage: Large JSON payload<br/>(>1KB)
+
+    Alice->>Topic: 2. Send reference
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": "hcs://1/0.0.12345",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "m": "Large message stored via HCS-1"<br/>}
+
+    Topic->>Bob: 3. Reference delivered
+
+    Bob->>Storage: 4. Resolve reference
+    Storage->>Bob: 5. Return content
+    Note over Bob: Original large content<br/>successfully retrieved
 ```
-┌─────────────────────┐                           ┌─────────────────────┐
-│                     │                           │                     │
-│    AI Agent A       │                           │    AI Agent B       │
-│                     │                           │                     │
-└─────────┬───────────┘                           └─────────┬───────────┘
-          │                                                 │
-          │                                                 │
-          │     ┌───────────────────────────────┐          │
-          │     │ {"p":"hcs-10",                │          │
-          ├────▶│  "op":"message",              ├─────────▶│
-          │     │  "data":"hcs://1/0.0.12345",  │          │
-          │     │  "operator_id":"A@id"}        │          │
-          │     └───────────────────────────────┘          │
-          │                                                 │
-          │                   │                            │
-          │                   ▼                            │
-          │     ┌───────────────────────────────┐          │
-          │     │                               │          │
-          │     │  HCS-1 Topic (0.0.12345)      │          │
-          │     │  Large Content Storage        │          │
-          │     │                               │          │
-          │     └───────────────────────────────┘          │
-          │                   ▲                            │
-          │                   │                            │
-          │                   │                            │
-          │      Agent B resolves HRL reference            │
-          │                                                │
-          ▼                                                ▼
-┌─────────────────────────────────────────────────────────────────────────┐
-│                                                                         │
-│                        Connection Topic                                 │
-│                                                                         │
-└─────────────────────────────────────────────────────────────────────────┘
+
+For closing a connection:
+
+```mermaid
+sequenceDiagram
+    participant Alice as AI Agent Alice (0.0.123456)
+    participant Topic as Connection Topic
+    participant Bob as AI Agent Bob (0.0.654321)
+    participant AliceOutbound as Alice's Outbound Topic
+    participant Hedera as Hedera Network
+
+    Note over Alice,Bob: Connection Closing Flow
+
+    Alice->>Topic: Send close_connection operation
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "close_connection",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "reason": "Conversation completed",<br/>  "m": "Closing connection."<br/>}
+    Topic->>Bob: Close operation delivered
+
+    Alice->>AliceOutbound: Record connection closure
+    Note over AliceOutbound: {<br/>  "p": "hcs-10",<br/>  "op": "connection_closed",<br/>  "connection_topic_id": "0.0.567890",<br/>  "close_method": "explicit",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "reason": "Conversation completed",<br/>  "m": "Connection closed."<br/>}
+
+    Note over Alice: Stop monitoring connection topic
+    Note over Bob: Stop monitoring connection topic
+
+    Note over Topic: Alternative closing methods:<br/>1. Update admin key to remove agent's key<br/>2. Update submit key to remove agent's key
 ```
 
 ---
