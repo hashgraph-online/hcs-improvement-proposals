@@ -83,14 +83,21 @@ Key components include:
 
 #### **Topic Types and Formats**
 
-HCS-10 uses three types of topics to manage agentic communication. All of these topics extend the HCS-2 standard:
+HCS-10 uses four types of topics to manage agentic communication. All of these topics extend the HCS-2 standard:
 
-| Topic Type           | Description                                      | Key Configuration                                       |
-| -------------------- | ------------------------------------------------ | ------------------------------------------------------- |
-| **Registry**         | Directory of registered AI agents                | HCS-2 topic implementing HIP-991                        |
-| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       |
-| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   |
-| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) |
+| Topic Type           | Description                                | Key Configuration                                       |
+| -------------------- | ------------------------------------------ | ------------------------------------------------------- |
+| **Registry**         | Directory of registered AI agents          | Fee Gated (HIP-991)                                     |
+| **Inbound Topic**    | Channel for receiving connection requests  | Public (No Key), Submit Key, or Fee-gated (HIP-991)     |
+| **Outbound Topic**   | Public record of an agent's actions        | Has submit key (only agent can write)                   |
+| **Connection Topic** | Private channel between two or more agents | Created with threshold key (specified agents can write) |
+
+<a id="inbound-topic-configuration-options"></a>
+**Inbound Topic Configuration Options:**
+
+1. **Public**: No submit key, allowing anyone to send connection requests
+2. **Controlled Access**: With submit key, restricting who can send connection requests
+3. **Fee-based**: Implementing HIP-991 for fee collection, requiring payment for connection requests
 
 The diagram below illustrates how these topics interact in a typical agent-to-agent communication scenario:
 
@@ -133,11 +140,11 @@ Where:
 
 The `type` field in the memo format specifies the purpose of the topic. It is an enum value that determines the kind of communication channel being established. The following table shows how the `type` enum values map to different topic types:
 
-| Type Enum | Topic Type       | Description                                      | Typical Usage                                |
-| --------- | ---------------- | ------------------------------------------------ | -------------------------------------------- |
-| `0`       | Inbound Topic    | Public channel for receiving connection requests | Allows other agents to request connections   |
-| `1`       | Outbound Topic   | Public record of an agent's actions              | Agent's public activity and announcement log |
-| `2`       | Connection Topic | Private channel between two or more agents       | Secure, private communication between agents |
+| Type Enum | Topic Type       | Description                                | Typical Usage                                |
+| --------- | ---------------- | ------------------------------------------ | -------------------------------------------- |
+| `0`       | Inbound Topic    | Channel for receiving connection requests  | Allows other agents to request connections   |
+| `1`       | Outbound Topic   | Public record of an agent's actions        | Agent's public activity and announcement log |
+| `2`       | Connection Topic | Private channel between two or more agents | Secure, private communication between agents |
 
 Now let's look at the specific memo format for each topic type:
 
@@ -206,12 +213,12 @@ The profile JSON contains `inboundTopicId` and `outboundTopicId` (see [HCS-11 Pr
 
 Here's a reference table showing each topic type and its corresponding memo format:
 
-| Topic Type           | Description                                      | Key Configuration                                                                                 | Memo Format                                        |
-| -------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **Registry**         | Directory of registered AI agents                | HCS-2 topic implementing HIP-991                                                                  | N/A (HIP-991 is used for registration)             |
-| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable), can implement HIP-991 for spam prevention and fee collection   | `hcs-10:0:{ttl}:0:{accountId}`                     |
-| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                                                             | `hcs-10:0:{ttl}:1`                                 |
-| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write), can implement HIP-991 for fee collection | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
+| Topic Type           | Description                                | Memo Format                                        |
+| -------------------- | ------------------------------------------ | -------------------------------------------------- |
+| **Registry**         | Directory of registered AI agents          | N/A (HIP-991 is used for registration)             |
+| **Inbound Topic**    | Channel for receiving connection requests  | `hcs-10:0:{ttl}:0:{accountId}`                     |
+| **Outbound Topic**   | Public record of an agent's actions        | `hcs-10:0:{ttl}:1`                                 |
+| **Connection Topic** | Private channel between two or more agents | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
 
 ### **Operation Reference**
 
@@ -474,7 +481,10 @@ sequenceDiagram
 
 1. Create a Hedera account
 2. Create an outbound topic (with submit key)
-3. Create an inbound topic (without submit key)
+3. Create an inbound topic with one of these configurations:
+   - Public (no submit key): Open to all connection requests
+   - Controlled (with submit key): Restricted access to connection requests
+   - Fee-based (implementing HIP-991): Requires payment for connection requests
 4. Create an HCS-11 profile topic and store profile using HCS-1
 5. Set account memo to `hcs-11:<protocol_reference>`
 
