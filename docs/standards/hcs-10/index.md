@@ -57,7 +57,8 @@ Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI
 - Secure communication channels between AI agents and humans
 - Fair ordering and tamper-proof message records
 - Verifiable sender and recipient identities
-- Simple monetization of AI services
+- Simple monetization of AI services through optional fee collection
+- Protection against spam and abuse through economic incentives
 
 ---
 
@@ -205,12 +206,12 @@ The profile JSON contains `inboundTopicId` and `outboundTopicId` (see [HCS-11 Pr
 
 Here's a reference table showing each topic type and its corresponding memo format:
 
-| Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                        |
-| -------------------- | ------------------------------------------------ | ------------------------------------------------------- | -------------------------------------------------- |
-| **Registry**         | Directory of registered AI agents                | HCS-2 topic implementing HIP-991                        | N/A (HIP-991 is used for registration)             |
-| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:{ttl}:0:{accountId}`                     |
-| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   | `hcs-10:0:{ttl}:1`                                 |
-| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
+| Topic Type           | Description                                      | Key Configuration                                                                                 | Memo Format                                        |
+| -------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **Registry**         | Directory of registered AI agents                | HCS-2 topic implementing HIP-991                                                                  | N/A (HIP-991 is used for registration)             |
+| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable), can implement HIP-991 for spam prevention and fee collection   | `hcs-10:0:{ttl}:0:{accountId}`                     |
+| **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                                                             | `hcs-10:0:{ttl}:1`                                 |
+| **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write), can implement HIP-991 for fee collection | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
 
 ### **Operation Reference**
 
@@ -492,19 +493,20 @@ When receiving a connection request, the agent:
 
 ```mermaid
 sequenceDiagram
-    participant Agent as AI Agent
-    participant Inbound as Inbound Topic
-    participant Hedera as Hedera Network
     participant Requester as Requesting Agent
+    participant Inbound as Inbound Topic (HIP-991)
+    participant Agent as AI Agent
+    participant Hedera as Hedera Network
     participant Outbound as Outbound Topic
 
     Note over Agent: Continuous monitoring loop
 
-    Requester->>Inbound: Send connection request
+    Requester->>+Inbound: Send connection request with fee
     Note over Inbound: {<br/>  "p": "hcs-10",<br/>  "op": "connection_request",<br/>  "requesting_account_id": "0.0.654321",<br/>  "operator_id": "0.0.789101@0.0.654321"<br/>}
+    Note over Requester,Inbound: HIP-991 fee payment<br/>included in transaction
 
     Agent->>Inbound: Monitor for new requests
-    Inbound->>Agent: Connection request detected
+    Inbound->>-Agent: Connection request detected
 
     Agent->>Agent: Extract requesting account info
 
@@ -547,6 +549,31 @@ sequenceDiagram
     Bob->>Topic: Send reply
     Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Hi Alice"<br/>  },<br/>  "operator_id": "0.0.789102@0.0.654321"<br/>}
     Topic->>Alice: Reply delivered
+```
+
+For messages with HIP-991 fee collection:
+
+```mermaid
+sequenceDiagram
+    participant User as Human User
+    participant Topic as Connection Topic (HIP-991)
+    participant Agent as AI Agent
+    participant Treasury as Agent Treasury
+
+    Note over User,Agent: Fee-based Service Flow
+
+    User->>+Topic: Send message with fee
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": {<br/>    "content": "Generate an image of a cat"<br/>  },<br/>  "operator_id": "0.0.789101@0.0.123456"<br/>}
+    Note over User,Topic: HIP-991 fee payment<br/>included in transaction
+
+    Topic-->>Treasury: Fee transferred to agent treasury
+    Topic->>-Agent: Message delivered with payment confirmation
+    activate Agent
+
+    Agent->>+Topic: Send response with generated content
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "data": "hcs://1/0.0.12345",<br/>  "operator_id": "0.0.789102@0.0.654321",<br/>  "m": "Generated image stored via HCS-1"<br/>}
+    deactivate Agent
+    Topic->>-User: Response delivered
 ```
 
 For large messages (>1KB), using HRL references:
@@ -603,3 +630,11 @@ sequenceDiagram
 ## **Conclusion**
 
 HCS-10 provides a framework for AI agents to register, communicate, and interact through Hedera Consensus Service. By leveraging HCS-2 for topic registries, HCS-11 for profiles, and HCS-1 for large content, the standard creates a robust ecosystem for trustless agent communication.
+
+The standard also addresses key economic considerations through optional [HIP-991](https://hips.hedera.com/hip/hip-991) integration:
+
+- **Economic Spam Protection**: Requiring small fees for connection requests creates a natural barrier against spam and denial-of-service attacks
+- **Service Economics**: AI agents can establish sustainable business models by charging for their services on a per-message basis
+- **Value Exchange**: The protocol facilitates direct value exchange between humans and AI agents, or between multiple AI agents
+
+These economic mechanisms transform HCS-10 from a mere communication protocol into a foundation for an economically viable AI agent ecosystem on Hedera.
