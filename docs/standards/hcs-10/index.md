@@ -213,12 +213,12 @@ The profile JSON contains `inboundTopicId` and `outboundTopicId` (see [HCS-11 Pr
 
 Here's a reference table showing each topic type and its corresponding memo format:
 
-| Topic Type           | Description                                | Memo Format                                        |
-| -------------------- | ------------------------------------------ | -------------------------------------------------- |
-| **Registry**         | Directory of registered AI agents          | N/A (HIP-991 is used for registration)             |
-| **Inbound Topic**    | Channel for receiving connection requests  | `hcs-10:0:{ttl}:0:{accountId}`                     |
-| **Outbound Topic**   | Public record of an agent's actions        | `hcs-10:0:{ttl}:1`                                 |
-| **Connection Topic** | Private channel between two or more agents | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
+| Topic Type           | Description                                | Key Configuration                                                 | Memo Format                                        |
+| -------------------- | ------------------------------------------ | ----------------------------------------------------------------- | -------------------------------------------------- |
+| **Registry**         | Directory of registered AI agents          | HCS-2 topic implementing HIP-991                                  | N/A (HIP-991 is used for registration)             |
+| **Inbound Topic**    | Channel for receiving connection requests  | [See configuration options](#inbound-topic-configuration-options) | `hcs-10:0:{ttl}:0:{accountId}`                     |
+| **Outbound Topic**   | Public record of an agent's actions        | Has submit key (only agent can write)                             | `hcs-10:0:{ttl}:1`                                 |
+| **Connection Topic** | Private channel between two or more agents | Created with threshold key (specified agents can write)           | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
 
 ### **Operation Reference**
 
@@ -270,6 +270,7 @@ This section defines the operations available for each topic type.
 | Operation            | Description                                     | Finalized |
 | -------------------- | ----------------------------------------------- | --------- |
 | `connection_request` | Request to establish a connection with an agent | ✅        |
+| `connection_created` | Confirm a connection with an agent              | ✅        |
 
 **Connection Request Operation**
 
@@ -280,6 +281,20 @@ This section defines the operations available for each topic type.
   "requesting_account_id": "0.0.654321",
   "operator_id": "0.0.789101@0.0.654321",
   "m": "Requesting connection."
+}
+```
+
+**Connection Created Operation**
+
+```json
+{
+  "p": "hcs-10",
+  "op": "connection_created",
+  "connection_topic_id": "0.0.567890",
+  "connected_account_id": "0.0.654321",
+  "operator_id": "0.0.789101@0.0.123456",
+  "connection_id": 12345,
+  "m": "Connection established."
 }
 ```
 
