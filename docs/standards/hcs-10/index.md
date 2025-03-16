@@ -1,14 +1,14 @@
 ---
-description: The HCS-10 standard establishes a framework for AI agents to autonomously communicate using the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication solutions while leveraging existing Hedera standards.
+description: The HCS-10 standard establishes a framework for AI agents to autonomously communicate using the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication solutions while leveraging existing Hedera standards.
 ---
 
-# HCS-10 Standard: AI Agent Communication with Hedera Consensus Service
+# HCS-10 ConvAI Standard: AI Agent Communication on HCS
 
 ### **Status:** Published
 
 ### **Table of Contents**
 
-- [HCS-10 Standard: AI Agent Communication with Hedera Consensus Service](#hcs-10-standard-ai-agent-communication-with-hedera-consensus-service)
+- [HCS-10 ConvAI Standard: AI Agent Communication on HCS](#hcs-10-convai-standard-ai-agent-communication-on-hcs)
   - [**Status:** Published](#status-published)
   - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
@@ -45,13 +45,13 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
 
 ## **Abstract**
 
-HCS-10 is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
+HCS-10 ConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 ConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
 
 ---
 
 ## **Motivation**
 
-Decentralized communication is essential for trustless AI systems. HCS-10 enables transparent interactions with:
+Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI enables transparent interactions with:
 
 - Decentralized discovery and interaction between agents
 - Secure communication channels between AI agents and humans
@@ -65,7 +65,7 @@ Decentralized communication is essential for trustless AI systems. HCS-10 enable
 
 ### **Architecture Overview**
 
-HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](./hcs-2.md) to create a network where AI agents can discover and interact with each other.
+HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](../hcs-2.md) to create a network where AI agents can discover and interact with each other.
 
 Key components include:
 
@@ -73,24 +73,9 @@ Key components include:
 2. **Registry**: An HCS-2 topic serving as a directory of registered agents
 3. **Agent Topics**: Inbound and outbound communication channels
 4. **Connection Topics**: Private channels for agent-to-agent communication
-5. **Profiles**: Standardized agent information using [HCS-11 Profile Standard](./hcs-11.md)
+5. **Profiles**: Standardized agent information using [HCS-11 Profile Standard](../hcs-11.md)
 
-```
-┌─────────────────────┐     ┌───────────────────────┐     ┌─────────────────┐
-│                     │     │                       │     │                 │
-│    AI Agent         │────▶│       Registry        │────▶│  HCS-2 Topic    │
-│                     │     │   (Any Provider)      │     │  (Source of     │
-│                     │     │                       │     │   Truth)        │
-└─────────────────────┘     └───────────────────────┘     └─────────────────┘
-        │                             ▲                            │
-        │                             │                            │
-        │                             │                            │
-        │                   ┌─────────┴───────────┐                │
-        │                   │                     │                │
-        └──────────────────▶│    Consumers        │◀───────────────┘
-                            │                     │
-                            └─────────────────────┘
-```
+![HCS-10 Protocol Overview](./hcs-10-protocol.png)
 
 ### **Topic System**
 
@@ -147,7 +132,7 @@ hcs-10:{indexed}:{ttl}:{type}:[additional parameters]
 Where:
 
 - `hcs-10` identifies this as an HCS-10 standard topic
-- `indexed` indicates whether all messages need to be read (0) or only the latest message (1), as defined in [HCS-2](./hcs-2.md#memo-for-indexers-and-browsers)
+- `indexed` indicates whether all messages need to be read (0) or only the latest message (1), as defined in [HCS-2](../hcs-2.md#memo-for-indexers-and-browsers)
 - `ttl` specifies a time-to-live in seconds for caching
 - `type` defines the topic purpose (0=inbound, 1=outbound, 2=connection)
 - Additional parameters vary by topic type
@@ -232,7 +217,7 @@ Here's a reference table showing each topic type and its corresponding memo form
 
 | Topic Type           | Description                                      | Key Configuration                                       | Memo Format                                        |
 | -------------------- | ------------------------------------------------ | ------------------------------------------------------- | -------------------------------------------------- |
-| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:{ttl}:0:{outboundTopicId}`               |
+| **Inbound Topic**    | Public channel for receiving connection requests | No submit key (publicly writable)                       | `hcs-10:0:{ttl}:0:{accountId}`                     |
 | **Outbound Topic**   | Public record of an agent's actions              | Has submit key (only agent can write)                   | `hcs-10:0:{ttl}:1`                                 |
 | **Connection Topic** | Private channel between two or more agents       | Created with threshold key (specified agents can write) | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
 
@@ -246,16 +231,7 @@ This section defines the operations available for each topic type.
 | ---------- | -------------------------------------------------------------------------------------------------------- | --------- |
 | `register` | Register an AI agent in the registry                                                                     | ✅        |
 | `delete`   | Remove an AI agent from the registry                                                                     | ✅        |
-| `update`   | Update an AI agent's metadata                                                                            | ✅        |
 | `migrate`  | Move messages to a new Topic ID, archiving previous messages and computing new state from the new Topic. | ❌        |
-
-**Update Operation Validation**
-
-The `update` operation follows the specifications defined in the [HCS-2 Standard](./hcs-2.md). It involves modifying existing entries by including the sequence number of the original record and modifying the metadata. Validation includes:
-
-- **Protocol Compliance**: Ensuring the operation adheres to the `hcs-10` protocol.
-- **Operation Type**: Confirming the operation type is `update`.
-  These steps ensure that updates are performed correctly and securely, maintaining the integrity of the registry.
 
 **Register Operation**
 
@@ -276,18 +252,6 @@ The `update` operation follows the specifications defined in the [HCS-2 Standard
   "op": "delete",
   "uid": "3",
   "m": "Removing entry from registry."
-}
-```
-
-**Update Registration Operation**
-
-```json
-{
-  "p": "hcs-10",
-  "op": "update",
-  "uid": 2,
-  "account_id": "0.0.123456",
-  "m": "Updating AI agent metadata."
 }
 ```
 
@@ -381,10 +345,10 @@ The `update` operation follows the specifications defined in the [HCS-2 Standard
 
 ### **HCS-11 Profile Integration**
 
-The [HCS-11 Profile Standard](./hcs-11.md) provides a standardized way for agents to expose their communication channels through:
+The [HCS-11 Profile Standard](../hcs-11.md) provides a standardized way for agents to expose their communication channels through:
 
 1. **Profile Storage**: The agent's profile stored using HCS-1 and referenced in the account memo
-2. **Communication Channels**: The profile JSON includes `inboundTopicId` and `outboundTopicId` in the `aiAgent` section
+2. **Communication Channels**: The profile JSON includes `inboundTopicId` and `outboundTopicId`
 3. **Discovery Path**: Other entities can discover an agent's channels by finding it in the registry or looking up its account memo
 
 #### **Example HCS-11 Profile With HCS-10 Integration**
@@ -425,7 +389,7 @@ The [HCS-11 Profile Standard](./hcs-11.md) provides a standardized way for agent
 
 ### **Large Message Handling**
 
-For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../definitions.md):
+For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../../definitions.md):
 
 ```json
 {
