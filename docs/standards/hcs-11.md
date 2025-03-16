@@ -53,11 +53,22 @@ As the Hedera ecosystem grows, there is an increasing need for a standardized wa
 The HCS-11 standard uses Hedera accounts with a standardized memo format to reference profile information:
 
 ```mermaid
-flowchart TB
-    Account["Hedera Account"] --> Memo["Account Memo<br>hcs-11:&lt;prot_ref&gt;"]
-    Memo --> Protocols["Protocol References<br>- HCS-1<br>- HCS-2<br>- HTTP<br>- IPFS<br>- Arweave"]
-    Account --> Apps["Applications"]
-    Apps -->|"Read Profile"| Protocols
+sequenceDiagram
+    participant User as User/Application
+    participant Account as Hedera Account
+    participant Storage as Storage Protocol
+
+    Note over Account: Account memo contains<br/>hcs-11:<protocol_reference>
+
+    User->>Account: 1. Query account info
+    Account->>User: 2. Return account memo
+
+    User->>Storage: 3. Resolve protocol reference
+    Note over Storage: Can be HCS-1, HCS-2,<br/>IPFS, Arweave, or HTTPS
+
+    Storage->>User: 4. Return profile data
+
+    Note over User: 5. Process profile information
 ```
 
 ### Account Memo Structure
