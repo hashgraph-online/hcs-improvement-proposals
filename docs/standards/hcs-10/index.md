@@ -115,7 +115,7 @@ sequenceDiagram
 
 #### **Topic Memo Formats**
 
-Each topic type uses a specific memo format in its HCS topic creation transaction to indicate its purpose and configuration. The memo formats follow this general structure:
+Each topic type uses a specific memo format in its HCS topic creation transaction to indicate its purpose and configuration. For a comprehensive overview of topic memos across all HCS standards, see the [Topic Memos](../../definitions.md#topic-memos) definition. The memo formats in HCS-10 follow this general structure:
 
 ```
 hcs-10:{indexed}:{ttl}:{type}:[additional parameters]

@@ -1,3 +1,8 @@
+---
+description: The HCS-11 standard defines a systematic approach for managing profiles on the Hedera network through account memos, enabling rich identity management for individuals and AI agents.
+sidebar_position: 11
+---
+
 # HCS-11 Standard: Profile Standard
 
 ### Status: Draft
