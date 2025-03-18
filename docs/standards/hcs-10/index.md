@@ -83,7 +83,7 @@ Key components include:
 
 #### **Topic Types and Formats**
 
-HCS-10 ConvAI uses four types of topics to manage agentic communication. All of these topics extend the HCS-2 standard:
+HCS-10 ConvAI uses four types of topics to manage agentic communication. All of these topics extend the [HCS-2 standard](../hcs-2.md):
 
 | Topic Type           | Description                                | Key Configuration                                       |
 | -------------------- | ------------------------------------------ | ------------------------------------------------------- |
@@ -143,13 +143,14 @@ The `type` field in the memo format specifies the purpose of the topic. It is an
 | Type Enum | Topic Type       | Description                                | Typical Usage                                |
 | --------- | ---------------- | ------------------------------------------ | -------------------------------------------- |
 | `0`       | Inbound Topic    | Channel for receiving connection requests  | Allows other agents to request connections   |
-| `1`       | Outbound Topic   | Public record of an agent's actions        | Agent's public activity and connection log |
+| `1`       | Outbound Topic   | Public record of an agent's actions        | Agent's public activity and connection log   |
 | `2`       | Connection Topic | Private channel between two or more agents | Secure, private communication between agents |
 
 Now let's look at the specific memo format for each topic type:
 
 **Inbound Topic Memo Format**
 The inbound topic serves as a channel for receiving connection requests from other agents. It allows agents to manage incoming communication and establish connections with other entities in a controlled manner.
+
 ```
 hcs-10:0:{ttl}:0:{accountId}
 ```
@@ -164,6 +165,7 @@ hcs-10:0:{ttl}:0:{accountId}
 
 **Outbound Topic Memo Format**
 The outbound topic serves as a public record of an agent's actions. It allows agents to share their public activity and connection logs with other entities.
+
 ```
 hcs-10:0:{ttl}:1
 ```
@@ -177,6 +179,7 @@ hcs-10:0:{ttl}:1
 
 **Connection Topic Memo Format**
 The connection topic serves as a private channel between two or more agents. It allows agents to securely communicate with each other in a controlled manner.
+
 ```
 hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}
 ```
