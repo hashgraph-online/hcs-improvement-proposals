@@ -124,7 +124,7 @@ All profiles share these common fields:
 | Field           | Type   | Required | Description                                                                                        |
 | --------------- | ------ | -------- | -------------------------------------------------------------------------------------------------- |
 | version         | string | Yes      | Standard version (e.g., "1.0")                                                                     |
-| type            | number | Yes      | Profile type enum (0=personal, 1=ai_agent)                                                         |
+| type            | number | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent)                          |
 | display_name    | string | Yes      | Display name for the profile                                                                       |
 | alias           | string | No       | Alternative identifier                                                                             |
 | bio             | string | No       | Brief description or biography                                                                     |
@@ -138,7 +138,7 @@ All profiles share these common fields:
 
 #### Profile Type Hierarchy
 
-HCS-11 supports two main profile types with specialized fields:
+HCS-11 supports the following profile types:
 
 ```mermaid
 classDiagram
@@ -156,8 +156,7 @@ classDiagram
     }
 
     class PersonalProfile {
-        language: string
-        timezone: string
+        Not officially supported yet
     }
 
     class AIAgentProfile {
@@ -181,10 +180,7 @@ The `properties` field is an unstructured JSON object that can contain any custo
 
 #### Personal Profile Fields
 
-| Field    | Type   | Required | Description             |
-| -------- | ------ | -------- | ----------------------- |
-| language | string | No       | Preferred language code |
-| timezone | string | No       | Preferred timezone      |
+_Personal profiles (type=0) are not officially supported in this version of the standard. While applications may use the base profile fields for personal profiles, the detailed schema and specialized functionality for personal profiles will be defined in a future version of this standard._
 
 #### AI Agent Profile Fields
 
@@ -258,10 +254,10 @@ The update process varies by protocol:
 
 _This enum categorizes the primary profile classifications supported by HCS-11. It distinguishes between individual user profiles and AI agent profiles, ensuring that each type is processed with its specific requirements in mind._
 
-| Value | Description             |
-| ----- | ----------------------- |
-| 0     | Individual user profile |
-| 1     | AI agent profile        |
+| Value | Description                                            |
+| ----- | ------------------------------------------------------ |
+| 0     | Individual user profile (not officially supported yet) |
+| 1     | AI agent profile                                       |
 
 #### AI Agent Types
 
@@ -333,36 +329,6 @@ _This predefined array lists supported social media platforms for the `socials[]
 | youtube  | YouTube channel               | @channel      |
 
 ### Example Profiles
-
-Personal Profile:
-
-```json
-{
-  "version": "1.0",
-  "type": 0,
-  "display_name": "John Doe",
-  "alias": "cryptodev",
-  "socials": [
-    {
-      "platform": "twitter",
-      "handle": "@johndoe"
-    }
-  ],
-  "bio": "Blockchain developer and Hedera enthusiast",
-  "profileImage": "hcs://1/0.0.123456",
-  "language": "en",
-  "timezone": "UTC-5",
-  "properties": {
-    "description": "Blockchain developer focused on Hedera ecosystem",
-    "location": "San Francisco, CA",
-    "website": "https://johndoe.dev",
-    "github_stars": 142,
-    "favorite_projects": ["hedera", "ethereum", "ipfs"],
-    "years_experience": 5,
-    "available_for_hire": true
-  }
-}
-```
 
 AI Agent Profile with HCS-10:
 
