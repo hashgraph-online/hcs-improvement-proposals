@@ -1,3 +1,8 @@
+---
+description: The HCS-2 standard defines advanced topic registries for Hedera Consensus Service, enabling structured data organization and retrieval.
+sidebar_position: 2
+---
+
 # HCS-2 Standard: Advanced Topic Registries
 
 ### Status: Published
@@ -5,8 +10,8 @@
 ### Table of Contents
 
 - [HCS-2 Standard: Advanced Topic Registries](#hcs-2-standard-advanced-topic-registries)
-    - [Status: Published](#status-published)
-    - [Table of Contents](#table-of-contents)
+  - [Status: Published](#status-published)
+  - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
     - [Primary Author](#primary-author)
     - [Additional Authors](#additional-authors)
@@ -34,9 +39,11 @@
 ## Authors
 
 ### Primary Author
+
 - Patches [https://twitter.com/TMCC_Patches](https://twitter.com/TMCC_Patches)
 
 ### Additional Authors
+
 - Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
 
 ## Abstract
@@ -53,13 +60,13 @@ The advent of dynamic metadata and the need for detailed version histories and s
 
 The registry should adopt a standardized format to ensure consistent access and interpretation. The following fields are introduced:
 
-| Field     | Description                                                        | Example Value          |
-|-----------|--------------------------------------------------------------------|------------------------|
-| `p`       | Protocol used by the registry, typically `hcs-2` for this standard.| `hcs-2`                |
-| `op`      | Operation being executed (register, delete, update).               | `register`             |
-| `t_id`    | Topic ID where the registry information is stored.                 | `0.0.1234567`          |
-| `uid`     | Sequence number for files or states within the registry.         | `42`            |
-| `m`       | Optional metadata providing additional context.                    | `Update for Q2 release`|
+| Field  | Description                                                         | Example Value           |
+| ------ | ------------------------------------------------------------------- | ----------------------- |
+| `p`    | Protocol used by the registry, typically `hcs-2` for this standard. | `hcs-2`                 |
+| `op`   | Operation being executed (register, delete, update).                | `register`              |
+| `t_id` | Topic ID where the registry information is stored.                  | `0.0.1234567`           |
+| `uid`  | Sequence number for files or states within the registry.            | `42`                    |
+| `m`    | Optional metadata providing additional context.                     | `Update for Q2 release` |
 
 `m` - memo is restricted to 500 characters
 
@@ -67,13 +74,12 @@ The registry should adopt a standardized format to ensure consistent access and 
 
 A list of all operations available for this standard. Note, operations that are not finalized should not be used in production applications.
 
-| Operation  | Description                                                                                      | Usable in non-indexed topic | Finalized |
-|------------|--------------------------------------------------------------------------------------------------|----------------------------|-----------|
-| `Register` | Adds new entries or versions to the registry.                                                    | ✅                         | ✅        |
-| `Migrate`  | Moves messages to a new Topic ID. Previous messages are archived and new state is computed from the new Topic. The new Topic should either replicate all the data, or create a snapshot with a pointer to the old Topic. | ✅                         | ❌        |
-| `Delete`   | Removes entries based on UID.                                                                    | ❌                         | ✅        |
-| `Update`   | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers. | ❌                         | ✅        |
-
+| Operation  | Description                                                                                                                                                                                                              | Usable in non-indexed topic | Finalized |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------- | --------- |
+| `Register` | Adds new entries or versions to the registry.                                                                                                                                                                            | ✅                          | ✅        |
+| `Migrate`  | Moves messages to a new Topic ID. Previous messages are archived and new state is computed from the new Topic. The new Topic should either replicate all the data, or create a snapshot with a pointer to the old Topic. | ✅                          | ❌        |
+| `Delete`   | Removes entries based on UID.                                                                                                                                                                                            | ❌                          | ✅        |
+| `Update`   | Modifies existing entries, by changing the referenced sequence number and updating the t_id and metadata pointers.                                                                                                       | ❌                          | ✅        |
 
 #### Register
 
@@ -85,18 +91,19 @@ Registration allows creating additional entries / versions to the Topic. Utilize
   "op": "register",
   "t_id": "TOPIC_ID_TO_REGISTER",
   "metadata": "OPTIONAL_METADATA (HIP-412 compliant)",
-  "m": "OPTIONAL_MEMO",
+  "m": "OPTIONAL_MEMO"
 }
 ```
 
 example useage:
+
 ```json
 {
   "p": "hcs-2",
   "op": "register",
   "t_id": "0.0.123456",
   "metadata": "hcs://1/0.0.456789",
-  "m": "register t",
+  "m": "register t"
 }
 ```
 
@@ -118,6 +125,7 @@ Use the following JSON structure:
 ```
 
 example usage:
+
 ```json
 {
   "p": "hcs-2",
@@ -147,6 +155,7 @@ Use the following JSON structure:
 ```
 
 example usage:
+
 ```json
 {
   "p": "hcs-2",
@@ -160,10 +169,10 @@ example usage:
 
 #### Migrate
 
-
 This operation is irreversible, and can only exist once within a Topic Id. New messages after a `migrate` operation are invalid. It is suggested to replicate all data from the previous Topic or create a snapshot with a pointer to the old Topic.
 
 ### Retrieval
+
 All HRLs pointing to the original Topic, should utilize the new `t_id` to compute state. Additionally, root Topic Ids with more than 3 `migrate` operations in any part of the chain would be considered invalid. This safeguard would prevent infinite recursion.
 
 **Note, this operation is not finalized and should not be used in production.**
@@ -181,6 +190,7 @@ Use the following JSON structure:
 ```
 
 example usage:
+
 ```json
 {
   "p": "hcs-2",
@@ -197,28 +207,28 @@ A memo system is defined for indexers and browsers to understand the data's stat
 
 `[protocol_standard]:[indexed]:[ttl]`
 
-| Field     | Description                                                        | Example Value          |
-|-----------|--------------------------------------------------------------------|------------------------|
-| `protocol_standard`       | Protocol used by the registry, `hcs-2` for this standard.| `hcs-2`                |
-| `indexed`     | enum value of if all messages need pulled down or only the last / newest message | `0`           |
-| `ttl`               | a numeric value, representing the number of seconds which external infrastructure can use to determine how long messages in this registry should be stored in cache | `60`
+| Field               | Description                                                                                                                                                         | Example Value |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `protocol_standard` | Protocol used by the registry, `hcs-2` for this standard.                                                                                                           | `hcs-2`       |
+| `indexed`           | enum value of if all messages need pulled down or only the last / newest message                                                                                    | `0`           |
+| `ttl`               | a numeric value, representing the number of seconds which external infrastructure can use to determine how long messages in this registry should be stored in cache | `60`          |
 
-
-| Indexed enum     | Description
-|-----------|-------------------------------------------------------------------------------------------|
-| `0`       | The topic id is indexed, and all messages should be read
-| `1`     | The topic id is not indexed, and only the last message should be used to determine state / topic data
-
+| Indexed enum | Description                                                                                           |
+| ------------ | ----------------------------------------------------------------------------------------------------- |
+| `0`          | The topic id is indexed, and all messages should be read                                              |
+| `1`          | The topic id is not indexed, and only the last message should be used to determine state / topic data |
 
 ### Example Memo Format
 
 `hcs-2:0:60`
 
 ### Indexed Registry Mechanics [enum: 0]
+
 Uses:
 Topic ids used for registiers where you need all records to get the data you need to execute logic. Typically good for most registeries.
 
 Examples:
+
 1. User registry for profiles of a video game
 2. A registry for posts on a social media site for a specific user
 
@@ -226,12 +236,13 @@ Examples:
 - Indexers should gather all files and metadata listed in the registry.
 - Processing state should start from the first message and proceed to the last sequential message number.
 
-
 ### Non-Indexed Registry Mechanics [enum: 1]
+
 Uses:
 Topic ids used for dynamic state of an entity. The latest message being used is the current state of the entity being defined
 
 Examples:
+
 1. A description for a product on a ecom site
 2. A state of an NFT for a video game
 
@@ -242,7 +253,6 @@ Examples:
 ## TTL Use Cases
 
 External infrastructure, dApps, clients should utilize the TTL as a reference point for how long to cache data, before attempting to fetch new messages from the registry. The default suggested value is 86400 (one day). Certain use cases might opt for lower or higher TTL values. For scalability, it is imperative to pick values that make the most sense.
-
 
 ### Use Cases and Functionalities
 
@@ -257,7 +267,6 @@ Registry links should follow a consistent format to ensure easy access and inter
 `hcs://2/{topic_id}`
 
 This facilitates direct access to specific registry entries and simplifies integration with external systems and applications.
-
 
 ## Validation
 

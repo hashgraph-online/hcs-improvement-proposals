@@ -2,16 +2,19 @@
 description: HCS-3 is a protocol standard that enables developers to reference and load on-graph resources directly from the Hedera network.
 sidebar_position: 1
 ---
+
 # What is HCS-3?
 
 HCS-3 is a protocol standard that enables developers to reference and load on-graph resources directly from the Hedera network. Think of it as a decentralized CDN where all your application resources live on the Hashgraph, with the unique ability to reuse resources across multiple applications.
 
-Learn more about HCS-3 in the [HCS-3 Standard](../../hcs-3.md).
+Learn more about HCS-3 in the [HCS-3 Standard](/docs/standards/hcs-3).
 
 ## Why Use HCS-3?
 
 ### 1. True Decentralization
+
 Instead of relying on traditional CDNs or centralized servers, your application's resources are stored directly on the Hashgraph, through the Consensus Service:
+
 ```html
 <!-- Traditional CDN -->
 <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
@@ -21,19 +24,24 @@ Instead of relying on traditional CDNs or centralized servers, your application'
 ```
 
 ### 2. Cost Efficiency
+
 Inscribe once, use everywhere:
+
 - Traditional: Each dApp inscribes ThreeJS (~500KB) = 500KB × number of dApps
 - HCS-3: One inscription shared across all dApps = 500KB total
 
 ### 3. Version Control
+
 Each resource has a unique topic ID, making version management straightforward and immutable.
 
 ### 4. Built-in CDN Support
+
 While resources live on-graph, HCS-3 supports CDN integration for faster loading while maintaining decentralization benefits.
 
 ## Shared Resource Pool
 
 Common libraries already inscribed and available for use:
+
 - ThreeJS: `0.0.6614307`
 - AnimeJS: `0.0.6627067`
 - NES.css: `0.0.6633438`
