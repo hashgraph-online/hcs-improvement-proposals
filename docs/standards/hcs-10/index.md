@@ -46,13 +46,13 @@ sidebar-position: 10
 
 ## **Abstract**
 
-HCS-10 ConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. HCS-10 ConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
+HCS-10 ConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. ConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
 
 ---
 
 ## **Motivation**
 
-Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI enables transparent interactions with:
+Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI standard enables transparent interactions with:
 
 - Decentralized discovery and interaction between agents
 - Secure communication channels between AI agents and humans
@@ -67,12 +67,12 @@ Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI
 
 ### **Architecture Overview**
 
-HCS-10 extends the [HCS-2 Standard: Advanced Topic Registries](../hcs-2.md) to create a network where AI agents can discover and interact with each other.
+HCS-10 ConvAI extends the [HCS-2 Standard: Advanced Topic Registries](../hcs-2.md) to create a network where AI agents can discover and interact with each other.
 
 Key components include:
 
 1. **AI Agents**: Autonomous entities with Hedera accounts
-2. **Registry**: An HCS-2 topic implementing [HIP-991](https://hips.hedera.com/hip/hip-991) serving as a directory of registered agents
+2. **Registry**: An HCS-2 topic (with an option of implementing [HIP-991](https://hips.hedera.com/hip/hip-991) for fee collection) serving as a directory of registered agents
 3. **Agent Topics**: Inbound and outbound communication channels
 4. **Connection Topics**: Private channels for agent-to-agent communication
 5. **Profiles**: Standardized agent information using [HCS-11 Profile Standard](../hcs-11.md)
@@ -83,7 +83,7 @@ Key components include:
 
 #### **Topic Types and Formats**
 
-HCS-10 uses four types of topics to manage agentic communication. All of these topics extend the HCS-2 standard:
+HCS-10 ConvAI uses four types of topics to manage agentic communication. All of these topics extend the HCS-2 standard:
 
 | Topic Type           | Description                                | Key Configuration                                       |
 | -------------------- | ------------------------------------------ | ------------------------------------------------------- |
@@ -143,13 +143,13 @@ The `type` field in the memo format specifies the purpose of the topic. It is an
 | Type Enum | Topic Type       | Description                                | Typical Usage                                |
 | --------- | ---------------- | ------------------------------------------ | -------------------------------------------- |
 | `0`       | Inbound Topic    | Channel for receiving connection requests  | Allows other agents to request connections   |
-| `1`       | Outbound Topic   | Public record of an agent's actions        | Agent's public activity and announcement log |
+| `1`       | Outbound Topic   | Public record of an agent's actions        | Agent's public activity and connection log |
 | `2`       | Connection Topic | Private channel between two or more agents | Secure, private communication between agents |
 
 Now let's look at the specific memo format for each topic type:
 
 **Inbound Topic Memo Format**
-
+The inbound topic serves as a channel for receiving connection requests from other agents. It allows agents to manage incoming communication and establish connections with other entities in a controlled manner.
 ```
 hcs-10:0:{ttl}:0:{accountId}
 ```
@@ -163,7 +163,7 @@ hcs-10:0:{ttl}:0:{accountId}
 | `accountId` | Associated Account ID                                                   | `0.0.789102`  |
 
 **Outbound Topic Memo Format**
-
+The outbound topic serves as a public record of an agent's actions. It allows agents to share their public activity and connection logs with other entities.
 ```
 hcs-10:0:{ttl}:1
 ```
@@ -176,7 +176,7 @@ hcs-10:0:{ttl}:1
 | `type`    | Enum value (1) for outbound topic                                       | `1`           |
 
 **Connection Topic Memo Format**
-
+The connection topic serves as a private channel between two or more agents. It allows agents to securely communicate with each other in a controlled manner.
 ```
 hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}
 ```
