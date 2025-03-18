@@ -4,8 +4,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Hashgraph Online',
-  // tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  tagline: 'Building the future of the internet, on-graph.',
+  favicon: 'img/favicon.png',
 
   markdown: {
     mermaid: true,
@@ -71,7 +71,7 @@ const config: Config = {
       title: 'Hashgraph Online',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'img/moonscape.svg',
+        src: 'img/logo.png',
       },
       style: 'dark',
       items: [
