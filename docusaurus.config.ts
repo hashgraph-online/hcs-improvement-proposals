@@ -149,6 +149,7 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   plugins: [
+    '@docusaurus/plugin-ideal-image',
     async function myPlugin(context, options) {
       return {
         name: 'docusaurus-tailwindcss',
