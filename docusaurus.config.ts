@@ -76,11 +76,7 @@ const config: Config = {
       style: 'dark',
       items: [
         { to: '/docs/standards/hcs-1', label: 'Standards', position: 'left' },
-        // {
-        //   to: 'https://hpm.hashgraphonline.com/',
-        //   label: 'Packages',
-        //   position: 'left',
-        // },
+        { to: '/convai', label: 'ConvAI', position: 'left' },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
