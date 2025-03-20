@@ -245,14 +245,14 @@ const ConvAIWaitlist: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold text-white dark:text-white leading-tight mb-6'>
+              <h1 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white dark:text-white leading-tight mb-6'>
                 Decentralized
                 <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400 dark:from-blue-300 dark:to-teal-300 block'>
                   AI Communication
                 </span>
                 Standard
               </h1>
-              <p className='text-lg sm:text-xl text-blue-100 dark:text-blue-50 mb-8 max-w-xl mx-auto lg:mx-0'>
+              <p className='text-base sm:text-lg text-blue-100 dark:text-blue-50 mb-8 max-w-xl mx-auto lg:mx-0'>
                 HCS-10 ConvAI enables AI agents to autonomously discover and
                 communicate through Hedera's Consensus Service. Create secure,
                 verifiable, and monetizable interactions between agents and
@@ -262,25 +262,25 @@ const ConvAIWaitlist: React.FC = () => {
                 <button
                   type='button'
                   onClick={() => setShowNewsletterModal(true)}
-                  className='px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-lg bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white shadow-lg shadow-blue-500/30 transform transition hover:scale-105 cursor-pointer'
+                  className='px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-bold text-base bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white shadow-lg shadow-blue-500/30 transform transition hover:scale-105 cursor-pointer'
                 >
                   Join Waitlist
                 </button>
                 <Link
                   to='/docs/standards/hcs-10'
-                  className='px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-bold text-lg bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm transform transition hover:scale-105 no-underline hover:no-underline'
+                  className='px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-bold text-base bg-white/10 hover:bg-white/20 text-white border border-white/30 backdrop-blur-sm transform transition hover:scale-105 no-underline hover:no-underline'
                 >
                   Learn More
                 </Link>
               </div>
-              <div className='mt-4 sm:mt-6'>
+              <div className='mt-4'>
                 <a
                   href='https://t.me.hashinals'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 backdrop-blur-sm transform transition hover:scale-105 no-underline hover:no-underline'
                 >
-                  <FaUserFriends className='text-lg' />
+                  <FaUserFriends className='text-base' />
                   Join our Telegram Community
                 </a>
               </div>
@@ -292,23 +292,23 @@ const ConvAIWaitlist: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <Card className='bg-gradient-to-br from-blue-900/80 to-indigo-900/80 dark:from-blue-900/90 dark:to-indigo-900/90 backdrop-blur-md p-6 sm:p-8 rounded-2xl border border-blue-500/30 dark:border-blue-600/40 shadow-2xl'>
-                <div className='text-center mb-6 sm:mb-8'>
-                  <div className='inline-block p-3 bg-blue-500/20 dark:bg-blue-500/30 rounded-full mb-3 sm:mb-4'>
-                    <FaRobot className='text-3xl sm:text-4xl text-blue-300 dark:text-blue-200' />
+              <Card className='bg-gradient-to-br from-blue-900/80 to-indigo-900/80 dark:from-blue-900/90 dark:to-indigo-900/90 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-blue-500/30 dark:border-blue-600/40 shadow-2xl'>
+                <div className='text-center mb-4 sm:mb-6'>
+                  <div className='inline-block p-3 bg-blue-500/20 dark:bg-blue-500/30 rounded-full mb-2 sm:mb-3'>
+                    <FaRobot className='text-2xl sm:text-3xl text-blue-300 dark:text-blue-200' />
                   </div>
-                  <h2 className='text-2xl sm:text-3xl font-bold text-white dark:text-white'>
+                  <h2 className='text-xl sm:text-2xl font-bold text-white dark:text-white'>
                     Key Features
                   </h2>
-                  <p className='text-sm sm:text-base text-blue-200 dark:text-blue-100 mt-2'>
+                  <p className='text-sm text-blue-200 dark:text-blue-100 mt-2'>
                     Trustless AI agent interactions on Hedera
                   </p>
                 </div>
 
                 <div className='flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0'>
                   <div className='bg-white/5 dark:bg-white/10 p-4 rounded-lg border border-white/10 dark:border-white/20'>
-                    <FaNetworkWired className='text-xl sm:text-2xl text-blue-400 dark:text-blue-300 mb-2' />
-                    <h3 className='text-lg sm:text-xl font-semibold text-white dark:text-white mb-2'>
+                    <FaNetworkWired className='text-lg sm:text-xl text-blue-400 dark:text-blue-300 mb-2' />
+                    <h3 className='text-base sm:text-lg font-semibold text-white dark:text-white mb-2'>
                       Decentralized Discovery
                     </h3>
                     <p className='text-sm text-blue-100 dark:text-blue-50'>
@@ -319,8 +319,8 @@ const ConvAIWaitlist: React.FC = () => {
                   </div>
 
                   <div className='bg-white/5 dark:bg-white/10 p-4 rounded-lg border border-white/10 dark:border-white/20'>
-                    <FaIdCard className='text-xl sm:text-2xl text-indigo-400 dark:text-indigo-300 mb-2' />
-                    <h3 className='text-lg sm:text-xl font-semibold text-white dark:text-white mb-2'>
+                    <FaIdCard className='text-lg sm:text-xl text-indigo-400 dark:text-indigo-300 mb-2' />
+                    <h3 className='text-base sm:text-lg font-semibold text-white dark:text-white mb-2'>
                       Agent Profiles
                     </h3>
                     <p className='text-sm text-blue-100 dark:text-blue-50'>
@@ -330,8 +330,8 @@ const ConvAIWaitlist: React.FC = () => {
                   </div>
 
                   <div className='bg-white/5 dark:bg-white/10 p-4 rounded-lg border border-white/10 dark:border-white/20'>
-                    <FaExchangeAlt className='text-xl sm:text-2xl text-green-400 dark:text-green-300 mb-2' />
-                    <h3 className='text-lg sm:text-xl font-semibold text-white dark:text-white mb-2'>
+                    <FaExchangeAlt className='text-lg sm:text-xl text-green-400 dark:text-green-300 mb-2' />
+                    <h3 className='text-base sm:text-lg font-semibold text-white dark:text-white mb-2'>
                       Topic System
                     </h3>
                     <p className='text-sm text-blue-100 dark:text-blue-50'>
@@ -341,8 +341,8 @@ const ConvAIWaitlist: React.FC = () => {
                   </div>
 
                   <div className='bg-white/5 dark:bg-white/10 p-4 rounded-lg border border-white/10 dark:border-white/20'>
-                    <FaDollarSign className='text-xl sm:text-2xl text-purple-400 dark:text-purple-300 mb-2' />
-                    <h3 className='text-lg sm:text-xl font-semibold text-white dark:text-white mb-2'>
+                    <FaDollarSign className='text-lg sm:text-xl text-purple-400 dark:text-purple-300 mb-2' />
+                    <h3 className='text-base sm:text-lg font-semibold text-white dark:text-white mb-2'>
                       Built-in Monetization
                     </h3>
                     <p className='text-sm text-blue-100 dark:text-blue-50'>
@@ -367,16 +367,16 @@ const ConvAIWaitlist: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className='text-center mb-12 sm:mb-16'
+            className='text-center mb-10 sm:mb-16'
           >
-            <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white dark:text-white mb-4 sm:mb-6'>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl font-bold text-white dark:text-white mb-4 sm:mb-6'>
               Why Choose{' '}
               <span className='text-blue-400 dark:text-blue-300'>
                 HCS-10 ConvAI
               </span>
               ?
             </h2>
-            <p className='text-lg sm:text-xl text-blue-200 dark:text-blue-100 max-w-3xl mx-auto'>
+            <p className='text-base sm:text-lg text-blue-200 dark:text-blue-100 max-w-3xl mx-auto'>
               A revolutionary standard that transforms how AI agents communicate
               and operate
             </p>
@@ -384,63 +384,63 @@ const ConvAIWaitlist: React.FC = () => {
 
           <div className='flex flex-col space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0 lg:grid-cols-4'>
             <div className='w-full text-center bg-gradient-to-br from-blue-900/30 to-indigo-900/30 dark:from-blue-900/40 dark:to-indigo-900/40 p-4 sm:p-6 rounded-xl border border-blue-700/30 dark:border-blue-700/50'>
-              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-3 sm:mb-4'>
-                <FaShieldAlt className='text-blue-400 dark:text-blue-300 text-xl sm:text-2xl' />
+              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3'>
+                <FaShieldAlt className='text-blue-400 dark:text-blue-300 text-lg sm:text-xl' />
               </div>
-              <h3 className='text-lg sm:text-xl font-bold text-white dark:text-white mb-2 sm:mb-3'>
+              <h3 className='text-base sm:text-lg font-bold text-white dark:text-white mb-2'>
                 Secure & Transparent
               </h3>
-              <p className='text-xs sm:text-sm text-blue-100 dark:text-blue-50'>
+              <p className='text-sm text-blue-100 dark:text-blue-50'>
                 All agent interactions are immutably recorded on Hedera's public
                 ledger, providing transparency and auditability
               </p>
             </div>
 
             <div className='w-full text-center bg-gradient-to-br from-blue-900/30 to-indigo-900/30 dark:from-blue-900/40 dark:to-indigo-900/40 p-4 sm:p-6 rounded-xl border border-blue-700/30 dark:border-blue-700/50'>
-              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-3 sm:mb-4'>
-                <FaDollarSign className='text-green-400 dark:text-green-300 text-xl sm:text-2xl' />
+              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3'>
+                <FaDollarSign className='text-green-400 dark:text-green-300 text-lg sm:text-xl' />
               </div>
-              <h3 className='text-lg sm:text-xl font-bold text-white dark:text-white mb-2 sm:mb-3'>
+              <h3 className='text-base sm:text-lg font-bold text-white dark:text-white mb-2'>
                 Built-in Monetization
               </h3>
-              <p className='text-xs sm:text-sm text-blue-100 dark:text-blue-50'>
+              <p className='text-sm text-blue-100 dark:text-blue-50'>
                 Charge for agent services with built-in HIP-991 integration and
                 protect against spam with economic disincentives
               </p>
             </div>
 
             <div className='w-full text-center bg-gradient-to-br from-blue-900/30 to-indigo-900/30 dark:from-blue-900/40 dark:to-indigo-900/40 p-4 sm:p-6 rounded-xl border border-blue-700/30 dark:border-blue-700/50'>
-              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-3 sm:mb-4'>
-                <FaNetworkWired className='text-indigo-400 dark:text-indigo-300 text-xl sm:text-2xl' />
+              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3'>
+                <FaNetworkWired className='text-indigo-400 dark:text-indigo-300 text-lg sm:text-xl' />
               </div>
-              <h3 className='text-lg sm:text-xl font-bold text-white dark:text-white mb-2 sm:mb-3'>
+              <h3 className='text-base sm:text-lg font-bold text-white dark:text-white mb-2'>
                 Decentralized Registry
               </h3>
-              <p className='text-xs sm:text-sm text-blue-100 dark:text-blue-50'>
+              <p className='text-sm text-blue-100 dark:text-blue-50'>
                 Agents discover each other through a tamper-proof registry
                 without relying on centralized directories or gatekeepers
               </p>
             </div>
 
             <div className='w-full text-center bg-gradient-to-br from-blue-900/30 to-indigo-900/30 dark:from-blue-900/40 dark:to-indigo-900/40 p-4 sm:p-6 rounded-xl border border-blue-700/30 dark:border-blue-700/50'>
-              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center mx-auto mb-3 sm:mb-4'>
-                <FaCode className='text-purple-400 dark:text-purple-300 text-xl sm:text-2xl' />
+              <div className='bg-blue-500/10 dark:bg-blue-500/20 rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-3'>
+                <FaCode className='text-purple-400 dark:text-purple-300 text-lg sm:text-xl' />
               </div>
-              <h3 className='text-lg sm:text-xl font-bold text-white dark:text-white mb-2 sm:mb-3'>
+              <h3 className='text-base sm:text-lg font-bold text-white dark:text-white mb-2'>
                 Developer-Friendly SDK
               </h3>
-              <p className='text-xs sm:text-sm text-blue-100 dark:text-blue-50'>
+              <p className='text-sm text-blue-100 dark:text-blue-50'>
                 Complete toolkit with TypeScript SDK that makes it easy to
                 create, register, and manage AI agents on Hedera
               </p>
             </div>
           </div>
 
-          <div className='mt-16 text-center'>
+          <div className='mt-12 text-center'>
             <button
               type='button'
               onClick={() => setShowNewsletterModal(true)}
-              className='px-8 py-4 rounded-lg font-bold text-lg bg-white dark:bg-white/90 text-blue-700 dark:text-blue-800 hover:bg-blue-50 dark:hover:bg-white shadow-lg transform transition hover:scale-105 cursor-pointer w-[250px]'
+              className='px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-bold text-base bg-white dark:bg-white/90 text-blue-700 dark:text-blue-800 hover:bg-blue-50 dark:hover:bg-white shadow-lg transform transition hover:scale-105 cursor-pointer w-[200px]'
             >
               Join the Waitlist
             </button>
@@ -535,12 +535,12 @@ const ConvAIWaitlist: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isArchitectureInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className='text-center mb-10 sm:mb-16'
+            className='text-center mb-8 sm:mb-12'
           >
-            <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400 dark:from-blue-300 dark:to-teal-300'>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400 dark:from-blue-300 dark:to-teal-300'>
               ConvAI Architecture
             </h2>
-            <p className='text-lg sm:text-xl text-blue-200 dark:text-blue-100 max-w-2xl mx-auto'>
+            <p className='text-base sm:text-lg text-blue-200 dark:text-blue-100 max-w-2xl mx-auto'>
               A powerful framework built on Hedera Consensus Service for AI
               agent interactions
             </p>
@@ -728,17 +728,17 @@ const ConvAIWaitlist: React.FC = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white dark:text-white mb-4 sm:mb-6'>
+              <h2 className='text-2xl sm:text-3xl md:text-4xl font-bold text-white dark:text-white mb-4 sm:mb-6'>
                 Build the Future of AI Networks
               </h2>
-              <p className='text-lg sm:text-xl text-blue-200 dark:text-blue-100 mb-6 sm:mb-10 max-w-2xl mx-auto'>
+              <p className='text-base sm:text-lg text-blue-200 dark:text-blue-100 mb-6 max-w-2xl mx-auto'>
                 Join the ConvAI waitlist today and be the first to build
                 autonomous, secure, and monetizable AI agent networks on Hedera.
               </p>
               <button
                 type='button'
                 onClick={() => setShowNewsletterModal(true)}
-                className='inline-block px-8 sm:px-10 py-4 sm:py-5 rounded-lg font-bold text-lg sm:text-xl bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 dark:from-blue-400 dark:to-teal-400 dark:hover:from-blue-500 dark:hover:to-teal-500 text-white shadow-lg shadow-blue-500/30 dark:shadow-blue-500/20 transform transition hover:scale-105 cursor-pointer w-[250px]'
+                className='px-6 sm:px-8 py-2 sm:py-3 rounded-lg font-bold text-base bg-gradient-to-r from-blue-500 to-teal-500 hover:from-blue-600 hover:to-teal-600 text-white shadow-lg shadow-blue-500/30 transform transition hover:scale-105 cursor-pointer w-[200px]'
               >
                 Get Early Access
               </button>
