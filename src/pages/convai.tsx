@@ -275,7 +275,7 @@ const ConvAIWaitlist: React.FC = () => {
               </div>
               <div className='mt-4'>
                 <a
-                  href='https://t.me.hashinals'
+                  href='https://t.me/hashinals'
                   target='_blank'
                   rel='noopener noreferrer'
                   className='inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/10 hover:bg-white/20 text-white/90 hover:text-white border border-white/20 backdrop-blur-sm transform transition hover:scale-105 no-underline hover:no-underline'
