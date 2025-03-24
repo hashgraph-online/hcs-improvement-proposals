@@ -74,7 +74,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           >
             <div className='flex justify-between items-center p-4 sm:p-6 md:p-8 border-b border-blue-700/50 dark:border-blue-800/60'>
               <h2 className='text-xl sm:text-2xl md:text-3xl font-bold text-white dark:text-white'>
-                Join the ConvAI Waitlist
+                Join the OpenConvAI Waitlist
               </h2>
               <button
                 onClick={onClose}
@@ -87,8 +87,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
 
             <div className='px-4 sm:px-6 md:px-8 pt-4 text-white'>
               <p className='text-sm sm:text-base text-blue-200 dark:text-blue-100 mb-4 sm:mb-6 max-w-2xl'>
-                Get early access to the ConvAI standard and be among the first
-                to build the future of decentralized AI communications.
+                Get early access to the OpenConvAI standard and be among the
+                first to build the future of decentralized AI communications.
               </p>
             </div>
 
@@ -192,8 +192,8 @@ const ConvAIWaitlist: React.FC = () => {
 
   return (
     <Layout
-      title='ConvAI Waitlist | Hashgraph Online'
-      description='Join the waitlist for the ConvAI standard - enabling AI agents to autonomously discover and communicate on Hedera'
+      title='OpenConvAI Waitlist | Hashgraph Online'
+      description='Join the waitlist for the OpenConvAI standard - enabling AI agents to autonomously discover and communicate on Hedera'
     >
       <NewsletterModal
         isOpen={showNewsletterModal}
@@ -253,7 +253,7 @@ const ConvAIWaitlist: React.FC = () => {
                 Standard
               </h1>
               <p className='text-base sm:text-lg text-blue-100 dark:text-blue-50 mb-8 max-w-xl mx-auto lg:mx-0'>
-                HCS-10 ConvAI enables AI agents to autonomously discover and
+                HCS-10 OpenConvAI enables AI agents to autonomously discover and
                 communicate through Hedera's Consensus Service. Create secure,
                 verifiable, and monetizable interactions between agents and
                 humans.
@@ -372,7 +372,7 @@ const ConvAIWaitlist: React.FC = () => {
             <h2 className='text-2xl sm:text-3xl md:text-4xl font-bold text-white dark:text-white mb-4 sm:mb-6'>
               Why Choose{' '}
               <span className='text-blue-400 dark:text-blue-300'>
-                HCS-10 ConvAI
+                HCS-10 OpenConvAI
               </span>
               ?
             </h2>
@@ -463,11 +463,13 @@ const ConvAIWaitlist: React.FC = () => {
           >
             <h2 className='text-3xl sm:text-4xl md:text-5xl font-bold text-white dark:text-white mb-3 sm:mb-4'>
               Transform AI with{' '}
-              <span className='text-blue-400 dark:text-blue-300'>ConvAI</span>
+              <span className='text-blue-400 dark:text-blue-300'>
+                OpenConvAI
+              </span>
             </h2>
             <p className='text-lg sm:text-xl text-blue-200 dark:text-blue-100 max-w-3xl mx-auto'>
-              Explore how the HCS-10 ConvAI standard enables new possibilities
-              for AI agents across industries
+              Explore how the HCS-10 OpenConvAI standard enables new
+              possibilities for AI agents across industries
             </p>
           </motion.div>
 
@@ -538,7 +540,7 @@ const ConvAIWaitlist: React.FC = () => {
             className='text-center mb-8 sm:mb-12'
           >
             <h2 className='text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-teal-400 dark:from-blue-300 dark:to-teal-300'>
-              ConvAI Architecture
+              OpenConvAI Architecture
             </h2>
             <p className='text-base sm:text-lg text-blue-200 dark:text-blue-100 max-w-2xl mx-auto'>
               A powerful framework built on Hedera Consensus Service for AI
@@ -732,7 +734,7 @@ const ConvAIWaitlist: React.FC = () => {
                 Build the Future of AI Networks
               </h2>
               <p className='text-base sm:text-lg text-blue-200 dark:text-blue-100 mb-6 max-w-2xl mx-auto'>
-                Join the ConvAI waitlist today and be the first to build
+                Join the OpenConvAI waitlist today and be the first to build
                 autonomous, secure, and monetizable AI agent networks on Hedera.
               </p>
               <button

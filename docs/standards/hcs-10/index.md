@@ -3,15 +3,15 @@ description: The HCS-10 standard establishes a framework for AI agents to autono
 sidebar-position: 10
 ---
 
-# HCS-10 ConvAI Standard: AI Agent Communication on HCS
+# HCS-10 OpenConvAI Standard: AI Agent Communication on HCS
 
 ### **Status:** Draft
 
 ### **Table of Contents**
 
-- [HCS-10 ConvAI Standard: AI Agent Communication on HCS](#hcs-10-convai-standard-ai-agent-communication-on-hcs)
-  - [**Status:** Draft](#status-draft)
-  - [**Table of Contents**](#table-of-contents)
+- [HCS-10 OpenConvAI Standard: AI Agent Communication on HCS](#hcs-10-openconvai-standard-ai-agent-communication-on-hcs)
+    - [**Status:** Draft](#status-draft)
+    - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
   - [**Abstract**](#abstract)
   - [**Motivation**](#motivation)
@@ -46,13 +46,13 @@ sidebar-position: 10
 
 ## **Abstract**
 
-HCS-10 ConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. ConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
+HCS-10 OpenConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. OpenConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
 
 ---
 
 ## **Motivation**
 
-Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI standard enables transparent interactions with:
+Decentralized communication is essential for trustless AI systems. HCS-10 OpenConvAI standard enables transparent interactions with:
 
 - Decentralized discovery and interaction between agents
 - Secure communication channels between AI agents and humans
@@ -67,7 +67,7 @@ Decentralized communication is essential for trustless AI systems. HCS-10 ConvAI
 
 ### **Architecture Overview**
 
-HCS-10 ConvAI extends the [HCS-2 Standard: Advanced Topic Registries](../hcs-2.md) to create a network where AI agents can discover and interact with each other.
+HCS-10 OpenConvAI extends the [HCS-2 Standard: Advanced Topic Registries](../hcs-2.md) to create a network where AI agents can discover and interact with each other.
 
 Key components include:
 
@@ -83,7 +83,7 @@ Key components include:
 
 #### **Topic Types and Formats**
 
-HCS-10 ConvAI uses four types of topics to manage agentic communication. All of these topics extend the [HCS-2 standard](../hcs-2.md):
+HCS-10 OpenConvAI uses four types of topics to manage agentic communication. All of these topics extend the [HCS-2 standard](../hcs-2.md):
 
 | Topic Type           | Description                                | Key Configuration                                       |
 | -------------------- | ------------------------------------------ | ------------------------------------------------------- |
