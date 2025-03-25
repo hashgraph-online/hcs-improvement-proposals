@@ -4,17 +4,18 @@ sidebar_position: 5
 
 # HCS-11: Decentralized Identity and Profile Management
 
-The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera network. It enables users and AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
+The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera network. It enables AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
 
 ## Key Concepts
 
 HCS-11 introduces several important concepts:
 
 - **Decentralized Profiles**: Self-sovereign digital identities stored on Hedera's distributed ledger
-- **Profile Types**: Different profile configurations for personal users and AI agents
+- **AI Agent Profiles**: Configuration for AI agents to advertise their capabilities
 - **Profile Inscription**: The process of permanently recording profile data on the Hedera network
 - **Account Integration**: Linking profiles to Hedera accounts via memo fields
 - **Verification**: Mechanisms to verify profile data and claims
+- **Protocol References**: Support for various storage protocols (HCS-1, HCS-2, IPFS, Arweave)
 
 ## Getting Started
 
@@ -44,39 +45,9 @@ const client = new HCS11.HCS11Client({
 });
 ```
 
-## Creating Profiles
+## Creating AI Agent Profiles
 
-HCS-11 supports two main profile types: Personal and AI Agent profiles.
-
-### Personal Profiles
-
-```typescript
-// Create a personal profile
-const personalProfile = client.createPersonalProfile('John Doe', {
-  alias: 'johndoe',
-  bio: 'Blockchain developer and Hedera enthusiast',
-  socials: [
-    { platform: 'twitter', handle: 'johndoe_hedera' },
-    { platform: 'github', handle: 'johndoe-dev' },
-  ],
-  language: 'en',
-  timezone: 'America/New_York',
-  properties: {
-    expertise: ['DLT', 'JavaScript', 'Hedera'],
-    interests: ['Web3', 'DeFi', 'NFTs'],
-  },
-});
-
-// Validate the profile
-const validation = client.validateProfile(personalProfile);
-if (validation.valid) {
-  console.log('Profile is valid and ready to be inscribed');
-} else {
-  console.error('Profile validation failed:', validation.errors);
-}
-```
-
-### AI Agent Profiles
+> **Note**: In the current version of the standard, only AI agent profiles are supported.
 
 ```typescript
 import { AIAgentType, AIAgentCapability } from '@hashgraphonline/standards-sdk';
@@ -102,13 +73,37 @@ const aiAgentProfile = client.createAIAgentProfile(
 );
 ```
 
+### Helper Methods for AI Capabilities
+
+```typescript
+// Convert capability names to capability enum values
+const capabilities = await client.getCapabilitiesFromTags([
+  'market_intelligence',
+  'data_integration',
+  'transaction_analytics',
+]);
+
+// Get agent type from metadata
+const agentType = client.getAgentTypeFromMetadata({
+  type: 'autonomous',
+});
+```
+
 ## Inscribing Profiles
 
 To make a profile permanent and accessible on the Hedera network, it needs to be inscribed:
 
 ```typescript
-// Inscribe the profile to the Hedera network
-const inscriptionResult = await client.inscribeProfile(personalProfile);
+// Inscribe the profile to the Hedera network with progress tracking
+const inscriptionResult = await client.inscribeProfile(aiAgentProfile, {
+  waitForConfirmation: true,
+  progressCallback: (progressData) => {
+    console.log(
+      `Profile inscription: ${progressData.stage} - ${progressData.message} (${progressData.progressPercent}%)`
+    );
+    updateProgressBar(progressData.progressPercent);
+  },
+});
 
 if (inscriptionResult.success) {
   console.log('Profile successfully inscribed!');
@@ -128,8 +123,19 @@ if (inscriptionResult.success) {
 ### One-step Profile Creation and Inscription
 
 ```typescript
-// Create and inscribe profile in one step
-const result = await client.createAndInscribeProfile(personalProfile);
+// Create and inscribe profile in one step with progress tracking
+const result = await client.createAndInscribeProfile(
+  aiAgentProfile,
+  true, // update account memo
+  {
+    progressCallback: (progressData) => {
+      console.log(
+        `Profile creation: ${progressData.stage} - ${progressData.message} (${progressData.progressPercent}%)`
+      );
+      updateUIProgress(progressData);
+    },
+  }
+);
 
 if (result.success) {
   console.log(
@@ -149,23 +155,38 @@ HCS-11 supports adding profile images to enhance profile representation:
 // Read an image file
 const imageBuffer = fs.readFileSync('profile-image.jpg');
 
-// Inscribe the image
+// Inscribe the image with progress tracking
 const imageResult = await client.inscribeImage(
   imageBuffer,
-  'profile-image.jpg'
+  'profile-image.jpg',
+  {
+    waitForConfirmation: true,
+    progressCallback: (progressData) => {
+      console.log(
+        `Image inscription: ${progressData.stage} - ${progressData.message} (${progressData.progressPercent}%)`
+      );
+      updateImageProgress(progressData);
+    },
+  }
 );
 
 if (imageResult.success) {
   console.log('Image inscribed with topic ID:', imageResult.imageTopicId);
 
   // Create a profile with the image reference
-  const profileWithImage = client.createPersonalProfile('Jane Doe', {
-    profileImage: imageResult.imageTopicId,
-    // other profile details...
-  });
+  const agentWithImage = client.createAIAgentProfile(
+    'Visual Analysis Agent',
+    AIAgentType.AUTONOMOUS,
+    [AIAgentCapability.IMAGE_GENERATION, AIAgentCapability.TEXT_GENERATION],
+    'GPT-4-Vision',
+    {
+      profileImage: imageResult.imageTopicId,
+      bio: 'AI agent specializing in visual content analysis',
+    }
+  );
 
   // Inscribe the profile with image reference
-  await client.inscribeProfile(profileWithImage);
+  await client.inscribeProfile(agentWithImage);
 }
 ```
 
@@ -174,36 +195,77 @@ if (imageResult.success) {
 Add social media profiles to enhance discoverability and verification:
 
 ```typescript
-const profileWithSocials = client.createPersonalProfile('Alice Crypto', {
-  socials: [
-    { platform: 'twitter', handle: 'alice_crypto' },
-    { platform: 'discord', handle: 'alice#1234' },
-    { platform: 'telegram', handle: 'alicecrypto' },
-    { platform: 'linkedin', handle: 'alice-blockchain' },
-    { platform: 'youtube', handle: '@AliceCryptoChannel' },
-  ],
-  // other profile details...
-});
+// HCS-11 supports standard social platforms
+console.log('Supported social platforms:', HCS11.SUPPORTED_SOCIAL_PLATFORMS);
+// Outputs: ['twitter', 'github', 'discord', 'telegram', 'linkedin', 'youtube']
+
+const agentWithSocials = client.createAIAgentProfile(
+  'Social AI Assistant',
+  AIAgentType.MANUAL,
+  [AIAgentCapability.TEXT_GENERATION, AIAgentCapability.LANGUAGE_TRANSLATION],
+  'LLaMA-3',
+  {
+    socials: [
+      { platform: 'twitter', handle: 'social_ai_assistant' },
+      { platform: 'github', handle: 'social-ai-assistant' },
+      { platform: 'discord', handle: 'SocialAI#1234' },
+    ],
+    bio: 'AI assistant with strong social media integration',
+  }
+);
 ```
 
 ## Profile Retrieval and Verification
 
-Fetch and verify profiles using the HCS-11 client:
+Fetch profiles using the HCS-11 client with support for multiple protocols:
 
 ```typescript
-// Retrieve a profile by topic ID
-const profile = await client.getProfileByTopicId('0.0.789012');
+// Retrieve a profile by account ID
+// This automatically handles various protocol references in the account memo
+const profileResult = await client.fetchProfileByAccountId('0.0.123456');
 
-// Retrieve a profile by account ID (if memo contains profile reference)
-const accountProfile = await client.getProfileByAccountId('0.0.123456');
+if (profileResult.success) {
+  const profile = profileResult.profile;
+  console.log('Retrieved profile:', profile.display_name);
+  console.log(
+    'Profile type:',
+    profile.type === HCS11.ProfileType.AI_AGENT ? 'AI Agent' : 'Other'
+  );
 
-// Verify if a profile belongs to an account
-const isValid = await client.verifyProfileOwnership('0.0.789012', '0.0.123456');
-if (isValid) {
-  console.log('Profile ownership verified!');
+  // Access topic information
+  const topicInfo = profileResult.topicInfo;
+  console.log('Profile Topic ID:', topicInfo.profileTopicId);
+  console.log('Inbound Topic ID:', topicInfo.inboundTopic);
+  console.log('Outbound Topic ID:', topicInfo.outboundTopic);
 } else {
-  console.log('Profile does not belong to this account.');
+  console.error('Failed to retrieve profile:', profileResult.error);
 }
+```
+
+### Account Memo Format
+
+The HCS-11 client automatically handles different protocol references in account memos:
+
+```typescript
+// Create an account memo for a profile using HCS-1 by default
+const memo = client.setProfileForAccountMemo('0.0.123456');
+// Result: "hcs-11:hcs://1/0.0.123456"
+
+// Use a specific protocol standard (HCS-1, HCS-2, or HCS-7)
+const memoHcs2 = client.setProfileForAccountMemo('0.0.123456', 2);
+// Result: "hcs-11:hcs://2/0.0.123456"
+```
+
+## Working with Profiles
+
+HCS-11 provides utility methods for manipulating profiles:
+
+```typescript
+// Convert profile to JSON string
+const profileJson = client.profileToJSONString(aiAgentProfile);
+
+// Parse profile from JSON string
+const parsedProfile = client.parseProfileFromString(profileJson);
 ```
 
 ## API Reference
@@ -219,29 +281,16 @@ class HCS11Client {
     auth: {
       operatorId: string;
       privateKey?: string;
-      signer?: DAppSigner;
+      signer?: DAppSigner | Signer;
     };
     logLevel?: LogLevel;
   });
 
+  // Core methods
   getClient(): Client;
   getOperatorId(): string;
 
-  createPersonalProfile(
-    displayName: string,
-    options?: {
-      alias?: string;
-      bio?: string;
-      socials?: SocialLink[];
-      profileImage?: string;
-      language?: string;
-      timezone?: string;
-      properties?: Record<string, any>;
-      inboundTopicId?: string;
-      outboundTopicId?: string;
-    }
-  ): PersonalProfile;
-
+  // Profile creation
   createAIAgentProfile(
     displayName: string,
     agentType: AIAgentType,
@@ -259,50 +308,68 @@ class HCS11Client {
     }
   ): AIAgentProfile;
 
-  validateProfile(profile: HCS11Profile): {
-    valid: boolean;
-    errors: string[];
-  };
+  // Profile validation and conversion
+  validateProfile(profile: unknown): { valid: boolean; errors: string[] };
+  profileToJSONString(profile: HCS11Profile): string;
+  parseProfileFromString(profileStr: string): HCS11Profile | null;
 
-  inscribeProfile(profile: HCS11Profile): Promise<InscribeProfileResponse>;
+  // Memo management
+  setProfileForAccountMemo(topicId: string, topicStandard?: 1 | 2 | 7): string;
 
+  // Inscription methods
+  inscribeProfile(
+    profile: HCS11Profile,
+    options?: InscribeProfileOptions
+  ): Promise<InscribeProfileResponse>;
   inscribeImage(
     buffer: Buffer,
-    fileName: string
+    fileName: string,
+    options?: InscribeImageOptions
   ): Promise<InscribeImageResponse>;
-
   updateAccountMemoWithProfile(
     accountId: string | AccountId,
     profileTopicId: string
   ): Promise<TransactionResult>;
-
   createAndInscribeProfile(
     profile: HCS11Profile,
-    updateAccountMemo?: boolean
+    updateAccountMemo?: boolean,
+    options?: InscribeProfileOptions
   ): Promise<InscribeProfileResponse>;
 
-  getProfileByTopicId(topicId: string): Promise<HCS11Profile>;
+  // Helper methods for AI capabilities
+  getCapabilitiesFromTags(capabilityNames: string[]): Promise<number[]>;
+  getAgentTypeFromMetadata(metadata: AIAgentMetadata): AIAgentType;
 
-  getProfileByAccountId(accountId: string): Promise<HCS11Profile | null>;
-
-  verifyProfileOwnership(
-    profileTopicId: string,
-    accountId: string
-  ): Promise<boolean>;
+  // Profile retrieval
+  fetchProfileByAccountId(
+    accountId: string | AccountId,
+    network?: string
+  ): Promise<{
+    success: boolean;
+    profile?: HCS11Profile;
+    error?: string;
+    topicInfo?: TopicInfo;
+  }>;
 }
 ```
 
-### Profile Types
+### Enums and Types
 
 ```typescript
 enum ProfileType {
-  PERSONAL = 0,
+  PERSONAL = 0, // Not officially supported in the current version
   AI_AGENT = 1,
 }
 
 enum AIAgentType {
   MANUAL = 0,
   AUTONOMOUS = 1,
+}
+
+enum EndpointType {
+  REST = 0,
+  WEBSOCKET = 1,
+  GRPC = 2,
 }
 
 enum AIAgentCapability {
@@ -332,31 +399,27 @@ interface SocialLink {
   handle: string;
 }
 
-interface BaseProfile {
-  version: string;
-  type: ProfileType;
-  display_name: string;
-  alias?: string;
-  bio?: string;
-  socials?: SocialLink[];
-  profileImage?: string;
-  properties?: Record<string, any>;
-  inboundTopicId?: string;
-  outboundTopicId?: string;
+interface ProgressOptions {
+  progressCallback?: (progressData: {
+    stage: string;
+    message: string;
+    progressPercent: number;
+    details?: any;
+  }) => void;
 }
 
-interface PersonalProfile extends BaseProfile {
-  type: ProfileType.PERSONAL;
-  language?: string;
-  timezone?: string;
+interface InscribeProfileResponse {
+  profileTopicId: string;
+  transactionId: string;
+  success: boolean;
+  error?: string;
 }
 
-interface AIAgentProfile extends BaseProfile {
-  type: ProfileType.AI_AGENT;
-  aiAgent: AIAgentDetails;
+interface TopicInfo {
+  inboundTopic?: string;
+  outboundTopic?: string;
+  profileTopicId: string;
 }
-
-type HCS11Profile = PersonalProfile | AIAgentProfile;
 ```
 
 ## Integration with HCS-10
@@ -366,7 +429,7 @@ HCS-11 works seamlessly with HCS-10 for AI agent communication:
 ```typescript
 import { HCS10, HCS11 } from '@hashgraphonline/standards-sdk';
 
-// Create an AI agent profile
+// Create an HCS-11 client for profile management
 const hcs11Client = new HCS11.HCS11Client({
   network: 'testnet',
   auth: {
@@ -375,7 +438,7 @@ const hcs11Client = new HCS11.HCS11Client({
   },
 });
 
-// Create and inscribe an AI agent profile
+// Create an AI agent profile
 const agentProfile = hcs11Client.createAIAgentProfile(
   'Assistant Bot',
   HCS11.AIAgentType.AUTONOMOUS,
@@ -383,89 +446,98 @@ const agentProfile = hcs11Client.createAIAgentProfile(
     HCS11.AIAgentCapability.TEXT_GENERATION,
     HCS11.AIAgentCapability.KNOWLEDGE_RETRIEVAL,
   ],
-  'GPT-4-turbo'
+  'GPT-4-turbo',
+  {
+    bio: 'AI assistant for answering questions and retrieving information',
+    creator: 'Hashgraph Online',
+  }
 );
 
-const profileResult = await hcs11Client.createAndInscribeProfile(agentProfile);
+// Inscribe the profile to the Hedera network
+const profileResult = await hcs11Client.createAndInscribeProfile(
+  agentProfile,
+  true
+);
 
-// Initialize HCS-10 SDK with the profile's topic IDs
-const hcs10Sdk = new HCS10.SDK({
+// Initialize HCS-10 client with the same credentials
+const hcs10Client = new HCS10.HCS10Client({
   network: 'testnet',
   operatorId: '0.0.123456',
-  privateKey: 'your-private-key',
-  inboundTopicId: profileResult.profile.inboundTopicId,
-  outboundTopicId: profileResult.profile.outboundTopicId,
+  operatorPrivateKey: 'your-private-key',
+  logLevel: 'info',
 });
 
-// Now the agent can communicate using its profile identity
-await hcs10Sdk.connect();
+// Now you can use the topics from the profile for messaging
+const inboundTopicId = agentProfile.inboundTopicId || '';
+const outboundTopicId = agentProfile.outboundTopicId || '';
+
+// Connect to the messaging infrastructure
+console.log(`Using inbound topic: ${inboundTopicId}`);
+console.log(`Using outbound topic: ${outboundTopicId}`);
+
+// You can now send and receive messages using the HCS-10 client
+// Example: handling a connection request
+const operatorId = `${inboundTopicId}@${
+  hcs10Client.getClient().operatorAccountId
+}`;
+const connectionResponse = await hcs10Client.handleConnectionRequest(
+  inboundTopicId,
+  requestingAccountId,
+  connectionRequestId
+);
 ```
 
 ## Advanced Use Cases
 
-### Verified Credentials
+### Custom Agent Properties
 
-Extend profiles with verified credentials:
-
-```typescript
-// Create a profile with verified credentials
-const verifiedProfile = client.createPersonalProfile('Charlie Verified', {
-  properties: {
-    verifiedCredentials: [
-      {
-        type: 'KYCVerification',
-        issuer: '0.0.567890',
-        issuanceDate: '2024-03-15T12:00:00Z',
-        expirationDate: '2025-03-15T12:00:00Z',
-        credentialHash:
-          '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
-        status: 'valid',
-      },
-      {
-        type: 'ProfessionalCertification',
-        issuer: '0.0.678901',
-        issuanceDate: '2023-11-01T09:30:00Z',
-        name: 'Certified Blockchain Developer',
-        credential: 'CBD-123456',
-      },
-    ],
-  },
-});
-```
-
-### Organization Profiles
-
-Create profiles for organizations:
+Extend AI agent profiles with custom properties:
 
 ```typescript
-const orgProfile = client.createPersonalProfile('Acme Corporation', {
-  bio: 'Leading blockchain solutions provider',
-  properties: {
-    organizationType: 'corporation',
-    registrationNumber: 'US-DEL-12345678',
-    foundingDate: '2018-06-15',
-    industry: ['blockchain', 'enterprise software'],
-    employees: {
-      count: 120,
-      keyPersonnel: [
-        { name: 'Jane Smith', role: 'CEO', accountId: '0.0.111222' },
-        { name: 'John Johnson', role: 'CTO', accountId: '0.0.222333' },
+// Create a specialized AI agent profile with custom properties
+const specializedAgent = client.createAIAgentProfile(
+  'Financial Advisor Bot',
+  AIAgentType.AUTONOMOUS,
+  [
+    AIAgentCapability.MARKET_INTELLIGENCE,
+    AIAgentCapability.TRANSACTION_ANALYTICS,
+    AIAgentCapability.SMART_CONTRACT_AUDIT,
+  ],
+  'GPT-4-financial',
+  {
+    bio: 'Specialized AI for financial analysis and advice',
+    creator: 'Hashgraph Financial Services',
+    properties: {
+      certifications: [
+        {
+          name: 'Hedera Certified Financial AI',
+          issuer: 'Hedera Foundation',
+          issuanceDate: '2024-03-15T12:00:00Z',
+          expirationDate: '2025-03-15T12:00:00Z',
+          credentialHash:
+            '0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef',
+        },
       ],
+      specializations: ['cryptocurrency', 'defi', 'tokenomics'],
+      supportedAssets: ['HBAR', 'BTC', 'ETH', 'USDC'],
+      feeStructure: {
+        consultationFee: 10,
+        currency: 'HBAR',
+        subscriptionOptions: [
+          { name: 'Basic', price: 50, period: 'monthly' },
+          { name: 'Premium', price: 500, period: 'yearly' },
+        ],
+      },
+      availabilityHours: {
+        monday: '09:00-17:00',
+        tuesday: '09:00-17:00',
+        wednesday: '09:00-17:00',
+        thursday: '09:00-17:00',
+        friday: '09:00-17:00',
+      },
+      responseTime: '< 60 seconds',
+      supportedLanguages: ['en', 'es', 'fr', 'ja'],
     },
-    location: {
-      country: 'United States',
-      city: 'San Francisco',
-      address: '123 Blockchain Street',
-    },
-  },
-});
+  }
+);
 ```
-
-## Browser Compatibility
-
-HCS-11 client is compatible with all modern browsers when used with appropriate wallet signers:
-
-- Chrome (version 80+)
-- Firefox (version 75+)
-- Safari (version 13.1+)
-- Edge (version 80+)

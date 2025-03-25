@@ -4,278 +4,216 @@ sidebar_position: 7
 
 # Utilities and Services
 
-The Standards SDK includes a collection of utility functions and service integrations that provide essential tools for working with the Hedera network. These components simplify common tasks and offer consistent interfaces for interacting with Hedera's services.
+The Standards SDK includes several utility classes and services that provide essential functionality across the SDK components.
 
-## Utilities
+## Mirror Node Service
 
-The Utilities module includes helper functions and tools for various SDK tasks.
+The `HederaMirrorNode` class provides a streamlined interface for interacting with Hedera Mirror Nodes, offering methods to retrieve account information, topic messages, and pricing data.
 
-### Logger
-
-The Logger provides a consistent logging interface throughout the SDK with configurable log levels.
-
-```typescript
-import { Logger, LogLevel } from '@hashgraphonline/standards-sdk';
-
-// Create a logger instance
-const logger = Logger.getInstance({
-  module: 'MyApp',
-  level: LogLevel.DEBUG,
-  timestamps: true,
-});
-
-// Use the logger
-logger.debug('Detailed information useful for debugging');
-logger.info('General information about application operation');
-logger.warn('Warning conditions that should be addressed');
-logger.error('Error conditions that may prevent proper operation');
-```
-
-#### Configuration
-
-```typescript
-interface LoggerOptions {
-  module?: string; // Module name prefix for log messages
-  level?: LogLevel; // Log level (DEBUG, INFO, WARN, ERROR)
-  timestamps?: boolean; // Whether to include timestamps in log messages
-  callback?: LogCallback; // Optional callback for custom log handling
-}
-
-enum LogLevel {
-  DEBUG = 0,
-  INFO = 1,
-  WARN = 2,
-  ERROR = 3,
-}
-
-type LogCallback = (level: LogLevel, message: string, meta?: any) => void;
-```
-
-#### Singleton Pattern
-
-The Logger uses a singleton pattern to ensure consistent logging across your application:
-
-```typescript
-// Both loggers reference the same instance
-const logger1 = Logger.getInstance({ module: 'MyApp' });
-const logger2 = Logger.getInstance({ module: 'MyApp' });
-
-// To create isolated logger instances
-const customLogger = new Logger({
-  module: 'CustomLogger',
-  level: LogLevel.INFO,
-});
-```
-
-### Topic Fee Utilities
-
-Functions for working with topic fees and exempt keys:
-
-```typescript
-import { accountIdsToExemptKeys } from '@hashgraphonline/standards-sdk';
-
-// Convert account IDs to public keys for fee exemption
-async function setupFeeExemptions(accountIds) {
-  const network = 'testnet';
-  const logger = Logger.getInstance({ module: 'FeeSetup' });
-
-  const exemptKeys = await accountIdsToExemptKeys(accountIds, network, logger);
-
-  console.log(`Generated ${exemptKeys.length} exempt keys`);
-  return exemptKeys;
-}
-
-// Usage in topic creation
-const createTopicWithExemptions = async (client, adminKey, accountIds) => {
-  const exemptKeys = await setupFeeExemptions(accountIds);
-
-  const transaction = new TopicCreateTransaction()
-    .setAdminKey(adminKey)
-    .setTopicMemo('Topic with fee exemptions')
-    .setFeeExemptSubmitterList(exemptKeys);
-
-  return transaction.execute(client);
-};
-```
-
-## Services
-
-The Services module provides integrations with Hedera network services, primarily focusing on Mirror Node interaction.
-
-### Hedera Mirror Node
-
-The Mirror Node service enables interaction with Hedera's mirror nodes for retrieving network data:
+### Initialization
 
 ```typescript
 import { HederaMirrorNode } from '@hashgraphonline/standards-sdk';
+import { Logger } from '@hashgraphonline/standards-sdk';
 
-// Initialize the mirror node client
-const mirrorNode = new HederaMirrorNode('mainnet');
+const logger = new Logger({ module: 'MyApp', level: 'info' });
+const mirrorNode = new HederaMirrorNode('testnet', logger);
+```
 
-// Retrieve an account's public key
-async function getAccountKey(accountId) {
-  try {
-    const publicKey = await mirrorNode.getPublicKey(accountId);
-    console.log('Account public key:', publicKey.toString());
-    return publicKey;
-  } catch (error) {
-    console.error('Failed to retrieve public key:', error);
-    throw error;
-  }
-}
+### Account Information
+
+Retrieve account information, including balances:
+
+```typescript
+// Get account details including balance
+const accountInfo = await mirrorNode.requestAccount('0.0.123456');
+console.log(
+  'Account balance:',
+  accountInfo.balance.balance / 100_000_000,
+  'HBAR'
+);
 
 // Get account memo
-async function getAccountMemo(accountId) {
-  const memo = await mirrorNode.getAccountMemo(accountId);
-  if (memo) {
-    console.log('Account memo:', memo);
-    return memo;
-  } else {
-    console.log('Account has no memo set');
-    return null;
-  }
-}
+const memo = await mirrorNode.getAccountMemo('0.0.123456');
+console.log('Account memo:', memo);
+
+// Get account public key
+const publicKey = await mirrorNode.getPublicKey('0.0.123456');
+console.log('Public key:', publicKey.toString());
 ```
 
-#### Topic Information
+### Topic Information
 
-Retrieve information about HCS topics:
+Retrieve topic information and messages:
 
 ```typescript
-// Get topic information
-async function getTopicDetails(topicId) {
-  try {
-    const topicInfo = await mirrorNode.getTopicInfo(topicId);
-
-    console.log('Topic Info:');
-    console.log('- Admin key:', topicInfo.admin_key?._type);
-    console.log('- Auto renew account:', topicInfo.auto_renew_account);
-    console.log('- Created:', topicInfo.created_timestamp);
-    console.log('- Memo:', topicInfo.memo);
-
-    return topicInfo;
-  } catch (error) {
-    console.error(`Failed to get info for topic ${topicId}:`, error);
-    throw error;
-  }
-}
+// Get topic info
+const topicInfo = await mirrorNode.getTopicInfo('0.0.123456');
+console.log('Topic memo:', topicInfo.memo);
 
 // Get topic fees
-async function getTopicFees(topicId) {
-  const fees = await mirrorNode.getTopicFees(topicId);
+const fees = await mirrorNode.getTopicFees('0.0.123456');
+console.log('Topic fees:', fees);
 
-  if (fees) {
-    console.log('Topic fees:');
-    if (fees.fixed_fees.length > 0) {
-      fees.fixed_fees.forEach((fee, index) => {
-        console.log(`Fee ${index + 1}:`);
-        console.log(`- Amount: ${fee.amount}`);
-        console.log(`- Collector: ${fee.collector_account_id}`);
-      });
-    } else {
-      console.log('No fixed fees set');
-    }
-  } else {
-    console.log('No fee information available');
-  }
+// Get topic messages
+const messages = await mirrorNode.getTopicMessages('0.0.123456');
+console.log('Topic messages:', messages);
+```
 
-  return fees;
+### HBAR Pricing
+
+Get current HBAR price for calculating fees:
+
+```typescript
+// Get current HBAR price in USD
+const hbarPrice = await mirrorNode.getHBARPrice(new Date());
+console.log('Current HBAR price: $', hbarPrice);
+
+// Calculate cost of HBAR needed for operations
+const hbarNeeded = 5; // 5 HBAR
+console.log('Cost in USD:', hbarNeeded * hbarPrice);
+```
+
+## Logger
+
+The `Logger` class provides structured and level-based logging capabilities to help debug applications:
+
+### Basic Usage
+
+```typescript
+import { Logger } from '@hashgraphonline/standards-sdk';
+
+// Create a logger instance
+const logger = new Logger({
+  module: 'MyComponent',
+  level: 'debug', // trace, debug, info, warn, error, fatal
+});
+
+// Log at different levels
+logger.debug('Detailed information for debugging');
+logger.info('General information about application progress');
+logger.warn('Warning situations that might cause issues');
+logger.error('Error events that might still allow the application to continue');
+```
+
+### Structured Logging
+
+The logger supports structured data in logs:
+
+```typescript
+// Log with contextual data
+logger.info('User authentication successful', {
+  userId: '12345',
+  loginTime: new Date().toISOString(),
+  ipAddress: '192.168.1.1',
+});
+
+// Error logging with details
+try {
+  // Operation that might fail
+} catch (error) {
+  logger.error('Failed to process transaction', {
+    transactionId: 'tx-12345',
+    error: error.message,
+    stack: error.stack,
+  });
 }
 ```
 
-#### Topic Messages
+### Singleton Pattern
 
-Retrieve and process messages from a topic:
+The logger supports a singleton pattern for consistent logging across modules:
 
 ```typescript
-// Get all messages from a topic
-async function getTopicMessages(topicId) {
-  try {
-    const messages = await mirrorNode.getTopicMessages(topicId);
+// In module 1
+const logger1 = Logger.getInstance({ module: 'Module1', level: 'info' });
 
-    console.log(`Retrieved ${messages.length} messages from topic ${topicId}`);
+// In module 2
+const logger2 = Logger.getInstance({ module: 'Module2' });
 
-    // Process messages
-    messages.forEach((message, index) => {
-      console.log(`Message ${index + 1}:`);
-      console.log(`- Sequence: ${message.sequence_number}`);
-      console.log(`- Timestamp: ${message.consensus_timestamp}`);
-      console.log(`- Payer: ${message.payer_account_id}`);
-
-      try {
-        // Try to parse as JSON
-        const content = JSON.parse(message.message);
-        console.log('- Content (JSON):', content);
-      } catch {
-        // If not JSON, treat as plain text
-        console.log('- Content (Text):', message.message);
-      }
-    });
-
-    return messages;
-  } catch (error) {
-    console.error(`Failed to retrieve messages for topic ${topicId}:`, error);
-    throw error;
-  }
-}
+// Same logger instance is used and can be configured once
 ```
 
-#### Access Control Checking
+## Progress Reporter
 
-Verify if a public key has access to a key list:
+The `ProgressReporter` class provides a standardized way to report progress for long-running operations:
+
+### Basic Usage
 
 ```typescript
-// Check if a user has access to a key list
-async function checkUserAccess(keyListBytes, userPublicKey) {
-  try {
-    const hasAccess = await mirrorNode.checkKeyListAccess(
-      Buffer.from(keyListBytes),
-      userPublicKey
-    );
+import { ProgressReporter } from '@hashgraphonline/standards-sdk';
 
-    if (hasAccess) {
-      console.log('User has access to the key list');
-    } else {
-      console.log('User does not have access to the key list');
-    }
+// Create a progress reporter
+const reporter = new ProgressReporter({
+  module: 'FileUpload',
+  callback: (data) => {
+    console.log(`${data.stage}: ${data.message} (${data.progressPercent}%)`);
+    // Update UI with progress
+    updateProgressBar(data.progressPercent);
+  },
+  logger: myLogger, // Optional
+});
 
-    return hasAccess;
-  } catch (error) {
-    console.error('Error checking key list access:', error);
-    throw error;
-  }
+// Report progress stages
+reporter.preparing('Preparing file upload', 0);
+reporter.submitting('Uploading file to server', 25);
+reporter.confirming('Verifying upload integrity', 75);
+reporter.completed('File upload complete');
+
+// Or report progress manually
+reporter.report({
+  stage: 'processing',
+  message: 'Analyzing file contents',
+  progressPercent: 50,
+  details: { fileSize: '2.5MB', fileType: 'image/jpeg' },
+});
+```
+
+### Sub-Progress Tracking
+
+Track progress of sub-tasks with percentage scaling:
+
+```typescript
+// Create main progress reporter
+const mainReporter = new ProgressReporter({
+  module: 'Registration',
+  callback: updateMainProgressUI,
+});
+
+// Create sub-reporter for a specific phase (20-50% of main progress)
+const profileProgress = mainReporter.createSubProgress({
+  minPercent: 20,
+  maxPercent: 50,
+  logPrefix: 'Profile',
+});
+
+// Sub-reporter percentages are automatically scaled
+profileProgress.preparing('Uploading profile picture', 0); // Reports 20% on main
+profileProgress.submitting('Processing profile', 50); // Reports 35% on main
+profileProgress.completed('Profile completed'); // Reports 50% on main
+```
+
+### Error Handling
+
+Report failures with the progress reporter:
+
+```typescript
+try {
+  // Long-running operation
+  reporter.preparing('Starting operation', 0);
+
+  // Simulated error
+  throw new Error('Network connection failed');
+} catch (error) {
+  // Report failure with details
+  reporter.failed(`Operation failed: ${error.message}`, {
+    error: error.message,
+    timestamp: new Date().toISOString(),
+  });
 }
 ```
 
 ## API Reference
-
-### Logger Class
-
-```typescript
-class Logger {
-  constructor(options: LoggerOptions);
-
-  static getInstance(options?: LoggerOptions): Logger;
-
-  debug(message: string, meta?: any): void;
-  info(message: string, meta?: any): void;
-  warn(message: string, meta?: any): void;
-  error(message: string, meta?: any): void;
-
-  setLevel(level: LogLevel): void;
-  getLevel(): LogLevel;
-}
-```
-
-### Topic Fee Utilities
-
-```typescript
-function accountIdsToExemptKeys(
-  accountIds: string[],
-  network: string,
-  logger?: Logger
-): Promise<PublicKey[]>;
-```
 
 ### Mirror Node Service
 
@@ -301,6 +239,42 @@ class HederaMirrorNode {
     keyBytes: Buffer,
     userPublicKey: PublicKey
   ): Promise<boolean>;
+
+  getHBARPrice(date: Date): Promise<number>;
+}
+```
+
+### Logger Class
+
+```typescript
+class Logger {
+  constructor(options: LoggerOptions);
+
+  static getInstance(options?: LoggerOptions): Logger;
+
+  debug(message: string, meta?: any): void;
+  info(message: string, meta?: any): void;
+  warn(message: string, meta?: any): void;
+  error(message: string, meta?: any): void;
+
+  setLevel(level: LogLevel): void;
+  getLevel(): LogLevel;
+}
+```
+
+### Progress Reporter
+
+```typescript
+class ProgressReporter {
+  constructor(options: ProgressReporterOptions);
+
+  preparing(stage: string, progressPercent: number): void;
+  submitting(stage: string, progressPercent: number): void;
+  confirming(stage: string, progressPercent: number): void;
+  completed(stage: string): void;
+  failed(stage: string, error: Error): void;
+  report(data: ProgressData): void;
+  createSubProgress(options: SubProgressOptions): ProgressReporter;
 }
 ```
 
@@ -354,116 +328,6 @@ function setupLogging() {
   });
 
   console.log('Logging system initialized');
-}
-```
-
-### Topic Analytics
-
-```typescript
-import { HederaMirrorNode } from '@hashgraphonline/standards-sdk';
-
-class TopicAnalytics {
-  constructor(network = 'mainnet') {
-    this.mirrorNode = new HederaMirrorNode(network);
-  }
-
-  async analyzeTopicActivity(topicId) {
-    try {
-      const messages = await this.mirrorNode.getTopicMessages(topicId);
-      const topicInfo = await this.mirrorNode.getTopicInfo(topicId);
-
-      // Basic analytics
-      const messageCount = messages.length;
-      const uniqueSenders = new Set(messages.map((m) => m.payer_account_id))
-        .size;
-
-      // Message frequency
-      const timestamps = messages.map((m) => new Date(m.consensus_timestamp));
-      const oldestMessage =
-        timestamps.length > 0
-          ? new Date(Math.min(...timestamps.map((t) => t.getTime())))
-          : null;
-      const newestMessage =
-        timestamps.length > 0
-          ? new Date(Math.max(...timestamps.map((t) => t.getTime())))
-          : null;
-
-      let avgMessagesPerDay = 0;
-      if (oldestMessage && newestMessage) {
-        const daysDiff =
-          (newestMessage.getTime() - oldestMessage.getTime()) /
-          (1000 * 60 * 60 * 24);
-        avgMessagesPerDay = messageCount / (daysDiff || 1);
-      }
-
-      // Message size analytics
-      const messageSizes = messages.map((m) => m.message.length);
-      const avgMessageSize =
-        messageSizes.reduce((sum, size) => sum + size, 0) /
-        (messageSizes.length || 1);
-      const maxMessageSize =
-        messageSizes.length > 0 ? Math.max(...messageSizes) : 0;
-
-      // Return analytics
-      return {
-        topicId,
-        topicCreated: topicInfo.created_timestamp,
-        topicMemo: topicInfo.memo,
-        messageCount,
-        uniqueSenders,
-        oldestMessage,
-        newestMessage,
-        avgMessagesPerDay: avgMessagesPerDay.toFixed(2),
-        avgMessageSize: avgMessageSize.toFixed(2),
-        maxMessageSize,
-      };
-    } catch (error) {
-      console.error(`Failed to analyze topic ${topicId}:`, error);
-      throw error;
-    }
-  }
-
-  async getTopContributors(topicId, limit = 5) {
-    try {
-      const messages = await this.mirrorNode.getTopicMessages(topicId);
-
-      // Count messages by sender
-      const senderCounts = {};
-      messages.forEach((message) => {
-        const sender = message.payer_account_id;
-        senderCounts[sender] = (senderCounts[sender] || 0) + 1;
-      });
-
-      // Sort senders by message count
-      const sortedSenders = Object.entries(senderCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, limit)
-        .map(([accountId, count]) => ({ accountId, count }));
-
-      return sortedSenders;
-    } catch (error) {
-      console.error(
-        `Failed to get top contributors for topic ${topicId}:`,
-        error
-      );
-      throw error;
-    }
-  }
-}
-
-// Usage
-async function displayTopicInsights(topicId) {
-  const analytics = new TopicAnalytics();
-
-  try {
-    const insights = await analytics.analyzeTopicActivity(topicId);
-    const contributors = await analytics.getTopContributors(topicId);
-
-    console.log('Topic Insights:', insights);
-    console.log('Top Contributors:', contributors);
-  } catch (error) {
-    console.error('Analysis failed:', error);
-  }
 }
 ```
 

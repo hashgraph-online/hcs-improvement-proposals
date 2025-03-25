@@ -15,6 +15,48 @@ The Inscribe module introduces several important concepts:
 - **Inscription Options**: Configuration settings for controlling how content is inscribed
 - **Topic IDs**: Unique identifiers for accessing inscribed content
 - **Hashinals**: NFT-like digital artifacts with on-chain metadata
+- **Progress Tracking**: Real-time monitoring of inscription status and progress
+
+## Inscription Process
+
+The following diagram illustrates the complete inscription workflow from a developer implementation perspective:
+
+```mermaid
+flowchart LR
+    User([Developer]) --> PrepContent[Prepare Content]
+    PrepContent --> CallAPI[Call inscribe API]
+
+    CallAPI --> Pending[Pending]
+    Pending --> Processing[Processing]
+
+    Processing -->|Success| Completed[Completed]
+    Processing -->|Error| Failed[Failed]
+
+    Completed --> TopicID[Get Topic ID]
+    Failed --> ErrorMsg[Error Details]
+
+    classDef user fill:#f9f9f9,stroke:#333,stroke-width:1px
+    classDef action fill:#d4f1f9,stroke:#333,stroke-width:1px
+    classDef state fill:#ffe6cc,stroke:#333,stroke-width:1px
+    classDef success fill:#d5f5e3,stroke:#333,stroke-width:1px
+    classDef error fill:#f9d6d5,stroke:#333,stroke-width:1px
+
+    class User user
+    class PrepContent,CallAPI action
+    class Pending,Processing state
+    class Completed,TopicID success
+    class Failed,ErrorMsg error
+```
+
+This diagram illustrates the core inscription flow:
+
+1. The developer prepares content (text, file, URL, or buffer)
+2. They call the inscribe API
+3. The inscription enters the "pending" state while being submitted
+4. It transitions to "processing" as the network handles the request
+5. Finally, it either completes successfully (returning a Topic ID) or fails with an error
+
+The progress callback reports the current state throughout this process, allowing applications to provide appropriate feedback to users.
 
 ## Getting Started
 
@@ -144,6 +186,62 @@ console.log('Buffer inscription successful!');
 console.log('Topic ID:', bufferResult.inscription.topic_id);
 ```
 
+## Progress Tracking
+
+The Inscribe module now supports real-time progress tracking during the inscription process, which is particularly useful for large files and user interfaces:
+
+```typescript
+// Track inscription progress
+const result = await inscribe(
+  {
+    type: 'file',
+    path: './path/to/large-document.pdf',
+  },
+  clientConfig,
+  {
+    ...options,
+    waitForConfirmation: true,
+    progressCallback: (progressData) => {
+      // progressData contains information about the inscription process
+      const { stage, message, progressPercent, details } = progressData;
+
+      console.log(`[${stage}] ${message} - ${progressPercent.toFixed(1)}%`);
+
+      // Update UI with progress information
+      updateProgressBar(progressPercent);
+      updateStatusText(message);
+
+      // Handle different stages
+      switch (stage) {
+        case 'pending':
+          // Initial submission and waiting phase
+          console.log('Inscription has been submitted and is pending');
+          break;
+        case 'processing':
+          // Network is processing the inscription
+          console.log('Network is processing the inscription');
+          break;
+        case 'completed':
+          // Inscription is complete
+          console.log('Inscription completed successfully');
+          break;
+        case 'failed':
+          // Inscription failed
+          console.log('Inscription failed:', details?.error);
+          break;
+      }
+    },
+  }
+);
+```
+
+The progress callback provides the following information:
+
+- **stage**: Current stage of the inscription process ('pending', 'processing', 'completed', or 'failed')
+- **message**: Human-readable description of the current status
+- **progressPercent**: Overall progress as a percentage (0-100)
+- **details**: Additional information such as error messages or technical details
+
 ## Inscription Options
 
 The inscribe function supports a variety of options to control the inscription process:
@@ -170,6 +268,13 @@ const advancedOptions = {
   waitForConfirmation: true,
   waitMaxAttempts: 30,
   waitIntervalMs: 5000,
+
+  // Progress tracking
+  progressCallback: (progressData) => {
+    console.log(
+      `Progress: ${progressData.progressPercent}% - ${progressData.message}`
+    );
+  },
 
   // Logging options
   logging: {
@@ -227,6 +332,11 @@ const hashinalResult = await inscribe(
       },
     },
     waitForConfirmation: true,
+    progressCallback: (progressData) => {
+      console.log(
+        `Hashinal creation: ${progressData.progressPercent}% - ${progressData.message}`
+      );
+    },
   }
 );
 
@@ -257,6 +367,9 @@ async function inscribeWithWallet(signer, content) {
         name: 'Wallet-Created Inscription',
         description: 'Created using a connected wallet',
       },
+      progressCallback: (progressData) => {
+        updateUserInterface(progressData);
+      },
     }
   );
 
@@ -268,8 +381,28 @@ document
   .getElementById('inscribe-button')
   .addEventListener('click', async () => {
     const content = document.getElementById('content-input').value;
+    const progressBar = document.getElementById('progress-bar');
+    const statusText = document.getElementById('status-text');
+
+    function updateUserInterface(progressData) {
+      // Update progress bar
+      progressBar.value = progressData.progressPercent;
+      progressBar.max = 100;
+
+      // Update status text
+      statusText.textContent = `${progressData.message} (${Math.round(
+        progressData.progressPercent
+      )}%)`;
+
+      // Update status class based on stage
+      statusText.className = `status-${progressData.stage}`;
+    }
 
     try {
+      // Show progress elements
+      progressBar.style.display = 'block';
+      statusText.style.display = 'block';
+
       // Get signer from your wallet connection
       const signer = await yourWalletProvider.getSigner();
 
@@ -285,6 +418,9 @@ document
       document.getElementById(
         'result'
       ).textContent = `Inscription failed: ${error.message}`;
+
+      statusText.textContent = `Error: ${error.message}`;
+      statusText.className = 'status-failed';
     }
   });
 ```
@@ -384,12 +520,20 @@ interface InscriptionOptions {
   waitForConfirmation?: boolean;
   waitMaxAttempts?: number;
   waitIntervalMs?: number;
+  progressCallback?: (progressData: ProgressData) => void;
   logging?: LoggerOptions;
   metadata?: Record<string, unknown>;
   tags?: string[];
   chunkSize?: number;
   mode?: 'file' | 'upload' | 'hashinal' | 'hashinal-collection';
   jsonFileURL?: string;
+}
+
+interface ProgressData {
+  stage: 'pending' | 'processing' | 'completed' | 'failed';
+  message: string;
+  progressPercent: number;
+  details?: Record<string, any>;
 }
 
 interface HashinalInscriptionOptions extends InscriptionOptions {
@@ -439,171 +583,175 @@ interface RetrievedInscriptionResult {
 
 ## Integration Examples
 
-### File Upload UI
+### Progress Tracking UI
 
-```typescript
+Here's a complete example of a React component that uses progress tracking:
+
+```tsx
+import React, { useState, useRef } from 'react';
 import { inscribeWithSigner } from '@hashgraphonline/standards-sdk';
 
-class InscriptionUploader {
-  constructor(signer) {
-    this.signer = signer;
-    this.fileInput = document.getElementById('file-input');
-    this.uploadButton = document.getElementById('upload-button');
-    this.resultDiv = document.getElementById('result');
+const FileUploader = ({ signer }) => {
+  const [file, setFile] = useState(null);
+  const [status, setStatus] = useState('idle');
+  const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState('');
+  const [result, setResult] = useState(null);
+  const fileInputRef = useRef(null);
 
-    this.uploadButton.addEventListener('click', this.handleUpload.bind(this));
-  }
-
-  async handleUpload() {
-    if (!this.fileInput.files || this.fileInput.files.length === 0) {
-      this.resultDiv.textContent = 'Please select a file to upload';
-      return;
+  const handleFileChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0]);
+      setStatus('ready');
+      setProgress(0);
+      setMessage('File selected');
+      setResult(null);
     }
+  };
 
-    const file = this.fileInput.files[0];
-    const reader = new FileReader();
+  const handleUpload = async () => {
+    if (!file) return;
 
-    reader.onload = async (e) => {
-      try {
-        this.resultDiv.textContent = 'Inscribing file...';
+    try {
+      setStatus('uploading');
+      setProgress(0);
+      setMessage('Starting inscription...');
 
-        const result = await inscribeWithSigner(
-          {
-            type: 'buffer',
-            buffer: e.target.result,
-            fileName: file.name,
-            mimeType: file.type,
-          },
-          this.signer,
-          {
-            mode: 'file',
-            waitForConfirmation: true,
-            metadata: {
-              name: file.name,
-              description: 'Uploaded through the web interface',
-              fileSize: file.size,
-              fileType: file.type,
+      const reader = new FileReader();
+
+      reader.onload = async (e) => {
+        try {
+          const result = await inscribeWithSigner(
+            {
+              type: 'buffer',
+              buffer: e.target.result,
+              fileName: file.name,
+              mimeType: file.type,
             },
+            signer,
+            {
+              mode: 'file',
+              waitForConfirmation: true,
+              metadata: {
+                name: file.name,
+                description: 'Uploaded file',
+                fileSize: file.size,
+                fileType: file.type,
+              },
+              progressCallback: (progressData) => {
+                setProgress(progressData.progressPercent);
+                setMessage(progressData.message);
+                setStatus(progressData.stage);
+              },
+            }
+          );
+
+          setResult(result);
+          setStatus('completed');
+
+          // Reset file selection
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
           }
-        );
-
-        this.resultDiv.textContent = `File inscribed successfully! Topic ID: ${result.inscription.topic_id}`;
-      } catch (error) {
-        this.resultDiv.textContent = `Error: ${error.message}`;
-      }
-    };
-
-    reader.readAsArrayBuffer(file);
-  }
-}
-
-// Usage
-async function initializeUploader() {
-  const signer = await yourWalletProvider.getSigner();
-  new InscriptionUploader(signer);
-}
-
-window.addEventListener('DOMContentLoaded', initializeUploader);
-```
-
-### Content Management System Integration
-
-```typescript
-import { inscribe, retrieveInscription } from '@hashgraphonline/standards-sdk';
-import fs from 'fs';
-import path from 'path';
-
-class HeideraContentManager {
-  constructor(clientConfig) {
-    this.clientConfig = clientConfig;
-    this.contentRegistry = new Map();
-  }
-
-  async uploadContent(filePath, metadata = {}) {
-    const fileName = path.basename(filePath);
-    const fileSize = fs.statSync(filePath).size;
-    const fileType = this.getFileType(fileName);
-
-    const result = await inscribe(
-      {
-        type: 'file',
-        path: filePath,
-      },
-      this.clientConfig,
-      {
-        mode: 'file',
-        waitForConfirmation: true,
-        metadata: {
-          ...metadata,
-          fileName,
-          fileSize,
-          uploadDate: new Date().toISOString(),
-        },
-        tags: [fileType, 'content', ...Object.keys(metadata)],
-      }
-    );
-
-    const contentRecord = {
-      topicId: result.inscription.topic_id,
-      transactionId: result.result.transactionId,
-      fileName,
-      fileSize,
-      fileType,
-      metadata,
-      inscribedAt: new Date(),
-    };
-
-    this.contentRegistry.set(result.inscription.topic_id, contentRecord);
-    return contentRecord;
-  }
-
-  async getContent(topicId) {
-    const localRecord = this.contentRegistry.get(topicId);
-
-    if (localRecord) {
-      const fullContent = await retrieveInscription(localRecord.transactionId, {
-        network: this.clientConfig.network,
-      });
-
-      return {
-        ...localRecord,
-        content: fullContent,
+        } catch (error) {
+          setStatus('failed');
+          setMessage(`Error: ${error.message}`);
+          console.error('Inscription failed:', error);
+        }
       };
+
+      reader.onerror = () => {
+        setStatus('failed');
+        setMessage('Error reading file');
+      };
+
+      reader.readAsArrayBuffer(file);
+    } catch (error) {
+      setStatus('failed');
+      setMessage(`Error: ${error.message}`);
+      console.error('Upload process failed:', error);
     }
+  };
 
-    throw new Error(`Content with Topic ID ${topicId} not found in registry`);
-  }
+  const getStatusColor = () => {
+    switch (status) {
+      case 'completed':
+        return 'green';
+      case 'failed':
+        return 'red';
+      case 'pending':
+      case 'processing':
+        return 'blue';
+      default:
+        return 'gray';
+    }
+  };
 
-  getFileType(fileName) {
-    const ext = path.extname(fileName).toLowerCase();
-    const typeMap = {
-      '.jpg': 'image',
-      '.jpeg': 'image',
-      '.png': 'image',
-      '.gif': 'image',
-      '.pdf': 'document',
-      '.doc': 'document',
-      '.docx': 'document',
-      '.txt': 'document',
-      '.mp3': 'audio',
-      '.wav': 'audio',
-      '.mp4': 'video',
-      '.mov': 'video',
-      '.json': 'data',
-    };
+  return (
+    <div className='file-uploader'>
+      <h2>File Uploader</h2>
 
-    return typeMap[ext] || 'unknown';
-  }
-}
+      <div className='input-group'>
+        <input
+          ref={fileInputRef}
+          type='file'
+          onChange={handleFileChange}
+          disabled={status === 'uploading'}
+        />
+        <button
+          onClick={handleUpload}
+          disabled={!file || status === 'uploading'}
+        >
+          Inscribe File
+        </button>
+      </div>
+
+      {file && (
+        <div className='file-info'>
+          <p>
+            Selected file: {file.name} ({Math.round(file.size / 1024)} KB)
+          </p>
+        </div>
+      )}
+
+      {status !== 'idle' && status !== 'ready' && (
+        <div className='progress-container'>
+          <div className='progress-bar-container'>
+            <div
+              className='progress-bar'
+              style={{
+                width: `${progress}%`,
+                backgroundColor: getStatusColor(),
+              }}
+            />
+          </div>
+          <p className='status-message' style={{ color: getStatusColor() }}>
+            {message}{' '}
+            {status !== 'completed' &&
+              status !== 'failed' &&
+              `(${Math.round(progress)}%)`}
+          </p>
+        </div>
+      )}
+
+      {result && (
+        <div className='result'>
+          <h3>Inscription Successful!</h3>
+          <p>Topic ID: {result.inscription.topic_id}</p>
+          <p>Transaction ID: {result.result.transactionId}</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default FileUploader;
 ```
 
-## Browser Compatibility
+This component provides:
 
-The Inscribe module is compatible with:
-
-- Node.js (12.x and above)
-- Browser environments with appropriate polyfills and wallet connectors
-  - Chrome (80+)
-  - Firefox (75+)
-  - Safari (13.1+)
-  - Edge (80+)
+- File selection and validation
+- Visual progress indication
+- Stage-based status updates
+- Success/failure handling
+- Result display
