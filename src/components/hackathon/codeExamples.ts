@@ -1,6 +1,6 @@
 import { CodeTabItem } from './TabbedCodeBlock';
 
-export const AGENT_REGISTRATION_CODE = `import { HCS10Client, AgentBuilder, InboundTopicType, AIAgentCapability } from '@hashgraph/standards-sdk';
+export const AGENT_REGISTRATION_CODE = `import { HCS10Client, AgentBuilder, InboundTopicType, AIAgentCapability } from '@hashgraph-online/standards-sdk';
 import { PrivateKey } from '@hashgraph/sdk';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -52,7 +52,7 @@ async function registerAgent() {
 
 registerAgent();`;
 
-export const CONNECTION_HANDLING_CODE = `import { HCS10Client, FeeConfigBuilder } from '@hashgraph/standards-sdk';
+export const CONNECTION_HANDLING_CODE = `import { HCS10Client, FeeConfigBuilder } from '@hashgraph-online/standards-sdk';
 import { Client } from '@hashgraph/sdk';
 
 class AgentConnectionMonitor {
@@ -166,7 +166,7 @@ async function startMonitoring() {
 
 startMonitoring();`;
 
-export const MESSAGE_EXCHANGE_CODE = `import { HCS10Client } from '@hashgraph/standards-sdk';
+export const MESSAGE_EXCHANGE_CODE = `import { HCS10Client } from '@hashgraph-online/standards-sdk';
 import * as crypto from 'crypto';
 
 class AgentCommunicationHandler {

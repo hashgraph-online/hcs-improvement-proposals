@@ -185,11 +185,11 @@ const HeroSection: React.FC = () => {
               </PrimaryButton>
 
               <Link
-                to='/convai'
+                to='/openconvai'
                 className='px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm sm:text-base bg-hedera-green text-white hover:text-white focus:text-white active:text-white visited:text-white hover:bg-hedera-green/90 border border-hedera-green transform transition-all duration-300 flex items-center justify-center gap-2 no-underline hover:no-underline focus:no-underline active:no-underline visited:no-underline focus:outline-none focus:ring-2 focus:ring-hedera-green/50 focus:ring-offset-2 shadow-md hover:shadow-lg hover:brightness-110'
                 style={{ textDecoration: 'none' }}
               >
-                <span className='text-white'>Learn About ConvAI</span>{' '}
+                <span className='text-white'>Learn About OpenConvAI</span>{' '}
                 <FaArrowRight className='ml-1 text-xs sm:text-sm' />
               </Link>
             </div>

@@ -266,7 +266,7 @@ const ToolsTimelineSection: React.FC = () => {
       title: 'Hedera JavaScript SDK',
       description:
         'Official JavaScript SDK for interacting with the Hedera network and building Hedera-powered applications.',
-      link: 'https://github.com/hashgraph/hedera-sdk-js',
+      link: 'https://github.com/hiero-ledger/hiero-sdk-js',
       color: 'blue',
     },
     {
