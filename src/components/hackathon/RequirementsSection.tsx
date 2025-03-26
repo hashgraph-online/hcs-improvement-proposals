@@ -34,7 +34,7 @@ type Constants = {
 };
 
 const CONSTANTS: Constants = {
-  DORAHACKS_URL: 'https://dorahacks.io/hackathon/hedera',
+  DORAHACKS_URL: 'https://dorahacks.io/org/hedera',
 };
 
 const RequirementsSection: React.FC = () => {
