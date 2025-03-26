@@ -4,11 +4,16 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Hashgraph Online',
-  // tagline: 'Dinosaurs are cool',
+  tagline: 'Building the future of the internet, on-graph.',
   favicon: 'img/favicon.png',
 
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
+
   // Set the production url of your site here
-  url: 'https://hgo-website.pages.dev',
+  url: 'https://hashgraphonline.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: '/',
@@ -71,11 +76,8 @@ const config: Config = {
       style: 'dark',
       items: [
         { to: '/docs/standards/hcs-1', label: 'Standards', position: 'left' },
-        // {
-        //   to: 'https://hpm.hashgraphonline.com/',
-        //   label: 'Packages',
-        //   position: 'left',
-        // },
+        { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
+        { to: '/hackathon', label: 'Agents Hackathon', position: 'left' },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
@@ -144,6 +146,7 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   plugins: [
+    '@docusaurus/plugin-ideal-image',
     async function myPlugin(context, options) {
       return {
         name: 'docusaurus-tailwindcss',
@@ -155,6 +158,17 @@ const config: Config = {
       };
     },
     require.resolve('./injectScriptPlugin.js'),
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            to: '/openconvai',
+            from: '/convai',
+          },
+        ],
+      },
+    ],
   ],
 };
 

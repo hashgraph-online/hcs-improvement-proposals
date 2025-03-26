@@ -1,3 +1,8 @@
+---
+description: The HCS-3 standard defines a method for implementing recursion within Hedera Consensus Service, enabling more complex data structures and relationships.
+sidebar_position: 3
+---
+
 # HCS-3 Standard: Recursion within Hedera Consensus Service
 
 ## Status: Published
@@ -99,44 +104,42 @@ https://kiloscribe.com/api/hashinals-cdn/0.0.1234567?network=mainnet
 
 The following configuration variables can be detected within a script configuration file. An implementation client should seek to use these variables to provide flexibility for end-users.
 
-| **Configuration Variable** | **Description**                                                                 | **Default Value**              |
-|----------------------------|---------------------------------------------------------------------------------|--------------------------------|
-| `cdnUrl`                   | The base URL for the CDN where resources are loaded.                             | `https://kiloscribe.com/api/hashinals-cdn/` |
-| `network`                  | Specifies the Hedera network, such as `mainnet` or `testnet`.                    | `mainnet`                      |
-| `retryAttempts`            | Number of retry attempts for failed resource fetches.                            | `3`                            |
-| `retryBackoff`             | Time in milliseconds between retry attempts, with exponential backoff.           | `300`                          |
-| `debug`                    | Toggles debug logging.                                                           | `false`                        |
-| `showLoadingIndicator`     | If set to true, displays loading status in the console.                          | `false`                        |
-| `loadingCallbackName`      | The name of the global function to call when the loading status changes.          | `null`                         |
-
+| **Configuration Variable** | **Description**                                                          | **Default Value**                           |
+| -------------------------- | ------------------------------------------------------------------------ | ------------------------------------------- |
+| `cdnUrl`                   | The base URL for the CDN where resources are loaded.                     | `https://kiloscribe.com/api/hashinals-cdn/` |
+| `network`                  | Specifies the Hedera network, such as `mainnet` or `testnet`.            | `mainnet`                                   |
+| `retryAttempts`            | Number of retry attempts for failed resource fetches.                    | `3`                                         |
+| `retryBackoff`             | Time in milliseconds between retry attempts, with exponential backoff.   | `300`                                       |
+| `debug`                    | Toggles debug logging.                                                   | `false`                                     |
+| `showLoadingIndicator`     | If set to true, displays loading status in the console.                  | `false`                                     |
+| `loadingCallbackName`      | The name of the global function to call when the loading status changes. | `null`                                      |
 
 Example script:
 
 ```html
- <script
-      data-hcs-config
-      data-hcs-cdn-url="https://kiloscribe.com/api/hashinals-cdn/"
-      data-hcs-network="mainnet"
-      data-hcs-debug="true"
-      data-hcs-retry-attempts="5"
-      data-hcs-retry-backoff="500"
-      data-hcs-show-loading-indicator="true"
-      data-hcs-loading-callback-name="setLoadingIndicator"
-    ></script>
+<script
+  data-hcs-config
+  data-hcs-cdn-url="https://kiloscribe.com/api/hashinals-cdn/"
+  data-hcs-network="mainnet"
+  data-hcs-debug="true"
+  data-hcs-retry-attempts="5"
+  data-hcs-retry-backoff="500"
+  data-hcs-show-loading-indicator="true"
+  data-hcs-loading-callback-name="setLoadingIndicator"
+></script>
 ```
 
 ### Data Attributes
 
-To ensure proper loading and execution of resources, the following data attributes are used in HTML elements. 
+To ensure proper loading and execution of resources, the following data attributes are used in HTML elements.
 
-| **Attribute**        | **Description**                                                                 | **Default Value**   |
-|----------------------|---------------------------------------------------------------------------------|---------------------|
-| `data-src`           | Specifies the HCS URL to load the resource from.                                 | `null`              |
-| `data-script-id`     | A unique identifier for the script or resource being loaded.                     | `null`              |
-| `data-required`      | Marks the resource as required, causing the process to halt if it fails to load. | `false`             |
-| `data-load-order`    | Specifies the load order for resources, ensuring proper sequence.                | `undefined` (loads last if not specified) |
-| `data-network`       | Overrides the default network configuration for specific resources.              | `mainnet`           |
-
+| **Attribute**     | **Description**                                                                  | **Default Value**                         |
+| ----------------- | -------------------------------------------------------------------------------- | ----------------------------------------- |
+| `data-src`        | Specifies the HCS URL to load the resource from.                                 | `null`                                    |
+| `data-script-id`  | A unique identifier for the script or resource being loaded.                     | `null`                                    |
+| `data-required`   | Marks the resource as required, causing the process to halt if it fails to load. | `false`                                   |
+| `data-load-order` | Specifies the load order for resources, ensuring proper sequence.                | `undefined` (loads last if not specified) |
+| `data-network`    | Overrides the default network configuration for specific resources.              | `mainnet`                                 |
 
 ## Examples
 
@@ -172,11 +175,7 @@ This link tag loads a CSS file (NES.css) from the specified HCS topic, set to lo
 ### Image
 
 ```html
-<img
-  data-src="hcs://1/0.0.6529019"
-  alt="Hedera Logo"
-  data-load-order="3"
-/>
+<img data-src="hcs://1/0.0.6529019" alt="Hedera Logo" data-load-order="3" />
 ```
 
 This img tag loads an image from the specified HCS topic, set to load third.
@@ -210,11 +209,7 @@ This script tag loads a JSON data file from the specified HCS topic, set to load
 ### Audio
 
 ```html
-<audio
-  data-src="hcs://1/0.0.6660001"
-  data-load-order="6"
-  controls
-></audio>
+<audio data-src="hcs://1/0.0.6660001" data-load-order="6" controls></audio>
 ```
 
 This audio tag loads an audio file from the specified HCS topic, set to load sixth.
