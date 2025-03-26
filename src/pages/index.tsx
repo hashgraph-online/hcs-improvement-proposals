@@ -17,6 +17,9 @@ import {
   FaVoteYea,
   FaRocket,
   FaMagic,
+  FaPalette,
+  FaRobot,
+  FaUserCircle,
 } from 'react-icons/fa';
 import Link from '@docusaurus/Link';
 import UseCaseSection from '../components/UseCaseSection';
@@ -466,12 +469,39 @@ const StandardsSection: React.FC = () => {
             )}
           />
           <StandardCard
+            icon={<FaPalette className='text-4xl text-indigo-400' />}
+            title='HCS-7'
+            description='Create Smart Hashinals with dynamic metadata that automatically updates based on smart contract state using WASM processing.'
+            link='/docs/standards/hcs-7'
+            relatedTools={tooling.filter(
+              (tool) => tool.relatedStandard === 'HCS-7'
+            )}
+          />
+          <StandardCard
             icon={<FaVoteYea className='text-4xl text-red-400' />}
             title='HCS-8'
             description='Implement secure, transparent community voting systems for fair, tamper-proof elections.'
             link='/docs/standards/hcs-8'
             relatedTools={tooling.filter(
               (tool) => tool.relatedStandard === 'HCS-8'
+            )}
+          />
+          <StandardCard
+            icon={<FaRobot className='text-4xl text-emerald-400' />}
+            title='HCS-10'
+            description='Enable AI agents to autonomously discover and communicate using Hedera Consensus Service with secure communication channels.'
+            link='/docs/standards/hcs-10'
+            relatedTools={tooling.filter(
+              (tool) => tool.relatedStandard === 'HCS-10'
+            )}
+          />
+          <StandardCard
+            icon={<FaUserCircle className='text-4xl text-amber-400' />}
+            title='HCS-11'
+            description='Standardized profile management for accounts, providing consistent identity metadata and discovery mechanisms.'
+            link='/docs/standards/hcs-11'
+            relatedTools={tooling.filter(
+              (tool) => tool.relatedStandard === 'HCS-11'
             )}
           />
           <StandardCard
