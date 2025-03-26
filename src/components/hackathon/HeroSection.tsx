@@ -177,7 +177,7 @@ const HeroSection: React.FC = () => {
 
             <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-6 sm:mb-8'>
               <PrimaryButton
-                href='https://dorahacks.io/org/hedera'
+                href='https://dorahacks.io/hackathon/hedera-ai-agents/'
                 className='z-10 px-3 py-2 text-xs sm:text-sm sm:px-4 sm:py-2.5'
                 size='sm'
               >

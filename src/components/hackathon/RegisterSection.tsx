@@ -148,7 +148,7 @@ const RegisterSection: React.FC = () => {
                   </div>
                   <div className='md:w-1/3 flex justify-center md:justify-end mt-4 md:mt-0'>
                     <PrimaryButton
-                      href='https://dorahacks.io/org/hedera'
+                      href='https://dorahacks.io/hackathon/hedera-ai-agents/'
                       icon={<FaArrowRight className='text-xs sm:text-sm' />}
                       className='w-full md:w-auto text-xs sm:text-sm'
                       size='sm'
