@@ -3,7 +3,8 @@ import { Redirect } from '@docusaurus/router';
 import Head from '@docusaurus/Head';
 
 export default function SDK() {
-  const redirectUrl = '/docs/libraries/standards-sdk/';
+  const redirectUrl =
+    'https://hashgraphonline.com/docs/libraries/standards-sdk/';
 
   useEffect(() => {
     window.location.href = redirectUrl;
