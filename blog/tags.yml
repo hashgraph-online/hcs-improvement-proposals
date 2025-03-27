@@ -42,3 +42,13 @@ blockchain:
   label: Blockchain
   permalink: /blockchain
   description: Topics covering blockchain technology and its applications
+
+sdk:
+  label: SDK
+  permalink: /sdk
+  description: Software Development Kits and developer tools
+
+open-source:
+  label: Open Source
+  permalink: /open-source
+  description: Open source projects, libraries and contributions

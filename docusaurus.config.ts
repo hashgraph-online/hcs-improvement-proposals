@@ -166,6 +166,10 @@ const config: Config = {
             to: '/openconvai',
             from: '/convai',
           },
+          {
+            to: '/sdk',
+            from: '/docs/libraries/standards-sdk',
+          },
         ],
       },
     ],
