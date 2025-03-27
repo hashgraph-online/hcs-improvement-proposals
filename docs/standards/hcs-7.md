@@ -10,8 +10,8 @@ sidebar_position: 7
 ### **Table of Contents**
 
 - [HCS-7: Smart Hashinals - A Micro-DSL for Deterministic Topic Selection](#hcs-7-smart-hashinals---a-micro-dsl-for-deterministic-topic-selection)
-    - [**Status:** Draft](#status-draft)
-    - [**Table of Contents**](#table-of-contents)
+  - [**Status:** Draft](#status-draft)
+  - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
   - [**Abstract**](#abstract)
   - [**Motivation**](#motivation)
@@ -217,7 +217,7 @@ HCS-7 uses the following topic types to manage dynamic metadata selection:
 
 #### **Topic Memo Formats**
 
-Each topic type uses a specific memo format in its HCS topic creation transaction to indicate its purpose and configuration. For a comprehensive overview of topic memos across all HCS standards, see the [Topic Memos](../../definitions.md#topic-memos) definition.
+Each topic type uses a specific memo format in its HCS topic creation transaction to indicate its purpose and configuration. For a comprehensive overview of topic memos across all HCS standards, see the [Topic Memos](../definitions.md#topic-memos) definition.
 
 **HCS-7 Registry Topic Memo Format**
 
