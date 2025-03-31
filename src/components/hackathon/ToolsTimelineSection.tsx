@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useInView, useScroll } from 'framer-motion';
 import {
   FaCode,
   FaRobot,
@@ -8,13 +8,11 @@ import {
   FaCalendarAlt,
   FaLaptopCode,
   FaVideo,
-  FaTrophy,
   FaFlag,
   FaHeadset,
-  FaUserFriends,
   FaGithub,
   FaBookOpen,
-  FaComments,
+  FaUserFriends,
   FaPaperPlane,
 } from 'react-icons/fa';
 import PrimaryButton from './PrimaryButton';
@@ -292,14 +290,14 @@ const ToolsTimelineSection: React.FC = () => {
   const timeline = [
     {
       icon: <FaBookOpen />,
-      date: 'April 11th, 2024',
+      date: 'March 26th, 2025',
       title: 'Registration Opens',
       description:
         'Register early for the hackathon to get access to exclusive workshops and resources.',
     },
     {
       icon: <FaHeadset />,
-      date: 'April 11th - May 2nd, 2024',
+      date: 'April 11th - May 2nd, 2025',
       title: 'Office Hours',
       description:
         'Join our office hours every Tuesday and Thursday. Times will be announced soon.',
@@ -307,28 +305,28 @@ const ToolsTimelineSection: React.FC = () => {
     },
     {
       icon: <FaFlag />,
-      date: 'April 11th, 2024',
+      date: 'April 11th, 2025',
       title: 'Hackathon Kickoff',
       description:
         'Official opening of the hackathon with introduction to the challenge, tools, and resources.',
     },
     {
       icon: <FaLaptopCode />,
-      date: 'April 11th - May 2nd, 2024',
+      date: 'April 11th - May 2nd, 2025',
       title: 'Building Phase',
       description:
         'Participants work on their projects with support from our technical mentors and AI assistants.',
     },
     {
       icon: <FaUserFriends />,
-      date: 'April 22nd, 2024',
+      date: 'April 22nd, 2025',
       title: 'Midpoint Check-in',
       description:
         'Optional progress review with mentors to receive feedback and guidance for the final stretch.',
     },
     {
       icon: <FaVideo />,
-      date: 'May 2nd, 2024',
+      date: 'May 2nd, 2025',
       title: 'Submission Deadline',
       description:
         'Final projects must be submitted by 11:59 PM EST, including code, documentation, and video demo.',
@@ -557,7 +555,6 @@ const ToolsTimelineSection: React.FC = () => {
                   title={item.title}
                   description={item.description}
                   index={index}
-                  isLast={item.isLast}
                   isHighlighted={item.isHighlighted}
                 />
               ))}
