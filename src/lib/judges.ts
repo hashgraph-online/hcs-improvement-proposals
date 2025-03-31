@@ -102,6 +102,16 @@ export const judges: Judge[] = [
     ],
   },
   {
+    name: 'Pluto',
+    role: 'CTO HashPack',
+    company: 'HashPack',
+    bio: 'Pluto is the CTO of HashPack.',
+    image: '/img/hackathon/pluto.png',
+    socials: [
+      { type: 'twitter', url: 'https://x.com/pluto_hashpack' },
+    ],
+  },
+  {
     name: 'Aegis-H',
     role: 'AI Judge',
     company: 'Hashgraph Online',

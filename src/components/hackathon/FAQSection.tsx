@@ -316,14 +316,26 @@ const FAQSection: React.FC = () => {
                 <div>🥉 Third Place: $2,500</div>
               </div>
             </div>
+            <div className='mb-4'>
+              <HackathonTypography
+                variant='subtitle1'
+                className='font-bold text-hedera-blue'
+              >
+                Hedera ElizaOS Plug-in
+              </HackathonTypography>
+              <div className='mt-2 ml-4 text-black dark:text-white'>
+                <div>🥇 First Place: $7,500</div>
+                <div>🥈 Second Place: $5,000</div>
+                <div>🥉 Third Place: $2,500</div>
+              </div>
+            </div>
 
             <div className='mb-4'>
               <HackathonTypography
                 variant='subtitle1'
                 className='font-bold text-hedera-blue'
               >
-                Best use of Hedera AgentKit and/or MCP and/or Hedera ElizaOS
-                Plug-in
+                Best use of Hedera AgentKit and/or MCP
               </HackathonTypography>
               <div className='mt-2 ml-4 text-black dark:text-white'>
                 <div>🥇 First Place: $7,500</div>
@@ -336,9 +348,9 @@ const FAQSection: React.FC = () => {
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            All winners will need to complete the HBAR Foundation's builder
-            grant process, which includes KYC verification. Prizes will be
-            distributed in HBAR cryptocurrency.
+            All winners will need to undergo a KYC process and OFAC-screening to
+            be eligible for prizes. Prizes will be distributed in HBAR
+            cryptocurrency.
           </HackathonTypography>
         </>
       ),
