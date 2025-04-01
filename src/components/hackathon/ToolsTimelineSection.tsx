@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, useInView, useScroll } from 'framer-motion';
 import {
   FaCode,
@@ -25,8 +25,9 @@ const ToolCard: React.FC<{
   link: string;
   index: number;
   isNew?: boolean;
+  id?: string;
   color: 'purple' | 'blue' | 'green';
-}> = ({ icon, title, description, link, index, isNew = false, color }) => {
+}> = ({ icon, title, description, link, index, isNew = false, color, id }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const cardInView = useInView(cardRef, { once: true, amount: 0.3 });
 
@@ -77,6 +78,7 @@ const ToolCard: React.FC<{
         transformStyle: 'preserve-3d',
         perspective: '1000px',
       }}
+      id={id}
     >
       <motion.div
         className={`h-full overflow-hidden rounded-[2rem] border border-white/10 dark:border-gray-800/50 ${colorStyle.borderHover} transition-colors duration-700 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_80px_-20px_rgba(0,0,0,0.2)]`}
@@ -233,6 +235,23 @@ const ToolsTimelineSection: React.FC = () => {
     offset: ['start end', 'end start'],
   });
 
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.commoninja.com/sdk/latest/commonninja.js';
+    script.defer = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+      const widget = document.querySelector(
+        '.commonninja_component.pid-dc86fd1a-0e8b-4491-b0e0-9d331d2dd52b'
+      );
+      if (widget) {
+        widget.remove();
+      }
+    };
+  }, []);
+
   const tools = [
     {
       icon: <FaGithub />,
@@ -297,10 +316,9 @@ const ToolsTimelineSection: React.FC = () => {
     },
     {
       icon: <FaHeadset />,
-      date: 'April 11th - May 2nd, 2025',
+      date: 'March 26th - May 2nd, 2025',
       title: 'Office Hours',
-      description:
-        'Join our office hours every Tuesday and Thursday. Times will be announced soon.',
+      description: 'Join our office hours every Tuesday and Thursday.',
       isHighlighted: true,
     },
     {
@@ -497,67 +515,40 @@ const ToolsTimelineSection: React.FC = () => {
           </div>
         </motion.div>
 
-        <div>
-          <div className='flex flex-col items-center text-center mb-24'>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className='relative mb-8'
-            >
-              <div className='relative w-24 h-24 mx-auto mb-6'>
-                <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
-                <div className='absolute inset-[6px] rounded-xl bg-[#2d84eb]/10 transform rotate-45'></div>
-                <div className='absolute inset-[12px] rounded-lg bg-[#3ec878]/10 transform rotate-45'></div>
-                <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef]'>
-                  <FaCalendarAlt />
-                </div>
-              </div>
+        <div className='mt-32' id='schedule'>
+          <HackathonTypography
+            variant='h2'
+            className='text-center mb-4'
+            as='h3'
+          >
+            Hackathon Timeline
+          </HackathonTypography>
+          <HackathonTypography
+            variant='body1'
+            color='muted'
+            className='text-center max-w-3xl mx-auto mb-16 font-light'
+          >
+            Key dates and milestones for the Hedera AI Hackathon. Stay tuned for
+            updates and detailed schedules.
+          </HackathonTypography>
 
-              <HackathonTypography
-                variant='h1'
-                className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878]'
-              >
-                Hackathon Schedule
-              </HackathonTypography>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className='max-w-2xl'
-            >
-              <HackathonTypography
-                variant='body1'
-                color='muted'
-                className='font-light'
-              >
-                Mark these important dates in your calendar to stay on track
-                throughout the hackathon. Our team provides support at every
-                stage of your build journey from registration to final
-                submission.
-              </HackathonTypography>
-            </motion.div>
-          </div>
-
-          <div className='relative max-w-5xl mx-auto'>
-            <div className='absolute left-4 sm:left-8 top-0 bottom-0 w-[1px] bg-gradient-to-b from-[#8259ef] via-[#2d84eb] to-[#3ec878] opacity-30'></div>
-
-            <div className='space-y-0'>
-              {timeline.map((item, index) => (
+          <div className='flex flex-col lg:flex-row gap-16 items-start'>
+            <div className='relative lg:w-1/2 w-full'>
+              {timeline.map((event, index) => (
                 <TimelineItem
                   key={index}
-                  icon={item.icon}
-                  date={item.date}
-                  title={item.title}
-                  description={item.description}
+                  icon={event.icon}
+                  date={event.date}
+                  title={event.title}
+                  description={event.description}
                   index={index}
-                  isHighlighted={item.isHighlighted}
+                  isLast={index === timeline.length - 1}
+                  isHighlighted={event.isHighlighted}
                 />
               ))}
+            </div>
+            <div className='lg:w-1/2 w-full lg:sticky lg:top-24'>
+              <div className='commonninja_component pid-dc86fd1a-0e8b-4491-b0e0-9d331d2dd52b'></div>
             </div>
           </div>
         </div>

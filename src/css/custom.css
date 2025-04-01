@@ -104,11 +104,32 @@
   .navbar__title {
     font-size: 1.2rem;
   }
-  
+
   .navbar__link {
     margin: 0.25rem;
     padding: 0.4rem 0.8rem;
   }
 }
 
-/* Add more custom styles as needed */
+.navbar__item.dropdown .dropdown__menu {
+  background-color: #1e3a8a;
+  border-radius: 0.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.navbar__item.dropdown .dropdown__link {
+  color: #e0e7ff;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.navbar__item.dropdown .dropdown__link:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1); /* Hover effect like main nav */
+  text-decoration: none;
+}
+
+.navbar__item.dropdown .dropdown__link--active {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+}

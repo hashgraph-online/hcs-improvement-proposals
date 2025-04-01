@@ -77,7 +77,20 @@ const config: Config = {
       items: [
         { to: '/docs/standards/hcs-1', label: 'Standards', position: 'left' },
         { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
-        { to: '/hackathon', label: 'Agents Hackathon', position: 'left' },
+        {
+          type: 'dropdown',
+          label: 'Hackathon',
+          position: 'left',
+          items: [
+            { to: '/hackathon', label: 'Overview' },
+            { to: '/hackathon#requirements', label: 'Requirements' },
+            { to: '/hackathon#tools', label: 'Tools' },
+            { to: '/hackathon#schedule', label: 'Schedule' },
+            { to: '/hackathon#judges', label: 'Judges' },
+            { to: '/hackathon#faq', label: 'FAQ' },
+            { to: '/hackathon#register', label: 'Register' },
+          ],
+        },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },

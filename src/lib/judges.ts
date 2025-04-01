@@ -27,7 +27,7 @@ export const judges: Judge[] = [
   },
   {
     name: 'Brandon Davenport',
-    role: 'Judge',
+    role: 'Dir. Communications, Hgraph',
     company: 'Hgraph',
     bio: 'Brandon Davenport is the Director of Communications at Hgraph, a company at the forefront of developing breakthrough data-focused products on the Hedera network and beyond. A recognized leader in the Hedera community, Brandon plays key roles in ecosystem-wide initiatives and has been instrumental in launching successful projects that drive innovation on the network. Based in Ottawa, Canada, Brandon is also a passionate NFT creator, musician and drummer.',
     image: '/img/hackathon/bradon-davenport.jpeg',
@@ -44,7 +44,7 @@ export const judges: Judge[] = [
   },
   {
     name: 'Brady Gentile',
-    role: 'Judge',
+    role: 'Founder, Bonzo Finance',
     company: 'Bonzo Finance Labs',
     bio: "Brady Gentile is the Co-Founder and CEO of Bonzo Finance Labs — contributing to the development of Bonzo Finance, an open source, non-custodial lending protocol based on Aave v2 deployed to the Hedera network. Brady's previous experience includes Product Marketing for blockchain, security, and distributed systems companies' Hedera, Cloudflare, and DataStax.",
     image: '/img/hackathon/brady-gentile.jpeg',
@@ -93,7 +93,7 @@ export const judges: Judge[] = [
   },
   {
     name: 'Tudor Holotescu',
-    role: 'Founder',
+    role: 'Founder, Builder Labs',
     company: 'Builder Labs',
     bio: 'Tudor is the founder of Builder Labs.',
     image: '/img/hackathon/tudor-h.jpg',
