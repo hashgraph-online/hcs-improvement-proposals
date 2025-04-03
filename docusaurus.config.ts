@@ -146,8 +146,16 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Hashgraph Online DAO LLC.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.oneLight,
+      darkTheme: prismThemes.nightOwl,
+      additionalLanguages: ['typescript', 'bash', 'json', 'jsx', 'tsx', 'yaml', 'solidity', 'markdown'],
+      magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: { start: 'highlight-start', end: 'highlight-end' },
+        },
+      ],
     },
     scripts: [
       {

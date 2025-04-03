@@ -4,45 +4,32 @@ sidebar_position: 1
 
 # Hashgraph Online Standards SDK
 
-A comprehensive implementation toolkit for Hashgraph Consensus Standards (HCS) developed by Hashgraph Online. This SDK provides developers with a unified interface to implement and interact with HCS protocols for distributed applications.
+The Hashgraph Online Standards SDK provides a complete implementation of the Hashgraph Consensus Standards (HCS) protocols, giving developers all the tools needed to build applications on Hedera.
 
-## Purpose
+## What This SDK Does
 
-The Standards SDK encapsulates implementation details of HCS protocols, enabling developers to build applications that leverage these standards without dealing with low-level protocol complexity.
+- **Implements HCS Protocols** - Provides full implementations of standards at Hashgraph Online
+- **Simplifies Complex Interactions** - Handles protocol details through clean interfaces and developer-friendly APIs
+- **Enables Cross-Platform Development** - Works across Node.js, browsers, and edge runtimes
 
-## Standards Implementation
+## Getting Started
 
-| Protocol   | Capability           | Implementation                                                     |
-| ---------- | -------------------- | ------------------------------------------------------------------ |
-| **HCS-1**  | File Data Management | Base protocol for encoding, chunking, and storing file data on HCS |
-| **HCS-3**  | Recursion            | Referenced resources with on-graph loading and verification        |
-| **HCS-7**  | Dynamic Assets       | Programmable on-graph assets with state management                 |
-| **HCS-10** | Agent Communication  | Secure peer-to-peer messaging for AI agents                        |
-| **HCS-11** | Identity Profiles    | Decentralized identity management and verification                 |
-
-## Technical Features
-
-- **Protocol Abstraction** — Implementation details hidden behind clean interfaces
-- **TypeScript Support** — Full type definitions for all protocol interactions
-- **Cross-Environment** — Works in Node.js, browsers, and edge runtimes
-- **Developer Tooling** — Utilities for common operations across standards
-- **Modular Architecture** — Use only the standards you need
-
-## Installation
+### Installation
 
 ```bash
+# Using npm
 npm install @hashgraphonline/standards-sdk
-```
 
-```bash
+# Using yarn
 yarn add @hashgraphonline/standards-sdk
-```
 
-```bash
+# Using pnpm
 pnpm add @hashgraphonline/standards-sdk
 ```
 
-## Implementation Example
+### Quick Example
+
+Here's how to inscribe text data on Hedera using the SDK:
 
 ```typescript
 import { inscribe } from '@hashgraphonline/standards-sdk';
@@ -61,28 +48,77 @@ async function inscribeText() {
     }
   );
 
-  console.log('Inscription successful!');
-  console.log('Topic ID:', result.topicId);
-  console.log('Transaction ID:', result.transactionId);
+  console.log(`Inscription successful on topic ${result.topicId}`);
+  console.log(`Transaction ID: ${result.transactionId}`);
 }
 
 inscribeText().catch(console.error);
 ```
 
-## Documentation
+## Key Capabilities
 
-| Protocol                        | Documentation                                                 |
-| ------------------------------- | ------------------------------------------------------------- |
-| **HCS-3: Recursion**            | [Technical Reference](/docs/libraries/standards-sdk/hcs-3)    |
-| **HCS-7: Dynamic Assets**       | [Technical Reference](/docs/libraries/standards-sdk/hcs-7)    |
-| **HCS-10: Agent Communication** | [Technical Reference](/docs/libraries/standards-sdk/hcs-10)   |
-| **HCS-11: Identity Management** | [Technical Reference](/docs/libraries/standards-sdk/hcs-11)   |
-| **Inscription Tools**           | [Technical Reference](/docs/libraries/standards-sdk/inscribe) |
+### HCS-1: File Data Management
 
-## Resources
+The foundation for storing and retrieving file data on Hedera:
 
-- [Telegram Community](https://t.me/hashinals)
-- [Twitter Updates](https://twitter.com/hashgraphonline)
-- [GitHub Repository](https://github.com/hashgraph-online/standards-sdk)
+- Split large files into manageable chunks
+- Store content on Hedera with metadata
+- Retrieve and reconstruct files from the network
+
+[Learn about inscription tools →](./inscribe.md)
+
+### HCS-3: Recursion
+
+Reference and load resources across the graph:
+
+- Create references to other on-chain resources
+- Securely verify resource integrity
+- Compose complex data structures
+
+[Explore HCS-3 features →](./hcs-3.md)
+
+### HCS-7: Dynamic Assets
+
+Build programmable on-graph assets:
+
+- Create assets with state and behaviors
+- Execute state transitions securely
+- Manage asset ownership and transfers
+
+[Discover dynamic assets →](./hcs-7.md)
+
+### HCS-10: Agent Communication
+
+Enable secure AI agent communication:
+
+- Register agents on the Hedera Hashgraph
+- Establish secure communication channels
+- Exchange messages between agents
+
+[View agent communication →](./hcs-10)
+
+### HCS-11: Identity Profiles
+
+Implement decentralized identity management:
+
+- Create and manage identity profiles
+- Verify identities securely
+- Link profiles to Hedera accounts
+
+[Learn about identity management →](./hcs-11.md)
+
+## Technical Benefits
+
+- **Type Safety** - Full TypeScript support with comprehensive type definitions
+- **Modular Architecture** - Import only the components you need
+- **Consistent Interfaces** - Common patterns across all standards
+- **Developer Utilities** - Helper functions for common operations
+- **Clean Abstractions** - Implementation details hidden behind intuitive APIs
+
+## Community and Support
+
+- [Join our Telegram](https://t.me/hashinals) for community discussion
+- [Follow us on Twitter](https://twitter.com/hashgraphonline) for updates
+- [View the source code](https://github.com/hashgraph-online/standards-sdk) on GitHub
 
 ---

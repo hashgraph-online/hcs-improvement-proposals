@@ -195,7 +195,7 @@ const receipt = await sdk.transferToken(
 
 ### `createAccount(initialBalance: number)`
 
-Creates a new account on the Hedera network.
+Creates a new account on the Hedera Hashgraph.
 
 UMD Example:
 
@@ -319,7 +319,7 @@ console.log('Account balance:', balance);
 
 ### `createTopic(memo?: string, adminKey?: string, submitKey?: string)`
 
-Creates a new topic on the Hedera network.
+Creates a new topic on the Hedera Hashgraph.
 
 UMD Example:
 
@@ -355,7 +355,7 @@ console.log('New topic created:', topicId);
 
 ### `createToken(name: string, symbol: string, initialSupply: number, decimals: number, treasuryAccountId: string, adminKey: string, supplyKey: string)`
 
-Creates a new token on the Hedera network.
+Creates a new token on the Hedera Hashgraph.
 
 UMD Example:
 
@@ -471,8 +471,10 @@ Retrieves transaction details by transaction ID from the mirror node.
 UMD Example:
 
 ```javascript
-const transactionId = "0.0.123456@1234567890.000000000";
-const transaction = await window.HashinalsWalletConnectSDK.getTransaction(transactionId);
+const transactionId = '0.0.123456@1234567890.000000000';
+const transaction = await window.HashinalsWalletConnectSDK.getTransaction(
+  transactionId
+);
 console.log(transaction);
 ```
 
@@ -489,8 +491,9 @@ Retrieves transaction details by consensus timestamp from the mirror node.
 UMD Example:
 
 ```javascript
-const timestamp = "1234567890.000000000";
-const transaction = await window.HashinalsWalletConnectSDK.getTransactionByTimestamp(timestamp);
+const timestamp = '1234567890.000000000';
+const transaction =
+  await window.HashinalsWalletConnectSDK.getTransactionByTimestamp(timestamp);
 console.log(transaction);
 ```
 
@@ -507,13 +510,16 @@ Retrieves all NFTs owned by an account, with optional filtering by token ID.
 UMD Example:
 
 ```javascript
-const accountId = "0.0.123456";
+const accountId = '0.0.123456';
 const nfts = await window.HashinalsWalletConnectSDK.getAccountNFTs(accountId);
 console.log(nfts);
 
 // With token filter
-const tokenId = "0.0.789012";
-const filteredNfts = await window.HashinalsWalletConnectSDK.getAccountNFTs(accountId, tokenId);
+const tokenId = '0.0.789012';
+const filteredNfts = await window.HashinalsWalletConnectSDK.getAccountNFTs(
+  accountId,
+  tokenId
+);
 ```
 
 ESM Example:
@@ -530,11 +536,15 @@ Validates if an account owns a specific NFT by serial number and token ID.
 UMD Example:
 
 ```javascript
-const serialNumber = "1";
-const accountId = "0.0.123456";
-const tokenId = "0.0.789012";
-const nft = await window.HashinalsWalletConnectSDK.validateNFTOwnership(serialNumber, accountId, tokenId);
-console.log(nft ? "Account owns this NFT" : "Account does not own this NFT");
+const serialNumber = '1';
+const accountId = '0.0.123456';
+const tokenId = '0.0.789012';
+const nft = await window.HashinalsWalletConnectSDK.validateNFTOwnership(
+  serialNumber,
+  accountId,
+  tokenId
+);
+console.log(nft ? 'Account owns this NFT' : 'Account does not own this NFT');
 ```
 
 ESM Example:
@@ -550,10 +560,14 @@ Makes a read-only call to a smart contract on the mirror node.
 UMD Example:
 
 ```javascript
-const data = "0x..."; // Contract call data
-const fromAccount = window.HashgraphSDK.AccountId.fromString("0.0.123456");
-const contractId = window.HashgraphSDK.ContractId.fromString("0.0.789012");
-const result = await window.HashinalsWalletConnectSDK.readSmartContract(data, fromAccount, contractId);
+const data = '0x...'; // Contract call data
+const fromAccount = window.HashgraphSDK.AccountId.fromString('0.0.123456');
+const contractId = window.HashgraphSDK.ContractId.fromString('0.0.789012');
+const result = await window.HashinalsWalletConnectSDK.readSmartContract(
+  data,
+  fromAccount,
+  contractId
+);
 console.log(result);
 ```
 
@@ -562,7 +576,7 @@ ESM Example:
 ```javascript
 import { AccountId, ContractId } from '@hashgraph/sdk';
 
-const fromAccount = AccountId.fromString("0.0.123456");
-const contractId = ContractId.fromString("0.0.789012");
+const fromAccount = AccountId.fromString('0.0.123456');
+const contractId = ContractId.fromString('0.0.789012');
 const result = await sdk.readSmartContract(data, fromAccount, contractId);
 ```

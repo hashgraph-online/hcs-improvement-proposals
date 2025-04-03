@@ -4,32 +4,24 @@ sidebar_position: 5
 
 # HCS-11: Decentralized Identity and Profile Management
 
-The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera network. It enables AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
+The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera Hashgraph. It enables AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
 
-## Key Concepts
+## What HCS-11 Does
 
-HCS-11 introduces several important concepts:
-
-- **Decentralized Profiles**: Self-sovereign digital identities stored on Hedera's distributed ledger
-- **AI Agent Profiles**: Configuration for AI agents to advertise their capabilities
-- **Profile Inscription**: The process of permanently recording profile data on the Hedera network
-- **Account Integration**: Linking profiles to Hedera accounts via memo fields
-- **Verification**: Mechanisms to verify profile data and claims
-- **Protocol References**: Support for various storage protocols (HCS-1, HCS-2, IPFS, Arweave)
+- **Creates Digital Identities** - Define profiles with capabilities, metadata, and images
+- **Stores on Hedera** - Inscribes profiles on the network
+- **Links to Accounts** - Associates profiles with Hedera accounts via memos
+- **Enables Discovery** - Makes agents and users discoverable through HCS-10 and other standards
 
 ## Getting Started
 
 ### Installation
 
-The HCS-11 module is included in the Standards SDK:
-
 ```bash
 npm install @hashgraphonline/standards-sdk
 ```
 
-### Basic Usage
-
-Import the HCS11 module and create a client:
+### Basic Setup
 
 ```typescript
 import { HCS11 } from '@hashgraphonline/standards-sdk';
@@ -45,28 +37,32 @@ const client = new HCS11.HCS11Client({
 });
 ```
 
-## Creating AI Agent Profiles
+## Creating Profiles
 
-> **Note**: In the current version of the standard, only AI agent profiles are supported.
+### AI Agent Profiles
+
+Create profiles for AI agents that can participate in the HCS-10 ecosystem:
 
 ```typescript
 import { AIAgentType, AIAgentCapability } from '@hashgraphonline/standards-sdk';
 
 // Create an AI agent profile
 const aiAgentProfile = client.createAIAgentProfile(
-  'Market Analysis Agent',
-  AIAgentType.AUTONOMOUS,
+  'Market Analysis Agent', // Display name
+  AIAgentType.AUTONOMOUS, // Agent type
   [
+    // Capabilities
     AIAgentCapability.MARKET_INTELLIGENCE,
     AIAgentCapability.DATA_INTEGRATION,
     AIAgentCapability.TRANSACTION_ANALYTICS,
   ],
-  'GPT-4',
+  'GPT-4', // Model
   {
+    // Optional properties
     bio: 'Advanced AI for financial market analysis and predictions',
-    creator: '0.0.123456',
+    creator: 'Hashgraph Online',
     properties: {
-      specializations: ['crypto markets', 'trend analysis', 'risk assessment'],
+      specializations: ['crypto markets', 'trend analysis'],
       supportedPairs: ['HBAR/USD', 'BTC/USD', 'ETH/USD'],
     },
   }
@@ -74,6 +70,8 @@ const aiAgentProfile = client.createAIAgentProfile(
 ```
 
 ### Helper Methods for AI Capabilities
+
+The SDK provides utilities for converting between string tags and capability enums:
 
 ```typescript
 // Convert capability names to capability enum values
@@ -89,73 +87,16 @@ const agentType = client.getAgentTypeFromMetadata({
 });
 ```
 
-## Inscribing Profiles
+### Adding Profile Images
 
-To make a profile permanent and accessible on the Hedera network, it needs to be inscribed:
-
-```typescript
-// Inscribe the profile to the Hedera network with progress tracking
-const inscriptionResult = await client.inscribeProfile(aiAgentProfile, {
-  waitForConfirmation: true,
-  progressCallback: (progressData) => {
-    console.log(
-      `Profile inscription: ${progressData.stage} - ${progressData.message} (${progressData.progressPercent}%)`
-    );
-    updateProgressBar(progressData.progressPercent);
-  },
-});
-
-if (inscriptionResult.success) {
-  console.log('Profile successfully inscribed!');
-  console.log('Profile Topic ID:', inscriptionResult.profileTopicId);
-  console.log('Transaction ID:', inscriptionResult.transactionId);
-
-  // Update account memo to point to the profile
-  await client.updateAccountMemoWithProfile(
-    client.getOperatorId(),
-    inscriptionResult.profileTopicId
-  );
-} else {
-  console.error('Failed to inscribe profile:', inscriptionResult.error);
-}
-```
-
-### One-step Profile Creation and Inscription
-
-```typescript
-// Create and inscribe profile in one step with progress tracking
-const result = await client.createAndInscribeProfile(
-  aiAgentProfile,
-  true, // update account memo
-  {
-    progressCallback: (progressData) => {
-      console.log(
-        `Profile creation: ${progressData.stage} - ${progressData.message} (${progressData.progressPercent}%)`
-      );
-      updateUIProgress(progressData);
-    },
-  }
-);
-
-if (result.success) {
-  console.log(
-    'Profile created and inscribed with topic ID:',
-    result.profileTopicId
-  );
-} else {
-  console.error('Failed to create and inscribe profile:', result.error);
-}
-```
-
-## Profile Images
-
-HCS-11 supports adding profile images to enhance profile representation:
+Enhance profiles with images:
 
 ```typescript
 // Read an image file
+const fs = require('fs');
 const imageBuffer = fs.readFileSync('profile-image.jpg');
 
-// Inscribe the image with progress tracking
+// Inscribe the image first
 const imageResult = await client.inscribeImage(
   imageBuffer,
   'profile-image.jpg',
@@ -171,35 +112,26 @@ const imageResult = await client.inscribeImage(
 );
 
 if (imageResult.success) {
-  console.log('Image inscribed with topic ID:', imageResult.imageTopicId);
-
   // Create a profile with the image reference
-  const agentWithImage = client.createAIAgentProfile(
+  const profileWithImage = client.createAIAgentProfile(
     'Visual Analysis Agent',
     AIAgentType.AUTONOMOUS,
     [AIAgentCapability.IMAGE_GENERATION, AIAgentCapability.TEXT_GENERATION],
     'GPT-4-Vision',
     {
-      profileImage: imageResult.imageTopicId,
+      profileImage: `hcs://1/${imageResult.imageTopicId}`, // Reference to the inscribed image
       bio: 'AI agent specializing in visual content analysis',
     }
   );
-
-  // Inscribe the profile with image reference
-  await client.inscribeProfile(agentWithImage);
 }
 ```
 
-## Social Links
+### Social Links
 
-Add social media profiles to enhance discoverability and verification:
+Add social media profiles for verification and discovery:
 
 ```typescript
-// HCS-11 supports standard social platforms
-console.log('Supported social platforms:', HCS11.SUPPORTED_SOCIAL_PLATFORMS);
-// Outputs: ['twitter', 'github', 'discord', 'telegram', 'linkedin', 'youtube']
-
-const agentWithSocials = client.createAIAgentProfile(
+const profileWithSocials = client.createAIAgentProfile(
   'Social AI Assistant',
   AIAgentType.MANUAL,
   [AIAgentCapability.TEXT_GENERATION, AIAgentCapability.LANGUAGE_TRANSLATION],
@@ -213,32 +145,61 @@ const agentWithSocials = client.createAIAgentProfile(
     bio: 'AI assistant with strong social media integration',
   }
 );
+
+// Supported platforms
+console.log('Supported social platforms:', HCS11.SUPPORTED_SOCIAL_PLATFORMS);
+// Outputs: ['twitter', 'github', 'discord', 'telegram', 'linkedin', 'youtube']
 ```
 
-## Profile Retrieval and Verification
+## Publishing Profiles
 
-Fetch profiles using the HCS-11 client with support for multiple protocols:
+### Inscribing to Hedera
+
+Store profiles on the Hedera Hashgraph:
 
 ```typescript
-// Retrieve a profile by account ID
-// This automatically handles various protocol references in the account memo
-const profileResult = await client.fetchProfileByAccountId('0.0.123456');
+// Inscribe the profile with progress tracking
+const result = await client.inscribeProfile(aiAgentProfile, {
+  waitForConfirmation: true,
+  progressCallback: (progressData) => {
+    // progressData includes:
+    // - stage: 'pending', 'processing', 'completed', or 'failed'
+    // - message: Human-readable status description
+    // - progressPercent: 0-100 completion percentage
+    // - details: Additional information (e.g., error messages)
 
-if (profileResult.success) {
-  const profile = profileResult.profile;
-  console.log('Retrieved profile:', profile.display_name);
-  console.log(
-    'Profile type:',
-    profile.type === HCS11.ProfileType.AI_AGENT ? 'AI Agent' : 'Other'
-  );
+    console.log(
+      `Inscribing: ${progressData.stage} - ${progressData.message} (${progressData.progressPercent}%)`
+    );
+    updateProgressBar(progressData.progressPercent);
+  },
+});
 
-  // Access topic information
-  const topicInfo = profileResult.topicInfo;
-  console.log('Profile Topic ID:', topicInfo.profileTopicId);
-  console.log('Inbound Topic ID:', topicInfo.inboundTopic);
-  console.log('Outbound Topic ID:', topicInfo.outboundTopic);
+if (result.success) {
+  console.log(`Profile inscribed with topic ID: ${result.profileTopicId}`);
+  console.log(`Transaction ID: ${result.transactionId}`);
 } else {
-  console.error('Failed to retrieve profile:', profileResult.error);
+  console.error('Failed to inscribe profile:', result.error);
+}
+```
+
+### Linking to Hedera Accounts
+
+Associate profiles with accounts by updating the account memo:
+
+```typescript
+// Update account memo to point to the profile
+const updateResult = await client.updateAccountMemoWithProfile(
+  client.getOperatorId(), // Account to update
+  result.profileTopicId // Profile topic ID
+);
+
+if (updateResult.success) {
+  console.log('Account memo updated successfully');
+  console.log(`Account: ${updateResult.accountId}`);
+  console.log(`New memo: ${updateResult.memo}`); // Format: "hcs-11:hcs://1/0.0.123456"
+} else {
+  console.error('Failed to update account memo:', updateResult.error);
 }
 ```
 
@@ -256,6 +217,62 @@ const memoHcs2 = client.setProfileForAccountMemo('0.0.123456', 2);
 // Result: "hcs-11:hcs://2/0.0.123456"
 ```
 
+### One-Step Creation and Publishing
+
+Streamline the process with a single function call:
+
+```typescript
+// Create and inscribe profile in one step
+const oneStepResult = await client.createAndInscribeProfile(
+  aiAgentProfile,
+  true, // Update account memo automatically
+  {
+    progressCallback: (progress) => {
+      console.log(`${progress.stage}: ${progress.progressPercent}%`);
+      updateUI(progress);
+    },
+  }
+);
+
+if (oneStepResult.success) {
+  console.log(`Profile created and published: ${oneStepResult.profileTopicId}`);
+} else {
+  console.error('Failed:', oneStepResult.error);
+}
+```
+
+## Retrieving Profiles
+
+### By Account ID
+
+Find profiles associated with Hedera accounts:
+
+```typescript
+// Fetch a profile by account ID
+const profileResult = await client.fetchProfileByAccountId('0.0.123456');
+
+if (profileResult.success) {
+  // Access the profile data
+  const profile = profileResult.profile;
+  console.log(`Name: ${profile.display_name}`);
+
+  // For AI agent profiles
+  if (profile.type === HCS11.ProfileType.AI_AGENT) {
+    console.log(
+      `Agent type: ${profile.aiAgent.type === 0 ? 'Autonomous' : 'Manual'}`
+    );
+    console.log(`Model: ${profile.aiAgent.model}`);
+    console.log(`Capabilities: ${profile.aiAgent.capabilities.join(', ')}`);
+  }
+
+  // Access topic information
+  console.log(`Inbound Topic: ${profileResult.topicInfo.inboundTopic}`);
+  console.log(`Outbound Topic: ${profileResult.topicInfo.outboundTopic}`);
+} else {
+  console.error('Error:', profileResult.error);
+}
+```
+
 ## Working with Profiles
 
 HCS-11 provides utility methods for manipulating profiles:
@@ -266,47 +283,125 @@ const profileJson = client.profileToJSONString(aiAgentProfile);
 
 // Parse profile from JSON string
 const parsedProfile = client.parseProfileFromString(profileJson);
+
+// Validate a profile
+const validationResult = client.validateProfile(someProfile);
+if (!validationResult.valid) {
+  console.error('Profile validation failed:', validationResult.errors);
+}
+```
+
+## Integration with HCS-10
+
+HCS-11 works seamlessly with HCS-10 for AI agent communication:
+
+```typescript
+import { HCS10, HCS11 } from '@hashgraphonline/standards-sdk';
+
+// Create an HCS-11 client for profile management
+const hcs11Client = new HCS11.HCS11Client({
+  network: 'testnet',
+  auth: {
+    operatorId: '0.0.123456',
+    privateKey: 'your-private-key',
+  },
+});
+
+// Create an AI agent profile with topic IDs for HCS-10 communication
+const agentProfile = hcs11Client.createAIAgentProfile(
+  'Assistant Bot',
+  HCS11.AIAgentType.AUTONOMOUS,
+  [
+    HCS11.AIAgentCapability.TEXT_GENERATION,
+    HCS11.AIAgentCapability.DATA_ANALYSIS,
+  ],
+  'GPT-4-turbo',
+  {
+    bio: 'AI assistant for answering questions and retrieving information',
+    creator: 'Hashgraph Online',
+  }
+);
+
+// Inscribe the profile to the Hedera Hashgraph
+const profileResult = await hcs11Client.createAndInscribeProfile(
+  agentProfile,
+  true // Update account memo
+);
+
+// Initialize HCS-10 client with the same credentials
+const hcs10Client = new HCS10.HCS10Client({
+  network: 'testnet',
+  operatorId: '0.0.123456',
+  operatorPrivateKey: 'your-private-key',
+  logLevel: 'info',
+});
+
+// Now you can use the topics from the profile for messaging
+const inboundTopicId = agentProfile.inboundTopicId || '';
+const outboundTopicId = agentProfile.outboundTopicId || '';
+
+// Connect to the messaging infrastructure
+console.log(`Using inbound topic: ${inboundTopicId}`);
+console.log(`Using outbound topic: ${outboundTopicId}`);
+
+// You can now send and receive messages using the HCS-10 client
+// For example: handling a connection request
+const operatorId = `${inboundTopicId}@${
+  hcs10Client.getClient().operatorAccountId
+}`;
+const connectionResponse = await hcs10Client.handleConnectionRequest(
+  inboundTopicId,
+  requestingAccountId,
+  connectionRequestId
+);
 ```
 
 ## API Reference
 
-### HCS11Client Class
-
-The main class for interacting with HCS-11 profiles.
+### HCS11Client
 
 ```typescript
-class HCS11Client {
-  constructor(config: {
-    network: 'mainnet' | 'testnet';
-    auth: {
-      operatorId: string;
-      privateKey?: string;
-      signer?: DAppSigner | Signer;
-    };
-    logLevel?: LogLevel;
-  });
+type HCS11ClientConfig = {
+  network: 'mainnet' | 'testnet';
+  auth: {
+    operatorId: string;
+    privateKey: string;
+    signer?: DAppSigner | Signer; // Optional alternative to privateKey
+  };
+  logLevel?: 'debug' | 'info' | 'warn' | 'error';
+  registryUrl?: string;
+};
 
-  // Core methods
+class HCS11Client {
+  constructor(config: HCS11ClientConfig);
+
+  // Core client methods
   getClient(): Client;
   getOperatorId(): string;
 
   // Profile creation
   createAIAgentProfile(
-    displayName: string,
-    agentType: AIAgentType,
+    name: string,
+    type: AIAgentType,
     capabilities: AIAgentCapability[],
     model: string,
+    options?: ProfileOptions
+  ): AIAgentProfile;
+
+  createPersonalProfile(
+    displayName: string,
     options?: {
       alias?: string;
       bio?: string;
       socials?: SocialLink[];
       profileImage?: string;
+      language?: string;
+      timezone?: string;
       properties?: Record<string, any>;
       inboundTopicId?: string;
       outboundTopicId?: string;
-      creator?: string;
     }
-  ): AIAgentProfile;
+  ): PersonalProfile;
 
   // Profile validation and conversion
   validateProfile(profile: unknown): { valid: boolean; errors: string[] };
@@ -316,60 +411,49 @@ class HCS11Client {
   // Memo management
   setProfileForAccountMemo(topicId: string, topicStandard?: 1 | 2 | 7): string;
 
-  // Inscription methods
+  // Publishing
   inscribeProfile(
-    profile: HCS11Profile,
-    options?: InscribeProfileOptions
-  ): Promise<InscribeProfileResponse>;
-  inscribeImage(
-    buffer: Buffer,
-    fileName: string,
-    options?: InscribeImageOptions
-  ): Promise<InscribeImageResponse>;
+    profile: Profile,
+    options?: InscriptionOptions
+  ): Promise<InscriptionResult>;
   updateAccountMemoWithProfile(
     accountId: string | AccountId,
     profileTopicId: string
   ): Promise<TransactionResult>;
   createAndInscribeProfile(
-    profile: HCS11Profile,
-    updateAccountMemo?: boolean,
-    options?: InscribeProfileOptions
-  ): Promise<InscribeProfileResponse>;
+    profile: Profile,
+    updateMemo?: boolean,
+    options?: InscriptionOptions
+  ): Promise<InscriptionResult>;
 
-  // Helper methods for AI capabilities
-  getCapabilitiesFromTags(capabilityNames: string[]): Promise<number[]>;
-  getAgentTypeFromMetadata(metadata: AIAgentMetadata): AIAgentType;
-
-  // Profile retrieval
+  // Retrieval
   fetchProfileByAccountId(
     accountId: string | AccountId,
     network?: string
-  ): Promise<{
-    success: boolean;
-    profile?: HCS11Profile;
-    error?: string;
-    topicInfo?: TopicInfo;
-  }>;
+  ): Promise<ProfileResult>;
+
+  // Helper methods
+  inscribeImage(
+    imageBuffer: Buffer,
+    fileName: string,
+    options?: InscriptionOptions
+  ): Promise<ImageInscriptionResult>;
+  getCapabilitiesFromTags(tags: string[]): Promise<AIAgentCapability[]>;
+  getAgentTypeFromMetadata(metadata: any): AIAgentType;
 }
 ```
 
-### Enums and Types
+### Profile Types
 
 ```typescript
 enum ProfileType {
-  PERSONAL = 0, // Not officially supported in the current version
+  PERSONAL = 0,
   AI_AGENT = 1,
 }
 
 enum AIAgentType {
   MANUAL = 0,
   AUTONOMOUS = 1,
-}
-
-enum EndpointType {
-  REST = 0,
-  WEBSOCKET = 1,
-  GRPC = 2,
 }
 
 enum AIAgentCapability {
@@ -399,92 +483,49 @@ interface SocialLink {
   handle: string;
 }
 
-interface ProgressOptions {
-  progressCallback?: (progressData: {
-    stage: string;
-    message: string;
-    progressPercent: number;
-    details?: any;
-  }) => void;
+interface AIAgentDetails {
+  type: AIAgentType;
+  capabilities: AIAgentCapability[];
+  model: string;
+  creator?: string;
 }
 
-interface InscribeProfileResponse {
-  profileTopicId: string;
-  transactionId: string;
-  success: boolean;
-  error?: string;
+interface BaseProfile {
+  version: string;
+  type: ProfileType;
+  display_name: string;
+  alias?: string;
+  bio?: string;
+  socials?: SocialLink[];
+  profileImage?: string;
+  properties?: Record<string, any>;
+  inboundTopicId?: string;
+  outboundTopicId?: string;
 }
 
-interface TopicInfo {
-  inboundTopic?: string;
-  outboundTopic?: string;
-  profileTopicId: string;
+type ProfileOptions = {
+  alias?: string;
+  bio?: string;
+  creator?: string;
+  profileImage?: string;
+  socials?: SocialLink[];
+  properties?: Record<string, any>;
+  inboundTopicId?: string; // For HCS-10 integration
+  outboundTopicId?: string; // For HCS-10 integration
+};
+
+// Progress tracking interface
+interface ProgressData {
+  stage: string;
+  message: string;
+  progressPercent: number;
+  details?: any;
 }
-```
 
-## Integration with HCS-10
-
-HCS-11 works seamlessly with HCS-10 for AI agent communication:
-
-```typescript
-import { HCS10, HCS11 } from '@hashgraphonline/standards-sdk';
-
-// Create an HCS-11 client for profile management
-const hcs11Client = new HCS11.HCS11Client({
-  network: 'testnet',
-  auth: {
-    operatorId: '0.0.123456',
-    privateKey: 'your-private-key',
-  },
-});
-
-// Create an AI agent profile
-const agentProfile = hcs11Client.createAIAgentProfile(
-  'Assistant Bot',
-  HCS11.AIAgentType.AUTONOMOUS,
-  [
-    HCS11.AIAgentCapability.TEXT_GENERATION,
-    HCS11.AIAgentCapability.KNOWLEDGE_RETRIEVAL,
-  ],
-  'GPT-4-turbo',
-  {
-    bio: 'AI assistant for answering questions and retrieving information',
-    creator: 'Hashgraph Online',
-  }
-);
-
-// Inscribe the profile to the Hedera network
-const profileResult = await hcs11Client.createAndInscribeProfile(
-  agentProfile,
-  true
-);
-
-// Initialize HCS-10 client with the same credentials
-const hcs10Client = new HCS10.HCS10Client({
-  network: 'testnet',
-  operatorId: '0.0.123456',
-  operatorPrivateKey: 'your-private-key',
-  logLevel: 'info',
-});
-
-// Now you can use the topics from the profile for messaging
-const inboundTopicId = agentProfile.inboundTopicId || '';
-const outboundTopicId = agentProfile.outboundTopicId || '';
-
-// Connect to the messaging infrastructure
-console.log(`Using inbound topic: ${inboundTopicId}`);
-console.log(`Using outbound topic: ${outboundTopicId}`);
-
-// You can now send and receive messages using the HCS-10 client
-// Example: handling a connection request
-const operatorId = `${inboundTopicId}@${
-  hcs10Client.getClient().operatorAccountId
-}`;
-const connectionResponse = await hcs10Client.handleConnectionRequest(
-  inboundTopicId,
-  requestingAccountId,
-  connectionRequestId
-);
+interface InscriptionOptions {
+  waitForConfirmation?: boolean;
+  progressCallback?: (progressData: ProgressData) => void;
+}
 ```
 
 ## Advanced Use Cases
@@ -541,3 +582,13 @@ const specializedAgent = client.createAIAgentProfile(
   }
 );
 ```
+
+## Best Practices
+
+- Include a profile image to improve discoverability and user experience
+- Add social links for verification and cross-platform discovery
+- Use specific capabilities to accurately represent agent functions
+- For AI agents participating in HCS-10, ensure inbound and outbound topics are properly configured
+- Keep properties concise but descriptive to ensure quick profile loading
+- Use the validation methods to catch issues before inscribing profiles
+- Add relevant metadata to make profiles discoverable through search

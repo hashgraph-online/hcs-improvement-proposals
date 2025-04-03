@@ -2,37 +2,30 @@
 sidebar_position: 2
 ---
 
-# HCS-3: Recursion for Inscribed Files
+# HCS-3: Resource Recursion
 
-The HCS-3 module provides a powerful toolkit for working with recursive inscribed files on the Hedera network. It enables loading and manipulating content directly from inscription references, creating a seamless experience for content-heavy applications.
+The HCS-3 module enables applications to reference and load resources directly from the Hedera Hashgraph. It provides a seamless way to work with inscribed content through URI references, creating powerful composable applications.
 
-## Key Concepts
+## What HCS-3 Does
 
-HCS-3 introduces the concept of recursive content loading, which allows:
-
-- **Content URI Scheme**: Using the `hcs://` protocol for referencing inscribed content
-- **Automatic Recursion**: Loading nested content references automatically
-- **Cross-Origin Loading**: Accessing content across different origins securely
-- **Environment Adaptability**: Working in both Node.js and browser environments
+- **Resolves Resource References** - Loads content directly from `hcs://` URIs
+- **Handles Recursive Content** - Automatically processes nested references
+- **Simplifies Media Integration** - Specialized functions for different content types
 
 ## Getting Started
 
 ### Installation
 
-The HCS-3 module is included in the Standards SDK:
-
 ```bash
 npm install @hashgraphonline/standards-sdk
 ```
 
-### Basic Usage
-
-Import the HCS3 module and create an instance:
+### Basic Setup
 
 ```typescript
 import { HCS3 } from '@hashgraphonline/standards-sdk';
 
-// Initialize HCS-3 with configuration
+// Initialize the HCS-3 client
 const hcs = new HCS3.HCS({
   cdnUrl: 'https://kiloscribe.com/api/inscription-cdn/',
   network: 'mainnet',
@@ -42,57 +35,58 @@ const hcs = new HCS3.HCS({
 });
 ```
 
-## Loading Different Content Types
+## Loading Content
 
-HCS-3 provides specialized methods for loading different types of content:
+### Images
 
-### Loading Scripts
-
-```typescript
-// Load and execute a JavaScript file from an inscription
-await hcs.loadScript('hcs://1/0.0.123456');
-```
-
-### Loading Images
+Load images directly from inscriptions:
 
 ```typescript
-// Load an image from an inscription and insert it into a DOM element
+// Get an image reference
 const imageElement = document.getElementById('myImage');
+
+// Load the image from an inscription
 await hcs.loadImage('hcs://1/0.0.123456', imageElement);
 ```
 
-### Loading Video
+### Scripts
+
+Execute JavaScript files from inscriptions:
 
 ```typescript
-// Load a video from an inscription and insert it into a DOM element
+// Load and execute a script
+await hcs.loadScript('hcs://1/0.0.123456');
+
+// Now any functions or variables defined in that script are available
+myInscribedFunction();
+```
+
+### Media Files
+
+Easily work with various media types:
+
+```typescript
+// Load a video
 const videoElement = document.getElementById('myVideo');
 await hcs.loadVideo('hcs://1/0.0.123456', videoElement);
-```
 
-### Loading Audio
-
-```typescript
-// Load audio from an inscription and insert it into a DOM element
+// Load audio
 const audioElement = document.getElementById('myAudio');
 await hcs.loadAudio('hcs://1/0.0.123456', audioElement);
-```
 
-### Loading 3D Models (GLB)
-
-```typescript
-// Load a 3D model from an inscription and insert it into a model-viewer element
+// Load a 3D model (GLB format)
 const modelElement = document.getElementById('myModel');
 await hcs.loadGLB('hcs://1/0.0.123456', modelElement);
 ```
 
-## Advanced Usage
+## Advanced Features
 
 ### Custom Content Loaders
 
-You can create custom content loaders for specific content types:
+Create specialized loaders for specific content types:
 
 ```typescript
-// Create a custom loader for SVG files
+// Register a custom SVG loader
 hcs.registerContentLoader('svg', async (content, targetElement) => {
   if (targetElement) {
     targetElement.innerHTML = content;
@@ -100,26 +94,30 @@ hcs.registerContentLoader('svg', async (content, targetElement) => {
   return content;
 });
 
-// Use the custom loader
+// Use your custom loader
+const svgContainer = document.getElementById('mySvg');
 await hcs.loadContent('hcs://1/0.0.123456', 'svg', svgContainer);
 ```
 
-### Content Pre-loading
+### Content Preloading
 
-Pre-load content for faster access:
+Improve performance by preloading resources:
 
 ```typescript
-// Preload multiple resources
+// Preload multiple resources in parallel
 await Promise.all([
   hcs.preloadContent('hcs://1/0.0.123456'),
   hcs.preloadContent('hcs://1/0.0.789012'),
   hcs.preloadContent('hcs://1/0.0.345678'),
 ]);
+
+// The content is now cached and will load instantly when needed
+await hcs.loadImage('hcs://1/0.0.123456', imageElement);
 ```
 
 ### Error Handling
 
-Implement robust error handling for content loading:
+Implement robust error handling:
 
 ```typescript
 try {
@@ -135,38 +133,34 @@ try {
 
 ## API Reference
 
-### HCS Class
-
-The main class for working with HCS-3 recursion.
-
-#### Constructor
+### HCS Class Configuration
 
 ```typescript
-constructor(config: {
-  cdnUrl: string;
-  network: 'mainnet' | 'testnet';
-  retryAttempts?: number;
-  retryBackoff?: number;
-  debug?: boolean;
-})
+type HCSConfig = {
+  cdnUrl: string; // CDN URL for faster content loading
+  network: 'mainnet' | 'testnet'; // Hedera Hashgraph to use
+  retryAttempts?: number; // Number of retry attempts (default: 3)
+  retryBackoff?: number; // Milliseconds between retries (default: 300)
+  debug?: boolean; // Enable debug logging (default: false)
+};
 ```
 
-#### Methods
+### Core Methods
 
-| Method                                                                                  | Description                          |
-| --------------------------------------------------------------------------------------- | ------------------------------------ |
-| `loadScript(uri: string): Promise<void>`                                                | Loads and executes a JavaScript file |
-| `loadImage(uri: string, element?: HTMLImageElement): Promise<string>`                   | Loads an image file                  |
-| `loadVideo(uri: string, element?: HTMLVideoElement): Promise<string>`                   | Loads a video file                   |
-| `loadAudio(uri: string, element?: HTMLAudioElement): Promise<string>`                   | Loads an audio file                  |
-| `loadGLB(uri: string, element?: HTMLElement): Promise<string>`                          | Loads a 3D model file                |
-| `loadContent(uri: string, contentType: string, element?: HTMLElement): Promise<string>` | Generic content loader               |
-| `preloadContent(uri: string): Promise<string>`                                          | Pre-loads content without rendering  |
-| `registerContentLoader(contentType: string, loader: ContentLoaderFn): void`             | Registers a custom content loader    |
+| Method                  | Description                          | Parameters                                                |
+| ----------------------- | ------------------------------------ | --------------------------------------------------------- |
+| `loadScript`            | Loads and executes a JavaScript file | `uri: string`                                             |
+| `loadImage`             | Loads an image from an inscription   | `uri: string, element?: HTMLImageElement`                 |
+| `loadVideo`             | Loads a video from an inscription    | `uri: string, element?: HTMLVideoElement`                 |
+| `loadAudio`             | Loads audio from an inscription      | `uri: string, element?: HTMLAudioElement`                 |
+| `loadGLB`               | Loads a 3D model from an inscription | `uri: string, element?: HTMLElement`                      |
+| `loadContent`           | Generic content loader               | `uri: string, contentType: string, element?: HTMLElement` |
+| `preloadContent`        | Pre-loads content without rendering  | `uri: string`                                             |
+| `registerContentLoader` | Registers a custom content loader    | `contentType: string, loader: ContentLoaderFn`            |
 
-## Examples
+## Example Application
 
-### Web Application With HCS-3 Resources
+Here's how to build a complete web application using HCS-3 resources:
 
 ```typescript
 import { HCS3 } from '@hashgraphonline/standards-sdk';
@@ -179,35 +173,44 @@ const hcs = new HCS3.HCS({
 
 // Application initialization
 async function initApp() {
-  // Load application banner image
-  await hcs.loadImage('hcs://1/0.0.123456', document.getElementById('banner'));
+  try {
+    // Load application assets in parallel
+    await Promise.all([
+      // Banner image
+      hcs.loadImage('hcs://1/0.0.123456', document.getElementById('banner')),
 
-  // Load styling
-  await hcs.loadStylesheet('hcs://1/0.0.234567');
+      // Application styling
+      hcs.loadStylesheet('hcs://1/0.0.234567'),
 
-  // Load application logic
-  await hcs.loadScript('hcs://1/0.0.345678');
+      // 3D product model
+      hcs.loadGLB(
+        'hcs://1/0.0.456789',
+        document.getElementById('productModel')
+      ),
+    ]);
 
-  // Load 3D product model
-  await hcs.loadGLB(
-    'hcs://1/0.0.456789',
-    document.getElementById('productModel')
-  );
+    // Load application logic last (depends on UI elements)
+    await hcs.loadScript('hcs://1/0.0.345678');
 
-  console.log('Application resources loaded successfully');
+    console.log('Application ready!');
+    showUserInterface();
+  } catch (error) {
+    console.error('Failed to initialize:', error);
+    showErrorScreen();
+  }
 }
 
-// Start loading
-initApp().catch(console.error);
+// Start the application
+initApp();
 ```
 
-## Browser Compatibility
+## Browser Support
 
-HCS-3 is compatible with all modern browsers, including:
+The HCS-3 module works in all modern browsers:
 
-- Chrome (version 80+)
-- Firefox (version 75+)
-- Safari (version 13.1+)
-- Edge (version 80+)
+- Chrome 80+
+- Firefox 75+
+- Safari 13.1+
+- Edge 80+
 
-For older browsers, consider using a polyfill for Promise and fetch API support.
+For older browsers, consider using polyfills for Promise and Fetch API support.

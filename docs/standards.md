@@ -28,7 +28,7 @@ Introduces advanced methodologies for managing and interacting with Topic Regist
 
 **Status: Published**
 
-Enables recursive referencing of inscriptions within the Hedera network, standardizing resource referencing and loading.
+Enables recursive referencing of inscriptions within the Hedera Hashgraph, standardizing resource referencing and loading.
 
 ---
 
@@ -68,4 +68,4 @@ Introduces a framework to use Hedera Consensus Service (HCS) topics to manage po
 
 **Status: Published**
 
-Defines how points can be managed and audited on the Hedera network, inspired by the BRC-20 protocol on Ordinals.
+Defines how points can be managed and audited on the Hedera Hashgraph, inspired by the BRC-20 protocol on Ordinals.

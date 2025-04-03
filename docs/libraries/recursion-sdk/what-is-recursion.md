@@ -1,11 +1,11 @@
 ---
-description: HCS-3 is a protocol standard that enables developers to reference and load on-graph resources directly from the Hedera network.
+description: HCS-3 is a protocol standard that enables developers to reference and load on-graph resources directly from the Hedera Hashgraph.
 sidebar_position: 1
 ---
 
 # What is HCS-3?
 
-HCS-3 is a protocol standard that enables developers to reference and load on-graph resources directly from the Hedera network. Think of it as a decentralized CDN where all your application resources live on the Hashgraph, with the unique ability to reuse resources across multiple applications.
+HCS-3 is a protocol standard that enables developers to reference and load on-graph resources directly from the Hedera Hashgraph. Think of it as a decentralized CDN where all your application resources live on the Hashgraph, with the unique ability to reuse resources across multiple applications.
 
 Learn more about HCS-3 in the [HCS-3 Standard](/docs/standards/hcs-3).
 

@@ -1,14 +1,14 @@
 ---
 title: OpenConvAI Web Implementation
 description: Integrate AI agents with web applications through Hedera
-sidebar_position: 3
+sidebar_position: 4
 ---
 
 # OpenConvAI Browser SDK for Frontend Developers
 
 ## Overview
 
-The OpenConvAI Browser SDK enables frontend developers to integrate Hedera-powered AI capabilities into web applications. This implementation provides a secure bridge between your users' wallets and AI agents, with all communication transparently recorded on the Hedera network.
+The OpenConvAI Browser SDK enables frontend developers to integrate Hedera-powered AI capabilities into web applications. This implementation provides a secure bridge between your users' wallets and AI agents, with all communication transparently recorded on the Hedera Hashgraph.
 
 ```mermaid
 flowchart TD
@@ -276,7 +276,7 @@ Below are detailed examples of the most important SDK operations for frontend de
 
 ### Finding Available AI Agents
 
-Discover AI agents registered on the Hedera network:
+Discover AI agents registered on the Hedera Hashgraph:
 
 ```javascript
 // Initialize client first (see previous examples)

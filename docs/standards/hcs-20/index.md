@@ -1,13 +1,12 @@
 ---
-description: HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.
+description: HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera Hashgraph. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.
 ---
 
 # HCS-20 Standard: Auditable Points Standard on Hedera
 
 ### Status: Published
 
-- [HCS-20 Standard: Auditable Points Standard on Hedera](#hcs-20-standard-auditable-points-standard-on-hedera)
-      - [Authors](#authors)
+- [HCS-20 Standard: Auditable Points Standard on Hedera](#hcs-20-standard-auditable-points-standard-on-hedera) - [Authors](#authors)
   - [Solving the Auditable Points Challenge](#solving-the-auditable-points-challenge)
   - [The Role of Hedera](#the-role-of-hedera)
     - [Hedera's Main Features:](#hederas-main-features)
@@ -20,9 +19,10 @@ description: HCS-20 is a new proposed standard (created by @TurtelMoonCC & @HGra
   - [Conclusion](#conclusion)
 
 #### Authors
+
 - Patches [https://twitter.com/TMCC_Patches](https://twitter.com/TMCC_Patches)
 
-**HCS-20** is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera network. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.
+**HCS-20** is a new proposed standard (created by @TurtelMoonCC & @HGraphPunks) that defines how points can be managed and audited on the Hedera Hashgraph. It is inspired by the BRC-20 protocol on Ordinals and has extended the functionality to auditable points in addition to introducing inscriptions on Hedera / Hashinals.
 
 ## Rationale
 
@@ -40,15 +40,18 @@ The HCS-20 standard emerges as a solution to a pressing problem in the web2 and 
 ## Standard Details
 
 ## Idea
-The HCS-20 standard is designed to leverage the Hedera Consensus Service (HCS) for creating, managing, and transferring auditable ownership of points. It utilizes topic IDs on the Hedera network to record JSON-encoded transactions, providing a framework for a auditable pointing system.
+
+The HCS-20 standard is designed to leverage the Hedera Consensus Service (HCS) for creating, managing, and transferring auditable ownership of points. It utilizes topic IDs on the Hedera Hashgraph to record JSON-encoded transactions, providing a framework for a auditable pointing system.
 
 ### Private (✅ Submit Key)
+
 A topic ID with a submit key allows control of all data posted to that topic. This is great for most use cases like gaming, leaderboard points, loyalty points, etc.
 
 **Valid transaction indexing note:**
 Indexers of topic Ids with submit keys shouldn't require the payer account id to be the same as the one moving balances. Since the submit key requirement implies only authorized parties should have write access to move funds, all transfer transactions written are authorized.
 
 ### Public (❌ No Submit Key)
+
 A topic ID with no submit key allows anyone to sign and write transaction openly to the public topic Id. Creators can make their own topic ids, or can use the proposed main topic id.
 
 Benefits of using the main public topic Id is to give access to a central location of all inscriptions for HCS-20 public points where indexers don't need to index multiple topic Ids for balances.
@@ -75,16 +78,16 @@ Indexing valid balances also includes checking if the payer account id is the sa
 }
 ```
 
-| Key | Required | Description |
-|-----|----------|-------------|
-| p | Yes | Protocol identifier, specifies HCS-20 |
-| op | Yes | Operation type, here it's 'deploy' |
-| name | Yes | Name of the point, describes the asset being created |
-| tick | Yes | Unique identifier for the point, akin to a ticker symbol |
-| max | Yes | Maximum supply of the point, sets the upper limit |
-| lim | No | Limit per transaction for minting, optional |
-| metadata | No | Optional additional data related to the points (HIP-412 standard) |
-| m | No | Optional additional memo related to the operation |
+| Key      | Required | Description                                                       |
+| -------- | -------- | ----------------------------------------------------------------- |
+| p        | Yes      | Protocol identifier, specifies HCS-20                             |
+| op       | Yes      | Operation type, here it's 'deploy'                                |
+| name     | Yes      | Name of the point, describes the asset being created              |
+| tick     | Yes      | Unique identifier for the point, akin to a ticker symbol          |
+| max      | Yes      | Maximum supply of the point, sets the upper limit                 |
+| lim      | No       | Limit per transaction for minting, optional                       |
+| metadata | No       | Optional additional data related to the points (HIP-412 standard) |
+| m        | No       | Optional additional memo related to the operation                 |
 
 ### Mint Points
 
@@ -99,14 +102,14 @@ Indexing valid balances also includes checking if the payer account id is the sa
 }
 ```
 
-| Key | Required | Description |
-|-----|----------|-------------|
-| p | Yes | Protocol identifier, specifies HCS-20 |
-| op | Yes | Operation type, here it's 'mint' |
-| tick | Yes | Unique identifier of the point to be minted |
-| amt | Yes | Amount of points to mint |
-| to | Yes | Address of the recipient receiving the minted points |
-| m | No | Optional additional memo related to the operation |
+| Key  | Required | Description                                          |
+| ---- | -------- | ---------------------------------------------------- |
+| p    | Yes      | Protocol identifier, specifies HCS-20                |
+| op   | Yes      | Operation type, here it's 'mint'                     |
+| tick | Yes      | Unique identifier of the point to be minted          |
+| amt  | Yes      | Amount of points to mint                             |
+| to   | Yes      | Address of the recipient receiving the minted points |
+| m    | No       | Optional additional memo related to the operation    |
 
 ### Burn Points
 
@@ -121,14 +124,14 @@ Indexing valid balances also includes checking if the payer account id is the sa
 }
 ```
 
-| Key | Required | Description |
-|-----|----------|-------------|
-| p | Yes | Protocol identifier, specifies HCS-20 |
-| op | Yes | Operation type, here it's 'burn' |
-| tick | Yes | Unique identifier of the point to be burned |
-| amt | Yes | Amount of points to burn |
-| from | Yes | Address of the holder from whom points are being burned |
-| m | No | Optional additional memo related to the operation |
+| Key  | Required | Description                                             |
+| ---- | -------- | ------------------------------------------------------- |
+| p    | Yes      | Protocol identifier, specifies HCS-20                   |
+| op   | Yes      | Operation type, here it's 'burn'                        |
+| tick | Yes      | Unique identifier of the point to be burned             |
+| amt  | Yes      | Amount of points to burn                                |
+| from | Yes      | Address of the holder from whom points are being burned |
+| m    | No       | Optional additional memo related to the operation       |
 
 ### Transfer Points
 
@@ -144,46 +147,53 @@ Indexing valid balances also includes checking if the payer account id is the sa
 }
 ```
 
-| Key | Required | Description |
-|-----|----------|-------------|
-| p | Yes | Protocol identifier, specifies HCS-20 |
-| op | Yes | Operation type, here it's 'transfer' |
-| tick | Yes | Unique identifier of the point to be transferred |
-| amt | Yes | Amount of points to transfer |
-| from | Yes | Address of the sender |
-| to | Yes | Address of the recipient |
-| m | No | Optional additional memo related to the operation |
+| Key  | Required | Description                                       |
+| ---- | -------- | ------------------------------------------------- |
+| p    | Yes      | Protocol identifier, specifies HCS-20             |
+| op   | Yes      | Operation type, here it's 'transfer'              |
+| tick | Yes      | Unique identifier of the point to be transferred  |
+| amt  | Yes      | Amount of points to transfer                      |
+| from | Yes      | Address of the sender                             |
+| to   | Yes      | Address of the recipient                          |
+| m    | No       | Optional additional memo related to the operation |
 
 ## Field Validation
 
 ### Common Fields
+
 - **Protocol Identifier (p)**
+
   - Type: String
   - Required: Yes
   - Validation: Must be 'hcs-20', case insensitive
 
 - **Operation Type (op)**
+
   - Type: String
   - Required: Yes
   - Validation: Must be one of: 'deploy', 'mint', 'burn', 'transfer', 'register'
 
 - **Number Fields (amount, max, lim)**
+
   - Type: String representing a number
   - Length: ≤ 18 characters
   - Validation: Must be valid number, defaults to 0 if conversion fails
 
 - **Account Fields (toAddress, fromAddress, topicId)**
   - Type: String
-  - Pattern: ^(0|(?:[1-9]\d*))\.(0|(?:[1-9]\d*))\.(0|(?:[1-9]\d*))(?:-([a-z]{5}))?$
+  - Pattern: ^(0|(?:[1-9]\d*))\.(0|(?:[1-9]\d*))\.(0|(?:[1-9]\d\*))(?:-([a-z]{5}))?$
   - Note: If hyphen present, only part before is considered
 
 ### Operation-Specific Validation
+
 - **Register Operation**
+
   - Name: 1-100 characters
   - Topic ID: Uses account field validation
   - Metadata: Optional string
 
 - **Deploy Operation**
+
   - Tick: Lowercase, trimmed string
   - Name: 1-100 characters
   - Max: Number field, defaults to Infinity
@@ -195,6 +205,7 @@ Indexing valid balances also includes checking if the payer account id is the sa
   - Addresses: Account field validation
 
 ## State Calculation
+
 - Deployments initialize point contract without affecting state
 - Mints add to recipient's balance
 - Transfers adjust sender and receiver balances
