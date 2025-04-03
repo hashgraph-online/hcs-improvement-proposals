@@ -63,12 +63,13 @@ graph TD
 
 ## SDK Implementations
 
-The SDK provides two main implementations:
+The SDK provides the following implementations:
 
-1. **[Server (Node.js) SDK](./server.md)** - A full implementation for server-side applications using Node.js
-2. **[Browser SDK](./browser.md)** - A browser-compatible implementation using wallet connections
+1. **[Base Client](./base-client.md)** - Core foundation class with shared functionality for both environments
+2. **[Server (Node.js) SDK](./server.md)** - Full implementation for server-side applications using Node.js
+3. **[Browser SDK](./browser.md)** - Browser-compatible implementation using wallet connections
 
-Both implementations provide similar functionality but are optimized for their respective environments. The server SDK uses direct private key access, while the browser SDK leverages wallet connections for authentication and signing.
+Both the server and browser implementations extend the base client and provide similar functionality but are optimized for their respective environments. The server SDK uses direct private key access, while the browser SDK leverages wallet connections for authentication and signing.
 
 ## Getting Started
 

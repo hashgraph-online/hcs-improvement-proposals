@@ -17,8 +17,17 @@ npm install @hashgraphonline/hashinal-wc @walletconnect/types buffer
 Create a new file called `WalletProvider.tsx`:
 
 ```typescript
-import React, { createContext, useContext, useCallback, useState, useEffect } from 'react';
-import { HashinalsWalletConnectSDK, PrivateKey } from '@hashgraphonline/hashinal-wc';
+import React, {
+  createContext,
+  useContext,
+  useCallback,
+  useState,
+  useEffect,
+} from 'react';
+import {
+  HashinalsWalletConnectSDK,
+  PrivateKey,
+} from '@hashgraphonline/hashinal-wc';
 import { SessionTypes, SignClientTypes } from '@walletconnect/types';
 import { Buffer } from 'buffer';
 
@@ -39,7 +48,11 @@ interface WalletContextType {
   accountId: string | null;
   balance: string | null;
   isConnecting: boolean;
-  submitHCS2Message: (message: HCS2Message, topicId: string, submitKey?: string) => Promise<any>;
+  submitHCS2Message: (
+    message: HCS2Message,
+    topicId: string,
+    submitKey?: string
+  ) => Promise<any>;
   transferHBAR: (recipientId: string, amount: number) => Promise<any>;
 }
 
@@ -50,7 +63,7 @@ const APP_METADATA: SignClientTypes.Metadata = {
   name: 'Your App Name',
   description: 'Your app description',
   url: 'https://yourapp.com',
-  icons: ['https://yourapp.com/icon.png']
+  icons: ['https://yourapp.com/icon.png'],
 };
 
 export function WalletProvider({ children }: { children: React.ReactNode }) {
@@ -64,13 +77,13 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     const initSDK = async () => {
       try {
         const sdkInstance = HashinalsWalletConnectSDK.getInstance();
-        
+
         // Initialize with your project ID
         await sdkInstance.init(
           process.env.REACT_APP_WALLETCONNECT_PROJECT_ID!,
           APP_METADATA
         );
-        
+
         setSdk(sdkInstance);
 
         // Check for existing connection
@@ -93,14 +106,15 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   const connect = useCallback(async () => {
     if (!sdk) return;
-    
+
     try {
       setIsConnecting(true);
-      const { accountId: newAccountId, balance: newBalance } = await sdk.connectWallet(
-        process.env.REACT_APP_WALLETCONNECT_PROJECT_ID!,
-        APP_METADATA
-      );
-      
+      const { accountId: newAccountId, balance: newBalance } =
+        await sdk.connectWallet(
+          process.env.REACT_APP_WALLETCONNECT_PROJECT_ID!,
+          APP_METADATA
+        );
+
       setAccountId(newAccountId);
       setBalance(newBalance);
     } catch (error) {
@@ -113,7 +127,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
 
   const disconnect = useCallback(async () => {
     if (!sdk) return;
-    
+
     try {
       await sdk.disconnectWallet();
       setAccountId(null);
@@ -124,53 +138,62 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
     }
   }, [sdk]);
 
-  const submitHCS2Message = useCallback(async (
-    message: HCS2Message,
-    topicId: string, 
-    submitKey?: string
-  ) => {
-    if (!sdk) throw new Error('SDK not initialized');
-    
-    try {
-      // Validate message format
-      if (message.m && message.m.length > 500) {
-        throw new Error("Memo must not exceed 500 characters");
-      }
-      
-      if (!message.p || message.p !== 'hcs-2') {
-        throw new Error("Invalid protocol. Must be 'hcs-2'");
-      }
-      
-      // Convert message to string
-      const messageString = JSON.stringify(message);
-      
-      // If a submit key is provided, convert it to a PrivateKey object
-      const privateKey = submitKey ? PrivateKey.fromString(submitKey) : undefined;
-      
-      const receipt = await sdk.submitMessageToTopic(topicId, messageString, privateKey);
-      
-      console.log("HCS-2 message submitted successfully!");
-      console.log("Transaction ID:", receipt.transactionId.toString());
-      
-      return receipt;
-    } catch (error) {
-      console.error("Error submitting HCS-2 message:", error);
-      throw error;
-    }
-  }, [sdk]);
+  const submitHCS2Message = useCallback(
+    async (message: HCS2Message, topicId: string, submitKey?: string) => {
+      if (!sdk) throw new Error('SDK not initialized');
 
-  const transferHBAR = useCallback(async (recipientId: string, amount: number) => {
-    if (!sdk || !accountId) throw new Error('SDK not initialized or wallet not connected');
-    
-    try {
-      const receipt = await sdk.transferHbar(accountId, recipientId, amount);
-      console.log('HBAR transfer successful:', receipt);
-      return receipt;
-    } catch (error) {
-      console.error('HBAR transfer failed:', error);
-      throw error;
-    }
-  }, [sdk, accountId]);
+      try {
+        // Validate message format
+        if (message.m && message.m.length > 500) {
+          throw new Error('Memo must not exceed 500 characters');
+        }
+
+        if (!message.p || message.p !== 'hcs-2') {
+          throw new Error("Invalid protocol. Must be 'hcs-2'");
+        }
+
+        // Convert message to string
+        const messageString = JSON.stringify(message);
+
+        // If a submit key is provided, convert it to a PrivateKey object
+        const privateKey = submitKey
+          ? PrivateKey.fromString(submitKey)
+          : undefined;
+
+        const receipt = await sdk.submitMessageToTopic(
+          topicId,
+          messageString,
+          privateKey
+        );
+
+        console.log('HCS-2 message submitted successfully!');
+        console.log('Transaction ID:', receipt.transactionId.toString());
+
+        return receipt;
+      } catch (error) {
+        console.error('Error submitting HCS-2 message:', error);
+        throw error;
+      }
+    },
+    [sdk]
+  );
+
+  const transferHBAR = useCallback(
+    async (recipientId: string, amount: number) => {
+      if (!sdk || !accountId)
+        throw new Error('SDK not initialized or wallet not connected');
+
+      try {
+        const receipt = await sdk.transferHbar(accountId, recipientId, amount);
+        console.log('HBAR transfer successful:', receipt);
+        return receipt;
+      } catch (error) {
+        console.error('HBAR transfer failed:', error);
+        throw error;
+      }
+    },
+    [sdk, accountId]
+  );
 
   return (
     <WalletContext.Provider
@@ -181,7 +204,7 @@ export function WalletProvider({ children }: { children: React.ReactNode }) {
         balance,
         isConnecting,
         submitHCS2Message,
-        transferHBAR
+        transferHBAR,
       }}
     >
       {children}
@@ -200,11 +223,7 @@ In your `App.tsx` or main component:
 import { WalletProvider } from './WalletProvider';
 
 function App() {
-  return (
-    <WalletProvider>
-      {/* Your app components */}
-    </WalletProvider>
-  );
+  return <WalletProvider>{/* Your app components */}</WalletProvider>;
 }
 ```
 
@@ -223,18 +242,10 @@ export function WalletButton() {
   }
 
   if (accountId) {
-    return (
-      <button onClick={disconnect}>
-        Disconnect {accountId}
-      </button>
-    );
+    return <button onClick={disconnect}>Disconnect {accountId}</button>;
   }
 
-  return (
-    <button onClick={connect}>
-      Connect Wallet
-    </button>
-  );
+  return <button onClick={connect}>Connect Wallet</button>;
 }
 ```
 
@@ -248,7 +259,7 @@ export function SendHbarButton() {
 
   const handleSend = async () => {
     try {
-      const receipt = await transferHBAR("0.0.123456", 1); // Send 1 HBAR
+      const receipt = await transferHBAR('0.0.123456', 1); // Send 1 HBAR
       console.log('Transfer successful:', receipt);
     } catch (error) {
       console.error('Transfer failed:', error);
@@ -273,28 +284,24 @@ export function RegisterTopicButton() {
 
   const handleRegister = async () => {
     try {
-      const topicId = "0.0.12345"; // Your HCS topic ID
-      
+      const topicId = '0.0.12345'; // Your HCS topic ID
+
       const registerMessage = {
-        p: "hcs-2",
-        op: "register",
-        t_id: "0.0.456789",
-        metadata: "hcs://1/0.0.456789",
-        m: "register new topic"
+        p: 'hcs-2',
+        op: 'register',
+        t_id: '0.0.456789',
+        metadata: 'hcs://1/0.0.456789',
+        m: 'register new topic',
       };
 
       const receipt = await submitHCS2Message(registerMessage, topicId);
-      console.log("Topic registered successfully:", receipt);
+      console.log('Topic registered successfully:', receipt);
     } catch (error) {
-      console.error("Failed to register topic:", error);
+      console.error('Failed to register topic:', error);
     }
   };
 
-  return (
-    <button onClick={handleRegister}>
-      Register Topic
-    </button>
-  );
+  return <button onClick={handleRegister}>Register Topic</button>;
 }
 ```
 
@@ -312,6 +319,6 @@ Make sure to replace `your_project_id_here` with your actual WalletConnect proje
 
 1. The SDK uses singleton pattern, so you only need to initialize it once.
 2. Make sure to handle errors appropriately in your components.
-3. The provider maintains wallet connection state and provides methods for interacting with the Hedera network.
+3. The provider maintains wallet connection state and provides methods for interacting with the Hedera Hashgraph.
 4. All HCS-2 messages must follow the standard format and include required fields.
 5. The memo field in HCS-2 messages is limited to 500 characters.

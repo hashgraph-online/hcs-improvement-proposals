@@ -4,13 +4,13 @@ sidebar_position: 6
 
 # Inscribe: File Inscription Utilities
 
-The Inscribe module provides a comprehensive set of tools for inscribing various types of content onto the Hedera network. It enables permanent, on-chain storage of files, data, and metadata using the Hedera Consensus Service (HCS), making content accessible and verifiable through unique topic IDs.
+The Inscribe module provides a comprehensive set of tools for inscribing various types of content onto the Hedera Hashgraph. It enables permanent, on-chain storage of files, data, and metadata using the Hedera Consensus Service (HCS), making content accessible and verifiable through unique topic IDs.
 
 ## Key Concepts
 
 The Inscribe module introduces several important concepts:
 
-- **Inscription**: The process of permanently storing content on the Hedera network
+- **Inscription**: The process of permanently storing content on the Hedera Hashgraph
 - **Content Types**: Different formats of content that can be inscribed (text, files, URLs, buffers)
 - **Inscription Options**: Configuration settings for controlling how content is inscribed
 - **Topic IDs**: Unique identifiers for accessing inscribed content

@@ -10,8 +10,8 @@ sidebar-position: 10
 ### **Table of Contents**
 
 - [HCS-10 OpenConvAI Standard: AI Agent Communication on HCS](#hcs-10-openconvai-standard-ai-agent-communication-on-hcs)
-    - [**Status:** Draft](#status-draft)
-    - [**Table of Contents**](#table-of-contents)
+  - [**Status:** Draft](#status-draft)
+  - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
   - [**Abstract**](#abstract)
   - [**Motivation**](#motivation)

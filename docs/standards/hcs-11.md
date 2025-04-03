@@ -1,5 +1,5 @@
 ---
-description: The HCS-11 standard defines a systematic approach for managing profiles on the Hedera network through account memos, enabling rich identity management for individuals and AI agents.
+description: The HCS-11 standard defines a systematic approach for managing profiles on the Hedera Hashgraph through account memos, enabling rich identity management for individuals and AI agents.
 sidebar_position: 11
 ---
 
@@ -45,7 +45,7 @@ sidebar_position: 11
 
 ## Abstract
 
-The HCS-11 standard defines a systematic approach for managing profiles on the Hedera network through account memos. This standard introduces a structured way to store profile information for individuals and AI agents, enabling rich identity management and interoperability across the Hedera ecosystem.
+The HCS-11 standard defines a systematic approach for managing profiles on the Hedera Hashgraph through account memos. This standard introduces a structured way to store profile information for individuals and AI agents, enabling rich identity management and interoperability across the Hedera ecosystem.
 
 ## Motivation
 

@@ -38,11 +38,11 @@ sidebar_position: 3
 
 ## Abstract
 
-This document introduces HCS-3, a protocol extension for the Hedera Consensus Service (HCS), enabling recursive referencing of inscriptions within the Hedera network. HCS-3 aims to standardize the method of referencing and loading resources stored as HCS messages, facilitating the creation of complex, interconnected decentralized applications.
+This document introduces HCS-3, a protocol extension for the Hedera Consensus Service (HCS), enabling recursive referencing of inscriptions within the Hedera Hashgraph. HCS-3 aims to standardize the method of referencing and loading resources stored as HCS messages, facilitating the creation of complex, interconnected decentralized applications.
 
 ## Motivation
 
-The primary goal of HCS-3 is to leverage Hedera's high-throughput, low-latency consensus mechanism to enable complex data structures and references within the Hedera network. By standardizing resource referencing and loading, HCS-3 seeks to foster a new level of integration for decentralized applications built on Hedera.
+The primary goal of HCS-3 is to leverage Hedera's high-throughput, low-latency consensus mechanism to enable complex data structures and references within the Hedera Hashgraph. By standardizing resource referencing and loading, HCS-3 seeks to foster a new level of integration for decentralized applications built on Hedera.
 
 ## Specification
 
@@ -71,7 +71,7 @@ https://{cdn_domain}/api/hashinals-cdn/{topic_id}?network={network}
 
 - `cdn_domain`: The domain of the CDN service.
 - `topic_id`: The Hedera topic ID of the resource.
-- `network`: The Hedera network (e.g., 'mainnet', 'testnet').
+- `network`: The Hedera Hashgraph (e.g., 'mainnet', 'testnet').
 
 Example using the TierBot CDN:
 
@@ -107,7 +107,7 @@ The following configuration variables can be detected within a script configurat
 | **Configuration Variable** | **Description**                                                          | **Default Value**                           |
 | -------------------------- | ------------------------------------------------------------------------ | ------------------------------------------- |
 | `cdnUrl`                   | The base URL for the CDN where resources are loaded.                     | `https://kiloscribe.com/api/hashinals-cdn/` |
-| `network`                  | Specifies the Hedera network, such as `mainnet` or `testnet`.            | `mainnet`                                   |
+| `network`                  | Specifies the Hedera Hashgraph, such as `mainnet` or `testnet`.          | `mainnet`                                   |
 | `retryAttempts`            | Number of retry attempts for failed resource fetches.                    | `3`                                         |
 | `retryBackoff`             | Time in milliseconds between retry attempts, with exponential backoff.   | `300`                                       |
 | `debug`                    | Toggles debug logging.                                                   | `false`                                     |
@@ -244,4 +244,4 @@ This video tag loads a video file from the specified HCS topic, set to load seve
 
 ## Conclusion
 
-HCS-3 provides a standardized method for referencing and loading resources within the Hedera network, enabling the creation of more complex and interconnected decentralized applications. By leveraging CDN integration and providing clear implementation guidelines, HCS-3 ensures efficient and reliable access to referenced inscriptions, fostering a new ecosystem of dynamic, on-graph applications on the Hedera network.
+HCS-3 provides a standardized method for referencing and loading resources within the Hedera Hashgraph, enabling the creation of more complex and interconnected decentralized applications. By leveraging CDN integration and providing clear implementation guidelines, HCS-3 ensures efficient and reliable access to referenced inscriptions, fostering a new ecosystem of dynamic, on-graph applications on the Hedera Hashgraph.

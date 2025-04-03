@@ -1,5 +1,5 @@
 ---
-description: The HCS-6 standard defines a framework for creating dynamic Hashinals on the Hedera network, enabling interactive and updatable on-chain assets.
+description: The HCS-6 standard defines a framework for creating dynamic Hashinals on the Hedera Hashgraph, enabling interactive and updatable on-chain assets.
 sidebar_position: 6
 ---
 
