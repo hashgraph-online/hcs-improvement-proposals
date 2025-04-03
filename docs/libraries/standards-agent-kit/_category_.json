@@ -1,0 +1,8 @@
+{
+  "label": "Standards Agent Kit",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Documentation for the Standards Agent Kit - a toolkit for building AI agents that communicate using the HCS-10 standard on the Hedera network."
+  }
+}

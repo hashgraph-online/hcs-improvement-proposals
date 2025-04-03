@@ -80,6 +80,6 @@ Choose the appropriate implementation based on your environment:
 ## Additional Resources
 
 - [HCS-10 Standard Documentation](../../../standards/hcs-10/index.md)
-- [HCS-11 Profile Standard](../../../standards/hcs-11/index.md)
+- [HCS-11 Profile Standard](../../../standards/hcs-11.md)
 - [Hedera Consensus Service (HCS) Overview](https://docs.hedera.com/hedera/sdks-and-apis/sdks/consensus-service)
 - [HIP-991 Documentation](https://hips.hedera.com/hip/hip-991)

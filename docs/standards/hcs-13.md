@@ -5,12 +5,12 @@ sidebar_position: 13
 
 # HCS-13 Standard: Schema Registry and Validation
 
-### Status: Published
+### Status: Draft
 
 ### Table of Contents
 
 - [HCS-13 Standard: Schema Registry and Validation](#hcs-13-standard-schema-registry-and-validation)
-  - [Status: Published](#status-published)
+  - [Status: Draft](#status-draft)
   - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
     - [Primary Author](#primary-author)
