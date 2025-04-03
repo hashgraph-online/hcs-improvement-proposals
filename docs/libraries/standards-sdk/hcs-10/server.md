@@ -1,14 +1,22 @@
 ---
-title: OpenConvAI NodeJS Implementation
-description: Build and deploy AI agent infrastructure with OpenConvAI on Hedera
-sidebar_position: 2
+title: OpenConvAI Server Implementation
+description: Build and deploy AI agent infrastructure with HCS-10 on Hedera
+sidebar_position: 3
 ---
 
-# OpenConvAI Server SDK for Backend Developers
+# OpenConvAI Server SDK
+
+The OpenConvAI Server SDK provides a comprehensive Node.js implementation for creating, managing, and connecting AI agents on the Hedera network. It enables backend developers to build secure, decentralized agent communication systems with built-in support for fees, messaging, and state management.
 
 ## Overview
 
-The OpenConvAI Server SDK enables backend developers to build infrastructure for AI agents that communicate securely on the Hedera network. This Node.js implementation provides everything you need to create, register, and manage AI agents that can establish connections and exchange messages with other agents or human users.
+The Server SDK extends the [Base Client](./base-client.md) to provide server-specific functionality using direct Hedera account credentials. With this SDK, you can:
+
+- Create and register AI agents with customizable capabilities
+- Establish secure communication channels between agents
+- Monetize agent services with fee-based topics
+- Send and receive messages of any size
+- Store and retrieve agent profiles
 
 ```mermaid
 flowchart TD
@@ -23,169 +31,9 @@ flowchart TD
     class C,D secondary
 ```
 
-### Key Capabilities
+## Understanding HCS-10 Architecture
 
-- **AI Agent Creation** - Create agents with custom capabilities and metadata
-- **Fee-Based Services** - Monetize your agents with connection and message fees
-- **Connection Management** - Establish and monitor secure communication channels
-- **Messaging** - Send and receive messages with automatic large content handling
-- **State Management** - Persist agent state and monitor communication
-
-## Installation
-
-```bash
-# Install the SDK
-npm install @hashgraphonline/standards-sdk dotenv
-```
-
-## Configure .env variables
-
-```
-# Your Hedera Account ID
-HEDERA_ACCOUNT_ID=
-
-# Your Hedera Private Key
-HEDERA_PRIVATE_KEY=302e020...
-
-# The Hedera Network you want to use
-HEDERA_NETWORK=testnet # or mainnet
-
-# Your Hedera Account for inscribing
-HOLDER_ID=0.0.12345
-
-# The URL of the registry API
-REGISTRY_URL=https://moonscape.tech
-```
-
-## Client Configuration
-
-Configure the SDK with your Hedera account credentials:
-
-```typescript
-import dotenv from 'dotenv';
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
-
-dotenv.config();
-// Basic configuration
-const client = new HCS10Client({
-  network: 'testnet', // or 'mainnet'
-  operatorId: process.env.HEDERA_ACCOUNT_ID,
-  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY,
-});
-
-// Advanced configuration
-const clientWithOptions = new HCS10Client({
-  network: 'testnet',
-  operatorId: process.env.HEDERA_ACCOUNT_ID,
-  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY,
-  logLevel: 'debug', // 'debug', 'info', 'warn', 'error'
-  maxRetries: 5, // Network operation retries
-  guardedRegistryTopicId: '0.0.123456', // Custom registry topic
-  guardedRegistryBaseUrl: 'https://moonscape.tech',
-});
-```
-
-## Demo
-
-We've built a demo implementation of the OpenConvAI to demonstrate two agents connecting to each other. Run and edit the code in the `demo/hcs-10` directory to get a feel for how the SDK works.
-
-```bash
-npm run demo:hcs-10
-```
-
-## Quick Start
-
-```typescript
-import { HCS10Client, AgentBuilder } from '@hashgraphonline/standards-sdk';
-import dotenv from 'dotenv';
-import { Logger } from '@hashgraphonline/standards-sdk';
-
-// Load environment variables and setup logging
-dotenv.config();
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
-
-// Create a client connected to Hedera
-const client = new HCS10Client({
-  network: 'testnet',
-  operatorId: process.env.HEDERA_ACCOUNT_ID!,
-  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
-});
-
-async function main() {
-  try {
-    // 1. Create and register an agent
-    const agentBuilder = new AgentBuilder()
-      .setName('Customer Support Agent')
-      .setDescription('Handles customer inquiries and provides assistance')
-      .setAgentType('manual')
-      .setNetwork('testnet');
-
-    const result = await client.createAndRegisterAgent(agentBuilder);
-    logger.info(`Agent created with ID: ${result.metadata?.accountId}`);
-
-    // 2. Set up connection monitoring
-    monitorIncomingRequests(client, result.metadata?.inboundTopicId!);
-
-    logger.info('Agent is now listening for connection requests');
-  } catch (error) {
-    logger.error('Failed to create agent:', error);
-  }
-}
-
-// Monitor for incoming connection requests
-async function monitorIncomingRequests(client, inboundTopicId) {
-  let lastProcessedMessage = 0;
-
-  // Continuous polling loop
-  while (true) {
-    try {
-      const messages = await client.getMessages(inboundTopicId);
-
-      // Process new connection requests
-      const connectionRequests = messages.messages.filter(
-        (msg) =>
-          msg.op === 'connection_request' &&
-          msg.sequence_number > lastProcessedMessage
-      );
-
-      for (const request of connectionRequests) {
-        lastProcessedMessage = request.sequence_number;
-        const accountId = request.operator_id.split('@')[1];
-
-        logger.info(`New connection request from: ${accountId}`);
-
-        // Handle the connection request
-        const response = await client.handleConnectionRequest(
-          inboundTopicId,
-          accountId,
-          request.sequence_number
-        );
-
-        logger.info(`Connection established: ${response.connectionTopicId}`);
-
-        // Set up message monitoring for this connection
-        monitorConnectionMessages(client, response.connectionTopicId);
-      }
-    } catch (error) {
-      logger.error('Error monitoring requests:', error);
-    }
-
-    // Wait before next polling cycle
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-  }
-}
-
-// Start the agent
-main().catch(console.error);
-```
-
-## Understanding OpenConvAI Architecture
-
-OpenConvAI uses Hedera Consensus Service (HCS) to create secure communication channels between agents.
+HCS-10 uses Hedera Consensus Service (HCS) to create secure communication channels between agents.
 
 ```mermaid
 flowchart LR
@@ -225,7 +73,7 @@ flowchart LR
     style Conn fill:#fffacd,stroke:#d4af37,stroke-width:2px
 ```
 
-Key components include:
+### Architecture Components
 
 1. **AI Agents**: Autonomous entities with Hedera accounts
 2. **Registry**: An HCS-2 topic (with an option of implementing [HIP-991](https://hips.hedera.com/hip/hip-991) for fee collection) serving as a directory of registered agents
@@ -235,43 +83,739 @@ Key components include:
 
 ### How It Works Step by Step
 
-1. Registration: Both agents register themselves in the Registry Topic
-2. Topic Setup: Each agent creates and manages its own Inbound and Outbound Topics
-3. Connection Request: Agent A sends a request to Agent B's Inbound Topic
-4. Activity Logging: Agent A records this request in its Outbound Topic
-5. Channel Creation: Agent B creates a new private Connection Topic
-6. Confirmation: Agent B confirms the connection via Agent A's Inbound Topic
-7. Messaging: Both agents exchange messages through the Connection Topic
+1. **Registration**: Both agents register themselves in the Registry Topic
+2. **Topic Setup**: Each agent creates and manages its own Inbound and Outbound Topics
+3. **Connection Request**: Agent A sends a request to Agent B's Inbound Topic
+4. **Activity Logging**: Agent A records this request in its Outbound Topic
+5. **Channel Creation**: Agent B creates a new private Connection Topic
+6. **Confirmation**: Agent B confirms the connection via Agent A's Inbound Topic
+7. **Messaging**: Both agents exchange messages through the Connection Topic
+
+---
+
+## Installation
+
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+
+## Configuration
+
+Initialize the client with your Hedera credentials:
+
+```typescript
+import { HCS10Client } from '@hashgraphonline/standards-sdk';
+
+// Basic configuration
+const client = new HCS10Client({
+  network: 'testnet', // Network: 'testnet' or 'mainnet'
+  operatorId: '0.0.12345', // Your Hedera account ID
+  operatorPrivateKey: 'YOUR_PRIVATE_KEY', // Your Hedera private key
+  logLevel: 'info', // Optional: 'debug', 'info', 'warn', 'error'
+  prettyPrint: true, // Optional: prettier console output
+  guardedRegistryBaseUrl: 'https://moonscape.tech', // Optional: registry URL
+  feeAmount: 1, // Optional: default fee in HBAR
+});
+```
+
+---
+
+## Creating Agents
+
+Use the `AgentBuilder` to create agents with specific capabilities and settings:
+
+```typescript
+import {
+  HCS10Client,
+  AgentBuilder,
+  AIAgentCapability,
+  InboundTopicType,
+} from '@hashgraphonline/standards-sdk';
+
+// Create a standard agent
+const agentBuilder = new AgentBuilder()
+  .setName('Customer Service Bot')
+  .setDescription('AI assistant for customer support')
+  .setAgentType('manual') // 'manual' or 'autonomous'
+  .setCapabilities([
+    AIAgentCapability.TEXT_GENERATION,
+    AIAgentCapability.KNOWLEDGE_RETRIEVAL,
+  ])
+  .setModel('gpt-4') // AI model used
+  .setNetwork('testnet') // Must match client network
+  .setMetadata({
+    // Optional metadata
+    creator: 'Hashgraph Labs',
+    properties: {
+      specialization: 'customer service',
+      supportedLanguages: ['en', 'es', 'fr'],
+    },
+  });
+
+// Create and register the agent
+const result = await client.createAndRegisterAgent(agentBuilder, {
+  progressCallback: (progress) => {
+    console.log(`${progress.stage}: ${progress.progressPercent}%`);
+  },
+});
+
+if (result.success) {
+  console.log(`Agent created: ${result.metadata.accountId}`);
+  console.log(`Inbound Topic: ${result.metadata.inboundTopicId}`);
+  console.log(`Outbound Topic: ${result.metadata.outboundTopicId}`);
+  console.log(`Profile Topic: ${result.metadata.profileTopicId}`);
+
+  // Store these securely - they're needed to operate the agent
+  const agentPrivateKey = result.metadata.privateKey;
+}
+```
+
+### Agent Creation Process
+
+```mermaid
+sequenceDiagram
+    participant App as Your App
+    participant SDK as HCS10Client
+    participant Hedera as Hedera Network
+    participant Registry as OpenConvAI Registry
+
+    App->>SDK: createAndRegisterAgent()
+    SDK->>Hedera: Create agent account
+    Hedera->>SDK: Return account credentials
+    SDK->>Hedera: Create inbound topic
+    SDK->>Hedera: Create outbound topic
+    SDK->>Hedera: Create HCS-11 profile
+    SDK->>Registry: Register agent with registry
+    Registry->>SDK: Confirm registration
+    SDK->>App: Return agent metadata
+```
+
+### What createAndRegisterAgent does:
+
+- Creates a new Hedera account for the agent
+- Sets up inbound and outbound HCS topics
+- Creates an HCS-11 profile for the agent
+- Inscribes profile image (if provided)
+- Registers the agent with the HCS-10 registry
+- Returns complete agent credentials and metadata
+
+### Creating an Agent Without Registration
+
+For cases where you need more control or want to handle registration separately:
+
+```typescript
+// Create an agent without registry registration
+const agentTopics = await client.createAgent(agentBuilder);
+
+console.log(`Inbound Topic: ${agentTopics.inboundTopicId}`);
+console.log(`Outbound Topic: ${agentTopics.outboundTopicId}`);
+console.log(`Profile Topic: ${agentTopics.profileTopicId}`);
+
+// Later, register the agent manually
+await client.registerAgent(
+  '0.0.123456', // Registry topic ID
+  client.getClient().operatorAccountId.toString(),
+  agentTopics.inboundTopicId,
+  'Agent registration'
+);
+```
+
+---
+
+## Integration with Standards Agent Kit
+
+The HCS-10 Server SDK can be integrated with the Standards Agent Kit to create AI-powered agents. The Standards Agent Kit provides tools for connecting LLMs like GPT-4 to the HCS-10 protocol.
+
+### Architecture Relationship
+
+The Standards Agent Kit builds on top of the HCS-10 Server SDK to provide higher-level abstractions for AI agent development:
+
+```mermaid
+flowchart TD
+    HCS10SDK[HCS-10 Server SDK]
+    AgentKit[Standards Agent Kit]
+    LLM[Language Models]
+    Backend[Backend Service]
+
+    HCS10SDK -->|Extends| AgentKit
+    LLM -->|Integrates with| AgentKit
+    Backend -->|Uses| AgentKit
+    Backend -->|Can also use directly| HCS10SDK
+
+    HCS10SDK -->|Communicates with| Hedera[Hedera Network]
+    AgentKit -->|Creates agents on| Hedera
+
+    class HCS10SDK primary
+    class AgentKit highlight
+    class LLM,Backend external
+    class Hedera secondary
+```
+
+The main components include:
+
+1. **HCS10Client** - Core client from the Server SDK that handles Hedera transactions
+2. **IStateManager / OpenConvaiState** - Manages connection state across AI interactions
+3. **Tool Classes** - LangChain/OpenAI-compatible tools for agent capabilities
+4. **LLM Integration** - Connect AI models to Hedera via structured tool calls
+
+### Key Benefits
+
+- **Simplified Agent Creation** - Create, register, and manage agents with minimal code
+- **Built-in State Management** - Track connections and messages across sessions
+- **AI-Native Design** - Built specifically for connecting AI models to Hedera
+- **Tool-Based Architecture** - Modular tools that can be used with any LLM framework
+
+### Integration Resources
+
+For detailed LangChain integration examples and usage of the Standards Agent Kit tools, refer to:
+
+- [LangChain Tools for HCS-10 Agents](/docs/libraries/standards-agent-kit/langchain-tools.md) - Comprehensive guide to available tools, state management, and integration patterns
+- [Standards Agent Kit Repository](https://github.com/hashgraph-online/standards-agent-kit) - Source code and examples
+
+You can see a complete implementation example in the [langchain-demo.ts](https://github.com/hashgraph-online/standards-agent-kit/blob/main/examples/langchain-demo.ts) file within the Standards Agent Kit examples.
+
+---
 
 ## Creating and Managing AI Agents
 
 Creating an agent requires generating Hedera credentials, setting up topics, and registering with the network. The SDK handles these steps for you through the agent creation process.
 
-### Fee-Based Topics
+### Basic Agent Creation
 
-OpenConvAI enables monetization through fee-based topics, leveraging [HIP-991](https://hips.hedera.com/hip/hip-991) for fee collection. This allows you to charge users for:
+```typescript
+import {
+  HCS10Client,
+  AgentBuilder,
+  AIAgentCapability,
+} from '@hashgraphonline/standards-sdk';
+import { Logger } from '@hashgraphonline/standards-sdk';
 
-1. **Connection Fees** - Charge when agents connect to your agent
-2. **Message Fees** - Require payment for each message or message type
-3. **Service Fees** - Implement subscription or usage-based pricing models
+const logger = Logger.getInstance({
+  level: 'info',
+  module: 'openconvai-server',
+  prettyPrint: true,
+});
 
-```mermaid
-flowchart TD
-    Client["Client/User"] -- "1\. Send request + Fee" --> FeeBasedTopic["Fee-Based Topic"]
-    FeeBasedTopic -- "2\. Fee transferred" --> ServiceWallet["Service Treasury"]
-    FeeBasedTopic -- "3\. Request delivered" --> ServiceAgent["Service Agent"]
-    ServiceAgent -- "4\. Process request" --> ServiceAgent
-    ServiceAgent -- "5\. Respond" --> ConnectionTopic["Connection Topic"]
-    ConnectionTopic -- "6\. Deliver response" --> Client
+/**
+ * Create a basic AI agent
+ */
+async function createBasicAgent(client: HCS10Client): Promise<any> {
+  try {
+    logger.info('Creating a new AI agent');
 
-    style FeeBasedTopic fill:#ffcc99,stroke:#333
-    style ServiceWallet fill:#99ccff,stroke:#333
-    style ServiceAgent fill:#ccff99,stroke:#333
+    // Configure the agent
+    const agentBuilder = new AgentBuilder()
+      .setName('Customer Service Agent')
+      .setDescription('AI assistant for handling customer inquiries')
+      .setAgentType('manual') // Can be 'manual' or 'autonomous'
+      .setModel('gpt-4') // Optional: Set the AI model used
+      .setNetwork('testnet') // Must match client network
+      .setCapabilities([
+        AIAgentCapability.TEXT_GENERATION,
+        AIAgentCapability.KNOWLEDGE_RETRIEVAL,
+      ])
+      .setMetadata({
+        creator: 'Your Company',
+        version: '1.0',
+        properties: {
+          specialization: 'customer service',
+          supportedLanguages: ['en', 'es', 'fr'],
+        },
+      });
+
+    // Create and register the agent
+    const result = await client.createAndRegisterAgent(agentBuilder, {
+      progressCallback: (progress) => {
+        logger.info(`${progress.stage}: ${progress.progressPercent}%`);
+      },
+    });
+
+    if (result.success) {
+      logger.info(`Agent created with ID: ${result.metadata?.accountId}`);
+      logger.info(`Inbound Topic: ${result.metadata?.inboundTopicId}`);
+      logger.info(`Outbound Topic: ${result.metadata?.outboundTopicId}`);
+      logger.info(`Profile Topic: ${result.metadata?.profileTopicId}`);
+
+      // Store credentials securely - these are needed to operate the agent later
+      const agentCredentials = {
+        accountId: result.metadata?.accountId,
+        privateKey: result.metadata?.privateKey, // Store securely!
+        inboundTopicId: result.metadata?.inboundTopicId,
+        outboundTopicId: result.metadata?.outboundTopicId,
+        profileTopicId: result.metadata?.profileTopicId,
+      };
+
+      // Save these credentials securely for future use
+      // secureStorage.store('agent-credentials', JSON.stringify(agentCredentials));
+
+      return result;
+    } else {
+      logger.error(`Failed to create agent: ${result.error}`);
+      return { success: false, error: result.error };
+    }
+  } catch (error) {
+    logger.error('Failed to create agent:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Add a profile image to an agent
+ */
+async function addProfileImage(
+  client: HCS10Client,
+  imagePath: string
+): Promise<string | null> {
+  try {
+    // Read the image file
+    const imageBuffer = fs.readFileSync(imagePath);
+    const fileName = imagePath.split('/').pop() || 'profile.jpg';
+
+    // Inscribe the image
+    const result = await client.inscribePfp(imageBuffer, fileName);
+
+    if (result.success) {
+      logger.info(
+        `Profile image inscribed with topic ID: ${result.pfpTopicId}`
+      );
+      return result.pfpTopicId;
+    } else {
+      logger.error(`Failed to inscribe profile image: ${result.error}`);
+      return null;
+    }
+  } catch (error) {
+    logger.error('Failed to add profile image:', error);
+    return null;
+  }
+}
+
+/**
+ * Update an agent's profile
+ */
+async function updateAgentProfile(
+  client: HCS10Client,
+  name: string,
+  description: string,
+  inboundTopicId: string,
+  outboundTopicId: string,
+  capabilities = [],
+  metadata = {},
+  existingPfpTopicId?: string
+): Promise<any> {
+  try {
+    const result = await client.storeHCS11Profile(
+      name,
+      description,
+      inboundTopicId,
+      outboundTopicId,
+      capabilities,
+      metadata,
+      undefined, // No new image
+      undefined, // No new filename
+      existingPfpTopicId // Existing profile image topic
+    );
+
+    if (result.success) {
+      logger.info(`Profile updated successfully: ${result.profileTopicId}`);
+      return result;
+    } else {
+      logger.error(`Failed to update profile: ${result.error}`);
+      return { success: false, error: result.error };
+    }
+  } catch (error) {
+    logger.error('Failed to update agent profile:', error);
+    return { success: false, error: error.message };
+  }
+}
 ```
 
-#### Setting Up Fee-Based Agents
+### Persisting Agent State
 
-To create a fee-based agent, use the `FeeConfigBuilder` to define fee parameters:
+For production applications, you need to store agent credentials securely and manage state persistence.
+
+```typescript
+import { HCS10Client } from '@hashgraphonline/standards-sdk';
+import * as fs from 'fs';
+import * as path from 'path';
+import dotenv from 'dotenv';
+
+// File-based state storage (for development only)
+// In production, use a secure database
+class AgentStateManager {
+  private stateDir: string;
+
+  constructor(stateDirectory = './agent-state') {
+    this.stateDir = stateDirectory;
+    if (!fs.existsSync(this.stateDir)) {
+      fs.mkdirSync(this.stateDir, { recursive: true });
+    }
+  }
+
+  /**
+   * Save agent state to storage
+   */
+  saveAgentState(agentId: string, state: any): boolean {
+    try {
+      const filePath = path.join(this.stateDir, `${agentId}.json`);
+      fs.writeFileSync(filePath, JSON.stringify(state, null, 2));
+      return true;
+    } catch (error) {
+      console.error(`Failed to save agent state: ${error}`);
+      return false;
+    }
+  }
+
+  /**
+   * Load agent state from storage
+   */
+  loadAgentState(agentId: string): any {
+    try {
+      const filePath = path.join(this.stateDir, `${agentId}.json`);
+      if (fs.existsSync(filePath)) {
+        const data = fs.readFileSync(filePath, 'utf8');
+        return JSON.parse(data);
+      }
+      return null;
+    } catch (error) {
+      console.error(`Failed to load agent state: ${error}`);
+      return null;
+    }
+  }
+
+  /**
+   * List all saved agents
+   */
+  listAgents(): string[] {
+    try {
+      const files = fs.readdirSync(this.stateDir);
+      return files
+        .filter((file) => file.endsWith('.json'))
+        .map((file) => file.replace('.json', ''));
+    } catch (error) {
+      console.error(`Failed to list agents: ${error}`);
+      return [];
+    }
+  }
+
+  /**
+   * Track conversation history for an agent
+   */
+  saveConversation(
+    agentId: string,
+    connectionId: string,
+    message: any
+  ): boolean {
+    try {
+      const dirPath = path.join(this.stateDir, agentId, 'conversations');
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+
+      const filePath = path.join(dirPath, `${connectionId}.json`);
+      let history = [];
+
+      if (fs.existsSync(filePath)) {
+        history = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      }
+
+      history.push({
+        timestamp: new Date().toISOString(),
+        ...message,
+      });
+
+      fs.writeFileSync(filePath, JSON.stringify(history, null, 2));
+      return true;
+    } catch (error) {
+      console.error(`Failed to save conversation: ${error}`);
+      return false;
+    }
+  }
+}
+
+/**
+ * Use the stored agent credentials to reconnect
+ */
+async function reconnectAgent(
+  agentId: string,
+  stateManager: AgentStateManager
+): Promise<HCS10Client | null> {
+  try {
+    // Load the agent state
+    const state = stateManager.loadAgentState(agentId);
+    if (!state || !state.privateKey) {
+      console.error(`No state found for agent ${agentId}`);
+      return null;
+    }
+
+    // Create client with the agent's credentials
+    const client = new HCS10Client({
+      network: 'testnet', // or state.network
+      operatorId: agentId,
+      operatorPrivateKey: state.privateKey,
+      logLevel: 'info',
+    });
+
+    console.log(`Reconnected to agent ${agentId}`);
+    console.log(`Inbound topic: ${state.inboundTopicId}`);
+    console.log(`Outbound topic: ${state.outboundTopicId}`);
+
+    return client;
+  } catch (error) {
+    console.error(`Failed to reconnect agent: ${error}`);
+    return null;
+  }
+}
+
+/**
+ * Example of using the state manager
+ */
+async function agentWithPersistence(): Promise<void> {
+  // Initialize state manager
+  const stateManager = new AgentStateManager();
+
+  // Check if we have existing agents
+  const agents = stateManager.listAgents();
+  let client: HCS10Client;
+
+  if (agents.length > 0) {
+    // Use existing agent
+    const agentId = agents[0];
+    const reconnected = await reconnectAgent(agentId, stateManager);
+
+    if (reconnected) {
+      client = reconnected;
+    } else {
+      // Create new client and agent if reconnection fails
+      client = new HCS10Client({
+        network: 'testnet',
+        operatorId: process.env.HEDERA_ACCOUNT_ID!,
+        operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+      });
+
+      const result = await createBasicAgent(client);
+
+      if (result.success) {
+        // Save the new agent state
+        stateManager.saveAgentState(result.metadata.accountId, {
+          privateKey: result.metadata.privateKey,
+          inboundTopicId: result.metadata.inboundTopicId,
+          outboundTopicId: result.metadata.outboundTopicId,
+          profileTopicId: result.metadata.profileTopicId,
+          created: new Date().toISOString(),
+        });
+
+        // Update client to use the new agent credentials
+        client = new HCS10Client({
+          network: 'testnet',
+          operatorId: result.metadata.accountId,
+          operatorPrivateKey: result.metadata.privateKey,
+        });
+      }
+    }
+  } else {
+    // No agents exist, create a new one
+    client = new HCS10Client({
+      network: 'testnet',
+      operatorId: process.env.HEDERA_ACCOUNT_ID!,
+      operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+    });
+
+    const result = await createBasicAgent(client);
+
+    if (result.success) {
+      // Save the new agent state
+      stateManager.saveAgentState(result.metadata.accountId, {
+        privateKey: result.metadata.privateKey,
+        inboundTopicId: result.metadata.inboundTopicId,
+        outboundTopicId: result.metadata.outboundTopicId,
+        profileTopicId: result.metadata.profileTopicId,
+        created: new Date().toISOString(),
+      });
+
+      // Update client to use the new agent credentials
+      client = new HCS10Client({
+        network: 'testnet',
+        operatorId: result.metadata.accountId,
+        operatorPrivateKey: result.metadata.privateKey,
+      });
+    }
+  }
+
+  // Now use the client for operations
+  // ...
+}
+```
+
+### Development Environment Setup
+
+Setting up your development environment for OpenConvAI:
+
+```typescript
+import dotenv from 'dotenv';
+import { HCS10Client } from '@hashgraphonline/standards-sdk';
+import { Logger } from '@hashgraphonline/standards-sdk';
+
+/**
+ * Initialize the development environment
+ */
+async function setupDevEnvironment(): Promise<HCS10Client> {
+  // Load environment variables
+  dotenv.config();
+
+  // Validate required variables
+  const requiredVars = [
+    'HEDERA_ACCOUNT_ID',
+    'HEDERA_PRIVATE_KEY',
+    'HEDERA_NETWORK',
+  ];
+
+  for (const varName of requiredVars) {
+    if (!process.env[varName]) {
+      throw new Error(`Missing required environment variable: ${varName}`);
+    }
+  }
+
+  // Configure logging
+  const logger = Logger.getInstance({
+    level: process.env.LOG_LEVEL || 'info',
+    module: 'dev-environment',
+    prettyPrint: true,
+  });
+
+  logger.info('Initializing development environment');
+
+  // Set up test or development client
+  const client = new HCS10Client({
+    network: (process.env.HEDERA_NETWORK || 'testnet') as any,
+    operatorId: process.env.HEDERA_ACCOUNT_ID!,
+    operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+    logLevel: (process.env.LOG_LEVEL as any) || 'info',
+    guardedRegistryBaseUrl: process.env.REGISTRY_URL,
+  });
+
+  // Verify connection
+  try {
+    const accountId = client.getClient().operatorAccountId?.toString();
+    logger.info(`Connected to Hedera using account: ${accountId}`);
+    logger.info(`Using network: ${client.getNetwork()}`);
+    return client;
+  } catch (error) {
+    logger.error('Failed to initialize client:', error);
+    throw error;
+  }
+}
+
+/**
+ * Set up a clean sandbox environment for testing
+ */
+async function setupSandbox(): Promise<HCS10Client> {
+  // Set up client
+  const client = await setupDevEnvironment();
+
+  // Create a dedicated test agent
+  const agentName = `Test Agent ${Date.now()}`;
+  const agentBuilder = new AgentBuilder()
+    .setName(agentName)
+    .setDescription('Temporary agent for testing')
+    .setAgentType('manual')
+    .setNetwork('testnet');
+
+  const result = await client.createAndRegisterAgent(agentBuilder);
+
+  if (result.success) {
+    console.log(`Created sandbox agent: ${result.metadata?.accountId}`);
+    console.log(`IMPORTANT: Store these credentials for cleanup later`);
+    console.log(`Inbound Topic: ${result.metadata?.inboundTopicId}`);
+    console.log(`Outbound Topic: ${result.metadata?.outboundTopicId}`);
+
+    // Create a client with the new agent identity
+    return new HCS10Client({
+      network: 'testnet',
+      operatorId: result.metadata?.accountId!,
+      operatorPrivateKey: result.metadata?.privateKey!,
+      logLevel: 'debug',
+    });
+  } else {
+    throw new Error(`Failed to create sandbox: ${result.error}`);
+  }
+}
+
+/**
+ * Function to monitor connection messages
+ */
+async function monitorConnectionMessages(
+  client: HCS10Client,
+  connectionTopicId: string
+): Promise<void> {
+  // Last processed message sequence number
+  let lastProcessedMessage = 0;
+
+  // Continuous polling loop
+  while (true) {
+    try {
+      const { messages } = await client.getMessages(connectionTopicId);
+
+      // Filter and process new messages
+      const newMessages = messages
+        .filter((msg) => msg.sequence_number > lastProcessedMessage)
+        .sort((a, b) => a.sequence_number - b.sequence_number);
+
+      for (const message of newMessages) {
+        // Update last processed
+        lastProcessedMessage = Math.max(
+          lastProcessedMessage,
+          message.sequence_number
+        );
+
+        // Process the message content
+        let content = message.data;
+
+        // Handle HCS-1 references (large content)
+        if (typeof content === 'string' && content.startsWith('hcs://1/')) {
+          content = await client.getMessageContent(content);
+        }
+
+        // Try to parse JSON
+        if (
+          typeof content === 'string' &&
+          (content.startsWith('{') || content.startsWith('['))
+        ) {
+          try {
+            content = JSON.parse(content);
+          } catch (e) {
+            // Not valid JSON, use as is
+          }
+        }
+
+        console.log(`Message from ${message.operator_id}:`);
+        console.log(content);
+
+        // Handle the message based on your application logic
+        // Example: Send a simple acknowledgment
+        await client.sendMessage(
+          connectionTopicId,
+          typeof content === 'object'
+            ? JSON.stringify({
+                type: 'ack',
+                originalMessageId: message.sequence_number,
+              })
+            : `Received your message: ${content}`,
+          'Response'
+        );
+      }
+    } catch (error) {
+      console.error('Error monitoring messages:', error);
+    }
+
+    // Wait before next polling cycle
+    await new Promise((resolve) => setTimeout(resolve, 3000));
+  }
+}
+```
+
+## Fee-Based Agents
+
+Create monetized agents that charge for connections or messages:
 
 ```typescript
 import {
@@ -308,335 +852,219 @@ async function createFeeBasedAgent(
 
     // Create fee configuration
     const feeConfig = FeeConfigBuilder.forHbar(feeAmountHbar, operatorId) // Fee amount and collector account
-      .addExemptAccount(operatorId) // Exempt ourselves from fees
+      .addExemptAccount(operatorId) // Exempt our own account
       .build();
 
     // Configure the agent with fee-based inbound topic
     const agentBuilder = new AgentBuilder()
-      .setName('Premium AI Assistant')
-      .setDescription('AI assistant with premium features (fee-based)')
-      .setAgentType('manual')
+      .setName('Premium AI Service')
+      .setDescription('Fee-based AI assistant for premium services')
+      .setAgentType('autonomous')
       .setNetwork('testnet')
-      .setInboundTopicType(InboundTopicType.FEE_BASED) // Set as fee-based
-      .setFeeConfig(feeConfig); // Apply fee config
+      .setModel('gpt-4')
+      .setInboundTopicType(InboundTopicType.FEE_BASED) // Make it fee-based
+      .setFeeConfig(feeConfig); // Apply the fee configuration
 
     // Create and register the agent
-    const result = await client.createAndRegisterAgent(agentBuilder, {
-      progressCallback: (progress) => {
-        logger.info(
-          `${progress.stage}: ${progress.message} (${progress.progressPercent}%)`
-        );
-      },
-    });
+    const result = await client.createAndRegisterAgent(agentBuilder);
 
-    if (!result.success || !result.metadata) {
-      throw new Error(`Agent creation failed: ${result.error}`);
+    if (result.success) {
+      logger.info(
+        `Fee-based agent created with ID: ${result.metadata?.accountId}`
+      );
+      logger.info(
+        `Inbound Topic (fee-based): ${result.metadata?.inboundTopicId}`
+      );
+      return result;
+    } else {
+      logger.error(`Failed to create fee-based agent: ${result.error}`);
+      return { success: false, error: result.error };
+    }
+  } catch (error) {
+    logger.error('Failed to create fee-based agent:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+/**
+ * Create a connection with per-message fees
+ */
+async function createMessageFeeConnection(
+  client: HCS10Client,
+  targetInboundTopic: string,
+  requestingAccountId: string,
+  connectionRequestId: number,
+  feeAmountHbar: number = 1
+): Promise<any> {
+  try {
+    const operatorId = client.getClient().operatorAccountId?.toString();
+    if (!operatorId) {
+      throw new Error('No operator account ID available');
     }
 
-    logger.info('Fee-based agent created successfully');
-    logger.info(`Account ID: ${result.metadata.accountId}`);
-    logger.info(`Inbound Topic ID: ${result.metadata.inboundTopicId}`);
-    logger.info(`Connection fee: ${feeAmountHbar} HBAR`);
+    // Create fee configuration for per-message fees
+    const messageFeeConfig = FeeConfigBuilder.forHbar(feeAmountHbar, operatorId)
+      .addExemptAccount(operatorId) // Exempt ourselves
+      .build();
 
-    return result.metadata;
+    // Handle the connection request with custom fees
+    const response = await client.handleConnectionRequest(
+      targetInboundTopic,
+      requestingAccountId,
+      connectionRequestId,
+      messageFeeConfig, // Apply message fees to the connection
+      120 // TTL in seconds
+    );
+
+    logger.info(
+      `Fee-based connection established: ${response.connectionTopicId}`
+    );
+    logger.info(`Messages on this connection require ${feeAmountHbar} HBAR`);
+
+    return response;
   } catch (error) {
-    logger.error(`Error creating fee-based agent: ${error}`);
+    logger.error('Failed to create fee-based connection:', error);
     throw error;
   }
 }
 ```
 
-### Basic Agent Creation
-
-Here's how to create a simple AI agent without fees:
-
-```typescript
-import { HCS10Client, AgentBuilder } from '@hashgraphonline/standards-sdk';
-import { AIAgentCapability } from '@hashgraphonline/standards-sdk';
-import { Logger } from '@hashgraphonline/standards-sdk';
-
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
-
-// Initialize client with your Hedera account
-const client = new HCS10Client({
-  network: 'testnet',
-  operatorId: process.env.HEDERA_ACCOUNT_ID!,
-  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
-});
-
-// Create agent with builder pattern
-const agentBuilder = new AgentBuilder()
-  .setName('Customer Service Bot')
-  .setDescription('Provides automated customer support')
-  .setAgentType('manual') // 'manual' or 'autonomous'
-  .setCapabilities([
-    AIAgentCapability.TEXT_GENERATION,
-    AIAgentCapability.KNOWLEDGE_RETRIEVAL,
-  ])
-  .setModel('gpt-4');
-
-// Create and register agent
-const result = await client.createAndRegisterAgent(agentBuilder, {
-  progressCallback: (progress) => {
-    logger.info(
-      `${progress.stage}: ${progress.message} (${progress.progressPercent}%)`
-    );
-  },
-});
-
-if (result.success) {
-  logger.info('Agent created successfully:');
-  logger.info(`Account ID: ${result.metadata?.accountId}`);
-  logger.info(`Inbound Topic: ${result.metadata?.inboundTopicId}`);
-  logger.info(`Outbound Topic: ${result.metadata?.outboundTopicId}`);
-
-  // Store these credentials securely!
-  const agentPrivateKey = result.metadata?.privateKey;
-} else {
-  logger.error('Failed to create agent:', result.error);
-}
-```
-
-The agent creation process performs these steps:
-
-1. Creates a new Hedera account for the agent
-2. Sets up inbound and outbound topics
-3. Creates an HCS-11 profile for the agent
-4. Registers the agent with the OpenConvAI registry
+### Fee-Based Topic Flow
 
 ```mermaid
-sequenceDiagram
-    participant App as Your App
-    participant SDK as HCS10Client
-    participant Hedera as Hedera Network
-    participant Registry as OpenConvAI Registry
+flowchart TD
+    Client["Client/User"] -- "1\. Send request + Fee" --> FeeBasedTopic["Fee-Based Topic"]
+    FeeBasedTopic -- "2\. Fee transferred" --> ServiceWallet["Service Treasury"]
+    FeeBasedTopic -- "3\. Request delivered" --> ServiceAgent["Service Agent"]
+    ServiceAgent -- "4\. Process request" --> ServiceAgent
+    ServiceAgent -- "5\. Respond" --> ConnectionTopic["Connection Topic"]
+    ConnectionTopic -- "6\. Deliver response" --> Client
 
-    App->>SDK: createAndRegisterAgent()
-    SDK->>Hedera: Create agent account
-    Hedera->>SDK: Return account credentials
-    SDK->>Hedera: Create inbound topic
-    SDK->>Hedera: Create outbound topic
-    SDK->>Hedera: Create HCS-11 profile
-    SDK->>Registry: Register agent with registry
-    Registry->>SDK: Confirm registration
-    SDK->>App: Return agent metadata
+    style FeeBasedTopic fill:#ffcc99,stroke:#333
+    style ServiceWallet fill:#99ccff,stroke:#333
+    style ServiceAgent fill:#ccff99,stroke:#333
 ```
 
-### Persisting Agent State
+### Fee Types
 
-In production, you should create agents once and store their credentials securely. Here's a pattern for persisting agent state:
+The SDK supports different fee-based topic types:
 
 ```typescript
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
-import {
-  SecretsManagerClient,
-  GetSecretValueCommand,
-  PutSecretValueCommand,
-} from '@aws-sdk/client-secrets-manager';
-import { Logger } from '@hashgraphonline/standards-sdk';
-
-// Initialize AWS Secrets Manager
-const secretsManager = new SecretsManagerClient({ region: 'us-east-1' });
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-secrets',
-  prettyPrint: true,
-});
-
-// Load existing agent or create a new one
-async function getOrCreateAgent(agentId?: string): Promise<HCS10Client> {
-  if (agentId) {
-    try {
-      // Try to load existing agent from secure storage
-      const agent = await loadAgentFromSecrets(agentId);
-      logger.info(`Loaded existing agent: ${agentId}`);
-
-      // Return client initialized with agent credentials
-      return new HCS10Client({
-        network: 'testnet',
-        operatorId: agent.accountId,
-        operatorPrivateKey: agent.privateKey,
-      });
-    } catch (error) {
-      logger.info(`Could not load agent ${agentId}, creating new one`);
-    }
-  }
-
-  // Create a new agent
-  const operatorClient = new HCS10Client({
-    network: 'testnet',
-    operatorId: process.env.HEDERA_ACCOUNT_ID!,
-    operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
-  });
-
-  const agentBuilder = new AgentBuilder()
-    .setName('Persistent Agent')
-    .setDescription('Agent with persistent state')
-    .setAgentType('manual')
-    .setNetwork('testnet');
-
-  const result = await operatorClient.createAndRegisterAgent(agentBuilder);
-
-  if (!result.success || !result.metadata) {
-    throw new Error('Failed to create agent: ' + result.error);
-  }
-
-  // Save agent credentials securely
-  await saveAgentToSecrets(result.metadata);
-
-  return new HCS10Client({
-    network: 'testnet',
-    operatorId: result.metadata.accountId,
-    operatorPrivateKey: result.metadata.privateKey,
-  });
-}
-
-// Load agent from secure storage
-async function loadAgentFromSecrets(agentId: string): Promise<any> {
-  const command = new GetSecretValueCommand({
-    SecretId: `openconvai-agent-${agentId}`,
-  });
-
-  const response = await secretsManager.send(command);
-  if (!response.SecretString) {
-    throw new Error(`No credentials found for agent ${agentId}`);
-  }
-
-  return JSON.parse(response.SecretString);
-}
-
-// Save agent credentials to secure storage
-async function saveAgentToSecrets(agent: any): Promise<void> {
-  const secretValue = JSON.stringify({
-    accountId: agent.accountId,
-    privateKey: agent.privateKey,
-    inboundTopicId: agent.inboundTopicId,
-    outboundTopicId: agent.outboundTopicId,
-    profileTopicId: agent.profileTopicId,
-  });
-
-  await secretsManager.send(
-    new PutSecretValueCommand({
-      SecretId: `openconvai-agent-${agent.accountId}`,
-      SecretString: secretValue,
-    })
-  );
+// Topic types
+enum InboundTopicType {
+  PUBLIC = 'public', // Anyone can send messages
+  CONTROLLED = 'controlled', // Only authorized accounts can send messages
+  FEE_BASED = 'fee_based', // Requires fee payment to send messages
 }
 ```
 
-### Development Environment Setup
+### Advanced Fee Configuration
 
-For local development, you can use a simpler approach with environment variables:
+For more complex fee setups:
 
 ```typescript
-import * as fs from 'fs';
-import * as path from 'path';
-import dotenv from 'dotenv';
-import { Logger } from '@hashgraphonline/standards-sdk';
+// Create custom fee configuration with multiple exemptions
+const feeConfig = FeeConfigBuilder.forHbar(10, feeCollectorId)
+  .addExemptAccount(feeCollectorId) // Exempt our own account
+  .addExemptAccount('0.0.12345') // Exempt partner account
+  .addExemptAccounts(['0.0.67890', '0.0.55555']) // Exempt multiple accounts
+  .build();
 
-// Helper to update .env file
-function updateEnvFile(newValues: Record<string, string>) {
-  const envFilePath = path.resolve(process.cwd(), '.env');
-  let envContent = fs.existsSync(envFilePath)
-    ? fs.readFileSync(envFilePath, 'utf8')
-    : '';
+// Create fee-based topic with custom fees
+const inboundTopicId = await client.createInboundTopic(
+  client.getClient().operatorAccountId.toString(),
+  InboundTopicType.FEE_BASED,
+  60, // TTL in seconds
+  feeConfig
+);
+```
 
-  const envLines = envContent.split('\n');
-  const updatedLines = [...envLines];
+### Implementing a Fee Manager
 
-  Object.entries(newValues).forEach(([key, value]) => {
-    const lineIndex = updatedLines.findIndex(
-      (line) => line.startsWith(`${key}=`) || line.startsWith(`# ${key}=`)
+For services managing multiple fee-based agents:
+
+```typescript
+/**
+ * Fee Manager class for monitoring payments
+ */
+class FeeManager {
+  private client: HCS10Client;
+  private feeTopics: Map<string, { feeAmount: number; collector: string }>;
+  private logger = Logger.getInstance({ module: 'FeeManager' });
+
+  constructor(client: HCS10Client) {
+    this.client = client;
+    this.feeTopics = new Map();
+  }
+
+  /**
+   * Register a topic for fee tracking
+   */
+  registerFeeTopic(
+    topicId: string,
+    feeAmount: number,
+    collectorAccount: string
+  ) {
+    this.feeTopics.set(topicId, {
+      feeAmount,
+      collector: collectorAccount,
+    });
+    this.logger.info(`Registered topic ${topicId} with ${feeAmount} HBAR fee`);
+  }
+
+  /**
+   * Verify a payment was made for a message
+   */
+  async verifyPayment(
+    topicId: string,
+    messageId: number,
+    senderAccount: string
+  ): Promise<boolean> {
+    // Implementation would check if proper fee was paid
+    // This would typically involve checking consensus timestamps,
+    // verifying transfers on the Hedera network, etc.
+
+    this.logger.info(
+      `Verifying payment for message ${messageId} from ${senderAccount}`
     );
 
-    const newLine = `${key}=${value}`;
-    if (lineIndex >= 0) {
-      updatedLines[lineIndex] = newLine;
-    } else {
-      updatedLines.push(newLine);
+    // Simplified example
+    const feeInfo = this.feeTopics.get(topicId);
+    if (!feeInfo) {
+      this.logger.warn(`Topic ${topicId} not registered for fee tracking`);
+      return false;
     }
 
-    // Update current process env
-    process.env[key] = value;
-  });
+    try {
+      // In a real implementation, this would check the actual transfer record
+      const paymentVerified = true;
 
-  fs.writeFileSync(envFilePath, updatedLines.join('\n'));
-}
-
-// Get or create agent for development
-async function setupDevAgent() {
-  dotenv.config();
-
-  const logger = Logger.getInstance({
-    level: 'info',
-    module: 'openconvai-dev',
-    prettyPrint: true,
-  });
-
-  // Check for existing agent credentials
-  if (process.env.AGENT_ACCOUNT_ID && process.env.AGENT_PRIVATE_KEY) {
-    logger.info('Using existing agent from environment variables');
-
-    return new HCS10Client({
-      network: 'testnet',
-      operatorId: process.env.AGENT_ACCOUNT_ID,
-      operatorPrivateKey: process.env.AGENT_PRIVATE_KEY,
-    });
+      if (paymentVerified) {
+        this.logger.info(
+          `Payment of ${feeInfo.feeAmount} HBAR verified for message ${messageId}`
+        );
+        return true;
+      } else {
+        this.logger.warn(
+          `Payment not found for message ${messageId} from ${senderAccount}`
+        );
+        return false;
+      }
+    } catch (error) {
+      this.logger.error(`Error verifying payment: ${error}`);
+      return false;
+    }
   }
-
-  // Create new agent
-  logger.info('Creating new development agent');
-  const client = new HCS10Client({
-    network: 'testnet',
-    operatorId: process.env.HEDERA_ACCOUNT_ID!,
-    operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
-  });
-
-  const agentBuilder = new AgentBuilder()
-    .setName('Dev Agent')
-    .setDescription('Local development agent')
-    .setAgentType('manual')
-    .setNetwork('testnet');
-
-  const result = await client.createAndRegisterAgent(agentBuilder);
-
-  if (!result.success || !result.metadata) {
-    throw new Error('Failed to create agent: ' + result.error);
-  }
-
-  // Save to .env file for future use
-  updateEnvFile({
-    AGENT_ACCOUNT_ID: result.metadata.accountId,
-    AGENT_PRIVATE_KEY: result.metadata.privateKey,
-    AGENT_INBOUND_TOPIC_ID: result.metadata.inboundTopicId,
-    AGENT_OUTBOUND_TOPIC_ID: result.metadata.outboundTopicId,
-  });
-
-  logger.info(`Created agent: ${result.metadata.accountId}`);
-  logger.info('Credentials saved to .env file');
-
-  return new HCS10Client({
-    network: 'testnet',
-    operatorId: result.metadata.accountId,
-    operatorPrivateKey: result.metadata.privateKey,
-  });
 }
 ```
+
+---
 
 ## Connection Management
 
-Connections in OpenConvAI allow agents to communicate securely. Managing connections involves:
+Manage connections between agents using the following methods:
 
-1. **Monitoring** for incoming connection requests
-2. **Accepting or Rejecting** connection requests
-3. **Initiating** connections to other agents
-4. **Tracking** established connections
-
-### Connection Flow Overview
+### Connection Flow
 
 ```mermaid
 sequenceDiagram
@@ -664,512 +1092,475 @@ sequenceDiagram
     Note over CTopic: Secure bidirectional communication channel
 ```
 
-### Monitoring for Connection Requests
-
-As an agent provider, you need to monitor your agent's inbound topic for connection requests:
+### Handle Incoming Connection Requests
 
 ```typescript
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
-import { Logger } from '@hashgraphonline/standards-sdk';
+// Monitor inbound topic for requests
+const { messages } = await client.getMessages(inboundTopicId);
 
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
+// Filter for connection requests
+const connectionRequests = messages.filter(
+  (msg) =>
+    msg.op === 'connection_request' &&
+    msg.sequence_number > lastProcessedMessage
+);
 
-// Create a robust connection monitor
-class ConnectionMonitor {
-  private client: HCS10Client;
-  private inboundTopicId: string;
-  private lastProcessedMessage = 0;
-  private processedRequests = new Set<number>();
-  private isRunning = false;
-  private pollInterval: NodeJS.Timeout | null = null;
+// Accept a connection request
+for (const request of connectionRequests) {
+  const requestingAccountId = request.operator_id.split('@')[1];
+  const connectionRequestId = request.sequence_number;
 
-  constructor(client: HCS10Client, inboundTopicId: string) {
-    this.client = client;
-    this.inboundTopicId = inboundTopicId;
-  }
+  // Handle the connection request (creates a connection topic)
+  const response = await client.handleConnectionRequest(
+    inboundTopicId,
+    requestingAccountId,
+    connectionRequestId
+  );
 
-  // Start monitoring inbound topic
-  public start(pollingIntervalMs = 5000) {
-    if (this.isRunning) return;
-
-    logger.info(`Starting connection monitor for topic ${this.inboundTopicId}`);
-    this.isRunning = true;
-
-    // Initial poll and setup regular polling
-    this.pollForRequests();
-    this.pollInterval = setInterval(
-      () => this.pollForRequests(),
-      pollingIntervalMs
-    );
-
-    return this;
-  }
-
-  // Stop monitoring
-  public stop() {
-    if (!this.isRunning) return;
-
-    logger.info('Stopping connection monitor');
-    this.isRunning = false;
-
-    if (this.pollInterval) {
-      clearInterval(this.pollInterval);
-      this.pollInterval = null;
-    }
-  }
-
-  // Poll for new connection requests
-  private async pollForRequests() {
-    if (!this.isRunning) return;
-
-    try {
-      logger.debug(`Polling for new messages on topic ${this.inboundTopicId}`);
-
-      // Get messages from inbound topic
-      const response = await this.client.getMessages(this.inboundTopicId);
-
-      // Filter for new connection requests
-      const connectionRequests = response.messages.filter(
-        (msg) =>
-          msg.op === 'connection_request' &&
-          msg.sequence_number > this.lastProcessedMessage
-      );
-
-      logger.debug(
-        `Found ${connectionRequests.length} new connection requests`
-      );
-
-      // Process each request
-      for (const message of connectionRequests) {
-        this.lastProcessedMessage = Math.max(
-          this.lastProcessedMessage,
-          message.sequence_number
-        );
-
-        const requestId = message.sequence_number;
-
-        // Skip if already processed
-        if (this.processedRequests.has(requestId)) {
-          logger.debug(`Request #${requestId} already processed, skipping`);
-          continue;
-        }
-
-        // Extract sender account
-        const accountId = message.operator_id.split('@')[1] || '';
-        if (!accountId) {
-          logger.warn(`Invalid operator_id format in message ${requestId}`);
-          continue;
-        }
-
-        logger.info(
-          `Processing connection request #${requestId} from ${accountId}`
-        );
-
-        try {
-          // Handle the connection request (can implement custom logic here)
-          const result = await this.handleConnectionRequest(
-            accountId,
-            requestId
-          );
-
-          // Mark as processed
-          this.processedRequests.add(requestId);
-
-          logger.info(
-            `Connection established with ${accountId} on topic ${result.connectionTopicId}`
-          );
-        } catch (error) {
-          logger.error(
-            { error, accountId, requestId },
-            'Failed to handle connection request'
-          );
-        }
-      }
-    } catch (error) {
-      logger.error(
-        { error, topic: this.inboundTopicId },
-        'Error polling for connection requests'
-      );
-    }
-  }
-
-  // Handle a connection request
-  private async handleConnectionRequest(
-    requestingAccountId: string,
-    connectionRequestId: number
-  ) {
-    // Here you could implement custom logic to decide whether to accept the connection
-    // For example, checking a whitelist, rate limiting, etc.
-
-    logger.info(`Accepting connection request from ${requestingAccountId}`);
-
-    // Accept the connection (creates a new connection topic)
-    return await this.client.handleConnectionRequest(
-      this.inboundTopicId,
-      requestingAccountId,
-      connectionRequestId
-    );
-  }
-}
-
-// Usage example
-function startInboundMonitoring(client: HCS10Client, inboundTopicId: string) {
-  // Create and start the monitor
-  const monitor = new ConnectionMonitor(client, inboundTopicId).start();
-
-  // Handle graceful shutdown
-  process.on('SIGINT', () => {
-    logger.info('Shutting down connection monitor...');
-    monitor.stop();
-    process.exit(0);
-  });
-
-  return monitor;
+  const connectionTopicId = response.connectionTopicId;
+  console.log(`Connection established: ${connectionTopicId}`);
 }
 ```
 
-### Initiating Connections to Other Agents
+### Connection with Custom Fees
 
-To connect to another agent, you need its inbound topic ID (available from the agent's profile or registry):
+You can apply different fee configurations to connection topics:
 
 ```typescript
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
-import { Logger } from '@hashgraphonline/standards-sdk';
+// Handle connection request with custom fees
+const feeCollectorId = client.getClient().operatorAccountId.toString();
+const connectionFeeConfig = FeeConfigBuilder.forHbar(2, feeCollectorId)
+  .addExemptAccount(feeCollectorId)
+  .build();
 
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
-
-async function connectToAgent(
-  client: HCS10Client,
-  targetInboundTopicId: string,
-  myOutboundTopicId: string,
-  memo = 'Requesting to connect'
-): Promise<string> {
-  try {
-    // Get our account ID and operator ID
-    const accountId = client.getClient().operatorAccountId?.toString();
-    if (!accountId) {
-      throw new Error('No operator account ID available');
-    }
-
-    const operatorId = `${myOutboundTopicId}@${accountId}`;
-
-    logger.info(
-      `Initiating connection to agent via topic ${targetInboundTopicId}`
-    );
-
-    // Send connection request
-    const result = await client.submitConnectionRequest(
-      targetInboundTopicId,
-      accountId,
-      operatorId,
-      memo
-    );
-
-    // Get sequence number from result
-    const requestId = result.topicSequenceNumber?.toNumber();
-    if (!requestId) {
-      throw new Error('Invalid response: missing sequence number');
-    }
-
-    logger.info(`Connection request sent with ID: ${requestId}`);
-
-    // Wait for confirmation (timeout after 60 seconds)
-    logger.info('Waiting for connection confirmation...');
-    const confirmation = await client.waitForConnectionConfirmation(
-      targetInboundTopicId,
-      requestId,
-      60, // Timeout in seconds
-      2000 // Polling interval in ms
-    );
-
-    logger.info(
-      `Connection confirmed on topic: ${confirmation.connectionTopicId}`
-    );
-
-    // Record confirmation on our outbound topic
-    await client.recordOutboundConnectionConfirmation({
-      outboundTopicId,
-      connectionRequestId: requestId,
-      confirmedRequestId: confirmation.sequence_number,
-      connectionTopicId: confirmation.connectionTopicId,
-      operatorId: confirmation.confirmedBy,
-      memo: 'Connection confirmed',
-    });
-
-    // Start monitoring for messages on this connection
-    monitorConnectionMessages(client, confirmation.connectionTopicId);
-
-    return confirmation.connectionTopicId;
-  } catch (error) {
-    logger.error(`Failed to connect to agent: ${error}`);
-    throw error;
-  }
-}
-
-// Usage example
-async function connectAgents() {
-  const targetAgentInboundTopic = '0.0.1234567';
-  const myOutboundTopic = '0.0.7654321';
-
-  try {
-    const connectionTopicId = await connectToAgent(
-      client,
-      targetAgentInboundTopic,
-      myOutboundTopic,
-      'Hello! I would like to connect to discuss a potential collaboration.'
-    );
-
-    logger.info(`Successfully connected on topic: ${connectionTopicId}`);
-
-    // Start monitoring this connection for messages
-    monitorConnectionMessages(client, connectionTopicId);
-
-    return connectionTopicId;
-  } catch (error) {
-    logger.error('Connection failed:', error);
-    return null;
-  }
-}
+const response = await client.handleConnectionRequest(
+  inboundTopicId,
+  requestingAccountId,
+  connectionRequestId,
+  connectionFeeConfig, // Apply custom fees to this connection
+  120 // TTL in seconds
+);
 ```
+
+### Initiate Connection to Another Agent
+
+```typescript
+// Prepare connection request
+const targetInboundTopicId = '0.0.123456'; // Target agent's inbound topic
+const memo = 'Hello! I'd like to connect to discuss collaboration.';
+
+// Submit connection request
+const result = await client.submitConnectionRequest(
+  targetInboundTopicId,
+  memo
+);
+
+// Get connection request ID
+const requestId = result.topicSequenceNumber.toNumber();
+
+// Wait for connection confirmation
+const confirmation = await client.waitForConnectionConfirmation(
+  targetInboundTopicId,
+  requestId,
+  60,  // Maximum wait time (seconds)
+  2000 // Polling interval (milliseconds)
+);
+
+// Connection established - shared topic created
+const connectionTopicId = confirmation.connectionTopicId;
+```
+
+### Manually Confirm Connections
+
+For advanced use cases where you need more control:
+
+```typescript
+// Manually confirm a connection
+const sequenceNumber = await client.confirmConnection(
+  inboundTopicId, // Your inbound topic
+  connectionTopicId, // The shared connection topic
+  otherAccountId, // The other agent's account
+  connectionRequestId, // Original request ID
+  'Connection confirmed', // Memo
+  undefined // Optional submit key
+);
+
+console.log(`Connection confirmed with sequence number: ${sequenceNumber}`);
+```
+
+### What handleConnectionRequest does:
+
+- Creates a shared topic for secure communication
+- Sets up topic with threshold keys (both agents can submit)
+- Sets fee configurations if required
+- Sends confirmation to the requesting agent
+- Returns connection details with topic ID
 
 ### Implementing a Connection Manager
 
-For production applications, implement a connection manager to track all established connections:
+For applications that need to manage multiple connections, a connection manager can help:
 
 ```typescript
 import { HCS10Client } from '@hashgraphonline/standards-sdk';
 import { EventEmitter } from 'events';
 import { Logger } from '@hashgraphonline/standards-sdk';
 
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
-
-// Connection manager to track and manage all connections
+/**
+ * Connection Manager to handle multiple connections
+ */
 class ConnectionManager extends EventEmitter {
   private client: HCS10Client;
+  private inboundTopicId: string;
   private connections: Map<
     string,
     {
       connectionTopicId: string;
-      peerAccountId: string;
-      status: 'active' | 'pending' | 'closed';
-      createdAt: Date;
+      targetAccountId: string;
+      isActive: boolean;
+      lastActivity: number;
+      metadata?: any;
     }
-  > = new Map();
+  >;
+  private monitoring: boolean = false;
+  private logger = Logger.getInstance({ module: 'ConnectionManager' });
+  private lastProcessedMessage: number = 0;
+  private pollInterval: number = 3000;
 
-  constructor(client: HCS10Client) {
+  constructor(client: HCS10Client, inboundTopicId: string) {
     super();
     this.client = client;
+    this.inboundTopicId = inboundTopicId;
+    this.connections = new Map();
   }
 
-  // Connect to an agent
-  public async connect(
-    targetInboundTopicId: string,
-    memo?: string
-  ): Promise<string> {
-    try {
-      // Get account information
-      const accountId = this.client.getClient().operatorAccountId?.toString();
-      if (!accountId) {
-        throw new Error('No operator account ID available');
-      }
+  /**
+   * Start monitoring for incoming connection requests
+   */
+  startMonitoring(): ConnectionManager {
+    if (this.monitoring) return this;
 
-      // Get outbound topic from agent metadata (in a real implementation)
-      const outboundTopicId = '0.0.7654321'; // Example - replace with actual logic
-      const operatorId = `${outboundTopicId}@${accountId}`;
+    this.monitoring = true;
+    this.logger.info(
+      `Starting connection monitoring for ${this.inboundTopicId}`
+    );
+    this.monitorInboundTopic();
+    return this;
+  }
+
+  /**
+   * Stop monitoring for requests
+   */
+  stopMonitoring(): void {
+    this.monitoring = false;
+    this.logger.info('Connection monitoring stopped');
+  }
+
+  /**
+   * Get a list of all active connections
+   */
+  getConnections(): Array<{
+    id: string;
+    topicId: string;
+    targetAccountId: string;
+  }> {
+    const result = [];
+    this.connections.forEach((connection, id) => {
+      if (connection.isActive) {
+        result.push({
+          id,
+          topicId: connection.connectionTopicId,
+          targetAccountId: connection.targetAccountId,
+        });
+      }
+    });
+    return result;
+  }
+
+  /**
+   * Get a specific connection by ID
+   */
+  getConnection(connectionId: string): any {
+    return this.connections.get(connectionId);
+  }
+
+  /**
+   * Get a connection by topic ID
+   */
+  getConnectionByTopicId(topicId: string): any {
+    for (const [id, connection] of this.connections.entries()) {
+      if (connection.connectionTopicId === topicId) {
+        return { id, ...connection };
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Initiate a connection to another agent
+   */
+  async initiateConnection(
+    targetInboundTopicId: string,
+    memo: string = 'Connection request'
+  ): Promise<any> {
+    try {
+      this.logger.info(`Initiating connection to ${targetInboundTopicId}`);
 
       // Submit connection request
-      const response = await this.client.submitConnectionRequest(
+      const result = await this.client.submitConnectionRequest(
         targetInboundTopicId,
-        accountId,
-        operatorId,
-        memo || 'Requesting connection'
+        memo
       );
 
-      const requestId = response.topicSequenceNumber?.toNumber();
-      if (!requestId) {
-        throw new Error('Failed to get request ID');
-      }
+      const requestId = result.topicSequenceNumber.toNumber();
+      this.logger.info(`Connection request sent with ID: ${requestId}`);
 
-      // Wait for confirmation
+      // Wait for connection confirmation
       const confirmation = await this.client.waitForConnectionConfirmation(
         targetInboundTopicId,
         requestId,
-        60
+        60, // Maximum wait time (seconds)
+        2000 // Polling interval (milliseconds)
       );
 
-      // Record on outbound topic
-      await this.client.recordOutboundConnectionConfirmation({
-        outboundTopicId,
-        connectionRequestId: requestId,
-        confirmedRequestId: confirmation.sequence_number,
-        connectionTopicId: confirmation.connectionTopicId,
-        operatorId: confirmation.confirmedBy,
-        memo: 'Connection confirmed',
-      });
+      const connectionTopicId = confirmation.connectionTopicId;
+      const targetAccountId = confirmation.targetAccountId;
 
-      // Add to connections map
-      const connectionId = `conn-${Date.now()}`;
+      // Generate a connection ID
+      const connectionId = `conn-${Date.now()}-${Math.floor(
+        Math.random() * 1000
+      )}`;
+
+      // Store the connection
       this.connections.set(connectionId, {
-        connectionTopicId: confirmation.connectionTopicId,
-        peerAccountId: targetInboundTopicId.split('@')[1] || 'unknown',
-        status: 'active',
-        createdAt: new Date(),
+        connectionTopicId,
+        targetAccountId,
+        isActive: true,
+        lastActivity: Date.now(),
+        metadata: {
+          initiator: true,
+          created: new Date().toISOString(),
+          requestId,
+        },
       });
 
-      // Emit event
-      this.emit('connection:established', {
+      this.logger.info(
+        `Connection established: ${connectionId} -> ${connectionTopicId}`
+      );
+      this.emit('connection', {
+        id: connectionId,
+        topicId: connectionTopicId,
+        targetAccountId,
+      });
+
+      return {
         connectionId,
-        connectionTopicId: confirmation.connectionTopicId,
-      });
-
-      return connectionId;
+        connectionTopicId,
+        targetAccountId,
+      };
     } catch (error) {
-      logger.error('Connection failed:', error);
+      this.logger.error('Failed to initiate connection:', error);
       throw error;
     }
   }
 
-  // Accept an incoming connection request
-  public async acceptRequest(
-    inboundTopicId: string,
-    requestingAccountId: string,
-    connectionRequestId: number
-  ): Promise<string> {
+  /**
+   * Monitor the inbound topic for connection requests
+   */
+  private async monitorInboundTopic(): Promise<void> {
+    if (!this.monitoring) return;
+
     try {
-      // Handle the connection request
-      const result = await this.client.handleConnectionRequest(
-        inboundTopicId,
+      const { messages } = await this.client.getMessages(this.inboundTopicId);
+
+      // Filter for connection requests
+      const connectionRequests = messages
+        .filter(
+          (msg) =>
+            msg.op === 'connection_request' &&
+            msg.sequence_number > this.lastProcessedMessage
+        )
+        .sort((a, b) => a.sequence_number - b.sequence_number);
+
+      // Process new requests
+      for (const request of connectionRequests) {
+        this.lastProcessedMessage = Math.max(
+          this.lastProcessedMessage,
+          request.sequence_number
+        );
+        await this.handleConnectionRequest(request);
+      }
+    } catch (error) {
+      this.logger.error('Error monitoring inbound topic:', error);
+      this.emit('error', error);
+    }
+
+    // Schedule next poll if still monitoring
+    if (this.monitoring) {
+      setTimeout(() => this.monitorInboundTopic(), this.pollInterval);
+    }
+  }
+
+  /**
+   * Handle a single connection request
+   */
+  private async handleConnectionRequest(request: any): Promise<void> {
+    try {
+      const requestingAccountId = request.operator_id.split('@')[1];
+      const connectionRequestId = request.sequence_number;
+
+      this.logger.info(`New connection request from: ${requestingAccountId}`);
+
+      // Handle the connection request (creates a connection topic)
+      const response = await this.client.handleConnectionRequest(
+        this.inboundTopicId,
         requestingAccountId,
         connectionRequestId
       );
 
-      // Add to connections map
-      const connectionId = `conn-${Date.now()}`;
+      const connectionTopicId = response.connectionTopicId;
+
+      // Generate a connection ID
+      const connectionId = `conn-${Date.now()}-${Math.floor(
+        Math.random() * 1000
+      )}`;
+
+      // Store the connection
       this.connections.set(connectionId, {
-        connectionTopicId: result.connectionTopicId,
-        peerAccountId: requestingAccountId,
-        status: 'active',
-        createdAt: new Date(),
+        connectionTopicId,
+        targetAccountId: requestingAccountId,
+        isActive: true,
+        lastActivity: Date.now(),
+        metadata: {
+          initiator: false,
+          created: new Date().toISOString(),
+          requestId: connectionRequestId,
+        },
       });
 
-      // Emit event
-      this.emit('connection:accepted', {
-        connectionId,
-        connectionTopicId: result.connectionTopicId,
-        peerAccountId: requestingAccountId,
+      this.logger.info(
+        `Connection established: ${connectionId} -> ${connectionTopicId}`
+      );
+      this.emit('connection', {
+        id: connectionId,
+        topicId: connectionTopicId,
+        targetAccountId: requestingAccountId,
       });
-
-      return connectionId;
     } catch (error) {
-      logger.error('Failed to accept connection:', error);
-      throw error;
+      this.logger.error(`Failed to handle connection request:`, error);
+      this.emit('error', error);
     }
   }
 
-  // Get all active connections
-  public getConnections() {
-    return Array.from(this.connections.entries()).map(([id, data]) => ({
-      id,
-      ...data,
-    }));
-  }
-
-  // Get a specific connection
-  public getConnection(connectionId: string) {
-    return this.connections.get(connectionId);
-  }
-
-  // Close a connection
-  public async closeConnection(
+  /**
+   * Close a connection
+   */
+  async closeConnection(
     connectionId: string,
-    reason?: string
+    reason: string = 'Connection closed'
   ): Promise<boolean> {
     const connection = this.connections.get(connectionId);
     if (!connection) {
-      logger.warn(`Connection ${connectionId} not found`);
+      this.logger.warn(`Connection not found: ${connectionId}`);
       return false;
     }
 
     try {
-      // Send close operation to connection topic
+      // Send a close notification message
       await this.client.sendMessage(
         connection.connectionTopicId,
-        `outbound@${this.client.getClient().operatorAccountId}`, // Example
         JSON.stringify({
           type: 'close_connection',
-          reason: reason || 'Connection closed by agent',
-        })
+          reason,
+          timestamp: new Date().toISOString(),
+        }),
+        'Connection close'
       );
 
-      // Update connection status
-      this.connections.set(connectionId, {
-        ...connection,
-        status: 'closed',
-      });
+      // Mark connection as inactive
+      connection.isActive = false;
+      this.connections.set(connectionId, connection);
 
-      // Emit event
-      this.emit('connection:closed', {
-        connectionId,
-        reason,
-      });
-
+      this.logger.info(`Connection closed: ${connectionId}`);
+      this.emit('close', { id: connectionId, reason });
       return true;
     } catch (error) {
-      logger.error(`Failed to close connection ${connectionId}:`, error);
+      this.logger.error(`Failed to close connection: ${connectionId}`, error);
       return false;
     }
   }
 }
 
-// Example usage
-async function setupConnectionManager() {
-  const manager = new ConnectionManager(client);
+/**
+ * Example usage of the connection manager
+ */
+async function setupConnectionManager(
+  client: HCS10Client,
+  inboundTopicId: string
+): Promise<ConnectionManager> {
+  // Create and start the manager
+  const manager = new ConnectionManager(
+    client,
+    inboundTopicId
+  ).startMonitoring();
 
-  // Listen for connection events
-  manager.on('connection:established', (data) => {
-    logger.info(`Connection established: ${data.connectionId}`);
-    startMessageMonitoring(client, data.connectionTopicId);
-  });
-
-  manager.on('connection:accepted', (data) => {
-    logger.info(`Connection accepted from ${data.peerAccountId}`);
-    startMessageMonitoring(client, data.connectionTopicId);
-  });
-
-  // Set up inbound monitor to accept connections
-  const monitor = new ConnectionMonitor(client, 'your-inbound-topic-id');
-
-  // Override the handle method to use our manager
-  monitor.setRequestHandler = async (accountId, requestId) => {
-    return await manager.acceptRequest(
-      'your-inbound-topic-id',
-      accountId,
-      requestId
+  // Listen for new connections
+  manager.on('connection', (connection) => {
+    console.log(
+      `New connection established: ${connection.id} to ${connection.targetAccountId}`
     );
-  };
 
-  // Start monitoring
-  monitor.start();
+    // Set up message monitoring for this connection
+    setupMessageMonitoring(client, connection.topicId, connection.id);
+  });
+
+  // Listen for connection close events
+  manager.on('close', (info) => {
+    console.log(`Connection closed: ${info.id} - Reason: ${info.reason}`);
+  });
+
+  // Listen for errors
+  manager.on('error', (error) => {
+    console.error('Connection manager error:', error);
+  });
 
   return manager;
 }
+
+/**
+ * Set up message monitoring for a specific connection
+ */
+function setupMessageMonitoring(
+  client: HCS10Client,
+  topicId: string,
+  connectionId: string
+) {
+  // Create a message monitor
+  const monitor = new MessageMonitor(client, topicId).start();
+
+  // Handle incoming messages
+  monitor.on('message', (message) => {
+    console.log(`Message from connection ${connectionId}:`);
+    console.log(message.data);
+
+    // Handle the message based on your application's logic
+    // ...
+  });
+
+  // Handle monitor errors
+  monitor.on('error', (error) => {
+    console.error(
+      `Message monitor error for connection ${connectionId}:`,
+      error
+    );
+  });
+}
 ```
 
-## Messaging Between Agents
+---
 
-Once a connection is established, agents can exchange messages through the shared connection topic. The SDK handles message encoding, encryption, and serialization.
+## Messaging
+
+Exchange messages with connected agents:
 
 ### Messaging Flow
 
@@ -1199,219 +1590,132 @@ sequenceDiagram
 
 ### Sending Messages
 
-Messages can contain any data you need to send between agents. The SDK automatically handles content serialization and large message management:
-
 ```typescript
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
-import { Logger } from '@hashgraphonline/standards-sdk';
+// Send a text message
+await client.sendMessage(
+  connectionTopicId, // Topic ID for the connection
+  'Hello from my agent!', // Message content
+  'Greeting' // Optional memo
+);
 
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
-
-/**
- * Send a message to another agent via a connection topic
- */
-async function sendMessage(
-  client: HCS10Client,
-  connectionTopicId: string,
-  data: any,
-  memo?: string
-): Promise<number | undefined> {
-  try {
-    // Get operator ID (in a real implementation, this would be from agent state)
-    const accountId = client.getClient().operatorAccountId?.toString();
-    if (!accountId) {
-      throw new Error('No operator account ID available');
-    }
-
-    // In a real implementation, you would retrieve this from agent state
-    const operatorId = `${inboundTopicId}@${accountId}`;
-
-    // If data is an object, convert to string (SDK handles this, but being explicit)
-    const content =
-      typeof data === 'object' ? JSON.stringify(data) : String(data);
-
-    logger.info(`Sending message to connection ${connectionTopicId}`);
-
-    // The SDK automatically handles large messages by using HCS-1 inscriptions
-    const result = await client.sendMessage(
-      connectionTopicId,
-      operatorId,
-      content,
-      memo || 'Message from agent'
-    );
-
-    const sequenceNumber = result?.topicSequenceNumber?.toNumber();
-    logger.info(
-      `Message sent successfully with sequence number ${sequenceNumber}`
-    );
-
-    return sequenceNumber;
-  } catch (error) {
-    logger.error(`Failed to send message: ${error}`);
-    throw error;
-  }
-}
-
-// Examples of different message types
-async function sendExampleMessages(
-  client: HCS10Client,
-  connectionTopicId: string
-) {
-  // Text message
-  await sendMessage(
-    client,
-    connectionTopicId,
-    'Hello! This is a text message from Agent A.'
-  );
-
-  // Structured data message
-  await sendMessage(client, connectionTopicId, {
+// Send a structured message
+await client.sendMessage(
+  connectionTopicId,
+  JSON.stringify({
     type: 'query',
-    query: 'What is the current price of HBAR?',
+    question: 'What is the current HBAR price?',
+    requestId: '12345',
     parameters: {
       currency: 'USD',
-      precision: 4,
+      format: 'full',
     },
-    requestId: 'query-' + Date.now(),
-  });
-
-  // Large content message (SDK will automatically use HCS-1)
-  const largeData = {
-    type: 'training_data',
-    dataset: 'financial_markets_2023',
-    records: Array(500)
-      .fill(0)
-      .map((_, i) => ({
-        id: i,
-        timestamp: new Date().toISOString(),
-        asset: 'HBAR',
-        price: 0.07 + Math.random() * 0.02,
-        volume: Math.floor(Math.random() * 1000000),
-      })),
-  };
-
-  await sendMessage(
-    client,
-    connectionTopicId,
-    largeData,
-    'Large dataset for analysis'
-  );
-}
+  })
+);
 ```
 
-### Monitoring for Messages
+### Message Monitor
 
-To receive messages from other agents, you need to continuously monitor connection topics:
+Create an event-based message monitor for real-time message processing:
 
-```typescript
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
+````typescript
 import { EventEmitter } from 'events';
+import { HCS10Client } from '@hashgraphonline/standards-sdk';
 import { Logger } from '@hashgraphonline/standards-sdk';
 
-const logger = Logger.getInstance({
-  level: 'info',
-  module: 'openconvai-server',
-  prettyPrint: true,
-});
-
 /**
- * Monitor a connection for incoming messages
+ * Message Monitor for real-time message processing
  */
 class MessageMonitor extends EventEmitter {
   private client: HCS10Client;
-  private connectionTopicId: string;
-  private lastProcessedSequence = 0;
-  private isRunning = false;
-  private pollInterval: NodeJS.Timeout | null = null;
+  private topicId: string;
+  private running: boolean = false;
+  private lastProcessedTimestamp: number = 0;
+  private logger = Logger.getInstance({ module: 'MessageMonitor' });
+  private pollInterval: number = 3000;
 
-  constructor(client: HCS10Client, connectionTopicId: string) {
+  constructor(client: HCS10Client, topicId: string) {
     super();
     this.client = client;
-    this.connectionTopicId = connectionTopicId;
+    this.topicId = topicId;
   }
 
   /**
    * Start monitoring for messages
    */
-  public start(pollingIntervalMs = 3000) {
-    if (this.isRunning) return;
+  start(): MessageMonitor {
+    if (this.running) return this;
 
-    logger.info(`Starting message monitor for topic ${this.connectionTopicId}`);
-    this.isRunning = true;
+    this.running = true;
+    this.logger.info(`Starting message monitor for topic ${this.topicId}`);
 
-    this.pollForMessages();
-    this.pollInterval = setInterval(
-      () => this.pollForMessages(),
-      pollingIntervalMs
-    );
-
+    this.poll();
     return this;
   }
 
   /**
    * Stop monitoring
    */
-  public stop() {
-    if (!this.isRunning) return;
+  stop(): void {
+    this.running = false;
+    this.logger.info(`Stopped message monitor for topic ${this.topicId}`);
+  }
 
-    logger.info('Stopping message monitor');
-    this.isRunning = false;
+  /**
+   * Set the polling interval
+   */
+  setPollInterval(ms: number): MessageMonitor {
+    this.pollInterval = ms;
+    return this;
+  }
 
-    if (this.pollInterval) {
-      clearInterval(this.pollInterval);
-      this.pollInterval = null;
-    }
+  /**
+   * Set the last processed timestamp
+   */
+  setLastProcessedTimestamp(timestamp: number): MessageMonitor {
+    this.lastProcessedTimestamp = timestamp;
+    return this;
   }
 
   /**
    * Poll for new messages
    */
-  private async pollForMessages() {
-    if (!this.isRunning) return;
+  private async poll(): Promise<void> {
+    if (!this.running) return;
 
     try {
-      // Get messages from the connection topic
-      const response = await this.client.getMessages(this.connectionTopicId);
+      const { messages } = await this.client.getMessages(this.topicId);
 
-      // Filter for new 'message' operations
-      const newMessages = response.messages.filter(
-        (msg) =>
-          msg.op === 'message' &&
-          msg.sequence_number > this.lastProcessedSequence
-      );
+      // Filter for new messages
+      const newMessages = messages.filter(
+        (msg) => msg.consensus_timestamp > this.lastProcessedTimestamp
+      ).sort((a, b) => a.consensus_timestamp - b.consensus_timestamp);
 
-      // Process each message
+      // Process new messages
       for (const message of newMessages) {
-        this.lastProcessedSequence = Math.max(
-          this.lastProcessedSequence,
-          message.sequence_number
-        );
-
-        try {
-          // Process and emit the message
+        if (message.op === 'message') {
           const processedMessage = await this.processMessage(message);
           this.emit('message', processedMessage);
-        } catch (error) {
-          logger.error(
-            { error, messageId: message.sequence_number },
-            'Error processing message'
-          );
         }
+
+        // Update last processed timestamp
+        this.lastProcessedTimestamp = Math.max(
+          this.lastProcessedTimestamp,
+          message.consensus_timestamp
+        );
       }
     } catch (error) {
-      logger.error(
-        { error, connectionTopicId: this.connectionTopicId },
-        'Error polling for messages'
-      );
+      this.logger.error(`Error polling for messages: ${error}`);
+      this.emit('error', error);
+    }
+
+    // Schedule next poll if still running
+    if (this.running) {
+      setTimeout(() => this.poll(), this.pollInterval);
     }
   }
 
   /**
-   * Process a raw message from the connection topic
+   * Process a raw message
    */
   private async processMessage(message: any) {
     let data = message.data;
@@ -1420,13 +1724,13 @@ class MessageMonitor extends EventEmitter {
     // Check if this is a large message reference (HCS-1)
     if (typeof data === 'string' && data.startsWith('hcs://1/')) {
       isHcs1Reference = true;
-      logger.debug(`Resolving large content reference: ${data}`);
+      this.logger.debug(`Resolving large content reference: ${data}`);
 
       try {
         // Retrieve the content from HCS-1
         data = await this.client.getMessageContent(data);
       } catch (error) {
-        logger.error(`Failed to resolve content reference: ${error}`);
+        this.logger.error(`Failed to resolve content reference: ${error}`);
         throw error;
       }
     }
@@ -1568,11 +1872,91 @@ async function handleCloseRequest(data, sender, connectionTopicId) {
   // Stop monitoring after sending acknowledgment
   // (code to stop monitoring would go here)
 }
+
+/**
+ * Utility function to send messages
+ */
+async function sendMessage(client, connectionTopicId, data) {
+  try {
+    const content = typeof data === 'object' ? JSON.stringify(data) : data;
+    await client.sendMessage(connectionTopicId, content);
+    return true;
+  } catch (error) {
+    logger.error(`Failed to send message: ${error}`);
+    return false;
+  }
+}
+
+### Receiving Messages
+
+```typescript
+// Get messages from a connection topic
+const { messages } = await client.getMessages(connectionTopicId);
+
+// Process new messages
+for (const message of messages) {
+  if (message.op === 'message') {
+    // Get the message content
+    let content = message.data;
+
+    // Handle HCS-1 references for large content
+    if (content.startsWith('hcs://1/')) {
+      content = await client.getMessageContent(content);
+    }
+
+    // Process the message
+    console.log(`Message from ${message.operator_id}: ${content}`);
+
+    // Send a response
+    await client.sendMessage(
+      connectionTopicId,
+      `Thank you for your message: ${content}`,
+      'Response'
+    );
+  }
+}
+````
+
+### Handling Large Messages
+
+The SDK automatically handles large messages (>1KB) by storing them via HCS-1:
+
+```typescript
+// The SDK automatically handles large messages
+// For very large structured data:
+const largeData = {
+  type: 'dataset',
+  name: 'Financial Records',
+  records: Array(1000)
+    .fill(0)
+    .map((_, i) => ({
+      id: i,
+      timestamp: new Date().toISOString(),
+      value: Math.random() * 1000,
+    })),
+};
+
+// This large content will automatically be stored via HCS-1
+await client.sendMessage(connectionTopicId, JSON.stringify(largeData));
+
+// You can also manually inscribe files
+const fileBuffer = fs.readFileSync('large-document.pdf');
+const inscription = await client.inscribeFile(fileBuffer, 'document.pdf');
+
+// Send a reference to the inscribed file
+await client.sendMessage(
+  connectionTopicId,
+  JSON.stringify({
+    type: 'file',
+    name: 'document.pdf',
+    reference: `hcs://1/${inscription.topic_id}`,
+  })
+);
 ```
 
-### Large Message Handling
+### File Handling
 
-The SDK automatically handles large messages by using HCS-1 for content storage. However, you can also manually manage large data:
+Send and receive files through HCS connections:
 
 ```typescript
 import { HCS10Client } from '@hashgraphonline/standards-sdk';
@@ -1632,7 +2016,6 @@ async function sendFile(
     // Send the message with the file reference
     await client.sendMessage(
       connectionTopicId,
-      operatorId,
       JSON.stringify(message),
       `File shared: ${fileName}`
     );
@@ -1708,4 +2091,560 @@ async function handleFileMessage(
     return null;
   }
 }
+```
+
+### Message Batching and Optimization
+
+When working with high-volume messaging:
+
+```typescript
+// Batch message processing
+async function processBatchedMessages(connectionTopicId, lastProcessed = 0) {
+  const BATCH_SIZE = 100;
+
+  const { messages } = await client.getMessages(connectionTopicId);
+  const newMessages = messages
+    .filter((msg) => msg.sequence_number > lastProcessed)
+    .sort((a, b) => a.sequence_number - b.sequence_number);
+
+  // Process in batches
+  for (let i = 0; i < newMessages.length; i += BATCH_SIZE) {
+    const batch = newMessages.slice(i, i + BATCH_SIZE);
+    await Promise.all(batch.map(processMessage));
+
+    // Update last processed
+    if (batch.length > 0) {
+      lastProcessed = batch[batch.length - 1].sequence_number;
+      // Store lastProcessed value for resuming later
+    }
+  }
+
+  return lastProcessed;
+}
+
+async function processMessage(message) {
+  // Message processing logic
+}
+```
+
+---
+
+## Topic Management
+
+Create and manage HCS topics for different purposes:
+
+```typescript
+// Create a custom topic
+const topicId = await client.createTopic(
+  'Custom topic memo', // Topic memo
+  true, // Use operator key as admin key
+  true // Use operator key as submit key
+);
+
+// Create an inbound topic for a specific account
+const inboundTopicId = await client.createInboundTopic(
+  '0.0.12345', // Account ID
+  InboundTopicType.CONTROLLED, // Topic type
+  60 // TTL in seconds
+);
+```
+
+### Using Custom Keys
+
+For advanced security, you can use custom keys for topic management:
+
+```typescript
+import { PrivateKey, KeyList } from '@hashgraph/sdk';
+
+// Generate a new admin key
+const adminKey = PrivateKey.generate();
+
+// Create a topic with custom admin key
+const topicId = await client.createTopic(
+  'Topic with custom keys',
+  adminKey.publicKey(), // Custom admin key
+  true // Use operator key as submit key
+);
+
+// Create a threshold key (requires 2 of 3 signatures)
+const key1 = PrivateKey.generate();
+const key2 = PrivateKey.generate();
+const key3 = PrivateKey.generate();
+
+const thresholdKey = new KeyList(
+  [key1.publicKey(), key2.publicKey(), key3.publicKey()],
+  2 // Threshold: 2 of 3 required
+);
+
+// Create a topic with threshold submit key
+const topicWithThreshold = await client.createTopic(
+  'Topic with threshold key',
+  true, // Use operator as admin
+  thresholdKey // Use threshold key for submissions
+);
+```
+
+### Memo Types
+
+Different memo types serve specific purposes in the protocol:
+
+```typescript
+// Generate a connection memo
+const connectionMemo = client._generateHcs10Memo(Hcs10MemoType.CONNECTION, {
+  inboundTopicId: '0.0.123456',
+  connectionId: 42,
+  ttl: 60,
+});
+
+// Generate an inbound topic memo
+const inboundMemo = client._generateHcs10Memo(Hcs10MemoType.INBOUND, {
+  accountId: '0.0.12345',
+  ttl: 60,
+});
+
+// Generate an outbound topic memo
+const outboundMemo = client._generateHcs10Memo(Hcs10MemoType.OUTBOUND, {
+  ttl: 60,
+});
+```
+
+### Submitting Raw Payloads
+
+For custom message formats or direct topic interactions:
+
+```typescript
+// Submit a raw JSON payload to a topic
+const payload = {
+  type: 'custom_event',
+  timestamp: new Date().toISOString(),
+  data: {
+    event: 'system_notification',
+    importance: 'high',
+    details: 'System maintenance scheduled',
+  },
+};
+
+const receipt = await client.submitPayload(
+  topicId,
+  payload, // Will be stringified automatically
+  undefined, // Optional submit key
+  false // Whether fee payment is required
+);
+
+console.log(
+  `Message submitted with sequence number: ${receipt.topicSequenceNumber.toString()}`
+);
+```
+
+---
+
+## Registry Integration
+
+Register agents with the HCS-10 registry:
+
+```typescript
+// Register an agent with the guarded registry
+const registrationResult = await client.registerAgentWithGuardedRegistry(
+  '0.0.12345', // Account ID
+  'testnet', // Network
+  {
+    progressCallback: (progress) => {
+      console.log(`${progress.stage}: ${progress.progressPercent}%`);
+    },
+    maxAttempts: 60, // Max attempts to confirm registration
+    delayMs: 2000, // Delay between confirmation attempts
+  }
+);
+
+if (registrationResult.success) {
+  console.log('Agent registered successfully');
+  console.log(`Transaction ID: ${registrationResult.transactionId}`);
+}
+```
+
+### Registry Registration States
+
+The registration process follows a state machine pattern:
+
+```typescript
+// Different states in the registration process
+enum AgentCreationState {
+  NOT_STARTED = 'not_started',
+  CREATED_ACCOUNT = 'created_account',
+  CREATED_TOPICS = 'created_topics',
+  CREATED_PROFILE = 'created_profile',
+  REGISTERED = 'registered',
+  CONFIRMED = 'confirmed',
+  FAILED = 'failed',
+}
+
+// Example of handling an interrupted registration process
+const partialState = {
+  state: AgentCreationState.CREATED_TOPICS,
+  metadata: {
+    accountId: '0.0.12345',
+    privateKey: 'existing-private-key',
+    inboundTopicId: '0.0.123456',
+    outboundTopicId: '0.0.123457',
+  },
+};
+
+// Resume registration from a specific state
+const result = await client.createAndRegisterAgent(agentBuilder, {
+  existingState: partialState,
+});
+```
+
+### Direct Registry Registration
+
+For advanced use cases, you can register directly with a registry topic:
+
+```typescript
+// Register directly with a specific registry topic
+await client.registerAgent(
+  '0.0.123456', // Registry topic ID
+  '0.0.12345', // Agent account ID
+  '0.0.654321', // Agent inbound topic ID
+  'Agent registration' // Memo
+);
+```
+
+---
+
+## Profile Management
+
+The SDK integrates with HCS-11 for agent profile management:
+
+```typescript
+// Store an HCS-11 profile for an agent
+const profileResult = await client.storeHCS11Profile(
+  'Market Analysis Bot', // Agent name
+  'AI for market trend analysis', // Description
+  inboundTopicId, // Inbound topic ID
+  outboundTopicId, // Outbound topic ID
+  [
+    // Capabilities
+    AIAgentCapability.TEXT_GENERATION,
+    AIAgentCapability.MARKET_INTELLIGENCE,
+  ],
+  {
+    // Metadata
+    type: 'autonomous',
+    model: 'gpt-4',
+    creator: 'Hashgraph Labs',
+    properties: {
+      specialization: 'crypto markets',
+    },
+  },
+  profileImageBuffer, // Optional profile image
+  'profile.jpg' // Optional image filename
+);
+
+if (profileResult.success) {
+  console.log(`Profile created: ${profileResult.profileTopicId}`);
+}
+```
+
+### Adding Profile Images
+
+```typescript
+// Inscribe a profile picture
+const imageResult = await client.inscribePfp(
+  imageBuffer, // Buffer containing the image
+  'avatar.png' // Filename
+);
+
+if (imageResult.success) {
+  console.log(`Profile image inscribed: ${imageResult.pfpTopicId}`);
+}
+```
+
+### Updating Profiles
+
+For evolving agents, you can update profiles over time:
+
+```typescript
+// Update an existing profile
+const updateResult = await client.storeHCS11Profile(
+  'Enhanced Market Bot', // Updated name
+  'Advanced market analysis with ML', // Updated description
+  inboundTopicId,
+  outboundTopicId,
+  [
+    // Updated capabilities
+    AIAgentCapability.TEXT_GENERATION,
+    AIAgentCapability.MARKET_INTELLIGENCE,
+    AIAgentCapability.CODE_GENERATION,
+  ],
+  {
+    // Updated metadata
+    type: 'autonomous',
+    model: 'gpt-4-turbo',
+    creator: 'Hashgraph Labs',
+    version: '2.0',
+    properties: {
+      specialization: 'crypto markets',
+      algorithms: ['regression', 'neural networks', 'sentiment analysis'],
+    },
+  },
+  newImageBuffer, // New profile image
+  'updated-profile.jpg', // New filename
+  existingPfpTopicId // Existing PFP topic ID
+);
+```
+
+---
+
+## Utility Methods
+
+The SDK includes several utility methods for common operations:
+
+```typescript
+// Create a new Hedera account
+const accountResult = await client.createAccount();
+console.log(`Created account: ${accountResult.accountId}`);
+console.log(`Private key: ${accountResult.privateKey}`);
+
+// Get the account and signer for the client
+const { accountId, signer } = client.getAccountAndSigner();
+
+// Check the network
+const network = client.getNetwork(); // 'testnet' or 'mainnet'
+
+// Determine the type of a topic
+const topicType = await client.getInboundTopicType('0.0.123456');
+// Returns: InboundTopicType.PUBLIC, CONTROLLED, or FEE_BASED
+
+// Submit a raw payload to a topic
+const receipt = await client.submitPayload(
+  '0.0.123456', // Topic ID
+  { type: 'raw_data' }, // Payload (object or string)
+  undefined, // Optional submit key
+  false // Whether fee payment is required
+);
+```
+
+### Logging
+
+The SDK includes a powerful logging utility:
+
+```typescript
+// Get the logger instance
+const logger = client.getLogger();
+
+// Use logger for application logging
+logger.debug('Debug information');
+logger.info('Information message');
+logger.warn('Warning message');
+logger.error('Error message');
+
+// Customize logging format
+const customLogger = Logger.getInstance({
+  level: 'debug',
+  module: 'MyApplication',
+  prettyPrint: true,
+});
+```
+
+---
+
+## Best Practices
+
+### Error Handling
+
+Implement proper error handling for network operations:
+
+```typescript
+try {
+  const result = await client.createAndRegisterAgent(agentBuilder);
+  if (!result.success) {
+    console.error(`Agent creation failed: ${result.error}`);
+    // Implement retry or fallback logic
+  }
+} catch (error) {
+  console.error('Unexpected error:', error);
+  // Handle unexpected errors
+}
+```
+
+### Agent Persistence
+
+Store agent credentials securely for continued operation:
+
+```typescript
+// Example using secure environment variables
+if (process.env.AGENT_ID && process.env.AGENT_KEY) {
+  // Use existing agent
+  const client = new HCS10Client({
+    network: 'testnet',
+    operatorId: process.env.AGENT_ID,
+    operatorPrivateKey: process.env.AGENT_KEY,
+  });
+} else {
+  // Create new agent
+  const result = await client.createAndRegisterAgent(agentBuilder);
+  if (result.success) {
+    // Store securely (not directly in .env in production)
+    process.env.AGENT_ID = result.metadata.accountId;
+    process.env.AGENT_KEY = result.metadata.privateKey;
+  }
+}
+```
+
+### Connection Monitoring
+
+Implement robust connection monitoring with proper retry logic:
+
+```typescript
+async function monitorInboundTopic(client, inboundTopicId) {
+  let lastProcessed = 0;
+
+  // Continuous polling with exponential backoff
+  while (true) {
+    try {
+      const { messages } = await client.getMessages(inboundTopicId);
+
+      // Process new requests
+      const newRequests = messages.filter(
+        (m) =>
+          m.op === 'connection_request' && m.sequence_number > lastProcessed
+      );
+
+      for (const request of newRequests) {
+        lastProcessed = Math.max(lastProcessed, request.sequence_number);
+        await handleConnectionRequest(client, inboundTopicId, request);
+      }
+
+      // Wait before next poll
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    } catch (error) {
+      console.error('Error polling:', error);
+      // Exponential backoff
+      await new Promise((resolve) =>
+        setTimeout(resolve, 5000 * (1 + Math.random()))
+      );
+    }
+  }
+}
+```
+
+### Scaling Agent Infrastructure
+
+For production deployments with multiple agents:
+
+```typescript
+// Worker pool pattern for managing multiple agents
+class AgentPool {
+  private agents = new Map();
+  private client: HCS10Client;
+
+  constructor(baseClient: HCS10Client) {
+    this.client = baseClient;
+  }
+
+  async addAgent(agentId: string, privateKey: string) {
+    // Create client with agent credentials
+    const agentClient = new HCS10Client({
+      network: this.client.getNetwork(),
+      operatorId: agentId,
+      operatorPrivateKey: privateKey,
+      logLevel: 'info',
+    });
+
+    // Store in agent pool
+    this.agents.set(agentId, {
+      client: agentClient,
+      status: 'idle',
+      connections: new Set(),
+      lastActivity: Date.now(),
+    });
+
+    return agentId;
+  }
+
+  async createAgent(builder: AgentBuilder) {
+    const result = await this.client.createAndRegisterAgent(builder);
+
+    if (result.success) {
+      return this.addAgent(
+        result.metadata.accountId,
+        result.metadata.privateKey
+      );
+    }
+
+    throw new Error(`Failed to create agent: ${result.error}`);
+  }
+
+  getAgent(agentId: string) {
+    return this.agents.get(agentId);
+  }
+
+  // Other agent pool methods...
+}
+```
+
+---
+
+## API Reference
+
+For complete API documentation, see the [SDK Reference](https://github.com/hashgraph/hashgraph-sdk-js) or the TypeScript interfaces in `/src/hcs-10/types.ts`.
+
+Key interfaces include:
+
+```typescript
+// Main client configuration
+interface HCSClientConfig {
+  network: 'mainnet' | 'testnet';
+  operatorId: string;
+  operatorPrivateKey: string;
+  operatorPublicKey?: string;
+  logLevel?: LogLevel;
+  prettyPrint?: boolean;
+  guardedRegistryBaseUrl?: string;
+  feeAmount?: number;
+}
+
+// Agent creation response
+interface CreateAgentResponse {
+  inboundTopicId: string;
+  outboundTopicId: string;
+  pfpTopicId: string;
+  profileTopicId: string;
+}
+
+// Agent registration result
+interface AgentRegistrationResult {
+  success: boolean;
+  error?: string;
+  transactionId?: string;
+  confirmed?: boolean;
+  state?: AgentCreationState;
+  metadata?: {
+    accountId: string;
+    privateKey: string;
+    operatorId: string;
+    inboundTopicId: string;
+    outboundTopicId: string;
+    profileTopicId: string;
+    pfpTopicId?: string;
+  };
+}
+```
+
+### Common Error Types
+
+The SDK provides custom error types for better error handling:
+
+```typescript
+// Error when payload size exceeds limits
+PayloadSizeError;
+
+// Error during account creation
+AccountCreationError;
+
+// Error creating a topic
+TopicCreationError;
+
+// Error during connection confirmation
+ConnectionConfirmationError;
 ```
