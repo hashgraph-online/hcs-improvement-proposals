@@ -18,7 +18,7 @@ We're thrilled to announce that the **Hashgraph Online DAO LLC** is now official
 Hashgraph Online DAO LLC is a consortium of leading organizations on Hedera. Our mission is to construct a true decentralized internet built with Hedera's robust Consensus Service as the backbone, with a commitment to openness and transparency. We're approaching this through three key strategic pillars:
 
 1. **Creating Standards**
-   We've established standards like [HCS-1](https://hgo-website.pages.dev/hcs-1) and [HCS-20](https://hgo-website.pages.dev/hcs-20), which have processed millions of transactions. We're continuing to develop new standards to address evolving challenges.
+   We've established standards like [HCS-1](https://hashgraphonline.com/docs/standards/hcs-1) and [HCS-20](https://hashgraphonline.com/docs/standards/hcs-20), which have processed millions of transactions. We're continuing to develop new standards to address evolving challenges.
 
 2. **Open Source Development**
    Our open-source tools and applications are designed to facilitate the growth of this new internet infrastructure, ensuring that all participants have access to a transparent and resilient ecosystem.
