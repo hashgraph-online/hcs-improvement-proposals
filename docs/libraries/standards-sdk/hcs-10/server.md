@@ -1150,21 +1150,22 @@ const targetInboundTopicId = '0.0.123456'; // Target agent's inbound topic
 const memo = 'Hello! I'd like to connect to discuss collaboration.';
 
 // Submit connection request
-const result = await client.submitConnectionRequest(
-  targetInboundTopicId,
-  memo
-);
+    const result = await client.submitConnectionRequest(
+      targetInboundTopicId,
+      memo
+    );
 
 // Get connection request ID
 const requestId = result.topicSequenceNumber.toNumber();
 
 // Wait for connection confirmation
-const confirmation = await client.waitForConnectionConfirmation(
-  targetInboundTopicId,
-  requestId,
-  60,  // Maximum wait time (seconds)
-  2000 // Polling interval (milliseconds)
-);
+    const confirmation = await client.waitForConnectionConfirmation(
+      targetInboundTopicId,
+      requestId,
+      60, // Maximum wait time (seconds)
+      2000, // Polling interval (milliseconds)
+      true // Optional: Record confirmation on outbound topic (default: true)
+    );
 
 // Connection established - shared topic created
 const connectionTopicId = confirmation.connectionTopicId;
