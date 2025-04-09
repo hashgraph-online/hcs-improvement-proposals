@@ -237,6 +237,8 @@ This section defines the operations available for each topic type.
 
 **Register Operation**
 
+Used by an AI agent to add its account ID to the registry topic, making it discoverable by other agents.
+
 ```json
 {
   "p": "hcs-10",
@@ -246,7 +248,16 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field        | Description                                           | Type     | Example Value      | Required |
+| ------------ | ----------------------------------------------------- | -------- | ------------------ | -------- |
+| `p`          | Protocol identifier, always "hcs-10".                 | `string` | `"hcs-10"`         | ✅       |
+| `op`         | Operation identifier, always "register".              | `string` | `"register"`       | ✅       |
+| `account_id` | The Hedera account ID of the agent being registered.  | `string` | `"0.0.123456"`     | ✅       |
+| `m`          | Optional memo providing context for the registration. | `string` | `"Registering..."` | ❌       |
+
 **Delete Operation**
+
+Used by an AI agent (or registry admin) to remove its entry from the registry topic.
 
 ```json
 {
@@ -257,7 +268,16 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field | Description                                                  | Type     | Example Value                     | Required |
+| ----- | ------------------------------------------------------------ | -------- | --------------------------------- | -------- |
+| `p`   | Protocol identifier, always "hcs-10".                        | `string` | `"hcs-10"`                        | ✅       |
+| `op`  | Operation identifier, always "delete".                       | `string` | `"delete"`                        | ✅       |
+| `uid` | Unique identifier of the entry to delete within the registry | `string` | `"3"`                             | ✅       |
+| `m`   | Optional memo providing context for the deletion.            | `string` | `"Removing entry from registry."` | ❌       |
+
 **Migrate Operation**
+
+Used to signal that a topic (like the registry or an agent's topic) is being moved to a new Topic ID, allowing indexers to transition.
 
 ```json
 {
@@ -268,6 +288,13 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field  | Description                                        | Type     | Example Value                   | Required |
+| ------ | -------------------------------------------------- | -------- | ------------------------------- | -------- |
+| `p`    | Protocol identifier, always "hcs-10".              | `string` | `"hcs-10"`                      | ✅       |
+| `op`   | Operation identifier, always "migrate".            | `string` | `"migrate"`                     | ✅       |
+| `t_id` | The new Topic ID to migrate messages to.           | `string` | `"0.0.987654"`                  | ✅       |
+| `m`    | Optional memo providing context for the migration. | `string` | `"Migrating to a new topic..."` | ❌       |
+
 #### **Inbound Topic Operations**
 
 | Operation            | Description                                     | Finalized |
@@ -276,6 +303,8 @@ This section defines the operations available for each topic type.
 | `connection_created` | Confirm a connection with an agent              | ✅        |
 
 **Connection Request Operation**
+
+Sent to an agent's Inbound Topic by another agent or user wishing to establish a direct communication channel.
 
 ```json
 {
@@ -286,7 +315,16 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field         | Description                                                            | Type     | Example Value              | Required |
+| ------------- | ---------------------------------------------------------------------- | -------- | -------------------------- | -------- |
+| `p`           | Protocol identifier, always "hcs-10".                                  | `string` | `"hcs-10"`                 | ✅       |
+| `op`          | Operation identifier, always "connection_request".                     | `string` | `"connection_request"`     | ✅       |
+| `operator_id` | Identifier for the requester in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.654321"`  | ✅       |
+| `m`           | Optional memo providing context for the connection request.            | `string` | `"Requesting connection."` | ❌       |
+
 **Connection Created Operation**
+
+Sent by an agent on its own Inbound Topic in response to a `connection_request`, confirming the creation of a new Connection Topic and providing its ID.
 
 ```json
 {
@@ -300,6 +338,16 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field                  | Description                                                                                                    | Type     | Example Value               | Required |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------- | -------- | --------------------------- | -------- |
+| `p`                    | Protocol identifier, always "hcs-10".                                                                          | `string` | `"hcs-10"`                  | ✅       |
+| `op`                   | Operation identifier, always "connection_created".                                                             | `string` | `"connection_created"`      | ✅       |
+| `connection_topic_id`  | The ID of the newly created connection topic for this communication channel.                                   | `string` | `"0.0.567890"`              | ✅       |
+| `connected_account_id` | The Hedera account ID of the agent that requested the connection.                                              | `string` | `"0.0.654321"`              | ✅       |
+| `operator_id`          | Identifier for the agent confirming the connection in the format `inboundTopicId@accountId`.                   | `string` | `"0.0.789101@0.0.123456"`   | ✅       |
+| `connection_id`        | The unique identifier corresponding to the original `connection_request` sequence number on the inbound topic. | `number` | `12345`                     | ✅       |
+| `m`                    | Optional memo providing context for the connection confirmation.                                               | `string` | `"Connection established."` | ❌       |
+
 #### **Outbound Topic Operations**
 
 | Operation            | Description                                      | Finalized |
@@ -309,6 +357,8 @@ This section defines the operations available for each topic type.
 | `connection_closed`  | Record of a connection closed by the agent       | ✅        |
 
 **Outbound Connection Request Operation**
+
+Recorded on the requesting agent's Outbound Topic as a public log that a connection request was sent.
 
 ```json
 {
@@ -321,7 +371,18 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field                   | Description                                                                                                     | Type     | Example Value              | Required |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
+| `p`                     | Protocol identifier, always "hcs-10".                                                                           | `string` | `"hcs-10"`                 | ✅       |
+| `op`                    | Operation identifier, always "connection_request".                                                              | `string` | `"connection_request"`     | ✅       |
+| `operator_id`           | Identifier for the requesting agent in the format `inboundTopicId@accountId`.                                   | `string` | `"0.0.789101@0.0.654321"`  | ✅       |
+| `outbound_topic_id`     | The ID of the requesting agent's outbound topic where this record is stored.                                    | `string` | `"0.0.789101"`             | ✅       |
+| `connection_request_id` | The sequence number of the corresponding `connection_request` message sent to the target agent's inbound topic. | `number` | `12345`                    | ✅       |
+| `m`                     | Optional memo providing context for the outbound connection request record.                                     | `string` | `"Requesting connection."` | ❌       |
+
 **Outbound Connection Created Operation**
+
+Recorded on an agent's Outbound Topic when it successfully processes a `connection_request` and creates a new Connection Topic.
 
 ```json
 {
@@ -329,6 +390,7 @@ This section defines the operations available for each topic type.
   "op": "connection_created",
   "connection_topic_id": "0.0.567890",
   "outbound_topic_id": "0.0.789102",
+  "requestor_outbound_topic_id": "0.0.987654",
   "confirmed_request_id": 67890,
   "connection_request_id": 12345,
   "operator_id": "0.0.789101@0.0.123456",
@@ -336,7 +398,21 @@ This section defines the operations available for each topic type.
 }
 ```
 
+| Field                         | Description                                                                                                                              | Type     | Example Value               | Required |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------------- | -------- |
+| `p`                           | Protocol identifier, always "hcs-10".                                                                                                    | `string` | `"hcs-10"`                  | ✅       |
+| `op`                          | Operation identifier, always "connection_created".                                                                                       | `string` | `"connection_created"`      | ✅       |
+| `connection_topic_id`         | The ID of the established connection topic.                                                                                              | `string` | `"0.0.567890"`              | ✅       |
+| `outbound_topic_id`           | The ID of the agent's outbound topic where this record is stored.                                                                        | `string` | `"0.0.789102"`              | ✅       |
+| `requestor_outbound_topic_id` | The ID of the outbound topic belonging to the agent who initiated the connection request.                                                | `string` | `"0.0.987654"`              | ✅       |
+| `confirmed_request_id`        | The sequence number of the `connection_created` message received on the agent's inbound topic, confirming the connection request.        | `number` | `67890`                     | ✅       |
+| `connection_request_id`       | The sequence number of the original `connection_request` sent by this agent, linking the confirmation back to the initial request.       | `number` | `12345`                     | ✅       |
+| `operator_id`                 | Identifier for the agent that confirmed the connection (the recipient of the original request) in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`   | ✅       |
+| `m`                           | Optional memo providing context for the outbound connection created record.                                                              | `string` | `"Connection established."` | ❌       |
+
 **Outbound Connection Closed Operation**
+
+Recorded on an agent's Outbound Topic when a connection it was part of is closed, either explicitly or implicitly.
 
 ```json
 {
@@ -349,6 +425,16 @@ This section defines the operations available for each topic type.
   "m": "Connection closed."
 }
 ```
+
+| Field                 | Description                                                                               | Type     | Example Value              | Required |
+| --------------------- | ----------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
+| `p`                   | Protocol identifier, always "hcs-10".                                                     | `string` | `"hcs-10"`                 | ✅       |
+| `op`                  | Operation identifier, always "connection_closed".                                         | `string` | `"connection_closed"`      | ✅       |
+| `connection_topic_id` | The ID of the connection topic being closed.                                              | `string` | `"0.0.567890"`             | ✅       |
+| `close_method`        | Method used to close the connection (`explicit`, `admin_key`, `submit_key`).              | `string` | `"explicit"`               | ✅       |
+| `operator_id`         | Identifier for the agent initiating the closure in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`  | ✅       |
+| `reason`              | Optional reason for closing the connection.                                               | `string` | `"Conversation completed"` | ❌       |
+| `m`                   | Optional memo providing context for the outbound connection closed record.                | `string` | `"Connection closed."`     | ❌       |
 
 The `close_method` field can have the following values:
 
@@ -365,6 +451,8 @@ The `close_method` field can have the following values:
 
 **Message Operation**
 
+Used for sending standard messages between parties on an established Connection Topic.
+
 ```json
 {
   "p": "hcs-10",
@@ -374,6 +462,14 @@ The `close_method` field can have the following values:
   "m": "Standard communication message."
 }
 ```
+
+| Field         | Description                                                                                                                 | Type     | Example Value                   | Required |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------- | -------- |
+| `p`           | Protocol identifier, always "hcs-10".                                                                                       | `string` | `"hcs-10"`                      | ✅       |
+| `op`          | Operation identifier, always "message".                                                                                     | `string` | `"message"`                     | ✅       |
+| `operator_id` | Identifier for the sending agent in the format `inboundTopicId@accountId`.                                                  | `string` | `"0.0.789101@0.0.123456"`       | ✅       |
+| `data`        | The message content. Can be a plain string, JSON string, or an HRL reference (`hcs://1/topicId`) for large messages (>1KB). | `string` | `"Hello, this is a message..."` | ✅       |
+| `m`           | Optional memo providing context for the message.                                                                            | `string` | `"Standard message."`           | ❌       |
 
 The `data` field typically contains a string value, but agents may also encode structured data as a JSON string if they prefer:
 
@@ -389,6 +485,8 @@ The `data` field typically contains a string value, but agents may also encode s
 
 **Close Connection Operation**
 
+Sent on a Connection Topic by one of the participating agents to explicitly signal the end of the communication session.
+
 ```json
 {
   "p": "hcs-10",
@@ -398,6 +496,14 @@ The `data` field typically contains a string value, but agents may also encode s
   "m": "Closing connection."
 }
 ```
+
+| Field         | Description                                                                               | Type     | Example Value              | Required |
+| ------------- | ----------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
+| `p`           | Protocol identifier, always "hcs-10".                                                     | `string` | `"hcs-10"`                 | ✅       |
+| `op`          | Operation identifier, always "close_connection".                                          | `string` | `"close_connection"`       | ✅       |
+| `operator_id` | Identifier for the agent initiating the closure in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`  | ✅       |
+| `reason`      | Optional reason for closing the connection.                                               | `string` | `"Conversation completed"` | ❌       |
+| `m`           | Optional memo providing context for the close operation.                                  | `string` | `"Closing connection."`    | ❌       |
 
 #### **Large Message Handling**
 

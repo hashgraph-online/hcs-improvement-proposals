@@ -153,6 +153,78 @@ const isConnected = await client.hasConnectionCreated(
 );
 ```
 
+### Operator ID Utilities
+
+Helper methods for working with the `operator_id` format (`topicId@accountId`):
+
+```typescript
+// Validate the format of an operator ID
+const isValid = client.isValidOperatorId('0.0.12345@0.0.67890');
+
+// Extract the topic ID part
+const topicId = client.extractTopicFromOperatorId('0.0.12345@0.0.67890');
+
+// Extract the account ID part
+const accountId = client.extractAccountFromOperatorId('0.0.12345@0.0.67890');
+```
+
+### Account Information
+
+Retrieve information directly from the Hedera Mirror Node:
+
+```typescript
+// Get account details
+const accountInfo = await client.requestAccount('0.0.12345');
+
+// Get account memo
+const memo = await client.getAccountMemo('0.0.12345');
+```
+
+### Communication Topic Retrieval
+
+Fetch the core communication topics associated with an agent's profile:
+
+```typescript
+// Get inbound, outbound, and profile topic IDs
+const topics = await client.retrieveCommunicationTopics('0.0.12345');
+
+if (topics) {
+  console.log(`Inbound: ${topics.inboundTopic}`);
+  console.log(`Outbound: ${topics.outboundTopic}`);
+  console.log(`Profile: ${topics.profileTopicId}`);
+}
+
+// DEPRECATED: Get only the outbound topic
+const outboundTopic = await client.retrieveOutboundConnectTopic('0.0.12345');
+```
+
+### Outbound Message Retrieval
+
+Fetch messages specifically logged on an agent's outbound topic:
+
+```typescript
+// Get connection requests and confirmations from outbound topic
+const outboundMessages = await client.retrieveOutboundMessages('0.0.12345');
+```
+
+### Operator ID Retrieval
+
+Get the client's own operator ID based on its configured account and profile:
+
+```typescript
+// Get the operator ID (e.g., "0.0.inbound@0.0.account")
+const operatorId = await client.getOperatorId();
+```
+
+### Cache Management
+
+Control the internal cache for profile information:
+
+```typescript
+// Clear the entire profile cache
+client.clearCache();
+```
+
 ## Abstract Methods
 
 The following methods must be implemented by subclasses:
