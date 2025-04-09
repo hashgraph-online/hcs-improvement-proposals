@@ -162,6 +162,19 @@ export const mentors: Judge[] = [
     ],
   },
   {
+    name: 'James Dunthorne',
+    role: 'Founder',
+    company: 'Neuron World',
+    bio: 'James is the CEO & Co-founder of Neuron, an edge network infrastructure making real time DePIN data available to software applications and AI agents. James leads the businesses vision, product and go-to-market strategy, and is on a mission to enable machine to machine commerce using edge devices. James has spent 16 years in disruptive tech, and banking, working in the drone industry building the first drone for surveying railway tracks, and now in web3, DePIN and DeAI. He is a mentor for Outlier Ventures accelerator, and is well connected across the DePIN ecosystem, having spoken at various events and conferences across his career. You can find out more about Neuron at www.neuron.world.',
+    image: '/img/hackathon/james-dunthorne.jpg',
+    socials: [{ type: 'twitter', url: 'https://twitter.com/james_dunthorne' }],
+    expertise: [
+      'Edge Computing',
+      'DePIN',
+      'DeAI',
+    ],
+  },
+  {
     name: 'Ejaz Merchant',
     role: 'DevRel',
     company: 'Hashgraph',
