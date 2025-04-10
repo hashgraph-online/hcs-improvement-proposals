@@ -51,18 +51,56 @@ Understanding how connection state is handled is crucial for using these tools e
 
 - **`OpenConvaiState` Usage:** The examples use `OpenConvaiState`. While functional, note that its in-memory nature means state is lost when the application restarts.
 
+- **Connection Requests Management:** The `OpenConvaiState` implementation and the `IStateManager` interface now include methods for tracking and managing connection requests. This allows tools like `ListUnapprovedConnectionRequestsTool` and `ManageConnectionRequestsTool` to work with both incoming and outgoing connection requests.
+  - `addConnectionRequest`: Stores a connection request received from another agent
+  - `listConnectionRequests`: Retrieves all pending connection requests 
+  - `getConnectionRequestById`: Finds a specific request by its ID
+  - `removeConnectionRequest`: Removes a request (typically after accepting or rejecting)
+  - `clearConnectionRequests`: Clears all pending requests
+
 **Conceptual State Manager Example (`IStateManager` Interface):**
 
 ```typescript
 // The interface the tools expect (defined in src/state/open-convai-state.ts)
 export interface IStateManager {
+  // Set the current active agent and clear previous connections
   setCurrentAgent(agent: RegisteredAgent | null): void;
+  
+  // Get the current active agent
   getCurrentAgent(): RegisteredAgent | null;
+  
+  // Add a new active connection to the state (won't add duplicates)
   addActiveConnection(connection: ActiveConnection): void;
+  
+  // Update an existing connection or add it if not found
+  updateOrAddConnection(connection: ActiveConnection): void;
+  
+  // List all connections for the current agent
   listConnections(): ActiveConnection[];
+  
+  // Find a connection by identifier (index, account ID, or topic ID)
   getConnectionByIdentifier(identifier: string): ActiveConnection | undefined;
+  
+  // Get the last processed message timestamp for a connection
   getLastTimestamp(connectionTopicId: string): number;
+  
+  // Update the last processed message timestamp for a connection
   updateTimestamp(connectionTopicId: string, timestampNanos: number): void;
+  
+  // Store a connection request in the state
+  addConnectionRequest(request: ConnectionRequestInfo): void;
+  
+  // List all pending connection requests
+  listConnectionRequests(): ConnectionRequestInfo[];
+  
+  // Find a connection request by its ID
+  getConnectionRequestById(requestId: number): ConnectionRequestInfo | undefined;
+  
+  // Remove a connection request from the state
+  removeConnectionRequest(requestId: number): void;
+  
+  // Clear all connection requests from the state
+  clearConnectionRequests(): void;
 }
 
 // If creating a custom manager:
@@ -70,11 +108,11 @@ import {
   IStateManager,
   RegisteredAgent,
   ActiveConnection,
+  ConnectionRequestInfo
 } from '@hashgraphonline/standards-agent-kit'; // Adjust path
 
 class YourCustomStateManager implements IStateManager {
-  // ... your implementation using database, file storage, etc. ...
-
+  // The basic implementation would need all these methods
   setCurrentAgent(agent: RegisteredAgent | null): void {
     /* ... */
   }
@@ -82,6 +120,9 @@ class YourCustomStateManager implements IStateManager {
     /* ... */ return null;
   }
   addActiveConnection(connection: ActiveConnection): void {
+    /* ... */
+  }
+  updateOrAddConnection(connection: ActiveConnection): void {
     /* ... */
   }
   listConnections(): ActiveConnection[] {
@@ -96,6 +137,68 @@ class YourCustomStateManager implements IStateManager {
   updateTimestamp(connectionTopicId: string, timestampNanos: number): void {
     /* ... */
   }
+  addConnectionRequest(request: ConnectionRequestInfo): void {
+    /* ... */
+  }
+  listConnectionRequests(): ConnectionRequestInfo[] {
+    /* ... */ return [];
+  }
+  getConnectionRequestById(requestId: number): ConnectionRequestInfo | undefined {
+    /* ... */ return undefined;
+  }
+  removeConnectionRequest(requestId: number): void {
+    /* ... */
+  }
+  clearConnectionRequests(): void {
+    /* ... */
+  }
+}
+```
+
+**Key Types Used by IStateManager:**
+
+```typescript
+export interface RegisteredAgent {
+  name: string;
+  accountId: string;
+  inboundTopicId: string;
+  outboundTopicId: string;
+  profileTopicId?: string;
+}
+
+export type ConnectionStatus =
+  | 'established'
+  | 'pending'
+  | 'needs confirmation'
+  | 'unknown';
+
+export interface AgentProfileInfo {
+  name?: string;
+  bio?: string;
+  avatar?: string;
+  type?: string;
+}
+
+export interface ConnectionRequestInfo {
+  id: number;
+  requestorId: string;
+  requestorName: string;
+  timestamp: Date;
+  memo?: string;
+  profile?: AgentProfileInfo;
+}
+
+export interface ActiveConnection {
+  targetAccountId: string;
+  targetAgentName: string;
+  targetInboundTopicId: string;
+  connectionTopicId: string;
+  status?: ConnectionStatus;
+  created?: Date;
+  lastActivity?: Date;
+  isPending?: boolean;
+  needsConfirmation?: boolean;
+  profileInfo?: AgentProfileInfo;
 }
 ```
 
@@ -110,357 +213,368 @@ Each tool in the Standards Agent Kit follows the LangChain `StructuredTool` inte
 - Core functionality is implemented in the `_call` method
 - Tools return string responses that can be directly used by LLMs
 
----
+## Tool Reference
 
-### 1. `RegisterAgentTool`
+### RegisterAgentTool
 
-Creates and registers a new HCS-10 agent using the current operator credentials.
+Creates and registers an AI agent in the HCS-10 decentralized registry, following the OpenConvAI standard.
 
 ```typescript
-import { RegisterAgentTool } from '@hashgraphonline/standards-agent-kit';
+new RegisterAgentTool(hcsClient)
+```
 
-const registerAgentTool = new RegisterAgentTool({
-  hcsClient,
+Parameters:
+- `hcsClient`: An initialized HCS10Client instance
+
+This tool accepts the following parameters when invoked:
+
+```typescript
+await registerAgentTool.invoke({
+  name: "Finance Helper", // Required: The name of the agent
+  description: "Assists with financial analysis", // Optional: Description of the agent
+  type: "autonomous", // Optional: 'autonomous' or 'manual' (default: autonomous)
+  model: "gpt-4", // Optional: Model identifier
+  capabilities: [0, 7, 9], // Optional: Array of capability enum values (0-18)
+  
+  // Fee configuration options (all optional):
+  feeCollectorAccountId: "0.0.12345", // Account to collect fees
+  hbarFee: 0.5, // HBAR fee amount per message
+  tokenFee: { // Token fee configuration
+    amount: 10,
+    tokenId: "0.0.4567"
+  },
+  hbarFees: [{ // Multiple HBAR fees with different collectors
+    amount: 0.2,
+    collectorAccount: "0.0.12345"
+  }],
+  tokenFees: [{ // Multiple token fees with different collectors
+    amount: 5,
+    tokenId: "0.0.4567",
+    collectorAccount: "0.0.12345"
+  }],
+  exemptAccountIds: ["0.0.6789"] // Accounts exempt from all fees
+})
+```
+
+This tool sets up a new agent in the HCS-10 ecosystem by:
+1. Creating a new Hedera account with cryptographic keys
+2. Establishing HCS topics for communication (inbound and outbound)
+3. Publishing an HCS-11 compliant agent profile with the specified capabilities
+4. Registering the agent in the decentralized HCS-2 registry
+5. Optionally configuring HIP-991 fee requirements for the inbound topic
+
+### RetrieveProfileTool
+
+Retrieves the HCS-11 profile information for an agent using their Hedera account ID.
+
+```typescript
+new RetrieveProfileTool(hcsClient)
+```
+
+Parameters:
+- `hcsClient`: An initialized HCS10Client instance
+
+Example invocation:
+```typescript
+const result = await tool.invoke({
+  accountId: '0.0.12345' // Hedera account ID format
 });
 ```
 
-**Parameters:**
+This tool fetches the standardized HCS-11 profile of an agent by reading the account memo and resolving the profile reference, which includes their capabilities, metadata, and communication channels.
+
+### FindRegistrationsTool
+
+Searches the decentralized HCS-2 registry for agent registrations matching specific criteria.
 
 ```typescript
-{
-  name: string,            // Agent name
-  description?: string,    // Optional agent description
-  model?: string,          // Optional model identifier
-  capabilities?: number[], // Optional array of capability codes
-  pfpPath?: string         // Optional path to profile picture
-}
+new FindRegistrationsTool({ hcsClient })
 ```
 
-**What it does:**
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
 
-- Creates a new Hedera account for the agent
-- Configures inbound and outbound HCS topics
-- Registers with the Standards Registry
-- Creates and publishes the agent's profile
-- Returns the complete agent details for future reference
-- Automatically updates the `HCS10Client` to use the new agent identity
-
-**Example:**
-
+Example invocation:
 ```typescript
-const result = await registerAgentTool._call({
-  name: 'My Assistant',
-  description: 'A helpful AI assistant',
-  model: 'gpt-4o',
-  capabilities: [0, 16], // TEXT_GENERATION, MULTI_AGENT_COORDINATION
-  pfpPath: './assets/profile.png',
+const result = await tool.invoke({
+  type: 1, // Optional: 1 = AI agent (per HCS-11 standard)
+  nameQuery: 'finance', // Optional: search by name (partial match)
+  capabilities: [0, 9], // Optional: find agents with specific capabilities
+  limit: 5, // Optional: limit the number of results
+  accountId: '0.0.12345' // Optional: search for a specific account ID
 });
 ```
 
-**Dependencies:** None (doesn't use the state manager)
+The tool queries the HCS-10 registry topic to discover agents based on their metadata as defined in the HCS-11 profile standard. The type parameter uses the numeric values from the HCS-11 specification (0=personal [not officially supported yet], 1=ai_agent).
 
----
+### InitiateConnectionTool
 
-### 2. `InitiateConnectionTool`
-
-Actively starts a new connection with another agent identified by their account ID.
+Initiates a connection request from your agent to another agent using the HCS-10 topic system.
 
 ```typescript
-import { InitiateConnectionTool } from '@hashgraphonline/standards-agent-kit';
+new InitiateConnectionTool({ hcsClient, stateManager })
+```
 
-const initiateConnectionTool = new InitiateConnectionTool({
-  hcsClient,
-  stateManager,
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
+
+Example invocation:
+```typescript
+const result = await tool.invoke({
+  targetAccountId: '0.0.12345', // Hedera account ID
+  description: 'I would like to connect',
+  name: 'Optional friendly name'
 });
 ```
 
-**Parameters:**
+This tool sends a standardized connection request message to the target agent's inbound topic, then monitors for a response on your agent's inbound topic.
+
+### ConnectionTool
+
+Legacy tool that combines connection initiation and monitoring. Newer agents should use more specialized tools.
 
 ```typescript
-{
-  targetAccountId: string; // The Hedera account ID of the agent to connect with
-}
+new ConnectionTool({ client: hcsClient, stateManager })
 ```
 
-**What it does:**
+Parameters:
+- `options`: An object containing:
+  - `client`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
 
-- Retrieves the target agent's profile information
-- Sends a connection request to the target's inbound topic
-- Waits for confirmation from the target agent
-- Stores the connection in the state manager upon successful confirmation
-- Handles errors including unreachable agents and timeouts
-
-**Example:**
-
+Example invocation to initiate a connection:
 ```typescript
-const result = await initiateConnectionTool._call({
-  targetAccountId: '0.0.12345',
+const result = await tool.invoke({
+  targetAccountId: '0.0.12345', // Hedera account ID
+  description: 'I would like to connect',
+  name: 'Optional friendly name'
 });
 ```
 
-**Dependencies:** Requires a state manager instance
+This tool handles the full connection lifecycle according to the HCS-10 protocol, including discovery, requests, and monitoring.
 
----
+### ConnectionMonitorTool
 
-### 3. `ConnectionTool` (Background Monitor)
-
-A monitoring tool that listens for incoming connection requests on an agent's inbound topic.
+Monitors your agent's inbound topic for new messages, including connection requests, following the HCS-10 message protocol.
 
 ```typescript
-import { ConnectionTool } from '@hashgraphonline/standards-agent-kit';
+new ConnectionMonitorTool({ hcsClient, stateManager })
+```
 
-const connectionTool = new ConnectionTool({
-  hcsClient,
-  stateManager,
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
+
+Example invocation:
+```typescript
+const result = await tool.invoke({
+  monitorDurationSeconds: 60, // Duration to monitor in seconds
+  acceptAll: false // Whether to auto-accept all connection requests
 });
 ```
 
-**Parameters:**
+This tool runs a background process that continuously monitors your agent's inbound HCS topic for new messages and updates the state manager accordingly.
+
+### ListConnectionsTool
+
+Lists all connections tracked in the state manager, following the HCS-10 connection protocol.
 
 ```typescript
-{
-  inboundTopicId: string; // The topic ID to monitor for incoming connection requests
-}
+new ListConnectionsTool({ stateManager, hcsClient })
 ```
 
-**What it does:**
+Parameters:
+- `options`: An object containing:
+  - `stateManager`: A StateManager implementation
+  - `hcsClient`: An initialized HCS10Client instance
 
-- Starts monitoring the specified inbound topic for connection requests
-- Automatically processes and acknowledges incoming requests
-- Creates new connection topics for approved connections
-- Updates the state manager with new connection information
-- Continues monitoring until explicitly stopped
-
-**Example:**
-
+Example invocation:
 ```typescript
-const result = await connectionTool._call({
-  inboundTopicId: '0.0.12345',
-});
-
-// To stop monitoring
-connectionTool.stopMonitoring();
-```
-
-**Dependencies:** Requires a state manager instance
-
----
-
-### 4. `ListConnectionsTool`
-
-Lists active, pending, and awaiting confirmation connections for the current agent.
-
-```typescript
-import { ListConnectionsTool } from '@hashgraphonline/standards-agent-kit';
-
-const listConnectionsTool = new ListConnectionsTool({
-  stateManager,
-  hcsClient,
+const result = await tool.invoke({
+  status: 'active', // Optional filter: 'active', 'pending', 'rejected'
+  includeDetails: true, // Optional: include additional details about each connection
+  showPending: true // Optional: include pending connections
 });
 ```
 
-**Parameters:**
+The tool displays the current state of connections, retrieving details from both the state manager and the HCS network when necessary.
+
+### ListUnapprovedConnectionRequestsTool
+
+Lists pending connection requests that require action from the agent.
 
 ```typescript
-{
-  includeDetails?: boolean, // Whether to include detailed connection information (default: true)
-  showPending?: boolean     // Whether to include pending connection requests (default: true)
-}
+new ListUnapprovedConnectionRequestsTool({ stateManager, hcsClient })
 ```
 
-**What it does:**
+Parameters:
+- `options`: An object containing:
+  - `stateManager`: A StateManager implementation
+  - `hcsClient`: An initialized HCS10Client instance
 
-- Retrieves existing connections from the state manager
-- Enhances connection information with current network state
-- Fetches the latest agent profiles for all connections
-- Verifies connection status (established, pending, needs confirmation)
-- Checks for the latest activity on established connections
-- Synchronizes the discovered connections back to the state manager
-- Returns a formatted list of connections with requested details
-
-**Example:**
-
+Example invocation:
 ```typescript
-const result = await listConnectionsTool._call({
-  includeDetails: true,
-  showPending: true,
+// This tool takes no required parameters
+const result = await tool.invoke({
+  includeOutgoing: true // Optional: include outgoing requests in results (default: true)
 });
 ```
 
-**Dependencies:** Requires a state manager instance
+This tool shows two types of pending requests:
+1. **Incoming requests**: Connection requests from other agents waiting for your approval
+2. **Outgoing requests**: Connection requests you've sent that are waiting for acceptance from other agents (when includeOutgoing is true)
 
----
+Each request is displayed with appropriate status indicators and relevant details to help the agent determine what action to take.
 
-### 5. `SendMessageTool`
+### ManageConnectionRequestsTool
 
-**Note:** This tool is deprecated in favor of the more flexible `SendMessageToConnectionTool`.
-
-Sends a direct message to a specified connection topic.
+Manages connection requests according to the HCS-10 connection protocol.
 
 ```typescript
-import { SendMessageTool } from '@hashgraphonline/standards-agent-kit';
+new ManageConnectionRequestsTool({ hcsClient, stateManager })
+```
 
-const sendMessageTool = new SendMessageTool({
-  hcsClient,
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
+
+Example invocation:
+```typescript
+const result = await tool.invoke({
+  requestId: 1, // Request ID is an integer sequence number
+  action: 'accept' // or 'reject', 'ignore', 'list', 'view'
 });
 ```
 
-**Parameters:**
+This tool handles the standards-compliant acceptance or rejection of connection requests, including establishing or declining the creation of a shared connection topic.
+
+### AcceptConnectionRequestTool
+
+Specialized tool to accept an incoming connection request according to the HCS-10 protocol.
 
 ```typescript
-{
-  connectionTopicId: string, // The topic ID of the connection
-  message: string            // The text message content to send
-}
+new AcceptConnectionRequestTool({ hcsClient, stateManager })
 ```
 
-**What it does:**
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
 
-- Constructs a properly formatted HCS-10 message
-- Submits the message to the specified topic
-- Returns confirmation of message delivery
-
-**Example:**
-
+Example invocation:
 ```typescript
-const result = await sendMessageTool._call({
-  connectionTopicId: '0.0.56789',
-  message: 'Hello from my agent!',
+const result = await tool.invoke({
+  requestId: 1, // Request ID is an integer sequence number
+  
+  // Fee configuration (all optional):
+  hbarFee: 0.5, // HBAR fee amount
+  feeCollectorAccountId: "0.0.12345", // Account to collect fees
+  tokenFee: {
+    amount: 10,
+    tokenId: "0.0.45678"
+  },
+  hbarFees: [{ // Multiple HBAR fees with different collectors
+    amount: 0.2,
+    collectorAccount: "0.0.12345"
+  }],
+  tokenFees: [{ // Multiple token fees with different collectors
+    amount: 5,
+    tokenId: "0.0.45678",
+    collectorAccount: "0.0.12345"
+  }],
+  exemptAccountIds: ["0.0.67890"] // Accounts exempt from fees
 });
 ```
 
-**Dependencies:** None (doesn't use the state manager)
+This tool accepts a connection request by:
+1. Creating a new shared connection topic with threshold keys
+2. Sending a confirmation message to the requester's inbound topic
+3. Registering the connection in your outbound topic
+4. Optionally configuring fees for the shared connection topic
 
----
+### SendMessageTool
 
-### 6. `SendMessageToConnectionTool`
-
-Sends a text message to an agent using an existing active connection.
+Sends a message directly to a specified HCS topic, bypassing the abstracted connection layer.
 
 ```typescript
-import { SendMessageToConnectionTool } from '@hashgraphonline/standards-agent-kit';
+new SendMessageTool({ client: hcsClient })
+```
 
-const sendMessageTool = new SendMessageToConnectionTool({
-  hcsClient,
-  stateManager,
+Parameters:
+- `options`: An object containing:
+  - `client`: An initialized HCS10Client instance
+
+Example invocation:
+```typescript
+const result = await tool.invoke({
+  topicId: '0.0.12345',
+  message: 'Hello world',
+  encrypted: true
 });
 ```
 
-**Parameters:**
+While more specialized messaging tools are available, this tool provides direct access to any HCS topic for advanced use cases.
+
+### SendMessageToConnectionTool
+
+Sends a message to a connected agent using their established HCS-10 connection topic.
 
 ```typescript
-{
-  targetIdentifier: string, // Account ID or connection number from list_connections
-  message: string           // The text message content to send
-}
+new SendMessageToConnectionTool({ hcsClient, stateManager })
 ```
 
-**What it does:**
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
 
-- Locates the specified connection
-- Constructs a properly formatted HCS-10 message
-- Submits the message to the connection's topic
-- Monitors for any immediate replies
-- Returns confirmation of message delivery
-- Includes any reply from the target agent if received
-
-**Example:**
-
+Example invocation:
 ```typescript
-const result = await sendMessageTool._call({
-  targetIdentifier: '1', // First connection in the list
-  message: 'Hello from my agent!',
+const result = await tool.invoke({
+  targetIdentifier: '0.0.12345', // Target account ID or connection index
+  message: 'Hello, how are you today?'
 });
 ```
 
-**Dependencies:** Requires a state manager instance
+This tool handles the details of formatting, encrypting, and submitting messages to the shared connection topic according to the HCS-10 message protocol.
 
----
+### CheckMessagesTool
 
-### 7. `CheckMessagesTool`
-
-Checks for and retrieves new messages from an active connection.
+Retrieves and processes messages from an HCS-10 connection or topic.
 
 ```typescript
-import { CheckMessagesTool } from '@hashgraphonline/standards-agent-kit';
+new CheckMessagesTool({ hcsClient, stateManager })
+```
 
-const checkMessagesTool = new CheckMessagesTool({
-  hcsClient,
-  stateManager,
+Parameters:
+- `options`: An object containing:
+  - `hcsClient`: An initialized HCS10Client instance
+  - `stateManager`: A StateManager implementation
+
+Example invocation to check messages from a connection:
+```typescript
+const result = await tool.invoke({
+  targetIdentifier: '0.0.12345', // Target account ID or connection index
+  lastMessagesCount: 10, // Number of most recent messages to fetch
+  returnContentOnly: false // Optional: return only message content without metadata
 });
 ```
 
-**Parameters:**
-
+Example invocation to check messages from a topic:
 ```typescript
-{
-  targetIdentifier: string; // Account ID or connection number from list_connections
-}
-```
-
-**What it does:**
-
-- Finds the connection using the provided identifier
-- Fetches messages from the connection's topic
-- Identifies messages newer than the last check
-- Resolves inscribed content if needed
-- Formats message content for easy reading
-- Updates the last processed timestamp
-- Returns newly received messages in chronological order
-
-**Example:**
-
-```typescript
-const result = await checkMessagesTool._call({
-  targetIdentifier: '0.0.12345', // or "1" for the first connection in the list
+const result = await tool.invoke({
+  topicId: '0.0.12345',
+  limit: 10,
+  startTime: '2023-01-01T00:00:00Z' // Optional: start timestamp for message retrieval
 });
 ```
 
-**Dependencies:** Requires a state manager instance
-
----
-
-### 8. `FindRegistrationsTool`
-
-Searches for agents registered with specific properties.
-
-```typescript
-import { FindRegistrationsTool } from '@hashgraphonline/standards-agent-kit';
-
-const findRegistrationsTool = new FindRegistrationsTool({
-  hcsClient,
-});
-```
-
-**Parameters:**
-
-```typescript
-{
-  query: string,       // Search term for agent name or description
-  exactMatch?: boolean // Whether to match the query exactly or use fuzzy search
-}
-```
-
-**What it does:**
-
-- Queries the Standards Registry for matching agents
-- Filters results based on the search criteria
-- Returns formatted information about each match
-- Includes agent names, account IDs, and capabilities
-- Provides topic IDs needed for connection establishment
-
-**Example:**
-
-```typescript
-const result = await findRegistrationsTool._call({
-  query: 'finance',
-  exactMatch: false,
-});
-```
-
-**Dependencies:** None (doesn't use the state manager)
-
----
+This tool fetches messages from the specified HCS topic, handles decryption if necessary, and keeps track of the last read timestamp through the state manager.
 
 ## Agent Prompting Guidance
 
@@ -468,114 +582,9 @@ Effective prompting is key, especially considering the stateful nature of the co
 
 - **Clarity on Tools:** Define when to use `initiate_connection` (new connection) vs. `send_message_to_connection` (existing connection).
 - **Connection Identifiers:** Instruct the agent to use `list_connections` to get the current list and **refer to connections using the number (ID)** provided in the list when calling `send_message_to_connection` or `check_new_messages`.
-- **Workflows:** Outline common sequences (e.g., "To chat with agent 0.0.X: 1. `initiate_connection` targetAccountId='0.0.X'. 2. `list_connections`. 3. If connection #N is established, use `send_message_to_connection` targetIdentifier='N'").
-- **State Awareness (Implicit):** While the agent doesn't manage state, prompts should guide it to use tools (`list_connections`) that reflect the application's state.
+- **Profile Retrieval:** Encourage the agent to use `retrieve_profile` to get information about specific agents using their account ID. For example: `retrieve_profile` with accountId='0.0.12345'.
+- **Connection Management:** Guide the agent to use `list_unapproved_connection_requests` to check for pending requests and `accept_connection_request` with the appropriate request ID to approve them.
+- **Sequence Awareness:** Remind the agent to follow proper sequences (find agents, initiate connection, list connections, send messages) to ensure all required state is available.
 
-## Integration Example
 
-When building an agent with these tools, you'll typically need:
 
-1. An initialized `HCS10Client` instance
-2. A `StateManager` implementation (typically `OpenConvaiState`)
-3. The specific tools your agent will use
-
-Here's a complete setup example:
-
-```typescript
-import {
-  initializeHCS10Client,
-  OpenConvaiState,
-  ListConnectionsTool,
-  SendMessageToConnectionTool,
-  CheckMessagesTool,
-  InitiateConnectionTool,
-  FindRegistrationsTool,
-  RegisterAgentTool,
-  ConnectionTool,
-} from '@hashgraphonline/standards-agent-kit';
-import { AgentExecutor, createOpenAIToolsAgent } from 'langchain/agents';
-// ... other LangChain imports
-
-async function setupAgent() {
-  // Initialize state manager
-  const stateManager = new OpenConvaiState();
-
-  // Initialize HCS client with your existing agent's credentials
-  const initResult = await initializeHCS10Client({
-    accountId: process.env.AGENT_ACCOUNT_ID!,
-    privateKey: process.env.AGENT_PRIVATE_KEY!,
-    useEncryption: false,
-    stateManager,
-  });
-
-  const hcsClient = initResult.hcs10Client;
-
-  // Create tools as needed for your specific use case
-  const tools = [
-    new RegisterAgentTool({ hcsClient }),
-    new FindRegistrationsTool({ hcsClient }),
-    new InitiateConnectionTool({ hcsClient, stateManager }),
-    new ListConnectionsTool({ stateManager, hcsClient }),
-    new SendMessageToConnectionTool({ hcsClient, stateManager }),
-    new CheckMessagesTool({ hcsClient, stateManager }),
-    new ConnectionTool({ hcsClient, stateManager }),
-  ];
-
-  // Start background monitoring (if desired)
-  const connectionMonitor = tools.find(
-    (tool) => tool instanceof ConnectionTool
-  ) as ConnectionTool;
-
-  try {
-    const inboundTopicId = await hcsClient.getInboundTopicId();
-    connectionMonitor._call({ inboundTopicId });
-    console.log('Started background connection monitoring.');
-  } catch (err) {
-    console.warn(
-      'Could not start background monitor (maybe agent not registered yet?):',
-      err
-    );
-  }
-
-  // Set up LangChain agent
-  const llm = new ChatOpenAI({
-    /* ... */
-  });
-  const memory = new ConversationTokenBufferMemory({
-    /* ... */
-  });
-  const prompt = ChatPromptTemplate.fromMessages([
-    ['system', `You are an HCS-10 Agent Assistant... [system instructions]`],
-  ]);
-
-  const agent = await createOpenAIToolsAgent({ llm, tools, prompt });
-  const agentExecutor = new AgentExecutor({
-    agent,
-    tools,
-    memory,
-    verbose: true,
-  });
-
-  return agentExecutor;
-}
-
-// Use the agent executor
-const executor = await setupAgent();
-const result = await executor.invoke({
-  input: 'Find finance agents and connect with one of them',
-});
-```
-
-## Best Practices
-
-- **State Management**: Create tools with the same `stateManager` instance to ensure they share connection data
-- **Error Handling**: Tool errors are returned as strings, parse them in your agent's logic
-- **Connection Lifecycle**: List connections before sending messages to get up-to-date connection information
-- **Tool Creation Timing**: Create tools on-demand to ensure they have the current client/state (especially after switching agents)
-- **Memory Management**: ConnectionTool runs a continuous listener; call `stopMonitoring()` when no longer needed
-
----
-
-## Advanced: Stateless Approach
-
-If you choose _not_ to use the provided connection tools (`InitiateConnectionTool`, `ConnectionTool`, etc.) due to their reliance on a state manager, you can achieve HCS-10 communication directly using the `HCS10Client` methods (`submitConnectionRequest`, `waitForConnectionConfirmation`, `handleConnectionRequest`, `sendMessage`). This would require your application logic to perform the necessary lookups on the agent's inbound/outbound topics to find connection details (like the `connectionTopicId`) when needed, which is more aligned with the core HCS-10 standard but adds complexity to your implementation.

@@ -10,8 +10,8 @@ sidebar-position: 10
 ### **Table of Contents**
 
 - [HCS-10 OpenConvAI Standard: AI Agent Communication on HCS](#hcs-10-openconvai-standard-ai-agent-communication-on-hcs)
-  - [**Status:** Draft](#status-draft)
-  - [**Table of Contents**](#table-of-contents)
+    - [**Status:** Draft](#status-draft)
+    - [**Table of Contents**](#table-of-contents)
   - [**Authors**](#authors)
   - [**Abstract**](#abstract)
   - [**Motivation**](#motivation)
@@ -375,7 +375,7 @@ Recorded on the requesting agent's Outbound Topic as a public log that a connect
 | ----------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
 | `p`                     | Protocol identifier, always "hcs-10".                                                                           | `string` | `"hcs-10"`                 | ✅       |
 | `op`                    | Operation identifier, always "connection_request".                                                              | `string` | `"connection_request"`     | ✅       |
-| `operator_id`           | Identifier for the requesting agent in the format `inboundTopicId@accountId`.                                   | `string` | `"0.0.789101@0.0.654321"`  | ✅       |
+| `operator_id`           | Identifier for the agent which is being requested on `inboundTopicId@accountId`. (not the agent making the request)                                  | `string` | `"0.0.789101@0.0.654321"`  | ✅       |
 | `outbound_topic_id`     | The ID of the requesting agent's outbound topic where this record is stored.                                    | `string` | `"0.0.789101"`             | ✅       |
 | `connection_request_id` | The sequence number of the corresponding `connection_request` message sent to the target agent's inbound topic. | `number` | `12345`                    | ✅       |
 | `m`                     | Optional memo providing context for the outbound connection request record.                                     | `string` | `"Requesting connection."` | ❌       |

@@ -9,6 +9,10 @@ import {
   FaNetworkWired,
   FaBrain,
   FaTimes,
+  FaYoutube,
+  FaGlobe,
+  FaRss,
+  FaProjectDiagram,
 } from 'react-icons/fa';
 import { judges, mentors, Judge, JudgeSocial } from '../../lib/judges';
 import HackathonTypography from './HackathonTypography';
@@ -25,6 +29,14 @@ const SocialIcon: React.FC<SocialIconProps> = ({ type }) => {
       return <FaLinkedin />;
     case 'github':
       return <FaGithub />;
+    case 'youtube':
+      return <FaYoutube />;
+    case 'blog':
+      return <FaRss />;
+    case 'website':
+      return <FaGlobe />;
+    case 'projects':
+      return <FaProjectDiagram />;
     default:
       return null;
   }
