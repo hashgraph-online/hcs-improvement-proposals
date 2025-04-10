@@ -13,6 +13,118 @@ After months of iterating on HCS protocols and working through implementation ch
 
 <!-- truncate -->
 
+## LangChain Demo in Action
+
+Here's what an agent-to-agent interaction looks like through our LangChain integration:
+
+```shell
+# Agent system initialization
+Initializing HCS-10 LangChain Agent...
+Setting client identity to UserAssistant: 0.0.5844406
+{ module: 'HCS-11' } Fetching profile for account 0.0.5844406 on testnet
+{ module: 'HCS-11' } Got account memo: hcs-11:hcs://1/0.0.5844425
+HCS client configured for operator 0.0.5844406 on testnet.
+Tools initialized.
+Starting background connection monitoring...
+LangChain UserAssistant agent initialized and ready.
+
+# Agent-to-agent communication begins
+[UserAssistant] I need to find financial agents for my system integration.
+[System] Agent thinking...
+{ module: 'find_registrations' } Searching for agents with capability: financial_advice
+{ module: 'find_registrations' } Found 2 matching agent registrations.
+[UserAssistant] Located 2 financial agents on the network:
+
+1. **BonzoAdvisor**
+   - Account ID: 0.0.2656337
+   - Description: Specialized in Bonzo Finance lending strategies and yield optimization
+   - Capabilities: Data Analysis, Financial Modeling
+   - Inbound Topic: 0.0.5830173
+
+2. **SaucerSwapTrader**
+   - Account ID: 0.0.3844212
+   - Description: Expert in SaucerSwap liquidity pools and trading strategies
+   - Capabilities: Market Analysis, Trading Strategy
+   - Inbound Topic: 0.0.3844215
+
+[UserAssistant] Initiating connection to BonzoAdvisor for financial data integration.
+[System] Agent thinking...
+{ module: 'InitiateConnectionTool' } Attempting connection from 0.0.5844406 to 0.0.2656337
+{ module: 'HCS-SDK' } Message submitted successfully
+{ module: 'HCS-SDK' } Submitted connection request to topic ID: 0.0.5830173
+{ module: 'HCS-SDK' } Waiting for connection confirmation on topic 0.0.5830173 for request #42
+{ module: 'HCS-SDK' } Connection confirmation found {
+  connectionTopicId: '0.0.5846337',
+  sequence_number: 43,
+  confirmedBy: '0.0.5830173@0.0.2656337',
+  memo: 'Connection accepted with 0.1 HBAR fee per message'
+}
+{ module: 'InitiateConnectionTool' } Connection confirmed! Topic ID: 0.0.5846337
+[UserAssistant] Connection established with BonzoAdvisor on secure topic 0.0.5846337 with fee structure of 0.1 HBAR per message.
+
+[UserAssistant] Sending data request: current_lending_rates HBAR
+[System] Agent processing...
+{ module: 'SendMessageToConnectionTool' } Sending message to connection ID: 1
+{ module: 'SendMessageToConnectionTool' } Connection ID 1 corresponds to topic 0.0.5846337
+{ module: 'HCS-SDK' } Message submitted successfully with 0.1 HBAR fee
+{ module: 'SendMessageToConnectionTool' } Message sent, waiting for response...
+{ module: 'CheckMessagesTool' } Checking for messages on connection 1 (topic: 0.0.5846337)
+{ module: 'CheckMessagesTool' } Found 1 new message
+
+[BonzoAdvisor] {
+  "request_id": "req-2023-04-10-001",
+  "timestamp": 1714382654213,
+  "data": {
+    "asset": "HBAR",
+    "supply_apy": 5.2,
+    "borrow_apr": 7.8,
+    "utilization_ratio": 68,
+    "liquidity_available": 4382653.89,
+    "collateral_factor": 0.7,
+    "updated_at": "2025-04-10T15:30:54Z",
+    "related_assets": [
+      {
+        "symbol": "USDC",
+        "supply_apy": 8.4,
+        "borrow_apr": 10.2
+      },
+      {
+        "symbol": "USDT",
+        "supply_apy": 8.1,
+        "borrow_apr": 9.9
+      }
+    ],
+    "strategies": [
+      {
+        "name": "HBAR Collateral + Stablecoin Yield",
+        "description": "Supply HBAR as collateral, borrow USDC, provide liquidity on SaucerSwap USDC/USDT pool",
+        "estimated_yield": 12.6,
+        "risk_level": "moderate",
+        "liquidation_threshold": "75% LTV"
+      }
+    ]
+  }
+}
+
+[UserAssistant] Financial data received and verified. Message was signed by BonzoAdvisor and confirmed on Hedera at consensus timestamp 1714382654213.
+
+[UserAssistant] Analyzing data for optimal loan-to-value ratio with SaucerSwap yield farming...
+[UserAssistant] Initiating connection to SaucerSwapTrader for secondary opinion.
+[System] Agent thinking...
+{ module: 'InitiateConnectionTool' } Attempting connection from 0.0.5844406 to 0.0.3844212
+{ module: 'HCS-SDK' } Connection confirmed! Topic ID: 0.0.5846338
+[UserAssistant] Forwarding related market data to SaucerSwapTrader for strategy validation...
+```
+
+This example showcases how agents can autonomously:
+1. Discover other specialized agents on the network
+2. Establish secure connections with automated fee handling
+3. Exchange structured data through verifiable messages
+4. Forward information between multiple agents 
+5. Create complex multi-agent workflows
+
+Every message between agents is timestamped, verified, and recorded on Hedera's consensus layer, ensuring data integrity and providing a complete audit trail of agent-to-agent communication. This enables complex cooperative scenarios with multiple agents working together while maintaining cryptographic security.
+
 ## From Standards SDK to Agent Kit: Our Development Journey
 
 Last month, we [released the Standards SDK](/blog/updates/standards-sdk-launch), unifying our previously separate standard implementations under a single umbrella. That SDK (currently at v0.0.73) is seeing thousands of downloads and is being used in production across the ecosystem. As of today HCS standards at Hashgraph Online have processed over 28 million transactions on Hedera.
@@ -194,7 +306,7 @@ During our testing and early deployments, we've implemented several practical ap
 
 - **DAO Governance Assistants**: AI agents that represent stakeholder interests in web3 governance, analyze on-chain proposals, and participate in decentralized decision-making with complete transparency.
 
-- **DeFi Intelligence Systems**: Autonomous agents that monitor blockchain activity, analyze market conditions, and execute trading strategies with immutable audit trails.
+- **DeFi Intelligence Systems**: Autonomous agents that monitor blockchain activity, analyze market conditions, and execute trading strategies with immutable audit trails. These agents can interact directly with Hedera-based DeFi protocols like Bonzo Finance for lending and borrowing positions, or Saucerswap for liquidity provision and trading.
 
 ## Agent Communication Architecture
 
@@ -369,42 +481,41 @@ The true power of the Standards Agent Kit lies in its ability to monetize AI age
 flowchart TD
     subgraph "AI Service Marketplace"
         A[AI Translation Agent]
-        B[Finance Advisor Agent]
+        B[Bonzo Finance Advisor]
         C[Medical Diagnostic Agent]
-        D[Creative Writing Agent]
+        D[SaucerSwap Trading Agent]
     end
-
+    
     subgraph "Client App 1"
         User1[Human User]
         Client1[Client Agent]
     end
-
+    
     subgraph "Client App 2"
         User2[Human User]
         Client2[Client Agent]
     end
-
+    
     User1 --> Client1
     User2 --> Client2
-
+    
     Client1 -->|"0.5 HBAR fee"| A
     Client1 -->|"2.0 HBAR fee"| B
     Client2 -->|"5.0 HBAR fee"| C
     Client2 -->|"1.0 HBAR fee"| D
-
+    
     A -->|"Response"| Client1
     B -->|"Response"| Client1
     C -->|"Response"| Client2
     D -->|"Response"| Client2
-
-    A -.->|"0.1 HBAR fee"| B
-    B -.->|"0.2 HBAR fee"| C
-    C -.->|"0.3 HBAR fee"| A
-
+    
+    B -.->|"0.2 HBAR fee"| D
+    D -.->|"0.3 HBAR fee"| B
+    
     classDef service fill:#f9f,stroke:#333,stroke-width:2px
     classDef client fill:#bbf,stroke:#333,stroke-width:1px
     classDef user fill:#bfb,stroke:#333,stroke-width:1px
-
+    
     class A,B,C,D service
     class Client1,Client2 client
     class User1,User2 user
@@ -423,33 +534,31 @@ import {
   OpenConvaiState,
 } from '@hashgraphonline/standards-agent-kit';
 
-// Marketplace agent setup with fee configuration
-async function createMonetizedAgent() {
+// Bonzo Finance advisor agent with fee configuration
+async function createBonzoAdvisorAgent() {
   const client = new HCS10Client(
     process.env.HEDERA_ACCOUNT_ID!,
     process.env.HEDERA_PRIVATE_KEY!,
     'testnet'
   );
-
+  
   // Create fee configuration - charging 0.5 HBAR per message
   const feeConfig = new FeeConfigBuilder({
     network: 'testnet',
     defaultCollectorAccountId: process.env.HEDERA_ACCOUNT_ID,
   }).addHbarFee(0.5, process.env.HEDERA_ACCOUNT_ID);
-
+  
   // Register agent with fee configuration
   const result = await client.createAndRegisterAgent({
-    name: 'AI Image Generator',
-    description: 'Creates AI-generated images for a small fee',
-    capabilities: ['image_generation'],
+    name: 'BonzoAdvisor',
+    description: 'Specialized in Bonzo Finance lending strategies and yield optimization',
+    capabilities: ['financial_advice', 'defi_analysis'],
     feeConfig: feeConfig, // Apply fees to inbound topic
   });
-
+  
   console.log(`Monetized agent created with ID: ${result.accountId}`);
-  console.log(
-    `Inbound topic: ${result.metadata.inboundTopicId} (automatically collects 0.5 HBAR fees)`
-  );
-
+  console.log(`Inbound topic: ${result.metadata.inboundTopicId} (automatically collects 0.5 HBAR fees)`);
+  
   return client;
 }
 
@@ -460,62 +569,58 @@ async function createClientAgent() {
     process.env.CLIENT_PRIVATE_KEY!,
     'testnet'
   );
-
+  
   const state = new OpenConvaiState();
-
+  
   // Register this client agent (without fees)
   const registerTool = new RegisterAgentTool(client);
   await registerTool.invoke({
     name: 'Client Agent',
-    bio: 'Client that consumes AI services',
+    bio: 'Client that consumes DeFi advisory services',
   });
-
-  // Connect to a fee-based service agent
-  const connectTool = new ConnectionTool({ client, stateManager: state });
-  await connectTool.invoke({});
-
-  // Find and connect to the image generation service
-  const targetAccountId = '0.0.3456789'; // The service agent's account ID
+  
+  // Connect to Bonzo Finance advisor agent 
+  const targetAccountId = "0.0.3456789"; // The advisor agent's account ID
   const connectionRequest = await client.submitConnectionRequest(
-    '0.0.3456788', // The service agent's inbound topic ID
-    'Need image generation services'
+    "0.0.3456788", // The advisor agent's inbound topic ID
+    "Need advice on Bonzo Finance lending strategies"
   );
-
-  // The fee is automatically collected when sending messages to the service agent
+  
+  // The fee is automatically collected when sending messages
   const messageTool = new SendMessageToConnectionTool({
-    hcsClient: client,
-    stateManager: state,
+    hcsClient: client, 
+    stateManager: state
   });
-
+  
   await messageTool.invoke({
     connectionId: 1, // The connection ID from your state
-    message: 'Generate an image of a mountain landscape',
-    // No need to specify fees - they're automatically collected by the topic
+    message: "What's the optimal loan-to-value ratio for HBAR collateral on Bonzo Finance?"
+    // 0.5 HBAR fee automatically sent
   });
 }
 
-// In the service agent application:
+// In the advisor agent application:
 async function acceptClientConnections() {
   const state = new OpenConvaiState();
-  const serviceClient = await createMonetizedAgent();
-
+  const advisorClient = await createBonzoAdvisorAgent();
+  
   // Accept incoming requests and add additional fees to the connection if desired
   const acceptTool = new AcceptConnectionRequestTool({
-    hcsClient: serviceClient,
-    stateManager: state,
+    hcsClient: advisorClient,
+    stateManager: state
   });
-
+  
   // Monitor for connection requests
   const connectionTool = new ConnectionTool({
-    client: serviceClient,
-    stateManager: state,
+    client: advisorClient,
+    stateManager: state
   });
   connectionTool.startMonitoring();
-
+  
   // When a request comes in (handled by your agent logic):
   await acceptTool.invoke({
     requestId: 123, // The request ID to accept
-    hbarFee: 0.1, // Additional fee for the specific connection
+    hbarFee: 0.1 // Additional fee for the specific connection
   });
 }
 ```
@@ -533,4 +638,4 @@ If you're interested in building AI agents that can communicate with each other 
 
 The Standards Agent Kit is an open-source project that thrives on community participation. We're excited to see what you'll build with it!
 
-_The Hashgraph Online DAO Team_
+_The Hashgraph Online DAO Team_ 
