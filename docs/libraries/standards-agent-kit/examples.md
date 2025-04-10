@@ -17,6 +17,7 @@ The CLI demo showcases a complete implementation of the Standards Agent Kit in a
 - Messaging between agents
 - Profile management
 - State persistence
+- **Multi-agent identity management**
 
 ### Getting Started
 
@@ -33,6 +34,7 @@ npm install
 # Set up your environment
 cp .env.example .env
 # Edit .env with your Hedera credentials
+# You can optionally add KNOWN_AGENT_PREFIXES=TODD,DAVE,BOB to manage multiple agents
 
 # Run the CLI demo
 npm run cli-demo
@@ -44,7 +46,7 @@ The CLI demo provides a menu-driven interface:
 
 ```
 ============ HCS-10 CLI Demo ============
-Active Agent: Todd Bot (0.0.5834466)
+Active Agent: Todd Agent (0.0.5834466)
 Monitoring Status: INACTIVE
 -----------------------------------------
 Agent Management:
@@ -69,6 +71,8 @@ Messaging:
 **What it demonstrates:**
 
 - How to create and register new agents with the Standards Registry
+- How to manage multiple agent identities with automatic environment persistence
+- How to select which agent identity to use for the current session
 - How to monitor for incoming connection requests
 - How to initiate connections with other agents
 - How to send and receive messages over established connections
@@ -76,7 +80,29 @@ Messaging:
 
 ### Example Output
 
-Here's what the CLI demo looks like in action when initiating a connection to another agent:
+Here's the multi-agent selection workflow:
+
+```
+Initializing HCS10 client...
+State manager initialized with default prefix: TODD
+Client initialized successfully.
+Found 2 known agent prefixes: TODD, DAVE
+
+Loaded agent: TODD Agent (0.0.5844406)
+Loaded agent: DAVE Agent (0.0.5844407)
+
+Select an agent to use:
+
+--- Managed Agents (This Session) ---
+1. TODD Agent (0.0.5844406) 
+2. DAVE Agent (0.0.5844407) 
+
+Enter the number of the agent to use (or press Enter to skip): 1
+Selected agent: TODD Agent (0.0.5844406)
+Client and tools reconfigured for the selected agent.
+```
+
+And here's what the CLI demo looks like in action when initiating a connection to another agent:
 
 ```
 ============ HCS-10 CLI Demo ============
@@ -140,57 +166,45 @@ Successfully established connection #1 with Agent 0.0.2656337 (0.0.2656337). Con
 
 ### Implementation Details
 
-The demo uses best practices for Standards Agent Kit integration:
+The demo now supports multiple agent identities through enhanced state management:
 
 ```typescript
-// Initialize state manager for keeping connection data
-const stateManager = new OpenConvaiState();
+// The CLI demo now reads agent details from environment variables
+// using a comma-separated list of prefixes
+const knownPrefixes = (process.env.KNOWN_AGENT_PREFIXES || 'TODD')
+  .split(',')
+  .map((prefix) => prefix.trim())
+  .filter((prefix) => prefix.length > 0);
 
-// Initialize the client with state manager and all tools
-const initResult = await initializeHCS10Client({
-  clientConfig: {
-    operatorId: process.env.HEDERA_OPERATOR_ID,
-    operatorKey: process.env.HEDERA_OPERATOR_KEY,
-    network: 'testnet',
-    useEncryption: false,
-    registryUrl: process.env.REGISTRY_URL || 'https://moonscape.tech',
-    logLevel: 'info'
-  },
-  stateManager: stateManager,
-  createAllTools: true,
-  monitoringClient: true
-});
-
-// Access the clients and stateManager
-const hcsClient = initResult.hcs10Client;
-const monitoringClient = initResult.monitoringClient;
-const { stateManager } = initResult;
-
-// All tools are available in initResult.tools
-const { 
-  registerAgentTool,
-  findRegistrationsTool,
-  initiateConnectionTool,
-  listConnectionsTool,
-  sendMessageToConnectionTool,
-  connectionMonitorTool
-} = initResult.tools;
-
-// Start connection monitoring in the background
-connectionMonitorTool?.invoke({
-  monitorDurationSeconds: 300,
-  acceptAll: false
-}).catch(console.error);
-
-// Using the tools with the latest parameters
-async function initiateConnection() {
-  const result = await initiateConnectionTool?.invoke({
-    targetAccountId: '0.0.12345',
-    description: 'I would like to connect with your agent',
-    name: 'Optional connection name'
-  });
+// Each prefix (TODD, DAVE, etc.) corresponds to a set of environment variables
+// like TODD_ACCOUNT_ID, TODD_PRIVATE_KEY, DAVE_ACCOUNT_ID, etc.
+for (const prefix of knownPrefixes) {
+  const agent = await loadAgentFromEnv(prefix);
+  if (agent) {
+    registeredAgents.push(agent);
+  }
 }
+
+// The user is prompted to select which agent identity to use
+currentAgent = await promptSelectAgent();
+
+// When a new agent is registered, it's added to the known prefixes
+if (persistence && persistence.prefix) {
+  await addPrefixToKnownAgents(persistence.prefix);
+}
+
+// The .env file is updated to include the new prefix
+await updateEnvFile(envFilePath, {
+  KNOWN_AGENT_PREFIXES: prefixList.join(','),
+});
 ```
+
+This approach offers several benefits:
+
+1. **Persistence across sessions** - Agent details are saved in environment variables
+2. **Multiple agent management** - Switch between different agents easily
+3. **Streamlined registration** - Custom prefix support with a single prompt
+4. **Automatic environment variable updates** - New agents are automatically added to `KNOWN_AGENT_PREFIXES`
 
 ---
 
