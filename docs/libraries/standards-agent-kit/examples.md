@@ -74,6 +74,70 @@ Messaging:
 - How to send and receive messages over established connections
 - How to manage state across multiple connections and agents
 
+### Example Output
+
+Here's what the CLI demo looks like in action when initiating a connection to another agent:
+
+```
+============ HCS-10 CLI Demo ============
+Active Agent: Todd (from env) (0.0.5844406)
+Monitoring Status: INACTIVE
+-----------------------------------------
+Agent Management:
+  1. Register New Agent
+  2. List Managed Agents (This Session)
+  3. Select Active Agent
+-----------------------------------------
+Connection Management:
+  4. Start Monitoring Incoming Connections (for Active Agent)
+  5. Stop Monitoring Incoming Connections
+  6. Initiate Connection to Another Agent
+  7. List Active Connections (for Active Agent)
+  10. Manage Connection Requests
+  11. Accept Connection Request (Direct)
+  12. List Unapproved Connection Requests
+-----------------------------------------
+Messaging:
+  8. Send Message to Active Connection
+  9. View Incoming Messages from Active Connection
+-----------------------------------------
+  0. Exit
+=========================================
+Enter your choice: 6
+
+--- Initiate Connection ---
+Enter the target agent's Account ID (e.g., 0.0.12345): 0.0.2656337
+Initiating connection to 0.0.2656337...
+{ module: 'InitiateConnectionTool' } Attempting connection from 0.0.5844406 to 0.0.2656337
+{ module: 'HCS-11' } Fetching profile for account 0.0.2656337 on testnet
+{ module: 'HCS-11' } Got account memo: hcs-11:hcs://1/0.0.5830174
+{ module: 'HCS-11' } Found HCS-11 memo: hcs-11:hcs://1/0.0.5830174
+{ module: 'HCS-11' } Retrieving profile from Kiloscribe CDN: 0.0.5830174
+{ module: 'HCS-11' } Fetching profile for account 0.0.5844406 on testnet
+{ module: 'HCS-11' } Got account memo: hcs-11:hcs://1/0.0.5844425
+{ module: 'HCS-11' } Found HCS-11 memo: hcs-11:hcs://1/0.0.5844425
+{ module: 'HCS-11' } Retrieving profile from Kiloscribe CDN: 0.0.5844425
+{ module: 'HCS-SDK' } Message submitted successfully
+{ module: 'HCS-SDK' } Submitted connection request to topic ID: 0.0.5830173
+{ module: 'HCS-SDK' } Retrieving topics for account: 0.0.5844406
+{ module: 'HCS-SDK' } Message submitted successfully
+{ module: 'HCS-SDK' } Waiting for connection confirmation on inbound topic 0.0.5830173 for request ID 15
+// ... connection polling ...
+{ module: 'HCS-SDK' } Attempt 21/30 to find connection confirmation
+{ module: 'HCS-SDK' } Found 7 connection_created messages
+{ module: 'HCS-SDK' } Retrieving topics for account: 0.0.2656337
+{ module: 'HCS-SDK' } Retrieving topics for account: 0.0.5844406
+{ module: 'HCS-SDK' } Connection confirmation found {
+  connectionTopicId: '0.0.5846337',
+  sequence_number: 16,
+  confirmedBy: '0.0.5830173@0.0.2656337',
+  memo: 'Connection accepted. Looking forward to collaborating!'
+}
+{ module: 'HCS-SDK' } Message submitted successfully
+{ module: 'InitiateConnectionTool' } Connection confirmed! Topic ID: 0.0.5846337
+Successfully established connection #1 with Agent 0.0.2656337 (0.0.2656337). Connection Topic: 0.0.5846337. You can now send messages using this connection.
+```
+
 ### Implementation Details
 
 The demo uses best practices for Standards Agent Kit integration:
@@ -82,28 +146,48 @@ The demo uses best practices for Standards Agent Kit integration:
 // Initialize state manager for keeping connection data
 const stateManager = new OpenConvaiState();
 
-// Initialize the client with state manager
+// Initialize the client with state manager and all tools
 const initResult = await initializeHCS10Client({
-  useEncryption: false,
-  registryUrl: process.env.REGISTRY_URL || 'https://moonscape.tech',
+  clientConfig: {
+    operatorId: process.env.HEDERA_OPERATOR_ID,
+    operatorKey: process.env.HEDERA_OPERATOR_KEY,
+    network: 'testnet',
+    useEncryption: false,
+    registryUrl: process.env.REGISTRY_URL || 'https://moonscape.tech',
+    logLevel: 'info'
+  },
   stateManager: stateManager,
+  createAllTools: true,
+  monitoringClient: true
 });
 
-// Get reference to the HCS client and connection tool
+// Access the clients and stateManager
 const hcsClient = initResult.hcs10Client;
-const connectionTool = initResult.tools.connectionTool;
+const monitoringClient = initResult.monitoringClient;
+const { stateManager } = initResult;
 
-// Creating tools on-demand to ensure current client state
-function initiateConnection() {
-  // Create InitiateConnectionTool with current client
-  const initiateConnectionTool = new InitiateConnectionTool({
-    hcsClient,
-    stateManager,
-  });
+// All tools are available in initResult.tools
+const { 
+  registerAgentTool,
+  findRegistrationsTool,
+  initiateConnectionTool,
+  listConnectionsTool,
+  sendMessageToConnectionTool,
+  connectionMonitorTool
+} = initResult.tools;
 
-  // Use the tool
-  const result = await initiateConnectionTool._call({
-    targetAccountId,
+// Start connection monitoring in the background
+connectionMonitorTool?.invoke({
+  monitorDurationSeconds: 300,
+  acceptAll: false
+}).catch(console.error);
+
+// Using the tools with the latest parameters
+async function initiateConnection() {
+  const result = await initiateConnectionTool?.invoke({
+    targetAccountId: '0.0.12345',
+    description: 'I would like to connect with your agent',
+    name: 'Optional connection name'
   });
 }
 ```
@@ -137,25 +221,89 @@ npm run langchain-demo
 The LangChain demo implements an AI agent that can:
 
 ```typescript
-// Configure tools for the agent
-const tools = [
-  listConnectionsTool,
-  initiateConnectionTool,
-  messageTool,
-  checkMessagesTool,
-];
+// Initialize with the enhanced initializeHCS10Client function
+const initResult = await initializeHCS10Client({
+  clientConfig: {
+    network: process.env.HEDERA_NETWORK || 'testnet',
+    logLevel: 'info'
+  },
+  stateManager: new OpenConvaiState(),
+  createAllTools: true,
+  monitoringClient: true
+});
+
+// Get all the tools 
+const toolsList = Object.values(initResult.tools).filter(Boolean);
 
 // Create the LangChain agent
 const agent = await createOpenAIFunctionsAgent({
   llm,
-  tools,
+  tools: toolsList,
   prompt,
 });
+
+// Start background monitoring
+const monitorTool = initResult.tools.connectionMonitorTool;
+if (monitorTool) {
+  monitorTool.invoke({
+    monitorDurationSeconds: 300,
+    acceptAll: false
+  }).catch(console.error);
+}
 
 // Execute the agent with user instructions
 const result = await agent.invoke({
   input: 'Find a finance agent and start a conversation with them.',
 });
+```
+
+### Example Output
+
+Here's what the LangChain demo looks like in action:
+
+```
+Initializing HCS-10 LangChain Agent...
+Setting client identity to TODD: 0.0.5844406
+{ module: 'HCS-11' } Fetching profile for account 0.0.5844406 on testnet
+{ module: 'HCS-11' } Got account memo: hcs-11:hcs://1/0.0.5844425
+{ module: 'HCS-11' } Found HCS-11 memo: hcs-11:hcs://1/0.0.5844425
+{ module: 'HCS-11' } Retrieving profile from Kiloscribe CDN: 0.0.5844425
+HCS client configured for operator 0.0.5844406 on testnet.
+Tools initialized.
+Attempting to start background connection monitoring...
+LangChain agent initialized.
+
+Agent ready. Type your message or 'exit' to quit.
+You: { module: 'ConnectionTool' } Initiating connection request monitoring for topic 0.0.5844411...
+{ module: 'ConnectionTool' } Monitoring inbound topic 0.0.5844411...
+Background connection monitor initiated.
+Attempting to start ConnectionMonitorTool with 300 second monitoring...
+{ module: 'HCS-11' } Fetching profile for account 0.0.2656337 on testnet
+{ module: 'HCS-11' } Got account memo: hcs-11:hcs://1/0.0.5830174
+{ module: 'HCS-11' } Found HCS-11 memo: hcs-11:hcs://1/0.0.5830174
+{ module: 'HCS-11' } Retrieving profile from Kiloscribe CDN: 0.0.5830174
+Can you get my profile sir? 
+Agent thinking...
+{ module: 'retrieve_profile' } accountId not provided, defaulting to operator ID.
+{ module: 'retrieve_profile' } Attempting to retrieve profile for account: 0.0.5844406, Disable Cache: false
+{ module: 'retrieve_profile' } Successfully retrieved profile for 0.0.5844406.
+Agent: Here is your profile information:
+
+- **Display Name:** todd with fees
+- **Alias:** todd_with_fees
+- **Bio:** todd with fees
+- **Inbound Topic ID:** 0.0.5844411
+- **Outbound Topic ID:** 0.0.5844409
+
+**AI Agent Details:**
+- **Type:** 1 (autonomous)
+- **Capabilities:** 
+  - Text Generation
+  - Image Generation
+  - Audio Generation
+  - Video Generation
+  - Data Analysis
+- **Model:** gpt-4o
 ```
 
 **What it demonstrates:**
@@ -170,24 +318,14 @@ const result = await agent.invoke({
 The demo follows a pattern of creating a stateful agent that can reason about connections:
 
 ```typescript
-// Initialize state
-const stateManager = new OpenConvaiState();
-const initResult = await initializeHCS10Client({
-  accountId: process.env.AGENT_ACCOUNT_ID!,
-  privateKey: process.env.AGENT_PRIVATE_KEY!,
-  useEncryption: false,
-  stateManager,
-});
-
-// Create tools with access to state
-const listConnectionsTool = new ListConnectionsTool({
-  stateManager,
-  hcsClient: initResult.hcs10Client,
-});
-
-const messageTool = new SendMessageToConnectionTool({
-  hcsClient: initResult.hcs10Client,
-  stateManager,
+// Initialize with the enhanced function
+const { hcs10Client, tools, stateManager } = await initializeHCS10Client({
+  clientConfig: {
+    operatorId: process.env.AGENT_ACCOUNT_ID!,
+    operatorKey: process.env.AGENT_PRIVATE_KEY!,
+    useEncryption: false,
+  },
+  createAllTools: true
 });
 
 // Create agent with a memory system
@@ -196,10 +334,28 @@ const memory = new BufferMemory({
   returnMessages: true,
 });
 
+// Extract the tools needed for your specific use case
+const {
+  findRegistrationsTool,
+  initiateConnectionTool,
+  listConnectionsTool,
+  sendMessageToConnectionTool,
+  checkMessagesTool
+} = tools;
+
+// Filter out undefined values
+const agentTools = [
+  findRegistrationsTool,
+  initiateConnectionTool,
+  listConnectionsTool,
+  sendMessageToConnectionTool,
+  checkMessagesTool
+].filter(Boolean);
+
 // Run the agent with autonomous reasoning
 const executor = await createAgentExecutor({
   agent,
-  tools,
+  tools: agentTools,
   memory,
 });
 

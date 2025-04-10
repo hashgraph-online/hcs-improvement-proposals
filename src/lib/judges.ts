@@ -1,5 +1,12 @@
 export interface JudgeSocial {
-  type: 'twitter' | 'linkedin' | 'github';
+  type:
+    | 'twitter'
+    | 'linkedin'
+    | 'github'
+    | 'youtube'
+    | 'blog'
+    | 'website'
+    | 'projects';
   url: string;
 }
 
@@ -32,7 +39,7 @@ export const judges: Judge[] = [
     bio: 'Brandon Davenport is the Director of Communications at Hgraph, a company at the forefront of developing breakthrough data-focused products on the Hedera network and beyond. A recognized leader in the Hedera community, Brandon plays key roles in ecosystem-wide initiatives and has been instrumental in launching successful projects that drive innovation on the network. Based in Ottawa, Canada, Brandon is also a passionate NFT creator, musician and drummer.',
     image: '/img/hackathon/bradon-davenport.jpeg',
     socials: [
-      { type: 'twitter', url: 'https://twitter.com/brandondavp' },
+      { type: 'twitter', url: 'https://x.com/itsbrandond' },
       { type: 'linkedin', url: 'https://linkedin.com/in/brandon-davenport' },
     ],
     expertise: [
@@ -48,10 +55,7 @@ export const judges: Judge[] = [
     company: 'Bonzo Finance Labs',
     bio: "Brady Gentile is the Co-Founder and CEO of Bonzo Finance Labs — contributing to the development of Bonzo Finance, an open source, non-custodial lending protocol based on Aave v2 deployed to the Hedera network. Brady's previous experience includes Product Marketing for blockchain, security, and distributed systems companies' Hedera, Cloudflare, and DataStax.",
     image: '/img/hackathon/brady-gentile.jpeg',
-    socials: [
-      { type: 'twitter', url: 'https://twitter.com/bradyagentile' },
-      { type: 'github', url: 'https://github.com/bradygentile' },
-    ],
+    socials: [{ type: 'twitter', url: 'https://x.com/bmgentile' }],
     expertise: [
       'DeFi',
       'Lending Protocols',
@@ -82,7 +86,7 @@ export const judges: Judge[] = [
     company: 'Hashgraph',
     bio: 'Ty is a Senior Product Manager at Hashgraph, focusing on the services roadmap for Hedera Mainnet, including tokenization, consensus, and mirror node services. ',
     image: '/img/hackathon/ty-smith.webp',
-    socials: [{ type: 'twitter', url: 'https://x.com/TMCC_Patches' }],
+    socials: [{ type: 'twitter', url: 'https://x.com/SL_Patches' }],
     expertise: [
       'Agent Architecture Analysis',
       'Protocol Evaluation',
@@ -97,9 +101,7 @@ export const judges: Judge[] = [
     company: 'Builder Labs',
     bio: 'Tudor is the founder of Builder Labs.',
     image: '/img/hackathon/tudor-h.jpg',
-    socials: [
-      { type: 'twitter', url: 'https://x.com/Tudor_Holotescu' },
-    ],
+    socials: [{ type: 'twitter', url: 'https://x.com/Tudor_Holotescu' }],
   },
   {
     name: 'Pluto',
@@ -107,9 +109,7 @@ export const judges: Judge[] = [
     company: 'HashPack',
     bio: 'Pluto is the CTO of HashPack.',
     image: '/img/hackathon/pluto.png',
-    socials: [
-      { type: 'twitter', url: 'https://x.com/pluto_hashpack' },
-    ],
+    socials: [{ type: 'twitter', url: 'https://x.com/pluto_hashpack' }],
   },
   {
     name: 'Aegis-H',
@@ -168,11 +168,7 @@ export const mentors: Judge[] = [
     bio: 'James is the CEO & Co-founder of Neuron, an edge network infrastructure making real time DePIN data available to software applications and AI agents. James leads the businesses vision, product and go-to-market strategy, and is on a mission to enable machine to machine commerce using edge devices. James has spent 16 years in disruptive tech, and banking, working in the drone industry building the first drone for surveying railway tracks, and now in web3, DePIN and DeAI. He is a mentor for Outlier Ventures accelerator, and is well connected across the DePIN ecosystem, having spoken at various events and conferences across his career. You can find out more about Neuron at www.neuron.world.',
     image: '/img/hackathon/james-dunthorne.jpg',
     socials: [{ type: 'twitter', url: 'https://twitter.com/james_dunthorne' }],
-    expertise: [
-      'Edge Computing',
-      'DePIN',
-      'DeAI',
-    ],
+    expertise: ['Edge Computing', 'DePIN', 'DeAI'],
   },
   {
     name: 'Ejaz Merchant',
@@ -193,7 +189,7 @@ export const mentors: Judge[] = [
     company: 'Hashgraph',
     bio: 'Ty is a Senior Product Manager at Hashgraph, focusing on the services roadmap for Hedera Mainnet, including tokenization, consensus, and mirror node services. ',
     image: '/img/hackathon/ty-smith.webp',
-    socials: [{ type: 'twitter', url: 'https://x.com/TMCC_Patches' }],
+    socials: [{ type: 'twitter', url: 'https://x.com/SL_Patches' }],
     expertise: [
       'Agent Architecture Analysis',
       'Protocol Evaluation',
@@ -206,7 +202,7 @@ export const mentors: Judge[] = [
     name: 'Ali Nikan',
     role: 'Director, Product Management',
     company: 'Hashgraph',
-    bio: 'Ali is a Director of Product Management at Hashgraph, driving Hedera\'s roadmap for Smart Contracts and EVM Compatibility.',
+    bio: "Ali is a Director of Product Management at Hashgraph, driving Hedera's roadmap for Smart Contracts and EVM Compatibility.",
     image: '/img/hackathon/ali-nikan.png',
     socials: [
       { type: 'twitter', url: 'https://x.com/ali_nik4n' },
@@ -219,6 +215,28 @@ export const mentors: Judge[] = [
       'UI/UX',
     ],
     isAI: false,
+  },
+  {
+    name: 'Brendan Graetz',
+    role: 'DevRel',
+    company: 'Hashgraph',
+    bio: 'Brendan is a software engineer with 16 years of experience, including the past 6 in developer relations. He is doing DevRel for Hedera in Dallas, has built blockchain education courses in Buenos Aires, run a DApp builder meetup in Singapore, and built a million concurrent user backend for the Rio Olympics in Sydney, among other things.',
+    image: '/img/hackathon/brendan-graetz.png',
+    socials: [
+      { type: 'youtube', url: 'https://www.youtube.com/@doDevRel' },
+      { type: 'blog', url: 'https://blog.bguiz.com/' },
+      { type: 'twitter', url: 'https://x.com/bguiz' },
+      { type: 'linkedin', url: 'https://linkedin.com/in/brendangraetz' },
+      { type: 'website', url: 'https://docs.hedera.com/hedera' },
+      { type: 'projects', url: 'https://rsk.thinkific.com/collections' },
+      { type: 'projects', url: 'https://dappsdev.org/' },
+      { type: 'projects', url: 'https://7plus.com.au/olympic-games-rio-2016' },
+    ],
+    expertise: [
+      'Smart Contract Development',
+      'AI Development',
+      'DApp Architecture',
+    ],
   },
   {
     name: 'Synapse-X',
