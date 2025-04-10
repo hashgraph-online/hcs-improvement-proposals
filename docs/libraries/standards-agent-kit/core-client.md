@@ -82,9 +82,9 @@ import {
 } from '@hashgraphonline/standards-agent-kit'; // Adjust path if necessary
 import * as dotenv from 'dotenv';
 
-dotenv.config(); // Loads HEDERA_ACCOUNT_ID, HEDERA_PRIVATE_KEY, HEDERA_NETWORK
+dotenv.config(); // Loads HEDERA_OPERATOR_ID, HEDERA_PRIVATE_KEY, HEDERA_NETWORK
 
-const operatorId: string = process.env.HEDERA_ACCOUNT_ID!;
+const operatorId: string = process.env.HEDERA_OPERATOR_ID!;
 const operatorPrivateKey: string = process.env.HEDERA_PRIVATE_KEY!;
 const network: StandardNetworkType =
   (process.env.HEDERA_NETWORK as StandardNetworkType) || 'testnet';
@@ -96,6 +96,7 @@ const hcs10Client = new HCS10Client(operatorId, operatorPrivateKey, network);
 const options = {
   registryUrl: process.env.REGISTRY_URL, // Optional: Specify registry
   useEncryption: false, // Optional: Influences certain SDK ops if applicable
+  logLevel: 'info', // Optional: Set logging level
 };
 const hcs10ClientWithOptions = new HCS10Client(
   operatorId,
@@ -122,7 +123,7 @@ constructor(
   operatorId: string,
   operatorPrivateKey: string,
   network: StandardNetworkType, // 'mainnet' | 'testnet'
-  options?: { useEncryption?: boolean; registryUrl?: string }
+  options?: { useEncryption?: boolean; registryUrl?: string; logLevel?: LogLevel }
 )
 ```
 
@@ -138,6 +139,7 @@ constructor(
   | `options`               | `object`                                         | Yes      | -           | Container for optional settings.                         |
   | `options.useEncryption` | `boolean`                                        | Yes      | `false`     | Stored flag; effect depends on SDK methods called later. |
   | `options.registryUrl`   | `string`                                         | Yes      | SDK default | URL for the HCS-10 registry.                             |
+  | `options.logLevel`      | `LogLevel`                                       | Yes      | 'info'      | Logger level ('debug', 'info', 'warn', 'error').         |
 
 - **Returns:** An instance of the `HCS10Client` wrapper.
 
@@ -299,6 +301,22 @@ try {
 }
 ```
 
+### `getAgentProfile`
+
+```typescript
+public async getAgentProfile(accountId: string): Promise<ProfileResponse>
+```
+
+- **Purpose:** Alias for `retrieveProfile` - fetches an agent's HCS-10 profile from the registry.
+- **Mechanism:** Delegates directly to `this.standardClient.retrieveProfile(accountId)`.
+- **Parameters:**
+
+  | Parameter   | Type     | Optional | Description                                                |
+  | :---------- | :------- | :------- | :--------------------------------------------------------- |
+  | `accountId` | `string` | No       | Account ID (`0.0.X`) of the agent whose profile is needed. |
+
+- **Returns:** A `Promise` resolving to the `ProfileResponse` object from the SDK, containing profile details (name, description, topics, etc.) and success status.
+
 ---
 
 ### `submitConnectionRequest`
@@ -414,7 +432,7 @@ public async sendMessage(
   data: string,
   memo?: string,
   submitKey?: PrivateKey // from '@hashgraph/sdk'
-): Promise<string>
+): Promise<number | undefined>
 ```
 
 - **Purpose:** Sends a **raw string message** to any specified HCS topic. This utility does **not** adhere to HCS-10 message formatting or connection protocols.
@@ -430,7 +448,7 @@ public async sendMessage(
   | `memo`      | `string`     | Yes      | Short memo for the Hedera transaction.                                     |
   | `submitKey` | `PrivateKey` | Yes      | Key if the target topic requires a specific submit key (`@hashgraph/sdk`). |
 
-- **Returns:** A `Promise` resolving to the consensus timestamp string of the submitted message upon success.
+- **Returns:** A `Promise` resolving to the topic sequence number (as a number) of the submitted message upon success, or undefined if unavailable.
 - **Notes / Gotchas:** Useful for debugging or sending data on non-HCS-10 topics. Do not use this for sending standard messages _within_ an established HCS-10 connection; use the `SendMessageToConnectionTool` for that (which _should_ ideally format messages correctly, although its current implementation also sends raw data).
 
 ```typescript
@@ -441,12 +459,12 @@ const statusUpdate = JSON.stringify({
   status: 'Processing',
 });
 try {
-  const timestamp = await hcs10Client.sendMessage(
+  const sequenceNumber = await hcs10Client.sendMessage(
     statsTopic,
     statusUpdate,
     'System Status'
   );
-  console.log(`Raw message sent to ${statsTopic} at ${timestamp}`);
+  console.log(`Raw message sent to ${statsTopic} with sequence number ${sequenceNumber}`);
 } catch (error) {
   console.error('Failed to send raw message:', error);
 }
@@ -635,6 +653,31 @@ if (newAgentResult.success && newAgentResult.accountId && newAgentResult.private
     );
     console.log(`Client identity switched. New Operator ID: ${hcs10Client.getOperatorId()}`);
     // Subsequent calls using hcs10Client will now use the new agent's identity
+}
+```
+
+### `getOutboundTopicId` (Kit Utility)
+
+```typescript
+public async getOutboundTopicId(): Promise<string>
+```
+
+- **Purpose:** Retrieves the outbound topic ID for the current operator account by fetching its profile.
+- **Mechanism:** Calls `this.getAgentProfile(this.getOperatorId())` and extracts the `outboundTopic` from the profile response.
+- **Parameters:** None.
+- **Returns:** A `Promise` resolving to the outbound topic ID string (`0.0.X`).
+- **Throws:** An error if the operator ID cannot be determined, the profile cannot be retrieved, or the profile doesn't contain an outbound topic ID.
+- **Notes / Gotchas:** The currently configured operator _must_ be successfully registered as an HCS-10 agent with a valid profile for this to succeed.
+
+```typescript
+// Example
+try {
+  const myOutboundTopic = await hcs10Client.getOutboundTopicId();
+  console.log('My Outbound Topic ID is:', myOutboundTopic);
+  // Can be used for monitoring confirmations, etc.
+} catch (error) {
+  console.error('Could not determine own outbound topic ID:', error);
+  // Might indicate the agent needs registration first
 }
 ```
 
