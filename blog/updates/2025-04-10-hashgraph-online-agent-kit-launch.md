@@ -1,31 +1,31 @@
 ---
 slug: hashgraph-online-agent-kit-launch
-title: 'The Standards Agent Kit: Teaching AI to Speak Hedera'
+title: 'The Standards Agent Kit: Teaching AI to Chat on Hedera'
 authors: [kantorcodes]
 tags: [hedera, hcs, ai, agents, langchain, openconvai, hcs-10, hackathon]
 ---
 
-# The Standards Agent Kit: Teaching AI to Speak Hedera
+# The Standards Agent Kit: Teaching AI to Chat on Hedera
 
 After months of iterating on HCS protocols and working through implementation challenges, we've completed the **Hashgraph Online Standards Agent Kit** – a TypeScript toolkit that lets your AI agents communicate directly with each other using the HCS-10 standard on Hedera. This toolkit addresses one of the most challenging problems in AI today: enabling secure, verifiable agent-to-agent communication.
 
-> "We built this toolkit to solve a real problem: enabling AI systems to communicate with each other in a standardized way without requiring developers to implement complex communication protocols from scratch." - Michael Kantor, President, Hashgraph Online DAO
+> "We built this toolkit to solve a real problem: enabling AI agents, swarms, systems and humans to communicate with each other in a standardized way without requiring developers to implement complex communication protocols from scratch." - Michael Kantor, President, Hashgraph Online DAO
 
 <!-- truncate -->
 
 ## From Standards SDK to Agent Kit: Our Development Journey
 
-Last month, we [released the Standards SDK](/blog/updates/standards-sdk-launch), unifying our previously separate standard implementations under a single umbrella. That SDK (currently at v0.0.73) has already processed over 28 million transactions on Hedera and serves as the foundation for various applications across the ecosystem.
+Last month, we [released the Standards SDK](/blog/updates/standards-sdk-launch), unifying our previously separate standard implementations under a single umbrella. That SDK (currently at v0.0.73) is seeing thousands of downloads and is being used in production across the ecosystem. As of today HCS standards at Hashgraph Online have processed over 28 million transactions on Hedera.
 
 The Standards Agent Kit is the next step in our development journey – a specialized layer built on top of the Standards SDK that focuses specifically on AI agent integration through LangChain. While the Standards SDK provides the core implementation of the HCS-10 protocol, the Agent Kit makes it accessible to AI developers who may not be familiar with the intricacies of decentralized communication.
 
 ```mermaid
 graph TD;
-    A[Developer Application] -->|"Uses"| B[Standards Agent Kit]
-    B -->|"Built on"| C[Standards SDK v0.0.73]
-    C -->|"Communicates via"| D[Hedera Consensus Service]
-    B -->|"Enhances"| E[LangChain Agents]
-    E -->|"Communicate with"| F[Other AI Agents]
+    A[Your Frustrated Developer] -->|"Uses"| B[Standards Agent Kit]
+    B -->|"Handles this"| C[Standards SDK]
+    C -->|"Writes on"| D[Hedera Consensus Service]
+    B -->|"Powers"| E[Your LangChain Agent]
+    E -->|"To communicate with"| F[Other AI Agents]
 ```
 
 The reality is that enabling AI agents to communicate with each other involves significant challenges:
