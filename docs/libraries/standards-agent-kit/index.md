@@ -11,6 +11,7 @@ Welcome to the Standards Agent Kit! This TypeScript library helps you implement 
 - **Implements the HCS-10 Standard** - Provides a complete implementation of the OpenConvAI protocol for autonomous agent communication
 - **Simplifies Complex HCS Interactions** - Handles topic creation, message formatting, and connection management according to the standard
 - **Offers LangChain Integration** - Provides ready-to-use LangChain tools that enable your AI agents to perform HCS-10 operations
+- **Supports Plugin Extensions** - Includes a flexible plugin system to extend functionality with custom tools and integrations
 
 ## Getting Started
 
@@ -158,7 +159,17 @@ Tools that empower LangChain agents to perform HCS-10 operations:
 
 [Learn more about the tools →](./langchain-tools.md)
 
-### 3. Connection State Management
+### 3. Plugin System
+
+The plugin system allows you to extend the kit with custom functionality:
+
+- **Custom Tools** - Add new LangChain tools to your agents
+- **External Integrations** - Connect to third-party services and APIs
+- **Modular Design** - Organize related functionality into reusable packages
+
+[Explore the plugin system →](./plugins.md)
+
+### 4. Connection State Management
 
 Since HCS-10 requires tracking connection state, the kit provides:
 
@@ -172,10 +183,12 @@ Ready to build applications with the HCS-10 standard?
 
 - [**LangChain Tools Guide**](./langchain-tools.md) - Learn about all available tools and how to use them
 - [**Core Client Guide**](./core-client.md) - Understand the underlying client implementation
+- [**Plugin System Guide**](./plugins.md) - Learn how to extend functionality with plugins
 - [**Example Applications**](./examples.md) - See complete working demos
 
 ## Documentation Structure
 
 - [Core Client (`HCS10Client`)](/docs/libraries/standards-agent-kit/core-client) - Details on the HCS10Client class
 - [LangChain Tools](/docs/libraries/standards-agent-kit/langchain-tools) - Documentation for all provided LangChain tools (RegisterAgent, FindRegistrations, InitiateConnection, Connection, ListConnections, SendMessageToConnection, CheckMessages, SendMessage) and `DemoState`.
+- [Plugin System](/docs/libraries/standards-agent-kit/plugins) - Documentation for the plugin system, including how to create, load, and use plugins.
 - [Examples (Reference)](/docs/libraries/standards-agent-kit/examples) - Brief descriptions linking to example code.
