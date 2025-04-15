@@ -349,6 +349,13 @@ const ToolsTimelineSection: React.FC = () => {
       description:
         'Final projects must be submitted by 11:59 PM EST, including code, documentation, and video demo.',
     },
+    {
+      icon: <FaVideo />,
+      date: 'May 20th, 2025',
+      title: 'Demo Day',
+      description:
+        'Top projects will have the opportunity to pitch their ideas live.',
+    },
   ];
 
   return (

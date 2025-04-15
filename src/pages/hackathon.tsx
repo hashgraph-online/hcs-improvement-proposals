@@ -7,6 +7,7 @@ import ToolsTimelineSection from '../components/hackathon/ToolsTimelineSection';
 import RegisterSection from '../components/hackathon/RegisterSection';
 import FAQSection from '../components/hackathon/FAQSection';
 import VideoSection from '../components/hackathon/VideoSection';
+import DemoDaySection from '../components/hackathon/DemoDaySection';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
 
@@ -28,6 +29,9 @@ const ConvAIHackathon: React.FC = () => {
         </div>
         <div id='tools'>
           <ToolsTimelineSection />
+        </div>
+        <div id='demo-day'>
+          <DemoDaySection />
         </div>
         <div id='judges'>
           <JudgesSection />
