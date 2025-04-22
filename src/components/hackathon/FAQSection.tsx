@@ -343,6 +343,17 @@ const FAQSection: React.FC = () => {
                 <div>🥉 Third Place: $2,500</div>
               </div>
             </div>
+            <div className='mb-4'>
+              <HackathonTypography
+                variant='subtitle1'
+                className='font-bold text-hedera-blue'
+              >
+                Best Use of Bonzo Finance + AI Tooling (<a href="https://docs.google.com/document/d/19ySWURgm4NS-41wdN-I5Wn31qxmaLAXbMLzfKgxhIus/edit?tab=t.0#heading=h.g45eoi3rm0k1">Details</a>)
+              </HackathonTypography>
+              <div className='mt-2 ml-4 text-black dark:text-white'>
+                <div>🥇 First Place: 15,000 $BONZO Governance Tokens</div>
+              </div>
+            </div>
           </div>
           <HackathonTypography
             variant='body1'
