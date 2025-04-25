@@ -237,7 +237,7 @@ const RequirementsSection: React.FC = () => {
                   color='muted'
                   className='mb-3 sm:mb-0 max-w-xl'
                 >
-                  Submit your project before May 2nd, 2024 at 11:59 PM EST
+                  Submit your project before May 2nd, 2025 at 11:59 PM EST
                 </HackathonTypography>
               </div>
             </div>

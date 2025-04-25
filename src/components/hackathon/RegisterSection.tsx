@@ -104,7 +104,7 @@ const RegisterSection: React.FC = () => {
             >
               <div className='inline-block px-3 py-1 mb-3 sm:mb-4 rounded-full bg-[#3ec878]/10 border border-[#3ec878]/20'>
                 <span className='text-xs sm:text-sm text-[#3ec878] font-medium'>
-                  April 11th - May 2nd, 2024
+                  April 11th - May 2nd, 2025
                 </span>
               </div>
               <h2

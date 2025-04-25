@@ -364,7 +364,7 @@ const FAQSection: React.FC = () => {
             <FaCircle className='text-hedera-purple text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                April 11th, 2024
+                April 11th, 2025
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Registration Opens & Hackathon Kickoff
@@ -376,7 +376,7 @@ const FAQSection: React.FC = () => {
             <FaCircle className='text-hedera-blue text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                April 11th - May 2nd, 2024
+                April 11th - May 2nd, 2025
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Building Phase with Daily Support Sessions
@@ -388,7 +388,7 @@ const FAQSection: React.FC = () => {
             <FaCircle className='text-hedera-green text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                April 22nd, 2024
+                April 22nd, 2025
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Midpoint Check-in
@@ -400,7 +400,7 @@ const FAQSection: React.FC = () => {
             <FaCircle className='text-hedera-purple text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                May 2nd, 2024 at 11:59 PM EST
+                May 2nd, 2025 at 11:59 PM EST
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Submission Deadline
@@ -412,7 +412,7 @@ const FAQSection: React.FC = () => {
             <FaCheckCircle className='text-hedera-blue text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                May 9th, 2024
+                May 9th, 2025
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Winners Announced
@@ -623,7 +623,7 @@ const FAQSection: React.FC = () => {
             You can submit a project you've been working on prior to the
             hackathon, provided that there are significant improvements and
             progress to the project during the official hacking period from
-            April 11th to May 2nd, 2024.
+            April 11th to May 2nd, 2025.
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
@@ -645,7 +645,7 @@ const FAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            The OpenConvAI Hackathon runs from April 11th to May 2nd, 2024 –
+            The OpenConvAI Hackathon runs from April 11th to May 2nd, 2025 –
             that's three weeks of building, learning, and collaborating! This
             timeframe gives you enough time to understand the technology,
             develop your idea, and implement a functional prototype.
