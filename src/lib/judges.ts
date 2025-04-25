@@ -112,6 +112,14 @@ export const judges: Judge[] = [
     socials: [{ type: 'twitter', url: 'https://x.com/pluto_hashpack' }],
   },
   {
+    name: 'Quincy Jones',
+    role: 'Lead Developer Relations',
+    company: 'XDC Foundation',
+    bio: 'From blockchain developer, to community relations I’m here to help the network, and assist other developers,builders and organizations develop and expand the notoriety and visibility of the projects on the XDC Network as well as assist the growth of the network itself',
+    image: '/img/hackathon/quincy-jones.jpg',
+    socials: [{ type: 'twitter', url: 'https://x.com/coinclubquincy' }],
+  },
+  {
     name: 'Aegis-H',
     role: 'AI Judge',
     company: 'Hashgraph Online',
