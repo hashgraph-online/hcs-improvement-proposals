@@ -311,9 +311,8 @@ const FAQSection: React.FC = () => {
                 Best use of OpenConvAI (HCS-10)
               </HackathonTypography>
               <div className='mt-2 ml-4 text-black dark:text-white'>
-                <div>🥇 First Place: $7,500</div>
-                <div>🥈 Second Place: $5,000</div>
-                <div>🥉 Third Place: $2,500</div>
+                <div>🥇 First Place: $6,500</div>
+                <div>🥈 Second Place: $3,500</div>
               </div>
             </div>
             <div className='mb-4'>
@@ -324,9 +323,8 @@ const FAQSection: React.FC = () => {
                 Hedera ElizaOS Plug-in
               </HackathonTypography>
               <div className='mt-2 ml-4 text-black dark:text-white'>
-                <div>🥇 First Place: $7,500</div>
-                <div>🥈 Second Place: $5,000</div>
-                <div>🥉 Third Place: $2,500</div>
+                <div>🥇 First Place: $6,500</div>
+                <div>🥈 Second Place: $3,500</div>
               </div>
             </div>
 
@@ -338,9 +336,8 @@ const FAQSection: React.FC = () => {
                 Best use of Hedera AgentKit and/or MCP
               </HackathonTypography>
               <div className='mt-2 ml-4 text-black dark:text-white'>
-                <div>🥇 First Place: $7,500</div>
-                <div>🥈 Second Place: $5,000</div>
-                <div>🥉 Third Place: $2,500</div>
+                <div>🥇 First Place: $6,500</div>
+                <div>🥈 Second Place: $3,500</div>
               </div>
             </div>
           </div>
@@ -349,8 +346,7 @@ const FAQSection: React.FC = () => {
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
             All winners will need to undergo a KYC process and OFAC-screening to
-            be eligible for prizes. Prizes will be distributed in HBAR
-            cryptocurrency.
+            be eligible for prizes. Prizes will be distributed in USDC.
           </HackathonTypography>
         </>
       ),
