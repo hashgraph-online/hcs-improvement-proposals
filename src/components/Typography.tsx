@@ -2,7 +2,17 @@ import React from 'react';
 import clsx from 'clsx';
 
 interface TypographyProps {
-  variant: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'p';
+  variant:
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6'
+    | 'p'
+    | 'body1'
+    | 'body2'
+    | 'subtitle1';
   children: React.ReactNode;
   className?: string;
   color?: 'primary' | 'secondary' | 'default';
@@ -29,6 +39,9 @@ const Typography: React.FC<TypographyProps> = ({
     h5: 'text-lg md:text-2xl font-medium mb-2',
     h6: 'text-base md:text-xl font-medium mb-2',
     p: 'text-base md:text-lg mb-4',
+    body1: 'text-base md:text-lg mb-4',
+    body2: 'text-sm md:text-base mb-2',
+    subtitle1: 'text-base md:text-lg font-medium mb-2',
   };
 
   const Component = variant;

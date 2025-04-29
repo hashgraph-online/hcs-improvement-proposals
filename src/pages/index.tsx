@@ -507,7 +507,7 @@ const StandardsSection: React.FC = () => {
           <StandardCard
             icon={<FaCoins className='text-4xl text-blue-400' />}
             title='HCS-20'
-            description='A standard for creating and managing auditable points on the Hedera network using the Hedera Consensus Service. It enables transparent, auditable, and versatile control systems for points.'
+            description='A standard for creating and managing auditable points on Hedera using the Hedera Consensus Service. It enables transparent, auditable, and versatile control systems for points.'
             link='/docs/standards/hcs-20'
             relatedTools={tooling.filter(
               (tool) => tool.relatedStandard === 'HCS-20'

@@ -22,22 +22,25 @@ import {
 } from 'react-icons/fa';
 import HackathonTypography from './HackathonTypography';
 
-interface FAQItemProps {
+export type FAQItemProps = {
   question: string;
   answer: React.ReactNode;
   index: number;
-  icon: React.ReactNode;
-  isInView: boolean;
-}
+  icon?: React.ReactNode;
+  isInView?: boolean;
+};
 
-const FAQItem: React.FC<FAQItemProps> = ({
+export const FAQItem: React.FC<FAQItemProps> = ({
   question,
   answer,
   index,
-  icon,
-  isInView,
+  icon = <FaChevronDown />,
+  isInView = true,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const itemRef = useRef<HTMLDivElement>(null);
+  const itemIsInView = useInView(itemRef, { once: true, amount: 0.1 });
+  const inView = isInView && itemIsInView;
 
   const hederaPurple = {
     bg: '#8259ef',
@@ -67,46 +70,36 @@ const FAQItem: React.FC<FAQItemProps> = ({
 
   return (
     <motion.div
+      ref={itemRef}
       initial={{ opacity: 0, y: 20 }}
-      animate={
-        isInView
-          ? {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.5,
-                delay: index * 0.1,
-                type: 'spring',
-                stiffness: 50,
-              },
-            }
-          : {}
-      }
-      style={{
-        borderColor: color.light,
-        boxShadow: `0 4px 6px ${color.light}`,
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{
+        duration: 0.5,
+        delay: index * 0.1,
+        ease: 'easeOut',
       }}
       className={`rounded-lg overflow-hidden border dark:border-${colorName}/30 hover:border-${colorName}/40 dark:hover:border-${colorName}/50 transition-all duration-300 hover:-translate-y-1 mb-4 sm:mb-5 bg-white dark:bg-[#222222]`}
     >
       <div className='relative z-10'>
         <button
-          className={`flex justify-between items-center w-full px-6 py-5 text-left group transition-colors duration-300`}
           onClick={() => setIsOpen(!isOpen)}
-          aria-expanded={isOpen}
+          className={`flex justify-between items-center w-full px-6 py-5 text-left group transition-colors duration-300`}
           style={{
             background: isOpen ? color.light : 'transparent',
           }}
         >
           <div className='flex items-center gap-4'>
-            <div
-              style={{ background: color.bg }}
-              className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-110`}
-            >
-              {icon}
-            </div>
+            {icon && (
+              <div
+                style={{ background: color.bg }}
+                className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-110`}
+              >
+                {icon}
+              </div>
+            )}
             <HackathonTypography
               variant='h4'
-              className='font-styrene text-black dark:text-white'
+              className=' text-black dark:text-white'
             >
               {question}
             </HackathonTypography>
@@ -172,7 +165,7 @@ const FAQSection: React.FC = () => {
           >
             By providing transparent identity management, verifiable message
             ordering, and simplified monetization, it enhances trustless
-            AI-to-AI and human-to-AI interactions on the Hedera network.
+            AI-to-AI and human-to-AI interactions on the Hedera.
           </HackathonTypography>
         </>
       ),
