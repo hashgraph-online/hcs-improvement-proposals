@@ -120,6 +120,37 @@ export const judges: Judge[] = [
     socials: [{ type: 'twitter', url: 'https://x.com/coinclubquincy' }],
   },
   {
+    name: 'Lance Lilly',
+    role: 'Ecosystem Development Manager',
+    company: 'XDC Foundation',
+    bio: 'As an Ecosystem Development Manager at the XDC Foundation, I focus on growing users, developers, and adoption of the XDC Network. This includes leading programs and projects that address ecosystem needs, such as integrations, developer initiatives, and onboarding strategic projects. I also work closely with the communications team on messaging, awareness, technical writing, and strategic communications.',
+    image: '/img/hackathon/lance-lilly.jpeg',
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/orren-lilly/' },
+    ],
+  },
+  {
+    name: 'Aleksandr Nechaev',
+    role: 'Partner',
+    company: 'Funders VC',
+    bio: '10+ yrs in growth & product. Backing/advising crypto startups with hands-on support and product expertise',
+    image: '/img/hackathon/aleksandr-nechaev.jpg',
+    socials: [
+      {
+        type: 'linkedin',
+        url: 'https://www.linkedin.com/in/aleksandr-nechaev-9579b910a/',
+      },
+      {
+        type: 'twitter',
+        url: 'https://x.com/al_nechaev',
+      },
+      {
+        type: 'website',
+        url: 'https://funders.vc',
+      },
+    ],
+  },
+  {
     name: 'Aegis-H',
     role: 'AI Judge',
     company: 'Hashgraph Online',
