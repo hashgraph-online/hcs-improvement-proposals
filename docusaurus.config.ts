@@ -91,6 +91,12 @@ const config: Config = {
             { to: '/hackathon#register', label: 'Register' },
           ],
         },
+        {
+          type: 'dropdown',
+          label: 'Challenges',
+          position: 'left',
+          items: [{ to: '/bonzo-challenge', label: 'Bonzo Challenge' }],
+        },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
@@ -148,7 +154,16 @@ const config: Config = {
     prism: {
       theme: prismThemes.oneLight,
       darkTheme: prismThemes.nightOwl,
-      additionalLanguages: ['typescript', 'bash', 'json', 'jsx', 'tsx', 'yaml', 'solidity', 'markdown'],
+      additionalLanguages: [
+        'typescript',
+        'bash',
+        'json',
+        'jsx',
+        'tsx',
+        'yaml',
+        'solidity',
+        'markdown',
+      ],
       magicComments: [
         {
           className: 'theme-code-block-highlighted-line',
@@ -186,7 +201,7 @@ const config: Config = {
           {
             to: '/openconvai',
             from: '/convai',
-          }
+          },
         ],
       },
     ],
