@@ -36,7 +36,7 @@ export const judges: Judge[] = [
     name: 'Brandon Davenport',
     role: 'Dir. Communications, Hgraph',
     company: 'Hgraph',
-    bio: 'Brandon Davenport is the Director of Communications at Hgraph, a company at the forefront of developing breakthrough data-focused products on the Hedera network and beyond. A recognized leader in the Hedera community, Brandon plays key roles in ecosystem-wide initiatives and has been instrumental in launching successful projects that drive innovation on the network. Based in Ottawa, Canada, Brandon is also a passionate NFT creator, musician and drummer.',
+    bio: 'Brandon Davenport is the Director of Communications at Hgraph, a company at the forefront of developing breakthrough data-focused products on Hedera and beyond. A recognized leader in the Hedera community, Brandon plays key roles in ecosystem-wide initiatives and has been instrumental in launching successful projects that drive innovation on the network. Based in Ottawa, Canada, Brandon is also a passionate NFT creator, musician and drummer.',
     image: '/img/hackathon/bradon-davenport.jpeg',
     socials: [
       { type: 'twitter', url: 'https://x.com/itsbrandond' },
@@ -53,7 +53,7 @@ export const judges: Judge[] = [
     name: 'Brady Gentile',
     role: 'Founder, Bonzo Finance',
     company: 'Bonzo Finance Labs',
-    bio: "Brady Gentile is the Co-Founder and CEO of Bonzo Finance Labs — contributing to the development of Bonzo Finance, an open source, non-custodial lending protocol based on Aave v2 deployed to the Hedera network. Brady's previous experience includes Product Marketing for blockchain, security, and distributed systems companies' Hedera, Cloudflare, and DataStax.",
+    bio: "Brady Gentile is the Co-Founder and CEO of Bonzo Finance Labs — contributing to the development of Bonzo Finance, an open source, non-custodial lending protocol based on Aave v2 deployed to Hedera. Brady's previous experience includes Product Marketing for blockchain, security, and distributed systems companies' Hedera, Cloudflare, and DataStax.",
     image: '/img/hackathon/brady-gentile.jpeg',
     socials: [{ type: 'twitter', url: 'https://x.com/bmgentile' }],
     expertise: [
@@ -146,7 +146,7 @@ export const mentors: Judge[] = [
     name: 'Ed Marquez',
     role: 'DevRel',
     company: 'Hashgraph',
-    bio: 'Ed is an Engineer and Marketer experienced in advanced vehicle technology, model-based design (MBD), and distributed ledger technologies (DLT). He is passionate about leading interdisciplinary teams, building user-centric solutions, and connecting with developers and organizations in technology sectors. Currently, Ed works at Hashgraph, growing the Hedera network and helping developers adopt Web 3. He is also pursuing a graduate degree in Management at Harvard.',
+    bio: 'Ed is an Engineer and Marketer experienced in advanced vehicle technology, model-based design (MBD), and distributed ledger technologies (DLT). He is passionate about leading interdisciplinary teams, building user-centric solutions, and connecting with developers and organizations in technology sectors. Currently, Ed works at Hashgraph, growing Hedera and helping developers adopt Web 3. He is also pursuing a graduate degree in Management at Harvard.',
     image: '/img/hackathon/ed-marquez.jpg',
     socials: [{ type: 'twitter', url: 'https://twitter.com/ed__marquez' }],
     expertise: [
@@ -182,7 +182,7 @@ export const mentors: Judge[] = [
     name: 'Ejaz Merchant',
     role: 'DevRel',
     company: 'Hashgraph',
-    bio: 'Ejaz Merchant is a Developer Advocate at Hashgraph, dedicated to equipping developers with the tools, resources, and insights they need to build on the Hedera network.',
+    bio: 'Ejaz Merchant is a Developer Advocate at Hashgraph, dedicated to equipping developers with the tools, resources, and insights they need to build on Hedera.',
     image: '/img/hackathon/ejaz-merchant.png',
     socials: [{ type: 'twitter', url: 'https://x.com/EjazMerchant' }],
     expertise: [

@@ -53,6 +53,7 @@ const PrimaryButton = ({
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       className={combinedClassName}
+      style={{ textDecoration: 'none' }}
     >
       <span className='text-white'>{children}</span> {icon}
     </motion.a>
