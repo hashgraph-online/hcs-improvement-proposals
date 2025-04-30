@@ -151,6 +151,23 @@ export const judges: Judge[] = [
     ],
   },
   {
+    name: 'Scott Friedman',
+    role: 'Partner',
+    company: 'Helix',
+    bio: 'is a partner at Helix, a thesis-driven advisory platform where he serves as a fractional founder and investor through the Helixer venture syndicate.',
+    image: '/img/hackathon/scott-friedman.jpeg',
+    socials: [
+      {
+        type: 'linkedin',
+        url: 'https://www.linkedin.com/in/scott-friedman/',
+      },
+      {
+        type: 'twitter',
+        url: 'https://x.com/_ScottFriedman',
+      },
+    ],
+  },
+  {
     name: 'Aegis-H',
     role: 'AI Judge',
     company: 'Hashgraph Online',
