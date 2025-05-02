@@ -28,6 +28,12 @@ sidebar_position: 11
       - [Personal Profile Fields](#personal-profile-fields)
       - [AI Agent Profile Fields](#ai-agent-profile-fields)
       - [MCP Server Profile Fields](#mcp-server-profile-fields)
+      - [MCP Server Verification Process](#mcp-server-verification-process)
+        - [DNS Verification](#dns-verification)
+        - [Signature Verification](#signature-verification)
+        - [Challenge Verification](#challenge-verification)
+        - [Complete Verification Example](#complete-verification-example)
+        - [Complete Client Verification Implementation](#complete-client-verification-implementation)
     - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
     - [Profile Update Flow](#profile-update-flow)
     - [Enums and Constants](#enums-and-constants)
@@ -165,7 +171,7 @@ classDiagram
         aiAgent: object
         capabilities: array
     }
-    
+
     class MCPServerProfile {
         mcpServer: object
     }
@@ -207,7 +213,12 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 | mcpServer.connectionInfo.url | string   | Yes      | Base URL for SSE connection or local path          |
 | mcpServer.connectionInfo.transport | string | Yes  | Transport type ("stdio" or "sse")                  |
 | mcpServer.services           | number[] | Yes      | List of service types offered (see MCP Services)   |
-| mcpServer.description        | string   | No       | Detailed description of server functionality       |
+| mcpServer.description        | string   | Yes      | Detailed description of server functionality       |
+| mcpServer.verification       | object   | No       | Verification proof of endpoint ownership           |
+| mcpServer.verification.type  | string   | Yes*     | Verification type: "dns", "signature", or "challenge" |
+| mcpServer.verification.value | string   | Yes*     | Verification value based on type                   |
+| mcpServer.verification.dns_field | string | No     | Custom DNS TXT record name (default: "hedera")     |
+| mcpServer.verification.challenge_path | string | No | Custom challenge endpoint path (default: "hedera-verification") |
 | mcpServer.host               | object   | No       | Compatible host requirements                        |
 | mcpServer.host.minVersion    | string   | No       | Minimum host version required                       |
 | mcpServer.capabilities       | array    | No       | MCP capabilities supported by the server           |
@@ -216,6 +227,364 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 | mcpServer.maintainer         | string   | No       | Organization maintaining this MCP server           |
 | mcpServer.repository         | string   | No       | URL to source code repository                       |
 | mcpServer.docs               | string   | No       | URL to server documentation                         |
+
+#### MCP Server Verification Process
+
+The verification field in MCP server profiles enables trustless ownership verification without relying on centralized authorities. The `verification` object contains these fields:
+
+- `type`: Specifies the verification method to use ("dns", "signature", or "challenge")
+- `value`: Contains the verification data appropriate for the selected type
+- `dns_field`: (Optional) Customizes the DNS TXT record name for DNS verification
+- `challenge_path`: (Optional) Customizes the challenge endpoint path for challenge verification
+
+Each verification method is designed to address common use cases while providing flexible implementation options:
+
+##### DNS Verification
+For `type: "dns"`, the verification process follows these specific steps:
+
+1. **Record Format**: MCP server owner must add a DNS TXT record to their domain with:
+   - Name: By default, `hedera` or a custom name specified in `dns_field` (prefixed with `_` automatically)
+   - Value: Equal to their Hedera account ID (e.g., `0.0.12345678`)
+
+2. **Profile Format**: The verification object in the profile must be structured as:
+   ```json
+   "verification": {
+     "type": "dns",
+     "value": "example.com",
+     "dns_field": "hedera"  // Optional, defaults to "hedera"
+   }
+   ```
+   Where:
+   - `value` is the fully qualified domain name to check
+   - `dns_field` optionally specifies a custom DNS TXT record name
+
+3. **Verification Procedure**:
+   - Client extracts the domain from the `value` field
+   - Client extracts the DNS field name from `dns_field` (default: "hedera")
+   - Client performs a DNS TXT lookup for record named `_{dns_field}` at that domain
+   - Client compares the TXT record value with the Hedera account ID of the profile owner
+   - Verification passes only if values match exactly (case-sensitive)
+
+4. **Real-world Example**:
+   ```
+   # Actual DNS record to add (using Route 53, Cloudflare, etc.)
+   Name: _hedera.example.com
+   Type: TXT
+   Value: "0.0.12345678"
+   TTL: 3600
+
+   # Sample dig command and response
+   $ dig TXT _hedera.example.com
+
+   ;; ANSWER SECTION:
+   _hedera.example.com. 3600 IN TXT "0.0.12345678"
+   ```
+
+5. **Common Providers Setup**:
+   - **AWS Route 53**: Create a TXT record with name `_hedera` (or your custom prefix) and value equal to your account ID
+   - **Cloudflare**: Add TXT record with name `_hedera.yourdomain.com` and content equal to your account ID
+   - **GoDaddy**: Add TXT record with host `_hedera` and value equal to your account ID
+
+##### Signature Verification
+For `type: "signature"`, the verification process follows these specific steps:
+
+1. **Message Format**: The message to be signed must be the server URL exactly as it appears in the `mcpServer.connectionInfo.url` field, with no additional characters or formatting.
+
+2. **Signature Format**: The signature must be:
+   - Created using the ED25519 key associated with the Hedera account
+   - Encoded as a hexadecimal string with no `0x` prefix
+   - No additional formatting (no spaces, newlines, etc.)
+
+3. **Profile Format**: The verification object in the profile must be structured as:
+   ```json
+   "verification": {
+     "type": "signature",
+     "value": "a1b2c3d4e5f6..."  // Hex-encoded signature
+   }
+   ```
+
+4. **Verification Procedure**:
+   - Client extracts the URL from `mcpServer.connectionInfo.url`
+   - Client extracts the signature from `verification.value`
+   - Client retrieves the public key of the Hedera account owner from the Hedera network
+   - Client verifies the signature against the UTF-8 encoded URL string using ED25519 verification
+   - Verification passes only if the signature is valid
+
+5. **Real-world Example**:
+   ```javascript
+   // Example of creating a signature (Node.js)
+   const { Ed25519PrivateKey } = require("@hashgraph/sdk");
+
+   // Get your private key (securely stored)
+   const privateKey = Ed25519PrivateKey.fromString("302e020100300506032b657004220420YOUR_PRIVATE_KEY");
+
+   // URL to sign (must match exactly what's in your profile)
+   const url = "https://mcp.example.com";
+
+   // Sign the URL (UTF-8 encoded)
+   const signature = privateKey.sign(Buffer.from(url, "utf8"));
+
+   // Convert to hex string for the verification.value field
+   const signatureHex = signature.toString("hex");
+   console.log(signatureHex);
+   // Output: "a1b2c3d4e5f6..." (this is what goes in verification.value)
+   ```
+
+##### Challenge Verification
+For `type: "challenge"`, the verification process follows these specific steps:
+
+1. **Endpoint Format**:
+   - The MCP server must expose an endpoint that responds to HTTP GET requests
+   - Default path: `/hedera-verification` relative to the server URL
+   - Custom path can be specified in `challenge_path`
+
+2. **Challenge-Response Protocol**:
+   - Client sends HTTP GET request to `{mcpServer.connectionInfo.url}/{challenge_path}`
+   - Server must respond with a JSON object containing:
+     ```json
+     {
+       "accountId": "0.0.12345678",
+       "timestamp": 1620000000000,
+       "signature": "a1b2c3d4e5f6..."
+     }
+     ```
+   - The `signature` must be an ED25519 signature (hex-encoded) of the UTF-8 encoded string `{accountId}:{timestamp}` using the account's private key
+
+3. **Profile Format**: The verification object in the profile must be structured as:
+   ```json
+   "verification": {
+     "type": "challenge",
+     "value": null,  // Can be null for challenge verification
+     "challenge_path": "verify"  // Optional, defaults to "hedera-verification"
+   }
+   ```
+
+4. **Verification Procedure**:
+   - Client determines the challenge endpoint URL by:
+     - Taking the base URL from `mcpServer.connectionInfo.url`
+     - Appending `/{challenge_path}` (or `/hedera-verification` if not specified)
+   - Client makes HTTP GET request to this endpoint
+   - Client validates that the returned `accountId` matches the profile owner's account ID
+   - Client checks that `timestamp` is within acceptable time window (typically 24 hours)
+   - Client verifies signature using the account owner's public key
+   - Verification passes only if all checks pass
+
+5. **Real-world Example**:
+   ```javascript
+   // Example server implementation (Express.js)
+   const express = require('express');
+   const { Ed25519PrivateKey } = require('@hashgraph/sdk');
+   const app = express();
+
+   // Verification endpoint
+   app.get('/hedera-verification', (req, res) => {
+     const accountId = '0.0.12345678'; // Your Hedera account ID
+     const timestamp = Date.now();
+     const message = `${accountId}:${timestamp}`;
+
+     // Get your private key (securely stored)
+     const privateKey = Ed25519PrivateKey.fromString("302e020100300506032b657004220420YOUR_PRIVATE_KEY");
+
+     // Sign the message
+     const signature = privateKey.sign(Buffer.from(message, 'utf8')).toString('hex');
+
+     // Return the verification object
+     res.json({
+       accountId,
+       timestamp,
+       signature
+     });
+   });
+
+   app.listen(3000, () => console.log('Server running'));
+   ```
+
+##### Complete Verification Example
+
+Here's a comprehensive example showing an MCP server profile with verification:
+
+```json
+{
+  "version": "1.0",
+  "type": 2,
+  "display_name": "Hedera Consensus MCP",
+  "alias": "hedera_consensus",
+  "bio": "MCP server for interacting with Hedera Consensus Service (HCS)",
+  "profileImage": "hcs://1/0.0.54321",
+  "inboundTopicId": "0.0.789103",
+  "outboundTopicId": "0.0.789104",
+  "properties": {
+    "description": "Enhances AI capabilities with direct access to Hedera Consensus Service",
+    "supportEmail": "support@hederaconsensus.com",
+    "compatibility": ["Claude", "GPT-4", "Gemini"]
+  },
+  "mcpServer": {
+    "version": "2025-03-26",
+    "connectionInfo": {
+      "url": "https://mcp.hederaconsensus.com",
+      "transport": "sse"
+    },
+    "services": [0, 1, 5, 11, 14],
+    "description": "Provides AI models with the ability to read from and submit messages to Hedera Consensus Service topics",
+    "verification": {
+      "type": "dns",
+      "value": "hederaconsensus.com",
+      "dns_field": "mcp-verify"
+    },
+    "host": {
+      "minVersion": "2024-11-05"
+    },
+    "capabilities": [
+      "resources.get",
+      "resources.list",
+      "resources.subscribe",
+      "tools.invoke"
+    ],
+    "maintainer": "Hedera Consensus Team",
+    "repository": "https://github.com/hedera-consensus/mcp-server",
+    "docs": "https://docs.hederaconsensus.com/mcp-integration"
+  }
+}
+```
+
+The corresponding DNS record for this profile:
+```
+_mcp-verify.hederaconsensus.com. 3600 IN TXT "0.0.12345678"
+```
+
+##### Complete Client Verification Implementation
+
+This client implementation covers all verification methods:
+
+```javascript
+/**
+ * Verifies an MCP server profile's ownership
+ *
+ * @param {string} accountId - The Hedera account ID that owns the profile
+ * @param {object} profile - The complete HCS-11 profile object
+ * @returns {Promise<boolean>} True if verification passes, false otherwise
+ */
+async function verifyMCPServer(accountId, profile) {
+  if (!profile?.mcpServer?.verification?.type) {
+    return false;
+  }
+
+  const verification = profile.mcpServer.verification;
+
+  try {
+    switch (verification.type) {
+      case "dns":
+        return await verifyDNS(accountId, profile);
+
+      case "signature":
+        return await verifySignature(accountId, profile);
+
+      case "challenge":
+        return await verifyChallenge(accountId, profile);
+
+      default:
+        console.error(`Unknown verification type: ${verification.type}`);
+        return false;
+    }
+  } catch (error) {
+    console.error(`Verification error: ${error.message}`);
+    return false;
+  }
+}
+
+/**
+ * DNS verification method
+ */
+async function verifyDNS(accountId, profile) {
+  const domain = profile.mcpServer.verification.value;
+  if (!domain) {
+    throw new Error("Missing domain in verification value");
+  }
+
+  const dnsField = profile.mcpServer.verification.dns_field || "hedera";
+  const recordName = `_${dnsField}.${domain}`;
+
+  // Fetch TXT records (implementation varies by platform)
+  const txtRecords = await dns.resolveTxt(recordName);
+
+  // Check if any record matches the account ID
+  return txtRecords.some(record =>
+    Array.isArray(record) && record[0] === accountId
+  );
+}
+
+/**
+ * Signature verification method
+ */
+async function verifySignature(accountId, profile) {
+  const url = profile.mcpServer.connectionInfo.url;
+  if (!url) {
+    throw new Error("Missing URL in connectionInfo");
+  }
+
+  const signature = profile.mcpServer.verification.value;
+  if (!signature) {
+    throw new Error("Missing signature in verification value");
+  }
+
+  // Get the public key from Hedera (implementation varies)
+  const publicKey = await fetchAccountPublicKey(accountId);
+
+  // Verify the signature (using ED25519 verification)
+  return ed25519Verify(
+    Buffer.from(url, 'utf8'),
+    Buffer.from(signature, 'hex'),
+    publicKey
+  );
+}
+
+/**
+ * Challenge verification method
+ */
+async function verifyChallenge(accountId, profile) {
+  const baseUrl = profile.mcpServer.connectionInfo.url;
+  if (!baseUrl) {
+    throw new Error("Missing URL in connectionInfo");
+  }
+
+  const challengePath = profile.mcpServer.verification.challenge_path || "hedera-verification";
+  const endpoint = `${baseUrl}/${challengePath}`;
+
+  // Make the HTTP request
+  const response = await fetch(endpoint);
+
+  if (!response.ok) {
+    throw new Error(`Challenge endpoint returned ${response.status}`);
+  }
+
+  const data = await response.json();
+
+  // Validate accountId
+  if (data.accountId !== accountId) {
+    return false;
+  }
+
+  // Validate timestamp (within 24 hours)
+  const timestamp = BigInt(data.timestamp);
+  const currentTime = BigInt(Date.now());
+  if (currentTime - timestamp > 86400000n) {
+    return false;
+  }
+
+  // Get the public key from Hedera
+  const publicKey = await fetchAccountPublicKey(accountId);
+
+  // Create the message that was signed
+  const message = `${data.accountId}:${data.timestamp}`;
+
+  // Verify the signature
+  return ed25519Verify(
+    Buffer.from(message, 'utf8'),
+    Buffer.from(data.signature, 'hex'),
+    publicKey
+  );
+}
+```
 
 ### HCS-10 Integration for AI Agents
 
@@ -440,6 +809,10 @@ MCP Server Profile:
     },
     "services": [0, 1, 5, 11, 14],
     "description": "Provides AI models with the ability to read from and submit messages to Hedera Consensus Service topics",
+    "verification": {
+      "type": "dns",
+      "value": "hederaconsensus.com/hedera=0.0.12345678"
+    },
     "host": {
       "minVersion": "2024-11-05"
     },
