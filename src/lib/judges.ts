@@ -19,6 +19,7 @@ export interface Judge {
   socials: JudgeSocial[];
   expertise?: string[];
   isAI?: boolean;
+  demoDay?: boolean;
 }
 
 export const judges: Judge[] = [
@@ -31,6 +32,7 @@ export const judges: Judge[] = [
     socials: [{ type: 'twitter', url: 'https://x.com/ashe_oro' }],
     expertise: ['Developer Relations', 'Ecosystem Development', 'AI & DePin'],
     isAI: false,
+    demoDay: true,
   },
   {
     name: 'Brandon Davenport',
@@ -65,8 +67,8 @@ export const judges: Judge[] = [
   },
   {
     name: 'Michael Kantor',
-    role: 'Founder',
-    company: 'Kiloscribe',
+    role: 'President',
+    company: 'Hashgraph Online',
     bio: 'Michael is the founder of KiloScribe, and President of Hashgraph Online. He has been a pioneer in Software for over a decade. Michael is also the CoCreator of the Hashinals standard for tokenized, on-chain NFTs on Hedera, which has gone on to generate 10m+ transactions for the network and 148,000+ inscribed NFTs using the standard.',
     image: '/img/hackathon/michael-kantor.webp',
     socials: [
@@ -79,6 +81,7 @@ export const judges: Judge[] = [
       'Hashgraph Standards',
       'Developer Tools',
     ],
+    demoDay: true,
   },
   {
     name: 'Ty Smith',
@@ -94,6 +97,7 @@ export const judges: Judge[] = [
       'Consensus Algorithms',
     ],
     isAI: false,
+    demoDay: true,
   },
   {
     name: 'Tudor Holotescu',
@@ -118,6 +122,7 @@ export const judges: Judge[] = [
     bio: 'From blockchain developer, to community relations I’m here to help the network, and assist other developers,builders and organizations develop and expand the notoriety and visibility of the projects on the XDC Network as well as assist the growth of the network itself',
     image: '/img/hackathon/quincy-jones.jpg',
     socials: [{ type: 'twitter', url: 'https://x.com/coinclubquincy' }],
+    demoDay: true,
   },
   {
     name: 'Lance Lilly',
@@ -128,6 +133,7 @@ export const judges: Judge[] = [
     socials: [
       { type: 'linkedin', url: 'https://www.linkedin.com/in/orren-lilly/' },
     ],
+    demoDay: true,
   },
   {
     name: 'Aleksandr Nechaev',
@@ -149,6 +155,7 @@ export const judges: Judge[] = [
         url: 'https://funders.vc',
       },
     ],
+    demoDay: true,
   },
   {
     name: 'Scott Friedman',
@@ -166,6 +173,25 @@ export const judges: Judge[] = [
         url: 'https://x.com/_ScottFriedman',
       },
     ],
+    demoDay: true,
+  },
+  {
+    name: "Ryan Solomon",
+    role: "Founder",
+    company: "Genfinity",
+    bio: "Ryan Solomon is the founder of Genfinity.",
+    image: "/img/hackathon/ryan-solomon.jpeg",
+    socials: [
+      {
+        type: "linkedin",
+        url: "https://www.linkedin.com/in/ryansolomon123/",
+      },
+      {
+        type: "twitter",
+        url: "https://x.com/IOV_OWL",
+      },
+    ],
+    demoDay: true,
   },
   {
     name: 'Aegis-H',
@@ -203,6 +229,7 @@ export const mentors: Judge[] = [
       'AI Communication',
       'Framework Design',
     ],
+    demoDay: true,
   },
   {
     name: 'Jake Hall',
@@ -216,6 +243,7 @@ export const mentors: Judge[] = [
       'Developer Support',
       'Developer Relations',
     ],
+    demoDay: true,
   },
   {
     name: 'James Dunthorne',
