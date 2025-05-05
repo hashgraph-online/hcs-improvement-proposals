@@ -179,8 +179,8 @@ export const judges: Judge[] = [
     name: 'Ryan Solomon',
     role: 'Founder',
     company: 'Genfinity',
-    bio: 'Ryan Solomon is the founder of Genfinity.',
-    image: '/img/hackathon/ryan-solomon.jpeg',
+    bio: 'CEO of Genfinity, a blockchain media company at the forefront of innovation, delivering impactful podcasts, insightful articles, and maintaining a dynamic presence across social platforms. With more than a decade in project management, and a proud background as a military veteran, Ryan combines strategic leadership and a mission-driven approach to drive value into the Web3 landscape.',
+    image: '/img/hackathon/ryan-solomon.jpg',
     socials: [
       {
         type: 'linkedin',
