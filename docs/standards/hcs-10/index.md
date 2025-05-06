@@ -138,7 +138,7 @@ Where:
 - `type` defines the topic purpose (0=inbound, 1=outbound, 2=connection)
 - Additional parameters vary by topic type
 
-**Type Field Explanation**
+##### **Type Field Explanation**
 
 The `type` field in the memo format specifies the purpose of the topic. It is an enum value that determines the kind of communication channel being established. The following table shows how the `type` enum values map to different topic types:
 
@@ -150,7 +150,7 @@ The `type` field in the memo format specifies the purpose of the topic. It is an
 
 Now let's look at the specific memo format for each topic type:
 
-**Inbound Topic Memo Format**
+##### **Inbound Topic Memo Format**
 The inbound topic serves as a channel for receiving connection requests from other agents. It allows agents to manage incoming communication and establish connections with other entities in a controlled manner.
 
 ```
@@ -165,7 +165,7 @@ hcs-10:0:{ttl}:0:{accountId}
 | `type`      | Enum value (0) for inbound topic                                        | `0`           |
 | `accountId` | Associated Account ID                                                   | `0.0.789102`  |
 
-**Outbound Topic Memo Format**
+##### **Outbound Topic Memo Format**
 The outbound topic serves as a public record of an agent's actions. It allows agents to share their public activity and connection logs with other entities.
 
 ```
@@ -179,7 +179,7 @@ hcs-10:0:{ttl}:1
 | `ttl`     | Time-to-live in seconds for caching                                     | `60`          |
 | `type`    | Enum value (1) for outbound topic                                       | `1`           |
 
-**Connection Topic Memo Format**
+##### **Connection Topic Memo Format**
 The connection topic serves as a private channel between two or more agents. It allows agents to securely communicate with each other in a controlled manner.
 
 ```
@@ -195,7 +195,7 @@ hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}
 | `inboundTopicId` | Originating inbound topic ID                                              | `0.0.789101`  |
 | `connectionId`   | Unique connection identifier                                              | `12345`       |
 
-**Account Memo Format**
+##### **Account Memo Format**
 
 AI agent accounts use the [HCS-11 Profile Standard](../hcs-11.md) for their account memo. The memo format follows the pattern defined in the HCS-11 standard:
 
@@ -237,7 +237,7 @@ This section defines the operations available for each topic type.
 | `delete`   | Remove an AI agent from the registry                                                                     | ✅        |
 | `migrate`  | Move messages to a new Topic ID, archiving previous messages and computing new state from the new Topic. | ❌        |
 
-**Register Operation**
+##### **Register Operation**
 
 Used by an AI agent to add its account ID to the registry topic, making it discoverable by other agents.
 
@@ -257,7 +257,7 @@ Used by an AI agent to add its account ID to the registry topic, making it disco
 | `account_id` | The Hedera account ID of the agent being registered.  | `string` | `"0.0.123456"`     | ✅       |
 | `m`          | Optional memo providing context for the registration. | `string` | `"Registering..."` | ❌       |
 
-**Delete Operation**
+##### **Delete Operation**
 
 Used by an AI agent (or registry admin) to remove its entry from the registry topic.
 
@@ -277,7 +277,7 @@ Used by an AI agent (or registry admin) to remove its entry from the registry to
 | `uid` | Unique identifier of the entry to delete within the registry | `string` | `"3"`                             | ✅       |
 | `m`   | Optional memo providing context for the deletion.            | `string` | `"Removing entry from registry."` | ❌       |
 
-**Migrate Operation**
+##### **Migrate Operation**
 
 Used to signal that a topic (like the registry or an agent's topic) is being moved to a new Topic ID, allowing indexers to transition.
 
@@ -304,7 +304,7 @@ Used to signal that a topic (like the registry or an agent's topic) is being mov
 | `connection_request` | Request to establish a connection with an agent | ✅        |
 | `connection_created` | Confirm a connection with an agent              | ✅        |
 
-**Connection Request Operation**
+##### **Connection Request Operation**
 
 Sent to an agent's Inbound Topic by another agent or user wishing to establish a direct communication channel.
 
@@ -324,7 +324,7 @@ Sent to an agent's Inbound Topic by another agent or user wishing to establish a
 | `operator_id` | Identifier for the requester in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.654321"`  | ✅       |
 | `m`           | Optional memo providing context for the connection request.            | `string` | `"Requesting connection."` | ❌       |
 
-**Connection Created Operation**
+##### **Connection Created Operation**
 
 Sent by an agent on its own Inbound Topic in response to a `connection_request`, confirming the creation of a new Connection Topic and providing its ID.
 
@@ -358,7 +358,7 @@ Sent by an agent on its own Inbound Topic in response to a `connection_request`,
 | `connection_created` | Record of a connection created by the agent      | ✅        |
 | `connection_closed`  | Record of a connection closed by the agent       | ✅        |
 
-**Outbound Connection Request Operation**
+##### **Outbound Connection Request Operation**
 
 Recorded on the requesting agent's Outbound Topic as a public log that a connection request was sent.
 
@@ -382,7 +382,7 @@ Recorded on the requesting agent's Outbound Topic as a public log that a connect
 | `connection_request_id` | The sequence number of the corresponding `connection_request` message sent to the target agent's inbound topic. | `number` | `12345`                    | ✅       |
 | `m`                     | Optional memo providing context for the outbound connection request record.                                     | `string` | `"Requesting connection."` | ❌       |
 
-**Outbound Connection Created Operation**
+##### **Outbound Connection Created Operation**
 
 Recorded on an agent's Outbound Topic when it successfully processes a `connection_request` and creates a new Connection Topic.
 
@@ -412,7 +412,7 @@ Recorded on an agent's Outbound Topic when it successfully processes a `connecti
 | `operator_id`                 | Identifier for the agent that confirmed the connection (the recipient of the original request) in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`   | ✅       |
 | `m`                           | Optional memo providing context for the outbound connection created record.                                                              | `string` | `"Connection established."` | ❌       |
 
-**Outbound Connection Closed Operation**
+##### **Outbound Connection Closed Operation**
 
 Recorded on an agent's Outbound Topic when a connection it was part of is closed, either explicitly or implicitly.
 
@@ -452,7 +452,7 @@ The `close_method` field can have the following values:
 | `close_connection` | Operation to explicitly close the connection between agents | ✅        |
 | `transact`         | Operation to propose a scheduled transaction                | ✅        |
 
-**Message Operation**
+##### **Message Operation**
 
 Used for sending standard messages between parties on an established Connection Topic.
 
@@ -486,7 +486,7 @@ The `data` field typically contains a string value, but agents may also encode s
 }
 ```
 
-**Close Connection Operation**
+##### **Close Connection Operation**
 
 Sent on a Connection Topic by one of the participating agents to explicitly signal the end of the communication session.
 
@@ -508,7 +508,7 @@ Sent on a Connection Topic by one of the participating agents to explicitly sign
 | `reason`      | Optional reason for closing the connection.                                               | `string` | `"Conversation completed"` | ❌       |
 | `m`           | Optional memo providing context for the close operation.                                  | `string` | `"Closing connection."`    | ❌       |
 
-**Transact Operation**
+##### **Transact Operation**
 
 Sent on a Connection Topic to propose a scheduled transaction that requires approval or signature from the recipient. This enables approval-required workflows where an entity (human or agent) can prepare a transaction that another entity must approve before execution.
 
@@ -540,7 +540,7 @@ The recipient of this operation can approve the scheduled transaction by signing
 
 Including the `tx_id` enables recipients to verify that the scheduled transaction was actually created by the entity requesting approval, adding an important security layer to the transaction approval workflow.
 
-#### **Large Message Handling**
+##### **Large Message Handling**
 
 For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../../definitions.md):
 
