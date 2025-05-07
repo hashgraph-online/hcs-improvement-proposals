@@ -1,5 +1,6 @@
 ---
 description: The HCS-1 standard provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS). This process is agnostic of the implementation details, focusing on the JSON structure and the use of a Topic ID for efficient data management.
+title: HCS-1 Standard - File Data Management with Hedera Consensus Service
 sidebar_position: 1
 ---
 
@@ -10,13 +11,15 @@ sidebar_position: 1
 ### Table of Contents
 
 - [HCS-1 Standard: File Data Management with Hedera Consensus Service](#hcs-1-standard-file-data-management-with-hedera-consensus-service)
-  - [Status: Published](#status-published)
-  - [Table of Contents](#table-of-contents)
+    - [Status: Published](#status-published)
+    - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [HCS Topic Validation](#hcs-topic-validation)
     - [Memo Structure](#memo-structure)
+    - [Supported Compression Algorithms](#supported-compression-algorithms)
+    - [Supported Encodings](#supported-encodings)
   - [Encoding and Chunking](#encoding-and-chunking)
     - [Uploading to HCS](#uploading-to-hcs)
   - [Retrieving and Reassembling](#retrieving-and-reassembling)
@@ -50,14 +53,27 @@ The format for the memo is as follows:
 `[hash]:[algo]:[encoding]`
 
 - [hash] is the SHA-256 hash of the file being uploaded before any compression
-- [algo] is the compression algorithm being used, for example, `zstd`
-- [encoding] is the encoding used to store the compressed file
+- [algo] is the compression algorithm being used, for example, `zstd` or `brotli`
+- [encoding] is the encoding used to store the compressed file, for example, `base64`
 
 For example a valid memo would like:
 
 `532eaabd9574880dbf76b9b8cc00832c20a6ec113d682299550d7a6e0f345e25:zstd:base64`
 
-At this time, only zstd and base64 encoding are supported. If you'd like a different compression algorithm or encoding to be approved, please raise a pull request.
+### Supported Compression Algorithms
+
+| Algorithm | Description |
+|-----------|-------------|
+| zstd | Recommended for most media types like images, videos, and audio |
+| brotli | Recommended for most text-based formats like JSON, HTML, and CSS |
+
+### Supported Encodings
+
+| Encoding | Description |
+|-----------|-------------|
+| base64 | Standard base64 encoding |
+
+If you'd like a different compression algorithm or encoding to be approved, please raise a pull request.
 
 ## Encoding and Chunking
 
