@@ -22,6 +22,13 @@ export interface RegistrationFormData {
   role: string;
 }
 
+export interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
 export interface Tool {
   icon: React.ReactNode;
   title: string;

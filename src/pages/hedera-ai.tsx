@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import {
   FaMicrophone,
   FaCalendarAlt,
@@ -21,11 +21,16 @@ import {
   FaClock as FaClockAlt,
   FaQuestion,
   FaChevronDown,
+  FaGlobe,
+  FaMoneyBill,
 } from 'react-icons/fa';
 import HackathonTypography from '../components/hackathon/HackathonTypography';
 import PrimaryButton from '../components/hackathon/PrimaryButton';
 import { judges, mentors, Judge, JudgeSocial } from '../lib/judges';
 import { FAQItem } from '../components/hackathon/FAQSection';
+import { useCountdown } from '../components/hackathon/useCountdown';
+import { EventCountdown } from '../components/hackathon/EventCountdown';
+import HederaAIDemoDayHero from '../components/hackathon/HederaAIDemoDayHero';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
 
@@ -48,22 +53,27 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
   return (
     <motion.div
       ref={itemRef}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: 0.5,
+        delay: index * 0.05,
+        ease: 'easeOut',
       }}
-      className='relative pl-10 pb-10 border-l-2 border-gray-200 dark:border-gray-700 last:border-l-0 last:pb-0'
+      className='relative pl-8 pb-8 last:pb-0'
     >
-      <div className='absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-gradient-to-br from-[#8259ef] to-[#3ec878]' />
+      <div className='absolute left-0 top-[5px] w-4 h-4 rounded-full bg-gradient-to-br from-[#8259ef] to-[#3ec878] ring-4 ring-white dark:ring-gray-900' />
+      <div className='absolute left-[7px] top-[20px] bottom-0 w-px bg-gray-200 dark:bg-gray-700 -z-10'></div>
 
-      <div className='mb-1 text-sm font-medium text-[#2d84eb]'>{time}</div>
-      <HackathonTypography variant='h4' className='mb-2'>
+      <div className='mb-1 text-xs font-semibold text-[#8259ef]'>{time}</div>
+      <HackathonTypography variant='subtitle1' className='mb-1.5 font-semibold'>
         {title}
       </HackathonTypography>
-      <HackathonTypography variant='body1' color='muted'>
+      <HackathonTypography
+        variant='body2'
+        color='muted'
+        className='leading-relaxed'
+      >
         {description}
       </HackathonTypography>
     </motion.div>
@@ -224,50 +234,94 @@ const DemoDay: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
-  // Filter judges and mentors who have demoDay: true
-  const demoDayJudges = judges.filter((judge) => judge.demoDay);
-  const demoDayMentors = mentors.filter((mentor) => mentor.demoDay);
-  const allDemoDayPanelists = [...demoDayJudges, ...demoDayMentors];
+  const EVENT_DATE = new Date('2025-05-20T10:00:00-04:00');
+  const timeLeft = useCountdown(EVENT_DATE);
+
+  const allDemoDayPanelists = judges
+    .filter((judge) => judge.demoDay)
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const scheduleItems = [
     {
-      time: 'May 20th, 10:00 - 10:15 AM',
+      time: 'May 20th, 10:00 - 10:15 AM EDT',
       title: 'Day 1: Welcome & Introduction',
       description:
         'Opening remarks from the Hedera team and introduction to the judging panel.',
     },
     {
-      time: 'May 20th, 10:15 - 12:45 PM',
-      title: 'Day 1: Team Presentations (Teams 1-5)',
+      time: 'May 20th, 10:15 - 10:55 AM EDT',
+      title: 'Day 1: Team Presentations (Block 1)',
       description:
-        'Each team has a 3-minute pitch followed by up to 15 minutes of Q&A from the judges. Teams should be ready when called to ensure a smooth flow between presentations.',
+        'First block of team presentations (3 teams). Each team pitches followed by Q&A.',
     },
     {
-      time: 'May 20th, 12:45 - 12:55 PM',
-      title: 'Day 1: Closing & Networking',
+      time: 'May 20th, 10:55 - 11:00 AM EDT',
+      title: 'Day 1: Hedera x AI Showcase',
       description:
-        'Wrap-up of day one and opportunity to connect with judges, other participants, and the broader community.',
+        'A brief showcase highlighting exciting projects and developments.',
     },
     {
-      time: 'May 21st, 10:00 - 10:15 AM',
-      title: 'Day 2: Welcome & Introduction',
-      description: 'Brief welcome to day two of the Hedera x AI event.',
+      time: 'May 20th, 11:00 - 11:10 AM EDT',
+      title: 'Day 1: Guest Segment',
+      description:
+        'Insights from a special guest speaker in the AI or Web3 space.',
     },
     {
-      time: 'May 21st, 10:15 - 12:45 PM',
-      title: 'Day 2: Team Presentations (Teams 6-10)',
+      time: 'May 20th, 11:10 AM - 11:55 AM EDT',
+      title: 'Day 1: Team Presentations (Block 2)',
       description:
-        'Each team has a 3-minute pitch followed by up to 15 minutes of Q&A from the judges. Teams should be ready when called to ensure a smooth flow between presentations.',
+        'Second block of team presentations (3 teams) and Q&A with judges.',
     },
     {
-      time: 'May 21st, 12:45 - 12:55 PM',
-      title: 'Day 2: Closing Remarks & Networking',
+      time: 'May 20th, 11:55 AM - 12:00 PM EDT',
+      title: 'Day 1: Hedera x AI Showcase',
+      description: 'Final quick showcase wrapping up Day 1 presentations.',
+    },
+    {
+      time: 'May 20th, 12:00 PM - 12:05 PM EDT',
+      title: 'Day 1: Closing Remarks',
+      description: 'Wrap-up of Day 1 proceedings and thank yous.',
+    },
+    {
+      time: 'May 21st, 10:00 - 10:15 AM EDT',
+      title: 'Day 2: Welcome',
+      description: 'Brief welcome to Day 2 of the Hedera x AI event.',
+    },
+    {
+      time: 'May 21st, 10:15 - 11:00 AM EDT',
+      title: 'Day 2: Team Presentations (Block 1)',
       description:
-        'Final thoughts from the Hedera team and opportunity to connect with judges, other participants, and the broader community. Winners will be announced in a separate announcement after final scoring.',
+        'First block of Day 2 presentations (3 teams). Pitches and Q&A.',
+    },
+    {
+      time: 'May 21st, 11:00 - 11:05 AM EDT',
+      title: 'Day 2: Hedera x AI Showcase',
+      description: 'Showcasing more innovation from the Hedera ecosystem.',
+    },
+    {
+      time: 'May 21st, 11:05 - 11:15 AM EDT',
+      title: 'Day 2: Guest Segment',
+      description: 'Insights from a second special guest speaker.',
+    },
+    {
+      time: 'May 21st, 11:15 AM - 11:55 AM EDT',
+      title: 'Day 2: Team Presentations (Block 2)',
+      description:
+        'Final block of team presentations (3 teams) and Q&A sessions.',
+    },
+    {
+      time: 'May 21st, 11:55 AM - 12:00 PM EDT',
+      title: 'Day 2: Hedera x AI Showcase',
+      description: 'Final quick showcase before closing remarks.',
+    },
+    {
+      time: 'May 21st, 12:00 PM - 12:10 PM EDT',
+      title: 'Day 2: Closing Remarks',
+      description:
+        'Final thoughts from the Hedera team. Winners announced separately post-event.',
     },
   ];
 
-  // Split schedule into Day 1 and Day 2
   const day1Schedule = scheduleItems.filter((item) =>
     item.time.includes('May 20th')
   );
@@ -312,78 +366,7 @@ const DemoDay: React.FC = () => {
       description='Join us for the Hedera x AI event of the Hedera OpenConvAI Hackathon where finalists will pitch their projects to our judges for a chance to win from our $30,000 prize pool.'
     >
       <div className='min-h-screen bg-white dark:bg-gray-900 font-styrene hackathon-container'>
-        {/* Hero Section */}
-        <section className='pt-20 pb-16 sm:pt-24 sm:pb-20 relative overflow-hidden'>
-          <div className='absolute inset-0 z-0 overflow-hidden'>
-            <div className='absolute -top-40 -right-40 w-80 h-80 bg-[#3ec878]/5 dark:bg-[#3ec878]/10 rounded-full blur-3xl'></div>
-            <div className='absolute -bottom-20 -left-20 w-60 h-60 bg-[#8259ef]/5 dark:bg-[#8259ef]/10 rounded-full blur-3xl'></div>
-            <div
-              className='absolute inset-0 opacity-[0.03] dark:opacity-[0.05]'
-              style={{
-                backgroundImage: `radial-gradient(rgba(130, 89, 239, 0.8) 1px, transparent 1px)`,
-                backgroundSize: '40px 40px',
-              }}
-            ></div>
-          </div>
-
-          <div className='container mx-auto px-6 relative z-10'>
-            <div className='max-w-4xl mx-auto text-center'>
-              <HackathonTypography
-                variant='h1'
-                className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878] mb-1'
-                underline={true}
-                underlineColor='gradient'
-              >
-                Hedera x AI
-              </HackathonTypography>
-
-              <div className='w-full flex justify-center mb-6'>
-                <div className='px-4 py-1.5 bg-gradient-to-r from-[#8259ef]/10 to-[#3ec878]/10 dark:from-[#8259ef]/20 dark:to-[#3ec878]/20 rounded-full'>
-                  <span className='text-[#8259ef] font-medium text-sm sm:text-base'>
-                    May 20th-21st, 10AM EST
-                  </span>
-                </div>
-              </div>
-
-              <HackathonTypography
-                variant='body1'
-                className='mt-3 max-w-2xl mx-auto text-gray-600 dark:text-gray-300'
-                align='center'
-              >
-                The final culmination of the Hedera OpenConvAI Hackathon where
-                shortlisted teams will present their innovative projects to our
-                panel of judges in a YC-style pitch competition for a chance to
-                win from our $30,000 prize pool.
-              </HackathonTypography>
-
-              <div className='mt-6 mb-8 flex justify-center'>
-                <div className='inline-flex items-center gap-3 px-4 py-2 bg-white/70 dark:bg-gray-800/70 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm backdrop-blur-sm'>
-                  <span className='text-gray-700 dark:text-gray-300 text-sm'>
-                    Streamed and hosted by:
-                  </span>
-                  <img
-                    src='/img/hackathon/genfinity-logo.webp'
-                    alt='Genfinity Logo'
-                    className='h-7 w-auto'
-                  />
-                </div>
-              </div>
-
-              <div className='mt-8 flex justify-center gap-4'>
-                <PrimaryButton href='#schedule' size='lg'>
-                  Event Details
-                </PrimaryButton>
-                <PrimaryButton
-                  href='/hackathon'
-                  size='lg'
-                  className='bg-gradient-to-r from-gray-700 to-gray-900 dark:from-gray-600 dark:to-gray-800'
-                >
-                  Back to Hackathon
-                </PrimaryButton>
-              </div>
-            </div>
-          </div>
-        </section>
+        <HederaAIDemoDayHero />
 
         <section className='relative bg-white dark:bg-gray-950 overflow-hidden'>
           <div className='absolute inset-0 z-0 overflow-hidden'>
@@ -434,114 +417,142 @@ const DemoDay: React.FC = () => {
           </div>
         </section>
 
-        {/* Schedule Section */}
         <section
           id='schedule'
           ref={sectionRef}
-          className='py-16 sm:py-24 relative bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 overflow-hidden'
+          className='py-16 sm:py-24 relative bg-gradient-to-b from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden'
         >
-          <div className='absolute inset-0 z-0 overflow-hidden'>
+          <div className='absolute inset-0 z-0 overflow-hidden opacity-50'>
             <div className='absolute top-0 right-0 w-60 h-60 bg-[#3ec878]/5 dark:bg-[#3ec878]/10 rounded-full blur-3xl'></div>
             <div className='absolute bottom-0 left-0 w-40 h-40 bg-[#8259ef]/5 dark:bg-[#8259ef]/10 rounded-full blur-3xl'></div>
           </div>
 
-          <div className='container mx-auto px-6 relative z-10'>
-            <div className='max-w-4xl mx-auto'>
-              <motion.div
-                className='text-center mb-16'
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7 }}
-              >
-                <div className='relative w-24 h-24 mx-auto mb-6'>
-                  <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
-                  <div className='absolute inset-[6px] rounded-xl bg-[#2d84eb]/10 transform rotate-45'></div>
-                  <div className='absolute inset-[12px] rounded-lg bg-[#3ec878]/10 transform rotate-45'></div>
-                  <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef]'>
-                    <FaCalendarAlt />
-                  </div>
+          <div className='container mx-auto px-4 sm:px-6 relative z-10'>
+            <motion.div
+              className='max-w-4xl mx-auto text-center mb-16'
+              initial={{ opacity: 0, y: 20 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.7 }}
+            >
+              <div className='relative w-24 h-24 mx-auto mb-8 group'>
+                <motion.div
+                  className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform group-hover:rotate-45 transition-transform duration-500'
+                  initial={{ rotate: 0 }}
+                  animate={isInView ? { rotate: [0, 45, 0] } : {}}
+                  transition={{
+                    duration: 1.5,
+                    ease: 'easeInOut',
+                    repeat: Infinity,
+                    repeatType: 'mirror',
+                  }}
+                />
+                <motion.div
+                  className='absolute inset-[8px] rounded-xl bg-[#2d84eb]/10 transform group-hover:-rotate-45 transition-transform duration-500'
+                  initial={{ rotate: 0 }}
+                  animate={isInView ? { rotate: [0, -45, 0] } : {}}
+                  transition={{
+                    duration: 1.5,
+                    ease: 'easeInOut',
+                    delay: 0.2,
+                    repeat: Infinity,
+                    repeatType: 'mirror',
+                  }}
+                />
+                <motion.div
+                  className='absolute inset-[16px] rounded-lg bg-[#3ec878]/10 transform group-hover:rotate-45 transition-transform duration-500'
+                  initial={{ rotate: 0 }}
+                  animate={isInView ? { rotate: [0, 45, 0] } : {}}
+                  transition={{
+                    duration: 1.5,
+                    ease: 'easeInOut',
+                    delay: 0.4,
+                    repeat: Infinity,
+                    repeatType: 'mirror',
+                  }}
+                />
+                <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef] group-hover:scale-110 transition-transform duration-500'>
+                  <FaCalendarAlt />
                 </div>
+              </div>
 
-                <HackathonTypography
-                  variant='h2'
-                  className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878] mb-4'
-                  underline={true}
-                  underlineColor='gradient'
-                >
-                  Event Schedule
-                </HackathonTypography>
+              <HackathonTypography
+                variant='h2'
+                className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878] mb-4'
+                underline={true}
+                underlineColor='gradient'
+              >
+                Event Schedule
+              </HackathonTypography>
 
-                <HackathonTypography
-                  variant='body1'
-                  className='mt-6 max-w-3xl mx-auto text-gray-600 dark:text-gray-300'
-                  align='center'
-                >
-                  Our Hedera x AI event follows a structured format designed to
-                  give each team the spotlight they deserve while maintaining an
-                  efficient judging process.
-                </HackathonTypography>
+              <HackathonTypography
+                variant='body1'
+                className='mt-6 max-w-3xl mx-auto text-gray-600 dark:text-gray-300'
+                align='center'
+              >
+                Our Hedera x AI event follows a structured format designed to
+                give each team the spotlight they deserve while maintaining an
+                efficient judging process.
+              </HackathonTypography>
+            </motion.div>
+
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16'>
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+                className='bg-white dark:bg-gray-800/50 overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm'
+              >
+                <div className='px-6 py-4 border-b border-gray-100 dark:border-gray-700/50 bg-gradient-to-r from-[#8259ef]/5 to-transparent'>
+                  <HackathonTypography
+                    variant='h3'
+                    className='text-[#8259ef] text-center font-semibold'
+                  >
+                    Day 1 · May 20th
+                  </HackathonTypography>
+                </div>
+                <div className='p-6 sm:p-8'>
+                  {day1Schedule.map((item, index) => (
+                    <ScheduleItem
+                      key={index}
+                      time={item.time.replace('May 20th, ', '')}
+                      title={item.title.replace('Day 1: ', '')}
+                      description={item.description}
+                      index={index}
+                    />
+                  ))}
+                </div>
               </motion.div>
 
-              <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.1 }}
-                  className='bg-white dark:bg-gray-900 overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700'
-                >
-                  <div className='bg-gradient-to-r from-[#8259ef]/10 to-[#8259ef]/5 dark:from-[#8259ef]/20 dark:to-[#8259ef]/10 px-6 py-4 border-b border-gray-100 dark:border-gray-700'>
-                    <HackathonTypography
-                      variant='h3'
-                      className='text-[#8259ef] text-center'
-                    >
-                      Day 1 · May 20th
-                    </HackathonTypography>
-                  </div>
-                  <div className='p-6'>
-                    {day1Schedule.map((item, index) => (
-                      <ScheduleItem
-                        key={index}
-                        time={item.time.replace('May 20th, ', '')}
-                        title={item.title.replace('Day 1: ', '')}
-                        description={item.description}
-                        index={index}
-                      />
-                    ))}
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.2 }}
-                  className='bg-white dark:bg-gray-900 overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700'
-                >
-                  <div className='bg-gradient-to-r from-[#3ec878]/10 to-[#3ec878]/5 dark:from-[#3ec878]/20 dark:to-[#3ec878]/10 px-6 py-4 border-b border-gray-100 dark:border-gray-700'>
-                    <HackathonTypography
-                      variant='h3'
-                      className='text-[#3ec878] text-center'
-                    >
-                      Day 2 · May 21st
-                    </HackathonTypography>
-                  </div>
-                  <div className='p-6'>
-                    {day2Schedule.map((item, index) => (
-                      <ScheduleItem
-                        key={index}
-                        time={item.time.replace('May 21st, ', '')}
-                        title={item.title.replace('Day 2: ', '')}
-                        description={item.description}
-                        index={index}
-                      />
-                    ))}
-                  </div>
-                </motion.div>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+                className='bg-white dark:bg-gray-800/50 overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm'
+              >
+                <div className='px-6 py-4 border-b border-gray-100 dark:border-gray-700/50 bg-gradient-to-r from-[#3ec878]/5 to-transparent'>
+                  <HackathonTypography
+                    variant='h3'
+                    className='text-[#3ec878] text-center font-semibold'
+                  >
+                    Day 2 · May 21st
+                  </HackathonTypography>
+                </div>
+                <div className='p-6 sm:p-8'>
+                  {day2Schedule.map((item, index) => (
+                    <ScheduleItem
+                      key={index}
+                      time={item.time.replace('May 21st, ', '')}
+                      title={item.title.replace('Day 2: ', '')}
+                      description={item.description}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* Judges Section */}
         <section
           id='judges'
           className='py-16 sm:py-24 relative overflow-hidden'
@@ -597,7 +608,6 @@ const DemoDay: React.FC = () => {
           </div>
         </section>
 
-        {/* Judging Criteria Section */}
         <section
           id='judging'
           className='py-16 sm:py-24 relative bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 overflow-hidden'
@@ -660,7 +670,6 @@ const DemoDay: React.FC = () => {
           </div>
         </section>
 
-        {/* Presentation Tips Section */}
         <section id='tips' className='py-16 sm:py-24 relative overflow-hidden'>
           <div className='absolute inset-0 z-0 overflow-hidden'>
             <div className='absolute top-0 right-0 w-60 h-60 bg-[#3ec878]/5 dark:bg-[#3ec878]/10 rounded-full blur-3xl'></div>
