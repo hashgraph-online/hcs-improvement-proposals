@@ -784,6 +784,23 @@ const DemoDay: React.FC = () => {
                 </motion.div>
               </div>
 
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={isInView ? { opacity: 1 } : {}}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className='mb-8 max-w-3xl mx-auto'
+              >
+                <HackathonTypography
+                  variant='body1'
+                  color='muted'
+                  align='center'
+                  className='italic'
+                >
+                  While you have full flexibility in how you use your 3 minutes,
+                  the following sections offer suggestions and requirements:
+                </HackathonTypography>
+              </motion.div>
+
               <div className='bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
                   <motion.div
@@ -800,7 +817,7 @@ const DemoDay: React.FC = () => {
                       </div>
                       Preparation
                     </HackathonTypography>
-                    <ul className='space-y-3'>
+                    <ul className='space-y-3 pl-11'>
                       <li className='flex items-start'>
                         <div className='flex-shrink-0 w-5 h-5 rounded-full bg-[#8259ef] flex items-center justify-center text-white text-xs mr-3 mt-1'>
                           <span className='text-xs'>✓</span>
@@ -853,7 +870,7 @@ const DemoDay: React.FC = () => {
                       </div>
                       Content Structure
                     </HackathonTypography>
-                    <ul className='space-y-3'>
+                    <ul className='space-y-3 pl-11'>
                       <li className='flex items-start'>
                         <div className='flex-shrink-0 w-5 h-5 rounded-full bg-[#3ec878] flex items-center justify-center text-white text-xs mr-3 mt-1'>
                           <span className='text-xs'>1</span>

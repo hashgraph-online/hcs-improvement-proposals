@@ -48,7 +48,7 @@ const DemoDayVisualCard: React.FC = () => {
 
         <div className='mb-3 sm:mb-4 text-center'>
           <HackathonTypography variant='h3' color='green' align='center'>
-            Demo Day Finals
+            Demo Day
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
@@ -61,7 +61,7 @@ const DemoDayVisualCard: React.FC = () => {
         </div>
 
         <div className='mb-8'>
-          <EventCountdown timeLeft={timeLeft} title='Demo Day Starting In' />
+          <EventCountdown timeLeft={timeLeft} title='Starting In' />
         </div>
 
         <div className='space-y-3 sm:space-y-4'>
