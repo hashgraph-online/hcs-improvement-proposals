@@ -204,12 +204,12 @@ const config: Config = {
             from: '/convai',
           },
           {
-            to: '/hedera-ai',
-            from: '/hederaai',
+            from: '/hedera-ai',
+            to: '/hederaai',
           },
           {
-            to: '/hederaAI',
-            from: '/hederaai',
+            from: '/hederaAI',
+            to: '/hederaai',
           },
         ],
       },
