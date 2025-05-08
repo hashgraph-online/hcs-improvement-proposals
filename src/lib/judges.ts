@@ -136,6 +136,15 @@ export const judges: Judge[] = [
     demoDay: true,
   },
   {
+    name: 'Dr. Leemon Baird',
+    role: 'Co-founder, Chief Scientist',
+    company: 'Hashgraph, Hedera',
+    bio: 'Dr. Leemon Baird is the Co-founder and Chief Scientist at Hashgraph. The inventor of the organization’s namesake, the distributed hashgraph consensus algorithm, Leemon co-founded the Hedera network with Mance Harmon. He has two decades of technology and start-up experience, and served as Professor of Computer Science at the US Air Force Academy, as well as holding senior scientist roles in several labs. Leemon received his PhD in Computer Science from Carnegie Mellon University and has multiple patents and publications in peer-reviewed journals. He has spoken at conferences in computer security, machine learning and mathematics. ',
+    image: '/img/hackathon/leemon-baird.webp',
+    socials: [{ type: 'twitter', url: 'https://x.com/leemonbaird' }],
+    demoDay: true,
+  },
+  {
     name: 'Aleksandr Nechaev',
     role: 'Partner',
     company: 'Funders VC',
@@ -218,6 +227,15 @@ export const judges: Judge[] = [
     bio: 'Kayla Phillips is a Senior Venture Principal at Hivemind, where she invests in crypto and blockchain projects across all funding stages. Prior to Hivemind, she worked as a crypto and generalist VC for several firms, including Truffle Ventures, Alumni Ventures, and White Star Capital. She holds an MBA from Columbia and a BS from Virginia Tech.',
     image: '/img/hackathon/kayla-phillips.png',
     socials: [{ type: 'twitter', url: 'https://x.com/kay_phillips_' }],
+    demoDay: true,
+  },
+  {
+    name: 'Mance Harmon',
+    role: 'Co-founder',
+    company: 'Hashgraph, Hedera',
+    bio: 'Mance is the Co-founder and Chairman of the Board at Hashgraph. As a Co-founder of Hedera, he has extensive experience as a business leader in Web3. Previously, he served as Head of Architecture and Labs at Ping Identity, as well as founding and leading two tech start-ups and managing Product Security at a $1.7 billion revenue organization. Mance is the Program Manager for the large-scale software program at the Missile Defense Agency, and the Course Director for Cybersecurity at the US Air Force Academy, as well as a research scientist in Machine Learning at Wright Laboratory. He received an MS in Computer Science from the University of Massachusetts and a BS in Computer Science from Mississippi State University.',
+    image: '/img/hackathon/mance-harmon.webp',
+    socials: [{ type: 'twitter', url: 'https://x.com/ManceHarmon' }],
     demoDay: true,
   },
   {

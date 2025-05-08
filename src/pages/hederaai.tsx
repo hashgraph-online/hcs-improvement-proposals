@@ -1,6 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
   FaMicrophone,
   FaCalendarAlt,
@@ -20,19 +20,23 @@ import {
   FaCog,
   FaClock as FaClockAlt,
   FaQuestion,
-  FaChevronDown,
   FaGlobe,
   FaMoneyBill,
+  FaTimes,
+  FaRobot,
+  FaBrain,
+  FaNetworkWired,
+  FaRss,
 } from 'react-icons/fa';
 import HackathonTypography from '../components/hackathon/HackathonTypography';
 import PrimaryButton from '../components/hackathon/PrimaryButton';
-import { judges, mentors, Judge, JudgeSocial } from '../lib/judges';
+import { judges, Judge } from '../lib/judges';
 import { FAQItem } from '../components/hackathon/FAQSection';
 import { useCountdown } from '../components/hackathon/useCountdown';
-import { EventCountdown } from '../components/hackathon/EventCountdown';
 import HederaAIDemoDayHero from '../components/hackathon/HederaAIDemoDayHero';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
+import { Person, SelectedPerson } from '../components/hackathon/JudgesSection';
 
 type ScheduleItemProps = {
   time: string;
@@ -128,111 +132,10 @@ const JudgingCriteria: React.FC<JudgingCriteriaProps> = ({
   );
 };
 
-type JudgeCardProps = {
-  judge: Judge;
-  index: number;
-};
-
-const JudgeCard: React.FC<JudgeCardProps> = ({ judge, index }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, amount: 0.2 });
-
-  const getSocialIcon = (type: string) => {
-    switch (type) {
-      case 'twitter':
-        return <FaTwitter />;
-      case 'linkedin':
-        return <FaLinkedin />;
-      case 'github':
-        return <FaGithub />;
-      case 'youtube':
-        return <FaYoutube />;
-      case 'blog':
-        return <FaBlog />;
-      case 'website':
-        return <FaLink />;
-      case 'projects':
-        return <FaProjectDiagram />;
-      default:
-        return <FaLink />;
-    }
-  };
-
-  return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
-      className='relative overflow-hidden rounded-2xl bg-white dark:bg-gray-800 shadow-md group'
-    >
-      <div className='absolute inset-0 bg-gradient-to-br from-[#8259ef]/80 via-[#2d84eb]/80 to-[#3ec878]/80 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10'></div>
-
-      <div className='aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-gray-700'>
-        <img
-          src={judge.image}
-          alt={judge.name}
-          className='w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-300'
-        />
-      </div>
-
-      <div className='p-5 relative'>
-        <HackathonTypography variant='h4' className='text-lg'>
-          {judge.name}
-        </HackathonTypography>
-
-        <div className='text-sm text-gray-600 dark:text-gray-300 font-medium mb-1'>
-          {judge.role}
-        </div>
-
-        <div className='text-sm text-[#3ec878] font-medium mb-3'>
-          {judge.company}
-        </div>
-
-        <div className='flex space-x-2 mt-3'>
-          {judge.socials.slice(0, 3).map((social, idx) => (
-            <a
-              key={idx}
-              href={social.url}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='text-gray-500 hover:text-[#8259ef] transition-colors'
-              aria-label={`${judge.name}'s ${social.type}`}
-            >
-              {getSocialIcon(social.type)}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      <div className='absolute inset-0 flex items-center justify-center p-6 bg-gradient-to-br from-[#8259ef]/90 via-[#2d84eb]/90 to-[#3ec878]/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20'>
-        <div className='text-white text-center'>
-          <p className='text-sm leading-relaxed'>{judge.bio}</p>
-          {judge.expertise && (
-            <div className='mt-3 flex flex-wrap gap-1 justify-center'>
-              {judge.expertise.slice(0, 3).map((skill, idx) => (
-                <span
-                  key={idx}
-                  className='text-xs px-2 py-1 bg-white/20 rounded-full'
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-};
-
 const DemoDay: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const [selectedPerson, setSelectedPerson] = useState<Judge | null>(null);
 
   const EVENT_DATE = new Date('2025-05-20T10:00:00-04:00');
   const timeLeft = useCountdown(EVENT_DATE);
@@ -599,13 +502,25 @@ const DemoDay: React.FC = () => {
                 </HackathonTypography>
               </motion.div>
 
-              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-10'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12 mt-10'>
                 {allDemoDayPanelists.map((judge, index) => (
-                  <JudgeCard key={index} judge={judge} index={index} />
+                  <Person
+                    key={judge.name}
+                    person={judge}
+                    index={index}
+                    onClick={() => setSelectedPerson(judge)}
+                    isSelected={selectedPerson?.name === judge.name}
+                  />
                 ))}
               </div>
             </div>
           </div>
+          {selectedPerson && (
+            <SelectedPerson
+              person={selectedPerson}
+              onClose={() => setSelectedPerson(null)}
+            />
+          )}
         </section>
 
         <section

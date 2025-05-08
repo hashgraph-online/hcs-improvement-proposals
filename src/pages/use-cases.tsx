@@ -33,12 +33,13 @@ export const useCases: UseCase[] = [
     color: '#66A3FF',
     link: 'https://bonzo.finance',
     creator: 'Bonzo Finance',
-    tagline: 'Revolutionizing DeFi incentives through transparent, on-chain rewards.',
+    tagline:
+      'Revolutionizing DeFi incentives through transparent, on-chain rewards.',
   },
   {
     name: 'HashPack Wallet',
     description:
-    'HashPack renders Hashinals inside the wallet, enabling users and creators to interact with this innovative standard, view files, and see inscription numbers.',
+      'HashPack renders Hashinals inside the wallet, enabling users and creators to interact with this innovative standard, view files, and see inscription numbers.',
     image: '/use-cases/hashpack-u.png',
     color: '#4ECDC4',
     link: 'https://www.hashpack.app/',
@@ -53,17 +54,8 @@ export const useCases: UseCase[] = [
     color: '#4B0082',
     link: 'https://sentx.io',
     creator: 'SentX',
-    tagline: 'Powering the premier marketplace for Hedera digital collectibles.',
-  },
-  {
-    name: 'Hashgate HCS-20 API',
-    description:
-      'Hashgate is an all-in-one payments solution on Hedera. They created an API to easily retrieve HCS-20 points, utilized by HashPack Wallet and Bonzo Finance.',
-    image: '/use-cases/hashgate.jpg',
-    color: '#4ECDC4',
-    link: 'https://www.hashgate.io/',
-    creator: 'Hashgate',
-    tagline: 'Simplifying HCS-20 integration for developers across Hedera.',
+    tagline:
+      'Powering the premier marketplace for Hedera digital collectibles.',
   },
   {
     name: 'Hashinals.com',
@@ -86,14 +78,16 @@ export const useCases: UseCase[] = [
     tagline: 'Pioneering serverless multiplayer gaming on Hedera.',
   },
   {
-    name: "Sketchverse",
-    description: "Sketchverse is Hedera's first experimentalon-graph metaverse built on Hedera, utilizing Hashinals. Sketchverse includes 300 plots of land, 3D assets and a growing community.",
-    image: "/use-cases/sketchverse.jpeg",
-    color: "#FFD700",
-    link: "https://blankpaper-rust.vercel.app/",
-    creator: "BlankPaper",
-    tagline: "Empowering artists to showcase their digital creations on Hedera.",
-  }
+    name: 'Sketchverse',
+    description:
+      "Sketchverse is Hedera's first experimentalon-graph metaverse built on Hedera, utilizing Hashinals. Sketchverse includes 300 plots of land, 3D assets and a growing community.",
+    image: '/use-cases/sketchverse.jpeg',
+    color: '#FFD700',
+    link: 'https://blankpaper-rust.vercel.app/',
+    creator: 'BlankPaper',
+    tagline:
+      'Empowering artists to showcase their digital creations on Hedera.',
+  },
 ];
 
 const UseCaseSection: React.FC<{ useCase: UseCase; index: number }> = ({
@@ -136,12 +130,14 @@ const UseCaseSection: React.FC<{ useCase: UseCase; index: number }> = ({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.5 }}
-            className="absolute -top-6 right-8 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 shadow-xl"
+            className='absolute -top-6 right-8 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 shadow-xl'
           >
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full animate-pulse"
-                   style={{ backgroundColor: useCase.color }} />
-              <span className="text-white/90 font-medium">
+            <div className='flex items-center gap-2'>
+              <div
+                className='w-2 h-2 rounded-full animate-pulse'
+                style={{ backgroundColor: useCase.color }}
+              />
+              <span className='text-white/90 font-medium'>
                 Created by {useCase.creator}
               </span>
             </div>
@@ -183,9 +179,9 @@ const UseCasesPage: React.FC = () => {
   return (
     <Layout
       title={`Use Cases | ${siteConfig.title}`}
-      description="Discover groundbreaking applications of Hashgraph Online standards"
+      description='Discover groundbreaking applications of Hashgraph Online standards'
     >
-      <main className="bg-black">
+      <main className='bg-black'>
         <section className='flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900 text-white py-8 md:py-36 px-4 md:px-6'>
           <div className='max-w-4xl mx-auto text-center'>
             <h1 className='text-2xl md:text-5xl lg:text-6xl font-extrabold mb-2 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400'>
