@@ -186,6 +186,17 @@ const DemoDaySection: React.FC = () => {
               </div>
             </div>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className='mt-12 text-center'
+          >
+            <PrimaryButton href='/demo-day' size='lg'>
+              Learn More About Demo Day
+            </PrimaryButton>
+          </motion.div>
         </div>
       </div>
     </section>
