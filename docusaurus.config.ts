@@ -83,7 +83,7 @@ const config: Config = {
           position: 'left',
           items: [
             { to: '/hackathon', label: 'Overview' },
-            { to: '/hedera-ai', label: 'Hedera x AI' },
+            { to: '/hederaai', label: 'Hedera x AI' },
             { to: '/hackathon#requirements', label: 'Requirements' },
             { to: '/hackathon#tools', label: 'Tools' },
             { to: '/hackathon#schedule', label: 'Schedule' },
