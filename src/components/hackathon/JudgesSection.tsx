@@ -21,7 +21,7 @@ interface SocialIconProps {
   type: string;
 }
 
-const SocialIcon: React.FC<SocialIconProps> = ({ type }) => {
+export const SocialIcon: React.FC<SocialIconProps> = ({ type }) => {
   switch (type) {
     case 'twitter':
       return <FaTwitter />;
@@ -42,14 +42,14 @@ const SocialIcon: React.FC<SocialIconProps> = ({ type }) => {
   }
 };
 
-interface PersonProps {
+export interface PersonProps {
   person: Judge;
   index: number;
   onClick: () => void;
   isSelected: boolean;
 }
 
-const Person: React.FC<PersonProps> = ({
+export const Person: React.FC<PersonProps> = ({
   person,
   index,
   onClick,
@@ -169,12 +169,15 @@ const Person: React.FC<PersonProps> = ({
   );
 };
 
-interface SelectedPersonProps {
+export interface SelectedPersonProps {
   person: Judge | null;
   onClose: () => void;
 }
 
-const SelectedPerson: React.FC<SelectedPersonProps> = ({ person, onClose }) => {
+export const SelectedPerson: React.FC<SelectedPersonProps> = ({
+  person,
+  onClose,
+}) => {
   if (!person) return null;
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -424,27 +427,7 @@ const GlowingButton: React.FC<{
   );
 };
 
-const StaggerGrid = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <motion.div
-      className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8'
-      initial='hidden'
-      animate='visible'
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: 0.1,
-          },
-        },
-        hidden: {},
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-};
-
-const JudgesSection: React.FC = () => {
+export const JudgesSection: React.FC = () => {
   const [selectedPerson, setSelectedPerson] = useState<Judge | null>(null);
   const [activeTab, setActiveTab] = useState<'judges' | 'mentors'>('judges');
   const sectionRef = useRef<HTMLDivElement>(null);

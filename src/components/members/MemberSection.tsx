@@ -65,6 +65,13 @@ const members: Member[] = [
     website: 'https://launchbadge.com',
   },
   {
+    name: 'Neuron',
+    description:
+      'Neuron is creating a world where machines buy from machines, facilitating a new era of agentic abundance',
+    logo: '/img/logos/neuron.avif',
+    website: 'https://neuron.world',
+  },
+  {
     name: 'SentX',
     description:
       'SentX is the leading NFT Marketplace on Hedera to buy, sell, and discover digital collectibles.',
