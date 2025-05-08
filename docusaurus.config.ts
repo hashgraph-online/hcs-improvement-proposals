@@ -67,6 +67,10 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 5,
+    },
     navbar: {
       title: 'Hashgraph Online',
       logo: {
