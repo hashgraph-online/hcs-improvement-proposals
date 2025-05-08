@@ -203,6 +203,14 @@ const config: Config = {
             to: '/openconvai',
             from: '/convai',
           },
+          {
+            to: '/hedera-ai',
+            from: '/hederaai',
+          },
+          {
+            to: '/hederaAI',
+            from: '/hederaai',
+          },
         ],
       },
     ],
