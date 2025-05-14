@@ -239,6 +239,15 @@ export const judges: Judge[] = [
     demoDay: true,
   },
   {
+    name: 'Marco Podien',
+    role: 'Senior Developer Advocate',
+    company: 'Algogrand',
+    bio: 'With over two decades in IT and a passion for Blockchain, GenAI and DevRel, Marco is building bridges from Web 2.0 to Web3. He specializes in community-building and enhancing developer experience through innovative tooling and education. His mission: to foster collaboration, empower developers to explore new technologies, to seek out new life and new civilizations, to boldly go where no nerd has gone before. 🦄',
+    image: '/img/hackathon/marco-podien.jpeg',
+    socials: [{ type: 'twitter', url: 'https://x.com/marcopodien' }],
+    demoDay: true,
+  },
+  {
     name: 'Aegis-H',
     role: 'AI Judge',
     company: 'Hashgraph Online',
