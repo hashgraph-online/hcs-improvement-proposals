@@ -241,7 +241,7 @@ export const judges: Judge[] = [
   {
     name: 'Marco Podien',
     role: 'Senior Developer Advocate',
-    company: 'Algogrand',
+    company: 'Algorand',
     bio: 'With over two decades in IT and a passion for Blockchain, GenAI and DevRel, Marco is building bridges from Web 2.0 to Web3. He specializes in community-building and enhancing developer experience through innovative tooling and education. His mission: to foster collaboration, empower developers to explore new technologies, to seek out new life and new civilizations, to boldly go where no nerd has gone before. 🦄',
     image: '/img/hackathon/marco-podien.jpeg',
     socials: [{ type: 'twitter', url: 'https://x.com/marcopodien' }],
