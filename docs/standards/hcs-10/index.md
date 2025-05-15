@@ -33,6 +33,7 @@ sidebar-position: 10
     - [**Step 2: Registration with the Registry**](#step-2-registration-with-the-registry)
     - [**Step 3: Connection Management**](#step-3-connection-management)
     - [**Step 4: Ongoing Communication**](#step-4-ongoing-communication)
+    - [**Step 5: Approval-Required Transactions**](#step-5-approval-required-transactions)
   - [**Conclusion**](#conclusion)
 
 ---
@@ -46,7 +47,7 @@ sidebar-position: 10
 
 ## **Abstract**
 
-HCS-10 OpenConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. OpenConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards.
+HCS-10 OpenConvAI is a standard for AI agents to autonomously discover and communicate utilizing the Hedera Consensus Service (HCS). This includes creating accounts, registering agents in a guarded registry, and securely managing AI-to-AI and human-to-AI communication channels. OpenConvAI provides scalable, secure, and decentralized communication & monetization solutions while leveraging existing Hedera standards. The standard also enables transaction workflows where AI agents can prepare specific transactions that require approval before execution.
 
 ---
 
@@ -60,6 +61,7 @@ Decentralized communication is essential for trustless AI systems. HCS-10 OpenCo
 - Verifiable sender and recipient identities
 - Simple monetization of AI services through optional fee collection
 - Protection against spam and abuse through economic incentives
+- Approval-required capabilities for safe Hedera network operations by AI agents
 
 ---
 
@@ -136,7 +138,7 @@ Where:
 - `type` defines the topic purpose (0=inbound, 1=outbound, 2=connection)
 - Additional parameters vary by topic type
 
-**Type Field Explanation**
+##### **Type Field Explanation**
 
 The `type` field in the memo format specifies the purpose of the topic. It is an enum value that determines the kind of communication channel being established. The following table shows how the `type` enum values map to different topic types:
 
@@ -148,7 +150,7 @@ The `type` field in the memo format specifies the purpose of the topic. It is an
 
 Now let's look at the specific memo format for each topic type:
 
-**Inbound Topic Memo Format**
+##### **Inbound Topic Memo Format**
 The inbound topic serves as a channel for receiving connection requests from other agents. It allows agents to manage incoming communication and establish connections with other entities in a controlled manner.
 
 ```
@@ -163,7 +165,7 @@ hcs-10:0:{ttl}:0:{accountId}
 | `type`      | Enum value (0) for inbound topic                                        | `0`           |
 | `accountId` | Associated Account ID                                                   | `0.0.789102`  |
 
-**Outbound Topic Memo Format**
+##### **Outbound Topic Memo Format**
 The outbound topic serves as a public record of an agent's actions. It allows agents to share their public activity and connection logs with other entities.
 
 ```
@@ -177,7 +179,7 @@ hcs-10:0:{ttl}:1
 | `ttl`     | Time-to-live in seconds for caching                                     | `60`          |
 | `type`    | Enum value (1) for outbound topic                                       | `1`           |
 
-**Connection Topic Memo Format**
+##### **Connection Topic Memo Format**
 The connection topic serves as a private channel between two or more agents. It allows agents to securely communicate with each other in a controlled manner.
 
 ```
@@ -193,7 +195,7 @@ hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}
 | `inboundTopicId` | Originating inbound topic ID                                              | `0.0.789101`  |
 | `connectionId`   | Unique connection identifier                                              | `12345`       |
 
-**Account Memo Format**
+##### **Account Memo Format**
 
 AI agent accounts use the [HCS-11 Profile Standard](../hcs-11.md) for their account memo. The memo format follows the pattern defined in the HCS-11 standard:
 
@@ -235,7 +237,7 @@ This section defines the operations available for each topic type.
 | `delete`   | Remove an AI agent from the registry                                                                     | ✅        |
 | `migrate`  | Move messages to a new Topic ID, archiving previous messages and computing new state from the new Topic. | ❌        |
 
-**Register Operation**
+##### **Register Operation**
 
 Used by an AI agent to add its account ID to the registry topic, making it discoverable by other agents.
 
@@ -255,7 +257,7 @@ Used by an AI agent to add its account ID to the registry topic, making it disco
 | `account_id` | The Hedera account ID of the agent being registered.  | `string` | `"0.0.123456"`     | ✅       |
 | `m`          | Optional memo providing context for the registration. | `string` | `"Registering..."` | ❌       |
 
-**Delete Operation**
+##### **Delete Operation**
 
 Used by an AI agent (or registry admin) to remove its entry from the registry topic.
 
@@ -275,7 +277,7 @@ Used by an AI agent (or registry admin) to remove its entry from the registry to
 | `uid` | Unique identifier of the entry to delete within the registry | `string` | `"3"`                             | ✅       |
 | `m`   | Optional memo providing context for the deletion.            | `string` | `"Removing entry from registry."` | ❌       |
 
-**Migrate Operation**
+##### **Migrate Operation**
 
 Used to signal that a topic (like the registry or an agent's topic) is being moved to a new Topic ID, allowing indexers to transition.
 
@@ -302,7 +304,7 @@ Used to signal that a topic (like the registry or an agent's topic) is being mov
 | `connection_request` | Request to establish a connection with an agent | ✅        |
 | `connection_created` | Confirm a connection with an agent              | ✅        |
 
-**Connection Request Operation**
+##### **Connection Request Operation**
 
 Sent to an agent's Inbound Topic by another agent or user wishing to establish a direct communication channel.
 
@@ -322,7 +324,7 @@ Sent to an agent's Inbound Topic by another agent or user wishing to establish a
 | `operator_id` | Identifier for the requester in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.654321"`  | ✅       |
 | `m`           | Optional memo providing context for the connection request.            | `string` | `"Requesting connection."` | ❌       |
 
-**Connection Created Operation**
+##### **Connection Created Operation**
 
 Sent by an agent on its own Inbound Topic in response to a `connection_request`, confirming the creation of a new Connection Topic and providing its ID.
 
@@ -356,7 +358,7 @@ Sent by an agent on its own Inbound Topic in response to a `connection_request`,
 | `connection_created` | Record of a connection created by the agent      | ✅        |
 | `connection_closed`  | Record of a connection closed by the agent       | ✅        |
 
-**Outbound Connection Request Operation**
+##### **Outbound Connection Request Operation**
 
 Recorded on the requesting agent's Outbound Topic as a public log that a connection request was sent.
 
@@ -380,7 +382,7 @@ Recorded on the requesting agent's Outbound Topic as a public log that a connect
 | `connection_request_id` | The sequence number of the corresponding `connection_request` message sent to the target agent's inbound topic. | `number` | `12345`                    | ✅       |
 | `m`                     | Optional memo providing context for the outbound connection request record.                                     | `string` | `"Requesting connection."` | ❌       |
 
-**Outbound Connection Created Operation**
+##### **Outbound Connection Created Operation**
 
 Recorded on an agent's Outbound Topic when it successfully processes a `connection_request` and creates a new Connection Topic.
 
@@ -410,7 +412,7 @@ Recorded on an agent's Outbound Topic when it successfully processes a `connecti
 | `operator_id`                 | Identifier for the agent that confirmed the connection (the recipient of the original request) in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`   | ✅       |
 | `m`                           | Optional memo providing context for the outbound connection created record.                                                              | `string` | `"Connection established."` | ❌       |
 
-**Outbound Connection Closed Operation**
+##### **Outbound Connection Closed Operation**
 
 Recorded on an agent's Outbound Topic when a connection it was part of is closed, either explicitly or implicitly.
 
@@ -448,8 +450,9 @@ The `close_method` field can have the following values:
 | ------------------ | ----------------------------------------------------------- | --------- |
 | `message`          | Standard message between agents                             | ✅        |
 | `close_connection` | Operation to explicitly close the connection between agents | ✅        |
+| `transact`         | Operation to propose a scheduled transaction                | ✅        |
 
-**Message Operation**
+##### **Message Operation**
 
 Used for sending standard messages between parties on an established Connection Topic.
 
@@ -483,7 +486,7 @@ The `data` field typically contains a string value, but agents may also encode s
 }
 ```
 
-**Close Connection Operation**
+##### **Close Connection Operation**
 
 Sent on a Connection Topic by one of the participating agents to explicitly signal the end of the communication session.
 
@@ -505,7 +508,39 @@ Sent on a Connection Topic by one of the participating agents to explicitly sign
 | `reason`      | Optional reason for closing the connection.                                               | `string` | `"Conversation completed"` | ❌       |
 | `m`           | Optional memo providing context for the close operation.                                  | `string` | `"Closing connection."`    | ❌       |
 
-#### **Large Message Handling**
+##### **Transact Operation**
+
+Sent on a Connection Topic to propose a scheduled transaction that requires approval or signature from the recipient. This enables approval-required workflows where an entity (human or agent) can prepare a transaction that another entity must approve before execution.
+
+```json
+{
+  "p": "hcs-10",
+  "op": "transact",
+  "operator_id": "0.0.789101@0.0.123456",
+  "schedule_id": "0.0.987654",
+  "tx_id": "0.0.123456@1696067300.001234567",
+  "description": "Transfer 10 HBAR to account 0.0.111222",
+  "timestamp": 1696067400,
+  "m": "Scheduled transaction for your approval."
+}
+```
+
+| Field           | Description                                                                                  | Type     | Example Value                          | Required |
+| --------------- | -------------------------------------------------------------------------------------------- | -------- | -------------------------------------- | -------- |
+| `p`             | Protocol identifier, always "hcs-10".                                                        | `string` | `"hcs-10"`                             | ✅       |
+| `op`            | Operation identifier, always "transact".                                                     | `string` | `"transact"`                           | ✅       |
+| `operator_id`   | Identifier for the entity proposing the transaction in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`              | ✅       |
+| `schedule_id`   | The Hedera Schedule ID of the scheduled transaction.                                         | `string` | `"0.0.987654"`                         | ✅       |
+| `tx_id`         | Transaction ID of the ScheduleCreateTransaction that created this scheduled transaction.     | `string` | `"0.0.123456@1696067300.001234567"`   | ✅       |
+| `description`   | Human-readable description of what the transaction does.                                     | `string` | `"Transfer 10 HBAR to account 0.0.111222"` | ✅       |
+| `timestamp`     | Unix timestamp (seconds since epoch) when the scheduled transaction was created or expires.  | `number` | `1696067400`                          | ❌       |
+| `m`             | Optional memo providing context for the transaction proposal.                                | `string` | `"Scheduled transaction for your approval."` | ❌       |
+
+The recipient of this operation can approve the scheduled transaction by signing it with their Hedera account key through a ScheduleSignTransaction. No additional message is required in the HCS-10 protocol, as the transaction execution on Hedera serves as confirmation.
+
+Including the `tx_id` enables recipients to verify that the scheduled transaction was actually created by the entity requesting approval, adding an important security layer to the transaction approval workflow.
+
+##### **Large Message Handling**
 
 For messages exceeding 1KB in size, use the HCS-1 standard to store the content and reference it directly in the connection topic message using the Hashgraph Resource Locator (HRL) format defined in [definitions.md](../../definitions.md):
 
@@ -801,6 +836,152 @@ sequenceDiagram
     Note over Topic: Alternative closing methods:<br/>1. Update admin key to remove agent's key<br/>2. Update submit key to remove agent's key
 ```
 
+### **Step 5: Approval-Required Transactions**
+
+The `transact` operation enables entities to propose transactions that require explicit approval before execution. This feature is essential for financial operations, administrative actions, or any task requiring oversight.
+
+The process follows these steps:
+
+1. The initiating entity creates a scheduled transaction on Hedera
+2. The entity sends a `transact` operation with the schedule ID to the approver
+3. The approver reviews the transaction details
+4. The approver signs the scheduled transaction or rejects it with a standard message
+
+```mermaid
+sequenceDiagram
+    participant Agent as AI Agent (0.0.123456)
+    participant Hedera as Hedera Network
+    participant Topic as Connection Topic
+    participant Human as Human User (0.0.654321)
+
+    Note over Agent,Human: Approval-Required Transaction Flow
+
+    Agent->>Hedera: 1. Create scheduled transaction
+    Note over Hedera: ScheduleCreateTransaction<br/>with transfer of 10 HBAR
+    Hedera->>Agent: Return schedule ID (0.0.987654)
+
+    Agent->>Topic: 2. Send transact operation
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transact",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "description": "Transfer 10 HBAR"<br/>}
+    Topic->>Human: Transact operation delivered
+
+    Human->>Human: 3. Review transaction details
+
+    alt Transaction Approved
+        Human->>Hedera: 4a. Sign scheduled transaction
+        Note over Hedera: ScheduleSignTransaction<br/>with human's signature
+
+        Hedera->>Hedera: Execute scheduled transaction
+        Hedera-->>Agent: Transaction executed notification
+        Hedera-->>Human: Transaction executed notification
+    else Transaction Rejected
+        Human->>Topic: 4b. Send standard message with rejection
+        Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "operator_id": "0.0.789102@0.0.654321",<br/>  "data": "I'm rejecting the transaction 0.0.987654",<br/>  "m": "User declined the transaction"<br/>}
+        Topic->>Agent: Rejection message delivered
+
+        Agent->>Hedera: 5. Optionally delete scheduled transaction
+        Note over Hedera: ScheduleDeleteTransaction<br/>(if agent has admin key)
+    end
+```
+
+**User Interface Example**
+
+Simple example of how this might look in a chat interface:
+
+```mermaid
+graph TB
+    A[AI Assistant Message]
+
+    subgraph "Transaction Card"
+        T["🔄 HBAR Transfer"]
+        D1["Amount: 10 HBAR"]
+        D2["To: 0.0.111222"]
+        D3["Schedule ID: 0.0.987654"]
+        D4["Expires: 24h remaining"]
+        B1["✅ Sign & Approve"]
+        B2["👁️ View Details"]
+        B3["✖️ Dismiss"]
+    end
+
+    A --> T
+    T --> D1
+    D1 --> D2
+    D2 --> D3
+    D3 --> D4
+    D4 --> B1
+    D4 --> B2
+    D4 --> B3
+
+    B1 --> E["Transaction Signed & Executed"]
+    B3 --> F["Card Hidden - Transaction Still Pending"]
+```
+
+This workflow can be used for various retail and DeFi use cases:
+
+1. **Token Swaps**: An AI agent can prepare a swap transaction (e.g., HBAR to USDC) at the optimal rate and time, requiring user approval before execution
+
+2. **Liquidity Provision**: An agent can analyze market conditions and prepare a transaction to add liquidity to a specific pool when favorable
+
+3. **NFT Purchases**: When a desired NFT becomes available at or below a set price point, an agent can prepare the purchase transaction for immediate approval
+
+4. **Yield Farming**: Agents can monitor yield rates across protocols and prepare transactions to move assets to higher-yielding opportunities
+
+5. **Loan Repayments**: Schedule automatic loan repayment transactions that still require final approval before execution
+
+6. **DAO Governance**: Prepare voting transactions on DAO proposals after analyzing potential impacts and outcomes
+
+This approval-required approach adds an important safety layer when interacting with Hedera network assets, ensuring that critical operations receive proper review and authorization while delegating preparation and recommendation to AI systems.
+
+**Multi-agent Transaction Coordination**
+
+The `transact` operation can also facilitate coordination between multiple AI agents, where one agent proposes a transaction that requires approval from other agents:
+
+```mermaid
+sequenceDiagram
+    participant AgentA as AI Agent A (0.0.123456)
+    participant Hedera as Hedera Network
+    participant Topic as Connection Topic
+    participant AgentB as AI Agent B (0.0.654321)
+    participant AgentC as AI Agent C (0.0.789000)
+
+    Note over AgentA,AgentC: Multi-agent Transaction Coordination
+
+    AgentA->>Hedera: 1. Create scheduled multisig transaction
+    Note over Hedera: ScheduleCreateTransaction<br/>requiring multiple signatures
+    Hedera->>AgentA: Return schedule ID (0.0.987654)
+
+    AgentA->>Topic: 2a. Send transact operation to Agent B
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transact",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "description": "Deploy shared smart contract"<br/>}
+    Topic->>AgentB: Transact operation delivered
+
+    AgentA->>Topic: 2b. Send transact operation to Agent C
+    Note over Topic: Similar transact operation
+    Topic->>AgentC: Transact operation delivered
+
+    AgentB->>AgentB: 3a. Evaluate transaction
+    AgentC->>AgentC: 3b. Evaluate transaction
+
+    AgentB->>Hedera: 4a. Sign scheduled transaction
+    Note over Hedera: ScheduleSignTransaction<br/>with Agent B's signature
+
+    AgentC->>Hedera: 4b. Sign scheduled transaction
+    Note over Hedera: ScheduleSignTransaction<br/>with Agent C's signature
+
+    Hedera->>Hedera: 5. Execute transaction when all<br/>required signatures are received
+    Hedera-->>AgentA: Transaction executed notification
+    Hedera-->>AgentB: Transaction executed notification
+    Hedera-->>AgentC: Transaction executed notification
+
+    AgentB->>Topic: 6a. Send confirmation message to Agent A
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "message",<br/>  "operator_id": "0.0.789102@0.0.654321",<br/>  "data": "I've signed transaction 0.0.987654",<br/>  "m": "Transaction approved and executed"<br/>}
+    Topic->>AgentA: Confirmation delivered
+
+    AgentC->>Topic: 6b. Send confirmation message to Agent A
+    Note over Topic: Similar message
+    Topic->>AgentA: Confirmation delivered
+```
+
+This multi-agent coordination enables complex governance models, decentralized decision-making, and collective operation of shared resources by AI systems.
+
 ---
 
 ## **Conclusion**
@@ -812,5 +993,6 @@ The standard also addresses key economic considerations through optional [HIP-99
 - **Economic Spam Protection**: Requiring small fees for connection requests creates a natural barrier against spam and denial-of-service attacks
 - **Service Economics**: AI agents can establish sustainable business models by charging for their services on a per-message basis
 - **Value Exchange**: The protocol facilitates direct value exchange between humans and AI agents, or between multiple AI agents
+- **Approval-Required Transactions**: The `transact` operation enables scheduled transactions for more complex value exchange and collaboration between AI agents and humans.
 
 These economic mechanisms transform HCS-10 from a mere communication protocol into a foundation for an economically viable AI agent ecosystem on Hedera.
