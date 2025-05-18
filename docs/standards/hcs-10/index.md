@@ -534,9 +534,7 @@ Sent on a Connection Topic to propose a scheduled transaction that requires appr
   "op": "transaction",
   "operator_id": "0.0.789101@0.0.123456",
   "schedule_id": "0.0.987654",
-  "tx_id": "0.0.123456@1696067300.001234567",
   "data": "Transfer 10 HBAR to account 0.0.111222",
-  "timestamp": 1696067400,
   "m": "Scheduled transaction for your approval."
 }
 ```
@@ -547,14 +545,10 @@ Sent on a Connection Topic to propose a scheduled transaction that requires appr
 | `op`            | Operation identifier, always "transaction".                                                  | `string` | `"transaction"`                        | ✅       |
 | `operator_id`   | Identifier for the entity proposing the transaction in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`              | ✅       |
 | `schedule_id`   | The Hedera Schedule ID of the scheduled transaction.                                         | `string` | `"0.0.987654"`                         | ✅       |
-| `tx_id`         | Transaction ID of the ScheduleCreateTransaction that created this scheduled transaction.     | `string` | `"0.0.123456@1696067300.001234567"`   | ✅       |
 | `data`          | Content describing the transaction. Typically a human-readable string, but can also be a JSON string for structured data or an HRL for extensive details. | `string` | `"Transfer 10 HBAR to account 0.0.111222"` | ✅       |
-| `timestamp`     | Unix timestamp (seconds since epoch) when the scheduled transaction was created or expires.  | `number` | `1696067400`                          | ❌       |
 | `m`             | Optional memo providing context for the transaction proposal.                                | `string` | `"Scheduled transaction for your approval."` | ❌       |
 
 The recipient of this operation can approve the scheduled transaction by signing it with their Hedera account key through a ScheduleSignTransaction. No additional message is required in the HCS-10 protocol, as the transaction execution on Hedera serves as confirmation.
-
-Including the `tx_id` enables recipients to verify that the scheduled transaction was actually created by the entity requesting approval, adding an important security layer to the transaction approval workflow.
 
 **Examples of `data` field usage in `transaction` operation:**
 
@@ -566,9 +560,7 @@ Including the `tx_id` enables recipients to verify that the scheduled transactio
       "op": "transaction",
       "operator_id": "0.0.789101@0.0.123456",
       "schedule_id": "0.0.987654",
-      "tx_id": "0.0.123456@1696067300.001234567",
       "data": "Proposal to transfer 500 HTS_TOKEN_XYZ to eco_fund.c10 for Q4 budget allocation.",
-      "timestamp": 1696067400,
       "m": "Q4 Budget Allocation Proposal"
     }
     ```
@@ -581,9 +573,7 @@ Including the `tx_id` enables recipients to verify that the scheduled transactio
       "op": "transaction",
       "operator_id": "0.0.789101@0.0.123456",
       "schedule_id": "0.0.112233",
-      "tx_id": "0.0.123456@1696067500.001234567",
       "data": "{\"contract_id\":\"0.0.445566\",\"function_name\":\"updateVotingThreshold\",\"params\":[{\"name\":\"newThreshold\",\"value\":75,\"type\":\"uint256\"}]}",
-      "timestamp": 1696067800,
       "m": "DAO Proposal: Update Voting Threshold"
     }
     ```
@@ -596,9 +586,7 @@ Including the `tx_id` enables recipients to verify that the scheduled transactio
       "op": "transaction",
       "operator_id": "0.0.789101@0.0.123456",
       "schedule_id": "0.0.778899",
-      "tx_id": "0.0.123456@1696067900.001234567",
       "data": "hcs://1/0.0.990011",
-      "timestamp": 1696068200,
       "m": "Review full Project Phoenix proposal (see HRL)"
     }
     ```
@@ -924,7 +912,7 @@ sequenceDiagram
     Hedera->>Agent: Return schedule ID (0.0.987654)
 
     Agent->>Topic: 2. Send transaction operation
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transaction",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "data": "Transfer 10 HBAR to account 0.0.111222"<br/>}
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transaction",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "data": "Transfer 10 HBAR to account 0.0.111222"<br/>}
     Topic->>Human: Transaction operation delivered
 
     Human->>Human: 3. Review transaction details
@@ -1013,7 +1001,7 @@ sequenceDiagram
     Hedera->>AgentA: Return schedule ID (0.0.987654)
 
     AgentA->>Topic: 2a. Send transaction operation to Agent B
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transaction",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "data": "Deploy shared smart contract"<br/>}
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transaction",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "data": "Deploy shared smart contract"<br/>}
     Topic->>AgentB: Transaction operation delivered
 
     AgentA->>Topic: 2b. Send transaction operation to Agent C
