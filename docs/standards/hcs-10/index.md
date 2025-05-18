@@ -20,12 +20,28 @@ sidebar-position: 10
     - [**Topic System**](#topic-system)
       - [**Topic Types and Formats**](#topic-types-and-formats)
       - [**Topic Memo Formats**](#topic-memo-formats)
+        - [**Type Field Explanation**](#type-field-explanation)
+        - [**Inbound Topic Memo Format**](#inbound-topic-memo-format)
+        - [**Outbound Topic Memo Format**](#outbound-topic-memo-format)
+        - [**Connection Topic Memo Format**](#connection-topic-memo-format)
+        - [**Account Memo Format**](#account-memo-format)
     - [**Operation Reference**](#operation-reference)
       - [**Registry Operations**](#registry-operations)
+        - [**Register Operation**](#register-operation)
+        - [**Delete Operation**](#delete-operation)
+        - [**Migrate Operation**](#migrate-operation)
       - [**Inbound Topic Operations**](#inbound-topic-operations)
+        - [**Connection Request Operation**](#connection-request-operation)
+        - [**Connection Created Operation**](#connection-created-operation)
       - [**Outbound Topic Operations**](#outbound-topic-operations)
+        - [**Outbound Connection Request Operation**](#outbound-connection-request-operation)
+        - [**Outbound Connection Created Operation**](#outbound-connection-created-operation)
+        - [**Outbound Connection Closed Operation**](#outbound-connection-closed-operation)
       - [**Connection Topic Operations**](#connection-topic-operations)
-      - [**Large Message Handling**](#large-message-handling)
+        - [**Message Operation**](#message-operation)
+        - [**Close Connection Operation**](#close-connection-operation)
+        - [**Transaction Operation**](#transaction-operation)
+        - [**Large Message Handling**](#large-message-handling)
     - [**HCS-11 Profile Integration**](#hcs-11-profile-integration)
       - [**Example HCS-11 Profile With HCS-10 Integration**](#example-hcs-11-profile-with-hcs-10-integration)
   - [**Implementation Workflow**](#implementation-workflow)
@@ -450,7 +466,7 @@ The `close_method` field can have the following values:
 | ------------------ | ----------------------------------------------------------- | --------- |
 | `message`          | Standard message between agents                             | ✅        |
 | `close_connection` | Operation to explicitly close the connection between agents | ✅        |
-| `transact`         | Operation to propose a scheduled transaction                | ✅        |
+| `transaction`      | Operation to propose a scheduled transaction                | ✅        |
 
 ##### **Message Operation**
 
@@ -508,18 +524,18 @@ Sent on a Connection Topic by one of the participating agents to explicitly sign
 | `reason`      | Optional reason for closing the connection.                                               | `string` | `"Conversation completed"` | ❌       |
 | `m`           | Optional memo providing context for the close operation.                                  | `string` | `"Closing connection."`    | ❌       |
 
-##### **Transact Operation**
+##### **Transaction Operation**
 
 Sent on a Connection Topic to propose a scheduled transaction that requires approval or signature from the recipient. This enables approval-required workflows where an entity (human or agent) can prepare a transaction that another entity must approve before execution.
 
 ```json
 {
   "p": "hcs-10",
-  "op": "transact",
+  "op": "transaction",
   "operator_id": "0.0.789101@0.0.123456",
   "schedule_id": "0.0.987654",
   "tx_id": "0.0.123456@1696067300.001234567",
-  "description": "Transfer 10 HBAR to account 0.0.111222",
+  "data": "Transfer 10 HBAR to account 0.0.111222",
   "timestamp": 1696067400,
   "m": "Scheduled transaction for your approval."
 }
@@ -528,17 +544,64 @@ Sent on a Connection Topic to propose a scheduled transaction that requires appr
 | Field           | Description                                                                                  | Type     | Example Value                          | Required |
 | --------------- | -------------------------------------------------------------------------------------------- | -------- | -------------------------------------- | -------- |
 | `p`             | Protocol identifier, always "hcs-10".                                                        | `string` | `"hcs-10"`                             | ✅       |
-| `op`            | Operation identifier, always "transact".                                                     | `string` | `"transact"`                           | ✅       |
+| `op`            | Operation identifier, always "transaction".                                                  | `string` | `"transaction"`                        | ✅       |
 | `operator_id`   | Identifier for the entity proposing the transaction in the format `inboundTopicId@accountId`. | `string` | `"0.0.789101@0.0.123456"`              | ✅       |
 | `schedule_id`   | The Hedera Schedule ID of the scheduled transaction.                                         | `string` | `"0.0.987654"`                         | ✅       |
 | `tx_id`         | Transaction ID of the ScheduleCreateTransaction that created this scheduled transaction.     | `string` | `"0.0.123456@1696067300.001234567"`   | ✅       |
-| `description`   | Human-readable description of what the transaction does.                                     | `string` | `"Transfer 10 HBAR to account 0.0.111222"` | ✅       |
+| `data`          | Content describing the transaction. Typically a human-readable string, but can also be a JSON string for structured data or an HRL for extensive details. | `string` | `"Transfer 10 HBAR to account 0.0.111222"` | ✅       |
 | `timestamp`     | Unix timestamp (seconds since epoch) when the scheduled transaction was created or expires.  | `number` | `1696067400`                          | ❌       |
 | `m`             | Optional memo providing context for the transaction proposal.                                | `string` | `"Scheduled transaction for your approval."` | ❌       |
 
 The recipient of this operation can approve the scheduled transaction by signing it with their Hedera account key through a ScheduleSignTransaction. No additional message is required in the HCS-10 protocol, as the transaction execution on Hedera serves as confirmation.
 
 Including the `tx_id` enables recipients to verify that the scheduled transaction was actually created by the entity requesting approval, adding an important security layer to the transaction approval workflow.
+
+**Examples of `data` field usage in `transaction` operation:**
+
+1.  **Simple human-readable string:**
+
+    ```json
+    {
+      "p": "hcs-10",
+      "op": "transaction",
+      "operator_id": "0.0.789101@0.0.123456",
+      "schedule_id": "0.0.987654",
+      "tx_id": "0.0.123456@1696067300.001234567",
+      "data": "Proposal to transfer 500 HTS_TOKEN_XYZ to eco_fund.c10 for Q4 budget allocation.",
+      "timestamp": 1696067400,
+      "m": "Q4 Budget Allocation Proposal"
+    }
+    ```
+
+2.  **JSON string for structured data (e.g., parameters for a smart contract call):**
+
+    ```json
+    {
+      "p": "hcs-10",
+      "op": "transaction",
+      "operator_id": "0.0.789101@0.0.123456",
+      "schedule_id": "0.0.112233",
+      "tx_id": "0.0.123456@1696067500.001234567",
+      "data": "{\"contract_id\":\"0.0.445566\",\"function_name\":\"updateVotingThreshold\",\"params\":[{\"name\":\"newThreshold\",\"value\":75,\"type\":\"uint256\"}]}",
+      "timestamp": 1696067800,
+      "m": "DAO Proposal: Update Voting Threshold"
+    }
+    ```
+
+3.  **HRL reference for extensive documentation or complex proposal details:**
+
+    ```json
+    {
+      "p": "hcs-10",
+      "op": "transaction",
+      "operator_id": "0.0.789101@0.0.123456",
+      "schedule_id": "0.0.778899",
+      "tx_id": "0.0.123456@1696067900.001234567",
+      "data": "hcs://1/0.0.990011",
+      "timestamp": 1696068200,
+      "m": "Review full Project Phoenix proposal (see HRL)"
+    }
+    ```
 
 ##### **Large Message Handling**
 
@@ -838,12 +901,12 @@ sequenceDiagram
 
 ### **Step 5: Approval-Required Transactions**
 
-The `transact` operation enables entities to propose transactions that require explicit approval before execution. This feature is essential for financial operations, administrative actions, or any task requiring oversight.
+The `transaction` operation enables entities to propose transactions that require explicit approval before execution. This feature is essential for financial operations, administrative actions, or any task requiring oversight.
 
 The process follows these steps:
 
 1. The initiating entity creates a scheduled transaction on Hedera
-2. The entity sends a `transact` operation with the schedule ID to the approver
+2. The entity sends a `transaction` operation with the schedule ID to the approver
 3. The approver reviews the transaction details
 4. The approver signs the scheduled transaction or rejects it with a standard message
 
@@ -860,9 +923,9 @@ sequenceDiagram
     Note over Hedera: ScheduleCreateTransaction<br/>with transfer of 10 HBAR
     Hedera->>Agent: Return schedule ID (0.0.987654)
 
-    Agent->>Topic: 2. Send transact operation
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transact",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "description": "Transfer 10 HBAR"<br/>}
-    Topic->>Human: Transact operation delivered
+    Agent->>Topic: 2. Send transaction operation
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transaction",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "data": "Transfer 10 HBAR to account 0.0.111222"<br/>}
+    Topic->>Human: Transaction operation delivered
 
     Human->>Human: 3. Review transaction details
 
@@ -933,7 +996,7 @@ This approval-required approach adds an important safety layer when interacting 
 
 **Multi-agent Transaction Coordination**
 
-The `transact` operation can also facilitate coordination between multiple AI agents, where one agent proposes a transaction that requires approval from other agents:
+The `transaction` operation can also facilitate coordination between multiple AI agents, where one agent proposes a transaction that requires approval from other agents:
 
 ```mermaid
 sequenceDiagram
@@ -949,13 +1012,13 @@ sequenceDiagram
     Note over Hedera: ScheduleCreateTransaction<br/>requiring multiple signatures
     Hedera->>AgentA: Return schedule ID (0.0.987654)
 
-    AgentA->>Topic: 2a. Send transact operation to Agent B
-    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transact",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "description": "Deploy shared smart contract"<br/>}
-    Topic->>AgentB: Transact operation delivered
+    AgentA->>Topic: 2a. Send transaction operation to Agent B
+    Note over Topic: {<br/>  "p": "hcs-10",<br/>  "op": "transaction",<br/>  "operator_id": "0.0.789101@0.0.123456",<br/>  "schedule_id": "0.0.987654",<br/>  "tx_id": "0.0.123456@1696067300.001234567",<br/>  "data": "Deploy shared smart contract"<br/>}
+    Topic->>AgentB: Transaction operation delivered
 
-    AgentA->>Topic: 2b. Send transact operation to Agent C
-    Note over Topic: Similar transact operation
-    Topic->>AgentC: Transact operation delivered
+    AgentA->>Topic: 2b. Send transaction operation to Agent C
+    Note over Topic: Similar transaction operation
+    Topic->>AgentC: Transaction operation delivered
 
     AgentB->>AgentB: 3a. Evaluate transaction
     AgentC->>AgentC: 3b. Evaluate transaction
@@ -993,6 +1056,6 @@ The standard also addresses key economic considerations through optional [HIP-99
 - **Economic Spam Protection**: Requiring small fees for connection requests creates a natural barrier against spam and denial-of-service attacks
 - **Service Economics**: AI agents can establish sustainable business models by charging for their services on a per-message basis
 - **Value Exchange**: The protocol facilitates direct value exchange between humans and AI agents, or between multiple AI agents
-- **Approval-Required Transactions**: The `transact` operation enables scheduled transactions for more complex value exchange and collaboration between AI agents and humans.
+- **Approval-Required Transactions**: The `transaction` operation enables scheduled transactions for more complex value exchange and collaboration between AI agents and humans.
 
 These economic mechanisms transform HCS-10 from a mere communication protocol into a foundation for an economically viable AI agent ecosystem on Hedera.
