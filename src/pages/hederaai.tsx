@@ -212,7 +212,7 @@ const DemoDay: React.FC = () => {
     {
       time: 'May 21st, 10:10 AM EDT',
       title: 'Pitch 1: Franky',
-      description: 'Kayla Phippips, Hivemind Overview. Founder Pitch  + Q&A',
+      description: 'Kayla Phillips, Hivemind Overview. Founder Pitch  + Q&A',
     },
     {
       time: 'May 21st, 10:25 AM EDT',
