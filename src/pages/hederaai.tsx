@@ -146,82 +146,121 @@ const DemoDay: React.FC = () => {
 
   const scheduleItems = [
     {
-      time: 'May 20th, 10:00 - 10:15 AM EDT',
-      title: 'Day 1: Welcome & Introduction',
+      time: 'May 20th, 10:00 AM EDT',
+      title: 'Live Start – Welcome & Overview',
+      description: 'Introductions and overview of the event. 10 minutes',
+    },
+    {
+      time: 'May 20th, 10:10 AM EDT',
+      title: 'Pitch 1: Unthink AI',
+      description: 'Scott Friedman, Helix Brief Overview. Founder Pitch  + Q&A',
+    },
+    {
+      time: 'May 20th, 10:25 AM EDT',
+      title: 'Pitch 2: Character AI',
       description:
-        'Opening remarks from the Hedera team and introduction to the judging panel.',
+        'Quincy Jones, XDC Foundation Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 20th, 10:15 - 10:55 AM EDT',
-      title: 'Day 1: Team Presentations (Block 1)',
+      time: 'May 20th, 10:40 AM EDT',
+      title: 'Pitch 3: HederaPayBot',
       description:
-        'First block of team presentations (3 teams). Each team pitches followed by Q&A.',
+        'Marco, Algorand Foundation Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 20th, 10:55 - 11:00 AM EDT',
-      title: 'Day 1: Hedera x AI Showcase',
+      time: 'May 20th, 10:55 AM EDT',
+      title: 'Showcase Segment: Neuron',
+      description: 'Showcase from the Hedera Ecosystem',
+    },
+    {
+      time: 'May 20th, 11:00 AM EDT',
+      title: 'Guest Segment - Mance Harmon',
+      description: 'Hedera Ecosystem Leadership Guest Spot.',
+    },
+    {
+      time: 'May 20th, 11:10 AM EDT',
+      title: 'Pitch 4: Fausto Project',
       description:
-        'A brief showcase highlighting exciting projects and developments.',
+        'Constellation (Ben or Altif) Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 20th, 11:00 - 11:10 AM EDT',
-      title: 'Day 1: Guest Segment',
+      time: 'May 20th, 11:25 AM EDT',
+      title: 'Pitch 5: Contracts auditor',
+      description: 'Alex Nechaev, Funders Brief Overview. Founder Pitch  + Q&A',
+    },
+    {
+      time: 'May 20th, 11:40 AM EDT',
+      title: 'Pitch 6: HederaCodes',
       description:
-        'Insights from a special guest speaker in the AI or Web3 space.',
+        'Tudor Holotescu, Headstarter Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 20th, 11:10 AM - 11:55 AM EDT',
-      title: 'Day 1: Team Presentations (Block 2)',
+      time: 'May 20th, 11:55 AM EDT',
+      title: 'Pitch 7: Novix',
+      description: 'VC or Judge Intro. Founder Pitch  + Q&A',
+    },
+    {
+      time: 'May 20th, 12:10 PM EDT',
+      title: 'Showcase Segment: Moonscape',
+      description: 'Showcase from the Hedera Ecosystem',
+    },
+    {
+      time: 'May 21st, 10:00 AM EDT',
+      title: 'Live Start – Welcome & Overview',
+      description: 'Introductions and overview of the event. 10 minutes',
+    },
+    {
+      time: 'May 21st, 10:10 AM EDT',
+      title: 'Pitch 1: Franky',
+      description: 'Kayla Phippips, Hivemind Overview. Founder Pitch  + Q&A',
+    },
+    {
+      time: 'May 21st, 10:25 AM EDT',
+      title: 'Pitch 2: SmartApp Studio',
       description:
-        'Second block of team presentations (3 teams) and Q&A with judges.',
+        'Lance Lilly, XDC Foundation Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 20th, 11:55 AM - 12:00 PM EDT',
-      title: 'Day 1: Hedera x AI Showcase',
-      description: 'Final quick showcase wrapping up Day 1 presentations.',
-    },
-    {
-      time: 'May 20th, 12:00 PM - 12:05 PM EDT',
-      title: 'Day 1: Closing Remarks',
-      description: 'Wrap-up of Day 1 proceedings and thank yous.',
-    },
-    {
-      time: 'May 21st, 10:00 - 10:15 AM EDT',
-      title: 'Day 2: Welcome',
-      description: 'Brief welcome to Day 2 of the Hedera x AI event.',
-    },
-    {
-      time: 'May 21st, 10:15 - 11:00 AM EDT',
-      title: 'Day 2: Team Presentations (Block 1)',
+      time: 'May 21st, 10:40 AM EDT',
+      title: 'Pitch 3: Project Neo',
       description:
-        'First block of Day 2 presentations (3 teams). Pitches and Q&A.',
+        'Marco, Algorand Foundation Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 21st, 11:00 - 11:05 AM EDT',
-      title: 'Day 2: Hedera x AI Showcase',
-      description: 'Showcasing more innovation from the Hedera ecosystem.',
+      time: 'May 21st, 10:55 AM EDT',
+      title: 'Showcase Segment: HashPack Showcase',
+      description: 'Showcase from the Hedera Ecosystem',
     },
     {
-      time: 'May 21st, 11:05 - 11:15 AM EDT',
-      title: 'Day 2: Guest Segment',
-      description: 'Insights from a second special guest speaker.',
+      time: 'May 21st, 11:00 AM EDT',
+      title: 'Guest Segment - Dr. Leemon Baird',
+      description: 'Hedera Ecosystem Leadership Guest Spot.',
     },
     {
-      time: 'May 21st, 11:15 AM - 11:55 AM EDT',
-      title: 'Day 2: Team Presentations (Block 2)',
+      time: 'May 21st, 11:10 AM EDT',
+      title: 'Pitch 4: Talentai',
+      description: 'Constellation (Altif) Brief Overview. Founder Pitch  + Q&A',
+    },
+    {
+      time: 'May 21st, 11:25 AM EDT',
+      title: 'Pitch 5: DeStatistics',
+      description: 'Alex Nechaev, Funders Brief Overview. Founder Pitch  + Q&A',
+    },
+    {
+      time: 'May 21st, 11:40 AM EDT',
+      title: 'Pitch 6: HashBrownie',
       description:
-        'Final block of team presentations (3 teams) and Q&A sessions.',
+        'Tudor Holotescu, Headstarter Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 21st, 11:55 AM - 12:00 PM EDT',
-      title: 'Day 2: Hedera x AI Showcase',
-      description: 'Final quick showcase before closing remarks.',
+      time: 'May 21st, 11:55 AM EDT',
+      title: 'Pitch 7: HederaScanAI',
+      description: 'Scott Friedman, Helix Brief Overview. Founder Pitch  + Q&A',
     },
     {
-      time: 'May 21st, 12:00 PM - 12:10 PM EDT',
-      title: 'Day 2: Closing Remarks',
-      description:
-        'Final thoughts from the Hedera team. Winners announced separately post-event.',
+      time: 'May 21st, 12:10 PM EDT',
+      title: 'Showcase Segment: Decentralized Oracle',
+      description: 'Showcase from the Hedera Ecosystem',
     },
   ];
 

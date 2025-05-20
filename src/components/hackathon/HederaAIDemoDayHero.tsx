@@ -1,6 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaCalendarAlt, FaGlobe, FaMoneyBill, FaBell } from 'react-icons/fa';
+import {
+  FaCalendarAlt,
+  FaGlobe,
+  FaMoneyBill,
+  FaBell,
+  FaTv,
+} from 'react-icons/fa';
 import HackathonTypography from './HackathonTypography';
 import PrimaryButton from './PrimaryButton';
 import DemoDayVisualCard from './DemoDayVisualCard';
@@ -111,10 +117,18 @@ const HederaAIDemoDayHero: React.FC = () => {
               win from our $30,000 prize pool.
             </HackathonTypography>
 
-            <div className='flex justify-center lg:justify-start mb-10'>
+            <div className='flex mb-10'>
+              <PrimaryButton
+                href='https://x.com/i/broadcasts/1ypKdZrYgadJW'
+                size='sm'
+                icon={<FaTv />}
+                className='mr-4 bg-gradient-to-r from-hedera-blue to-hedera-green hover:from-hedera-blue/90 hover:to-hedera-green/90 dark:from-hedera-blue/80 dark:to-hedera-green/80 dark:hover:from-hedera-blue/70 dark:hover:to-hedera-green/70'
+              >
+                <span>Watch Broadcast</span>
+              </PrimaryButton>
               <PrimaryButton
                 href='https://twitter.com/intent/follow?screen_name=hashgraphonline&notify_on_follow=true'
-                size='md'
+                size='sm'
                 icon={<FaBell />}
                 className='bg-gradient-to-r from-hedera-blue to-hedera-green hover:from-hedera-blue/90 hover:to-hedera-green/90 dark:from-hedera-blue/80 dark:to-hedera-green/80 dark:hover:from-hedera-blue/70 dark:hover:to-hedera-green/70'
               >
