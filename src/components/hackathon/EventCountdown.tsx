@@ -44,7 +44,7 @@ const FloatingParticle: React.FC<{
 export const EventCountdown: React.FC<EventCountdownProps> = ({
   timeLeft,
   title = 'Event Starting In',
-  streamUrl = 'https://x.com/hedera',
+  streamUrl = 'https://x.com/i/broadcasts/1jMKgkoEpdXKL',
   streamButtonText = 'Watch Live Stream',
 }) => {
   const particles = Array.from({ length: 8 }, (_, i) => i);

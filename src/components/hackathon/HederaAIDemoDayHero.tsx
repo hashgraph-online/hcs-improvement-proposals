@@ -119,14 +119,6 @@ const HederaAIDemoDayHero: React.FC = () => {
 
             <div className='flex mb-10'>
               <PrimaryButton
-                href='https://x.com/i/broadcasts/1ypKdZrYgadJW'
-                size='sm'
-                icon={<FaTv />}
-                className='mr-4 bg-gradient-to-r from-hedera-blue to-hedera-green hover:from-hedera-blue/90 hover:to-hedera-green/90 dark:from-hedera-blue/80 dark:to-hedera-green/80 dark:hover:from-hedera-blue/70 dark:hover:to-hedera-green/70'
-              >
-                <span>Watch Broadcast</span>
-              </PrimaryButton>
-              <PrimaryButton
                 href='https://twitter.com/intent/follow?screen_name=hashgraphonline&notify_on_follow=true'
                 size='sm'
                 icon={<FaBell />}
