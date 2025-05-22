@@ -3,7 +3,7 @@ title: Active Discussions
 sidebar_position: 5
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 
 ### Support for rich-text
@@ -13,11 +13,11 @@ Should this standard support rich text features, such as bold, italics, colours,
 If so, which features should be supported and how should we define it such that it is as simple to implement as possible?
 
 
-### Should 'schema' be optional (defaults to "hcs9")?
+### Should 'schema' be optional (defaults to "hcs-9")?
 
 For the majority of platforms starting out, they likely will mostly be using default implementations of the standard. Therefore, explicitly defining 'schema' in all modules could be seen as redundant. 
 
-Currently schema is required, but it is reasonable that it be made optional and if missing, assumed to be "hcs9".
+Currently schema is required, but it is reasonable that it be made optional and if missing, assumed to be "hcs-9".
 
 The downside of this is developers may shortcut the schema validation check entirely, and if developers start implementing new schema modules, the apps may not be written to account for it and not be able to process those schemas. If there were an explicit check for a schema definition from the start then platforms could fail elegantly.
 

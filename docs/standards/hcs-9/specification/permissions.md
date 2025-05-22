@@ -3,7 +3,7 @@ title: Permissions
 sidebar_position: 11
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 Permissions define lists of users that groups them into categories for use by the poll. This list can be used in different ways - defining which users can vote on a poll, which users can manage a poll, which users get more weight for voting, etc.
 
@@ -29,7 +29,7 @@ Permissions define lists of users that groups them into categories for use by th
 
 The *schema* field defines the schema that is being used. It is any identifiable string about the standard or platform that the data follows. A developer who wishes to implement the schema will use the schema to filter data that they support and process it appropriately.
 
-For permissions that follow the hcs9 standard, the schema is defined as hcs9
+For permissions that follow the hcs-9 standard, the schema is defined as hcs-9
 
 ### uuid
 
@@ -92,7 +92,7 @@ Once a user has been evaluated across all modules, the highest priority state de
 
 ## Pre-Defined Modules
 
-hcs9 defines the following default permissions modules:
+hcs-9 defines the following default permissions modules:
 
 1. Open
 2. Whitelist

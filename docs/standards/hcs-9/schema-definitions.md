@@ -3,7 +3,7 @@ title: Schema definitions
 sidebar_position: 4
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 This section provides links to the JSON Schema definitions of all the modules defined in this standard.
 

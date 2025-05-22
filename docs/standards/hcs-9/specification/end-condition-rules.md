@@ -4,7 +4,7 @@ sidebar_position: 9
 ---
 
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 The end-condition-rules module defines the rules around how the poll end is determined. 
 
@@ -29,7 +29,7 @@ The JSON Schema file can be found on here: [update-rules.json](../../../assets/s
 
 The *schema* field defines the schema that is being used. It is any identifiable string about the standard or platform that the data follows. A developer who wishes to implement the schema will use the schema to filter data that they support and process it appropriately.
 
-For the hcs9 standard, the schema is defined as hcs9-update-rules. 
+For the hcs-9 standard, the schema is defined as hcs-9-update-rules. 
 
 ### rules
 

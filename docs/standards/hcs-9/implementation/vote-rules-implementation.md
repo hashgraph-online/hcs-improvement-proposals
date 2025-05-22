@@ -2,7 +2,7 @@
 title: vote-rules implementation
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 This standard implements a number of default modules and rules as a base line set of supported poll voting behaviours.
 

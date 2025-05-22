@@ -17,9 +17,11 @@ sidebar_position: 1
 
 5. **Messages are read in order:** Polls are read in chronological order from oldest to newest. This is also important when the update operation is used to change the settings of the poll. 
 
-6. **Modularity:** The framework is set up to be robust but flexible. HCS-8 defines the methods to take action on polls, but relies on the metadata structure of the hcs9 standard to define the specifics. This modularity should allow for projects to innovate on poll types while following the same structure to maximize portability.
+6. **Modularity:** The framework is set up to be robust but flexible. hcs-8 defines the methods to take action on polls, but relies on the metadata structure of the hcs-9 standard to define the specifics. This modularity should allow for projects to innovate on poll types while following the same structure to maximize portability.
 
-7. **Legal vs Illegal Actions:** HCS-8 does not explicitly define legal and illegal actions, but leaves it to the metadata standard to define and lay out rules. This is done to separate the format and flow of the poll topic from the behaviour of the poll.
+7. **Legal vs Illegal Actions:** hcs-8 does not explicitly define legal and illegal actions, but leaves it to the metadata standard to define and lay out rules. This is done to separate the format and flow of the poll topic from the behaviour of the poll.
+
+8. **Searchability:** To faciliate searchability of hcs-8 topics and to adhere to other HCS standards, the topic creation transaction must follow the prescribed memo format.
 
 Scenario 1:
 
@@ -67,7 +69,13 @@ Authorizes update topic and delete topic transactions
 
 Sets a short memo that is stored with the topic (100 bytes)
 
-Conventions for memos are defined for each operation and are strongly encouraged to be followed.
+This memo MUST be exactly 'hcs-8' (case sensitive). This is to adhere to the format of other HCS standards and allow for future extensibility through enums.
+
+Valid Memos: 'hcs-8'
+
+Invalid Memos: '' (empty), 'poll type: hcs-8', 'hcs8', 'HCS-8', 'hcs-8:hedera poll', 'hcs-8 community voting topic'
+
+Note to avoid ambiguity: This is explicitly related to the memo on the topic create transaction. Topic messages and metadata memos do not need to follow the instructions in this section.
 
 ### Message Format and Usage
 
@@ -75,7 +83,7 @@ Topic messages must adhere to the following format:
 
 ```
 {
-  "p": "HCS-8",
+  "p": "hcs-8",
   "op": *string*,
   "sid": *array*,
   "d": *string*,
@@ -87,11 +95,11 @@ Where:
 
 | Field | Description                                                                                                                                           |
 |-------|-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| p     | Protocol used by the poll. Polls that follow this framework must use: HCS-8  |
+| p     | Protocol used by the poll. Polls that follow this framework must use: hcs-8  |
 | op    | Operation being executed |
 | sid   | Sequence information for an operation with data that spans multiple HCS messages. (Register only) |
 | d     | Operation-specific JSON-formatted data. Following HCS-1 conventions, the data should be prefixed by its type. For this HIP, every message should be: data:application/json;utf8,\{JSON_DATA\} |
-| m     | Optional memo |
+| m     | Memo |
 
 ### Multi-Message Operation - Register operation only
 
@@ -135,13 +143,13 @@ Message 1:
 ```
 data:application/json;utf8,
 {
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”register”,
   “sid”: [0,0,2],
   “d”: “{
         “title”: “An incomplete poll”, 
     “,
-   “m”: “poll memo”
+   “m”: “hcs-8”
 }
 ```
 
@@ -149,7 +157,7 @@ Message 2:
 ```
 data:application/json;utf8,
 {
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”register”,
   “sid”: [0,1,2],
   “d”: “
@@ -171,7 +179,7 @@ Final operation from the perspective of the application:
 ```
 
 {
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”register”,
   “d”:
 “{

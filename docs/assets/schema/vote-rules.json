@@ -3,7 +3,7 @@
   "$id": "https://rockvt.com/schemas/vote-rules",
   "type": "object",
   "properties": {
-    "schema": { "const": "hcs9" },
+    "schema": { "const": "hcs-9" },
     "allocations" : { "type": "array", "items" : {"$ref" : "allocations-module"}},
     "permissions" : { "type": "array", "items" : {"$ref": "permissions"}},
     "rules": { "type": "array", "items" : { "$ref": "rule"}}

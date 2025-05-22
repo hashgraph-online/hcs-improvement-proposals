@@ -3,7 +3,7 @@ title: Base Schema
 sidebar_position: 2
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 ## Base Schema Specification
 
@@ -17,7 +17,7 @@ Below is a summary of each of the fields in the schema:
 
 ```
 {
-  "schema" - Strictly defines the schema. Must be "hcs9"
+  "schema" - Strictly defines the schema. Must be "hcs-9"
   "title" - The title of the poll, the question being asked
   "description" - The description of the poll
   "author" - The author of the poll. For HCS implementations this must be the Hedera account Id of the author
@@ -46,7 +46,7 @@ Below is a summary of each of the fields in the schema:
 
 The *schema* field defines the schema that is being used. It is any identifiable string about the standard or platform that the data follows. A developer who wishes to implement the schema will use the schema to filter data that they support and process it appropriately.
 
-**Every poll that implements this base schema should define schema as "hcs9"**
+**Every poll that implements this base schema should define schema as "hcs-9"**
 
 The base schema structure is designed to provide the basic information required to display a poll, even if all the functionality is not supported by a third party. Therefore it is recommended that developers strictly follow the base schema.
 
@@ -86,7 +86,7 @@ When not defined, a platform should not show any description for the poll.
 
 The *author* field is the unique, verifiable identifier for the poll author. This field is used by platforms for validation purposes so should not be user-defined. The server should define this field based on a verified signature (or other similar method) from the user.
 
-In the case of the HCS-8 Standard, the author field is the Hedera account Id used to sign the HCS message, which can be verified on ledger, allowing for trustless identification of the author for the purposes of poll management.
+In the case of the hcs-8 Standard, the author field is the Hedera account Id used to sign the HCS message, which can be verified on ledger, allowing for trustless identification of the author for the purposes of poll management.
 
 ### status
 
@@ -104,7 +104,7 @@ The *status* field defines the state of the poll at any given time. This standar
 
 The *startDate* defines the date that the poll is scheduled to start, in UNIX Timestamp format.
 
-The HCS-8 Standard uses HCS messages to manage the state of the poll. For the purposes of the HCS-8 implementation, startDate supercedes the requirement to open a poll via a *manage* operation. Ideally, the platform would automatically post a manage operation to explicitly 'open' the poll at the scheduled start date. However if startDate is set then platforms should recognize that the poll is open even if an explicit call isn't made to open the poll.
+The hcs-8 Standard uses HCS messages to manage the state of the poll. For the purposes of the hcs-8 implementation, startDate supercedes the requirement to open a poll via a *manage* operation. Ideally, the platform would automatically post a manage operation to explicitly 'open' the poll at the scheduled start date. However if startDate is set then platforms should recognize that the poll is open even if an explicit call isn't made to open the poll.
 
 Example: 
 
@@ -137,7 +137,7 @@ The poll-option module is described in the following section.
 
 ## Actions
 
-There are five actions supported in hcs9: Register, Vote, Manage, Update and Information. 
+There are five actions supported in hcs-9: Register, Vote, Manage, Update and Information. 
 
 The register action establishes the poll by via the base schema, while the remaining four actions are defined in "actions".
 

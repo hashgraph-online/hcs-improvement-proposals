@@ -2,7 +2,7 @@
 title: HCS-9 Standard - Poll Metadata Schema
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 **Status:** Active
 
@@ -18,7 +18,7 @@ Polls as a category are quite diverse, with each project wanting to run polls wi
 
 This schema should be able to be implemented regardless of the exact implementation. Given an API endpoint or pointer to the data, any platform should be able to serve the information in this standard to third parties for standardized consumption.
 
-This standard is issued alongside HCS-8: Poll Topics, which presents a standard for HCS Topic-based polls.
+This standard is issued alongside hcs-8: Poll Topics, which presents a standard for HCS Topic-based polls.
 
 ## Motivation
 

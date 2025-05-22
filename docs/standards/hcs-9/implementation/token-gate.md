@@ -2,7 +2,7 @@
 title: Token Gate Implementation
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 Token gates provide the way for poll behaviour to be determined based on what tokens (fungible or non-fungible) a user holds. It's a powerful way to make use of Web3 assets to engage with communities.
 
@@ -67,7 +67,7 @@ A poll is set up with a vote-rules module that defines two allocations:
 
 ```
 {
-    "schema": "hcs9-vote-rules",
+    "schema": "hcs-9-vote-rules",
     "allocations": [
             {   
                 "name": "tokengate",
@@ -103,7 +103,7 @@ A poll is set up with a vote-rules module that defines two allocations:
                 ]
             }
     ],
-    "permissions": [ { "schema":"hcs9", "name": "open" } ]
+    "permissions": [ { "schema":"hcs-9", "name": "open" } ]
 }
 ```
 

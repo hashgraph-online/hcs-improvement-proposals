@@ -3,7 +3,7 @@
     "$id": "https://rockvt.com/schemas/manage-rules",
     "type": "object",
     "properties": {
-      "schema": { "const": "hcs9" },
+      "schema": { "const": "hcs-9" },
       "permissions": {
         "type": "array",
         "items": { "$ref": "permissions-module" }

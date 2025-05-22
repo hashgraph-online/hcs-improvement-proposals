@@ -3,9 +3,9 @@ title: Extending Modules
 sidebar_position: 3
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
-The extensibility of the standard is one of the core design features of the hcs9 standard. This section provides guidance and examples on how to extend or create new modules to plug into your polls and add new functionality.
+The extensibility of the standard is one of the core design features of the hcs-9 standard. This section provides guidance and examples on how to extend or create new modules to plug into your polls and add new functionality.
 
 ## Open Source Implementation Repo
 
@@ -53,4 +53,4 @@ Let's say a project defined a "new-vote-rules.json" module. To support this new 
     ]},
 ```
 
-The more strictly a project adheres to the hcs9 standard, the more other sites will be able to support its features.
+The more strictly a project adheres to the hcs-9 standard, the more other sites will be able to support its features.

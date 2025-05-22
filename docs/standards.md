@@ -42,16 +42,16 @@ Introduces a way to inscribe and tokenize Hashinals whose metadata can be update
 
 ---
 
-[![HCS-8](https://via.placeholder.com/350x200.png?text=HCS-8)](./standards/hcs-8/index.md)
-### [HCS-8: Poll Topic Standard](./standards/hcs-8/index.md)
+[![hcs-8](https://via.placeholder.com/350x200.png?text=hcs-8)](./standards/hcs-8/index.md)
+### [hcs-8: Poll Topic Standard](./standards/hcs-8/index.md)
 **Status: Draft**
 
 Introduces a framework to use Hedera Consensus Service (HCS) topics to manage polls.
 
 ---
 
-[![HCS-9](https://via.placeholder.com/350x200.png?text=HCS-9)](./standards/hcs-9/index.md)
-### [HCS-9: Poll Metadata Schema](./standards/hcs-9/index.md)
+[![hcs-9](https://via.placeholder.com/350x200.png?text=hcs-9)](./standards/hcs-9/index.md)
+### [hcs-9: Poll Metadata Schema](./standards/hcs-9/index.md)
 **Status: Draft**
 
 Standards Specification for Poll Topics on Hedera.

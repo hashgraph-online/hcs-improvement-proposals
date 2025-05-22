@@ -18,7 +18,7 @@ Polls are a common method of community engagement in which a question is posed t
 
 This framework provides a method to run a poll where poll activities are recorded on Hedera Hashgraph. Every poll is contained in a single HCS topic, allowing for retrieval of the history of the poll at any time. 
 
-This standard is issued alongside hcs9: Poll Metadata Standards, which presents a robust specification for poll metadata for broader use in the ecosystem.
+This standard is issued alongside hcs-9: Poll Metadata Standards, which presents a robust specification for poll metadata for broader use in the ecosystem.
 
 ## Motivation
 

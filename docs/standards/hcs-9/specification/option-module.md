@@ -3,7 +3,7 @@ title: Option Module
 sidebar_position: 4
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 The option-module defines the options on the poll that users can vote for.
 
@@ -30,7 +30,7 @@ The JSON Schema file can be found on here: [option-module.json](../../../assets/
 
 The *schema* field defines the schema that is being used. It is any identifiable string about the standard or platform that the data follows. A developer who wishes to implement the schema will use the schema to filter data that they support and process it appropriately.
 
-poll-option modules that follow the exact structure above should use "hcs9" as the value for schema.
+poll-option modules that follow the exact structure above should use "hcs-9" as the value for schema.
 
 ### id
 
@@ -71,19 +71,19 @@ The options array that contains these poll-option modules would look like:
 ```
 "options":[
     {
-        "schema":"hcs9",
+        "schema":"hcs-9",
         "id":0,
         "title":"red",
         "description":"the colour of fire"
     },
     {
-        "schema":"hcs9",
+        "schema":"hcs-9",
         "id":1,
         "title":"blue",
         "description":"the colour of water"
     },
     {
-        "schema":"hcs9",
+        "schema":"hcs-9",
         "id":2,
         "title":"green",
         "description":"the colour of grass"
@@ -95,4 +95,4 @@ The options array that contains these poll-option modules would look like:
 
 The option module *can* be extended to add additional parameters and functionality. However note that the required fields of schema, id and title MUST be defined in any new schema.
 
-This is required in order to preserve the basic ability for any hcs9 compliant app to view and display the status of an hcs9 poll.
+This is required in order to preserve the basic ability for any hcs-9 compliant app to view and display the status of an hcs-9 poll.

@@ -3,9 +3,9 @@ title: Rules Schema
 sidebar_position: 5
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
-Rules are the simplest building block of the hcs9 standard. They are used to toggle or specify specific functionality.
+Rules are the simplest building block of the hcs-9 standard. They are used to toggle or specify specific functionality.
 
 
 ```
@@ -33,7 +33,7 @@ Example: allowMultipleVotes, allowVoteChanges
 
 A rule at its most basic level is a toggle that directs the behaviour of the poll.
 
-An example of a rule is 'allowMultipleVotes', which is included as one of the supported rules in the hcs9 specification for voting rules. allowMultipleVotes signals to the poll that users are allowed to vote on multiple options.
+An example of a rule is 'allowMultipleVotes', which is included as one of the supported rules in the hcs-9 specification for voting rules. allowMultipleVotes signals to the poll that users are allowed to vote on multiple options.
 
 The reason why rules are objects and not just strings is to allow for parameters to be passed in with a rule. An example might be an extension of allowMultipleVotes, allowLimitedMultipleVotes, that would allow a user to vote on up to two different options:
 

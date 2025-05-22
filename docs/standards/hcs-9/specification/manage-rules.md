@@ -4,9 +4,9 @@ sidebar_position: 7
 ---
 
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
-The manage-rules module defines the rules around the manage action. The [manage action](../../hcs-8/operations.md) is defined under HCS-8.
+The manage-rules module defines the rules around the manage action. The [manage action](../../hcs-8/operations.md) is defined under hcs-8.
 
 If no manage-rules module is included in a poll, the default behaviour is only the author accountId is allowed to manage the poll (Which allows the author to Open, Close, Cancel, and Pause the poll).
 
@@ -32,7 +32,7 @@ The JSON Schema file can be found on here: [manage-rules.json](../../../assets/s
 
 The *schema* field defines the schema that is being used. It is any identifiable string about the standard or platform that the data follows. A developer who wishes to implement the schema will use the schema to filter data that they support and process it appropriately.
 
-For the hcs9 standard, the schema is defined as hcs9.
+For the hcs-9 standard, the schema is defined as hcs-9.
 
 ### permissions
 
@@ -52,4 +52,4 @@ If permissions is not defined, no user is allowed to manage.
 
 Rules is an array of [rules](./rules.md) that define additional behaviours. 
 
-No rules have been defined in the default implementation of hcs9.
+No rules have been defined in the default implementation of hcs-9.

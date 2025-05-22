@@ -2,7 +2,7 @@
 title: Specification
 ---
 
-#### [ hcs9 - Poll Metadata Schema ]
+#### [ hcs-9 - Poll Metadata Schema ]
 
 ## Specification Overview
 
@@ -30,7 +30,7 @@ This standard consists of three major components:
 2. Module Schemas define the structure of each of the modules in the base schema.
 3. The Vote Schema defines voting actions.
 
-### Base hcs9 Schema Specification
+### Base hcs-9 Schema Specification
 
 This is the base schema that forms the root of the poll. 
 
@@ -38,7 +38,7 @@ The components of the schema are described below:
 
 ```
 {
-  "schema" - Strictly defines the schema. Must be "hcs9"
+  "schema" - Strictly defines the schema. Must be "hcs-9"
   "title" - The title of the poll, the question being asked
   "description" - The description of the poll
   "author" - The author of the poll. For HCS implementations this must be the Hedera account Id of the author
@@ -74,13 +74,13 @@ Each of these modules will be explored in the upcoming sections.
 
 #### Module Extensibility
 
-The structure of this schema has specifically been designed to allow for developers to extend the functionality to suit their specific use case. Each module is defined under the scope of 'hcs9', however it is intended that if some voting feature or behaviour is not captured in this specification, that a developer can create their own JSON Schema module and implement it on their own voting platform by following the structure outlined in this standard.
+The structure of this schema has specifically been designed to allow for developers to extend the functionality to suit their specific use case. Each module is defined under the scope of 'hcs-9', however it is intended that if some voting feature or behaviour is not captured in this specification, that a developer can create their own JSON Schema module and implement it on their own voting platform by following the structure outlined in this standard.
 
-For example, suppose Voting Site Alpha would like to define a specific permissionsRules module that calls their AlphaAPI to receive the list of users who are allowed to vote on their poll. A new permissionsRules module can be defined by the Alpha team and plugged into with the permissionsRules schema field defined as "schema":"alpha" instead of "schema":"hcs9". They can then build their platform to use their schema.
+For example, suppose Voting Site Alpha would like to define a specific permissionsRules module that calls their AlphaAPI to receive the list of users who are allowed to vote on their poll. A new permissionsRules module can be defined by the Alpha team and plugged into with the permissionsRules schema field defined as "schema":"alpha" instead of "schema":"hcs-9". They can then build their platform to use their schema.
 
-In this scenario, suppose there is Poll Aggregator Beta, a website that aggregates polls. It only supports hcs9 compliant polls, and also allows users to vote on open polls or even manage polls that they're the author of. Beta can read the Alpha team's base poll schema since it follows hcs9, however when it parses the permissionsRules module it does not recognize the 'alpha' schema. This means that Beta cannot determine who is allowed to vote on the poll, which means it does not have the capability of allowing a user to vote on the poll.
+In this scenario, suppose there is Poll Aggregator Beta, a website that aggregates polls. It only supports hcs-9 compliant polls, and also allows users to vote on open polls or even manage polls that they're the author of. Beta can read the Alpha team's base poll schema since it follows hcs-9, however when it parses the permissionsRules module it does not recognize the 'alpha' schema. This means that Beta cannot determine who is allowed to vote on the poll, which means it does not have the capability of allowing a user to vote on the poll.
 
-However, because the poll still follows the hcs9 schema, Beta can still display the information of the poll - What the title is, what the options are, how many votes have been placed on the poll. When the poll ends they can display the winning option.
+However, because the poll still follows the hcs-9 schema, Beta can still display the information of the poll - What the title is, what the options are, how many votes have been placed on the poll. When the poll ends they can display the winning option.
 
 Thus, the modularity allows team Alpha to build out specific functionality that it needs for its usecase, while still allowing team Beta (and other teams) to aggregate its data and extend visibility of their polls to the broader ecosystem.
 
@@ -102,10 +102,10 @@ The vote schema is very simple and is optimized to provide the minimum amount of
 
 We define a **vote** as the action of indicating a user's choice in the poll, whereas **weight** is used as a measure of the magnitude of a user's vote action. The terms are used to help distinguish these two concepts, as english tends to use 'vote' as both a verb and also a noun.
 
-For an hcs9 poll, the winning option is the one with the most weight allocated to it by user votes when the end condition is met.
+For an hcs-9 poll, the winning option is the one with the most weight allocated to it by user votes when the end condition is met.
 
 #### Regarding the validity of a vote
 
 Validation is done by the server (and also, ideally, by the front end that the user is using as well), so the legality of a vote is not part of the scope of placing a vote. 
 
-Authentication of the user is also not part of this schema and is assumed to be done by the platform 'above' the metadata layer. In the case of the sister standard HCS-8, which defines poll topics run via the Hedera Consensus Service, the accountId in the vote metadata here must also be the account that signs the HCS message.
+Authentication of the user is also not part of this schema and is assumed to be done by the platform 'above' the metadata layer. In the case of the sister standard hcs-8, which defines poll topics run via the Hedera Consensus Service, the accountId in the vote metadata here must also be the account that signs the HCS message.

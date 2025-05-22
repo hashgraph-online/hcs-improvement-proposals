@@ -19,9 +19,9 @@ The following operations are defined:
 
 ### Register
 
-The Register operation must be the first message in the topic. Topics without a valid register operation as the first message are not considered valid HCS-8 polls. 
+The Register operation must be the first message in the topic. Topics without a valid register operation as the first message are not considered valid hcs-8 polls. 
 
-The metadata for the register operation should be a JSON-formatted string. Poll metadata is recommended to follow hcs9: Poll Metadata Standard to allow for cross-platform compatibility.
+The metadata for the register operation should be a JSON-formatted string. Poll metadata is recommended to follow hcs-9: Poll Metadata Standard to allow for cross-platform compatibility.
 
 When the Register metadata exceeds the maximum length of a HCS message (1024 characters), follow up Register operations are posted, as many as needed to complete the JSON string.
 
@@ -31,25 +31,25 @@ Only the first message in the topic, or the first set of messages (as identified
 
 ```
 data:application/json;utf8,{
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “o”:”register”,
   “d”: “{
-   "schema":"”hcs9”",
+   "schema":"”hcs-9”",
    "title":"”What is your favourite colour?”",
    "description":"A sample poll with one vote per voter.",
    "author":"0.0.1234567",
    "voting-rules":{
-      "schema":"hcs9",
+      "schema":"hcs-9",
       "ruleset":"single-vote"
    },
    "update-rules":{
-      "schema":"hcs9",
+      "schema":"hcs-9",
       "update-settings":{
          "endDate":true
       }
    },
    "options":{
-      "schema":"hcs9",
+      "schema":"hcs-9",
       "items":[
          {
             "id":0,
@@ -105,7 +105,7 @@ On a technical level there is no difference between a 'close' and 'cancel' actio
 
 ``` 
 data:application/json;utf8,{
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”manage”,
   “d”:”{ 
         “accountId”: “0.0.12345”,
@@ -135,7 +135,7 @@ The format of the metadata for the vote action is defined in the metadata standa
 
 ```
 data:application/json;utf8,{
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”vote”,
   “d”:[
      {
@@ -165,7 +165,7 @@ The contents for the metadata field for the Update action is defined in the meta
 
 ```
 data:application/json;utf8,{
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”update”,
   “md”:
       {
@@ -194,7 +194,7 @@ Metadata is optional but could be extended to provide more functionality.
 
 ```
 data:application/json;utf8,{
-  “p”:”HCS-8”,
+  “p”:”hcs-8”,
   “op”:”information”,
   “m”:”The final tally of votes is: Red 21, Blue 15 and Green 5. Red is the winning option.”
 }
