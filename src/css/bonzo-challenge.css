@@ -1,0 +1,137 @@
+/* 
+  Bonzo Finance AI Agent Challenge Styles
+  This file contains custom styles specific to the Bonzo Finance challenge page
+*/
+
+.bonzo-challenge-container {
+  scroll-behavior: smooth;
+}
+
+/* Custom background gradients */
+.bg-bonzo-gradient {
+  background: linear-gradient(
+    135deg,
+    rgba(130, 89, 239, 0.05) 0%,
+    rgba(62, 200, 120, 0.05) 100%
+  );
+}
+
+/* Text gradient for headings */
+.text-gradient {
+  background: linear-gradient(90deg, #8259ef, #2d84eb, #3ec878);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Animations */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.float-animation {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Timeline connector styles */
+.timeline-connector {
+  position: absolute;
+  top: 24px;
+  bottom: 0;
+  width: 2px;
+  left: 15px;
+  background: linear-gradient(180deg, #8259ef, #2d84eb, #3ec878);
+}
+
+@media (min-width: 768px) {
+  .timeline-connector {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Button styles */
+.btn-gradient {
+  background: linear-gradient(90deg, #8259ef, #2d84eb);
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  background: linear-gradient(90deg, #7447e0, #2175d8);
+  box-shadow: 0 4px 14px 0 rgba(130, 89, 239, 0.4);
+}
+
+/* Sponsor card styles */
+.sponsor-card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(130, 89, 239, 0.1);
+}
+
+.sponsor-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 10px 25px -5px rgba(130, 89, 239, 0.1),
+    0 10px 10px -5px rgba(130, 89, 239, 0.05);
+}
+
+/* FAQ accordion animation */
+.faq-accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.faq-accordion-active .faq-accordion-content {
+  max-height: 1000px;
+}
+
+/* Custom scrollbar */
+.bonzo-challenge-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.bonzo-challenge-container::-webkit-scrollbar-track {
+  background: rgba(130, 89, 239, 0.05);
+}
+
+.bonzo-challenge-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8259ef, #2d84eb);
+  border-radius: 5px;
+}
+
+.bonzo-challenge-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #7447e0, #2175d8);
+}
+
+/* Dark mode specific adjustments */
+@media (prefers-color-scheme: dark) {
+  .bonzo-challenge-container {
+    color-scheme: dark;
+  }
+
+  .sponsor-card {
+    border-color: rgba(130, 89, 239, 0.2);
+  }
+
+  .bonzo-challenge-container::-webkit-scrollbar-track {
+    background: rgba(130, 89, 239, 0.1);
+  }
+}

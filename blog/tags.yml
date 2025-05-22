@@ -42,3 +42,40 @@ blockchain:
   label: Blockchain
   permalink: /blockchain
   description: Topics covering blockchain technology and its applications
+
+sdk:
+  label: SDK
+  permalink: /sdk
+  description: Software Development Kits and developer tools
+
+open-source:
+  label: Open Source
+  permalink: /open-source
+  description: Open source projects, libraries and contributions
+
+ai:
+  label: AI
+  permalink: /ai
+  description: Artificial Intelligence related content
+
+agents:
+  label: Agents
+  permalink: /agents
+  description: Content related to AI agents and agentic systems
+
+hcs-10:
+  label: HCS-10
+  permalink: /hcs-10
+  description: Information about the HCS-10 protocol
+
+hcs-11:
+  label: HCS-11
+  permalink: /hcs-11
+  description: Information about the HCS-11 protocol
+
+openconvai:
+  label: OpenConvAI
+  permalink: /openconvai
+  description: Content related to OpenConvAI
+
+

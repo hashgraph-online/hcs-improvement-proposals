@@ -1,5 +1,6 @@
 ---
 description: This specification provides a standard way to "inscribe" Hashinals utilizing the Hedera Consensus and Hedera Token Services. Hashinals borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the Hedera Hashgraph.
+sidebar_position: 5
 ---
 
 # HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**
@@ -9,8 +10,8 @@ description: This specification provides a standard way to "inscribe" Hashinals 
 ### Table of Contents
 
 - [HCS-5 Standard: Tokenized HCS-1 Files, **Hashinals**](#hcs-5-standard-tokenized-hcs-1-files-hashinals)
-    - [Status: Published](#status-published)
-    - [Table of Contents](#table-of-contents)
+  - [Status: Published](#status-published)
+  - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
@@ -28,6 +29,7 @@ description: This specification provides a standard way to "inscribe" Hashinals 
     - [Conclusion](#conclusion)
 
 ## Authors
+
 - Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
 - Patches [https://twitter.com/TMCC_Patches](https://twitter.com/TMCC_Patches)
 
@@ -52,7 +54,7 @@ The format of the field is as follows:
 
 `hcsStandard` tells you which HCS standard to use when referencing the Topic ID. At this time, this field will always be `1`.
 
-`topicId` is a valid HCS-1 Topic ID in which data for this NFT written to. Please note that while other popular metadata standards will work, a JSON file following the [HIP-412](https://hips.hedera.com/hip/hip-412) is recommended for your Hashinals to work properly in the Hedera ecosystem. 
+`topicId` is a valid HCS-1 Topic ID in which data for this NFT written to. Please note that while other popular metadata standards will work, a JSON file following the [HIP-412](https://hips.hedera.com/hip/hip-412) is recommended for your Hashinals to work properly in the Hedera ecosystem.
 
 Bare Minimal example of metadata
 
@@ -68,6 +70,7 @@ Bare Minimal example of metadata
 ```
 
 #### Metadata Example
+
 The following is a valid example of the metadata string saved onto the serial number of an NFT on HTS:
 `hcs://1/0.0.3601682`
 
@@ -97,21 +100,22 @@ All valid Hashinals, will be registered in a private Topic ID managed by the HCS
 The process of maintaining a registry can be replicated outside of the Council, but must follow the specification to be valid.
 
 #### Submitting to the Registry
+
 Messages must be submitted as valid JSON and use the Registry fields as described below.
 
 #### Registry fields
 
-The sum of all fields should not exceed 1024KB, or the registration will be invalid. 
+The sum of all fields should not exceed 1024KB, or the registration will be invalid.
 
-| Field  | Description                                                | Example Value |
-|--------|------------------------------------------------------------|---------------|
-| `p`    | The protocol used by the registry. Should always be `hcs-5` unless superseded.       | `hcs-5`
-| `op`   | The operation being executed.  | `register` or `reset`
-| `t_id` | The topic where the valid [HCS-1](hcs-1.md) file or new registry is located.  | `0.0.3541181` |
-| `ht_id`| The Token ID for the registered inscription                | `0.0.11111`   |
-| `sn`   | The serial number of the registered inscription            | `1`           |
-| `m`    | Any optional metadata the indexer might want included      | `Inscribed by 0.0.1234145 on TurtleMoon` |
-| `type` | Any valid mimeType of the inscription.                     | `image/png`   |
+| Field   | Description                                                                    | Example Value                            |
+| ------- | ------------------------------------------------------------------------------ | ---------------------------------------- |
+| `p`     | The protocol used by the registry. Should always be `hcs-5` unless superseded. | `hcs-5`                                  |
+| `op`    | The operation being executed.                                                  | `register` or `reset`                    |
+| `t_id`  | The topic where the valid [HCS-1](hcs-1.md) file or new registry is located.   | `0.0.3541181`                            |
+| `ht_id` | The Token ID for the registered inscription                                    | `0.0.11111`                              |
+| `sn`    | The serial number of the registered inscription                                | `1`                                      |
+| `m`     | Any optional metadata the indexer might want included                          | `Inscribed by 0.0.1234145 on TurtleMoon` |
+| `type`  | Any valid mimeType of the inscription.                                         | `image/png`                              |
 
 #### Register Inscriptions
 
@@ -125,11 +129,12 @@ Valid register messages will have the following format on the **Hashinals** Topi
   "ht_id": "0.0.11111",
   "sn": 1,
   "m": "Inscribed by 0.0.1234145 on TurtleMoon"
-  “type”: “image/png” // or any other valid mime type
+  "type": "image/png" // or any other valid mime type
 }
 ```
 
 #### Reset Registry
+
 In rare events, it could be required to "Reset" the registry. This is a fallback mechanism that should be exercised with extreme caution. On reset, a new Topic ID is provided which will serve as the defacto replacement of the Hashinals Registry.
 
 ```
@@ -142,10 +147,11 @@ In rare events, it could be required to "Reset" the registry. This is a fallback
 ```
 
 ### User Process for inscribing Hashinals
+
 ![HCS Protocol HRL Defintion 2](../assets/hcs-5-lifecycle.png)
 
-
 ### Conclusion
+
 The HCS-5 standard introduces a robust and on-chain method for inscribing NFT metadata directly onto the Hedera Hashgraph, named Hashinals. By integrating the Hedera Consensus Service (HCS) with the Hedera Token Service (HTS), it creates a decentralized and verifiable way to manage NFT metadata, ensuring the longevity and integrity of digital assets in the Hedera ecosystem.
 
 Adopting this standard addresses the drawbacks associated with relying on external storage systems by keeping the entirety of NFT data on-chain. This enhances the trust and value of NFTs by ensuring their metadata is immutable and perpetually accessible.

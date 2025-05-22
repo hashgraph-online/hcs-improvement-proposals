@@ -4,8 +4,13 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Hashgraph Online',
-  // tagline: 'Dinosaurs are cool',
-  favicon: 'img/favicon.ico',
+  tagline: 'Building the future of the internet, on-graph.',
+  favicon: 'img/favicon.png',
+
+  markdown: {
+    mermaid: true,
+  },
+  themes: ['@docusaurus/theme-mermaid'],
 
   // Set the production url of your site here
   url: 'https://hashgraphonline.com',
@@ -62,20 +67,41 @@ const config: Config = {
       disableSwitch: false,
       respectPrefersColorScheme: true,
     },
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 5,
+    },
     navbar: {
       title: 'Hashgraph Online',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'img/moonscape.svg',
+        src: 'img/logo.png',
       },
       style: 'dark',
       items: [
         { to: '/docs/standards/hcs-1', label: 'Standards', position: 'left' },
-        // {
-        //   to: 'https://hpm.hashgraphonline.com/',
-        //   label: 'Packages',
-        //   position: 'left',
-        // },
+        { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
+        {
+          type: 'dropdown',
+          label: 'Hackathon',
+          position: 'left',
+          items: [
+            { to: '/hackathon', label: 'Overview' },
+            { to: '/hederaai', label: 'Hedera x AI' },
+            { to: '/hackathon#requirements', label: 'Requirements' },
+            { to: '/hackathon#tools', label: 'Tools' },
+            { to: '/hackathon#schedule', label: 'Schedule' },
+            { to: '/hackathon#judges', label: 'Judges' },
+            { to: '/hackathon#faq', label: 'FAQ' },
+            { to: '/hackathon#register', label: 'Register' },
+          ],
+        },
+        {
+          type: 'dropdown',
+          label: 'Challenges',
+          position: 'left',
+          items: [{ to: '/bonzo-challenge', label: 'Bonzo Challenge' }],
+        },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
@@ -131,8 +157,25 @@ const config: Config = {
       copyright: `Copyright © ${new Date().getFullYear()} Hashgraph Online DAO LLC.`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: prismThemes.oneLight,
+      darkTheme: prismThemes.nightOwl,
+      additionalLanguages: [
+        'typescript',
+        'bash',
+        'json',
+        'jsx',
+        'tsx',
+        'yaml',
+        'solidity',
+        'markdown',
+      ],
+      magicComments: [
+        {
+          className: 'theme-code-block-highlighted-line',
+          line: 'highlight-next-line',
+          block: { start: 'highlight-start', end: 'highlight-end' },
+        },
+      ],
     },
     scripts: [
       {
@@ -144,6 +187,7 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   plugins: [
+    '@docusaurus/plugin-ideal-image',
     async function myPlugin(context, options) {
       return {
         name: 'docusaurus-tailwindcss',
@@ -155,6 +199,25 @@ const config: Config = {
       };
     },
     require.resolve('./injectScriptPlugin.js'),
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            to: '/openconvai',
+            from: '/convai',
+          },
+          {
+            from: '/hedera-ai',
+            to: '/hederaai',
+          },
+          {
+            from: '/hederaAI',
+            to: '/hederaai',
+          },
+        ],
+      },
+    ],
   ],
 };
 

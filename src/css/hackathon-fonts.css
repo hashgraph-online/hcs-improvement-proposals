@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-MediumItalic.otf') format('opentype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Styrene A';
+  src: url('/fonts/StyreneA-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-styrene {
+  font-family: 'Styrene A', sans-serif !important;
+}
+
+.bg-hedera-gradient-purple {
+  background: linear-gradient(135deg, #8259ef 0%, #2d84eb 100%);
+}
+
+.bg-hedera-gradient-green {
+  background: linear-gradient(135deg, #3ec878 0%, #2d84eb 100%);
+}
+
+.text-hedera-gradient {
+  background: linear-gradient(to right, #8259ef, #2d84eb);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
