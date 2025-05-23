@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rockvt.com/schemas/permissions-module",
+  "type": "object",
+  "properties": {
+    "schema": { "type": "string"},
+    "uuid": { "type": "string" },
+    "name": { "type": "string" },
+    "csv": { 
+      "type": "string"
+    },
+    "uri": {
+      "type": "string"
+    }
+    
+  },
+  "required": ["schema", "name"],
+  "oneOf": [
+        {
+          "required": [
+            "csv"
+          ],
+          "not": {
+            "required": [
+              "uri"
+            ]
+          }
+        },
+        {
+          "required": [
+            "uri", "uuid"
+          ],
+          "not": {
+            "required": [
+              "csv"
+            ]
+          }
+        }
+      ]
+}

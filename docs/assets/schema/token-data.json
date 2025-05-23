@@ -1,0 +1,13 @@
+
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://rockvt.com/schemas/token-data",
+    "type": "object",
+    "properties": {
+      "tokenId": { "type": "string" },
+      "serialNumbers": { "type": "string" },
+      "tokensPerVote": { "type": "number" },
+      "multiplier": { "type": "number" }
+    },
+    "required": ["tokenId"]
+  }

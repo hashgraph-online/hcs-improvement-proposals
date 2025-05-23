@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rockvt.com/schemas/base-poll-schema",
+  "type": "object",
+  "properties": {
+    "schema": { "type": "string" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "author": { "type": "string" },
+    "status": { "type": "string" },
+    "startDate": { "type": "string" },
+
+    "options": {
+      "type": "array",
+      "items": { "$ref": "option-module" }
+    },
+
+    "actions" : {
+      "type" : "object",
+      "items": {
+        "voteRules": { "$ref": "vote-rules" },
+        "manageRules": { "$ref": "manage-rules" },
+        "updateRules": { "$ref": "update-rules" },
+        "informationRules": { "$ref": "information-rules" }
+      },
+      "required": ["voteRules"]
+    },
+
+    "endConditionRules": { "$ref": "end-condition-rules" }
+
+  },
+  "required": ["schema", "title", "description", "author", "options", "actions", "endConditionRules", "status"]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rockvt.com/schemas/vote-rules",
+  "type": "object",
+  "properties": {
+    "schema": { "const": "hcs-9" },
+    "allocations" : { "type": "array", "items" : {"$ref" : "allocations-module"}},
+    "permissions" : { "type": "array", "items" : {"$ref": "permissions"}},
+    "rules": { "type": "array", "items" : { "$ref": "rule"}}
+  },
+  "required": ["schema"]
+}

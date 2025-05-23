@@ -5,7 +5,7 @@ sidebar_position: 8
 
 # HCS-8 Standard: Poll Topic Standard
 
-### Status: Draft
+**Status:** Active
 
 **Authors:**
 
@@ -20,7 +20,7 @@ Polls are a common method of community engagement in which a question is posed t
 
 This framework provides a method to run a poll where poll activities are recorded on Hedera Hashgraph. Every poll is contained in a single HCS topic, allowing for retrieval of the history of the poll at any time.
 
-This standard is issued alongside HCS-YY: Poll Metadata Standards, which presents a robust specification for poll metadata for broader use in the ecosystem.
+This standard is issued alongside hcs-9: Poll Metadata Standards, which presents a robust specification for poll metadata for broader use in the ecosystem.
 
 ## Motivation
 
@@ -51,6 +51,3 @@ Invalid messages could be:
 
 To avoid this, poll authors can create a HCS topic with a submit key. This locks participation only to entities that hold the submit key. The benefit of this approach is that all activities on the topic can be pre-validated by the author for validity prior to posting, allowing for a cleaner topic, reducing the validation work needed to be done by platforms reading the topic. This approach adds an element of centralization, since only the author can post messages to the topic they could censor the activities of certain accounts by choosing not to post messages from those accounts.
 
-## Specification
-
-Detailed specifications are under development.

@@ -479,11 +479,11 @@ const StandardsSection: React.FC = () => {
           />
           <StandardCard
             icon={<FaVoteYea className='text-4xl text-red-400' />}
-            title='HCS-8'
+            title='hcs-8'
             description='Implement secure, transparent community voting systems for fair, tamper-proof elections.'
             link='/docs/standards/hcs-8'
             relatedTools={tooling.filter(
-              (tool) => tool.relatedStandard === 'HCS-8'
+              (tool) => tool.relatedStandard === 'hcs-8'
             )}
           />
           <StandardCard
