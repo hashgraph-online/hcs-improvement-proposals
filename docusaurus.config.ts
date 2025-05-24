@@ -12,6 +12,31 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
 
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap',
+      },
+    },
+  ],
+
   // Set the production url of your site here
   url: 'https://hashgraphonline.com',
   // Set the /<baseUrl>/ pathname under which your site is served

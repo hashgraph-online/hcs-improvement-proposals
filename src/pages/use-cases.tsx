@@ -1,8 +1,11 @@
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import Link from '@docusaurus/Link';
+import TransformCard from '../components/ui/TransformCard';
+import PrimaryButton from '../components/PrimaryButton';
+import SecondaryButton from '../components/SecondaryButton';
 
 interface UseCase {
   name: string;
@@ -15,6 +18,16 @@ interface UseCase {
 }
 
 export const useCases: UseCase[] = [
+  {
+    name: 'Moonscape',
+    description:
+      'Moonscape is a portal implementing OpenConvAI. Find, Connect and talk with AI agents on Hedera.',
+    image: '/use-cases/moonscape-portal.jpg',
+    color: '#e17000',
+    link: 'https://moonscape.tech',
+    creator: 'Moonscape',
+    tagline: 'Decentralized AI Agents on Hedera',
+  },
   {
     name: 'LinkPages',
     description:
@@ -90,86 +103,64 @@ export const useCases: UseCase[] = [
   },
 ];
 
-const UseCaseSection: React.FC<{ useCase: UseCase; index: number }> = ({
+const UseCaseCard: React.FC<{ useCase: UseCase; index: number }> = ({
   useCase,
   index,
 }) => {
   const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.6, 1], [0, 1, 1, 0]);
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <motion.section
+    <motion.div
       ref={ref}
-      id={`use-case-${index}`}
-      className='min-h-screen flex items-center justify-center py-10 md:py-20 relative overflow-hidden'
-      style={{
-        background: `linear-gradient(45deg, ${useCase.color}, ${useCase.color}88)`,
-      }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className='w-full'
     >
-      <motion.div
-        className='absolute inset-0 opacity-20'
-        style={{
-          backgroundImage: `url(${useCase.image})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(8px)',
-        }}
-      />
-      <div className='container mx-auto px-2 md:px-4 relative z-10'>
-        <motion.div
-          className='bg-black bg-opacity-40 backdrop-filter backdrop-blur-lg rounded-2xl p-4 md:p-8 shadow-2xl'
-          style={{ y, opacity }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-            className='absolute -top-6 right-8 bg-white/10 backdrop-blur-md px-6 py-2 rounded-full border border-white/20 shadow-xl'
-          >
-            <div className='flex items-center gap-2'>
-              <div
-                className='w-2 h-2 rounded-full animate-pulse'
-                style={{ backgroundColor: useCase.color }}
-              />
-              <span className='text-white/90 font-medium'>
-                Created by {useCase.creator}
-              </span>
-            </div>
-          </motion.div>
-
-          <h2 className='text-3xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-6 text-white'>
-            {useCase.name}
-          </h2>
-          <p className='text-base md:text-xl mb-4 md:mb-8 text-gray-200 leading-relaxed'>
-            {useCase.description}
-          </p>
-          <div className='flex flex-wrap gap-4 md:gap-8 items-center'>
+      <TransformCard className='p-6 md:p-8 h-full' shadow='xl'>
+        <div className='flex flex-col lg:flex-row gap-6 items-start'>
+          <div className='lg:w-1/3'>
             <img
               src={useCase.image}
               alt={useCase.name}
-              className='w-full md:w-2/5 h-60 md:h-80 object-contain rounded-lg shadow-lg'
+              className='w-full h-48 md:h-64 object-cover rounded-lg shadow-md'
             />
-            <div className='w-full md:w-1/2 flex flex-col justify-center mt-4 md:mt-0'>
-              <p className='text-base md:text-xl text-gray-300 mb-4 md:mb-8'>
+          </div>
+
+          <div className='lg:w-2/3 flex flex-col justify-between h-full'>
+            <div>
+              <div className='flex items-center gap-3 mb-4'>
+                <div className='flex items-center gap-2'>
+                  <div className='w-3 h-3 rounded-full bg-brand-blue'></div>
+                  <span className='text-sm text-gray-600 dark:text-gray-400 font-medium'>
+                    Created by {useCase.creator}
+                  </span>
+                </div>
+              </div>
+
+              <h3 className='text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4'>
+                {useCase.name}
+              </h3>
+
+              <p className='text-gray-600 dark:text-gray-400 mb-4 leading-relaxed'>
+                {useCase.description}
+              </p>
+
+              <p className='text-lg text-brand-blue font-medium mb-6'>
                 {useCase.tagline}
               </p>
-              <Link
-                to={useCase.link}
-                className='inline-block bg-white text-black font-bold py-3 md:py-4 px-6 md:px-8 rounded-full hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg text-sm md:text-base'
-              >
+            </div>
+
+            <div className='flex gap-3'>
+              <PrimaryButton href={useCase.link}>
                 Explore {useCase.name}
-              </Link>
+              </PrimaryButton>
             </div>
           </div>
-        </motion.div>
-      </div>
-    </motion.section>
+        </div>
+      </TransformCard>
+    </motion.div>
   );
 };
 
@@ -181,29 +172,86 @@ const UseCasesPage: React.FC = () => {
       title={`Use Cases | ${siteConfig.title}`}
       description='Discover groundbreaking applications of Hashgraph Online standards'
     >
-      <main className='bg-black'>
-        <section className='flex items-center justify-center bg-gradient-to-br from-blue-900 to-purple-900 text-white py-8 md:py-36 px-4 md:px-6'>
+      {/* Hero Section */}
+      <div className='py-20 md:py-32 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20'>
+        <div className='container mx-auto px-4 md:px-6'>
           <div className='max-w-4xl mx-auto text-center'>
-            <h1 className='text-2xl md:text-5xl lg:text-6xl font-extrabold mb-2 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400'>
-              Hashgraph in Action
-            </h1>
-            <p className='text-sm md:text-xl lg:text-2xl mb-3 md:mb-8 text-gray-300'>
-              Witness how companies are leveraging Hashgraph to shape the future
-              of technology.
-            </p>
-            <Link
-              to='#use-case-0'
-              className='inline-block bg-white text-black font-bold py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-base hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg'
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
             >
-              Explore Use Cases
-            </Link>
+              <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6'>
+                Hashgraph in{' '}
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-purple'>
+                  Action
+                </span>
+              </h1>
+              <p className='text-lg md:text-xl text-gray-600 dark:text-gray-400 mb-8 max-w-3xl mx-auto'>
+                Witness how companies are leveraging Hashgraph Online standards
+                to shape the future of decentralized technology.
+              </p>
+              <SecondaryButton href='#use-cases'>
+                Explore Use Cases
+              </SecondaryButton>
+            </motion.div>
           </div>
-        </section>
+        </div>
+      </div>
 
-        {useCases.map((useCase, index) => (
-          <UseCaseSection key={index} useCase={useCase} index={index} />
-        ))}
-      </main>
+      {/* Use Cases Grid */}
+      <div id='use-cases' className='py-20 bg-white dark:bg-gray-900'>
+        <div className='container mx-auto px-4 md:px-6'>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className='text-center mb-16'
+          >
+            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6'>
+              Production Applications
+            </h2>
+            <p className='text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
+              Real-world implementations showcasing the power and versatility of
+              HCS standards
+            </p>
+          </motion.div>
+
+          <div className='grid grid-cols-1 gap-8 max-w-6xl mx-auto'>
+            {useCases.map((useCase, index) => (
+              <UseCaseCard key={index} useCase={useCase} index={index} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className='py-20 bg-gray-50 dark:bg-gray-800'>
+        <div className='container mx-auto px-4 md:px-6 text-center'>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className='max-w-4xl mx-auto'
+          >
+            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6'>
+              Ready to Build Your Use Case?
+            </h2>
+            <p className='text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto'>
+              Join the growing ecosystem of developers and companies building
+              the future with Hashgraph Online standards.
+            </p>
+            <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+              <PrimaryButton href='/docs'>View Documentation</PrimaryButton>
+              <SecondaryButton href='https://t.me/hashinals'>
+                Join Community
+              </SecondaryButton>
+            </div>
+          </motion.div>
+        </div>
+      </div>
     </Layout>
   );
 };

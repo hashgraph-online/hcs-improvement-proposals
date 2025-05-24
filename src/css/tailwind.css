@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --brand-white: #ffffff;
+    --brand-dark: #3f4174;
+    --brand-blue: #5599fe;
+    --brand-green: #48df7b;
+    --brand-purple: #b56cff;
+  }
+
+  body {
+    @apply bg-brand-white font-sans text-brand-dark;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-mono font-medium;
+  }
+}
