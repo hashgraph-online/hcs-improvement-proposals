@@ -767,8 +767,8 @@ export const MemberSection: React.FC = () => {
               </div>
             </div>
 
-            <div className='flex'>
-              <div className='w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col'>
+            <div className='flex' style={{ minHeight: '600px' }}>
+              <div className='w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full'>
                 <div className='px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0'>
                   <div className='flex items-center gap-2 text-sm font-mono text-gray-700 dark:text-gray-300'>
                     <FiGitBranch className='w-4 h-4' />
@@ -782,7 +782,6 @@ export const MemberSection: React.FC = () => {
 
                 <div
                   className='flex-1 px-2 py-3 space-y-1 overflow-y-auto overflow-x-visible'
-                  style={{ maxHeight: '440px' }}
                 >
                   {teamMembers.map((member, index) => (
                     <TeamMemberCard
@@ -796,7 +795,7 @@ export const MemberSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className='flex-1 p-8'>
+              <div className='flex-1 p-8 flex items-stretch'>
                 <AnimatePresence mode='wait'>
                   <motion.div
                     key={activeIndex}
@@ -804,7 +803,7 @@ export const MemberSection: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className={`bg-gradient-to-br ${activeTheme.background} rounded-2xl p-6 border transition-all duration-500`}
+                    className={`bg-gradient-to-br ${activeTheme.background} rounded-2xl p-6 border transition-all duration-500 w-full`}
                     style={{ borderColor: `${activeTheme.primary}30` }}
                   >
                     <div className='mb-6'>
