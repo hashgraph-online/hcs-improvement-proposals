@@ -96,7 +96,7 @@ const HeroSection: React.FC = () => {
                   variant='h1'
                   gradient='brand'
                   as='span'
-                  className='transform inline-block skew-x-[2deg]'
+                  className='inline-block'
                 >
                   internet
                 </Typography>
@@ -159,7 +159,7 @@ const HeroSection: React.FC = () => {
                   <div className='inline-block'>
                     <Typography
                       color='muted'
-                      className='text-xs text-gray-300 uppercase tracking-[0.2em] lg:tracking-[0.4em] mb-2 transform skew-x-[-2deg] lg:skew-x-[-5deg]'
+                      className='text-xs text-gray-300 uppercase tracking-[0.2em] lg:tracking-[0.4em] mb-2'
                     >
                       // PARADIGM SHIFT
                     </Typography>
@@ -174,7 +174,7 @@ const HeroSection: React.FC = () => {
                           variant='h3'
                           gradient='brand'
                           as='span'
-                          className='transform inline-block skew-x-[1deg] lg:skew-x-[3deg]'
+                          className='inline-block'
                         >
                           Becomes Autonomous_
                         </Typography>
@@ -394,7 +394,7 @@ const VisionSection: React.FC = () => {
           }}
         >
           <div>
-            <div className='text-xs font-mono text-gray-600 dark:text-gray-300 uppercase tracking-[0.3em] mb-4 transform skew-x-[-2deg]'>
+            <div className='text-xs font-mono text-gray-600 dark:text-gray-300 uppercase tracking-[0.3em] mb-4'>
               <span className='text-gray-800 dark:text-gray-400'>//</span> Our
               Vision
             </div>
@@ -402,7 +402,7 @@ const VisionSection: React.FC = () => {
               variant='h2'
               gradient='brand'
               as='span'
-              className='transform inline-block skew-x-[2deg]'
+              className='inline-block'
             >
               Our Mandate_
             </Typography>
@@ -429,7 +429,7 @@ const VisionSection: React.FC = () => {
                 border='border border-gray-700/50'
                 shadow='xl'
                 rounded='3xl'
-                className='p-8 h-52 flex flex-col justify-between'
+                className='p-8 h-64 flex flex-col justify-between'
               >
                 <div className='text-xs font-mono text-gray-600 dark:text-gray-300 mb-2'>
                   <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
@@ -460,7 +460,7 @@ const VisionSection: React.FC = () => {
                 border='border border-gray-700/50'
                 shadow='xl'
                 rounded='3xl'
-                className='p-8 h-52 flex flex-col justify-between md:mt-12'
+                className='p-8 h-64 flex flex-col justify-between md:mt-12'
               >
                 <div className='text-xs font-mono text-gray-600 dark:text-gray-300 mb-2'>
                   <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
@@ -491,7 +491,7 @@ const VisionSection: React.FC = () => {
               border='border border-gray-700/50'
               shadow='xl'
               rounded='3xl'
-              className='p-8 h-52 flex flex-col justify-between max-w-lg mx-auto md:mx-0'
+              className='p-8 h-64 flex flex-col justify-between max-w-lg mx-auto md:mx-0'
             >
               <div className='text-xs font-mono text-gray-600 dark:text-gray-300 mb-2'>
                 <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
@@ -899,7 +899,7 @@ const StandardsSection: React.FC = () => {
                 variant='h2'
                 gradient='brand'
                 as='span'
-                className='transform inline-block skew-x-[2deg]'
+                className='inline-block'
               >
                 HCS Standards_
               </Typography>
@@ -1069,7 +1069,7 @@ const StandardsSection: React.FC = () => {
                       variant='h3'
                       gradient='brand'
                       as='span'
-                      className='transform inline-block skew-x-[3deg]'
+                      className='inline-block'
                     >
                       HCS Standards_
                     </Typography>
@@ -1150,7 +1150,7 @@ const MetricsSection: React.FC = () => {
                 variant='h2'
                 gradient='brand'
                 as='span'
-                className='transform inline-block skew-x-[2deg]'
+                className='inline-block'
               >
                 Metrics_
               </Typography>
