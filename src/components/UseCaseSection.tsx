@@ -1,147 +1,93 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from './SecondaryButton';
 import Link from '@docusaurus/Link';
 import { useCases } from '../pages/use-cases';
-import { GradientText, AnimatedBackground, StatusBadge } from './ui';
+import { 
+  GradientText, 
+  AnimatedBackground, 
+  StatusBadge,
+  TransformCard,
+  Typography,
+  Terminal
+} from './ui';
 import { HashgraphConsensus } from './HashgraphConsensus';
-import InteractiveShowcase, { ShowcaseItem } from './InteractiveShowcase';
-import { Typography } from './ui';
-
-interface UseCase extends ShowcaseItem {
-  name: string;
-  creator: string;
-  description: string;
-  tagline: string;
-  link: string;
-  image: string;
-}
-
-interface UseCaseMainContentProps {
-  item: UseCase;
-  index: number;
-}
-
-interface UseCaseSidebarItemProps {
-  item: UseCase;
-  index: number;
-  isActive: boolean;
-  onClick: () => void;
-}
-
-const UseCaseMainContent: React.FC<UseCaseMainContentProps> = ({
-  item: useCase,
-}) => (
-  <div className='relative group'>
-    <div className='absolute -inset-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green rounded-3xl blur opacity-20 group-hover:opacity-40 transition duration-1000'></div>
-    <div className='relative bg-white/95 dark:bg-gray-800/95 border border-gray-200/50 dark:border-gray-700/50 shadow-xl rounded-3xl backdrop-blur-sm overflow-hidden'>
-      <div className='flex flex-col lg:flex-row'>
-        <div className='lg:w-3/5 p-8 lg:p-12 space-y-6'>
-          <div className='flex items-center justify-between mb-4'>
-            <div className='text-xs font-mono text-gray-500 dark:text-gray-400'>
-              <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
-              {useCase.name.toLowerCase().replace(/\s+/g, '_')}
-            </div>
-            <StatusBadge variant='success'>LIVE</StatusBadge>
-          </div>
-
-          <div className='space-y-4'>
-            <Typography variant='h3' className='leading-tight'>
-              {useCase.name}
-            </Typography>
-
-            <div className='text-sm font-mono text-brand-purple'>
-              by{' '}
-              <span className='text-gray-900 dark:text-white'>
-                {useCase.creator}
-              </span>
-            </div>
-
-            <Typography color='muted' className='leading-relaxed'>
-              {useCase.description}
-            </Typography>
-
-            <div className='bg-gray-100/80 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200/50 dark:border-gray-700/30'>
-              <div className='text-sm font-mono text-gray-700 dark:text-gray-300'>
-                <div className='text-xs text-gray-500 dark:text-gray-400 mb-2'>
-                  <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
-                  {useCase.tagline}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className='flex flex-col sm:flex-row gap-4 pt-4'>
-            <PrimaryButton href={useCase.link}>
-              Visit {useCase.name}
-            </PrimaryButton>
-            <SecondaryButton>Next Application</SecondaryButton>
-          </div>
-        </div>
-
-        <div className='lg:w-2/5 relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800'>
-          <div className='absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent'></div>
-          <img
-            src={useCase.image}
-            alt={useCase.name}
-            className='w-full h-full object-cover transform hover:scale-105 transition-transform duration-700'
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.src = '/img/placeholder-image.png';
-              target.alt = 'Application preview';
-            }}
-          />
-          <div className='absolute bottom-4 left-4 right-4'>
-            <div className='bg-white/10 dark:bg-gray-900/10 backdrop-blur-md rounded-lg p-3 border border-white/20 dark:border-gray-700/20'>
-              <div className='text-xs font-mono text-white'>
-                Created by {useCase.creator}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-
-const UseCaseSidebarItem: React.FC<UseCaseSidebarItemProps> = ({
-  item: useCase,
-  index,
-  isActive,
-  onClick,
-}) => (
-  <button
-    onClick={onClick}
-    className={`w-full text-left p-3 rounded-lg border transition-all duration-300 ${
-      isActive
-        ? 'bg-brand-blue/10 border-brand-blue/30 dark:bg-brand-blue/20 dark:border-brand-blue/40'
-        : 'bg-gray-50/50 dark:bg-gray-900/50 border-gray-200/50 dark:border-gray-700/30 hover:border-gray-300/70 dark:hover:border-gray-600/50'
-    }`}
-  >
-    <div className='flex items-center justify-between'>
-      <div className='space-y-1'>
-        <div className='text-sm font-mono font-bold text-gray-900 dark:text-white'>
-          {useCase.name}
-        </div>
-        <div className='text-xs font-mono text-brand-purple'>
-          {useCase.creator}
-        </div>
-      </div>
-      <StatusBadge variant='success'>LIVE</StatusBadge>
-    </div>
-  </button>
-);
 
 const UseCaseSection: React.FC = () => {
-  const showcaseUseCases: UseCase[] = useCases.map((useCase, index) => ({
-    id: `usecase-${index}`,
-    name: useCase.name,
-    creator: useCase.creator,
-    description: useCase.description,
-    tagline: useCase.tagline,
-    link: useCase.link,
-    image: useCase.image,
-  }));
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+
+  const goToPrevious = () => {
+    setCurrentIndex((prev) => (prev - 1 + useCases.length) % useCases.length);
+  };
+
+  const goToNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % useCases.length);
+  };
+
+  useEffect(() => {
+    if (!isPlaying) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % useCases.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying]);
+
+  const getCardTransform = (index: number) => {
+    const diff = index - currentIndex;
+    const absDiff = Math.abs(diff);
+    
+    if (diff === 0) {
+      // Center card - main focus
+      return {
+        x: 0,
+        z: 100,
+        rotateY: 0,
+        scale: 1,
+        opacity: 1,
+      };
+    } else if (absDiff === 1) {
+      // Immediate neighbors - prominent secondary cards
+      return {
+        x: diff > 0 ? 280 : -280,
+        z: 0,
+        rotateY: diff > 0 ? -25 : 25,
+        scale: 0.85,
+        opacity: 0.8,
+      };
+    } else if (absDiff === 2) {
+      // Second layer - visible but more receded
+      return {
+        x: diff > 0 ? 480 : -480,
+        z: -80,
+        rotateY: diff > 0 ? -40 : 40,
+        scale: 0.7,
+        opacity: 0.5,
+      };
+    } else if (absDiff === 3) {
+      // Third layer - subtle background presence
+      return {
+        x: diff > 0 ? 650 : -650,
+        z: -150,
+        rotateY: diff > 0 ? -55 : 55,
+        scale: 0.55,
+        opacity: 0.3,
+      };
+    } else {
+      // Far cards - barely visible depth
+      return {
+        x: diff > 0 ? 800 : -800,
+        z: -200,
+        rotateY: diff > 0 ? -70 : 70,
+        scale: 0.4,
+        opacity: 0.15,
+      };
+    }
+  };
 
   return (
     <section className='relative py-20 lg:py-32 bg-gradient-to-br from-gray-50 via-white to-blue-50/20 dark:from-gray-900 dark:via-gray-800 dark:to-blue-950/20 overflow-hidden'>
@@ -165,13 +111,13 @@ const UseCaseSection: React.FC = () => {
             </div>
             <Typography
               variant='h2'
-              className='text-5xl lg:text-7xl xl:text-8xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight'
+              className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight'
             >
               <span className='block'>Standards in</span>
               <GradientText
                 gradient='brand'
                 as='span'
-                className='transform inline-block skew-x-[2deg]'
+                className='inline-block'
               >
                 Production_
               </GradientText>
@@ -187,92 +133,254 @@ const UseCaseSection: React.FC = () => {
           </div>
         </div>
 
-        <InteractiveShowcase
-          items={showcaseUseCases}
-          title=''
-          MainContent={UseCaseMainContent}
-          SidebarItem={UseCaseSidebarItem}
-          terminalTitle='application-showcase'
-          rotationInterval={6000}
-          className='p-0 bg-transparent'
-        />
-
-        <div className='max-w-4xl mx-auto mt-16'>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-            <div className='bg-white/95 dark:bg-gray-800/95 border border-gray-200/50 dark:border-gray-700/50 shadow-lg rounded-2xl p-6 backdrop-blur-sm transform rotate-[-1deg]'>
-              <div className='space-y-4'>
-                <div className='text-xs font-mono text-gray-500 dark:text-gray-400 mb-4'>
-                  <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
-                  ECOSYSTEM_GROWTH
+        {/* Static Layout with Dynamic Content */}
+        <div className='relative max-w-7xl mx-auto'>
+          <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 items-start'>
+            
+            {/* Left Side - Clean Laptop Mockup */}
+            <div className='relative lg:col-span-7 transform scale-110 origin-left ml-4'>
+              {/* Laptop Screen */}
+              <div className='relative bg-gray-800 dark:bg-gray-700 rounded-t-2xl p-3 shadow-2xl'>
+                {/* Screen Bezel */}
+                <div className='bg-black rounded-xl p-1 shadow-inner'>
+                  {/* Actual Screen */}
+                  <div className='bg-gray-900 rounded-lg overflow-hidden relative' style={{ aspectRatio: '16/10' }}>
+                    {/* Dynamic Screen Content */}
+                    <AnimatePresence mode='wait'>
+                      <motion.div
+                        key={`laptop-${currentIndex}`}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className='relative w-full h-full'
+                      >
+                        {useCases[currentIndex]?.image ? (
+                          <img
+                            src={useCases[currentIndex].image}
+                            alt={useCases[currentIndex].name}
+                            className='w-full h-full object-cover object-left rounded-lg transform -translate-y-1'
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                            }}
+                          />
+                        ) : (
+                          <div className='w-full h-full bg-gray-700 flex items-center justify-center rounded-lg'>
+                            <span className='text-white text-sm'>No Image</span>
+                          </div>
+                        )}
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
                 </div>
+                
+                {/* Camera dot */}
+                <div className='absolute top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-600 dark:bg-gray-500 rounded-full'></div>
+              </div>
 
-                <div className='space-y-3'>
+              {/* Laptop Base Edge */}
+              <div className='bg-gray-700 dark:bg-gray-600 h-6 rounded-b-2xl shadow-xl' style={{ width: '110%', marginLeft: '-5%' }}></div>
+            </div>
+
+            {/* Right Side - Dynamic Browser Window */}
+            <div className='lg:col-span-5 lg:-ml-12 lg:mt-8 relative z-10 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden'>
+              {/* Browser Header */}
+              <div className='bg-gray-100 dark:bg-gray-800 px-4 py-3 border-b border-gray-200 dark:border-gray-700'>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-3'>
+                    <div className='flex gap-1.5'>
+                      <div className='w-3 h-3 rounded-full bg-red-400'></div>
+                      <div className='w-3 h-3 rounded-full bg-yellow-400'></div>
+                      <div className='w-3 h-3 rounded-full bg-green-400'></div>
+                    </div>
+                    <div className='text-xs font-mono text-gray-700 dark:text-gray-300'>
+                      {useCases[currentIndex]?.name.toLowerCase().replace(/\s+/g, '-')}.app
+                    </div>
+                  </div>
+                  <div className='text-xs text-gray-500 dark:text-gray-400'>
+                    {useCases[currentIndex]?.creator}
+                  </div>
+                </div>
+              </div>
+
+              {/* Dynamic Browser Content */}
+              <div className='p-6 space-y-4' style={{ minHeight: '320px' }}>
+                <AnimatePresence mode='wait'>
+                  <motion.div
+                    key={`browser-${currentIndex}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.4 }}
+                    className='space-y-4'
+                  >
+                    <div className='space-y-3'>
+                      <div className='flex items-start justify-between'>
+                        <Typography
+                          variant='h3'
+                          className='text-xl font-bold text-gray-900 dark:text-white'
+                        >
+                          {useCases[currentIndex]?.name}
+                        </Typography>
+                        <StatusBadge variant='success' animated>
+                          LIVE
+                        </StatusBadge>
+                      </div>
+
+                      <Typography
+                        color='muted'
+                        className='text-sm text-gray-600 dark:text-gray-300 leading-relaxed'
+                      >
+                        {useCases[currentIndex]?.description}
+                      </Typography>
+                    </div>
+
+                    <div className='bg-gray-100/80 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200/50 dark:border-gray-700/30'>
+                      <div className='text-sm font-mono text-brand-purple'>
+                        {useCases[currentIndex]?.tagline}
+                      </div>
+                    </div>
+
+                    <div className='flex gap-3 pt-2'>
+                      <PrimaryButton
+                        href={useCases[currentIndex]?.link}
+                        size='small'
+                        className='flex-1'
+                      >
+                        Visit Site →
+                      </PrimaryButton>
+                      <SecondaryButton
+                        size='small'
+                        onClick={() => setIsPlaying(!isPlaying)}
+                      >
+                        {isPlaying ? 'Pause' : 'Play'}
+                      </SecondaryButton>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </div>
+          </div>
+
+          {/* Arrow navigation buttons */}
+          <button
+            onClick={() => {
+              console.log('Previous clicked, current:', currentIndex);
+              goToPrevious();
+            }}
+            className='absolute -left-16 top-1/2 transform -translate-y-1/2 z-30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-full p-3 shadow-lg hover:bg-white dark:hover:bg-gray-700 hover:scale-110 transition-all duration-300 group'
+          >
+            <FiChevronLeft className='w-5 h-5 text-gray-700 dark:text-gray-300 group-hover:text-brand-blue transition-colors duration-300' />
+          </button>
+
+          <button
+            onClick={() => {
+              console.log('Next clicked, current:', currentIndex);
+              goToNext();
+            }}
+            className='absolute -right-16 top-1/2 transform -translate-y-1/2 z-30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-full p-3 shadow-lg hover:bg-white dark:hover:bg-gray-700 hover:scale-110 transition-all duration-300 group'
+          >
+            <FiChevronRight className='w-5 h-5 text-gray-700 dark:text-gray-300 group-hover:text-brand-blue transition-colors duration-300' />
+          </button>
+
+          {/* Navigation dots */}
+          <div className='flex justify-center mt-8 space-x-3'>
+            {useCases.map((_, index) => (
+              <div key={index} className='relative'>
+                {/* Individual blur background for each dot */}
+                <div className='absolute inset-0 bg-slate-800/30 backdrop-blur-sm rounded-full scale-110 blur -z-10'></div>
+                <button
+                  onClick={() => setCurrentIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 border-0 outline-none relative z-10 ${
+                    index === currentIndex
+                      ? 'bg-brand-blue scale-125'
+                      : 'bg-white hover:bg-brand-blue'
+                  }`}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className='mt-32 lg:mt-48'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
+            <div className='relative group'>
+              <div className='absolute -inset-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000'></div>
+              <div className='relative bg-white/95 dark:bg-gray-800/95 rounded-2xl border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm'>
+                <Terminal title='production-impact.sh' className='text-left'>
+                  <Terminal.Line output='#!/bin/bash' type='comment' />
+                  <Terminal.Line
+                    output='# Real applications leveraging HCS standards'
+                    type='comment'
+                  />
+                  <Terminal.Line output='' type='output' />
+                  <Terminal.Line command='./analyze-ecosystem --type=production' />
+                  <Terminal.Line
+                    output={`🚀 ${useCases.length} live applications in production...`}
+                    type='output'
+                  />
+                  <Terminal.Line
+                    output={`🏢 ${new Set(useCases.map(u => u.creator)).size} companies building on HCS...`}
+                    type='output'
+                  />
+                  <Terminal.Line
+                    output='📈 Real users, real value, real adoption...'
+                    type='output'
+                  />
+                  <Terminal.Line output='' type='output' />
+                  <Terminal.Line
+                    output='✅ STATUS: Ecosystem thriving'
+                    type='output'
+                  />
+                </Terminal>
+              </div>
+            </div>
+
+            <div className='space-y-8'>
+              <div className='bg-white/95 dark:bg-gray-800/95 border border-gray-200/50 dark:border-gray-700/50 shadow-lg rounded-2xl p-6 backdrop-blur-sm transform rotate-[-1deg]'>
+                <div className='space-y-4'>
+                  <div className='text-xs font-mono text-gray-500 dark:text-gray-400 mb-4'>
+                    <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
+                    ECOSYSTEM_GROWTH
+                  </div>
+
                   <Typography
                     variant='h4'
                     className='text-gray-900 dark:text-white'
                   >
-                    Real Applications
+                    Join the
                     <br />
-                    <span className='text-brand-green'>In Production</span>
+                    <span className='text-brand-green'>Production Ecosystem</span>
                   </Typography>
 
-                  <div className='text-sm font-mono text-gray-700 dark:text-gray-300 space-y-1'>
-                    <div>
-                      <span className='text-brand-purple'>const</span>{' '}
-                      <span className='text-gray-900 dark:text-white'>
-                        applications
-                      </span>{' '}
-                      ={' '}
-                      <span className='text-brand-blue'>{useCases.length}</span>
-                      ;
-                    </div>
-                    <div>
-                      <span className='text-brand-purple'>const</span>{' '}
-                      <span className='text-gray-900 dark:text-white'>
-                        companies
-                      </span>{' '}
-                      ={' '}
-                      <span className='text-brand-blue'>
-                        {new Set(useCases.map((u) => u.creator)).size}
-                      </span>
-                      ;
-                    </div>
-                    <div>
-                      <span className='text-brand-purple'>const</span>{' '}
-                      <span className='text-gray-900 dark:text-white'>
-                        proof
-                      </span>{' '}
-                      ={' '}
-                      <span className='text-brand-green'>"real_adoption"</span>;
-                    </div>
-                  </div>
+                  <Typography color='muted' className='text-sm'>
+                    Build your application on battle-tested HCS standards and join the growing ecosystem of production applications.
+                  </Typography>
+
+                  <Link
+                    to='/docs/libraries/standards-sdk'
+                    className='block w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-mono font-bold py-3 px-6 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-300 text-center'
+                  >
+                    Start Building →
+                  </Link>
                 </div>
               </div>
-            </div>
 
-            <div className='bg-white/95 dark:bg-gray-800/95 border border-gray-200/50 dark:border-gray-700/50 shadow-lg rounded-2xl p-6 backdrop-blur-sm transform rotate-[1deg]'>
-              <div className='space-y-4'>
-                <div className='text-xs font-mono text-gray-500 dark:text-gray-400 mb-4'>
-                  <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
-                  EXPLORE_MORE
+              <Link
+                to='/use-cases'
+                className='block bg-gradient-to-r from-brand-blue/10 to-brand-purple/10 dark:from-brand-blue/20 dark:to-brand-purple/20 border border-brand-blue/20 dark:border-brand-blue/30 rounded-2xl p-6 hover:scale-105 transition-all duration-300 transform rotate-[1deg]'
+              >
+                <div className='text-xs font-mono text-brand-blue mb-2'>
+                  // EXPLORE_ALL
                 </div>
-
-                <Typography
-                  variant='h4'
-                  className='text-gray-900 dark:text-white mb-4'
-                >
-                  Browse All
-                  <br />
-                  <span className='text-brand-blue'>Applications</span>
+                <Typography variant='h5' className='text-gray-900 dark:text-white mb-2'>
+                  Browse All Applications
                 </Typography>
-
-                <Link
-                  to='/use-cases'
-                  className='block w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-mono font-bold py-3 px-6 rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-300 text-center'
-                >
-                  ./explore-all-applications.sh
-                </Link>
-              </div>
+                <Typography color='muted' className='text-sm'>
+                  Discover more production applications →
+                </Typography>
+              </Link>
             </div>
           </div>
         </div>

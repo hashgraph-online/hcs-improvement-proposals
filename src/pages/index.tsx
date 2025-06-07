@@ -6,6 +6,7 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import Modal from '../components/Modal';
 import UseCaseSection from '../components/UseCaseSection';
+import InteractiveShowcase, { ShowcaseItem } from '../components/InteractiveShowcase';
 import { MemberSection } from '../components/members/MemberSection';
 import { HashgraphConsensus } from '../components/HashgraphConsensus';
 import {
@@ -402,7 +403,7 @@ const VisionSection: React.FC = () => {
               variant='h2'
               gradient='brand'
               as='span'
-              className='inline-block'
+              className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black leading-tight tracking-tight inline-block'
             >
               Our Mandate_
             </Typography>
@@ -745,10 +746,238 @@ interface StandardCardProps {
   relatedTools: Tool[];
 }
 
-const StandardsSection: React.FC = () => {
-  const [selectedStandard, setSelectedStandard] = useState<string | null>(null);
+interface StandardItem extends ShowcaseItem {
+  id: string;
+  name: string;
+  description: string;
+  specification: string;
+  status: string;
+  adoptions: string[];
+  codeExample: string;
+}
 
-  const allStandards = [
+interface StandardMainContentProps {
+  item: StandardItem;
+  index: number;
+}
+
+interface StandardSidebarItemProps {
+  item: StandardItem;
+  index: number;
+  isActive: boolean;
+  onClick: () => void;
+}
+
+const StandardMainContent: React.FC<StandardMainContentProps> = ({ item: standard }) => (
+  <div className='relative'>
+    <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden'>
+      <div className='p-4 space-y-3'>
+        <div className='flex items-center justify-between'>
+          <span className='text-sm font-mono text-brand-blue'>{standard.id}</span>
+          <StatusBadge variant={standard.status === 'PUBLISHED' ? 'success' : 'warning'} className="font-bold">
+            {standard.status}
+          </StatusBadge>
+        </div>
+
+        <div className='space-y-2'>
+          <h3 className='text-2xl font-semibold text-gray-900 dark:text-white'>
+            {standard.name}
+          </h3>
+          <p className='text-sm text-gray-600 dark:text-gray-300 leading-relaxed'>
+            {standard.description}
+          </p>
+        </div>
+
+        <div className='bg-gray-50 dark:bg-gray-900 rounded p-2'>
+          <div className='text-xs text-gray-500 mb-1'>Example:</div>
+          <code className='text-xs font-mono text-gray-700 dark:text-gray-300'>
+            {standard.codeExample}
+          </code>
+        </div>
+
+        {standard.adoptions.length > 0 && (
+          <div>
+            <div className='text-xs text-gray-500 mb-1'>Implementations:</div>
+            <div className='flex flex-wrap gap-1'>
+              {standard.adoptions.map((adoption) => {
+                const getOrgColor = (orgName: string) => {
+                  const orgColors: Record<string, string> = {
+                    'Bonzo Finance': '#6366f1',
+                    'HashPack': '#8a1b7a',
+                    'SentX': '#64748b',
+                    'Neuron': '#0ea5e9',
+                    'KiloScribe': '#7c3aed',
+                    'Builder Labs': '#2563eb',
+                    'Hashgate': '#059669',
+                    'Hgraph': '#0ea5e9',
+                    'LaunchBadge': '#ea580c',
+                    'Turtlemoon': '#0891b2',
+                    'TurtleMoon': '#0891b2',
+                    'Hashinals.com': '#0891b2',
+                    'OpenConvAI': '#0ea5e9',
+                    'Moonscape': '#ea580c',
+                  };
+                  return orgColors[orgName] || '#059669';
+                };
+                
+                const color = getOrgColor(adoption);
+                return (
+                  <span
+                    key={adoption}
+                    className='px-2 py-0.5 rounded text-xs font-medium'
+                    style={{
+                      backgroundColor: `${color}15`,
+                      color: color,
+                    }}
+                  >
+                    {adoption}
+                  </span>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className='flex gap-2 pt-2'>
+          <PrimaryButton href={standard.specification} size='small'>
+            View Specifications →
+          </PrimaryButton>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const StandardSidebarItem: React.FC<StandardSidebarItemProps> = ({
+  item: standard,
+  index,
+  isActive,
+  onClick,
+}) => (
+  <motion.div
+    initial={{ opacity: 0, x: -30 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: index * 0.05, duration: 0.4 }}
+    onClick={onClick}
+    className={`cursor-pointer transition-all duration-500 relative ${
+      isActive
+        ? 'bg-gradient-to-r from-brand-blue/10 via-brand-purple/5 to-brand-green/10 dark:from-brand-blue/15 dark:via-brand-purple/8 dark:to-brand-green/15 shadow-lg border-l-4 border-brand-blue scale-[1.02]'
+        : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 border-l-4 border-transparent hover:scale-[1.01]'
+    } rounded-r-xl p-3 group`}
+    style={{
+      borderLeftColor: isActive ? '#3b82f6' : 'transparent',
+      margin: '0.25rem 0.5rem 0.25rem 0',
+    }}
+  >
+    {/* Background gradient effect for active state */}
+    {isActive && (
+      <div
+        className='absolute inset-0 opacity-5'
+        style={{
+          background: 'linear-gradient(135deg, #3b82f640, #8b5cf620)',
+        }}
+      />
+    )}
+
+    <div className='relative z-10 space-y-2'>
+      <div className='flex items-center justify-between'>
+        <span
+          className={`text-sm font-mono transition-colors duration-500 ${
+            isActive
+              ? 'text-brand-blue'
+              : 'text-gray-700 dark:text-gray-300'
+          }`}
+        >
+          {standard.id}
+        </span>
+        
+        <div
+          className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-500 ${
+            isActive ? 'scale-105 shadow-sm' : 'scale-100'
+          } ${
+            standard.status === 'PUBLISHED' 
+              ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400' 
+              : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400'
+          }`}
+        >
+          {standard.status}
+        </div>
+      </div>
+
+      <Typography
+        className={`text-sm font-mono font-semibold transition-colors duration-500 ${
+          isActive
+            ? 'text-gray-900 dark:text-white'
+            : 'text-gray-700 dark:text-gray-300'
+        }`}
+      >
+        {standard.name}
+      </Typography>
+
+
+      {/* Show adoption tags when active */}
+      {isActive && standard.adoptions.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className='flex flex-wrap gap-1 mt-2'
+        >
+          {standard.adoptions.slice(0, 2).map((adoption) => {
+            const getOrgColor = (orgName: string) => {
+              const orgColors: Record<string, string> = {
+                'Bonzo Finance': '#6366f1',
+                'HashPack': '#8a1b7a',
+                'SentX': '#64748b',
+                'Neuron': '#0ea5e9',
+                'KiloScribe': '#7c3aed',
+                'Builder Labs': '#2563eb',
+                'Hashgate': '#059669',
+                'Hgraph': '#0ea5e9',
+                'LaunchBadge': '#ea580c',
+                'Turtlemoon': '#0891b2',
+                'TurtleMoon': '#0891b2',
+                'Hashinals.com': '#0891b2',
+                'OpenConvAI': '#0ea5e9',
+                'Moonscape': '#ea580c',
+              };
+              return orgColors[orgName] || '#059669';
+            };
+            
+            const color = getOrgColor(adoption);
+            return (
+              <span
+                key={adoption}
+                className='text-xs px-2 py-0.5 rounded-full font-medium'
+                style={{
+                  backgroundColor: `${color}15`,
+                  color: color,
+                }}
+              >
+                {adoption}
+              </span>
+            );
+          })}
+          {standard.adoptions.length > 2 && (
+            <span
+              className='text-xs px-2 py-0.5 rounded-full font-medium'
+              style={{
+                backgroundColor: '#64748b15',
+                color: '#64748b',
+              }}
+            >
+              +{standard.adoptions.length - 2}
+            </span>
+          )}
+        </motion.div>
+      )}
+    </div>
+  </motion.div>
+);
+
+const StandardsSection: React.FC = () => {
+  // Convert to InteractiveShowcase format
+  const allStandards: StandardItem[] = [
     {
       id: 'HCS-1',
       name: 'File Storage & Retrieval',
@@ -869,7 +1098,7 @@ const StandardsSection: React.FC = () => {
   ];
 
   return (
-    <section className='relative py-20 lg:py-32 bg-white dark:bg-gray-900 overflow-hidden'>
+    <section className='relative py-20 lg:py-32 pb-32 lg:pb-40 bg-white dark:bg-gray-900 overflow-hidden'>
       <AnimatedBackground
         variant='blobs'
         colors={['brand-blue', 'brand-purple', 'brand-green']}
@@ -885,233 +1114,85 @@ const StandardsSection: React.FC = () => {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-        <div className='text-center mb-20 lg:mb-32'>
-          <div className='mb-12'>
-            <div className='text-xs font-mono text-gray-800 dark:text-gray-400 uppercase tracking-[0.4em] mb-6'>
-              <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
-              COMPLETE_STANDARDS_SUITE
-            </div>
+        <div className='text-center mb-6'>
+          <div className='mb-3'>
             <Typography
               variant='h2'
-              className='text-5xl lg:text-7xl xl:text-8xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight'
+              className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-2'
             >
+              HCS{' '}
               <Typography
                 variant='h2'
                 gradient='brand'
                 as='span'
-                className='inline-block'
+                className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black leading-tight tracking-tight inline-block'
               >
-                HCS Standards_
+                Standards_
               </Typography>
             </Typography>
             <Typography
               color='muted'
-              className='text-lg lg:text-xl text-gray-600 dark:text-gray-300 mt-12 max-w-4xl mx-auto'
+              className='text-sm text-gray-600 dark:text-gray-300 max-w-lg mx-auto'
             >
-              <Typography color='blue' as='span' className='text-brand-blue'>
-                Battle-tested standards
-              </Typography>{' '}
-              powering the autonomous internet.
-              <br />
-              <Typography color='green' as='span' className='text-brand-green'>
-                Deployed. Proven. Ready to integrate.
-              </Typography>
+              Battle-tested standards powering the autonomous internet.
             </Typography>
           </div>
         </div>
 
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-12'>
-          {allStandards.map((standard, index) => (
-            <motion.div
-              key={standard.id}
-              initial={{ opacity: 0, y: 200, rotateX: 45 }}
-              animate={{ opacity: 1, y: 0, rotateX: 0 }}
-              transition={{
-                duration: 1.2,
-                delay: index * 0.1,
-                type: 'spring',
-                stiffness: 50,
-              }}
-            >
-              <div className='relative group h-full'>
-                <div className='absolute -inset-1 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green rounded-3xl blur-lg opacity-0 group-hover:opacity-40 dark:group-hover:opacity-75 transition duration-1000 animate-pulse'></div>
+        <InteractiveShowcase
+          items={allStandards}
+          title=''
+          MainContent={StandardMainContent}
+          SidebarItem={StandardSidebarItem}
+          terminalTitle='standards-browser.sh'
+          rotationInterval={8000}
+          className='p-0 bg-transparent'
+        />
 
-                <TransformCard
-                  rotation={
-                    index % 4 === 0
-                      ? 'rotate-[2deg]'
-                      : index % 4 === 1
-                      ? 'rotate-[-1.5deg]'
-                      : index % 4 === 2
-                      ? 'rotate-[2.5deg]'
-                      : 'rotate-[-1deg]'
-                  }
-                  background='bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl'
-                  border='border border-gray-200/50 dark:border-gray-700/50'
-                  shadow='xl'
-                  rounded='3xl'
-                  className='relative h-full group-hover:scale-105 group-hover:-rotate-1 transition-all duration-700'
-                >
-                  <div className='p-6 lg:p-8 h-full flex flex-col'>
-                    <div className='space-y-4 flex-grow'>
-                      <Typography
-                        variant='h4'
-                        className='!text-brand-blue group-hover:text-brand-green group-hover:scale-110 transition-all duration-500'
-                      >
-                        {standard.id}
-                      </Typography>
-
-                      <div className='space-y-3'>
-                        <Typography
-                          variant='h5'
-                          className='text-gray-900 dark:text-white group-hover:text-brand-purple transition-colors duration-500'
-                        >
-                          {standard.name}
-                        </Typography>
-
-                        <StatusBadge
-                          variant={
-                            standard.status === 'PUBLISHED'
-                              ? 'success'
-                              : 'warning'
-                          }
-                          animated
-                        >
-                          {standard.status}
-                        </StatusBadge>
-                      </div>
-
-                      <Typography
-                        color='muted'
-                        className='text-gray-600 dark:text-gray-300 leading-relaxed'
-                      >
-                        {standard.description}
-                      </Typography>
-                    </div>
-
-                    <div className='mt-6 space-y-4'>
-                      <div className='flex items-center gap-2'>
-                        <PrimaryButton
-                          href={standard.specification}
-                          size='small'
-                        >
-                          Docs
-                        </PrimaryButton>
-                        {standard.adoptions.length > 0 && (
-                          <SecondaryButton
-                            size='small'
-                            onClick={() =>
-                              setSelectedStandard(
-                                selectedStandard === standard.id
-                                  ? null
-                                  : standard.id
-                              )
-                            }
-                          >
-                            Uses ({standard.adoptions.length})
-                          </SecondaryButton>
-                        )}
-                      </div>
-
-                      {selectedStandard === standard.id &&
-                        standard.adoptions.length > 0 && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className='border-t border-gray-200/50 dark:border-gray-600/30 pt-4'
-                          >
-                            <div className='flex flex-wrap gap-2'>
-                              {standard.adoptions.map((adoption) => (
-                                <span
-                                  key={adoption}
-                                  className='bg-brand-green/10 dark:bg-brand-green/20 text-brand-green text-xs font-mono px-2 py-1 rounded'
-                                >
-                                  {adoption}
-                                </span>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                    </div>
-                  </div>
-                </TransformCard>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        <div className='mt-32 lg:mt-48 text-center'>
-          <div className='max-w-6xl mx-auto'>
-            <div className='relative group'>
-              <div className='absolute -inset-2 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green rounded-3xl blur-2xl opacity-30 dark:opacity-50 group-hover:opacity-60 dark:group-hover:opacity-100 transition duration-1000'></div>
-              <TransformCard
-                rotation='rotate-[1deg]'
-                background='bg-white/95 dark:bg-gray-800/90 backdrop-blur-xl'
-                border='border border-gray-200/50 dark:border-gray-600/50'
-                shadow='xl'
-                rounded='3xl'
-                className='relative p-12 lg:p-20'
-              >
-                <div className='space-y-12'>
-                  <div className='text-sm font-mono text-gray-800 dark:text-gray-400 uppercase tracking-[0.5em]'>
-                    <span className='text-gray-800 dark:text-gray-400'>//</span>{' '}
-                    DEVELOPER_GATEWAY
-                  </div>
-
-                  <Typography
-                    variant='h3'
-                    className='text-4xl lg:text-6xl xl:text-7xl font-mono font-black text-gray-900 dark:text-white leading-tight'
-                  >
-                    Start Building with
-                    <br />
-                    <Typography
-                      variant='h3'
-                      gradient='brand'
-                      as='span'
-                      className='inline-block'
-                    >
-                      HCS Standards_
-                    </Typography>
-                  </Typography>
-
-                  <Terminal
-                    title='standards-deployment.sh'
-                    className='max-w-4xl mx-auto'
-                  >
-                    <Terminal.Line command='npm install @hashgraphonline/standards-sdk' />
-                    <Terminal.Line
-                      output='✓ Installing 12 published protocols...'
-                      type='output'
-                    />
-                    <Terminal.Line
-                      output='✓ Connecting to Hedera Consensus Service...'
-                      type='output'
-                    />
-                    <Terminal.Line
-                      output='✓ Autonomous systems ready for deployment'
-                      type='output'
-                    />
-                    <Terminal.Line output='' type='output' />
-                    <Terminal.Line
-                      output='🚀 The on-chain internet is live'
-                      type='output'
-                    />
-                  </Terminal>
-
-                  <div className='flex flex-col sm:flex-row gap-8 justify-center'>
-                    <PrimaryButton
-                      href='/docs/libraries/standards-sdk'
-                      size='large'
-                    >
-                      Standards SDK →
-                    </PrimaryButton>
-                    <SecondaryButton href='https://github.com/hashgraph-online/standards-sdk'>
-                      GitHub Repository ↗
-                    </SecondaryButton>
+        <div className='mt-16 text-center'>
+          <div className='relative group max-w-2xl mx-auto'>
+            <div className='absolute -inset-2 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500 rounded-3xl blur-xl opacity-50 group-hover:opacity-80 transition duration-1000 animate-pulse'></div>
+            <div className='relative bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-800 dark:via-gray-900 dark:to-purple-950 border-4 border-blue-500/30 shadow-2xl rounded-3xl p-8 backdrop-blur-sm transform hover:scale-105 transition-all duration-500'>
+              <div className='space-y-6'>
+                <div className='text-center'>
+                  <h3 className='text-4xl lg:text-5xl font-mono font-black text-gray-900 dark:text-white'>
+                    <span style={{
+                      background: 'linear-gradient(45deg, #3b82f6, #8b5cf6, #10b981)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      backgroundClip: 'text'
+                    }}>
+                      Start Building
+                    </span>
+                  </h3>
+                </div>
+                
+                <p className='text-lg text-gray-700 dark:text-gray-200 font-medium leading-relaxed'>
+                  Join <span className='font-bold text-purple-600 dark:text-purple-400'>10 consortium members</span> building 
+                  the autonomous internet with <span className='font-bold text-blue-600 dark:text-blue-400'>15+ battle-tested standards</span>
+                </p>
+                
+                <div className='bg-gray-100 dark:bg-gray-800 rounded-xl p-4 border-2 border-dashed border-gray-300 dark:border-gray-600'>
+                  <div className='text-sm font-mono text-gray-600 dark:text-gray-300'>
+                    <span className='text-green-600 dark:text-green-400'>$</span> npm install @hashgraphonline/standards-sdk
                   </div>
                 </div>
-              </TransformCard>
+                
+                <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                  <PrimaryButton
+                    href='/docs/libraries/standards-sdk'
+                    className='text-lg py-4 px-8 font-black shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300'
+                  >
+                    Standards SDK →
+                  </PrimaryButton>
+                  <SecondaryButton 
+                    href='https://github.com/hashgraph-online/standards-sdk' 
+                    className='text-lg py-4 px-8 font-bold border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 transform hover:scale-105 transition-all duration-300'
+                  >
+                    GitHub ↗
+                  </SecondaryButton>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1143,17 +1224,12 @@ const MetricsSection: React.FC = () => {
             </div>
             <Typography
               variant='h2'
-              className='text-5xl lg:text-7xl xl:text-8xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight'
+              className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight'
             >
               <span className='block'>Production</span>
-              <Typography
-                variant='h2'
-                gradient='brand'
-                as='span'
-                className='inline-block'
-              >
+              <span className='bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green bg-clip-text text-transparent inline-block'>
                 Metrics_
-              </Typography>
+              </span>
             </Typography>
             <Typography
               color='muted'

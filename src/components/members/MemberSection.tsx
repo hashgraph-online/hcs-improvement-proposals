@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   FiTerminal,
   FiGitBranch,
@@ -15,6 +15,8 @@ import {
   FiTarget,
   FiUsers,
   FiLayers,
+  FiChevronDown,
+  FiChevronUp,
 } from 'react-icons/fi';
 import SecondaryButton from '../SecondaryButton';
 import PrimaryButton from '../PrimaryButton';
@@ -38,6 +40,7 @@ interface MemberTheme {
   gradient: string;
   icon: React.ComponentType<any>;
   logo: string;
+  logoDark?: string;
   specialty: string;
   fontFamily: string;
   messageStyle: string;
@@ -71,6 +74,7 @@ const brandProfiles: Record<string, MemberTheme> = {
     gradient: 'from-indigo-500 to-purple-600',
     icon: FiTrendingUp,
     logo: '/logo_icons/Bonzo.png',
+    logoDark: '/logo_icons/Bonzo_Dark.png',
     specialty: 'DeFi Lending Protocol',
     fontFamily: '"SuisseIntl", system-ui, sans-serif',
     messageStyle: 'corporate-finance',
@@ -97,15 +101,16 @@ const brandProfiles: Record<string, MemberTheme> = {
     ],
   },
   SentX: {
-    primary: '#374151',
-    secondary: '#6b7280',
-    accent: '#9ca3af',
+    primary: '#64748b',
+    secondary: '#94a3b8',
+    accent: '#cbd5e1',
     background: 'from-gray-50 to-slate-50 dark:from-gray-950 dark:to-slate-950',
     text: 'text-gray-900 dark:text-gray-100',
     personality: 'professional',
-    gradient: 'from-gray-700 to-slate-800',
+    gradient: 'from-slate-600 to-slate-700',
     icon: FiDatabase,
     logo: '/logo_icons/SentX.png',
+    logoDark: '/logo_icons/SentX_Dark.png',
     specialty: 'Leading NFT Marketplace',
     fontFamily: 'system-ui, sans-serif',
     messageStyle: 'trading-professional',
@@ -125,6 +130,7 @@ const brandProfiles: Record<string, MemberTheme> = {
     gradient: 'from-sky-500 to-blue-600',
     icon: FiCpu,
     logo: '/logo_icons/Neuron.png',
+    logoDark: '/logo_icons/Neuron_Dark.png',
     specialty: 'Machine-to-Machine Commerce',
     fontFamily: '"Inter", system-ui, sans-serif',
     messageStyle: 'futuristic-technical',
@@ -141,6 +147,7 @@ const brandProfiles: Record<string, MemberTheme> = {
     gradient: 'from-violet-500 to-purple-600',
     icon: FiCode,
     logo: '/logo_icons/Kiloscribe.png',
+    logoDark: '/logo_icons/Kiloscribe_Dark.png',
     specialty: 'On-Graph File Storage',
     fontFamily: '"JetBrains Mono", "Fira Code", monospace',
     messageStyle: 'code-as-brand',
@@ -196,6 +203,7 @@ const brandProfiles: Record<string, MemberTheme> = {
     gradient: 'from-sky-500 to-blue-600',
     icon: FiUsers,
     logo: '/logo_icons/HGRAPH.png',
+    logoDark: '/logo_icons/HGraph_Dark.png',
     specialty: 'Mirror Node Infrastructure',
     fontFamily: '"JetBrains Mono", "Fira Code", monospace',
     messageStyle: 'technical-enterprise',
@@ -401,8 +409,29 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
   onClick,
 }) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
   const theme = member.theme;
   const IconComponent = theme.icon;
+
+  useEffect(() => {
+    // Check if dark mode is active
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark') || 
+                     document.documentElement.getAttribute('data-theme') === 'dark';
+      setIsDarkMode(isDark);
+    };
+    
+    checkDarkMode();
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -441,32 +470,19 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
             <div
               className={`w-16 h-16 rounded-2xl object-contain p-3 transition-all duration-500 relative ${
                 isActive ? 'shadow-xl' : 'shadow-md'
-              }`}
+              } ${!isActive ? 'bg-gray-50 dark:bg-white/20' : ''}`}
               style={{
-                backgroundColor: isActive ? `${theme.primary}15` : '#f9fafb',
+                backgroundColor: isActive ? `${theme.primary}15` : undefined,
                 border: isActive
                   ? `3px solid ${theme.primary}40`
                   : '3px solid transparent',
               }}
             >
               <img
-                src={theme.logo}
+                src={isDarkMode && theme.logoDark ? theme.logoDark : theme.logo}
                 alt={member.name}
                 className='w-full h-full object-contain transition-transform duration-300 group-hover:scale-110'
               />
-
-              {/* Floating icon indicator - positioned to avoid clipping */}
-              <div
-                className={`absolute top-0 right-0 w-6 h-6 rounded-full flex items-center justify-center shadow-lg transition-all duration-500 z-20 ${
-                  isActive ? 'scale-100 rotate-0' : 'scale-75 rotate-12'
-                }`}
-                style={{
-                  backgroundColor: theme.primary,
-                  transform: 'translate(25%, -25%)',
-                }}
-              >
-                <IconComponent className='w-3 h-3 text-white' />
-              </div>
             </div>
           </div>
 
@@ -577,7 +593,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
                 style={{ backgroundColor: `${theme.primary}10` }}
               >
                 <img
-                  src={member.logo}
+                  src={isDarkMode && theme.logoDark ? theme.logoDark : theme.logo}
                   alt={member.name}
                   className='w-full h-full object-contain'
                 />
@@ -674,6 +690,9 @@ export const MemberSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [scrollPosition, setScrollPosition] = useState<'top' | 'middle' | 'bottom'>('top');
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isPlaying) return;
@@ -684,6 +703,78 @@ export const MemberSection: React.FC = () => {
 
     return () => clearInterval(interval);
   }, [isPlaying]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!scrollRef.current) return;
+      
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      const scrollPercentage = scrollTop / (scrollHeight - clientHeight);
+      
+      if (scrollPercentage === 0) {
+        setScrollPosition('top');
+      } else if (scrollPercentage >= 0.95) {
+        setScrollPosition('bottom');
+      } else {
+        setScrollPosition('middle');
+      }
+    };
+
+    const scrollElement = scrollRef.current;
+    if (scrollElement) {
+      scrollElement.addEventListener('scroll', handleScroll);
+      handleScroll(); // Check initial position
+    }
+
+    return () => {
+      if (scrollElement) {
+        scrollElement.removeEventListener('scroll', handleScroll);
+      }
+    };
+  }, []);
+
+  // Auto-scroll to active member
+  useEffect(() => {
+    if (!scrollRef.current) return;
+    
+    const activeElement = scrollRef.current.children[activeIndex] as HTMLElement;
+    if (!activeElement) return;
+    
+    const container = scrollRef.current;
+    const containerHeight = container.clientHeight;
+    const scrollTop = container.scrollTop;
+    const elementTop = activeElement.offsetTop;
+    const elementHeight = activeElement.offsetHeight;
+    
+    // Check if element is not fully visible
+    if (elementTop < scrollTop || elementTop + elementHeight > scrollTop + containerHeight) {
+      // Scroll to center the element in the container
+      const targetScroll = elementTop - containerHeight / 2 + elementHeight / 2;
+      container.scrollTo({
+        top: Math.max(0, targetScroll),
+        behavior: 'smooth'
+      });
+    }
+  }, [activeIndex]);
+
+  // Detect dark mode
+  useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark = document.documentElement.classList.contains('dark') || 
+                     document.documentElement.getAttribute('data-theme') === 'dark';
+      setIsDarkMode(isDark);
+    };
+    
+    checkDarkMode();
+    
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
 
   const activeMember = teamMembers[activeIndex];
   const activeTheme = activeMember.theme;
@@ -708,7 +799,7 @@ export const MemberSection: React.FC = () => {
 
           <Typography
             variant='h2'
-            className='text-4xl sm:text-5xl lg:text-6xl font-mono font-black text-gray-900 dark:text-white leading-tight mb-6'
+            className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-6'
           >
             <GradientText gradient='brand' as='span'>
               Consortium
@@ -752,12 +843,12 @@ export const MemberSection: React.FC = () => {
                   </div>
                   <button
                     onClick={() => setIsPlaying(!isPlaying)}
-                    className='p-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors'
+                    className='p-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-all duration-200'
                   >
                     {isPlaying ? (
-                      <FiPause className='w-4 h-4 text-gray-600 dark:text-gray-400' />
+                      <FiPause className='w-3.5 h-3.5 text-gray-700 dark:text-gray-300' />
                     ) : (
-                      <FiPlay className='w-4 h-4 text-gray-600 dark:text-gray-400' />
+                      <FiPlay className='w-3.5 h-3.5 text-gray-700 dark:text-gray-300' />
                     )}
                   </button>
                   <div className='text-xs text-gray-500 dark:text-gray-400'>
@@ -767,8 +858,8 @@ export const MemberSection: React.FC = () => {
               </div>
             </div>
 
-            <div className='flex' style={{ minHeight: '600px' }}>
-              <div className='w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full'>
+            <div className='flex' style={{ height: '640px' }}>
+              <div className='w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full relative'>
                 <div className='px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0'>
                   <div className='flex items-center gap-2 text-sm font-mono text-gray-700 dark:text-gray-300'>
                     <FiGitBranch className='w-4 h-4' />
@@ -781,6 +872,7 @@ export const MemberSection: React.FC = () => {
                 </div>
 
                 <div
+                  ref={scrollRef}
                   className='flex-1 px-2 py-3 space-y-1 overflow-y-auto overflow-x-visible'
                 >
                   {teamMembers.map((member, index) => (
@@ -793,9 +885,26 @@ export const MemberSection: React.FC = () => {
                     />
                   ))}
                 </div>
+                
+                {/* Scroll indicator */}
+                {scrollPosition !== 'middle' && (
+                  <div className={`absolute ${scrollPosition === 'bottom' ? 'top-14' : 'bottom-2'} left-1/2 transform -translate-x-1/2 pointer-events-none z-10`}>
+                    <motion.div
+                      animate={{ y: scrollPosition === 'bottom' ? [0, -5, 0] : [0, 5, 0] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className='text-gray-400 dark:text-gray-600'
+                    >
+                      {scrollPosition === 'bottom' ? (
+                        <FiChevronUp className='w-5 h-5' />
+                      ) : (
+                        <FiChevronDown className='w-5 h-5' />
+                      )}
+                    </motion.div>
+                  </div>
+                )}
               </div>
 
-              <div className='flex-1 p-8 flex items-stretch'>
+              <div className='flex-1 p-8 flex items-start'>
                 <AnimatePresence mode='wait'>
                   <motion.div
                     key={activeIndex}
@@ -803,10 +912,10 @@ export const MemberSection: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className={`bg-gradient-to-br ${activeTheme.background} rounded-2xl p-6 border transition-all duration-500 w-full`}
+                    className={`bg-gradient-to-br ${activeTheme.background} rounded-2xl p-4 border transition-all duration-500 w-full`}
                     style={{ borderColor: `${activeTheme.primary}30` }}
                   >
-                    <div className='mb-6'>
+                    <div className='mb-4'>
                       <div className='flex items-center gap-4 mb-4'>
                         <div
                           className='w-16 h-16 rounded-xl object-contain p-2 transition-colors duration-500 relative'
@@ -815,7 +924,7 @@ export const MemberSection: React.FC = () => {
                           }}
                         >
                           <img
-                            src={activeTheme.logo}
+                            src={isDarkMode && activeTheme.logoDark ? activeTheme.logoDark : activeTheme.logo}
                             alt={activeMember.name}
                             className='w-full h-full object-contain'
                           />
@@ -823,33 +932,23 @@ export const MemberSection: React.FC = () => {
                         <div>
                           <Typography
                             variant='h3'
-                            className='text-2xl font-mono font-bold transition-colors duration-500 text-gray-900 dark:text-white'
+                            className='text-lg font-mono font-bold transition-colors duration-500 text-gray-900 dark:text-white mb-1'
                           >
                             {activeMember.name}
                           </Typography>
                           <Typography
-                            className={`text-sm font-mono mb-1 transition-colors duration-500`}
+                            className={`text-sm font-mono transition-colors duration-500 mb-1`}
                           >
                             <span style={{ color: activeTheme.primary }}>
                               {activeTheme.specialty}
                             </span>
                           </Typography>
-                          <a
-                            href={activeMember.website}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='font-mono hover:underline transition-colors duration-500'
-                            style={{ color: activeTheme.primary }}
-                          >
-                            {activeMember.website.replace('https://', '')}
-                          </a>
-
                           {activeTheme.brandElements && (
-                            <div className='flex flex-wrap gap-2 mt-3'>
+                            <div className='flex flex-wrap gap-2'>
                               {activeTheme.brandElements.map((element, idx) => (
                                 <span
                                   key={idx}
-                                  className='text-xs px-3 py-1 rounded-full font-medium'
+                                  className='text-xs px-2 py-0.5 rounded-full font-medium'
                                   style={{
                                     backgroundColor: `${activeTheme.primary}15`,
                                     color: activeTheme.primary,
@@ -864,24 +963,16 @@ export const MemberSection: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className='space-y-6'>
-                      <div>
-                        <Typography
-                          variant='h4'
-                          className='text-sm font-mono font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2'
-                        >
-                          About
-                        </Typography>
-                        <Typography className='text-lg leading-relaxed transition-colors duration-500 text-gray-900 dark:text-white'>
-                          {activeMember.description}
-                        </Typography>
-                      </div>
+                    <div className='space-y-4'>
+                      <Typography className='text-sm leading-relaxed transition-colors duration-500 text-gray-900 dark:text-white'>
+                        {activeMember.description}
+                      </Typography>
 
                       {activeMember.metrics && (
                         <div>
                           <Typography
                             variant='h4'
-                            className='text-sm font-mono font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2'
+                            className='text-xs font-mono font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2'
                           >
                             Key Metrics
                           </Typography>
@@ -892,11 +983,11 @@ export const MemberSection: React.FC = () => {
                             }}
                           >
                             <div className='flex items-center justify-between mb-2'>
-                              <span className='font-mono transition-colors duration-500 text-gray-900 dark:text-white'>
+                              <span className='text-xs font-mono transition-colors duration-500 text-gray-900 dark:text-white'>
                                 {activeMember.metrics.primaryMetric}
                               </span>
                               <span
-                                className='text-2xl font-bold'
+                                className='text-lg font-bold'
                                 style={{
                                   color: activeTheme.primary,
                                 }}
@@ -904,7 +995,7 @@ export const MemberSection: React.FC = () => {
                                 {activeMember.metrics.value}
                               </span>
                             </div>
-                            <Typography className='text-sm transition-colors duration-500 text-gray-700 dark:text-gray-300'>
+                            <Typography className='text-xs transition-colors duration-500 text-gray-700 dark:text-gray-300'>
                               {activeMember.metrics.description}
                             </Typography>
                           </div>
@@ -912,24 +1003,27 @@ export const MemberSection: React.FC = () => {
                       )}
 
                       {activeMember.contribution && (
-                        <div className='bg-gray-900 dark:bg-gray-800 rounded-xl p-4'>
+                        <div 
+                          className='rounded-xl p-4'
+                          style={{ backgroundColor: `${activeTheme.primary}10` }}
+                        >
                           <Typography
                             variant='h4'
-                            className='font-mono mb-2 text-white'
+                            className='font-mono mb-2 font-bold'
+                            style={{ color: activeTheme.primary }}
                           >
                             Consortium Contribution
                           </Typography>
                           <Typography
                             variant='body'
-                            color='white'
-                            className='text-sm'
+                            className='text-sm text-gray-700 dark:text-gray-300'
                           >
                             {activeMember.contribution}
                           </Typography>
                         </div>
                       )}
 
-                      <div className='flex gap-3'>
+                      <div className='flex gap-2'>
                         <SecondaryButton
                           className='flex-1'
                           onClick={() => setShowModal(true)}
@@ -965,7 +1059,7 @@ export const MemberSection: React.FC = () => {
                 style={{ backgroundColor: `${activeTheme.primary}10` }}
               >
                 <img
-                  src={activeTheme.logo}
+                  src={isDarkMode && activeTheme.logoDark ? activeTheme.logoDark : activeTheme.logo}
                   alt={activeMember.name}
                   className='w-full h-full object-contain'
                 />
@@ -998,12 +1092,6 @@ export const MemberSection: React.FC = () => {
               className='rounded-xl p-4'
               style={{ backgroundColor: `${activeTheme.primary}08` }}
             >
-              <Typography
-                variant='h4'
-                className='font-semibold text-gray-900 dark:text-white mb-2'
-              >
-                About
-              </Typography>
               <Typography className='text-gray-700 dark:text-gray-300 leading-relaxed'>
                 {activeMember.description}
               </Typography>
@@ -1040,11 +1128,18 @@ export const MemberSection: React.FC = () => {
             )}
 
             {activeMember.contribution && (
-              <div className='bg-gray-900 dark:bg-gray-800 rounded-xl p-4'>
-                <Typography variant='h4' className='font-mono mb-2 text-white'>
+              <div 
+                className='rounded-xl p-4'
+                style={{ backgroundColor: `${activeTheme.primary}10` }}
+              >
+                <Typography 
+                  variant='h4' 
+                  className='font-mono mb-2 font-bold'
+                  style={{ color: activeTheme.primary }}
+                >
                   Consortium Contribution
                 </Typography>
-                <Typography variant='body' color='white' className='text-sm'>
+                <Typography variant='body' className='text-sm text-gray-700 dark:text-gray-300'>
                   {activeMember.contribution}
                 </Typography>
               </div>
