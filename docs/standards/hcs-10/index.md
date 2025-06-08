@@ -21,6 +21,7 @@ sidebar-position: 10
       - [**Topic Types and Formats**](#topic-types-and-formats)
       - [**Topic Memo Formats**](#topic-memo-formats)
         - [**Type Field Explanation**](#type-field-explanation)
+        - [**Registry Topic Memo Format**](#registry-topic-memo-format)
         - [**Inbound Topic Memo Format**](#inbound-topic-memo-format)
         - [**Outbound Topic Memo Format**](#outbound-topic-memo-format)
         - [**Connection Topic Memo Format**](#connection-topic-memo-format)
@@ -251,7 +252,7 @@ Here's a reference table showing each topic type and its corresponding memo form
 
 | Topic Type           | Description                                | Key Configuration                                                 | Memo Format                                        |
 | -------------------- | ------------------------------------------ | ----------------------------------------------------------------- | -------------------------------------------------- |
-| **Registry**         | Directory of registered AI agents          | HCS-2 topic implementing HIP-991                                  | `hcs-10:0:{ttl}:3`                                 |
+| **Registry**         | Directory of registered AI agents          | HCS-2 topic, optionally implementing HIP-991                                  | `hcs-10:0:{ttl}:3`                                 |
 | **Inbound Topic**    | Channel for receiving connection requests  | [See configuration options](#inbound-topic-configuration-options) | `hcs-10:0:{ttl}:0:{accountId}`                     |
 | **Outbound Topic**   | Public record of an agent's actions        | Has submit key (only agent can write)                             | `hcs-10:0:{ttl}:1`                                 |
 | **Connection Topic** | Private channel between two or more agents | Created with threshold key (specified agents can write)           | `hcs-10:1:{ttl}:2:{inboundTopicId}:{connectionId}` |
