@@ -138,7 +138,7 @@ const UseCaseSection: React.FC = () => {
           <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 items-start'>
             
             {/* Left Side - Clean Laptop Mockup */}
-            <div className='relative lg:col-span-7 transform scale-110 origin-left ml-4'>
+            <div className='relative lg:col-span-7 transform scale-90 sm:scale-100 lg:scale-110 origin-left ml-2 sm:ml-4'>
               {/* Laptop Screen */}
               <div className='relative bg-gray-800 dark:bg-gray-700 rounded-t-2xl p-3 shadow-2xl'>
                 {/* Screen Bezel */}
@@ -180,7 +180,7 @@ const UseCaseSection: React.FC = () => {
               </div>
 
               {/* Laptop Base Edge */}
-              <div className='bg-gray-700 dark:bg-gray-600 h-6 rounded-b-2xl shadow-xl' style={{ width: '110%', marginLeft: '-5%' }}></div>
+              <div className='bg-gray-700 dark:bg-gray-600 h-6 rounded-b-2xl shadow-xl' style={{ width: '105%', marginLeft: '-2.5%' }}></div>
             </div>
 
             {/* Right Side - Dynamic Browser Window */}
@@ -195,7 +195,7 @@ const UseCaseSection: React.FC = () => {
                       <div className='w-3 h-3 rounded-full bg-green-400'></div>
                     </div>
                     <div className='text-xs font-mono text-gray-700 dark:text-gray-300'>
-                      {useCases[currentIndex]?.name.toLowerCase().replace(/\s+/g, '-')}.app
+                      {useCases[currentIndex]?.link.replace(/^https?:\/\//, '')}
                     </div>
                   </div>
                   <div className='text-xs text-gray-500 dark:text-gray-400'>
@@ -205,7 +205,7 @@ const UseCaseSection: React.FC = () => {
               </div>
 
               {/* Dynamic Browser Content */}
-              <div className='p-6 space-y-4' style={{ minHeight: '320px' }}>
+              <div className='p-6' style={{ height: '360px' }}>
                 <AnimatePresence mode='wait'>
                   <motion.div
                     key={`browser-${currentIndex}`}
@@ -213,40 +213,41 @@ const UseCaseSection: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -20 }}
                     transition={{ duration: 0.4 }}
-                    className='space-y-4'
+                    className='h-full flex flex-col justify-between'
                   >
-                    <div className='space-y-3'>
-                      <div className='flex items-start justify-between'>
+                    <div className='flex-1 space-y-3'>
+                      <div>
+                        <div className='flex items-start justify-between mb-2'>
+                          <Typography
+                            variant='h3'
+                            className='text-xl font-bold text-gray-900 dark:text-white'
+                          >
+                            {useCases[currentIndex]?.name}
+                          </Typography>
+                          <StatusBadge variant='success' animated>
+                            LIVE
+                          </StatusBadge>
+                        </div>
+
                         <Typography
-                          variant='h3'
-                          className='text-xl font-bold text-gray-900 dark:text-white'
+                          color='muted'
+                          className='text-sm text-gray-600 dark:text-gray-300 leading-relaxed'
                         >
-                          {useCases[currentIndex]?.name}
+                          {useCases[currentIndex]?.description}
                         </Typography>
-                        <StatusBadge variant='success' animated>
-                          LIVE
-                        </StatusBadge>
                       </div>
 
-                      <Typography
-                        color='muted'
-                        className='text-sm text-gray-600 dark:text-gray-300 leading-relaxed'
-                      >
-                        {useCases[currentIndex]?.description}
-                      </Typography>
-                    </div>
-
-                    <div className='bg-gray-100/80 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200/50 dark:border-gray-700/30'>
-                      <div className='text-sm font-mono text-brand-purple'>
-                        {useCases[currentIndex]?.tagline}
+                      <div className='bg-gray-100/80 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200/50 dark:border-gray-700/30'>
+                        <div className='text-sm font-mono text-brand-purple'>
+                          {useCases[currentIndex]?.tagline}
+                        </div>
                       </div>
                     </div>
 
-                    <div className='flex gap-3 pt-2'>
+                    <div className='flex gap-2'>
                       <PrimaryButton
                         href={useCases[currentIndex]?.link}
                         size='small'
-                        className='flex-1'
                       >
                         Visit Site →
                       </PrimaryButton>

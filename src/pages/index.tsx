@@ -70,6 +70,57 @@ const NewsletterOverlay: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
 const HeroSection: React.FC = () => {
   const [showNewsletter, setShowNewsletter] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [showLine1, setShowLine1] = useState(false);
+  const [showLine2, setShowLine2] = useState(false);
+  const [typedText1, setTypedText1] = useState('');
+  const [typedText2, setTypedText2] = useState('');
+
+  const line1 = '✓ Installing autonomous agent infrastructure...';
+  const line2 = '// Ready to build the agentic internet';
+
+  useEffect(() => {
+    // Start first line after delay
+    const timer1 = setTimeout(() => {
+      setShowLine1(true);
+      // Type out first line
+      let index = 0;
+      const typeInterval1 = setInterval(() => {
+        if (index <= line1.length) {
+          setTypedText1(line1.slice(0, index));
+          index++;
+        } else {
+          clearInterval(typeInterval1);
+        }
+      }, 30);
+    }, 800);
+
+    // Start second line after first is done
+    const timer2 = setTimeout(() => {
+      setShowLine2(true);
+      // Type out second line
+      let index = 0;
+      const typeInterval2 = setInterval(() => {
+        if (index <= line2.length) {
+          setTypedText2(line2.slice(0, index));
+          index++;
+        } else {
+          clearInterval(typeInterval2);
+        }
+      }, 30);
+    }, 2200);
+    
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+    };
+  }, []);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText('npm install @hashgraphonline/standards-sdk');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   return (
     <section className='relative min-h-screen bg-white dark:bg-gray-900 overflow-hidden'>
@@ -88,32 +139,12 @@ const HeroSection: React.FC = () => {
         <div className='grid lg:grid-cols-2 gap-16 items-center min-h-screen py-20'>
           <div className='space-y-8'>
             <div className='space-y-6'>
-              <Typography variant='h1' className='leading-tight tracking-tight'>
-                <span className='block text-2xl lg:text-3xl xl:text-4xl font-normal text-gray-600 dark:text-gray-400 mb-2'>
-                  /hashgraph-online_
-                </span>
-                <span className='block'>on-chain</span>
-                <Typography
-                  variant='h1'
-                  gradient='brand'
-                  as='span'
-                  className='inline-block'
-                >
+              <h1 className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black leading-tight tracking-tight lg:whitespace-nowrap'>
+                <span className='text-gray-900 dark:text-white'>on-chain </span>
+                <span className='bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green bg-clip-text text-transparent inline'>
                   internet
-                </Typography>
-              </Typography>
-
-              <Terminal title='terminal'>
-                <Terminal.Line command='npm install @hashgraphonline/standards-sdk' />
-                <Terminal.Line
-                  output='✓ Installing autonomous agent infrastructure...'
-                  type='output'
-                />
-                <Terminal.Line
-                  output='// Ready to build the agentic internet'
-                  type='comment'
-                />
-              </Terminal>
+                </span>
+              </h1>
 
               <Typography
                 color='muted'
@@ -135,6 +166,70 @@ const HeroSection: React.FC = () => {
                 </Typography>
               </Typography>
 
+              <div className='relative'>
+                <Terminal title='terminal'>
+                  <Terminal.Line 
+                    command='npm install @hashgraphonline/standards-sdk' 
+                    clickable
+                    onClick={handleCopy}
+                  />
+                  <AnimatePresence>
+                    {showLine1 && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      >
+                        <div className='font-mono text-sm pl-4 text-green-500 dark:text-green-400 flex items-center'>
+                          <span>{typedText1}</span>
+                          {typedText1.length < line1.length && (
+                            <motion.span
+                              animate={{ opacity: [1, 0] }}
+                              transition={{ duration: 0.5, repeat: Infinity }}
+                              className='ml-0.5 inline-block w-2 h-4 bg-green-500 dark:bg-green-400'
+                            />
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <AnimatePresence>
+                    {showLine2 && (
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeOut" }}
+                      >
+                        <div className='font-mono text-sm pl-4 text-blue-500 dark:text-blue-400 flex items-center'>
+                          <span>{typedText2}</span>
+                          {typedText2.length < line2.length && (
+                            <motion.span
+                              animate={{ opacity: [1, 0] }}
+                              transition={{ duration: 0.5, repeat: Infinity }}
+                              className='ml-0.5 inline-block w-2 h-4 bg-blue-500 dark:bg-blue-400'
+                            />
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Terminal>
+                <AnimatePresence>
+                  {copied && (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className='absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium shadow-lg'
+                    >
+                      Copied!
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
               <div className='flex flex-col sm:flex-row gap-4'>
                 <PrimaryButton href='/docs/libraries/standards-sdk'>
                   Standards SDK Docs →
@@ -148,14 +243,14 @@ const HeroSection: React.FC = () => {
           </div>
 
           <div className='space-y-8'>
-            <div className='relative h-80 lg:h-96 rounded-3xl overflow-hidden'>
+            <div className='relative h-auto lg:h-96 rounded-3xl overflow-hidden'>
               <div className='absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black'></div>
 
               <div className='absolute top-4 lg:top-8 left-4 lg:left-8 w-24 lg:w-32 h-24 lg: rounded-full bg-gradient-to-br from-brand-blue/20 to-brand-purple/30 blur-2xl'></div>
               <div className='absolute bottom-8 lg:bottom-12 right-8 lg:right-12 w-16 lg:w-24 h-16 lg:h-24 rounded-full bg-gradient-to-tl from-brand-green/25 to-cyan-400/20 blur-xl'></div>
               <div className='absolute top-1/2 left-1/4 lg:left-1/3 w-12 lg:w-16 h-12 lg:h-16 rounded-full bg-gradient-to-r from-brand-purple/30 to-pink-400/25 blur-lg'></div>
 
-              <div className='relative h-full p-4 lg:p-8 flex flex-col justify-between'>
+              <div className='relative h-full p-4 lg:p-8 pb-8 lg:pb-8 flex flex-col justify-between'>
                 <div className='transform rotate-[-1deg] lg:rotate-[-2deg]'>
                   <div className='inline-block'>
                     <Typography
@@ -184,153 +279,234 @@ const HeroSection: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='grid grid-cols-1 lg:grid-cols-12 gap-4 items-end mt-8 lg:mt-0'>
-                  <div className='lg:col-span-5 space-y-3'>
-                    <TransformCard
-                      rotation='rotate-[0.5deg] lg:rotate-[1deg]'
-                      background='bg-gray-800/80'
-                      border='border-l-4 border-brand-blue'
-                      shadow='lg'
-                      className='backdrop-blur-sm p-4'
+                <div className='grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mt-8 items-start'>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    className='flex flex-col items-center'
+                  >
+                    <motion.div
+                      animate={{ 
+                        rotateY: [0, 360],
+                        scale: [1, 1.1, 1]
+                      }}
+                      transition={{ 
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                      className='mb-3 text-brand-blue/60'
+                      style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                     >
-                      <Typography
-                        color='muted'
-                        className='text-xs text-white font-semibold mb-1'
-                      >
-                        // TODAY
-                      </Typography>
-                      <div className='space-y-1'>
-                        <Typography className='text-sm text-white font-medium'>
-                          Servers
-                        </Typography>
-                        <Typography className='text-sm text-white font-medium'>
-                          Databases
-                        </Typography>
-                        <Typography className='text-sm text-white font-medium'>
-                          APIs
-                        </Typography>
-                      </div>
-                    </TransformCard>
-                  </div>
-
-                  <div className='hidden lg:block lg:col-span-2 flex justify-center'>
-                    <div className='w-8 h-px bg-gradient-to-r from-brand-blue to-brand-green'></div>
-                  </div>
-
-                  <div className='lg:col-span-5 space-y-3'>
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        <circle cx="12" cy="12" r="10" />
+                        <ellipse cx="12" cy="12" rx="10" ry="5" />
+                        <path d="M2 12 Q12 8 22 12" />
+                        <path d="M2 12 Q12 16 22 12" />
+                        <line x1="12" y1="2" x2="12" y2="22" />
+                      </svg>
+                    </motion.div>
                     <TransformCard
                       rotation='rotate-[-0.5deg] lg:rotate-[-1deg]'
-                      background='bg-gradient-to-br from-brand-blue/30 to-brand-green/30'
-                      border='border-l-4 border-brand-green'
+                      background='bg-gradient-to-br from-brand-blue/30 to-brand-blue/20'
+                      border='border border-brand-blue/50'
                       shadow='lg'
-                      className='backdrop-blur-sm p-4'
+                      className='p-4 backdrop-blur-sm hover:scale-105 transition-all duration-500 group w-full'
+                      style={{ minHeight: '100px' }}
                     >
-                      <Typography
-                        color='muted'
-                        className='text-xs text-white font-semibold mb-1'
+                      <motion.div
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
                       >
-                        // TOMORROW
-                      </Typography>
-                      <div className='space-y-1'>
-                        <Typography className='text-sm text-white font-bold'>
-                          Consensus
+                        <Typography
+                          color='muted'
+                          className='text-xs text-white/90 font-bold uppercase tracking-wide mb-2 group-hover:text-brand-blue transition-colors duration-300'
+                        >
+                          // Websites
+                          <br />
+                          exist
                         </Typography>
-                        <Typography className='text-sm text-white font-bold'>
-                          Consensus
+                      </motion.div>
+                      <motion.div
+                        animate={{ 
+                          opacity: [0.5, 1, 0.5],
+                          scale: [0.95, 1.05, 0.95]
+                        }}
+                        transition={{ 
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        <Typography className='text-sm font-black text-white leading-tight'>
+                          without web
+                          <br />
+                          servers
                         </Typography>
-                        <Typography className='text-sm text-white font-bold'>
-                          Consensus
-                        </Typography>
-                      </div>
+                      </motion.div>
                     </TransformCard>
-                  </div>
-                </div>
+                  </motion.div>
 
-                <div className='lg:absolute lg:bottom-4 lg:right-4 mt-6 lg:mt-0 transform rotate-[1deg] lg:rotate-[2deg]'>
-                  <TransformCard
-                    background='bg-gradient-to-br from-gray-800/95 to-gray-900/95 dark:from-gray-700/95 dark:to-gray-800/95'
-                    border='border border-gray-600/50 dark:border-gray-500/50'
-                    shadow='xl'
-                    rounded='2xl'
-                    className='backdrop-blur-sm p-4'
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    className='flex flex-col items-center'
                   >
-                    <Typography
-                      color='muted'
-                      className='text-xs text-white font-semibold mb-1'
+                    <div className='mb-3 text-brand-green/60 relative' style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <svg width="108" height="40" viewBox="0 0 60 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        {/* First robot */}
+                        <rect x="4" y="6" width="12" height="14" rx="2" />
+                        <circle cx="7" cy="11" r="1.5" fill="currentColor">
+                          <animate attributeName="opacity" values="1;0.1;1" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                        <circle cx="13" cy="11" r="1.5" fill="currentColor">
+                          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite" begin="0.5s" />
+                        </circle>
+                        <path d="M7 15 Q10 17 13 15" strokeLinecap="round" />
+                        <line x1="8" y1="2" x2="8" y2="6" strokeLinecap="round">
+                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" />
+                        </line>
+                        <line x1="12" y1="2" x2="12" y2="6" strokeLinecap="round">
+                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.5s" />
+                        </line>
+                        
+                        {/* Second robot */}
+                        <rect x="44" y="6" width="12" height="14" rx="2" />
+                        <circle cx="47" cy="11" r="1.5" fill="currentColor">
+                          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite" begin="1s" />
+                        </circle>
+                        <circle cx="53" cy="11" r="1.5" fill="currentColor">
+                          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite" begin="1.5s" />
+                        </circle>
+                        <path d="M47 15 Q50 17 53 15" strokeLinecap="round" />
+                        <line x1="48" y1="2" x2="48" y2="6" strokeLinecap="round">
+                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="1s" />
+                        </line>
+                        <line x1="52" y1="2" x2="52" y2="6" strokeLinecap="round">
+                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="1.5s" />
+                        </line>
+                        
+                        {/* Communication waves between robots */}
+                        <path d="M16 12 C20 10, 25 10, 30 12 C35 14, 40 14, 44 12" strokeDasharray="2 1" opacity="0.5">
+                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" />
+                        </path>
+                        <path d="M16 12 C20 14, 25 14, 30 12 C35 10, 40 10, 44 12" strokeDasharray="2 1" opacity="0.5">
+                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.75s" />
+                        </path>
+                      </svg>
+                    </div>
+                    <TransformCard
+                      rotation='rotate-[0.5deg] lg:rotate-[1deg]'
+                      background='bg-gradient-to-br from-brand-green/30 to-brand-green/20'
+                      border='border border-brand-green/50'
+                      shadow='lg'
+                      className='p-4 backdrop-blur-sm hover:scale-105 transition-all duration-500 group w-full'
+                      style={{ minHeight: '100px' }}
                     >
-                      // BUILDING
-                    </Typography>
-                    <Typography className='text-sm text-white font-bold'>
-                      Decentralized Internet Protocols.
-                    </Typography>
-                  </TransformCard>
+                      <motion.div
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                      >
+                        <Typography
+                          color='muted'
+                          className='text-xs text-white/90 font-bold uppercase tracking-wide mb-2 group-hover:text-brand-green transition-colors duration-300'
+                        >
+                          // AI agents discover
+                        </Typography>
+                      </motion.div>
+                      <motion.div
+                        animate={{ 
+                          opacity: [0.5, 1, 0.5],
+                          scale: [0.95, 1.05, 0.95]
+                        }}
+                        transition={{ 
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 1
+                        }}
+                      >
+                        <Typography className='text-sm font-black text-white leading-tight'>
+                          eachother
+                          <br />
+                          autonomously
+                        </Typography>
+                      </motion.div>
+                    </TransformCard>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.6 }}
+                    className='flex flex-col items-center'
+                  >
+                    <motion.div
+                      animate={{ 
+                        rotateY: [0, 180, 360],
+                        scale: [1, 1.15, 1]
+                      }}
+                      transition={{ 
+                        duration: 5,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      className='mb-3 text-brand-purple/60'
+                      style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+                        <circle cx="12" cy="12" r="10" />
+                        <circle cx="12" cy="12" r="6" strokeDasharray="2 1" />
+                        <path d="M12 8 L12 16 M9 10 L15 10 M9 14 L15 14" strokeLinecap="round" />
+                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      </svg>
+                    </motion.div>
+                    <TransformCard
+                      rotation='rotate-[-0.25deg] lg:rotate-[-0.5deg]'
+                      background='bg-gradient-to-br from-brand-purple/30 to-brand-purple/20'
+                      border='border border-brand-purple/50'
+                      shadow='lg'
+                      className='p-4 backdrop-blur-sm hover:scale-105 transition-all duration-500 group w-full'
+                      style={{ minHeight: '100px' }}
+                    >
+                      <motion.div
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.8 }}
+                      >
+                        <Typography
+                          color='muted'
+                          className='text-xs text-white/90 font-bold uppercase tracking-wide mb-2 group-hover:text-brand-purple transition-colors duration-300'
+                        >
+                          // Economic systems
+                        </Typography>
+                      </motion.div>
+                      <motion.div
+                        animate={{ 
+                          opacity: [0.5, 1, 0.5],
+                          scale: [0.95, 1.05, 0.95]
+                        }}
+                        transition={{ 
+                          duration: 3,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: 2
+                        }}
+                      >
+                        <Typography className='text-sm font-black text-white'>
+                          run themselves
+                        </Typography>
+                      </motion.div>
+                    </TransformCard>
+                  </motion.div>
                 </div>
               </div>
             </div>
 
-            <div className='grid grid-cols-1 lg:grid-cols-12 gap-4'>
-              <div className='lg:col-span-4'>
-                <TransformCard
-                  rotation='rotate-[-0.5deg] lg:rotate-[-1deg]'
-                  background='bg-gradient-to-br from-brand-blue/90 to-brand-blue/70'
-                  border='border border-brand-blue/50'
-                  shadow='lg'
-                  className='p-6  flex flex-col justify-start'
-                >
-                  <Typography
-                    color='muted'
-                    className='text-xs text-gray-400 dark:text-white font-bold uppercase tracking-wide mb-3'
-                  >
-                    // Websites exist
-                  </Typography>
-                  <Typography className='text-base lg:text-lg font-black text-white'>
-                    without web servers
-                  </Typography>
-                </TransformCard>
-              </div>
-
-              <div className='lg:col-span-4 lg:mt-4'>
-                <TransformCard
-                  rotation='rotate-[0.5deg] lg:rotate-[1deg]'
-                  background='bg-gradient-to-br from-brand-green/90 to-brand-green/70'
-                  border='border border-brand-green/50'
-                  shadow='lg'
-                  className='p-6 flex flex-col justify-start'
-                >
-                  <Typography
-                    color='muted'
-                    className='text-xs text-gray-400 dark:text-white font-bold uppercase tracking-wide mb-3'
-                  >
-                    // AI agents discover
-                  </Typography>
-                  <Typography className='text-base lg:text-lg font-black text-white leading-tight'>
-                    each other
-                    <br />
-                    autonomously_
-                  </Typography>
-                </TransformCard>
-              </div>
-
-              <div className='lg:col-span-4 lg:mt-2'>
-                <TransformCard
-                  rotation='rotate-[-0.25deg] lg:rotate-[-0.5deg]'
-                  background='bg-gradient-to-br from-brand-purple/90 to-brand-purple/70'
-                  border='border border-brand-purple/50'
-                  shadow='lg'
-                  className='p-6  flex flex-col justify-start'
-                >
-                  <Typography
-                    color='muted'
-                    className='text-xs text-gray-400 dark:text-white font-bold uppercase tracking-wide mb-3'
-                  >
-                    // Economic systems
-                  </Typography>
-                  <Typography className='text-base lg:text-lg font-black text-white'>
-                    run themselves
-                  </Typography>
-                </TransformCard>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -976,6 +1152,8 @@ const StandardSidebarItem: React.FC<StandardSidebarItemProps> = ({
 );
 
 const StandardsSection: React.FC = () => {
+  const [copied, setCopied] = useState(false);
+  
   // Convert to InteractiveShowcase format
   const allStandards: StandardItem[] = [
     {
@@ -1172,10 +1350,31 @@ const StandardsSection: React.FC = () => {
                   the autonomous internet with <span className='font-bold text-blue-600 dark:text-blue-400'>15+ battle-tested standards</span>
                 </p>
                 
-                <div className='bg-gray-100 dark:bg-gray-800 rounded-xl p-4 border-2 border-dashed border-gray-300 dark:border-gray-600'>
-                  <div className='text-sm font-mono text-gray-600 dark:text-gray-300'>
-                    <span className='text-green-600 dark:text-green-400'>$</span> npm install @hashgraphonline/standards-sdk
+                <div className='relative'>
+                  <div 
+                    className='bg-gray-100 dark:bg-gray-800 rounded-xl p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200'
+                    onClick={() => {
+                      navigator.clipboard.writeText('npm install @hashgraphonline/standards-sdk');
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                  >
+                    <div className='text-sm font-mono text-gray-600 dark:text-gray-300'>
+                      <span className='text-green-600 dark:text-green-400'>$</span> npm install @hashgraphonline/standards-sdk
+                    </div>
                   </div>
+                  <AnimatePresence>
+                    {copied && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        className='absolute top-1/2 right-4 -translate-y-1/2 bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium shadow-lg'
+                      >
+                        Copied!
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
                 
                 <div className='flex flex-col sm:flex-row gap-4 justify-center'>
@@ -1187,7 +1386,7 @@ const StandardsSection: React.FC = () => {
                   </PrimaryButton>
                   <SecondaryButton 
                     href='https://github.com/hashgraph-online/standards-sdk' 
-                    className='text-lg py-4 px-8 font-bold border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 transform hover:scale-105 transition-all duration-300'
+                    className='text-lg py-4 px-8 font-bold border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 hover:text-purple-700 dark:hover:text-purple-300 transform hover:scale-105 transition-all duration-300'
                   >
                     GitHub ↗
                   </SecondaryButton>

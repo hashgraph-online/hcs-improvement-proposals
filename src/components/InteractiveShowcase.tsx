@@ -51,6 +51,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isPlaying, setIsPlaying] = useState<boolean>(autoRotate);
   const [scrollPosition, setScrollPosition] = useState<'top' | 'middle' | 'bottom'>('top');
+  const [expandedMobile, setExpandedMobile] = useState<number | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -129,7 +130,85 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
         )}
 
         <div className='max-w-7xl mx-auto mb-16'>
-          <div className='bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden'>
+          {/* Mobile: Accordion layout */}
+          <div className='lg:hidden'>
+            <div className='bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden'>
+              <div className='bg-gray-100 dark:bg-gray-800 px-4 py-2 border-b border-gray-200 dark:border-gray-700'>
+                <div className='flex items-center justify-between'>
+                  <div className='flex items-center gap-2'>
+                    <div className='flex gap-1'>
+                      <div className='w-2.5 h-2.5 rounded-full bg-red-400'></div>
+                      <div className='w-2.5 h-2.5 rounded-full bg-yellow-400'></div>
+                      <div className='w-2.5 h-2.5 rounded-full bg-green-400'></div>
+                    </div>
+                    <div className='text-xs font-mono text-gray-700 dark:text-gray-300'>
+                      {terminalTitle}
+                    </div>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    {autoRotate && (
+                      <button
+                        onClick={() => setIsPlaying(!isPlaying)}
+                        className='p-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-all duration-200'
+                      >
+                        {isPlaying ? (
+                          <FiPause className='w-3 h-3 text-gray-700 dark:text-gray-300' />
+                        ) : (
+                          <FiPlay className='w-3 h-3 text-gray-700 dark:text-gray-300' />
+                        )}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+              
+              <div className='p-2 space-y-2'>
+                {items.map((item, index) => (
+                  <div key={item.id} className='bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden'>
+                    <div className='relative'>
+                      <div 
+                        onClick={() => setExpandedMobile(expandedMobile === index ? null : index)}
+                        className='cursor-pointer'
+                      >
+                        <SidebarItem
+                          item={item}
+                          index={index}
+                          isActive={expandedMobile === index}
+                          onClick={() => setExpandedMobile(expandedMobile === index ? null : index)}
+                        />
+                      </div>
+                      <div className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
+                        <motion.div
+                          animate={{ rotate: expandedMobile === index ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <FiChevronDown className='w-5 h-5 text-gray-500' />
+                        </motion.div>
+                      </div>
+                    </div>
+                    <AnimatePresence>
+                      {expandedMobile === index && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className='overflow-hidden'
+                        >
+                          <div className='p-4 border-t border-gray-200 dark:border-gray-700'>
+                            <MainContent item={item} index={index} />
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop: Original layout */}
+          <div className='hidden lg:block bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden'>
             <div className='bg-gray-100 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-4'>

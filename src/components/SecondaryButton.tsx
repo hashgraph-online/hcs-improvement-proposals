@@ -22,7 +22,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
     'bg-transparent hover:bg-brand-blue hover:text-white',
     'border border-brand-blue shadow-sm hover:shadow-md',
     'focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-opacity-50',
-    'no-underline hover:no-underline',
+    'no-underline hover:no-underline text-center',
     {
       'text-sm py-2 px-4': size === 'small',
       'text-base py-3 px-6': size === 'medium',
