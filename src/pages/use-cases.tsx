@@ -173,7 +173,7 @@ const UseCasesPage: React.FC = () => {
       description='Discover groundbreaking applications of Hashgraph Online standards'
     >
       {/* Hero Section */}
-      <div className='py-20 md:py-32 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20'>
+      <div className='py-20 md:py-32 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'>
         <div className='container mx-auto px-4 md:px-6'>
           <div className='max-w-4xl mx-auto text-center'>
             <motion.div

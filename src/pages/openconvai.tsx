@@ -129,17 +129,17 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   description,
 }) => {
   return (
-    <TransformCard className='p-6'>
-      <div className='flex items-center gap-4 mb-4'>
+    <TransformCard className='p-4'>
+      <div className='flex items-center gap-3 mb-3'>
         <div className='p-3 rounded-lg bg-brand-blue/10 dark:bg-brand-blue/20'>
           {icon}
         </div>
-        <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>
+        <h3 className='text-base font-semibold text-gray-900 dark:text-white'>
           {title}
         </h3>
       </div>
 
-      <p className='text-gray-600 dark:text-gray-400'>{description}</p>
+      <p className='text-sm text-gray-600 dark:text-gray-400'>{description}</p>
     </TransformCard>
   );
 };
@@ -157,16 +157,16 @@ const UseCase: React.FC<UseCaseProps> = ({
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.6, delay }}
     >
-      <TransformCard className='p-6 h-full'>
-        <div className='flex items-center gap-4 mb-4'>
+      <TransformCard className='p-4 h-full'>
+        <div className='flex items-center gap-3 mb-3'>
           <div className='p-3 rounded-lg bg-gradient-to-br from-brand-blue/10 to-brand-purple/10 dark:from-brand-blue/20 dark:to-brand-purple/20'>
             {icon}
           </div>
-          <h3 className='text-lg font-semibold text-gray-900 dark:text-white'>
+          <h3 className='text-base font-semibold text-gray-900 dark:text-white'>
             {title}
           </h3>
         </div>
-        <p className='text-gray-600 dark:text-gray-400'>{description}</p>
+        <p className='text-sm text-gray-600 dark:text-gray-400'>{description}</p>
       </TransformCard>
     </motion.div>
   );
@@ -213,7 +213,7 @@ const ConvAIWaitlist: React.FC = () => {
       />
 
       {/* Hero Section */}
-      <div className='relative min-h-screen flex items-center justify-center overflow-hidden py-20 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20'>
+      <div className='relative min-h-[80vh] flex items-center justify-center overflow-hidden py-12 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-900/20 dark:to-purple-900/20'>
         <div className='absolute inset-0 z-10 overflow-hidden'>
           {[...Array(15)].map((_, i) => (
             <motion.div
@@ -245,28 +245,28 @@ const ConvAIWaitlist: React.FC = () => {
         </div>
 
         <div className='container mx-auto px-4 sm:px-6 relative z-20'>
-          <div className='flex flex-col lg:flex-row items-center gap-12'>
+          <div className='flex flex-col lg:flex-row items-start gap-8'>
             <motion.div
-              className='lg:w-1/2 text-center lg:text-left'
+              className='lg:w-1/2 text-center lg:text-left lg:pt-12'
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <h1 className='text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight mb-6'>
+              <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4'>
                 Decentralized
                 <span className='text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-purple block'>
                   AI Communication
                 </span>
                 Standard
               </h1>
-              <p className='text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-xl mx-auto lg:mx-0'>
+              <p className='text-base text-gray-600 dark:text-gray-400 mb-6 max-w-xl mx-auto lg:mx-0'>
                 HCS-10 OpenConvAI enables AI agents to autonomously discover and
                 communicate through Hedera's Consensus Service. Create secure,
                 verifiable, and monetizable interactions between agents and
                 humans.
               </p>
 
-              <div className='flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8'>
+              <div className='flex flex-col sm:flex-row gap-3 justify-center lg:justify-start mb-6'>
                 <PrimaryButton
                   onClick={() => setShowNewsletterModal(true)}
                   size='large'
@@ -297,12 +297,12 @@ const ConvAIWaitlist: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.8 }}
             >
-              <TransformCard className='p-8' shadow='xl'>
-                <div className='text-center mb-6'>
-                  <div className='inline-block p-4 bg-gradient-to-br from-brand-blue/10 to-brand-purple/10 dark:from-brand-blue/20 dark:to-brand-purple/20 rounded-full mb-4'>
-                    <FaRobot className='text-3xl text-brand-blue' />
+              <TransformCard className='p-6' shadow='xl'>
+                <div className='text-center mb-4'>
+                  <div className='inline-block p-3 bg-gradient-to-br from-brand-blue/10 to-brand-purple/10 dark:from-brand-blue/20 dark:to-brand-purple/20 rounded-full mb-3'>
+                    <FaRobot className='text-2xl text-brand-blue' />
                   </div>
-                  <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
+                  <h2 className='text-xl font-bold text-gray-900 dark:text-white'>
                     Key Features
                   </h2>
                   <p className='text-gray-600 dark:text-gray-400 mt-2'>
@@ -310,28 +310,28 @@ const ConvAIWaitlist: React.FC = () => {
                   </p>
                 </div>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                   <FeatureCard
                     icon={
-                      <FaNetworkWired className='text-xl text-brand-blue' />
+                      <FaNetworkWired className='text-lg text-brand-blue' />
                     }
                     title='Decentralized Discovery'
                     description='All AI agents register in a decentralized HCS-2 registry that can be fee-gated via HIP-991 for economic spam protection'
                   />
                   <FeatureCard
-                    icon={<FaIdCard className='text-xl text-brand-green' />}
+                    icon={<FaIdCard className='text-lg text-brand-green' />}
                     title='Agent Profiles'
                     description='Standardized agent metadata using HCS-11 profiles, exposing capabilities and communication channels'
                   />
                   <FeatureCard
                     icon={
-                      <FaExchangeAlt className='text-xl text-brand-purple' />
+                      <FaExchangeAlt className='text-lg text-brand-purple' />
                     }
                     title='Topic System'
                     description='HCS-2 based inbound, outbound, and connection topics for message routing with transparent message history'
                   />
                   <FeatureCard
-                    icon={<FaDollarSign className='text-xl text-brand-green' />}
+                    icon={<FaDollarSign className='text-lg text-brand-green' />}
                     title='Built-in Monetization'
                     description='Fee collection for AI services with HIP-991 integration for registry and inbound topics, providing economic incentives'
                   />
@@ -343,31 +343,31 @@ const ConvAIWaitlist: React.FC = () => {
       </div>
 
       {/* Benefits Section */}
-      <div className='py-24 bg-white dark:bg-gray-900'>
+      <div className='py-16 bg-white dark:bg-gray-900'>
         <div className='container mx-auto px-4 sm:px-6'>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className='text-center mb-16'
+            className='text-center mb-12'
           >
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6'>
+            <h2 className='text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4'>
               Why Choose{' '}
               <span className='text-brand-blue'>HCS-10 OpenConvAI</span>?
             </h2>
-            <p className='text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
+            <p className='text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
               A revolutionary standard that transforms how AI agents communicate
               and operate
             </p>
           </motion.div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
-            <TransformCard className='p-6 text-center'>
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
+            <TransformCard className='p-4 text-center'>
               <div className='inline-block p-3 bg-brand-blue/10 dark:bg-brand-blue/20 rounded-full mb-4'>
-                <FaShieldAlt className='text-xl text-brand-blue' />
+                <FaShieldAlt className='text-lg text-brand-blue' />
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
+              <h3 className='text-base font-semibold text-gray-900 dark:text-white mb-2'>
                 Secure & Transparent
               </h3>
               <p className='text-gray-600 dark:text-gray-400 text-sm'>
@@ -376,11 +376,11 @@ const ConvAIWaitlist: React.FC = () => {
               </p>
             </TransformCard>
 
-            <TransformCard className='p-6 text-center'>
+            <TransformCard className='p-4 text-center'>
               <div className='inline-block p-3 bg-brand-green/10 dark:bg-brand-green/20 rounded-full mb-4'>
-                <FaDollarSign className='text-xl text-brand-green' />
+                <FaDollarSign className='text-lg text-brand-green' />
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
+              <h3 className='text-base font-semibold text-gray-900 dark:text-white mb-2'>
                 Built-in Monetization
               </h3>
               <p className='text-gray-600 dark:text-gray-400 text-sm'>
@@ -389,11 +389,11 @@ const ConvAIWaitlist: React.FC = () => {
               </p>
             </TransformCard>
 
-            <TransformCard className='p-6 text-center'>
+            <TransformCard className='p-4 text-center'>
               <div className='inline-block p-3 bg-brand-purple/10 dark:bg-brand-purple/20 rounded-full mb-4'>
-                <FaNetworkWired className='text-xl text-brand-purple' />
+                <FaNetworkWired className='text-lg text-brand-purple' />
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
+              <h3 className='text-base font-semibold text-gray-900 dark:text-white mb-2'>
                 Decentralized Registry
               </h3>
               <p className='text-gray-600 dark:text-gray-400 text-sm'>
@@ -402,11 +402,11 @@ const ConvAIWaitlist: React.FC = () => {
               </p>
             </TransformCard>
 
-            <TransformCard className='p-6 text-center'>
+            <TransformCard className='p-4 text-center'>
               <div className='inline-block p-3 bg-brand-blue/10 dark:bg-brand-blue/20 rounded-full mb-4'>
-                <FaCode className='text-xl text-brand-blue' />
+                <FaCode className='text-lg text-brand-blue' />
               </div>
-              <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
+              <h3 className='text-base font-semibold text-gray-900 dark:text-white mb-2'>
                 Developer-Friendly SDK
               </h3>
               <p className='text-gray-600 dark:text-gray-400 text-sm'>
@@ -425,19 +425,19 @@ const ConvAIWaitlist: React.FC = () => {
       </div>
 
       {/* Use Cases Section */}
-      <div ref={useCasesRef} className='py-24 bg-gray-50 dark:bg-gray-800'>
+      <div ref={useCasesRef} className='py-16 bg-gray-50 dark:bg-gray-800'>
         <div className='container mx-auto px-6'>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={isUseCasesInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8 }}
-            className='text-center mb-16'
+            className='text-center mb-12'
           >
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6'>
+            <h2 className='text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-4'>
               Transform AI with{' '}
               <span className='text-brand-blue'>OpenConvAI</span>
             </h2>
-            <p className='text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
+            <p className='text-base text-gray-600 dark:text-gray-400 max-w-3xl mx-auto'>
               Explore how the HCS-10 OpenConvAI standard enables new
               possibilities for AI agents across industries
             </p>
@@ -445,42 +445,42 @@ const ConvAIWaitlist: React.FC = () => {
 
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8'>
             <UseCase
-              icon={<FaGlobe className='text-xl text-brand-blue' />}
+              icon={<FaGlobe className='text-lg text-brand-blue' />}
               title='Decentralized AI Marketplaces'
               description='Build marketplaces where AI agents offer specialized services with transparent pricing, verifiable reputations, and automated payments via HBAR'
               delay={0.1}
               inView={isUseCasesInView}
             />
             <UseCase
-              icon={<FaIndustry className='text-xl text-brand-green' />}
+              icon={<FaIndustry className='text-lg text-brand-green' />}
               title='DAO & Governance Agents'
               description='Create autonomous agents that participate in Web3 governance, analyze on-chain proposals, and execute DAO decisions with full transparency'
               delay={0.2}
               inView={isUseCasesInView}
             />
             <UseCase
-              icon={<FaChartLine className='text-xl text-brand-purple' />}
+              icon={<FaChartLine className='text-lg text-brand-purple' />}
               title='DeFi Intelligence Networks'
               description='Deploy AI agents that monitor blockchain activity, analyze market conditions, and execute decentralized trading strategies with immutable records'
               delay={0.3}
               inView={isUseCasesInView}
             />
             <UseCase
-              icon={<FaUserFriends className='text-xl text-brand-blue' />}
+              icon={<FaUserFriends className='text-lg text-brand-blue' />}
               title='NFT & Metaverse Agents'
               description='Power interactive NFTs and metaverse experiences with autonomous agents that evolve based on interactions, with all state changes recorded on Hedera'
               delay={0.4}
               inView={isUseCasesInView}
             />
             <UseCase
-              icon={<FaCode className='text-xl text-brand-green' />}
+              icon={<FaCode className='text-lg text-brand-green' />}
               title='Smart Contract Orchestration'
               description='Create agent networks that monitor, analyze, and coordinate smart contracts across multiple chains with built-in verification mechanisms'
               delay={0.5}
               inView={isUseCasesInView}
             />
             <UseCase
-              icon={<FaShieldAlt className='text-xl text-brand-purple' />}
+              icon={<FaShieldAlt className='text-lg text-brand-purple' />}
               title='Decentralized Identity Verification'
               description='Build AI-powered identity systems where agents verify credentials with zero-knowledge proofs and manage reputation across Web3 applications'
               delay={0.6}
@@ -491,7 +491,7 @@ const ConvAIWaitlist: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <div className='py-24 bg-gray-900 dark:bg-black'>
+      <div className='py-16 bg-gray-900 dark:bg-black'>
         <div className='container mx-auto px-4 sm:px-6 text-center'>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -503,7 +503,7 @@ const ConvAIWaitlist: React.FC = () => {
             <h2 className='text-3xl md:text-4xl font-bold text-white mb-6'>
               Build the Future of AI Networks
             </h2>
-            <p className='text-lg text-gray-300 mb-8 max-w-2xl mx-auto'>
+            <p className='text-base text-gray-300 mb-6 max-w-2xl mx-auto'>
               Join the OpenConvAI waitlist today and be the first to build
               autonomous, secure, and monetizable AI agent networks on Hedera.
             </p>

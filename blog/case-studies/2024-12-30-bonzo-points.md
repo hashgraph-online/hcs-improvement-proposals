@@ -12,6 +12,8 @@ date: 2024-12-30T08:34:27-05:00
 
 [Bonzo Finance's](https://bonzo.finance) mission is to become The Liquidity Layer of the Hedera DeFi ecosystem — unlocking previously dormant liquidity and enabling lending & borrowing capabilities that were previously not possible for retail and institutional users. Bonzo Finance harnesses the full potential of Hedera's EVM equivalence, tooling, and mirror node infrastructure, with a symbiosis that ensures a high efficiency, low cost, and user friendly experience.
 
+<!-- truncate -->
+
 Bonzo Finance supports a diverse range of assets, including $HBAR, HTS tokens, and stablecoins, such as $USDC, enabling users to lend and borrow in an overcollateralized fashion across a broad spectrum of the Hedera economy.
 
 The protocol's overcollateralized loan system enables borrowers to access capital by providing collateral into single asset liquidity pools, with loan-to-value (LTV) ratios calibrated to maintain protocol stability. For more sophisticated users and developers, Bonzo Finance offers flash loans – instant, uncollateralized loans that open the door to more complex DeFi operations.

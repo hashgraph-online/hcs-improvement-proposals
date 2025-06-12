@@ -30,14 +30,14 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         delay: index * 0.1,
         ease: [0.25, 0.1, 0.25, 1],
       }}
-      className='relative p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm h-full'
+      className='relative p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm h-full'
     >
-      <div className='absolute -top-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-[#8259ef] to-[#3ec878] flex items-center justify-center transform -rotate-6'>
-        <div className='text-white text-xl'>{icon}</div>
+      <div className='absolute -top-3 -left-3 w-10 h-10 rounded-xl bg-gradient-to-br from-[#8259ef] to-[#3ec878] flex items-center justify-center transform -rotate-6'>
+        <div className='text-white text-lg'>{icon}</div>
       </div>
 
-      <div className='mt-5 mb-3'>
-        <HackathonTypography variant='h4' className='text-xl'>
+      <div className='mt-4 mb-2'>
+        <HackathonTypography variant='h4' className='text-lg'>
           {title}
         </HackathonTypography>
       </div>
@@ -83,7 +83,7 @@ const DemoDaySection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className='py-16 sm:py-24 relative bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 overflow-hidden'
+      className='py-8 sm:py-12 relative bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-gray-900 overflow-hidden'
     >
       <div className='absolute inset-0 z-0 overflow-hidden'>
         <div className='absolute -top-40 -right-40 w-80 h-80 bg-[#3ec878]/5 dark:bg-[#3ec878]/10 rounded-full blur-3xl'></div>
@@ -98,26 +98,26 @@ const DemoDaySection: React.FC = () => {
         ></div>
       </div>
 
-      <div className='container mx-auto px-6 relative z-10'>
+      <div className='container mx-auto px-3 relative z-10'>
         <div className='max-w-7xl mx-auto'>
           <motion.div
-            className='text-center mb-16'
+            className='text-center mb-10'
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7 }}
           >
-            <div className='relative w-24 h-24 mx-auto mb-6'>
+            <div className='relative w-16 h-16 mx-auto mb-4'>
               <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
               <div className='absolute inset-[6px] rounded-xl bg-[#2d84eb]/10 transform rotate-45'></div>
               <div className='absolute inset-[12px] rounded-lg bg-[#3ec878]/10 transform rotate-45'></div>
-              <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef]'>
+              <div className='absolute inset-0 flex items-center justify-center text-2xl text-[#8259ef]'>
                 <FaVideo />
               </div>
             </div>
 
             <HackathonTypography
               variant='h1'
-              className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878] mb-4'
+              className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878] mb-3'
               underline={true}
               underlineColor='gradient'
             >
@@ -126,7 +126,7 @@ const DemoDaySection: React.FC = () => {
 
             <HackathonTypography
               variant='body1'
-              className='mt-6 max-w-3xl mx-auto text-gray-600 dark:text-gray-300'
+              className='mt-4 max-w-3xl mx-auto text-gray-600 dark:text-gray-300'
               align='center'
             >
               Demo Day is a crucial part of the hackathon process. It's your
@@ -137,7 +137,7 @@ const DemoDaySection: React.FC = () => {
             </HackathonTypography>
           </motion.div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-10 mb-20'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-12'>
             {features.map((feature, index) => (
               <FeatureCard
                 key={index}
@@ -191,7 +191,7 @@ const DemoDaySection: React.FC = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className='mt-12 text-center'
+            className='mt-8 text-center'
           >
             <PrimaryButton href='/demo-day' size='lg'>
               Learn More About Demo Day

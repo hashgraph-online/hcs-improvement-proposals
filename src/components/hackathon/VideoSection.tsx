@@ -9,7 +9,7 @@ const VideoSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className='py-16 sm:py-20 relative bg-white dark:bg-gray-950 overflow-hidden'
+      className='py-8 sm:py-12 relative bg-white dark:bg-gray-950 overflow-hidden'
       id='featured-video'
     >
       <div className='absolute inset-0 z-0 overflow-hidden'>
@@ -17,17 +17,17 @@ const VideoSection: React.FC = () => {
         <div className='absolute -bottom-20 -left-20 w-60 h-60 bg-hedera-blue/5 dark:bg-hedera-blue/10 rounded-full blur-3xl'></div>
       </div>
 
-      <div className='container mx-auto px-4 sm:px-6 relative z-10'>
+      <div className='container mx-auto px-3 sm:px-4 relative z-10'>
         <div className='max-w-5xl mx-auto'>
           <motion.div
-            className='text-center mb-12'
+            className='text-center mb-8'
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7 }}
           >
             <HackathonTypography
               variant='h2'
-              className='mb-4 font-styrene text-black dark:text-white'
+              className='mb-3 font-styrene text-black dark:text-white'
               underline={true}
               underlineColor='gradient'
             >
@@ -36,7 +36,7 @@ const VideoSection: React.FC = () => {
 
             <HackathonTypography
               variant='body1'
-              className='mt-4 max-w-3xl mx-auto text-gray-600 dark:text-gray-300'
+              className='mt-3 max-w-3xl mx-auto text-gray-600 dark:text-gray-300'
               align='center'
             >
               Prefer a video? Turn up your volume and hit play.

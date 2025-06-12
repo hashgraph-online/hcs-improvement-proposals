@@ -6,6 +6,273 @@
  * work well for content-centric websites.
  */
 
+/* Blog post title styling - main content area and individual posts */
+main article header h2,
+main article header h2 a,
+article.margin-bottom--xl h2,
+article.margin-bottom--xl h2 a,
+[class*="blogPostTitle"],
+[class*="blogPostTitle"] a,
+/* Individual blog post pages */
+.blog-wrapper article header h1,
+article header h1,
+[class*="title_"] {
+  font-weight: 700 !important;
+  font-size: 1.75rem !important;
+}
+
+/* Blog tags - limit to one line with view more */
+[class*="tagsListInline"],
+.margin-vert--sm,
+ul.tags {
+  position: relative;
+  max-height: 2.5rem !important;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  white-space: nowrap;
+}
+
+[class*="tagsListInline"].expanded,
+.margin-vert--sm.expanded,
+ul.tags.expanded {
+  max-height: none !important;
+  white-space: normal;
+}
+
+/* Style individual tags to be inline */
+[class*="tagsListInline"] > *,
+.margin-vert--sm > *,
+ul.tags > * {
+  display: inline-block !important;
+  margin-right: 0.5rem !important;
+  margin-bottom: 0 !important;
+}
+
+/* Show view more when there's overflow */
+[class*="tagsListInline"]:not(.expanded)::after,
+.margin-vert--sm:not(.expanded)::after,
+ul.tags:not(.expanded)::after {
+  content: "...more";
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: linear-gradient(to left, var(--ifm-background-color) 85%, transparent);
+  padding-left: 4rem;
+  padding-right: 0.5rem;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: var(--ifm-color-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+[class*="tagsListInline"].expanded::after,
+.margin-vert--sm.expanded::after,
+ul.tags.expanded::after {
+  content: " less";
+  position: relative;
+  background: none;
+  padding: 0;
+  margin-left: 0.25rem;
+  color: var(--ifm-color-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline;
+}
+
+/* Navbar menu items - make them smaller */
+.navbar__item,
+.navbar__link {
+  font-size: 0.9rem !important;
+}
+
+/* Color mode toggle - white for visibility */
+.navbar__toggle,
+.clean-btn.toggleButton_node_modules-\@docusaurus-theme-classic-lib-theme-ColorModeToggle-styles-module,
+[class*="toggleButton"] {
+  opacity: 1 !important;
+  visibility: visible !important;
+  color: white !important;
+}
+
+/* React toggle switch styling */
+.react-toggle {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.react-toggle-track {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.react-toggle:hover .react-toggle-track {
+  background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.react-toggle--checked .react-toggle-track {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.react-toggle-thumb {
+  background-color: white !important;
+}
+
+/* Icons inside toggle */
+.react-toggle-track-check,
+.react-toggle-track-x {
+  color: white !important;
+}
+
+.navbar__items--right button {
+  opacity: 1 !important;
+  color: white !important;
+}
+
+/* Keep navbar background light in both themes */
+.navbar {
+  background-color: #ffffff !important;
+  --ifm-navbar-background-color: #ffffff !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Fix blog dark mode - force dark backgrounds */
+[data-theme='dark'] .blog-wrapper,
+[data-theme='dark'] main[itemscope],
+[data-theme='dark'] .container.margin-vert--lg,
+[data-theme='dark'] .col.col--7,
+[data-theme='dark'] .col.col--2,
+[data-theme='dark'] .row,
+[data-theme='dark'] main {
+  background-color: #1b1b1d !important;
+}
+
+[data-theme='dark'] article,
+[data-theme='dark'] .blog-list__item {
+  background-color: transparent !important;
+}
+
+/* Fix the main blog content area */
+html[data-theme='dark'] body {
+  background-color: #1b1b1d !important;
+}
+
+[data-theme='dark'] #__docusaurus {
+  background-color: #1b1b1d !important;
+}
+
+/* Ensure dark mode works on blog sidebar */
+[data-theme='dark'] aside.col {
+  background-color: #1b1b1d !important;
+  color: var(--ifm-font-color-base) !important;
+}
+
+/* Fix blog text contrast in dark mode */
+[data-theme='dark'] .blog-wrapper p,
+[data-theme='dark'] .markdown p,
+[data-theme='dark'] article p,
+[data-theme='dark'] .blog-post-content p,
+[data-theme='dark'] .blog-wrapper li,
+[data-theme='dark'] article li,
+[data-theme='dark'] .markdown li {
+  color: #e2e8f0 !important; /* Light gray for body text */
+}
+
+/* Headings - Bright blue */
+[data-theme='dark'] .blog-wrapper h1,
+[data-theme='dark'] .blog-wrapper h2,
+[data-theme='dark'] .blog-wrapper h3,
+[data-theme='dark'] .blog-wrapper h4,
+[data-theme='dark'] .blog-wrapper h5,
+[data-theme='dark'] .blog-wrapper h6,
+[data-theme='dark'] article h1,
+[data-theme='dark'] article h2,
+[data-theme='dark'] article h3,
+[data-theme='dark'] article h4,
+[data-theme='dark'] article h5,
+[data-theme='dark'] article h6,
+[data-theme='dark'] [class*="blogPostTitle"],
+[data-theme='dark'] [class*="title_"] {
+  color: #60a5fa !important; /* Bright blue for headings */
+}
+
+/* Blog post metadata - Medium blue */
+[data-theme='dark'] time,
+[data-theme='dark'] .text--secondary,
+[data-theme='dark'] [class*="readingTime"],
+[data-theme='dark'] [class*="readingtime"],
+[data-theme='dark'] .reading-time,
+[data-theme='dark'] small {
+  color: #94a3b8 !important; /* Blue-gray for less important text */
+}
+
+/* Sidebar active/selected items */
+[data-theme='dark'] .menu__link--active,
+[data-theme='dark'] .navbar__link--active,
+[data-theme='dark'] aside .text-brand-blue,
+[data-theme='dark'] aside [class*="isActive"],
+[data-theme='dark'] aside [class*="active"] {
+  color: #60a5fa !important; /* Bright blue for active items */
+}
+
+/* Author info - Slightly brighter blue */
+[data-theme='dark'] [class*="authorName"],
+[data-theme='dark'] [class*="authorTitle"],
+[data-theme='dark'] .avatar__subtitle,
+[data-theme='dark'] .blog__author-title {
+  color: #3b82f6 !important; /* Medium blue for author info */
+}
+
+/* Links - Lighter blue with good contrast */
+[data-theme='dark'] .blog-wrapper a,
+[data-theme='dark'] article a,
+[data-theme='dark'] .markdown a {
+  color: #60a5fa !important; /* Bright blue for links */
+}
+
+[data-theme='dark'] .blog-wrapper a:hover,
+[data-theme='dark'] article a:hover,
+[data-theme='dark'] .markdown a:hover {
+  color: #93c5fd !important; /* Even lighter blue on hover */
+  text-decoration: underline;
+}
+
+/* Remove black square from footer links section in dark mode */
+[data-theme='dark'] .footer__links {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+/* Ensure no background on footer sections in dark mode */
+[data-theme='dark'] .footer__col,
+[data-theme='dark'] .footer__link-separator {
+  background: none !important;
+  background-color: transparent !important;
+}
+
+
+/* Smooth transitions for color mode changes */
+* {
+  transition: background-color 0.6s ease-in-out, color 0.6s ease-in-out, border-color 0.6s ease-in-out, fill 0.6s ease-in-out, stroke 0.6s ease-in-out !important;
+}
+
+/* Slightly faster for interactive elements */
+a, button, .navbar__link, .navbar__item, input, textarea {
+  transition: background-color 0.5s ease-in-out, color 0.5s ease-in-out, border-color 0.5s ease-in-out, transform 0.3s ease-in-out, opacity 0.5s ease-in-out !important;
+}
+
+/* Keep hover effects responsive */
+*:hover {
+  transition-duration: 0.2s !important;
+}
+
+/* Smooth transition for shadows and gradients */
+*::before, *::after {
+  transition: background-color 0.6s ease-in-out, opacity 0.6s ease-in-out !important;
+}
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #3f4174;
@@ -240,7 +507,7 @@
 
 .navbar__item.dropdown .dropdown__link:hover {
   color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1); /* Hover effect like main nav */
+  background-color: rgba(255, 255, 255, 0.1);
   text-decoration: none;
 }
 
@@ -401,4 +668,37 @@
     rgba(85, 153, 254, 0.3),
     transparent
   );
+}
+
+/* Blog post title styling */
+.blog-list__item article h2 {
+  font-size: 1.3rem;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
+}
+
+/* Alternative selectors for blog post titles in case the above doesn't work */
+article header h2,
+.blogPostTitle_node_modules-\@docusaurus-theme-classic-lib-theme-BlogPostItem-Header-Title-styles-module {
+  font-size: 1.3rem !important;
+  line-height: 1.3 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Blog post item spacing */
+.blog-list__item {
+  margin-bottom: 2rem;
+}
+
+/* Target the blog post preview title specifically */
+h2.text--truncate {
+  font-size: 1.3rem;
+  line-height: 1.3;
+}
+
+/* Additional targeting for blog post titles on the main blog page */
+.margin-bottom--xl article h2 {
+  font-size: 1.3rem;
+  line-height: 1.3;
+  margin-bottom: 0.5rem;
 }

@@ -1,0 +1,180 @@
+.blogListWrapper {
+  position: relative;
+}
+
+.filterSection {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-global-radius);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.searchBar {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  transition: border-color 0.2s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+}
+
+.clearButton {
+  position: absolute;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--ifm-color-secondary-darkest);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.clearButton:hover {
+  color: var(--ifm-color-primary);
+}
+
+.filterGroup {
+  margin-bottom: 1.5rem;
+}
+
+.filterGroup:last-child {
+  margin-bottom: 0;
+}
+
+.filterTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--ifm-color-secondary-darkest);
+  margin-bottom: 0.75rem;
+}
+
+.filterOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid var(--ifm-toc-border-color);
+  border-radius: 9999px;
+  background-color: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.filterButton:hover {
+  border-color: var(--ifm-color-primary);
+  background-color: var(--ifm-color-primary-lighter);
+}
+
+.filterButtonActive {
+  background-color: var(--ifm-color-primary);
+  color: white;
+  border-color: var(--ifm-color-primary);
+}
+
+.filterButtonActive:hover {
+  background-color: var(--ifm-color-primary-darker);
+  border-color: var(--ifm-color-primary-darker);
+}
+
+.activeFilters {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--ifm-toc-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.activeFiltersLabel {
+  font-size: 0.875rem;
+  color: var(--ifm-color-secondary-darkest);
+}
+
+.clearAllButton {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: var(--ifm-global-radius);
+  background-color: var(--ifm-color-danger-lighter);
+  color: var(--ifm-color-danger-darker);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.clearAllButton:hover {
+  background-color: var(--ifm-color-danger-light);
+}
+
+/* Dark mode adjustments */
+[data-theme='dark'] .filterSection {
+  background-color: var(--ifm-background-surface-color);
+}
+
+[data-theme='dark'] .searchInput {
+  background-color: var(--ifm-background-color);
+}
+
+[data-theme='dark'] .filterButton {
+  background-color: var(--ifm-background-color);
+}
+
+[data-theme='dark'] .filterButtonActive {
+  background-color: var(--ifm-color-primary);
+  color: white;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .filterSection {
+    padding: 1rem;
+    margin-left: 0;
+    margin-right: 0;
+    border-radius: 0;
+  }
+  
+  .activeFilters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .clearAllButton {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Ensure filters work well with blog layout */
+@media (min-width: 997px) {
+  .filterSection {
+    margin-right: var(--ifm-spacing-horizontal);
+  }
+}

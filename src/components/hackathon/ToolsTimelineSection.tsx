@@ -153,7 +153,7 @@ const ToolsTimelineSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className='py-8 sm:py-10 md:py-16 relative bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 overflow-hidden isolation'
+      className='py-6 sm:py-8 md:py-10 relative bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-950 overflow-hidden isolation'
       id='tools-timeline'
     >
       <div className='absolute inset-0 z-[-1] overflow-hidden'>
@@ -192,21 +192,21 @@ const ToolsTimelineSection: React.FC = () => {
         ></div>
       </div>
 
-      <div className='container mx-auto px-6 relative'>
-        <div className='mb-24'>
-          <div className='flex flex-col items-center text-center mb-20'>
+      <div className='container mx-auto px-3 relative'>
+        <div className='mb-16'>
+          <div className='flex flex-col items-center text-center mb-12'>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className='relative mb-8'
+              className='relative mb-6'
             >
-              <div className='relative w-24 h-24 mx-auto mb-6'>
+              <div className='relative w-16 h-16 mx-auto mb-4'>
                 <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
                 <div className='absolute inset-[6px] rounded-xl bg-[#2d84eb]/10 transform rotate-45'></div>
                 <div className='absolute inset-[12px] rounded-lg bg-[#3ec878]/10 transform rotate-45'></div>
-                <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef]'>
+                <div className='absolute inset-0 flex items-center justify-center text-2xl text-[#8259ef]'>
                   <FaCode />
                 </div>
               </div>
@@ -239,7 +239,7 @@ const ToolsTimelineSection: React.FC = () => {
             </motion.div>
           </div>
 
-          <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10'>
+          <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6'>
             {tools.map((tool, index) => (
               <ToolCard
                 key={index}
@@ -260,7 +260,7 @@ const ToolsTimelineSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className='relative max-w-5xl mx-auto mb-24 perspective'
+          className='relative max-w-5xl mx-auto mb-16 perspective'
         >
           <div className='relative'>
             <div className='absolute -inset-4 rounded-[2rem] blur-xl opacity-30 dark:opacity-20 bg-gradient-to-r from-[#8259ef]/20 via-[#2d84eb]/20 to-[#3ec878]/20'></div>
@@ -268,13 +268,13 @@ const ToolsTimelineSection: React.FC = () => {
             <div className='relative rounded-[2rem] bg-white dark:bg-gray-800 overflow-hidden shadow-2xl'>
               <div className='h-2 bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878]'></div>
 
-              <div className='p-12 sm:p-14 md:p-16'>
-                <div className='flex flex-col md:flex-row md:items-center gap-10'>
+              <div className='p-8 sm:p-10 md:p-12'>
+                <div className='flex flex-col md:flex-row md:items-center gap-6'>
                   <div className='md:w-1/3 flex justify-center'>
-                    <div className='relative w-32 h-32 md:w-44 md:h-44'>
+                    <div className='relative w-24 h-24 md:w-32 md:h-32'>
                       <div className='absolute inset-0 rounded-full bg-gradient-to-br from-[#0088cc]/10 to-[#0088cc]/5 flex items-center justify-center overflow-hidden'>
                         <div className='absolute inset-[2px] rounded-full bg-white dark:bg-gray-800 flex items-center justify-center'>
-                          <FaPaperPlane className='text-[#0088cc] text-7xl z-50' />
+                          <FaPaperPlane className='text-[#0088cc] text-5xl z-50' />
                         </div>
                       </div>
                       <div className='absolute -inset-1 rounded-full blur-[4px] opacity-30 bg-[#0088cc]/30'></div>
@@ -284,7 +284,7 @@ const ToolsTimelineSection: React.FC = () => {
                   <div className='md:w-2/3'>
                     <HackathonTypography
                       variant='h2'
-                      className='mb-4 text-[#0088cc]'
+                      className='mb-3 text-[#0088cc]'
                     >
                       Need Support?
                     </HackathonTypography>
@@ -292,7 +292,7 @@ const ToolsTimelineSection: React.FC = () => {
                     <HackathonTypography
                       variant='body1'
                       color='muted'
-                      className='mb-8 font-light'
+                      className='mb-6 font-light'
                     >
                       Join our Telegram group for real-time support and to
                       connect with other participants. Our team is available to
@@ -314,10 +314,10 @@ const ToolsTimelineSection: React.FC = () => {
           </div>
         </motion.div>
 
-        <div className='mt-32' id='schedule'>
+        <div className='mt-20' id='schedule'>
           <HackathonTypography
             variant='h2'
-            className='text-center mb-4'
+            className='text-center mb-3'
             as='h3'
           >
             Hackathon Timeline
@@ -325,13 +325,13 @@ const ToolsTimelineSection: React.FC = () => {
           <HackathonTypography
             variant='body1'
             color='muted'
-            className='text-center max-w-3xl mx-auto mb-16 font-light'
+            className='text-center max-w-3xl mx-auto mb-10 font-light'
           >
             Key dates and milestones for the Hedera AI Hackathon. Stay tuned for
             updates and detailed schedules.
           </HackathonTypography>
 
-          <div className='flex flex-col lg:flex-row gap-16 items-start'>
+          <div className='flex flex-col lg:flex-row gap-10 items-start'>
             <div className='relative lg:w-1/2 w-full'>
               {timeline.map((event, index) => (
                 <TimelineItem
