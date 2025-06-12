@@ -217,6 +217,17 @@ html[data-theme='dark'] body {
   color: #60a5fa !important; /* Bright blue for active items */
 }
 
+/* Blog sidebar selected post styling */
+[data-theme='dark'] .blog-sidebar-item__link--active,
+[data-theme='dark'] .blog-sidebar__item--active,
+[data-theme='dark'] aside a[aria-current="page"],
+[data-theme='dark'] .theme-blog-sidebar a[aria-current="page"],
+[data-theme='dark'] .blog-sidebar a[aria-current="page"] {
+  color: #60a5fa !important; /* Light blue for selected post */
+  background-color: rgba(96, 165, 250, 0.1) !important;
+  font-weight: 600 !important;
+}
+
 /* Author info - Slightly brighter blue */
 [data-theme='dark'] [class*="authorName"],
 [data-theme='dark'] [class*="authorTitle"],
@@ -701,4 +712,333 @@ h2.text--truncate {
   font-size: 1.3rem;
   line-height: 1.3;
   margin-bottom: 0.5rem;
+}
+
+/* Standards page styling */
+.standards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.standard-card {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.standard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--brand-functions));
+}
+
+.standard-card.missing::before {
+  background: linear-gradient(90deg, #94a3b8, #cbd5e1);
+}
+
+.standard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--ifm-color-primary-light);
+}
+
+[data-theme='dark'] .standard-card:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.standard-number {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  font-family: 'Roboto Mono', monospace;
+}
+
+[data-theme='dark'] .standard-number {
+  color: var(--ifm-color-emphasis-500);
+}
+
+.standard-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  color: var(--ifm-color-primary);
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+[data-theme='dark'] .standard-card h3 {
+  color: var(--ifm-color-primary-light);
+}
+
+.standard-card p {
+  margin-bottom: 1rem;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.6;
+}
+
+.standard-card strong {
+  color: var(--ifm-color-primary-dark);
+  font-weight: 600;
+}
+
+[data-theme='dark'] .standard-card strong {
+  color: var(--ifm-color-primary-light);
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.status-badge.status-published {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #059669;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+[data-theme='dark'] .status-badge.status-published {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #10b981;
+}
+
+.status-badge.status-draft {
+  background-color: rgba(251, 191, 36, 0.1);
+  color: #d97706;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+[data-theme='dark'] .status-badge.status-draft {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
+.standards-grid h2 {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  color: var(--ifm-color-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ifm-color-primary-lightest);
+  padding-bottom: 0.5rem;
+}
+
+.standards-grid h2:first-of-type {
+  margin-top: 1rem;
+}
+
+[data-theme='dark'] .standards-grid h2 {
+  color: var(--ifm-color-primary-light);
+  border-bottom-color: var(--ifm-color-primary-darkest);
+}
+
+.standard-card.missing {
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.standard-card.missing h3 {
+  color: var(--ifm-color-emphasis-600);
+}
+
+[data-theme='dark'] .standard-card.missing h3 {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .standards-grid {
+    gap: 1.5rem;
+  }
+  
+  .standard-card {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* For very wide screens, we could add a 2-column layout */
+  .standards-grid .standard-card {
+    max-width: none;
+  }
+}
+
+/* Category page styling for standards */
+/* Target the generated index page for standards category */
+.theme-doc-category-generated-index .theme-doc-generated-index-item {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: var(--ifm-background-surface-color);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--ifm-color-primary), var(--brand-functions));
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--ifm-color-primary-light);
+}
+
+[data-theme='dark'] .theme-doc-category-generated-index .theme-doc-generated-index-item:hover {
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Style the HCS standard titles on category page */
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  position: relative;
+  padding-top: 1.5rem;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a {
+  color: var(--ifm-color-primary);
+  text-decoration: none;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+[data-theme='dark'] .theme-doc-category-generated-index .theme-doc-generated-index-item h3 a {
+  color: var(--ifm-color-primary-light);
+}
+
+/* Add HCS number above title using CSS text manipulation */
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-1"]::before {
+  content: "HCS-1";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-2"]::before {
+  content: "HCS-2";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-3"]::before {
+  content: "HCS-3";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-5"]::before {
+  content: "HCS-5";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-6"]::before {
+  content: "HCS-6";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-7"]::before {
+  content: "HCS-7";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-8"]::before {
+  content: "HCS-8";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-9"]::before {
+  content: "HCS-9";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-10"]::before {
+  content: "HCS-10";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-11"]::before {
+  content: "HCS-11";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-13"]::before {
+  content: "HCS-13";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a[href*="hcs-20"]::before {
+  content: "HCS-20";
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a::before {
+  position: absolute;
+  top: -1.5rem;
+  left: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Roboto Mono', monospace;
+}
+
+[data-theme='dark'] .theme-doc-category-generated-index .theme-doc-generated-index-item h3 a::before {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* Style status text as tags */
+.theme-doc-category-generated-index .theme-doc-generated-index-item p {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+/* Transform "Status: Published" text into green tag */
+.theme-doc-category-generated-index .theme-doc-generated-index-item p strong:first-child {
+  display: none; /* Hide "Status:" label */
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item p strong + text:contains("Published"),
+.theme-doc-category-generated-index .theme-doc-generated-index-item p:first-of-type::after {
+  content: "";
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+/* Add published/draft styling based on text content */
+.theme-doc-category-generated-index .theme-doc-generated-index-item p:first-of-type::before {
+  content: "Published";
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #059669;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  margin-bottom: 0.75rem;
+  margin-right: 0.5rem;
+}
+
+[data-theme='dark'] .theme-doc-category-generated-index .theme-doc-generated-index-item p:first-of-type::before {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #10b981;
 }

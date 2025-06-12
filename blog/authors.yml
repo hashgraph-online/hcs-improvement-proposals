@@ -32,5 +32,7 @@ hashgraph-online:
 michelle-baez:
   name: Michelle Baez
   title: Head of Marketing, Hashgraph Online
-  url: https://hashgraph.online
-  image_url: https://github.com/hashgraph-online.png
+  url: https://www.linkedin.com/in/michellebaezny/
+  image_url: https://media.licdn.com/dms/image/v2/D4E03AQHHvGmGK58UcA/profile-displayphoto-shrink_800_800/B4EZOYVp6qGQAg-/0/1733427634206?e=1755129600&v=beta&t=2WcqyrMnYiLBVneCD1BWFgkIZxYrp7sd2PVEh4BPYxo
+  socials:
+    linkedin: michellebaezny

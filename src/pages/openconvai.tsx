@@ -273,7 +273,7 @@ const ConvAIWaitlist: React.FC = () => {
                 >
                   Join Waitlist
                 </PrimaryButton>
-                <SecondaryButton href='/docs/standards/hcs-10'>
+                <SecondaryButton href='/docs/standards/hcs-10' size='large'>
                   Learn More
                 </SecondaryButton>
               </div>
@@ -491,7 +491,7 @@ const ConvAIWaitlist: React.FC = () => {
       </div>
 
       {/* CTA Section */}
-      <div className='py-16 bg-gray-900 dark:bg-black'>
+      <div className='py-16 bg-gradient-to-br from-brand-blue to-brand-purple'>
         <div className='container mx-auto px-4 sm:px-6 text-center'>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
@@ -503,7 +503,7 @@ const ConvAIWaitlist: React.FC = () => {
             <h2 className='text-3xl md:text-4xl font-bold text-white mb-6'>
               Build the Future of AI Networks
             </h2>
-            <p className='text-base text-gray-300 mb-6 max-w-2xl mx-auto'>
+            <p className='text-base text-white/90 mb-6 max-w-2xl mx-auto'>
               Join the OpenConvAI waitlist today and be the first to build
               autonomous, secure, and monetizable AI agent networks on Hedera.
             </p>
