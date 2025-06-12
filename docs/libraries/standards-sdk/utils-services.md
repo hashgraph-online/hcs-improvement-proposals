@@ -17,8 +17,43 @@ import { HederaMirrorNode } from '@hashgraphonline/standards-sdk';
 import { Logger } from '@hashgraphonline/standards-sdk';
 
 const logger = new Logger({ module: 'MyApp', level: 'info' });
+
+// Basic initialization
 const mirrorNode = new HederaMirrorNode('testnet', logger);
+
+// With custom mirror node configuration
+const customMirrorNode = new HederaMirrorNode('mainnet', logger, {
+  customUrl: 'https://mainnet.hedera.api.hgraph.dev/v1/<API-KEY>',
+  apiKey: 'your-api-key-here'
+});
 ```
+
+### Custom Mirror Node Providers
+
+The SDK supports integration with custom mirror node providers through flexible configuration:
+
+```typescript
+// Using HGraph with API key in URL
+const hgraphMirrorNode = new HederaMirrorNode('mainnet', logger, {
+  customUrl: 'https://mainnet.hedera.api.hgraph.dev/v1/<API-KEY>',
+  apiKey: 'your-hgraph-api-key'
+});
+
+// Using custom provider with headers
+const customProviderMirrorNode = new HederaMirrorNode('mainnet', logger, {
+  customUrl: 'https://custom-mirror-node.com',
+  apiKey: 'your-api-key',
+  headers: {
+    'X-Custom-Header': 'value',
+    'X-Another-Header': 'another-value'
+  }
+});
+```
+
+The configuration supports:
+- **Custom URLs**: Override the default Hedera mirror node endpoints
+- **API Keys**: Authentication via URL replacement or headers
+- **Custom Headers**: Additional headers for custom provider requirements
 
 ### Account Information
 
@@ -218,10 +253,27 @@ try {
 ### Mirror Node Service
 
 ```typescript
+interface MirrorNodeConfig {
+  /** Custom mirror node URL. Can include <API-KEY> placeholder for URL-based API keys. */
+  customUrl?: string;
+  /** API key for authentication. Will be used in both Authorization header and URL replacement. */
+  apiKey?: string;
+  /** Additional custom headers to include with requests. */
+  headers?: Record<string, string>;
+}
+
 class HederaMirrorNode {
-  constructor(network: 'mainnet' | 'testnet', logger?: Logger);
+  constructor(
+    network: 'mainnet' | 'testnet',
+    logger?: Logger,
+    config?: MirrorNodeConfig
+  );
 
   getBaseUrl(): string;
+  
+  configureMirrorNode(config: MirrorNodeConfig): void;
+  
+  configureRetry(config: RetryConfig): void;
 
   getPublicKey(accountId: string): Promise<PublicKey>;
 
@@ -361,7 +413,43 @@ function setupLogging() {
 
 ### Mirror Node Usage
 
-1. **Caching**: Implement caching for frequently accessed mirror node data:
+1. **Custom Provider Configuration**: When using custom mirror node providers, configure retry and rate limiting appropriately:
+
+   ```typescript
+   // Configure custom mirror node with retry settings
+   const mirrorNode = new HederaMirrorNode('mainnet', logger, {
+     customUrl: 'https://custom-provider.com/api/v1',
+     apiKey: process.env.MIRROR_NODE_API_KEY,
+     headers: {
+       'X-Provider-Id': 'my-app-id'
+     }
+   });
+   
+   // Configure retry behavior for the custom provider
+   mirrorNode.configureRetry({
+     maxRetries: 5,
+     initialDelayMs: 500,
+     maxDelayMs: 30000,
+     backoffFactor: 2
+   });
+   ```
+
+2. **Dynamic Configuration**: Update mirror node configuration at runtime:
+
+   ```typescript
+   // Start with default Hedera mirror node
+   const mirrorNode = new HederaMirrorNode('mainnet', logger);
+   
+   // Switch to custom provider based on conditions
+   if (highTrafficMode) {
+     mirrorNode.configureMirrorNode({
+       customUrl: 'https://high-performance-mirror.com/api',
+       apiKey: process.env.HIGH_PERF_API_KEY
+     });
+   }
+   ```
+
+3. **Caching**: Implement caching for frequently accessed mirror node data:
 
    ```typescript
    const cache = new Map();
