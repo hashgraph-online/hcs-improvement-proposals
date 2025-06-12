@@ -23,7 +23,7 @@ const UseCasesPage: React.FC = () => {
             </p>
             <Link
               to='#members'
-              className='inline-block bg-white text-black font-bold py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-base hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg'
+              className='inline-block bg-brand-blue text-white font-bold py-2 md:py-3 px-4 md:px-6 rounded-full text-xs md:text-base hover:bg-opacity-90 transition-all duration-300 transform hover:scale-105 shadow-lg'
             >
               Explore Members
             </Link>

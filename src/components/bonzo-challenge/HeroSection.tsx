@@ -9,7 +9,6 @@ import {
   FaMoneyBillWave,
   FaChartLine,
 } from 'react-icons/fa';
-import PrimaryButton from '../hackathon/PrimaryButton';
 
 type Props = {};
 
@@ -165,7 +164,12 @@ const HeroSection: React.FC<Props> = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 1.3 }}
             >
-              <PrimaryButton href='#register'>Register Now</PrimaryButton>
+              <button 
+                className='px-6 py-3 rounded-lg font-bold text-white bg-gray-400 cursor-not-allowed opacity-60'
+                disabled
+              >
+                Event Ended
+              </button>
 
               <Link
                 to='#ideas'

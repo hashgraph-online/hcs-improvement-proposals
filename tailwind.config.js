@@ -11,22 +11,29 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['"Inter"', ...fontFamily.sans],
+        sans: ['"Roboto"', ...fontFamily.sans],
+        mono: ['"Roboto Mono"', ...fontFamily.mono],
         jakarta: ['"Plus Jakarta Sans"', ...fontFamily.sans],
-        mono: ['"Fira Code"', ...fontFamily.mono],
         styrene: ['"Styrene A"', ...fontFamily.sans],
       },
       borderRadius: {
         sm: '4px',
       },
       colors: {
+        brand: {
+          white: '#ffffff',
+          dark: '#3f4174',
+          blue: '#5599fe',
+          green: '#48df7b',
+          purple: '#b56cff',
+        },
         blue: {
           50: '#eff6ff',
           100: '#dbeafe',
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
-          500: '#3b82f6',
+          500: '#5599fe', // Updated to brand blue
           600: '#2563eb',
           700: '#1d4ed8',
           800: '#1e40af',

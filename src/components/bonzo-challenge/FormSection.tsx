@@ -48,12 +48,12 @@ const FormSection: React.FC = () => {
           >
             <Section
               icon={<FaPaperPlane />}
-              title='Ready to Build the Future of DeFi AI?'
+              title='Challenge Completed!'
             />
 
-            <p className='text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto'>
-              Register for the Bonzo Finance AI Agent Challenge and start
-              building your AI agent on Hedera.
+            <p className='text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6'>
+              The Bonzo Finance AI Agent Challenge has ended. Thank you to all participants
+              who built innovative AI agents on Hedera.
             </p>
           </motion.div>
 
@@ -62,16 +62,20 @@ const FormSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className='bg-white dark:bg-gray-800 rounded-xl shadow-md border border-purple-100 dark:border-gray-700 p-6 md:p-8 overflow-hidden'
+            className='bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-12 text-center'
           >
-            <div className='aspect-w-16 aspect-h-9'>
-              <iframe
-                src='https://tally.so/embed/wggvxD?alignLeft=1&hideTitle=1&transparentBackground=1'
-                frameBorder='0'
-                title='Bonzo Finance AI Agent Challenge Registration'
-                className='w-full h-[700px] min-h-[500px]'
-              ></iframe>
-            </div>
+            <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
+              Challenge Period Ended
+            </h3>
+            <p className='text-gray-600 dark:text-gray-400 mb-6'>
+              Stay tuned for future challenges and opportunities to build on Hedera!
+            </p>
+            <a
+              href='https://bonzo.finance'
+              className='inline-block px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors'
+            >
+              Visit Bonzo Finance →
+            </a>
           </motion.div>
         </div>
       </div>

@@ -1,81 +1,129 @@
-# Standards
+# HCS Standards
 
-Welcome to the HCS Standards page! Here, we'll showcase the various standards that are used within the HCS.
+<div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(63, 65, 116, 0.05) 0%, rgba(85, 153, 254, 0.05) 100%); border-radius: 0.5rem; border-left: 4px solid var(--ifm-color-primary);">
+  <p style="margin: 0; font-size: 1.1rem; color: var(--ifm-color-emphasis-700);">
+    Discover the comprehensive collection of Hedera Consensus Service standards that enable powerful decentralized applications and data management on the Hedera network.
+  </p>
+</div>
 
-[![HCS-1](https://via.placeholder.com/350x200.png?text=HCS-1)](./standards/hcs-1.md)
+<div className="standards-grid">
 
-### [HCS-1: File Data Management with Hedera Consensus Service](./standards/hcs-1.md)
+## Core Data Management
 
-**Status: Published**
+<div className="standard-card">
 
-Provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS).
+<div className="standard-number">HCS-1</div>
+### [File Data Management](./standards/hcs-1.md)
+<span className="status-badge status-published">Published</span>
 
----
+Systematic approach to encode, chunk, upload, retrieve, and reassemble file data using Hedera Consensus Service. The foundation for data management on HCS.
 
-[![HCS-2](https://via.placeholder.com/350x200.png?text=HCS-2)](./standards/hcs-2.md)
+**Key Features:** Data chunking, file reconstruction, consensus-based storage
 
-### [HCS-2: Advanced Topic Registries](./standards/hcs-2.md)
+</div>
 
-**Status: Published**
+<div className="standard-card">
 
-Introduces advanced methodologies for managing and interacting with Topic Registries within the HCS framework.
+<div className="standard-number">HCS-2</div>
+### [Advanced Topic Registries](./standards/hcs-2.md)
+<span className="status-badge status-published">Published</span>
 
----
+Advanced methodologies for managing and interacting with Topic Registries within the HCS framework, enabling organized data discovery.
 
-[![HCS-3](https://via.placeholder.com/350x200.png?text=HCS-3)](./standards/hcs-3.md)
+**Key Features:** Topic organization, registry management, data indexing
 
-### [HCS-3: Recursion within Hedera Consensus Service](./standards/hcs-3.md)
+</div>
 
-**Status: Published**
+<div className="standard-card">
 
-Enables recursive referencing of inscriptions within the Hedera Hashgraph, standardizing resource referencing and loading.
+<div className="standard-number">HCS-3</div>
+### [Recursion within HCS](./standards/hcs-3.md)
+<span className="status-badge status-published">Published</span>
 
----
+Enables recursive referencing of inscriptions within Hedera Hashgraph, standardizing how resources reference and load other resources.
 
-[![HCS-5](https://via.placeholder.com/350x200.png?text=HCS-5)](./standards/hcs-5.md)
+**Key Features:** Recursive references, resource loading, standardized linking
 
-### [HCS-5: Tokenized HCS-1 Files, Hashinals](./standards/hcs-5.md)
+</div>
 
-**Status: Published**
+## Digital Assets & NFTs
 
-Provides a standard way to "inscribe" Hashinals utilizing the Hedera Consensus and Hedera Token Services.
+<div className="standard-card">
 
----
+<div className="standard-number">HCS-5</div>
+### [Tokenized HCS-1 Files (Hashinals)](./standards/hcs-5.md)
+<span className="status-badge status-published">Published</span>
 
-[![HCS-6](https://via.placeholder.com/350x200.png?text=HCS-6)](./standards/hcs-6.md)
+Standard for "inscribing" Hashinals utilizing both Hedera Consensus Service and Hedera Token Service for tokenized file assets.
 
-### [HCS-6: Dynamic Hashinals](./standards/hcs-6.md)
+**Key Features:** NFT creation, file tokenization, HTS integration
 
-**Status: Published**
+</div>
 
-Introduces a way to inscribe and tokenize Hashinals whose metadata can be updated using a non-indexed Topic ID.
+<div className="standard-card">
 
----
+<div className="standard-number">HCS-6</div>
+### [Dynamic Hashinals](./standards/hcs-6.md)
+<span className="status-badge status-published">Published</span>
 
-[![HCS-8](https://via.placeholder.com/350x200.png?text=HCS-8)](./standards/hcs-8/index.md)
+Inscribe and tokenize Hashinals with updatable metadata using non-indexed Topic IDs, enabling evolving digital assets.
 
-### [HCS-8: Poll Topic Standard](./standards/hcs-8/index.md)
+**Key Features:** Mutable metadata, dynamic updates, flexible NFTs
 
-**Status: Published**
+</div>
 
-Introduces a framework to use Hedera Consensus Service (HCS) topics to manage polls.
+## Governance & Polling
 
----
+<div className="standard-card">
 
-[![HCS-9](https://via.placeholder.com/350x200.png?text=HCS-9)](./standards/hcs-9/index.md)
+<div className="standard-number">HCS-8</div>
+### [Poll Topic Standard](./standards/hcs-8/index.md)
+<span className="status-badge status-published">Published</span>
 
-### [HCS-9: Poll Metadata Schema](./standards/hcs-9/index.md)
+Framework for using HCS topics to manage decentralized polls and voting mechanisms with transparent, auditable results.
 
-**Status: Published**
+**Key Features:** Decentralized voting, poll management, result aggregation
 
-Defines the schema to describe and execute polls, in conjunction with HCS-8.
+</div>
 
----
+<div className="standard-card">
 
-[![HCS-20](https://via.placeholder.com/350x200.png?text=HCS-20)](/docs/standards/hcs-20)
+<div className="standard-number">HCS-9</div>
+### [Poll Metadata Schema](./standards/hcs-9/index.md)
+<span className="status-badge status-published">Published</span>
 
-### [HCS-20: Auditable Points Standard on Hedera](/docs/standards/hcs-20)
+Defines the schema to describe and execute polls in conjunction with HCS-8, ensuring standardized poll structure and execution.
 
-**Status: Published**
+**Key Features:** Poll schemas, metadata standards, execution framework
 
-Defines how points can be managed and audited on the Hedera Hashgraph, inspired by the BRC-20 protocol on Ordinals.
+</div>
+
+## Points & Rewards
+
+<div className="standard-card">
+
+<div className="standard-number">HCS-20</div>
+### [Auditable Points Standard](/docs/standards/hcs-20)
+<span className="status-badge status-published">Published</span>
+
+Manages and audits points on Hedera Hashgraph, inspired by BRC-20. Enables transparent reward systems and loyalty programs.
+
+**Key Features:** Point management, audit trails, reward systems
+
+</div>
+
+## Missing Standards
+
+<div className="standard-card missing">
+
+<div className="standard-number">HCS-4, HCS-7, HCS-10+</div>
+### Coming Soon
+<span className="status-badge status-draft">In Development</span>
+
+Additional standards are being developed to expand the HCS ecosystem. Stay tuned for announcements on new specifications.
+
+**Coming Soon:** Enhanced protocols, advanced features, ecosystem expansion
+
+</div>
+
+</div>

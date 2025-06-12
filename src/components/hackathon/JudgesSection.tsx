@@ -131,9 +131,9 @@ export const Person: React.FC<PersonProps> = ({
         {person.isAI && (
           <div className='absolute top-3 right-3 z-10'>
             <div className='relative'>
-              <div className='absolute -inset-1 bg-hedera-purple rounded-full opacity-40 blur animate-pulse'></div>
-              <div className='relative bg-gradient-to-r from-hedera-blue to-hedera-purple rounded-full w-8 h-8 flex items-center justify-center'>
-                <FaRobot className='text-white' />
+              <div className='absolute -inset-0.5 bg-hedera-purple rounded-full opacity-40 blur animate-pulse'></div>
+              <div className='relative bg-gradient-to-r from-hedera-blue to-hedera-purple rounded-full w-6 h-6 flex items-center justify-center'>
+                <FaRobot className='text-white text-sm' />
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@ export const Person: React.FC<PersonProps> = ({
       </div>
 
       <motion.div
-        className='mt-4 text-center px-2'
+        className='mt-3 text-center px-2'
         initial={{ opacity: 0 }}
         animate={
           isInView
@@ -285,17 +285,17 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
               </div>
             </div>
 
-            <div className='md:w-3/5 p-6 md:p-10 md:pl-12'>
+            <div className='md:w-3/5 p-4 md:p-6 md:pl-8'>
               <div className='h-full flex flex-col'>
                 <motion.div
-                  className='mb-6'
+                  className='mb-4'
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 }}
                 >
                   <HackathonTypography
                     variant='h3'
-                    className='font-styrene text-black dark:text-white mb-4'
+                    className='font-styrene text-black dark:text-white mb-3'
                   >
                     Bio
                   </HackathonTypography>
@@ -309,7 +309,7 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
 
                 {person.expertise && (
                   <motion.div
-                    className='mt-4'
+                    className='mt-3'
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
@@ -317,7 +317,7 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                     <HackathonTypography
                       variant='subtitle1'
                       color='purple'
-                      className='font-styrene mb-4 flex items-center'
+                      className='font-styrene mb-3 flex items-center'>
                     >
                       <FaNetworkWired className='mr-2' /> <span>Expertise</span>
                     </HackathonTypography>
@@ -329,7 +329,7 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={{ opacity: 1, scale: 1 }}
                           transition={{ delay: 0.4 + index * 0.05 }}
-                          className={`px-4 py-2 text-sm rounded-full ${
+                          className={`px-3 py-1.5 text-xs rounded-full ${
                             index % 3 === 0
                               ? 'bg-hedera-blue/10 text-hedera-blue dark:bg-hedera-blue/20 dark:text-blue-300'
                               : index % 3 === 1
@@ -346,16 +346,16 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
 
                 {person.isAI && (
                   <motion.div
-                    className='mt-6 p-4 border border-blue-300/20 dark:border-blue-500/20 rounded-xl bg-gradient-to-r from-blue-50/30 to-purple-50/30 dark:from-blue-900/10 dark:to-purple-900/10'
+                    className='mt-4 p-3 border border-blue-300/20 dark:border-blue-500/20 rounded-xl bg-gradient-to-r from-blue-50/30 to-purple-50/30 dark:from-blue-900/10 dark:to-purple-900/10'
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
                   >
-                    <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-2'>
                       <div className='relative'>
                         <div className='absolute -inset-1 rounded-full bg-blue-500/20 blur-sm animate-pulse'></div>
-                        <div className='relative w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center'>
-                          <FaBrain className='text-white' />
+                        <div className='relative w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center'>
+                          <FaBrain className='text-white text-sm' />
                         </div>
                       </div>
                       <div>
@@ -390,7 +390,7 @@ const GlowingButton: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`relative px-8 py-3 rounded-full text-base font-medium transition-all duration-300 ${
+      className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
         active
           ? `text-white ${
               color === 'purple' ? 'bg-hedera-purple' : 'bg-hedera-green'
@@ -434,7 +434,7 @@ export const JudgesSection: React.FC = () => {
 
   return (
     <div
-      className='min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black relative overflow-hidden py-24'
+      className='min-h-screen bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black relative overflow-hidden py-16'
       ref={sectionRef}
     >
       <div className='absolute inset-0 overflow-hidden'>
@@ -447,21 +447,21 @@ export const JudgesSection: React.FC = () => {
       <div className='absolute -top-64 -left-64 w-[500px] h-[500px] rounded-full bg-hedera-purple/20 dark:bg-hedera-purple/10 blur-3xl opacity-20 dark:opacity-30 animate-blob'></div>
       <div className='absolute -bottom-64 -right-64 w-[500px] h-[500px] rounded-full bg-hedera-blue/20 dark:bg-hedera-blue/10 blur-3xl opacity-20 dark:opacity-30 animate-blob animation-delay-4000'></div>
 
-      <div className='container mx-auto px-4 relative z-10'>
-        <div className='max-w-4xl mx-auto text-center mb-16'>
+      <div className='container mx-auto px-3 relative z-10'>
+        <div className='max-w-4xl mx-auto text-center mb-10'>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className='inline-block bg-gradient-to-r from-hedera-blue/10 to-hedera-purple/10 dark:from-hedera-blue/20 dark:to-hedera-purple/20 px-4 py-1.5 rounded-full text-sm font-medium text-hedera-green border border-hedera-green/20 mb-6'>
+            <span className='inline-block bg-gradient-to-r from-hedera-blue/10 to-hedera-purple/10 dark:from-hedera-blue/20 dark:to-hedera-purple/20 px-3 py-1 rounded-full text-xs font-medium text-hedera-green border border-hedera-green/20 mb-4'>
               Expert Advisors
             </span>
 
             <HackathonTypography
               variant='h1'
-              className='text-center bg-gradient-to-r from-[#000000] to-hedera-charcoal dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-6'
+              className='text-center bg-gradient-to-r from-[#000000] to-hedera-charcoal dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4'
             >
               Meet Our <span className='text-hedera-green'>Experts</span>
             </HackathonTypography>
@@ -478,7 +478,7 @@ export const JudgesSection: React.FC = () => {
           </motion.div>
 
           <motion.div
-            className='flex flex-wrap justify-center mt-16 mb-12 gap-4'
+            className='flex flex-wrap justify-center mt-10 mb-8 gap-3'
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -511,7 +511,7 @@ export const JudgesSection: React.FC = () => {
               exit={{ opacity: 0, y: -40 }}
               transition={{ duration: 0.5 }}
             >
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8'>
                 {judges.map((judge, index) => (
                   <Person
                     key={index}
@@ -531,7 +531,7 @@ export const JudgesSection: React.FC = () => {
               exit={{ opacity: 0, y: -40 }}
               transition={{ duration: 0.5 }}
             >
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-12'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8'>
                 {mentors.map((mentor, index) => (
                   <Person
                     key={index}

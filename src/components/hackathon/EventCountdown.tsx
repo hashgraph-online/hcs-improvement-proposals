@@ -50,12 +50,12 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
   const particles = Array.from({ length: 8 }, (_, i) => i);
 
   return (
-    <div className='w-full py-6 relative'>
+    <div className='w-full py-4 relative'>
       <div className='absolute inset-0 overflow-hidden'>
         {particles.map((i) => (
           <FloatingParticle
             key={i}
-            size={Math.random() * 4 + 2}
+            size={Math.random() * 3 + 1}
             delay={Math.random() * 2}
             duration={3 + Math.random() * 3}
             x={Math.random() * 100}
@@ -74,7 +74,7 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
             className='flex flex-col items-center relative z-10'
           >
             <motion.h3
-              className='text-[#2d84eb] text-2xl font-bold mb-8'
+              className='text-[#2d84eb] text-xl font-bold mb-6'
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -82,7 +82,7 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
               {title}
             </motion.h3>
 
-            <div className='flex justify-between items-center w-full max-w-lg'>
+            <div className='flex justify-between items-center w-full max-w-md'>
               <TimeUnit
                 value={timeLeft.days}
                 label='Days'
@@ -90,7 +90,7 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
                 delay={0.1}
               />
 
-              <div className='w-px h-12 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent' />
+              <div className='w-px h-8 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent' />
 
               <TimeUnit
                 value={timeLeft.hours}
@@ -99,7 +99,7 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
                 delay={0.2}
               />
 
-              <div className='w-px h-12 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent' />
+              <div className='w-px h-8 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent' />
 
               <TimeUnit
                 value={timeLeft.minutes}
@@ -108,7 +108,7 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
                 delay={0.3}
               />
 
-              <div className='w-px h-12 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent' />
+              <div className='w-px h-8 bg-gradient-to-b from-transparent via-gray-300 dark:via-gray-600 to-transparent' />
 
               <TimeUnit
                 value={timeLeft.seconds}
@@ -160,7 +160,7 @@ const TimeUnit: React.FC<TimeUnitProps> = ({ value, label, color, delay }) => {
       transition={{ duration: 0.6, delay }}
     >
       <motion.div
-        className='text-6xl font-mono font-bold'
+        className='text-4xl font-mono font-bold'
         style={{ color }}
         initial={{ scale: 0.5 }}
         animate={{ scale: 1 }}
@@ -173,7 +173,7 @@ const TimeUnit: React.FC<TimeUnitProps> = ({ value, label, color, delay }) => {
       >
         {String(value).padStart(2, '0')}
       </motion.div>
-      <div className='mt-2 text-sm font-medium text-gray-600 dark:text-gray-400'>
+      <div className='mt-1 text-xs font-medium text-gray-600 dark:text-gray-400'>
         {label}
       </div>
     </motion.div>

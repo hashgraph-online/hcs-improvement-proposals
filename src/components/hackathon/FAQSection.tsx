@@ -78,21 +78,21 @@ export const FAQItem: React.FC<FAQItemProps> = ({
         delay: index * 0.1,
         ease: 'easeOut',
       }}
-      className={`rounded-lg overflow-hidden border dark:border-${colorName}/30 hover:border-${colorName}/40 dark:hover:border-${colorName}/50 transition-all duration-300 hover:-translate-y-1 mb-4 sm:mb-5 bg-white dark:bg-[#222222]`}
+      className={`rounded-lg overflow-hidden border dark:border-${colorName}/30 hover:border-${colorName}/40 dark:hover:border-${colorName}/50 transition-all duration-300 hover:-translate-y-1 mb-3 sm:mb-4 bg-white dark:bg-[#222222]`}
     >
       <div className='relative z-10'>
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex justify-between items-center w-full px-6 py-5 text-left group transition-colors duration-300`}
+          className={`flex justify-between items-center w-full px-4 py-3 text-left group transition-colors duration-300`}
           style={{
             background: isOpen ? color.light : 'transparent',
           }}
         >
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-3'>
             {icon && (
               <div
                 style={{ background: color.bg }}
-                className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-110`}
+                className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-white transition-transform duration-300 group-hover:scale-110`}
               >
                 {icon}
               </div>
@@ -128,7 +128,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
                 className='h-px w-full'
               ></div>
               <div
-                className='px-6 py-5 pl-20 dark:bg-opacity-20'
+                className='px-4 py-3 pl-14 dark:bg-opacity-20'
                 style={{ background: color.light }}
               >
                 {answer}
@@ -296,39 +296,39 @@ const FAQSection: React.FC = () => {
             The $30,000 prize pool is distributed across two tracks:
           </HackathonTypography>
           <div className='mt-4'>
-            <div className='mb-4'>
+            <div className='mb-3'>
               <HackathonTypography
                 variant='subtitle1'
                 className='font-bold text-hedera-purple'
               >
                 Best use of OpenConvAI (HCS-10)
               </HackathonTypography>
-              <div className='mt-2 ml-4 text-black dark:text-white'>
+              <div className='mt-2 ml-3 text-black dark:text-white'>
                 <div>🥇 First Place: $6,500</div>
                 <div>🥈 Second Place: $3,500</div>
               </div>
             </div>
-            <div className='mb-4'>
+            <div className='mb-3'>
               <HackathonTypography
                 variant='subtitle1'
                 className='font-bold text-hedera-blue'
               >
                 Hedera ElizaOS Plug-in
               </HackathonTypography>
-              <div className='mt-2 ml-4 text-black dark:text-white'>
+              <div className='mt-2 ml-3 text-black dark:text-white'>
                 <div>🥇 First Place: $6,500</div>
                 <div>🥈 Second Place: $3,500</div>
               </div>
             </div>
 
-            <div className='mb-4'>
+            <div className='mb-3'>
               <HackathonTypography
                 variant='subtitle1'
                 className='font-bold text-hedera-blue'
               >
                 Best use of Hedera AgentKit and/or MCP
               </HackathonTypography>
-              <div className='mt-2 ml-4 text-black dark:text-white'>
+              <div className='mt-2 ml-3 text-black dark:text-white'>
                 <div>🥇 First Place: $6,500</div>
                 <div>🥈 Second Place: $3,500</div>
               </div>
@@ -423,7 +423,7 @@ const FAQSection: React.FC = () => {
             You can build any project that leverages the OpenConvAI protocol and
             Hedera technology! Some ideas include:
           </HackathonTypography>
-          <div className='mt-4 space-y-3 text-black dark:text-white'>
+          <div className='mt-3 space-y-2 text-black dark:text-white'>
             <div className='flex items-start'>
               <FaCircle className='text-hedera-purple text-xs mt-1.5 mr-2 flex-shrink-0' />
               <div>
@@ -474,7 +474,7 @@ const FAQSection: React.FC = () => {
             Your hackathon submission must include:
           </HackathonTypography>
 
-          <div className='mt-4 space-y-3 text-black dark:text-white'>
+          <div className='mt-3 space-y-2 text-black dark:text-white'>
             <div className='flex items-start'>
               <FaGithub className='text-hedera-purple mt-1 mr-2 flex-shrink-0' />
               <div>
@@ -654,7 +654,7 @@ const FAQSection: React.FC = () => {
             You'll have access to several powerful tools to build your project:
           </HackathonTypography>
 
-          <div className='mt-4 space-y-3 text-black dark:text-white'>
+          <div className='mt-3 space-y-2 text-black dark:text-white'>
             <div className='flex items-start'>
               <FaRobot className='text-hedera-purple mt-1 mr-2 flex-shrink-0' />
               <div>
@@ -729,19 +729,19 @@ const FAQSection: React.FC = () => {
     <section
       ref={sectionRef}
       id='faq'
-      className='py-16 sm:py-20 md:py-24 lg:py-32 bg-white dark:bg-[#222222] overflow-hidden'
+      className='py-8 sm:py-12 md:py-16 lg:py-20 bg-white dark:bg-[#222222] overflow-hidden'
       style={{
         backgroundImage: 'url("/img/hackathon/stars.svg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
       }}
     >
-      <div className='container mx-auto px-4 sm:px-6 md:px-8 lg:px-10 max-w-5xl'>
-        <div className='text-center mb-12 sm:mb-16 md:mb-20'>
+      <div className='container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 max-w-5xl'>
+        <div className='text-center mb-8 sm:mb-10 md:mb-12'>
           <HackathonTypography
             variant='h2'
             align='center'
-            className='mb-4 sm:mb-6 font-styrene text-black dark:text-white'
+            className='mb-3 sm:mb-4 font-styrene text-black dark:text-white'
             underline={true}
             underlineColor='gradient'
           >
@@ -769,7 +769,7 @@ const FAQSection: React.FC = () => {
             aria-hidden='true'
           ></div>
 
-          <div className='relative space-y-4 sm:space-y-5'>
+          <div className='relative space-y-3 sm:space-y-4'>
             {faqs.map((faq, index) => (
               <FAQItem
                 key={index}

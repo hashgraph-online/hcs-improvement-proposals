@@ -18,3 +18,21 @@ kantorcodes:
   image_url: https://avatars.githubusercontent.com/u/6068672?s=400&u=304bc9f4512c677786835926a69deb67d75ec7fc&v=4
   page:
     permalink: '/kantorcodes'
+  socials:
+    x: kantorcodes
+    linkedin: kantorcodes
+    github: kantorcodes
+
+hashgraph-online:
+  name: Hashgraph Online
+  title: Building the Autonomous Internet
+  url: https://hashgraph.online
+  image_url: https://github.com/hashgraph-online.png
+
+michelle-baez:
+  name: Michelle Baez
+  title: Head of Marketing, Hashgraph Online
+  url: https://www.linkedin.com/in/michellebaezny/
+  image_url: https://media.licdn.com/dms/image/v2/D4E03AQHHvGmGK58UcA/profile-displayphoto-shrink_800_800/B4EZOYVp6qGQAg-/0/1733427634206?e=1755129600&v=beta&t=2WcqyrMnYiLBVneCD1BWFgkIZxYrp7sd2PVEh4BPYxo
+  socials:
+    linkedin: michellebaezny

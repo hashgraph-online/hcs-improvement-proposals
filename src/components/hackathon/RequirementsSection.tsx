@@ -50,7 +50,7 @@ const RequirementsSection: React.FC = () => {
 
   return (
     <section
-      className='relative py-16 sm:py-20 md:py-24 lg:py-32 bg-white dark:bg-gray-900 overflow-hidden'
+      className='relative py-8 sm:py-12 md:py-16 lg:py-20 bg-white dark:bg-gray-900 overflow-hidden'
       aria-labelledby='ai-requirements-title'
       style={{
         backgroundImage: 'url("/img/hackathon/stars.svg")',
@@ -64,7 +64,7 @@ const RequirementsSection: React.FC = () => {
       <DataFlowLines />
 
       <div className='container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10'>
-        <div className='text-center mb-10 sm:mb-14 md:mb-20 max-w-4xl mx-auto'>
+        <div className='text-center mb-6 sm:mb-8 md:mb-10 max-w-4xl mx-auto'>
           <motion.div
             ref={titleRef}
             initial={{ opacity: 0, y: 50 }}
@@ -114,7 +114,7 @@ const RequirementsSection: React.FC = () => {
               variant='body1'
               color='muted'
               align='center'
-              className='max-w-3xl mx-auto mb-5 sm:mb-6 md:mb-8 px-1 sm:px-2'
+              className='max-w-3xl mx-auto mb-3 sm:mb-4 md:mb-5 px-1 sm:px-2'
             >
               For AI agents and human developers collaborating in this
               hackathon, your project must meet these requirements to qualify
@@ -152,7 +152,7 @@ const RequirementsSection: React.FC = () => {
           </motion.div>
         </div>
 
-        <div className='max-w-6xl mx-auto mb-12 sm:mb-16 md:mb-20'>
+        <div className='max-w-6xl mx-auto mb-6 sm:mb-8 md:mb-10'>
           <motion.div
             className='grid grid-cols-2 gap-1.5 sm:gap-3 md:gap-4 lg:gap-5'
             initial={{ opacity: 0 }}
@@ -195,7 +195,7 @@ const RequirementsSection: React.FC = () => {
         </div>
 
         <motion.div
-          className='relative max-w-5xl mx-auto mb-12 sm:mb-16 md:mb-20'
+          className='relative max-w-5xl mx-auto mb-6 sm:mb-8 md:mb-10'
           initial={{ opacity: 0, y: 30 }}
           animate={
             isTitleInView
@@ -215,13 +215,13 @@ const RequirementsSection: React.FC = () => {
             aria-hidden='true'
           ></div>
 
-          <div className='flex flex-col sm:flex-row justify-between relative border border-hedera-purple/20 dark:border-hedera-purple/40 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-5 md:p-6 lg:p-8 overflow-hidden bg-white/30 dark:bg-gray-800/50 backdrop-blur-sm gap-3 sm:gap-4 md:gap-6'>
-            <div className='flex items-start gap-2.5 sm:gap-4 md:gap-5'>
+          <div className='flex flex-col sm:flex-row justify-between relative border border-hedera-purple/20 dark:border-hedera-purple/40 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 overflow-hidden bg-white/30 dark:bg-gray-800/50 backdrop-blur-sm gap-2 sm:gap-3 md:gap-4'>
+            <div className='flex items-start gap-2 sm:gap-3 md:gap-4'>
               <div
-                className='w-9 h-9 sm:w-12 sm:h-12 md:w-14 md:h-14 flex-shrink-0 bg-gradient-to-r from-hedera-purple to-hedera-blue rounded-md sm:rounded-lg shadow-md flex items-center justify-center text-white'
+                className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0 bg-gradient-to-r from-hedera-purple to-hedera-blue rounded-md sm:rounded-lg shadow-md flex items-center justify-center text-white'
                 aria-hidden='true'
               >
-                <FaLock className='text-base sm:text-xl md:text-2xl' />
+                <FaLock className='text-sm sm:text-base md:text-lg' />
               </div>
 
               <div>
@@ -276,14 +276,14 @@ const RequirementsSection: React.FC = () => {
                 }
               : {}
           }
-          className='relative max-w-6xl mx-auto mb-12 sm:mb-16 md:mb-20'
+          className='relative max-w-6xl mx-auto mb-6 sm:mb-8 md:mb-10'
         >
-          <div className='flex items-center mb-4 sm:mb-6 md:mb-8'>
+          <div className='flex items-center mb-3 sm:mb-4 md:mb-5'>
             <div
-              className='w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-r from-hedera-blue to-hedera-purple rounded-lg shadow-md flex items-center justify-center text-white'
+              className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-hedera-blue to-hedera-purple rounded-lg shadow-md flex items-center justify-center text-white'
               aria-hidden='true'
             >
-              <FaNetworkWired className='text-base sm:text-lg md:text-xl' />
+              <FaNetworkWired className='text-sm sm:text-base md:text-lg' />
             </div>
             <HackathonTypography variant='h3' className='ml-3 sm:ml-4'>
               Agent Integration Examples
@@ -311,9 +311,9 @@ const RequirementsSection: React.FC = () => {
                 }
               : {}
           }
-          className='relative max-w-7xl mx-auto mb-12 sm:mb-16'
+          className='relative max-w-7xl mx-auto mb-6 sm:mb-8'
         >
-          <div className='mb-10 sm:mb-14 md:mb-16 text-center'>
+          <div className='mb-6 sm:mb-8 md:mb-10 text-center'>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -321,11 +321,11 @@ const RequirementsSection: React.FC = () => {
               transition={{ duration: 0.8 }}
               className='relative mb-8'
             >
-              <div className='relative w-24 h-24 mx-auto mb-6'>
+              <div className='relative w-16 h-16 mx-auto mb-4'>
                 <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
                 <div className='absolute inset-[6px] rounded-xl bg-[#2d84eb]/10 transform rotate-45'></div>
                 <div className='absolute inset-[12px] rounded-lg bg-[#3ec878]/10 transform rotate-45'></div>
-                <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef]'>
+                <div className='absolute inset-0 flex items-center justify-center text-2xl text-[#8259ef]'>
                   <FaGavel />
                 </div>
               </div>
@@ -357,7 +357,7 @@ const RequirementsSection: React.FC = () => {
 
             <div className='absolute -inset-1 bg-gradient-to-r from-hedera-purple/5 via-hedera-blue/5 to-hedera-green/5 dark:from-hedera-purple/15 dark:via-hedera-blue/15 dark:to-hedera-green/15 rounded-3xl'></div>
 
-            <div className='relative bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-gray-700/40 p-6 sm:p-8 md:p-10 lg:p-12 overflow-hidden shadow-xl'>
+            <div className='relative bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-gray-700/40 p-4 sm:p-5 md:p-6 lg:p-8 overflow-hidden shadow-xl'>
               <div className='absolute -inset-px bg-gradient-to-r from-hedera-purple/20 via-hedera-blue/20 to-hedera-green/20 dark:from-hedera-purple/30 dark:via-hedera-blue/30 dark:to-hedera-green/30 rounded-2xl pointer-events-none'></div>
 
               <div className='absolute right-0 top-0 w-full h-full overflow-hidden pointer-events-none'>
@@ -365,7 +365,7 @@ const RequirementsSection: React.FC = () => {
                 <div className='absolute -bottom-20 -left-20 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-hedera-blue/5 dark:bg-hedera-blue/10 rounded-full blur-3xl'></div>
               </div>
 
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-10 z-10 relative'>
+              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 z-10 relative'>
                 <CriterionCard
                   icon={<FaCode />}
                   title='Innovation'
@@ -416,7 +416,7 @@ const RequirementsSection: React.FC = () => {
                   progressBarWidth='w-4 sm:w-5'
                 />
 
-                <div className='lg:col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 md:gap-8'>
+                <div className='lg:col-span-1 sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 md:gap-4'>
                   <CriterionCard
                     icon={<FaChartLine />}
                     title='Success'
@@ -441,7 +441,7 @@ const RequirementsSection: React.FC = () => {
                 </div>
               </div>
 
-              <div className='w-full h-px bg-gradient-to-r from-transparent via-hedera-purple/30 to-transparent my-8 sm:my-10 md:my-12'></div>
+              <div className='w-full h-px bg-gradient-to-r from-transparent via-hedera-purple/30 to-transparent my-4 sm:my-5 md:my-6'></div>
             </div>
           </div>
         </motion.div>
