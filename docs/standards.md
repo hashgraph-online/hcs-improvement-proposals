@@ -1,7 +1,17 @@
 # HCS Standards
 
-<div style="margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(63, 65, 116, 0.05) 0%, rgba(85, 153, 254, 0.05) 100%); border-radius: 0.5rem; border-left: 4px solid var(--ifm-color-primary);">
-  <p style="margin: 0; font-size: 1.1rem; color: var(--ifm-color-emphasis-700);">
+<div style={{
+  marginBottom: '2rem',
+  padding: '1.5rem',
+  background: 'linear-gradient(135deg, rgba(63, 65, 116, 0.05) 0%, rgba(85, 153, 254, 0.05) 100%)',
+  borderRadius: '0.5rem',
+  borderLeft: '4px solid var(--ifm-color-primary)'
+}}>
+  <p style={{
+    margin: 0,
+    fontSize: '1.1rem',
+    color: 'var(--ifm-color-emphasis-700)'
+  }}>
     Discover the comprehensive collection of Hedera Consensus Service standards that enable powerful decentralized applications and data management on the Hedera network.
   </p>
 </div>
