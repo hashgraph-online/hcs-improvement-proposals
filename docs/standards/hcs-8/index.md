@@ -5,7 +5,7 @@ sidebar_position: 8
 
 # HCS-8 Standard: Poll Topic Standard
 
-**Status:** Draft
+**Status:** Published
 
 **Authors:**
 

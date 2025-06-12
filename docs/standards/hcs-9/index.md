@@ -4,7 +4,7 @@ title: HCS-9 Standard - Poll Metadata Schema
 
 #### [ hcs-9 - Poll Metadata Schema ]
 
-**Status:** Active
+**Status:** Published
 
 **Authors:** May Chan
 

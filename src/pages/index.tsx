@@ -6,7 +6,9 @@ import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import Modal from '../components/Modal';
 import UseCaseSection from '../components/UseCaseSection';
-import InteractiveShowcase, { ShowcaseItem } from '../components/InteractiveShowcase';
+import InteractiveShowcase, {
+  ShowcaseItem,
+} from '../components/InteractiveShowcase';
 import { MemberSection } from '../components/members/MemberSection';
 import { HashgraphConsensus } from '../components/HashgraphConsensus';
 import {
@@ -109,7 +111,7 @@ const HeroSection: React.FC = () => {
         }
       }, 30);
     }, 2200);
-    
+
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
@@ -168,8 +170,8 @@ const HeroSection: React.FC = () => {
 
               <div className='relative'>
                 <Terminal title='terminal'>
-                  <Terminal.Line 
-                    command='npm install @hashgraphonline/standards-sdk' 
+                  <Terminal.Line
+                    command='npm install @hashgraphonline/standards-sdk'
                     clickable
                     onClick={handleCopy}
                   />
@@ -179,7 +181,7 @@ const HeroSection: React.FC = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
                       >
                         <div className='font-mono text-sm pl-4 text-green-500 dark:text-green-400 flex items-center'>
                           <span>{typedText1}</span>
@@ -200,7 +202,7 @@ const HeroSection: React.FC = () => {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeOut" }}
+                        transition={{ duration: 0.3, ease: 'easeOut' }}
                       >
                         <div className='font-mono text-sm pl-4 text-blue-500 dark:text-blue-400 flex items-center'>
                           <span>{typedText2}</span>
@@ -287,24 +289,36 @@ const HeroSection: React.FC = () => {
                     className='flex flex-col items-center'
                   >
                     <motion.div
-                      animate={{ 
+                      animate={{
                         rotateY: [0, 360],
-                        scale: [1, 1.1, 1]
+                        scale: [1, 1.1, 1],
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 6,
                         repeat: Infinity,
-                        ease: "linear"
+                        ease: 'linear',
                       }}
                       className='mb-3 text-brand-blue/60'
-                      style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      style={{
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                        <circle cx="12" cy="12" r="10" />
-                        <ellipse cx="12" cy="12" rx="10" ry="5" />
-                        <path d="M2 12 Q12 8 22 12" />
-                        <path d="M2 12 Q12 16 22 12" />
-                        <line x1="12" y1="2" x2="12" y2="22" />
+                      <svg
+                        width='40'
+                        height='40'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='1'
+                      >
+                        <circle cx='12' cy='12' r='10' />
+                        <ellipse cx='12' cy='12' rx='10' ry='5' />
+                        <path d='M2 12 Q12 8 22 12' />
+                        <path d='M2 12 Q12 16 22 12' />
+                        <line x1='12' y1='2' x2='12' y2='22' />
                       </svg>
                     </motion.div>
                     <TransformCard
@@ -330,14 +344,14 @@ const HeroSection: React.FC = () => {
                         </Typography>
                       </motion.div>
                       <motion.div
-                        animate={{ 
+                        animate={{
                           opacity: [0.5, 1, 0.5],
-                          scale: [0.95, 1.05, 0.95]
+                          scale: [0.95, 1.05, 0.95],
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 3,
                           repeat: Infinity,
-                          ease: "easeInOut"
+                          ease: 'easeInOut',
                         }}
                       >
                         <Typography className='text-sm font-black text-white leading-tight'>
@@ -355,46 +369,144 @@ const HeroSection: React.FC = () => {
                     transition={{ duration: 0.6, delay: 0.4 }}
                     className='flex flex-col items-center'
                   >
-                    <div className='mb-3 text-brand-green/60 relative' style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="108" height="40" viewBox="0 0 60 24" fill="none" stroke="currentColor" strokeWidth="1">
+                    <div
+                      className='mb-3 text-brand-green/60 relative'
+                      style={{
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <svg
+                        width='108'
+                        height='40'
+                        viewBox='0 0 60 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='1'
+                      >
                         {/* First robot */}
-                        <rect x="4" y="6" width="12" height="14" rx="2" />
-                        <circle cx="7" cy="11" r="1.5" fill="currentColor">
-                          <animate attributeName="opacity" values="1;0.1;1" dur="2s" repeatCount="indefinite" />
+                        <rect x='4' y='6' width='12' height='14' rx='2' />
+                        <circle cx='7' cy='11' r='1.5' fill='currentColor'>
+                          <animate
+                            attributeName='opacity'
+                            values='1;0.1;1'
+                            dur='2s'
+                            repeatCount='indefinite'
+                          />
                         </circle>
-                        <circle cx="13" cy="11" r="1.5" fill="currentColor">
-                          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite" begin="0.5s" />
+                        <circle cx='13' cy='11' r='1.5' fill='currentColor'>
+                          <animate
+                            attributeName='opacity'
+                            values='1;0.3;1'
+                            dur='3s'
+                            repeatCount='indefinite'
+                            begin='0.5s'
+                          />
                         </circle>
-                        <path d="M7 15 Q10 17 13 15" strokeLinecap="round" />
-                        <line x1="8" y1="2" x2="8" y2="6" strokeLinecap="round">
-                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" />
+                        <path d='M7 15 Q10 17 13 15' strokeLinecap='round' />
+                        <line x1='8' y1='2' x2='8' y2='6' strokeLinecap='round'>
+                          <animate
+                            attributeName='opacity'
+                            values='0;1;0'
+                            dur='1.5s'
+                            repeatCount='indefinite'
+                          />
                         </line>
-                        <line x1="12" y1="2" x2="12" y2="6" strokeLinecap="round">
-                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.5s" />
+                        <line
+                          x1='12'
+                          y1='2'
+                          x2='12'
+                          y2='6'
+                          strokeLinecap='round'
+                        >
+                          <animate
+                            attributeName='opacity'
+                            values='0;1;0'
+                            dur='1.5s'
+                            repeatCount='indefinite'
+                            begin='0.5s'
+                          />
                         </line>
-                        
+
                         {/* Second robot */}
-                        <rect x="44" y="6" width="12" height="14" rx="2" />
-                        <circle cx="47" cy="11" r="1.5" fill="currentColor">
-                          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite" begin="1s" />
+                        <rect x='44' y='6' width='12' height='14' rx='2' />
+                        <circle cx='47' cy='11' r='1.5' fill='currentColor'>
+                          <animate
+                            attributeName='opacity'
+                            values='1;0.3;1'
+                            dur='3s'
+                            repeatCount='indefinite'
+                            begin='1s'
+                          />
                         </circle>
-                        <circle cx="53" cy="11" r="1.5" fill="currentColor">
-                          <animate attributeName="opacity" values="1;0.3;1" dur="3s" repeatCount="indefinite" begin="1.5s" />
+                        <circle cx='53' cy='11' r='1.5' fill='currentColor'>
+                          <animate
+                            attributeName='opacity'
+                            values='1;0.3;1'
+                            dur='3s'
+                            repeatCount='indefinite'
+                            begin='1.5s'
+                          />
                         </circle>
-                        <path d="M47 15 Q50 17 53 15" strokeLinecap="round" />
-                        <line x1="48" y1="2" x2="48" y2="6" strokeLinecap="round">
-                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="1s" />
+                        <path d='M47 15 Q50 17 53 15' strokeLinecap='round' />
+                        <line
+                          x1='48'
+                          y1='2'
+                          x2='48'
+                          y2='6'
+                          strokeLinecap='round'
+                        >
+                          <animate
+                            attributeName='opacity'
+                            values='0;1;0'
+                            dur='1.5s'
+                            repeatCount='indefinite'
+                            begin='1s'
+                          />
                         </line>
-                        <line x1="52" y1="2" x2="52" y2="6" strokeLinecap="round">
-                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="1.5s" />
+                        <line
+                          x1='52'
+                          y1='2'
+                          x2='52'
+                          y2='6'
+                          strokeLinecap='round'
+                        >
+                          <animate
+                            attributeName='opacity'
+                            values='0;1;0'
+                            dur='1.5s'
+                            repeatCount='indefinite'
+                            begin='1.5s'
+                          />
                         </line>
-                        
+
                         {/* Communication waves between robots */}
-                        <path d="M16 12 C20 10, 25 10, 30 12 C35 14, 40 14, 44 12" strokeDasharray="2 1" opacity="0.5">
-                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" />
+                        <path
+                          d='M16 12 C20 10, 25 10, 30 12 C35 14, 40 14, 44 12'
+                          strokeDasharray='2 1'
+                          opacity='0.5'
+                        >
+                          <animate
+                            attributeName='opacity'
+                            values='0;1;0'
+                            dur='1.5s'
+                            repeatCount='indefinite'
+                          />
                         </path>
-                        <path d="M16 12 C20 14, 25 14, 30 12 C35 10, 40 10, 44 12" strokeDasharray="2 1" opacity="0.5">
-                          <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" begin="0.75s" />
+                        <path
+                          d='M16 12 C20 14, 25 14, 30 12 C35 10, 40 10, 44 12'
+                          strokeDasharray='2 1'
+                          opacity='0.5'
+                        >
+                          <animate
+                            attributeName='opacity'
+                            values='0;1;0'
+                            dur='1.5s'
+                            repeatCount='indefinite'
+                            begin='0.75s'
+                          />
                         </path>
                       </svg>
                     </div>
@@ -419,15 +531,15 @@ const HeroSection: React.FC = () => {
                         </Typography>
                       </motion.div>
                       <motion.div
-                        animate={{ 
+                        animate={{
                           opacity: [0.5, 1, 0.5],
-                          scale: [0.95, 1.05, 0.95]
+                          scale: [0.95, 1.05, 0.95],
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 3,
                           repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 1
+                          ease: 'easeInOut',
+                          delay: 1,
                         }}
                       >
                         <Typography className='text-sm font-black text-white leading-tight'>
@@ -446,23 +558,38 @@ const HeroSection: React.FC = () => {
                     className='flex flex-col items-center'
                   >
                     <motion.div
-                      animate={{ 
+                      animate={{
                         rotateY: [0, 180, 360],
-                        scale: [1, 1.15, 1]
+                        scale: [1, 1.15, 1],
                       }}
-                      transition={{ 
+                      transition={{
                         duration: 5,
                         repeat: Infinity,
-                        ease: "easeInOut"
+                        ease: 'easeInOut',
                       }}
                       className='mb-3 text-brand-purple/60'
-                      style={{ height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      style={{
+                        height: '40px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
                     >
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                        <circle cx="12" cy="12" r="10" />
-                        <circle cx="12" cy="12" r="6" strokeDasharray="2 1" />
-                        <path d="M12 8 L12 16 M9 10 L15 10 M9 14 L15 14" strokeLinecap="round" />
-                        <circle cx="12" cy="12" r="2" fill="currentColor" />
+                      <svg
+                        width='40'
+                        height='40'
+                        viewBox='0 0 24 24'
+                        fill='none'
+                        stroke='currentColor'
+                        strokeWidth='1'
+                      >
+                        <circle cx='12' cy='12' r='10' />
+                        <circle cx='12' cy='12' r='6' strokeDasharray='2 1' />
+                        <path
+                          d='M12 8 L12 16 M9 10 L15 10 M9 14 L15 14'
+                          strokeLinecap='round'
+                        />
+                        <circle cx='12' cy='12' r='2' fill='currentColor' />
                       </svg>
                     </motion.div>
                     <TransformCard
@@ -486,15 +613,15 @@ const HeroSection: React.FC = () => {
                         </Typography>
                       </motion.div>
                       <motion.div
-                        animate={{ 
+                        animate={{
                           opacity: [0.5, 1, 0.5],
-                          scale: [0.95, 1.05, 0.95]
+                          scale: [0.95, 1.05, 0.95],
                         }}
-                        transition={{ 
+                        transition={{
                           duration: 3,
                           repeat: Infinity,
-                          ease: "easeInOut",
-                          delay: 2
+                          ease: 'easeInOut',
+                          delay: 2,
                         }}
                       >
                         <Typography className='text-sm font-black text-white'>
@@ -506,7 +633,6 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -944,13 +1070,20 @@ interface StandardSidebarItemProps {
   onClick: () => void;
 }
 
-const StandardMainContent: React.FC<StandardMainContentProps> = ({ item: standard }) => (
+const StandardMainContent: React.FC<StandardMainContentProps> = ({
+  item: standard,
+}) => (
   <div className='relative'>
     <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden'>
       <div className='p-4 space-y-3'>
         <div className='flex items-center justify-between'>
-          <span className='text-sm font-mono text-brand-blue'>{standard.id}</span>
-          <StatusBadge variant={standard.status === 'PUBLISHED' ? 'success' : 'warning'} className="font-bold">
+          <span className='text-sm font-mono text-brand-blue'>
+            {standard.id}
+          </span>
+          <StatusBadge
+            variant={standard.status === 'PUBLISHED' ? 'success' : 'warning'}
+            className='font-bold'
+          >
             {standard.status}
           </StatusBadge>
         </div>
@@ -979,23 +1112,23 @@ const StandardMainContent: React.FC<StandardMainContentProps> = ({ item: standar
                 const getOrgColor = (orgName: string) => {
                   const orgColors: Record<string, string> = {
                     'Bonzo Finance': '#6366f1',
-                    'HashPack': '#8a1b7a',
-                    'SentX': '#64748b',
-                    'Neuron': '#0ea5e9',
-                    'KiloScribe': '#7c3aed',
+                    HashPack: '#8a1b7a',
+                    SentX: '#64748b',
+                    Neuron: '#0ea5e9',
+                    KiloScribe: '#7c3aed',
                     'Builder Labs': '#2563eb',
-                    'Hashgate': '#059669',
-                    'Hgraph': '#0ea5e9',
-                    'LaunchBadge': '#ea580c',
-                    'Turtlemoon': '#0891b2',
-                    'TurtleMoon': '#0891b2',
+                    Hashgate: '#059669',
+                    Hgraph: '#0ea5e9',
+                    LaunchBadge: '#ea580c',
+                    Turtlemoon: '#0891b2',
+                    TurtleMoon: '#0891b2',
                     'Hashinals.com': '#0891b2',
-                    'OpenConvAI': '#0ea5e9',
-                    'Moonscape': '#ea580c',
+                    OpenConvAI: '#0ea5e9',
+                    Moonscape: '#ea580c',
                   };
                   return orgColors[orgName] || '#059669';
                 };
-                
+
                 const color = getOrgColor(adoption);
                 return (
                   <span
@@ -1059,20 +1192,18 @@ const StandardSidebarItem: React.FC<StandardSidebarItemProps> = ({
       <div className='flex items-center justify-between'>
         <span
           className={`text-sm font-mono transition-colors duration-500 ${
-            isActive
-              ? 'text-brand-blue'
-              : 'text-gray-700 dark:text-gray-300'
+            isActive ? 'text-brand-blue' : 'text-gray-700 dark:text-gray-300'
           }`}
         >
           {standard.id}
         </span>
-        
+
         <div
           className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium transition-all duration-500 ${
             isActive ? 'scale-105 shadow-sm' : 'scale-100'
           } ${
-            standard.status === 'PUBLISHED' 
-              ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400' 
+            standard.status === 'PUBLISHED'
+              ? 'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400'
               : 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400'
           }`}
         >
@@ -1090,7 +1221,6 @@ const StandardSidebarItem: React.FC<StandardSidebarItemProps> = ({
         {standard.name}
       </Typography>
 
-
       {/* Show adoption tags when active */}
       {isActive && standard.adoptions.length > 0 && (
         <motion.div
@@ -1103,23 +1233,23 @@ const StandardSidebarItem: React.FC<StandardSidebarItemProps> = ({
             const getOrgColor = (orgName: string) => {
               const orgColors: Record<string, string> = {
                 'Bonzo Finance': '#6366f1',
-                'HashPack': '#8a1b7a',
-                'SentX': '#64748b',
-                'Neuron': '#0ea5e9',
-                'KiloScribe': '#7c3aed',
+                HashPack: '#8a1b7a',
+                SentX: '#64748b',
+                Neuron: '#0ea5e9',
+                KiloScribe: '#7c3aed',
                 'Builder Labs': '#2563eb',
-                'Hashgate': '#059669',
-                'Hgraph': '#0ea5e9',
-                'LaunchBadge': '#ea580c',
-                'Turtlemoon': '#0891b2',
-                'TurtleMoon': '#0891b2',
+                Hashgate: '#059669',
+                Hgraph: '#0ea5e9',
+                LaunchBadge: '#ea580c',
+                Turtlemoon: '#0891b2',
+                TurtleMoon: '#0891b2',
                 'Hashinals.com': '#0891b2',
-                'OpenConvAI': '#0ea5e9',
-                'Moonscape': '#ea580c',
+                OpenConvAI: '#0ea5e9',
+                Moonscape: '#ea580c',
               };
               return orgColors[orgName] || '#059669';
             };
-            
+
             const color = getOrgColor(adoption);
             return (
               <span
@@ -1153,7 +1283,7 @@ const StandardSidebarItem: React.FC<StandardSidebarItemProps> = ({
 
 const StandardsSection: React.FC = () => {
   const [copied, setCopied] = useState(false);
-  
+
   // Convert to InteractiveShowcase format
   const allStandards: StandardItem[] = [
     {
@@ -1223,7 +1353,7 @@ const StandardsSection: React.FC = () => {
       name: 'Governance & Voting',
       description: 'Transparent voting systems with tamper-proof results',
       specification: '/docs/standards/hcs-8',
-      status: 'DRAFT',
+      status: 'PUBLISHED',
       adoptions: ['HashPack'],
       codeExample: 'createPoll(question, options, duration)',
     },
@@ -1232,7 +1362,7 @@ const StandardsSection: React.FC = () => {
       name: 'Modular Governance Framework',
       description: 'Flexible governance system with pluggable voting modules',
       specification: '/docs/standards/hcs-9',
-      status: 'DRAFT',
+      status: 'PUBLISHED',
       adoptions: [],
       codeExample: 'createGovernance(modules, rules)',
     },
@@ -1334,33 +1464,47 @@ const StandardsSection: React.FC = () => {
               <div className='space-y-6'>
                 <div className='text-center'>
                   <h3 className='text-4xl lg:text-5xl font-mono font-black text-gray-900 dark:text-white'>
-                    <span style={{
-                      background: 'linear-gradient(45deg, #3b82f6, #8b5cf6, #10b981)',
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text'
-                    }}>
+                    <span
+                      style={{
+                        background:
+                          'linear-gradient(45deg, #3b82f6, #8b5cf6, #10b981)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        backgroundClip: 'text',
+                      }}
+                    >
                       Start Building
                     </span>
                   </h3>
                 </div>
-                
+
                 <p className='text-lg text-gray-700 dark:text-gray-200 font-medium leading-relaxed'>
-                  Join <span className='font-bold text-purple-600 dark:text-purple-400'>10 consortium members</span> building 
-                  the autonomous internet with <span className='font-bold text-blue-600 dark:text-blue-400'>15+ battle-tested standards</span>
+                  Join{' '}
+                  <span className='font-bold text-purple-600 dark:text-purple-400'>
+                    10 consortium members
+                  </span>{' '}
+                  building the autonomous internet with{' '}
+                  <span className='font-bold text-blue-600 dark:text-blue-400'>
+                    15+ battle-tested standards
+                  </span>
                 </p>
-                
+
                 <div className='relative'>
-                  <div 
+                  <div
                     className='bg-gray-100 dark:bg-gray-800 rounded-xl p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors duration-200'
                     onClick={() => {
-                      navigator.clipboard.writeText('npm install @hashgraphonline/standards-sdk');
+                      navigator.clipboard.writeText(
+                        'npm install @hashgraphonline/standards-sdk'
+                      );
                       setCopied(true);
                       setTimeout(() => setCopied(false), 2000);
                     }}
                   >
                     <div className='text-sm font-mono text-gray-600 dark:text-gray-300'>
-                      <span className='text-green-600 dark:text-green-400'>$</span> npm install @hashgraphonline/standards-sdk
+                      <span className='text-green-600 dark:text-green-400'>
+                        $
+                      </span>{' '}
+                      npm install @hashgraphonline/standards-sdk
                     </div>
                   </div>
                   <AnimatePresence>
@@ -1376,7 +1520,7 @@ const StandardsSection: React.FC = () => {
                     )}
                   </AnimatePresence>
                 </div>
-                
+
                 <div className='flex flex-col sm:flex-row gap-4 justify-center'>
                   <PrimaryButton
                     href='/docs/libraries/standards-sdk'
@@ -1384,8 +1528,8 @@ const StandardsSection: React.FC = () => {
                   >
                     Standards SDK →
                   </PrimaryButton>
-                  <SecondaryButton 
-                    href='https://github.com/hashgraph-online/standards-sdk' 
+                  <SecondaryButton
+                    href='https://github.com/hashgraph-online/standards-sdk'
                     className='text-lg py-4 px-8 font-bold border-2 border-purple-500 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950 hover:text-purple-700 dark:hover:text-purple-300 transform hover:scale-105 transition-all duration-300'
                   >
                     GitHub ↗
