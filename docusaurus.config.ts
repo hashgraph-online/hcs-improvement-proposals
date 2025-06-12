@@ -235,10 +235,6 @@ const config: Config = {
             from: '/hedera-ai',
             to: '/hederaai',
           },
-          {
-            from: '/hederaAI',
-            to: '/hederaai',
-          },
         ],
       },
     ],

@@ -7,6 +7,9 @@ type Props = WrapperProps<typeof BlogPostItemType>;
 
 export default function BlogPostItemWrapper(props: Props): JSX.Element {
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+    
     // Add click handlers for tag expansion
     const handleTagExpansion = () => {
       const tagContainers = document.querySelectorAll('[class*="tagsListInline"]');
@@ -16,7 +19,7 @@ export default function BlogPostItemWrapper(props: Props): JSX.Element {
         
         // Check if tags overflow
         if (htmlElement.scrollHeight > htmlElement.clientHeight + 5) {
-          htmlElement.style.cursor = 'pointer';
+          htmlElement.style.setProperty('cursor', 'pointer');
           
           htmlElement.addEventListener('click', function(e) {
             e.stopPropagation();
