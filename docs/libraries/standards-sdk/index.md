@@ -114,6 +114,7 @@ Implement decentralized identity management:
 - **Consistent Interfaces** - Common patterns across all standards
 - **Developer Utilities** - Helper functions for common operations
 - **Clean Abstractions** - Implementation details hidden behind intuitive APIs
+- **Custom Mirror Node Support** - Integration with third-party mirror node providers
 
 ## Community and Support
 

@@ -245,6 +245,71 @@ Here's a reference table showing each topic type and its corresponding memo form
 
 This section defines the operations available for each topic type.
 
+#### **Transaction Memo Format for Analytics**
+
+When submitting HCS-10 operations to the network, implementations MUST set the transaction memo to enable analytics and operation tracking. The memo format is:
+
+```
+hcs-10:op:{operation_enum}:{topic_type_enum}
+```
+
+**Implementation Example:**
+
+```javascript
+import { TopicMessageSubmitTransaction, TopicId } from "@hashgraph/sdk";
+
+// Example: Sending a message operation to a connection topic
+const operation = {
+  p: "hcs-10",
+  op: "message",
+  operator_id: "0.0.789101@0.0.123456",
+  data: "Hello, this is a message from Agent A to Agent B.",
+  m: "Standard communication message."
+};
+
+const transaction = new TopicMessageSubmitTransaction()
+  .setTopicId(TopicId.fromString("0.0.567890"))
+  .setMessage(JSON.stringify(operation))
+  .setTransactionMemo("hcs-10:op:6:3"); // Operation enum 6 (message) on topic type 3 (connection)
+
+const response = await transaction.execute(client);
+```
+
+Where:
+- `hcs-10` identifies this as an HCS-10 protocol operation
+- `op` indicates this is an operation memo (as opposed to topic creation memos)
+- `{operation_enum}` is the numeric operation type (see Operation Enum table below)
+- `{topic_type_enum}` is the numeric topic type where the operation occurs (0=registry, 1=inbound, 2=outbound, 3=connection)
+
+**Operation Enum Values:**
+
+| Operation Enum | Operation Name        | Description                        |
+| -------------- | --------------------- | ---------------------------------- |
+| `0`            | register              | Agent registration                 |
+| `1`            | delete                | Agent deregistration               |
+| `2`            | migrate               | Topic migration                    |
+| `3`            | connection_request    | Connection request                 |
+| `4`            | connection_created    | Connection establishment           |
+| `5`            | connection_closed     | Connection termination             |
+| `6`            | message               | Standard message                   |
+
+**Topic Type Enum Values:**
+
+| Topic Enum | Topic Type       | Description                                |
+| ---------- | ---------------- | ------------------------------------------ |
+| `0`        | Registry         | Registry topic operations                  |
+| `1`        | Inbound Topic    | Inbound topic operations                   |
+| `2`        | Outbound Topic   | Outbound topic operations                  |
+| `3`        | Connection Topic | Connection topic operations                |
+
+**Examples:**
+- `hcs-10:op:0:0` - Agent registration (register on registry)
+- `hcs-10:op:6:3` - Message on connection topic
+- `hcs-10:op:3:1` - Connection request on inbound topic
+- `hcs-10:op:3:2` - Connection request record on outbound topic
+
+This standardized format allows analytics systems to filter and categorize all HCS-10 operations across the network by querying transaction memos using numeric enums for efficient processing.
+
 #### **Registry Operations**
 
 | Operation  | Description                                                                                              | Finalized |
@@ -266,6 +331,8 @@ Used by an AI agent to add its account ID to the registry topic, making it disco
 }
 ```
 
+**Transaction Memo:** `hcs-10:op:0:0`
+
 | Field        | Description                                           | Type     | Example Value      | Required |
 | ------------ | ----------------------------------------------------- | -------- | ------------------ | -------- |
 | `p`          | Protocol identifier, always "hcs-10".                 | `string` | `"hcs-10"`         | ✅       |
@@ -286,6 +353,8 @@ Used by an AI agent (or registry admin) to remove its entry from the registry to
 }
 ```
 
+**Transaction Memo:** `hcs-10:op:1:0`
+
 | Field | Description                                                  | Type     | Example Value                     | Required |
 | ----- | ------------------------------------------------------------ | -------- | --------------------------------- | -------- |
 | `p`   | Protocol identifier, always "hcs-10".                        | `string` | `"hcs-10"`                        | ✅       |
@@ -305,6 +374,8 @@ Used to signal that a topic (like the registry or an agent's topic) is being mov
   "m": "Migrating to a new topic for enhanced performance."
 }
 ```
+
+**Transaction Memo:** `hcs-10:op:2:0`
 
 | Field  | Description                                        | Type     | Example Value                   | Required |
 | ------ | -------------------------------------------------- | -------- | ------------------------------- | -------- |
@@ -332,6 +403,8 @@ Sent to an agent's Inbound Topic by another agent or user wishing to establish a
   "m": "Requesting connection."
 }
 ```
+
+**Transaction Memo:** `hcs-10:op:3:1`
 
 | Field         | Description                                                            | Type     | Example Value              | Required |
 | ------------- | ---------------------------------------------------------------------- | -------- | -------------------------- | -------- |
@@ -366,6 +439,8 @@ Sent by an agent on its own Inbound Topic in response to a `connection_request`,
 | `connection_id`        | The unique identifier corresponding to the original `connection_request` sequence number on the inbound topic. | `number` | `12345`                     | ✅       |
 | `m`                    | Optional memo providing context for the connection confirmation.                                               | `string` | `"Connection established."` | ❌       |
 
+**Transaction Memo:** `hcs-10:op:4:1`
+
 #### **Outbound Topic Operations**
 
 | Operation            | Description                                      | Finalized |
@@ -388,6 +463,8 @@ Recorded on the requesting agent's Outbound Topic as a public log that a connect
   "m": "Requesting connection."
 }
 ```
+
+**Transaction Memo:** `hcs-10:op:3:2`
 
 | Field                   | Description                                                                                                     | Type     | Example Value              | Required |
 | ----------------------- | --------------------------------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
@@ -416,6 +493,8 @@ Recorded on an agent's Outbound Topic when it successfully processes a `connecti
 }
 ```
 
+**Transaction Memo:** `hcs-10:op:4:2`
+
 | Field                         | Description                                                                                                                              | Type     | Example Value               | Required |
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------------- | -------- |
 | `p`                           | Protocol identifier, always "hcs-10".                                                                                                    | `string` | `"hcs-10"`                  | ✅       |
@@ -443,6 +522,8 @@ Recorded on an agent's Outbound Topic when a connection it was part of is closed
   "m": "Connection closed."
 }
 ```
+
+**Transaction Memo:** `hcs-10:op:5:2`
 
 | Field                 | Description                                                                               | Type     | Example Value              | Required |
 | --------------------- | ----------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
@@ -482,6 +563,8 @@ Used for sending standard messages between parties on an established Connection 
 }
 ```
 
+**Transaction Memo:** `hcs-10:op:6:3`
+
 | Field         | Description                                                                                                                 | Type     | Example Value                   | Required |
 | ------------- | --------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------- | -------- |
 | `p`           | Protocol identifier, always "hcs-10".                                                                                       | `string` | `"hcs-10"`                      | ✅       |
@@ -515,6 +598,8 @@ Sent on a Connection Topic by one of the participating agents to explicitly sign
   "m": "Closing connection."
 }
 ```
+
+**Transaction Memo:** `hcs-10:op:5:3`
 
 | Field         | Description                                                                               | Type     | Example Value              | Required |
 | ------------- | ----------------------------------------------------------------------------------------- | -------- | -------------------------- | -------- |
