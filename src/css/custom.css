@@ -458,21 +458,21 @@ a, button, .navbar__link, .navbar__item, input, textarea {
   color: #bfdbfe;
 }
 
-/* Dark mode adjustments */
+/* Dark mode adjustments - Keep navbar the same */
 [data-theme='dark'] .navbar {
   background: linear-gradient(
     135deg,
-    var(--brand-keywords) 0%,
+    var(--brand-functions) 0%,
     var(--brand-keywords) 100%
-  );
+  ) !important;
 }
 
 [data-theme='dark'] .footer {
   background: linear-gradient(
     135deg,
     var(--brand-keywords) 0%,
-    var(--brand-keywords) 100%
-  );
+    var(--brand-functions) 100%
+  ) !important;
 }
 
 /* Add a subtle separator in the footer */
@@ -488,6 +488,47 @@ a, button, .navbar__link, .navbar__item, input, textarea {
     var(--brand-functions),
     transparent
   );
+}
+
+/* Mobile menu styling */
+.navbar-sidebar {
+  background: linear-gradient(
+    135deg,
+    var(--brand-functions) 0%,
+    var(--brand-keywords) 100%
+  ) !important;
+}
+
+.navbar-sidebar__backdrop {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.navbar-sidebar__brand {
+  background: transparent !important;
+}
+
+.navbar-sidebar__items {
+  background: transparent !important;
+}
+
+.navbar-sidebar__item {
+  background: transparent !important;
+}
+
+.navbar-sidebar .menu__link {
+  color: #e0e7ff !important;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
+}
+
+.navbar-sidebar .menu__link:hover,
+.navbar-sidebar .menu__link--active {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-sidebar .menu__list-item-collapsible .menu__link--sublist-caret:after {
+  filter: brightness(0) invert(1) !important;
 }
 
 /* Responsive adjustments */
