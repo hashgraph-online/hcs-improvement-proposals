@@ -1,5 +1,5 @@
 ---
-title: HCS-7: Smart Hashinals
+title: "HCS-7: Smart Hashinals"
 description: HCS-7 enables dynamic NFTs (Hashinals) whose metadata automatically updates based on smart contract state using a micro-DSL for deterministic topic selection and WASM processing. This standard supports creating reactive, state-dependent NFTs without requiring additional transactions for updates.
 sidebar_position: 7
 ---
