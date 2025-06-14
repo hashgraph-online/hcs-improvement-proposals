@@ -93,11 +93,11 @@ const standardsData = [
     icon: 'HCS-11'
   },
   {
-    title: 'HCS-13: Event Logging Standard',
+    title: 'HCS-13: Schema Registry',
     category: 'Infrastructure',
     status: 'draft' as const,
-    description: 'Defines standardized event logging patterns for HCS applications, enabling consistent monitoring and analytics.',
-    features: ['Event tracking', 'Standardized logs', 'Analytics support'],
+    description: 'Provides a standard way to define, register, and reference schemas for data validation and structure in the Hedera ecosystem.',
+    features: ['Schema validation', 'Type-safe data', 'JSON Schema support'],
     href: '/docs/standards/hcs-13',
     icon: 'HCS-13'
   },
