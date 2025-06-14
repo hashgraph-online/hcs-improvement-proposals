@@ -1,5 +1,6 @@
 {
-  "label": "HCS-8 Poll Topic Standard",
+  "label": "HCS-8: Poll Topic",
   "position": 8,
-  "collapsible": false
+  "collapsible": true,
+  "collapsed": true
 }

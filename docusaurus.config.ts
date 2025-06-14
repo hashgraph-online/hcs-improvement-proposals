@@ -108,7 +108,7 @@ const config: Config = {
         src: 'img/logo.png',
       },
       items: [
-        { to: '/docs/standards/hcs-1', label: 'Standards', position: 'left' },
+        { to: '/docs/standards/', label: 'Standards', position: 'left' },
         { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
         {
           type: 'dropdown',

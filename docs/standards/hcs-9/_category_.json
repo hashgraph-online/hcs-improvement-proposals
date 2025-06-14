@@ -1,5 +1,6 @@
 {
-  "label": "HCS-9 Poll Metadata Schema",
+  "label": "HCS-9 Poll Metadata",
   "position": 9,
-  "collapsible": false
+  "collapsible": true,
+  "collapsed": true
 }

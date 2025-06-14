@@ -1,6 +1,6 @@
 ---
+title: HCS-1: File Management
 description: The HCS-1 standard provides a systematic approach to encode, chunk, upload, retrieve, and reassemble file data for applications using Hedera Consensus Service (HCS). This process is agnostic of the implementation details, focusing on the JSON structure and the use of a Topic ID for efficient data management.
-title: HCS-1 Standard - File Data Management with Hedera Consensus Service
 sidebar_position: 1
 ---
 

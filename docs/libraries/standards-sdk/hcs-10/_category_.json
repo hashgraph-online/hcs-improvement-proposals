@@ -2,7 +2,7 @@
   "label": "HCS-10 OpenConvAI",
   "position": 5,
   "link": {
-    "type": "generated-index",
-    "description": "Documentation for the HCS-10 OpenConvAI SDK implementations supporting agent communication via the Hedera Consensus Service."
+    "type": "doc",
+    "id": "libraries/standards-sdk/hcs-10/index"
   }
 }

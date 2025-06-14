@@ -1,4 +1,5 @@
 ---
+title: HCS-5: Hashinals
 description: This specification provides a standard way to "inscribe" Hashinals utilizing the Hedera Consensus and Hedera Token Services. Hashinals borrow many ideas from Ordinal theory on Bitcoin, and apply them in a more efficient, and scalable way for the Hedera Hashgraph.
 sidebar_position: 5
 ---

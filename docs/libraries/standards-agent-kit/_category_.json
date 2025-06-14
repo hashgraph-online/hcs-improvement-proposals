@@ -2,7 +2,7 @@
   "label": "Standards Agent Kit",
   "position": 4,
   "link": {
-    "type": "generated-index",
-    "description": "Build AI agents using LangChain that can communicate securely on Hedera via HCS-10. Includes tools for agent registration, connection management, messaging, and registry search."
+    "type": "doc",
+    "id": "libraries/standards-agent-kit/index"
   }
 }
