@@ -1,5 +1,5 @@
 ---
-title: HCS-3: Recursion
+title: "HCS-3: Recursion"
 description: The HCS-3 standard defines a method for implementing recursion within Hedera Consensus Service, enabling more complex data structures and relationships.
 sidebar_position: 3
 ---

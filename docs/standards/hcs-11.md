@@ -1,5 +1,5 @@
 ---
-title: HCS-11: Profile Metadata
+title: "HCS-11: Profile Metadata"
 description: The HCS-11 standard defines a systematic approach for managing profiles on the Hedera Hashgraph through account memos, enabling rich identity management for individuals and AI agents.
 sidebar_position: 11
 ---
