@@ -1,4 +1,5 @@
 ---
+title: HCS-13: Schema Registry
 description: This specification provides a standard way to define, register, and reference schemas for data validation and structure in the Hedera ecosystem, enabling type-safe data exchange and improved interoperability.
 sidebar_position: 13
 ---

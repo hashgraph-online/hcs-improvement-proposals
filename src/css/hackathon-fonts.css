@@ -58,6 +58,20 @@
   font-family: 'Styrene A', sans-serif !important;
 }
 
+/* Use system fonts as fallback, with mono for headings */
+.hackathon-container h1,
+.hackathon-container h2,
+.hackathon-container h3,
+.hackathon-container h4,
+.hackathon-container h5,
+.hackathon-container h6 {
+  font-family: 'Roboto Mono', monospace !important;
+}
+
+.hackathon-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif !important;
+}
+
 .bg-hedera-gradient-purple {
   background: linear-gradient(135deg, #8259ef 0%, #2d84eb 100%);
 }
@@ -67,7 +81,7 @@
 }
 
 .text-hedera-gradient {
-  background: linear-gradient(to right, #8259ef, #2d84eb);
+  background: linear-gradient(90deg, #5599fe 0%, #b56cff 50%, #48df7b 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

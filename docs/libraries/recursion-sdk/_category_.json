@@ -2,8 +2,9 @@
     "label": "Recursion SDK",
     "position": 1,
     "link": {
-      "type": "generated-index",
-      "description": "HCS-3 Recursion SDK"
+      "type": "doc",
+      "id": "libraries/recursion-sdk/index"
     },
-    "collapsible": true
+    "collapsible": true,
+    "collapsed": true
   }

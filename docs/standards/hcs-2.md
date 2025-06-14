@@ -1,4 +1,5 @@
 ---
+title: HCS-2: Topic Registries
 description: The HCS-2 standard defines advanced topic registries for Hedera Consensus Service, enabling structured data organization and retrieval.
 sidebar_position: 2
 ---

@@ -1,5 +1,5 @@
 ---
-title: HCS-9 Standard - Poll Metadata Schema
+title: HCS-9: Poll Metadata
 ---
 
 #### [ hcs-9 - Poll Metadata Schema ]
