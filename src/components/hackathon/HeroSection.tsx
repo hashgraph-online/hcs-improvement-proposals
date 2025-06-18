@@ -173,21 +173,22 @@ const HeroSection: React.FC = () => {
 
             <div className='flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center lg:justify-start mb-4 sm:mb-6'>
               <PrimaryButton
-                href='/blog/updates/hedera-ai-hackathon-winners'
-                className='z-10 px-3 py-2 text-xs sm:text-sm sm:px-4 sm:py-2.5'
-                size='sm'
+                href='/blog/hedera-ai-hackathon-winners'
+                className='z-10'
+                size='lg'
+                icon={null}
               >
-                <span>View Winners</span>
+                View Winners
               </PrimaryButton>
 
-              <Link
-                to='/openconvai'
-                className='px-3 py-2 sm:px-4 sm:py-2.5 rounded-lg font-bold text-xs sm:text-sm sm:text-base bg-hedera-green text-white hover:text-white focus:text-white active:text-white visited:text-white hover:bg-hedera-green/90 border border-hedera-green transform transition-all duration-300 flex items-center justify-center gap-2 no-underline hover:no-underline focus:no-underline active:no-underline visited:no-underline focus:outline-none focus:ring-2 focus:ring-hedera-green/50 focus:ring-offset-2 shadow-md hover:shadow-lg hover:brightness-110'
-                style={{ textDecoration: 'none' }}
+              <PrimaryButton
+                href='/openconvai'
+                className='z-10 bg-hedera-green hover:bg-hedera-green/90'
+                size='lg'
+                icon={null}
               >
-                <span className='text-white'>Learn About OpenConvAI</span>{' '}
-                <FaArrowRight className='ml-1 text-xs sm:text-sm' />
-              </Link>
+                Learn About OpenConvAI
+              </PrimaryButton>
             </div>
 
             <div className='mt-4 sm:mt-6 flex flex-wrap align-middle justify-center lg:justify-start gap-3 sm:gap-4'>
