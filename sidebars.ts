@@ -199,7 +199,7 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-10/connections-manager',
                 'libraries/standards-sdk/hcs-10/examples',
                 'libraries/standards-sdk/hcs-10/server',
-                'libraries/standards-sdk/hcs-10/showcase'
+                'libraries/standards-sdk/hcs-10/index'
               ],
             },
             'libraries/standards-sdk/hcs-3',

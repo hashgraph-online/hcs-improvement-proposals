@@ -13,6 +13,32 @@ The HCS-20 module provides a standard for creating and managing auditable points
 - **Includes an Indexer** - `HCS20PointsIndexer` to process topic messages and maintain the state of points.
 - **Supports Public and Private Topics** - Deploy points on a public topic or on your own private, permissioned topic.
 
+## Architecture Overview
+
+The HCS-20 standard is built on top of the Hedera Consensus Service (HCS) and provides a standardized way to handle point systems:
+
+```mermaid
+graph TB
+    subgraph "HCS-20 Architecture"
+        App[Application]
+        NodeClient[HCS20Client]
+        BrowserClient[BrowserHCS20Client]
+        Indexer[HCS20PointsIndexer]
+        HCS[Hedera Consensus Service]
+        Topics[HCS Topics]
+        State[Points State]
+
+        App -->|uses| NodeClient
+        App -->|uses| BrowserClient
+        App -->|uses| Indexer
+        NodeClient -->|submits to| HCS
+        BrowserClient -->|submits to| HCS
+        HCS -->|stores in| Topics
+        Topics -->|processed by| Indexer
+        Indexer -->|maintains| State
+    end
+```
+
 ## Getting Started
 
 ### Installation
@@ -26,7 +52,9 @@ npm install @hashgraphonline/standards-sdk
 For server-side applications, use `HCS20Client`.
 
 ```typescript
-import { HCS20Client } from '@hashgraphonline/standards-sdk/dist/hcs-20';
+import { HCS20Client } from '@hashgraphonline/standards-sdk';
+// or import from specific path
+// import { HCS20Client } from '@hashgraphonline/standards-sdk/hcs-20';
 
 // Initialize the HCS-20 client
 const client = new HCS20Client({
@@ -42,7 +70,9 @@ const client = new HCS20Client({
 For client-side applications, use `BrowserHCS20Client` with a wallet connection.
 
 ```typescript
-import { BrowserHCS20Client } from '@hashgraphonline/standards-sdk/dist/hcs-20';
+import { BrowserHCS20Client } from '@hashgraphonline/standards-sdk';
+// or import from specific path
+// import { BrowserHCS20Client } from '@hashgraphonline/standards-sdk/hcs-20';
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 
 // Initialize Hashinals WalletConnect
@@ -58,9 +88,30 @@ const browserClient = new BrowserHCS20Client({
 });
 ```
 
-## Deploying Points
+## Implementation Workflow
 
-Create a new type of points on the network.
+### 1. Deploy Points
+
+The first step is to deploy a new points system:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS20Client
+    participant HCS as Hedera Consensus Service
+    participant Topic as Points Topic
+
+    App->>Client: deployPoints(options)
+    activate Client
+    Client->>HCS: Create topic
+    HCS->>Topic: Topic created
+    Client->>HCS: Submit deploy message
+    HCS->>Topic: Store deploy message
+    Client->>App: Return PointsInfo
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const deployOptions = {
@@ -79,11 +130,26 @@ const pointsInfo = await client.deployPoints(deployOptions);
 console.log('Points deployed:', pointsInfo);
 ```
 
-## Point Operations
+### 2. Mint Points
 
-### Minting Points
+After deployment, you can mint points to assign them to accounts:
 
-Create new points and assign them to an account.
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS20Client
+    participant HCS as Hedera Consensus Service
+    participant Topic as Points Topic
+
+    App->>Client: mintPoints(options)
+    activate Client
+    Client->>HCS: Submit mint message
+    HCS->>Topic: Store mint message
+    Client->>App: Return PointsTransaction
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const mintOptions = {
@@ -100,9 +166,26 @@ const mintTransaction = await client.mintPoints(mintOptions);
 console.log('Mint transaction:', mintTransaction);
 ```
 
-### Transferring Points
+### 3. Transfer Points
 
-Move points from one account to another.
+Move points between accounts:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS20Client
+    participant HCS as Hedera Consensus Service
+    participant Topic as Points Topic
+
+    App->>Client: transferPoints(options)
+    activate Client
+    Client->>HCS: Submit transfer message
+    HCS->>Topic: Store transfer message
+    Client->>App: Return PointsTransaction
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const transferOptions = {
@@ -119,9 +202,26 @@ const transferTransaction = await client.transferPoints(transferOptions);
 console.log('Transfer transaction:', transferTransaction);
 ```
 
-### Burning Points
+### 4. Burn Points
 
-Permanently remove points from circulation.
+Remove points from circulation:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS20Client
+    participant HCS as Hedera Consensus Service
+    participant Topic as Points Topic
+
+    App->>Client: burnPoints(options)
+    activate Client
+    Client->>HCS: Submit burn message
+    HCS->>Topic: Store burn message
+    Client->>App: Return PointsTransaction
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const burnOptions = {
@@ -137,12 +237,35 @@ const burnTransaction = await client.burnPoints(burnOptions);
 console.log('Burn transaction:', burnTransaction);
 ```
 
-## Using the Points Indexer
+### 5. Using the Points Indexer
 
-The `HCS20PointsIndexer` listens to HCS topics and builds a local state of all points, balances, and transactions.
+The indexer maintains the state of all points by processing HCS topic messages:
+
+```mermaid
+graph TB
+    subgraph "Indexer Architecture"
+        HCS[Hedera Consensus Service] -->|provides messages| Indexer[HCS20PointsIndexer]
+        
+        subgraph "Indexer State"
+            DeployedPoints[Deployed Points]
+            Balances[Account Balances]
+            Transactions[Transaction History]
+        end
+        
+        Indexer -->|maintains| DeployedPoints
+        Indexer -->|maintains| Balances
+        Indexer -->|maintains| Transactions
+        
+        App[Application] -->|queries| Indexer
+    end
+```
+
+Example code:
 
 ```typescript
-import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk/dist/hcs-20';
+import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk';
+// or import from specific path
+// import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk/hcs-20';
 
 const indexer = new HCS20PointsIndexer('testnet');
 
@@ -167,6 +290,51 @@ console.log('Balance for 0.0.98765:', balance);
 
 // Stop indexing
 // indexer.stopIndexing();
+```
+
+## Complete Implementation Flow
+
+This diagram shows the complete lifecycle of points in the HCS-20 system:
+
+```mermaid
+sequenceDiagram
+    participant Creator as Points Creator
+    participant User1 as User 1
+    participant User2 as User 2
+    participant Client as HCS20Client
+    participant HCS as Hedera Consensus Service
+    participant Indexer as HCS20PointsIndexer
+    
+    Creator->>Client: deployPoints("MRP", 1000000)
+    Client->>HCS: Create and configure topic
+    Client->>HCS: Submit deploy message
+    
+    HCS-->>Indexer: Process deploy message
+    Indexer->>Indexer: Update state
+    
+    Creator->>Client: mintPoints("MRP", 500, User1)
+    Client->>HCS: Submit mint message
+    HCS-->>Indexer: Process mint message
+    Indexer->>Indexer: Update User1 balance
+    
+    User1->>Client: transferPoints("MRP", 100, User2)
+    Client->>HCS: Submit transfer message
+    HCS-->>Indexer: Process transfer message
+    Indexer->>Indexer: Update User1 & User2 balances
+    
+    User2->>Client: burnPoints("MRP", 50)
+    Client->>HCS: Submit burn message
+    HCS-->>Indexer: Process burn message
+    Indexer->>Indexer: Update User2 balance
+    
+    Creator->>Indexer: getPointsInfo("MRP")
+    Indexer-->>Creator: Return points info
+    
+    User1->>Indexer: getBalance("MRP")
+    Indexer-->>User1: Return balance (400)
+    
+    User2->>Indexer: getBalance("MRP")
+    Indexer-->>User2: Return balance (50)
 ```
 
 ## API Reference

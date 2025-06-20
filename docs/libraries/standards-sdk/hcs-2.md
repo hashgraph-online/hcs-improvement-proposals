@@ -13,6 +13,47 @@ The HCS-2 module provides a decentralized registry for Hedera Consensus Service 
 - **Standardized Memos** - Uses a specific memo format for identifying HCS-2 registries.
 - **Flexible Queries** - Allows for fetching and parsing registry entries.
 
+## Architecture Overview
+
+HCS-2 provides a standardized way to manage topic registries using Hedera Consensus Service:
+
+```mermaid
+graph TB
+    subgraph "HCS-2 Architecture"
+        App[Application]
+        NodeClient[HCS2Client]
+        BrowserClient[BrowserHCS2Client]
+        HCS[Hedera Consensus Service]
+        Registry[Registry Topic]
+        Entries[Topic Entries]
+
+        App -->|uses| NodeClient
+        App -->|uses| BrowserClient
+        NodeClient -->|interacts with| HCS
+        BrowserClient -->|interacts with| HCS
+        HCS -->|maintains| Registry
+        Registry -->|contains| Entries
+    end
+```
+
+The HCS-2 standard defines two types of registries:
+
+```mermaid
+graph TB
+    subgraph "Registry Types"
+        IndexedRegistry[Indexed Registry]
+        NonIndexedRegistry[Non-Indexed Registry]
+        
+        IndexedRegistry -->|Supports| UpdateOps[Update Operations]
+        IndexedRegistry -->|Supports| DeleteOps[Delete Operations]
+        IndexedRegistry -->|Requires| SequenceTracking[Tracking All Messages]
+        
+        NonIndexedRegistry -->|No| UpdateOps
+        NonIndexedRegistry -->|No| DeleteOps
+        NonIndexedRegistry -->|Only Latest| SequenceTracking
+    end
+```
+
 ## Getting Started
 
 ### Installation
@@ -26,8 +67,10 @@ npm install @hashgraphonline/standards-sdk
 For server-side applications, use `HCS2Client`.
 
 ```typescript
-import { HCS2Client } from '@hashgraphonline/standards-sdk/dist/hcs-2';
-import { HCS2RegistryType } from '@hashgraphonline/standards-sdk/dist/hcs-2/types';
+import { HCS2Client, HCS2RegistryType } from '@hashgraphonline/standards-sdk';
+// or import from specific paths
+// import { HCS2Client } from '@hashgraphonline/standards-sdk/hcs-2';
+// import { HCS2RegistryType } from '@hashgraphonline/standards-sdk/hcs-2/types';
 
 // Initialize the HCS-2 client
 const client = new HCS2Client({
@@ -43,8 +86,10 @@ const client = new HCS2Client({
 For client-side applications, use `BrowserHCS2Client` with a wallet connection.
 
 ```typescript
-import { BrowserHCS2Client } from '@hashgraphonline/standards-sdk/dist/hcs-2';
-import { HCS2RegistryType } from '@hashgraphonline/standards-sdk/dist/hcs-2/types';
+import { BrowserHCS2Client, HCS2RegistryType } from '@hashgraphonline/standards-sdk';
+// or import from specific paths
+// import { BrowserHCS2Client } from '@hashgraphonline/standards-sdk/hcs-2';
+// import { HCS2RegistryType } from '@hashgraphonline/standards-sdk/hcs-2/types';
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 
 // Initialize Hashinals WalletConnect
@@ -60,9 +105,28 @@ const browserClient = new BrowserHCS2Client({
 });
 ```
 
-## Creating a Registry
+## Implementation Workflow
 
-Create a new topic that will serve as a registry.
+### 1. Creating a Registry
+
+First, you need to create a topic that will serve as your registry:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant Registry as Registry Topic
+
+    App->>Client: createRegistry(options)
+    activate Client
+    Client->>HCS: Create topic with registry memo
+    HCS->>Registry: Topic created
+    Client->>App: Return registry details
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 // Create an indexed registry
@@ -80,11 +144,26 @@ if (response.success) {
 }
 ```
 
-## Managing Registry Entries
+### 2. Registering Entries
 
-### Registering an Entry
+Once you have a registry, you can register entries (topics) in it:
 
-Add a new topic to your registry.
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant Registry as Registry Topic
+
+    App->>Client: registerEntry(registryTopicId, options)
+    activate Client
+    Client->>HCS: Submit registration message
+    HCS->>Registry: Store registration
+    Client->>App: Return registration details
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const registryTopicId = '0.0.12345'; // Your registry topic ID
@@ -102,9 +181,26 @@ if (registerResponse.success) {
 }
 ```
 
-### Updating an Entry
+### 3. Updating Entries
 
-Update an existing entry in an indexed registry. You need the unique ID (`uid`) of the message, which is typically the `sequence_number` of the registration message.
+In indexed registries, you can update existing entries:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant Registry as Registry Topic
+
+    App->>Client: updateEntry(registryTopicId, options)
+    activate Client
+    Client->>HCS: Submit update message
+    HCS->>Registry: Store update
+    Client->>App: Return update details
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const updateResponse = await client.updateEntry(registryTopicId, {
@@ -121,9 +217,26 @@ if (updateResponse.success) {
 }
 ```
 
-### Deleting an Entry
+### 4. Deleting Entries
 
-Delete an entry from an indexed registry using its `uid`.
+Remove entries from an indexed registry:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant Registry as Registry Topic
+
+    App->>Client: deleteEntry(registryTopicId, options)
+    activate Client
+    Client->>HCS: Submit delete message
+    HCS->>Registry: Store deletion marker
+    Client->>App: Return deletion details
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const deleteResponse = await client.deleteEntry(registryTopicId, {
@@ -138,9 +251,29 @@ if (deleteResponse.success) {
 }
 ```
 
-### Migrating a Registry
+### 5. Migrating a Registry
 
-Point an entire registry to a new topic. This is useful for versioning or upgrades.
+Point an entire registry to a new topic for versioning or upgrades:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant OldRegistry as Old Registry Topic
+    participant NewRegistry as New Registry Topic
+
+    App->>Client: migrateRegistry(oldRegistryTopicId, options)
+    activate Client
+    Client->>HCS: Submit migration message
+    HCS->>OldRegistry: Store migration marker
+    Client->>App: Return migration details
+    deactivate Client
+    
+    Note over App,NewRegistry: Consumers will now follow to the new registry
+```
+
+Example code:
 
 ```typescript
 const migrateResponse = await client.migrateRegistry(registryTopicId, {
@@ -155,9 +288,27 @@ if (migrateResponse.success) {
 }
 ```
 
-## Querying a Registry
+### 6. Querying a Registry
 
-Fetch all entries from a registry.
+Fetch and process entries from a registry:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant Registry as Registry Topic
+
+    App->>Client: getRegistry(registryTopicId, options)
+    activate Client
+    Client->>HCS: Query messages
+    HCS->>Client: Return messages
+    Client->>Client: Process messages
+    Client->>App: Return parsed registry data
+    deactivate Client
+```
+
+Example code:
 
 ```typescript
 const registryData = await client.getRegistry(registryTopicId, {
@@ -179,6 +330,90 @@ if (registryData.latestEntry) {
     console.log(`Latest entry: `, registryData.latestEntry.message);
 }
 ```
+
+## Complete HCS-2 Registry Workflow
+
+This diagram illustrates a complete lifecycle of an HCS-2 Registry:
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant Client as HCS2Client
+    participant HCS as Hedera Consensus Service
+    participant Registry as Registry Topic
+    
+    App->>Client: createRegistry(INDEXED)
+    Client->>HCS: Create topic with memo
+    HCS->>Registry: Registry created
+    Client-->>App: Return registry details
+    
+    App->>Client: registerEntry(topic1)
+    Client->>HCS: Submit registration
+    HCS->>Registry: Store registration (seq=1)
+    
+    App->>Client: registerEntry(topic2)
+    Client->>HCS: Submit registration
+    HCS->>Registry: Store registration (seq=2)
+    
+    App->>Client: updateEntry(uid=1, newData)
+    Client->>HCS: Submit update
+    HCS->>Registry: Store update (seq=3)
+    
+    App->>Client: deleteEntry(uid=2)
+    Client->>HCS: Submit deletion
+    HCS->>Registry: Store deletion (seq=4)
+    
+    App->>Client: getRegistry()
+    Client->>HCS: Query all messages
+    HCS-->>Client: Return messages
+    Client->>Client: Process message sequence
+    Client-->>App: Return current registry state
+    
+    App->>Client: migrateRegistry(newTopicId)
+    Client->>HCS: Submit migration message
+    HCS->>Registry: Store migration (seq=5)
+    
+    Note over App,Registry: Registry consumers will now follow to new topic
+```
+
+## Use Case: Building a Decentralized Service Directory
+
+One common use case for HCS-2 is building a service directory where different applications can register their APIs or services:
+
+```mermaid
+graph TB
+    subgraph "Decentralized Service Directory"
+        Registry[Service Registry]
+        
+        subgraph "Service Providers"
+            ServiceA[Payment Service]
+            ServiceB[Storage Service]
+            ServiceC[Authentication Service]
+        end
+        
+        subgraph "Consumers"
+            AppA[Mobile App]
+            AppB[Web App]
+            AppC[IoT Device]
+        end
+        
+        ServiceA -->|Register| Registry
+        ServiceB -->|Register| Registry
+        ServiceC -->|Register| Registry
+        
+        Registry -->|Discover| AppA
+        Registry -->|Discover| AppB
+        Registry -->|Discover| AppC
+    end
+```
+
+Implementation steps:
+
+1. Create an indexed registry topic
+2. Services register their endpoints with metadata
+3. Applications query the registry to discover available services
+4. When services update their APIs, they can update their registry entries
+5. If a service is deprecated, it can delete its entry
 
 ## API Reference
 
