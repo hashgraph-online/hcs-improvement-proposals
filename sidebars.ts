@@ -183,6 +183,7 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/standards-sdk/overview',
+            'libraries/standards-sdk/hcs-2',
             {
               type: 'category',
               label: 'HCS-10',
@@ -197,12 +198,14 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-10/browser',
                 'libraries/standards-sdk/hcs-10/connections-manager',
                 'libraries/standards-sdk/hcs-10/examples',
-                'libraries/standards-sdk/hcs-10/server'
+                'libraries/standards-sdk/hcs-10/server',
+                'libraries/standards-sdk/hcs-10/showcase'
               ],
             },
             'libraries/standards-sdk/hcs-3',
             'libraries/standards-sdk/hcs-7',
             'libraries/standards-sdk/hcs-11',
+            'libraries/standards-sdk/hcs-20',
             'libraries/standards-sdk/inscribe',
             'libraries/standards-sdk/utils-services'
           ],

@@ -9,10 +9,10 @@ const standardsSDKData = [
     icon: '📖',
   },
   {
-    title: 'HCS-10 SDK',
-    href: '/docs/libraries/standards-sdk/hcs-10/',
-    description: 'OpenConvAI Standard SDK for building AI agent communication systems',
-    icon: '🤖',
+    title: 'HCS-2 SDK',
+    href: '/docs/libraries/standards-sdk/hcs-2',
+    description: 'Decentralized Topic Registry for managing HCS topics',
+    icon: '📋',
   },
   {
     title: 'HCS-3 Integration',
@@ -27,10 +27,22 @@ const standardsSDKData = [
     icon: '💎',
   },
   {
+    title: 'HCS-10 SDK',
+    href: '/docs/libraries/standards-sdk/hcs-10/',
+    description: 'OpenConvAI Standard SDK for building AI agent communication systems',
+    icon: '🤖',
+  },
+  {
     title: 'HCS-11 Integration',
     href: '/docs/libraries/standards-sdk/hcs-11',
     description: 'SDK implementation for HCS-11 Profile Metadata standard',
     icon: '👤',
+  },
+  {
+    title: 'HCS-20 SDK',
+    href: '/docs/libraries/standards-sdk/hcs-20',
+    description: 'Auditable Points Standard for creating and managing loyalty points',
+    icon: '🪙',
   },
   {
     title: 'Inscribe Utilities',
