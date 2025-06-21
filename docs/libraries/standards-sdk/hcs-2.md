@@ -36,22 +36,69 @@ graph TB
     end
 ```
 
-The HCS-2 standard defines two types of registries:
+## Registry Types: Indexed vs. Non-Indexed
+
+The HCS-2 standard defines two types of registry topics, each with different behaviors and use cases:
 
 ```mermaid
 graph TB
     subgraph "Registry Types"
-        IndexedRegistry[Indexed Registry]
-        NonIndexedRegistry[Non-Indexed Registry]
+        IndexedRegistry[Indexed Registry<br>HCS2RegistryType.INDEXED = 0]
+        NonIndexedRegistry[Non-Indexed Registry<br>HCS2RegistryType.NON_INDEXED = 1]
         
-        IndexedRegistry -->|Supports| UpdateOps[Update Operations]
-        IndexedRegistry -->|Supports| DeleteOps[Delete Operations]
-        IndexedRegistry -->|Requires| SequenceTracking[Tracking All Messages]
+        IndexedRegistry -->|Supports| UpdateOps["✓ Update Operations"]
+        IndexedRegistry -->|Supports| DeleteOps["✓ Delete Operations"]
+        IndexedRegistry -->|Requires| FullHistory["✓ Full Message History"]
         
-        NonIndexedRegistry -->|No| UpdateOps
-        NonIndexedRegistry -->|No| DeleteOps
-        NonIndexedRegistry -->|Only Latest| SequenceTracking
+        NonIndexedRegistry -->|No| UpdateOps["✗ Update Operations"]
+        NonIndexedRegistry -->|No| DeleteOps["✗ Delete Operations"]
+        NonIndexedRegistry -->|Only Needs| LatestMessage["✓ Latest Message Only"]
     end
+```
+
+### Key Differences
+
+| Feature | Indexed Registry | Non-Indexed Registry |
+|---------|-----------------|---------------------|
+| Registry type enum | `HCS2RegistryType.INDEXED` (0) | `HCS2RegistryType.NON_INDEXED` (1) |
+| Update operations | ✓ Supported | ✗ Not supported |
+| Delete operations | ✓ Supported | ✗ Not supported |
+| Message history | Maintains full history | Only cares about latest message |
+| Memory/storage | Higher requirements | Lower requirements |
+| Performance | May be slower for large registries | Faster, only processes latest state |
+| Use case | Full audit history needed | Only current state matters |
+| Memo format | `hcs-2:0:ttl` | `hcs-2:1:ttl` |
+
+### When to Use Each Type
+
+- **Use Indexed Registries** when:
+  - You need to maintain a history of all entries
+  - Entries need to be updated or deleted over time
+  - Audit trails are important for your application
+  - Example: Service registries that need change tracking, governance systems
+
+- **Use Non-Indexed Registries** when:
+  - Only the latest state matters for your application
+  - Storage efficiency is important
+  - You have high-volume, simple registrations
+  - Example: Status indicators, availability registries, lightweight discovery services
+
+### SDK Implementation
+
+The SDK validates operations based on registry type:
+
+- **Update and Delete operations** will throw an error if attempted on a non-indexed registry
+- **GetRegistry operation** for non-indexed registries returns only the latest entry per topic
+- **Creation** allows you to specify which type you need (defaults to indexed):
+
+```typescript
+// Create an indexed registry (default)
+const indexedRegistry = await client.createRegistry();
+
+// Create a non-indexed registry
+const nonIndexedRegistry = await client.createRegistry({
+  registryType: HCS2RegistryType.NON_INDEXED
+});
 ```
 
 ## Getting Started
@@ -68,9 +115,6 @@ For server-side applications, use `HCS2Client`.
 
 ```typescript
 import { HCS2Client, HCS2RegistryType } from '@hashgraphonline/standards-sdk';
-// or import from specific paths
-// import { HCS2Client } from '@hashgraphonline/standards-sdk/hcs-2';
-// import { HCS2RegistryType } from '@hashgraphonline/standards-sdk/hcs-2/types';
 
 // Initialize the HCS-2 client
 const client = new HCS2Client({
@@ -87,9 +131,6 @@ For client-side applications, use `BrowserHCS2Client` with a wallet connection.
 
 ```typescript
 import { BrowserHCS2Client, HCS2RegistryType } from '@hashgraphonline/standards-sdk';
-// or import from specific paths
-// import { BrowserHCS2Client } from '@hashgraphonline/standards-sdk/hcs-2';
-// import { HCS2RegistryType } from '@hashgraphonline/standards-sdk/hcs-2/types';
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 
 // Initialize Hashinals WalletConnect
@@ -129,7 +170,7 @@ sequenceDiagram
 Example code:
 
 ```typescript
-// Create an indexed registry
+// Create an indexed registry (default)
 const response = await client.createRegistry({
   registryType: HCS2RegistryType.INDEXED,
   ttl: 3600, // Time-to-live in seconds
@@ -142,6 +183,13 @@ if (response.success) {
 } else {
   console.error(`Error: ${response.error}`);
 }
+
+// Create a non-indexed registry
+const nonIndexedResponse = await client.createRegistry({
+  registryType: HCS2RegistryType.NON_INDEXED,
+  ttl: 3600,
+  memo: 'My Non-Indexed Registry',
+});
 ```
 
 ### 2. Registering Entries
@@ -203,6 +251,7 @@ sequenceDiagram
 Example code:
 
 ```typescript
+// This only works with indexed registries
 const updateResponse = await client.updateEntry(registryTopicId, {
   uid: '1', // The sequence number of the message to update
   targetTopicId: '0.0.98765', // New target topic
@@ -239,6 +288,7 @@ sequenceDiagram
 Example code:
 
 ```typescript
+// This only works with indexed registries
 const deleteResponse = await client.deleteEntry(registryTopicId, {
   uid: '1', // The sequence number of the message to delete
   memo: 'Entry deleted',
@@ -316,9 +366,11 @@ const registryData = await client.getRegistry(registryTopicId, {
   order: 'asc',
 });
 
-console.log(`Registry Type: ${registryData.registryType}`);
+console.log(`Registry Type: ${registryData.registryType === 0 ? 'Indexed' : 'Non-indexed'}`);
 console.log(`TTL: ${registryData.ttl}`);
 
+// For indexed registries, this will have the full history
+// For non-indexed registries, this will only have the latest entry
 for (const entry of registryData.entries) {
   console.log(`- Sequence: ${entry.sequence}`);
   console.log(`  Timestamp: ${entry.timestamp}`);
@@ -326,6 +378,7 @@ for (const entry of registryData.entries) {
   console.log(`  Message:`, entry.message);
 }
 
+// Both registry types provide the latestEntry for convenience
 if (registryData.latestEntry) {
     console.log(`Latest entry: `, registryData.latestEntry.message);
 }
