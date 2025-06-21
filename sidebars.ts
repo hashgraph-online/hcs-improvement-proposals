@@ -183,7 +183,6 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/standards-sdk/overview',
-            'libraries/standards-sdk/hcs-2',
             {
               type: 'category',
               label: 'HCS-10',
