@@ -85,25 +85,25 @@ const HackathonTypography: React.FC<TypographyProps> = ({
   const getFontClasses = (): string => {
     switch (variant) {
       case 'display':
-        return 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-styrene';
+        return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-styrene';
       case 'h1':
-        return 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-styrene';
+        return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black font-styrene';
       case 'h2':
-        return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold font-styrene';
+        return 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-styrene';
       case 'h3':
-        return 'text-xl sm:text-2xl md:text-3xl font-bold font-styrene';
+        return 'text-base sm:text-lg md:text-xl font-bold font-styrene';
       case 'h4':
-        return 'text-lg sm:text-xl md:text-2xl font-bold font-styrene';
+        return 'text-sm sm:text-base md:text-lg font-bold font-styrene';
       case 'subtitle1':
-        return 'text-base sm:text-lg md:text-xl font-semibold font-styrene';
-      case 'subtitle2':
         return 'text-sm sm:text-base md:text-lg font-semibold font-styrene';
+      case 'subtitle2':
+        return 'text-xs sm:text-sm md:text-base font-semibold font-styrene';
       case 'body1':
-        return 'text-sm sm:text-base md:text-lg font-normal';
-      case 'body2':
         return 'text-xs sm:text-sm md:text-base font-normal';
+      case 'body2':
+        return 'text-xs sm:text-sm font-normal';
       case 'caption':
-        return 'text-xs sm:text-sm font-medium';
+        return 'text-xs font-medium';
       default:
         return 'text-sm sm:text-base font-normal';
     }

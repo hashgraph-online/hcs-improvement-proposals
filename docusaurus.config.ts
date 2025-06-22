@@ -12,6 +12,31 @@ const config: Config = {
   },
   themes: ['@docusaurus/theme-mermaid'],
 
+  headTags: [
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.googleapis.com',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://fonts.gstatic.com',
+        crossorigin: 'anonymous',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap',
+      },
+    },
+  ],
+
   // Set the production url of your site here
   url: 'https://hashgraphonline.com',
   // Set the /<baseUrl>/ pathname under which your site is served
@@ -62,6 +87,11 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/og-card.png',
+    blog: {
+      sidebar: {
+        groupByYear: true,
+      },
+    },
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
@@ -77,14 +107,14 @@ const config: Config = {
         alt: 'Hashgraph Online Logo',
         src: 'img/logo.png',
       },
-      style: 'dark',
       items: [
-        { to: '/docs/standards/hcs-1', label: 'Standards', position: 'left' },
+        { to: '/docs/standards/', label: 'Standards', position: 'left' },
         { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
         {
           type: 'dropdown',
           label: 'Hackathon',
           position: 'left',
+          to: '/hackathon',
           items: [
             { to: '/hackathon', label: 'Overview' },
             { to: '/hederaai', label: 'Hedera x AI' },
@@ -95,12 +125,6 @@ const config: Config = {
             { to: '/hackathon#faq', label: 'FAQ' },
             { to: '/hackathon#register', label: 'Register' },
           ],
-        },
-        {
-          type: 'dropdown',
-          label: 'Challenges',
-          position: 'left',
-          items: [{ to: '/bonzo-challenge', label: 'Bonzo Challenge' }],
         },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
@@ -209,10 +233,6 @@ const config: Config = {
           },
           {
             from: '/hedera-ai',
-            to: '/hederaai',
-          },
-          {
-            from: '/hederaAI',
             to: '/hederaai',
           },
         ],

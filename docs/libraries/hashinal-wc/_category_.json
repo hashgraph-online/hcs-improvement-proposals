@@ -2,8 +2,8 @@
     "label": "Hashinal Wallet Connect",
     "position": 2,
     "link": {
-      "type": "generated-index",
-      "description": "Hashinal Wallet Connect"
+      "type": "doc",
+      "id": "libraries/hashinal-wc/index"
     },
     "collapsible": true
   }

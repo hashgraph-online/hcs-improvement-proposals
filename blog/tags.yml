@@ -78,4 +78,44 @@ openconvai:
   permalink: /openconvai
   description: Content related to OpenConvAI
 
+hackathon:
+  label: Hackathon
+  permalink: /hackathon
+  description: Hackathon events and competitions
+
+winners:
+  label: Winners
+  permalink: /winners
+  description: Winners and achievements
+
+agent-kit:
+  label: Agent Kit
+  permalink: /agent-kit
+  description: Hedera Agent Kit related content
+
+eliza-os:
+  label: Eliza OS
+  permalink: /eliza-os
+  description: Eliza OS framework and applications
+
+case-study:
+  label: Case Study
+  permalink: /case-study
+  description: Individual case study posts
+
+points:
+  label: Points
+  permalink: /points
+  description: Points and rewards systems
+
+langchain:
+  label: LangChain
+  permalink: /langchain
+  description: LangChain integration and tools
+
+community:
+  label: Community
+  permalink: /community
+  description: Community-related content and events
+
 

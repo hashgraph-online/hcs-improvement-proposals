@@ -1,10 +1,10 @@
 ---
-title: HCS-9 Standard - Poll Metadata Schema
+title: "HCS-9: Poll Metadata"
 ---
 
 #### [ hcs-9 - Poll Metadata Schema ]
 
-**Status:** Active
+**Status:** Published
 
 **Authors:** May Chan
 

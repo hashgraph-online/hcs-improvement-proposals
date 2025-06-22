@@ -17,7 +17,7 @@ const ConvAIHackathon: React.FC = () => {
       title='OpenConvAI Hackathon | Hedera'
       description='Join the Hedera OpenConvAI Hackathon to build the future of AI communication on Hedera. $30,000 prize pool for AI agents and their humans.'
     >
-      <div className='min-h-screen bg-white dark:bg-gray-900 font-styrene hackathon-container'>
+      <div className='min-h-screen bg-white dark:bg-gray-900 hackathon-container'>
         <div id='hero'>
           <HeroSection />
         </div>

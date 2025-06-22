@@ -18,13 +18,14 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   ...props
 }) => {
   const classes = classNames(
-    'text-sm hinline-block font-semibold text-white py-1.5 px-3 rounded transition-colors duration-300',
-    'bg-blue-500 hover:bg-blue-600 hover:text-white',
-    'border border-transparent', // Added transparent border
-    'focus:outline-none focus:ring-2 focus:ring-blue-600',
-    size === 'small' && 'py-1 px-2',
-    size === 'medium' && 'py-2 px-4',
-    size === 'large' && 'py-3 px-6',
+    'inline-block font-mono font-semibold text-white rounded-lg transition-all duration-300',
+    'bg-brand-blue hover:bg-opacity-90 hover:text-white',
+    'border border-transparent shadow-sm hover:shadow-md',
+    'focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-opacity-50',
+    'no-underline hover:no-underline text-center',
+    size === 'small' && 'text-sm py-2 px-4',
+    size === 'medium' && 'text-base py-3 px-6',
+    size === 'large' && 'text-lg py-4 px-8',
     className
   );
 

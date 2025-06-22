@@ -78,17 +78,17 @@ const HeroSection: React.FC = () => {
   const particles = Array.from({ length: 15 }, (_, i) => i);
 
   return (
-    <div className='relative overflow-hidden pt-20 pb-16 sm:pb-24 sm:pt-24 md:pb-32 md:pt-28 lg:pb-36 lg:pt-32'>
+    <div className='relative overflow-hidden pt-16 pb-12 sm:pb-16 sm:pt-20 md:pb-20 md:pt-24 lg:pb-24 lg:pt-28'>
       <div className='absolute inset-0 z-0 bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-gray-800'></div>
       <div
-        className='absolute top-0 right-0 h-[600px] sm:h-[700px] md:h-[800px] lg:h-[900px] w-full'
+        className='absolute top-0 right-0 h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-full'
         style={{
           backgroundImage:
             'radial-gradient(circle at top right, rgba(130, 89, 239, 0.07), transparent 60%)',
         }}
       ></div>
       <div
-        className='absolute bottom-0 left-0 h-[600px] sm:h-[700px] md:h-[800px] lg:h-[900px] w-full'
+        className='absolute bottom-0 left-0 h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px] w-full'
         style={{
           backgroundImage:
             'radial-gradient(circle at bottom left, rgba(62, 200, 120, 0.07), transparent 60%)',
@@ -109,20 +109,20 @@ const HeroSection: React.FC = () => {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
-        <div className='flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16'>
+        <div className='flex flex-col lg:flex-row items-start gap-8 sm:gap-12 lg:gap-16'>
           <motion.div
-            className='lg:w-1/2 text-center lg:text-left'
+            className='lg:w-1/2 text-center lg:text-left lg:pt-0'
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
             <motion.div
-              className='inline-flex items-center rounded-full border border-hedera-green/20 px-2.5 py-0.5 text-xs font-medium bg-gradient-to-r from-hedera-blue/5 to-hedera-purple/5 mb-4'
+              className='inline-flex items-center rounded-full border border-red-500/20 px-2.5 py-0.5 text-xs font-medium bg-gradient-to-r from-red-500/10 to-red-600/10 mb-4'
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <span className='text-hedera-green'>April 11th - May 2nd</span>
+              <span className='text-red-500 font-semibold'>EVENT ENDED</span>
             </motion.div>
 
             <div className='mb-3 sm:mb-4 md:mb-6'>
@@ -162,26 +162,22 @@ const HeroSection: React.FC = () => {
               variant='body1'
               color='muted'
               align='left'
-              className='mb-5 sm:mb-6 md:mb-8 max-w-xl mx-auto lg:mx-0 text-center lg:text-left'
+              className='mb-4 sm:mb-5 md:mb-6 max-w-xl mx-auto lg:mx-0 text-center lg:text-left'
             >
-              Join us for a revolutionary hackathon designed for{' '}
+              The Hedera OpenConvAI & Agents Hackathon has concluded. Thank you to all{' '}
               <span className='text-hedera-purple font-semibold'>
                 AI agents and their human collaborators
-              </span>
-              . Compete for a{' '}
-              <span className='text-hedera-green font-semibold'>
-                $30,000 prize pool
               </span>{' '}
-              and shape the future of autonomous AI communication on Hedera.
+              who participated! Stay tuned for our next hackathon and continue building the future of autonomous AI communication on Hedera.
             </HackathonTypography>
 
-            <div className='flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-6 sm:mb-8'>
+            <div className='flex flex-col sm:flex-row gap-2 sm:gap-3 justify-center lg:justify-start mb-4 sm:mb-6'>
               <PrimaryButton
-                href='https://dorahacks.io/hackathon/hedera-ai-agents/'
+                href='/blog/updates/hedera-ai-hackathon-winners'
                 className='z-10 px-3 py-2 text-xs sm:text-sm sm:px-4 sm:py-2.5'
                 size='sm'
               >
-                <span>Register Now</span>
+                <span>View Winners</span>
               </PrimaryButton>
 
               <Link
@@ -194,21 +190,21 @@ const HeroSection: React.FC = () => {
               </Link>
             </div>
 
-            <div className='mt-6 sm:mt-8 flex flex-wrap align-middle justify-center lg:justify-start gap-4 sm:gap-6'>
+            <div className='mt-4 sm:mt-6 flex flex-wrap align-middle justify-center lg:justify-start gap-3 sm:gap-4'>
               <div className='hidden sm:flex items-center gap-2 sm:gap-3'>
                 <div className='flex items-center'>
-                  <div className='w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-hedera-blue/10 flex items-center justify-center text-hedera-blue'>
-                    <FaCalendarAlt className='w-3 h-3 sm:w-4 sm:h-4' />
+                  <div className='w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-hedera-blue/10 flex items-center justify-center text-hedera-blue'>
+                    <FaCalendarAlt className='w-3 h-3' />
                   </div>
                   <span className='ml-2 sm:ml-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium'>
-                    April 11th - May 2nd
+                    Hackathon Ended
                   </span>
                 </div>
               </div>
               <div className='flex items-center gap-2 sm:gap-3'>
                 <div className='flex items-center'>
-                  <div className='w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-hedera-purple/10 flex items-center justify-center text-hedera-purple'>
-                    <FaGlobe className='w-3 h-3 sm:w-4 sm:h-4' />
+                  <div className='w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-hedera-purple/10 flex items-center justify-center text-hedera-purple'>
+                    <FaGlobe className='w-3 h-3' />
                   </div>
                   <span className='ml-2 sm:ml-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium'>
                     Virtual Event
@@ -217,8 +213,8 @@ const HeroSection: React.FC = () => {
               </div>
               <div className='flex items-center gap-2 sm:gap-3'>
                 <div className='flex items-center'>
-                  <div className='w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-hedera-green/10 flex items-center justify-center text-hedera-green'>
-                    <FaMoneyBill className='w-3 h-3 sm:w-4 sm:h-4' />
+                  <div className='w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-hedera-green/10 flex items-center justify-center text-hedera-green'>
+                    <FaMoneyBill className='w-3 h-3' />
                   </div>
                   <span className='ml-2 sm:ml-3 text-xs sm:text-sm text-gray-600 dark:text-gray-300 font-medium'>
                     $30,000 Prize Pool
@@ -228,7 +224,7 @@ const HeroSection: React.FC = () => {
             </div>
 
             <motion.div
-              className='mt-8 sm:mt-10 lg:mt-12'
+              className='mt-6 sm:mt-8 lg:mt-10'
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 1.2 }}
@@ -278,7 +274,7 @@ const HeroSection: React.FC = () => {
             <div className='relative'>
               <div className='absolute -inset-4 sm:-inset-6 bg-gradient-radial from-hedera-purple/20 to-transparent blur-3xl opacity-30'></div>
 
-              <div className='relative bg-white dark:bg-gray-800 p-5 sm:p-6 md:p-8 rounded-2xl border border-hedera-purple/20 overflow-hidden backdrop-blur-sm shadow-xl shadow-hedera-purple/20 z-10'>
+              <div className='relative bg-white dark:bg-gray-800 p-4 sm:p-5 md:p-6 rounded-2xl border border-hedera-purple/20 overflow-hidden backdrop-blur-sm shadow-xl shadow-hedera-purple/20 z-10'>
                 <div
                   className='absolute top-0 left-0 w-full h-full opacity-20'
                   style={{
@@ -294,7 +290,7 @@ const HeroSection: React.FC = () => {
                   }}
                 ></div>
 
-                <div className='flex items-center justify-center mb-4 sm:mb-6'>
+                <div className='flex items-center justify-center mb-3 sm:mb-4'>
                   <div className='relative'>
                     <div className='absolute inset-0 flex items-center justify-center'>
                       <AIPulseEffect
@@ -303,7 +299,7 @@ const HeroSection: React.FC = () => {
                         intensity='medium'
                       />
                     </div>
-                    <div className='relative z-10 text-5xl sm:text-6xl md:text-7xl text-center text-hedera-purple opacity-80'>
+                    <div className='relative z-10 text-4xl sm:text-5xl md:text-6xl text-center text-hedera-purple opacity-80'>
                       <FaBrain />
                     </div>
                   </div>
@@ -324,7 +320,7 @@ const HeroSection: React.FC = () => {
                   >
                     (and their Humans)
                   </HackathonTypography>
-                  <div className='h-5 sm:h-6 text-gray-700 dark:text-gray-300 font-mono text-xs sm:text-sm mt-1 sm:mt-2'>
+                  <div className='h-4 sm:h-5 text-gray-700 dark:text-gray-300 font-mono text-xs mt-1'>
                     <TypingEffect
                       texts={aiMessages}
                       typingSpeed={40}
@@ -334,12 +330,12 @@ const HeroSection: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='space-y-3 sm:space-y-4 mt-5 sm:mt-6 md:mt-8'>
-                  <div className='bg-hedera-purple/5 p-3 sm:p-4 rounded-xl border border-hedera-purple/10'>
+                <div className='space-y-2 sm:space-y-3 mt-4 sm:mt-5 md:mt-6'>
+                  <div className='bg-hedera-purple/5 p-2 sm:p-3 rounded-xl border border-hedera-purple/10'>
                     <div className='flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2'>
                       <div className='flex items-center'>
-                        <div className='w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-hedera-gradient flex items-center justify-center text-white'>
-                          <FaNetworkWired className='w-3 h-3 sm:w-4 sm:h-4' />
+                        <div className='w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-hedera-gradient flex items-center justify-center text-white'>
+                          <FaNetworkWired className='w-2.5 h-2.5 sm:w-3 sm:h-3' />
                         </div>
                         <span className='ml-2 sm:ml-3 text-sm sm:text-base md:text-lg font-semibold font-styrene text-hedera-purple'>
                           Best use of OpenConvAI
@@ -352,11 +348,11 @@ const HeroSection: React.FC = () => {
                     </HackathonTypography>
                   </div>
 
-                  <div className='bg-hedera-blue/5 p-3 sm:p-4 rounded-xl border border-hedera-blue/10'>
+                  <div className='bg-hedera-blue/5 p-2 sm:p-3 rounded-xl border border-hedera-blue/10'>
                     <div className='flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2'>
                       <div className='flex items-center'>
-                        <div className='w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-hedera-gradient flex items-center justify-center text-white'>
-                          <FaPlug className='w-3 h-3 sm:w-4 sm:h-4' />
+                        <div className='w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-hedera-gradient flex items-center justify-center text-white'>
+                          <FaPlug className='w-2.5 h-2.5 sm:w-3 sm:h-3' />
                         </div>
                         <span className='ml-2 sm:ml-3 text-sm sm:text-base md:text-lg font-semibold font-styrene text-hedera-blue'>
                           Best use of Hedera ElizaOS Plugin
@@ -369,11 +365,11 @@ const HeroSection: React.FC = () => {
                     </HackathonTypography>
                   </div>
 
-                  <div className='bg-hedera-green/5 p-3 sm:p-4 rounded-xl border border-hedera-green/10'>
+                  <div className='bg-hedera-green/5 p-2 sm:p-3 rounded-xl border border-hedera-green/10'>
                     <div className='flex items-center gap-2 sm:gap-3 mb-1 sm:mb-2'>
                       <div className='flex items-center'>
-                        <div className='w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-hedera-green-gradient flex items-center justify-center text-white'>
-                          <FaRobot className='w-3 h-3 sm:w-4 sm:h-4' />
+                        <div className='w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-hedera-green-gradient flex items-center justify-center text-white'>
+                          <FaRobot className='w-2.5 h-2.5 sm:w-3 sm:h-3' />
                         </div>
                         <span className='ml-2 sm:ml-3 text-sm sm:text-base md:text-lg font-semibold font-styrene text-hedera-green'>
                           Best use of Hedera Agent Kit or MCP
@@ -387,7 +383,7 @@ const HeroSection: React.FC = () => {
                   </div>
 
                   <motion.div
-                    className='p-3 sm:p-4 rounded-xl border border-hedera-blue/20 bg-white dark:bg-gray-700'
+                    className='p-2 sm:p-3 rounded-xl border border-hedera-blue/20 bg-white dark:bg-gray-700'
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.5, duration: 0.8 }}

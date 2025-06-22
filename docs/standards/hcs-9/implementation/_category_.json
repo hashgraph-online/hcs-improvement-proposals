@@ -1,4 +1,6 @@
 {
     "position": 2,
-    "label": "Implementation"
+    "label": "Implementation",
+    "collapsible": true,
+    "collapsed": true
 }
