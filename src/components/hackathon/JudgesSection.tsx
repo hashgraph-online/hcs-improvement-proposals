@@ -427,10 +427,47 @@ const GlowingButton: React.FC<{
   );
 };
 
-export const JudgesSection: React.FC = () => {
+interface JudgesSectionProps {
+  event?: string; // Filter judges/mentors by event
+  showTBA?: boolean; // Show TBA message if no judges confirmed
+}
+
+export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = false }) => {
   const [selectedPerson, setSelectedPerson] = useState<Judge | null>(null);
   const [activeTab, setActiveTab] = useState<'judges' | 'mentors'>('judges');
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Filter judges and mentors by event if specified
+  const filteredJudges = event 
+    ? judges.filter(judge => judge.events && judge.events.includes(event))
+    : judges;
+  
+  const filteredMentors = event
+    ? mentors.filter(mentor => mentor.events && mentor.events.includes(event))
+    : mentors;
+
+  // Show TBA if no judges confirmed for this event
+  if (showTBA && filteredJudges.length === 0 && filteredMentors.length === 0) {
+    return (
+      <div className='min-h-[400px] bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black relative overflow-hidden py-16'>
+        <div className='container mx-auto px-3 text-center'>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
+              Judges & Mentors
+            </h2>
+            <p className='text-lg text-gray-600 dark:text-gray-400'>
+              To Be Announced
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -512,7 +549,7 @@ export const JudgesSection: React.FC = () => {
               transition={{ duration: 0.5 }}
             >
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8'>
-                {judges.map((judge, index) => (
+                {filteredJudges.map((judge, index) => (
                   <Person
                     key={index}
                     person={judge}
@@ -532,7 +569,7 @@ export const JudgesSection: React.FC = () => {
               transition={{ duration: 0.5 }}
             >
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8'>
-                {mentors.map((mentor, index) => (
+                {filteredMentors.map((mentor, index) => (
                   <Person
                     key={index}
                     person={mentor}

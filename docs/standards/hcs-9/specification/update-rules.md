@@ -6,7 +6,7 @@ sidebar_position: 8
 
 #### [ hcs-9 - Poll Metadata Schema ]
 
-The update-rules module defines the rules around the update action. The [update action](../hcs-8/operations.md) is defined under hcs-8.
+The update-rules module defines the rules around the update action. The [update action](../../hcs-8/operations.md) is defined under hcs-8.
 
 ```
 {

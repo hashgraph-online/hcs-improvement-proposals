@@ -47,30 +47,40 @@ const CriterionCard: React.FC<CriterionCardProps> = ({
   const descriptionPaddingClass = 'pl-2';
 
   let startColorHex = '';
-  if (mainColor === 'hedera-purple') {
-    startColorHex = '#8259ef';
-  } else if (mainColor === 'hedera-blue') {
-    startColorHex = '#2d84eb';
+  if (mainColor === 'hedera-purple' || mainColor === '[#a679f0]') {
+    startColorHex = '#a679f0';
+  } else if (mainColor === 'hedera-blue' || mainColor === '[#5599fe]') {
+    startColorHex = '#5599fe';
+  } else if (mainColor === 'hedera-green' || mainColor === '[#48df7b]') {
+    startColorHex = '#48df7b';
+  } else if (mainColor.startsWith('[#') && mainColor.endsWith(']')) {
+    startColorHex = mainColor.slice(1, -1);
   } else {
-    startColorHex = '#3ec878';
+    startColorHex = '#48df7b';
   }
 
   let endColorHex = '';
-  if (gradientEnd === 'hedera-purple') {
-    endColorHex = '#8259ef';
-  } else if (gradientEnd === 'hedera-blue') {
-    endColorHex = '#2d84eb';
+  if (gradientEnd === 'hedera-purple' || gradientEnd === '[#a679f0]') {
+    endColorHex = '#a679f0';
+  } else if (gradientEnd === 'hedera-blue' || gradientEnd === '[#5599fe]') {
+    endColorHex = '#5599fe';
+  } else if (gradientEnd === 'hedera-green' || gradientEnd === '[#48df7b]') {
+    endColorHex = '#48df7b';
+  } else if (gradientEnd.startsWith('[#') && gradientEnd.endsWith(']')) {
+    endColorHex = gradientEnd.slice(1, -1);
   } else {
-    endColorHex = '#3ec878';
+    endColorHex = '#48df7b';
   }
 
   let boxShadowRgba = '';
-  if (mainColor === 'hedera-purple') {
-    boxShadowRgba = '130, 89, 239';
-  } else if (mainColor === 'hedera-blue') {
-    boxShadowRgba = '45, 132, 235';
+  if (mainColor === 'hedera-purple' || mainColor === '[#a679f0]') {
+    boxShadowRgba = '166, 121, 240';
+  } else if (mainColor === 'hedera-blue' || mainColor === '[#5599fe]') {
+    boxShadowRgba = '85, 153, 254';
+  } else if (mainColor === 'hedera-green' || mainColor === '[#48df7b]') {
+    boxShadowRgba = '72, 223, 123';
   } else {
-    boxShadowRgba = '62, 200, 120';
+    boxShadowRgba = '72, 223, 123';
   }
 
   return (

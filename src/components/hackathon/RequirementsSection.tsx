@@ -116,11 +116,10 @@ const RequirementsSection: React.FC = () => {
               align='center'
               className='max-w-3xl mx-auto mb-3 sm:mb-4 md:mb-5 px-1 sm:px-2'
             >
-              For AI agents and human developers collaborating in this
-              hackathon, your project must meet these requirements to qualify
-              for evaluation. Our judging algorithm will analyze each submission
-              based on innovation, technical implementation, and potential
-              impact.
+              For all AI solutions built during this hackathon, your project
+              must meet these requirements to qualify for evaluation. Our
+              judging panel will analyze each submission based on innovation,
+              technical implementation, and potential impact.
             </HackathonTypography>
           </motion.div>
 
@@ -140,13 +139,13 @@ const RequirementsSection: React.FC = () => {
                 : {}
             }
           >
-            <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-hedera-purple/10 dark:bg-hedera-purple/20 text-hedera-purple rounded-full text-xs sm:text-sm font-medium'>
+            <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-[#a679f0]/10 dark:bg-[#a679f0]/20 text-[#a679f0] rounded-full text-xs sm:text-sm font-medium'>
               #AI
             </span>
-            <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-hedera-blue/10 dark:bg-hedera-blue/20 text-hedera-blue rounded-full text-xs sm:text-sm font-medium'>
+            <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-[#5599fe]/10 dark:bg-[#5599fe]/20 text-[#5599fe] rounded-full text-xs sm:text-sm font-medium'>
               #Hedera
             </span>
-            <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-hedera-green/10 dark:bg-hedera-green/20 text-hedera-green rounded-full text-xs sm:text-sm font-medium'>
+            <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-[#48df7b]/10 dark:bg-[#48df7b]/20 text-[#48df7b] rounded-full text-xs sm:text-sm font-medium'>
               #ConvAI
             </span>
           </motion.div>
@@ -162,7 +161,7 @@ const RequirementsSection: React.FC = () => {
             <RequirementCard
               icon={<FaGithub />}
               title='Repository Access'
-              description="Provide source code with documentation explaining how your agent leverages Hedera's ConvAI protocol for autonomous communication"
+              description="Provide source code with documentation explaining how your AI solution leverages Hedera's technology and protocols"
               index={0}
               iconBg='bg-gradient-to-r from-[#6e5494] to-[#4f3a6b]'
               borderColor='bg-[#6e5494]/30'
@@ -170,15 +169,15 @@ const RequirementsSection: React.FC = () => {
             <RequirementCard
               icon={<FaVideo />}
               title='Visual Demonstration'
-              description="Create a 5-minute video showcasing your agent's capabilities and communication protocols in action"
+              description="Create a 5-minute video showcasing your AI solution's capabilities and features in action"
               index={1}
-              iconBg='bg-gradient-to-r from-hedera-purple to-hedera-blue'
-              borderColor='bg-hedera-purple/30'
+              iconBg='bg-gradient-to-r from-[#a679f0] to-[#5599fe]'
+              borderColor='bg-[#a679f0]/30'
             />
             <RequirementCard
               icon={<FaFileAlt />}
               title='Architecture Spec'
-              description="Submit detailed architecture specifications describing your agent's decision-making frameworks and integration patterns"
+              description="Submit detailed architecture specifications describing your AI solution's design and integration patterns"
               index={2}
               iconBg='bg-gradient-to-r from-[#3ec878] to-[#2a9c5a]'
               borderColor='bg-[#3ec878]/30'
@@ -186,7 +185,7 @@ const RequirementsSection: React.FC = () => {
             <RequirementCard
               icon={<FaCog />}
               title='Deployment Protocol'
-              description="Ensure your agent is deployed on Hedera's testnet or mainnet with verifiable transaction history"
+              description="Ensure your solution is deployed on Hedera's testnet or mainnet with verifiable transaction history"
               index={3}
               iconBg='bg-gradient-to-r from-[#2d84eb] to-[#1c5da3]'
               borderColor='bg-[#2d84eb]/30'
@@ -211,14 +210,14 @@ const RequirementsSection: React.FC = () => {
           }
         >
           <div
-            className='absolute -inset-3 sm:-inset-6 lg:-inset-10 bg-gradient-to-r from-hedera-purple/5 to-hedera-blue/5 dark:from-hedera-purple/10 dark:to-hedera-blue/10 rounded-2xl sm:rounded-3xl blur-xl'
+            className='absolute -inset-3 sm:-inset-6 lg:-inset-10 bg-gradient-to-r from-[#a679f0]/5 to-[#5599fe]/5 dark:from-[#a679f0]/10 dark:to-[#5599fe]/10 rounded-2xl sm:rounded-3xl blur-xl'
             aria-hidden='true'
           ></div>
 
-          <div className='flex flex-col sm:flex-row justify-between relative border border-hedera-purple/20 dark:border-hedera-purple/40 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 overflow-hidden bg-white/30 dark:bg-gray-800/50 backdrop-blur-sm gap-2 sm:gap-3 md:gap-4'>
+          <div className='flex flex-col sm:flex-row justify-between relative border border-[#a679f0]/20 dark:border-[#a679f0]/40 rounded-lg sm:rounded-xl md:rounded-2xl p-2 sm:p-3 md:p-4 lg:p-5 overflow-hidden bg-white/30 dark:bg-gray-800/50 backdrop-blur-sm gap-2 sm:gap-3 md:gap-4'>
             <div className='flex items-start gap-2 sm:gap-3 md:gap-4'>
               <div
-                className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0 bg-gradient-to-r from-hedera-purple to-hedera-blue rounded-md sm:rounded-lg shadow-md flex items-center justify-center text-white'
+                className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0 bg-gradient-to-r from-[#a679f0] to-[#5599fe] rounded-md sm:rounded-lg shadow-md flex items-center justify-center text-white'
                 aria-hidden='true'
               >
                 <FaLock className='text-sm sm:text-base md:text-lg' />
@@ -254,7 +253,7 @@ const RequirementsSection: React.FC = () => {
             </div>
 
             <div
-              className='absolute -right-12 -bottom-12 sm:-right-16 sm:-bottom-16 w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-hedera-purple/10 dark:bg-hedera-purple/20 rounded-full blur-3xl'
+              className='absolute -right-12 -bottom-12 sm:-right-16 sm:-bottom-16 w-36 h-36 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-[#a679f0]/10 dark:bg-[#a679f0]/20 rounded-full blur-3xl'
               aria-hidden='true'
             ></div>
           </div>
@@ -280,17 +279,17 @@ const RequirementsSection: React.FC = () => {
         >
           <div className='flex items-center mb-3 sm:mb-4 md:mb-5'>
             <div
-              className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-hedera-blue to-hedera-purple rounded-lg shadow-md flex items-center justify-center text-white'
+              className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-[#5599fe] to-[#a679f0] rounded-lg shadow-md flex items-center justify-center text-white'
               aria-hidden='true'
             >
               <FaNetworkWired className='text-sm sm:text-base md:text-lg' />
             </div>
             <HackathonTypography variant='h3' className='ml-3 sm:ml-4'>
-              Agent Integration Examples
+              AI Solution Integration Examples
             </HackathonTypography>
           </div>
 
-          <div className='bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-lg sm:rounded-xl p-0 border border-hedera-blue/10 dark:border-hedera-blue/20 shadow-lg overflow-hidden'>
+          <div className='bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-lg sm:rounded-xl p-0 border border-[#5599fe]/10 dark:border-[#5599fe]/20 shadow-lg overflow-hidden'>
             <TabbedCodeBlock tabs={CODE_EXAMPLES} />
           </div>
         </motion.div>
@@ -353,16 +352,16 @@ const RequirementsSection: React.FC = () => {
           </div>
 
           <div className='relative'>
-            <div className='absolute inset-0 bg-gradient-to-br from-hedera-purple/10 via-hedera-blue/10 to-hedera-green/10 dark:from-hedera-purple/20 dark:via-hedera-blue/20 dark:to-hedera-green/20 rounded-3xl blur-xl'></div>
+            <div className='absolute inset-0 bg-gradient-to-br from-[#a679f0]/10 via-[#5599fe]/10 to-[#48df7b]/10 dark:from-[#a679f0]/20 dark:via-[#5599fe]/20 dark:to-[#48df7b]/20 rounded-3xl blur-xl'></div>
 
-            <div className='absolute -inset-1 bg-gradient-to-r from-hedera-purple/5 via-hedera-blue/5 to-hedera-green/5 dark:from-hedera-purple/15 dark:via-hedera-blue/15 dark:to-hedera-green/15 rounded-3xl'></div>
+            <div className='absolute -inset-1 bg-gradient-to-r from-[#a679f0]/5 via-[#5599fe]/5 to-[#48df7b]/5 dark:from-[#a679f0]/15 dark:via-[#5599fe]/15 dark:to-[#48df7b]/15 rounded-3xl'></div>
 
             <div className='relative bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-white/40 dark:border-gray-700/40 p-4 sm:p-5 md:p-6 lg:p-8 overflow-hidden shadow-xl'>
-              <div className='absolute -inset-px bg-gradient-to-r from-hedera-purple/20 via-hedera-blue/20 to-hedera-green/20 dark:from-hedera-purple/30 dark:via-hedera-blue/30 dark:to-hedera-green/30 rounded-2xl pointer-events-none'></div>
+              <div className='absolute -inset-px bg-gradient-to-r from-[#a679f0]/20 via-[#5599fe]/20 to-[#48df7b]/20 dark:from-[#a679f0]/30 dark:via-[#5599fe]/30 dark:to-[#48df7b]/30 rounded-2xl pointer-events-none'></div>
 
               <div className='absolute right-0 top-0 w-full h-full overflow-hidden pointer-events-none'>
-                <div className='absolute -right-20 -top-20 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-hedera-purple/5 dark:bg-hedera-purple/10 rounded-full blur-3xl'></div>
-                <div className='absolute -bottom-20 -left-20 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-hedera-blue/5 dark:bg-hedera-blue/10 rounded-full blur-3xl'></div>
+                <div className='absolute -right-20 -top-20 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-[#a679f0]/5 dark:bg-[#a679f0]/10 rounded-full blur-3xl'></div>
+                <div className='absolute -bottom-20 -left-20 w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 bg-[#5599fe]/5 dark:bg-[#5599fe]/10 rounded-full blur-3xl'></div>
               </div>
 
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 lg:gap-6 z-10 relative'>
@@ -371,8 +370,8 @@ const RequirementsSection: React.FC = () => {
                   title='Innovation'
                   description='How new is the idea? Uniqueness compared to existing solutions.'
                   percentage='10%'
-                  gradientStart='hedera-purple'
-                  gradientEnd='hedera-blue'
+                  gradientStart='[#a679f0]'
+                  gradientEnd='[#5599fe]'
                   progressBarWidth='w-8 sm:w-12 md:w-14'
                 />
 
@@ -381,8 +380,8 @@ const RequirementsSection: React.FC = () => {
                   title='Feasibility'
                   description='Viability of the concept and implementation.'
                   percentage='10%'
-                  gradientStart='hedera-blue'
-                  gradientEnd='hedera-green'
+                  gradientStart='[#5599fe]'
+                  gradientEnd='[#48df7b]'
                   progressBarWidth='w-8 sm:w-12 md:w-14'
                 />
 
@@ -391,8 +390,8 @@ const RequirementsSection: React.FC = () => {
                   title='Execution / Automation'
                   description='Quality of implementation, code structure, and automation.'
                   percentage='35%'
-                  gradientStart='hedera-green'
-                  gradientEnd='hedera-purple'
+                  gradientStart='[#48df7b]'
+                  gradientEnd='[#a679f0]'
                   progressBarWidth='w-28 sm:w-32 md:w-36'
                 />
 
@@ -401,8 +400,8 @@ const RequirementsSection: React.FC = () => {
                   title='Integration'
                   description='Effective use of Hedera technologies and services.'
                   percentage='30%'
-                  gradientStart='hedera-purple'
-                  gradientEnd='hedera-blue'
+                  gradientStart='[#a679f0]'
+                  gradientEnd='[#5599fe]'
                   progressBarWidth='w-24 sm:w-28 md:w-32'
                 />
 
@@ -411,8 +410,8 @@ const RequirementsSection: React.FC = () => {
                   title='Validation'
                   description='Market fit and adoption potential.'
                   percentage='5%'
-                  gradientStart='hedera-blue'
-                  gradientEnd='hedera-green'
+                  gradientStart='[#5599fe]'
+                  gradientEnd='[#48df7b]'
                   progressBarWidth='w-4 sm:w-5'
                 />
 
@@ -433,8 +432,8 @@ const RequirementsSection: React.FC = () => {
                     title='Pitch'
                     description='Presentation quality and problem-solving relevance.'
                     percentage='5%'
-                    gradientStart='hedera-purple'
-                    gradientEnd='hedera-green'
+                    gradientStart='[#a679f0]'
+                    gradientEnd='[#48df7b]'
                     progressBarWidth='w-4 sm:w-5'
                     isCompact={true}
                   />

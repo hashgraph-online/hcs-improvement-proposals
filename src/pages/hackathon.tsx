@@ -1,50 +1,43 @@
 import React from 'react';
 import Layout from '@theme/Layout';
-import HeroSection from '../components/hackathon/HeroSection';
+import HAHHeroSection from '../components/hackathon/HAHHeroSection';
 import RequirementsSection from '../components/hackathon/RequirementsSection';
 import JudgesSection from '../components/hackathon/JudgesSection';
-import ToolsTimelineSection from '../components/hackathon/ToolsTimelineSection';
-import RegisterSection from '../components/hackathon/RegisterSection';
-import FAQSection from '../components/hackathon/FAQSection';
-import VideoSection from '../components/hackathon/VideoSection';
-import DemoDaySection from '../components/hackathon/DemoDaySection';
+import HAHToolsTimelineSection from '../components/hackathon/HAHToolsTimelineSection';
+import HAHRegisterSection from '../components/hackathon/HAHRegisterSection';
+import HAHFAQSection from '../components/hackathon/HAHFAQSection';
+import HAHJudgingCriteriaSection from '../components/hackathon/HAHJudgingCriteriaSection';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
 
-const ConvAIHackathon: React.FC = () => {
+const HAHPage: React.FC = () => {
   return (
     <Layout
-      title='OpenConvAI Hackathon | Hedera'
-      description='Join the Hedera OpenConvAI Hackathon to build the future of AI communication on Hedera. $30,000 prize pool for AI agents and their humans.'
+      title='AI Track - Hedera Africa Hackathon | Hashgraph Online'
+      description='Join the AI Track at Hedera Africa Hackathon. Build innovative AI solutions on Hedera in collaboration with The Hashgraph Association and Exponential Science.'
     >
       <div className='min-h-screen bg-white dark:bg-gray-900 hackathon-container'>
         <div id='hero'>
-          <HeroSection />
-        </div>
-        <div id='video'>
-          <VideoSection />
+          <HAHHeroSection />
         </div>
         <div id='requirements'>
-          <RequirementsSection />
+          <HAHJudgingCriteriaSection />
         </div>
         <div id='tools'>
-          <ToolsTimelineSection />
-        </div>
-        <div id='demo-day'>
-          <DemoDaySection />
+          <HAHToolsTimelineSection />
         </div>
         <div id='judges'>
-          <JudgesSection />
+          <JudgesSection event='africa-hackathon' showTBA={true} />
         </div>
         <div id='faq'>
-          <FAQSection />
+          <HAHFAQSection />
         </div>
         <div id='register'>
-          <RegisterSection />
+          <HAHRegisterSection />
         </div>
       </div>
     </Layout>
   );
 };
 
-export default ConvAIHackathon;
+export default HAHPage;

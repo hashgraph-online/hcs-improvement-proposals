@@ -64,18 +64,18 @@ const HackathonTypography: React.FC<TypographyProps> = ({
 
   const getColorClasses = (): string => {
     if (gradient) {
-      return 'bg-gradient-to-r from-hedera-purple via-hedera-blue to-hedera-green bg-clip-text text-transparent';
+      return 'bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent';
     }
 
     switch (color) {
       case 'muted':
         return 'text-gray-600 dark:text-gray-300';
       case 'purple':
-        return 'text-hedera-purple';
+        return 'text-[#a679f0]';
       case 'blue':
-        return 'text-hedera-blue';
+        return 'text-[#5599fe]';
       case 'green':
-        return 'text-hedera-green';
+        return 'text-[#48df7b]';
       case 'default':
       default:
         return 'text-gray-900 dark:text-white';
@@ -85,19 +85,19 @@ const HackathonTypography: React.FC<TypographyProps> = ({
   const getFontClasses = (): string => {
     switch (variant) {
       case 'display':
-        return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-styrene';
+        return 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black font-jakarta';
       case 'h1':
-        return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black font-styrene';
+        return 'text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black font-jakarta';
       case 'h2':
-        return 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-styrene';
+        return 'text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold font-jakarta';
       case 'h3':
-        return 'text-base sm:text-lg md:text-xl font-bold font-styrene';
+        return 'text-base sm:text-lg md:text-xl font-bold font-jakarta';
       case 'h4':
-        return 'text-sm sm:text-base md:text-lg font-bold font-styrene';
+        return 'text-sm sm:text-base md:text-lg font-bold font-jakarta';
       case 'subtitle1':
-        return 'text-sm sm:text-base md:text-lg font-semibold font-styrene';
+        return 'text-sm sm:text-base md:text-lg font-semibold font-jakarta';
       case 'subtitle2':
-        return 'text-xs sm:text-sm md:text-base font-semibold font-styrene';
+        return 'text-xs sm:text-sm md:text-base font-semibold font-jakarta';
       case 'body1':
         return 'text-xs sm:text-sm md:text-base font-normal';
       case 'body2':
@@ -126,11 +126,11 @@ const HackathonTypography: React.FC<TypographyProps> = ({
 
     switch (underlineColor) {
       case 'purple':
-        return 'border-b-2 border-hedera-purple pb-1';
+        return 'border-b-2 border-[#a679f0] pb-1';
       case 'blue':
-        return 'border-b-2 border-hedera-blue pb-1';
+        return 'border-b-2 border-[#5599fe] pb-1';
       case 'green':
-        return 'border-b-2 border-hedera-green pb-1';
+        return 'border-b-2 border-[#48df7b] pb-1';
       case 'gradient':
       default:
         return 'relative';
@@ -154,14 +154,14 @@ const HackathonTypography: React.FC<TypographyProps> = ({
           className
         )}
         style={{
-          fontFamily: 'Styrene A',
+          fontFamily: 'Plus Jakarta Sans, sans-serif',
         }}
       >
         {children}
       </Component>
       {underline && underlineColor === 'gradient' && (
         <div
-          className='absolute left-0 right-0 h-1 bg-gradient-to-r from-hedera-purple via-hedera-blue to-hedera-green'
+          className='absolute left-0 right-0 h-1 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b]'
           style={{
             bottom: '-2px',
             height: '4px',

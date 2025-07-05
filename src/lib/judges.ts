@@ -20,6 +20,7 @@ export interface Judge {
   expertise?: string[];
   isAI?: boolean;
   demoDay?: boolean;
+  events?: string[];
 }
 
 export const judges: Judge[] = [
@@ -82,6 +83,7 @@ export const judges: Judge[] = [
       'Developer Tools',
     ],
     demoDay: true,
+    events: ['africa-hackathon'],
   },
   {
     name: 'Ty Smith',
@@ -353,6 +355,25 @@ export const mentors: Judge[] = [
       'UI/UX',
     ],
     isAI: false,
+  },
+    {
+    name: 'Michael Kantor',
+    role: 'President',
+    company: 'Hashgraph Online',
+    bio: 'Michael is the founder of KiloScribe, and President of Hashgraph Online. He has been a pioneer in Software for over a decade. Michael is also the CoCreator of the Hashinals standard for tokenized, on-chain NFTs on Hedera, which has gone on to generate 10m+ transactions for the network and 148,000+ inscribed NFTs using the standard.',
+    image: '/img/hackathon/michael-kantor.webp',
+    socials: [
+      { type: 'twitter', url: 'https://twitter.com/kantorcodes' },
+      { type: 'github', url: 'https://github.com/mkantor' },
+    ],
+    expertise: [
+      'NFTs',
+      'Tokenization',
+      'Hashgraph Standards',
+      'Developer Tools',
+    ],
+    demoDay: true,
+    events: ['africa-hackathon'],
   },
   {
     name: 'Brendan Graetz',
