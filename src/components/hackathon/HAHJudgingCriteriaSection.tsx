@@ -537,7 +537,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
-                className='mt-8 md:mt-16'
+                className='mt-8 md:mt-16 mb-12'
               >
                 <TransformCard
                   rotation='rotate-[-0.5deg]'
