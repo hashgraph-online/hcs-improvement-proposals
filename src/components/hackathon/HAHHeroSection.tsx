@@ -40,7 +40,7 @@ const HAHHeroSection: React.FC = () => {
     },
     {
       icon: <FaDollarSign />,
-      title: '$2M Prize Pool',
+      title: '$1M Prize Pool',
       description: 'Compete for your share across all tracks',
       link: null,
     },
@@ -125,7 +125,7 @@ const HAHHeroSection: React.FC = () => {
                     Prize Pool
                   </div>
                   <div className='font-semibold text-gray-900 dark:text-white'>
-                    $2,000,000
+                    $1,000,000
                   </div>
                 </div>
               </div>

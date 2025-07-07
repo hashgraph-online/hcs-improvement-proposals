@@ -6,6 +6,7 @@ export { default as MetricCard } from './MetricCard';
 export { default as AnimatedBackground } from './AnimatedBackground';
 export { default as Terminal, TerminalLine } from './Terminal';
 export { default as ToolCard } from './ToolCard';
+export { default as SidebarNavButton } from './SidebarNavButton';
 export { PrimaryButton } from './primary-button';
 export { Button, buttonVariants } from './button';
 export {

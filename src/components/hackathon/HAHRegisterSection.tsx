@@ -141,7 +141,7 @@ const HAHRegisterSection: React.FC = () => {
                           ✓ AI Track available!
                         </div>
                         <div className='text-[#a679f0]'>
-                          ✓ $2M prize pool confirmed
+                          ✓ $1M prize pool confirmed
                         </div>
                         <div className='mt-2 text-white'>
                           → Ready to build amazing AI agents!
@@ -214,7 +214,7 @@ const HAHRegisterSection: React.FC = () => {
                   </div>
                   <div>
                     <Typography variant='h3' className='mb-1'>
-                      $2M Prize Pool
+                      $1M Prize Pool
                     </Typography>
                     <Typography variant='body2' color='muted'>
                       Compete across all tracks including AI

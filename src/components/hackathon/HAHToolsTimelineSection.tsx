@@ -15,13 +15,27 @@ import {
   FaUserFriends,
   FaPaperPlane,
   FaExternalLinkAlt,
+  FaGlobe,
+  FaComments,
 } from 'react-icons/fa';
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
 import PrimaryButton from './PrimaryButton';
 import HackathonTypography from './HackathonTypography';
 import ToolCard from '../ui/ToolCard';
 import { TimelineItem } from './TimelineItem';
-import { TransformCard, Typography } from '../ui';
+import { TransformCard, Typography, SidebarNavButton } from '../ui';
+
+interface Tool {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  link: string;
+  installCommand?: string;
+  visitCommand?: string;
+  image?: string;
+  isNew?: boolean;
+  color: 'purple' | 'blue' | 'green';
+}
 
 const HAHToolsTimelineSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -38,7 +52,7 @@ const HAHToolsTimelineSection: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const tools = [
+  const tools: Tool[] = [
     {
       icon: <FaGithub />,
       title: 'Standards SDK',
@@ -76,6 +90,16 @@ const HAHToolsTimelineSection: React.FC = () => {
       installCommand: 'npm install @hashgraphonline/standards-agent-kit',
       isNew: true,
       color: 'purple',
+    },
+    {
+      icon: <FaComments />,
+      title: 'Moonscape Portal',
+      description:
+        'Decentralized portal for discovering, testing, and interacting with AI agents on Hedera using the OpenConvAI standard.',
+      link: 'https://moonscape.tech',
+      visitCommand: 'Open moonscape.tech in your browser',
+      image: '/use-cases/moonscape-portal.jpg',
+      color: 'blue',
     },
   ];
 
@@ -245,15 +269,11 @@ const HAHToolsTimelineSection: React.FC = () => {
 
                   <div className='p-2 space-y-1 bg-white dark:bg-gray-900'>
                     {tools.map((tool, index) => (
-                      <motion.button
+                      <SidebarNavButton
                         key={index}
+                        isActive={activeToolIndex === index}
                         onClick={() => setActiveToolIndex(index)}
-                        className={`w-full text-left p-3 rounded-lg transition-all duration-200 ${
-                          activeToolIndex === index
-                            ? 'bg-gray-100 dark:bg-white/10 shadow-lg border border-gray-300 dark:border-white/20'
-                            : 'bg-transparent hover:bg-gray-50 dark:hover:bg-white/5'
-                        }`}
-                        whileHover={{ x: 2 }}
+                        className='p-3'
                       >
                         <div className='flex items-center gap-3'>
                           <div
@@ -271,7 +291,11 @@ const HAHToolsTimelineSection: React.FC = () => {
                           </div>
                           <div className='flex-1'>
                             <div className='flex items-center gap-2'>
-                              <h3 className='text-sm font-semibold text-gray-900 dark:text-white'>
+                              <h3 className={`text-sm font-semibold transition-colors ${
+                                activeToolIndex === index
+                                  ? 'text-gray-900 dark:text-white'
+                                  : 'text-gray-700 dark:text-white/80'
+                              }`}>
                                 {tool.title}
                               </h3>
                               {tool.isNew && (
@@ -280,12 +304,16 @@ const HAHToolsTimelineSection: React.FC = () => {
                                 </span>
                               )}
                             </div>
-                            <p className='text-xs text-gray-600 dark:text-white/70 line-clamp-1'>
+                            <p className={`text-xs line-clamp-1 transition-colors ${
+                              activeToolIndex === index
+                                ? 'text-gray-600 dark:text-white/90'
+                                : 'text-gray-500 dark:text-white/60'
+                            }`}>
                               {tool.description}
                             </p>
                           </div>
                         </div>
-                      </motion.button>
+                      </SidebarNavButton>
                     ))}
                   </div>
                 </div>
@@ -313,91 +341,119 @@ const HAHToolsTimelineSection: React.FC = () => {
                       </p>
                     </div>
 
-                    <div className='mb-8'>
-                      <h3 className='text-sm font-medium text-gray-500 dark:text-white/60 mb-3'>
-                        QUICK INSTALL
-                      </h3>
-                      <div className='relative group'>
-                        <div className='absolute inset-0 bg-gradient-to-r from-[#a679f0]/20 via-[#5599fe]/20 to-[#48df7b]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-                        <div
-                          onClick={() =>
-                            copyToClipboard(
-                              tools[activeToolIndex].installCommand
-                            )
-                          }
-                          className='relative overflow-hidden bg-gray-100 dark:bg-black rounded-xl border border-gray-300 dark:border-white/20 hover:border-gray-400 dark:hover:border-white/30 transition-all cursor-pointer'
-                        >
-                          <div className='flex items-center justify-between px-4 py-2 bg-gray-200 dark:bg-black border-b border-gray-300 dark:border-white/20'>
-                            <div className='flex items-center gap-2'>
-                              <div className='flex gap-1.5'>
-                                <div className='w-3 h-3 rounded-full bg-red-400' />
-                                <div className='w-3 h-3 rounded-full bg-yellow-400' />
-                                <div className='w-3 h-3 rounded-full bg-green-400' />
-                              </div>
-                              <FiTerminal className='w-3 h-3 text-gray-600 dark:text-white/50' />
-                            </div>
-                            <div className='flex items-center gap-2'>
-                              {copied ? (
-                                <motion.div
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  className='flex items-center gap-1.5 px-2 py-0.5 rounded bg-green-500/20 text-green-500'
-                                >
-                                  <svg
-                                    className='w-3 h-3'
-                                    fill='currentColor'
-                                    viewBox='0 0 20 20'
-                                  >
-                                    <path
-                                      fillRule='evenodd'
-                                      d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
-                                      clipRule='evenodd'
-                                    />
-                                  </svg>
-                                  <span className='text-xs font-medium'>
-                                    Copied!
-                                  </span>
-                                </motion.div>
-                              ) : (
-                                <div className='flex items-center gap-1.5 px-2 py-0.5 rounded text-gray-500 hover:text-gray-400 hover:bg-gray-800/50 transition-all'>
-                                  <svg
-                                    className='w-3 h-3'
-                                    fill='none'
-                                    stroke='currentColor'
-                                    viewBox='0 0 24 24'
-                                  >
-                                    <path
-                                      strokeLinecap='round'
-                                      strokeLinejoin='round'
-                                      strokeWidth={2}
-                                      d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
-                                    />
-                                  </svg>
-                                  <span className='text-xs font-medium'>
-                                    Copy
-                                  </span>
+                    {tools[activeToolIndex].image && (
+                      <div className='mb-6'>
+                        <img
+                          src={tools[activeToolIndex].image}
+                          alt={tools[activeToolIndex].title}
+                          className='w-full rounded-xl border border-gray-200 dark:border-gray-700 shadow-lg'
+                        />
+                      </div>
+                    )}
+
+                    {tools[activeToolIndex].installCommand && (
+                      <div className='mb-8'>
+                        <h3 className='text-sm font-medium text-gray-500 dark:text-white/60 mb-3'>
+                          QUICK INSTALL
+                        </h3>
+                        <div className='relative group'>
+                          <div className='absolute inset-0 bg-gradient-to-r from-[#a679f0]/20 via-[#5599fe]/20 to-[#48df7b]/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
+                          <div
+                            onClick={() =>
+                              copyToClipboard(
+                                tools[activeToolIndex].installCommand!
+                              )
+                            }
+                            className='relative overflow-hidden bg-gray-100 dark:bg-black rounded-xl border border-gray-300 dark:border-white/20 hover:border-gray-400 dark:hover:border-white/30 transition-all cursor-pointer'
+                          >
+                            <div className='flex items-center justify-between px-4 py-2 bg-gray-200 dark:bg-black border-b border-gray-300 dark:border-white/20'>
+                              <div className='flex items-center gap-2'>
+                                <div className='flex gap-1.5'>
+                                  <div className='w-3 h-3 rounded-full bg-red-400' />
+                                  <div className='w-3 h-3 rounded-full bg-yellow-400' />
+                                  <div className='w-3 h-3 rounded-full bg-green-400' />
                                 </div>
-                              )}
+                                <FiTerminal className='w-3 h-3 text-gray-600 dark:text-white/50' />
+                              </div>
+                              <div className='flex items-center gap-2'>
+                                {copied ? (
+                                  <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    className='flex items-center gap-1.5 px-2 py-0.5 rounded bg-green-500/20 text-green-500'
+                                  >
+                                    <svg
+                                      className='w-3 h-3'
+                                      fill='currentColor'
+                                      viewBox='0 0 20 20'
+                                    >
+                                      <path
+                                        fillRule='evenodd'
+                                        d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z'
+                                        clipRule='evenodd'
+                                      />
+                                    </svg>
+                                    <span className='text-xs font-medium'>
+                                      Copied!
+                                    </span>
+                                  </motion.div>
+                                ) : (
+                                  <div className='flex items-center gap-1.5 px-2 py-0.5 rounded text-gray-500 hover:text-gray-400 hover:bg-gray-800/50 transition-all'>
+                                    <svg
+                                      className='w-3 h-3'
+                                      fill='none'
+                                      stroke='currentColor'
+                                      viewBox='0 0 24 24'
+                                    >
+                                      <path
+                                        strokeLinecap='round'
+                                        strokeLinejoin='round'
+                                        strokeWidth={2}
+                                        d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
+                                      />
+                                    </svg>
+                                    <span className='text-xs font-medium'>
+                                      Copy
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          <div className='p-4 bg-gray-50 dark:bg-black'>
-                            <div className='flex items-center gap-3 font-mono text-sm'>
-                              <span className='text-green-600 dark:text-green-400'>
-                                $
-                              </span>
-                              <code className='text-gray-900 dark:text-white/80'>
-                                {tools[activeToolIndex].installCommand}
-                              </code>
-                              <motion.span
-                                animate={{ opacity: [1, 0] }}
-                                transition={{ duration: 0.8, repeat: Infinity }}
-                                className='inline-block w-2 h-4 bg-gray-600 dark:bg-white/70'
-                              />
+                            <div className='p-4 bg-gray-50 dark:bg-black'>
+                              <div className='flex items-center gap-3 font-mono text-sm'>
+                                <span className='text-green-600 dark:text-green-400'>
+                                  $
+                                </span>
+                                <code className='text-gray-900 dark:text-white/80'>
+                                  {tools[activeToolIndex].installCommand}
+                                </code>
+                                <motion.span
+                                  animate={{ opacity: [1, 0] }}
+                                  transition={{ duration: 0.8, repeat: Infinity }}
+                                  className='inline-block w-2 h-4 bg-gray-600 dark:bg-white/70'
+                                />
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
+
+                    {tools[activeToolIndex].visitCommand && (
+                      <div className='mb-8'>
+                        <h3 className='text-sm font-medium text-gray-500 dark:text-white/60 mb-3'>
+                          HOW TO ACCESS
+                        </h3>
+                        <div className='bg-gray-100 dark:bg-black rounded-xl border border-gray-300 dark:border-white/20 p-4'>
+                          <div className='flex items-center gap-3'>
+                            <FaGlobe className='w-5 h-5 text-[#5599fe]' />
+                            <span className='text-base text-gray-900 dark:text-white'>
+                              {tools[activeToolIndex].visitCommand}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
 
                     <div className='flex gap-4'>
                       {tools[activeToolIndex].link !== '#' ? (

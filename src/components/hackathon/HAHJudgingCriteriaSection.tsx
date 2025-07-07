@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaCode,
   FaRobot,
@@ -16,6 +16,9 @@ import {
   FaFileAlt,
   FaCog,
   FaCheckCircle,
+  FaLightbulb,
+  FaCheck,
+  FaUsers,
 } from 'react-icons/fa';
 import { TransformCard, Typography } from '../ui';
 import PrimaryButton from './PrimaryButton';
@@ -31,10 +34,23 @@ interface Criterion {
 
 const HAHJudgingCriteriaSection: React.FC = () => {
   const [activeCriterion, setActiveCriterion] = useState(0);
+  const [hoveredSegment, setHoveredSegment] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const criteria: Criterion[] = [
     {
-      icon: <FaBrain />,
+      icon: <FaCog />,
       title: 'Execution & Automation',
       description: 'Quality of implementation, code structure, and automation capabilities',
       percentage: 35,
@@ -60,7 +76,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
       ],
     },
     {
-      icon: <FaCode />,
+      icon: <FaLightbulb />,
       title: 'Innovation',
       description: 'Uniqueness and creativity of the solution',
       percentage: 10,
@@ -73,7 +89,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
       ],
     },
     {
-      icon: <FaRobot />,
+      icon: <FaCheck />,
       title: 'Feasibility',
       description: 'Viability of the concept and implementation',
       percentage: 10,
@@ -86,7 +102,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
       ],
     },
     {
-      icon: <FaMicrochip />,
+      icon: <FaUsers />,
       title: 'Market Validation',
       description: 'Market fit and adoption potential',
       percentage: 5,
@@ -155,7 +171,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
 
   return (
     <>
-      <section className='py-24 sm:py-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
+      <section className='pb-24 sm:pb-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
         <div className='absolute inset-0'>
           <motion.div
             animate={{
@@ -291,7 +307,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
         </div>
       </section>
 
-      <section className='py-24 sm:py-32 relative bg-gray-50 dark:bg-black overflow-hidden'>
+      <section className='pt-24 sm:pt-32 pb-24 sm:pb-32 relative bg-gray-50 dark:bg-black overflow-hidden'>
       <div className='absolute inset-0'>
         <motion.div
           animate={{
@@ -369,146 +385,224 @@ const HAHJudgingCriteriaSection: React.FC = () => {
                     Evaluation Criteria
                   </span>
                 </div>
-                <div className='flex items-center gap-2'>
-                  <FaPercent className='text-gray-500 dark:text-gray-400 text-sm' />
-                  <span className='text-sm text-gray-600 dark:text-white/60'>
-                    Total: 100%
-                  </span>
-                </div>
               </div>
             </div>
 
-            <div className='flex flex-col lg:flex-row'>
-              <div className='lg:w-1/3 border-b lg:border-b-0 lg:border-r border-gray-200 dark:border-gray-700'>
-                <div className='p-2'>
+            <div className='max-w-5xl mx-auto px-4 md:px-6'>
+              <div className='mb-12'>
+                <h3 className='text-center text-xs md:text-sm font-medium text-gray-500 dark:text-white/60 uppercase tracking-wide mb-6 md:mb-8'>
+                  {isMobile ? 'Tap any criteria to explore details' : 'Click on any segment to explore criteria details'}
+                </h3>
+                
+                {/* Desktop: Interactive bar */}
+                <div className='hidden md:block relative mb-6'>
+                  <div className='relative h-32 w-full'>
+                    {criteria.map((criterion, index) => {
+                      let startPercentage = 0;
+                      for (let i = 0; i < index; i++) {
+                        startPercentage += criteria[i].percentage;
+                      }
+                      const isActive = activeCriterion === index;
+                      const isHovered = hoveredSegment === index;
+                      
+                      return (
+                        <motion.button
+                          key={index}
+                          className='absolute top-0 bottom-0 cursor-pointer focus:outline-none border-0 p-0 m-0'
+                          style={{
+                            left: `${startPercentage}%`,
+                            width: `${criterion.percentage}%`,
+                            background:
+                              criterion.color === 'purple'
+                                ? 'linear-gradient(180deg, #a679f0, #5599fe)'
+                                : criterion.color === 'green'
+                                ? 'linear-gradient(180deg, #48df7b, #54ae70)'
+                                : 'linear-gradient(180deg, #5599fe, #48df7b)',
+                          }}
+                          onClick={() => setActiveCriterion(index)}
+                          onMouseEnter={() => setHoveredSegment(index)}
+                          onMouseLeave={() => setHoveredSegment(null)}
+                          animate={{ 
+                            scaleY: 1,
+                            y: isActive ? '-5px' : isHovered ? '-2px' : '0px',
+                            zIndex: isActive ? 20 : isHovered ? 10 : 1,
+                            boxShadow: isActive ? '0 -10px 30px rgba(0,0,0,0.3)' : '0 0 0 rgba(0,0,0,0)',
+                          }}
+                          transition={{ 
+                            type: 'spring',
+                            stiffness: 300,
+                            damping: 30,
+                          }}
+                        >
+                          {(isActive || isHovered) && (
+                            <motion.div
+                              animate={{
+                                opacity: [0.3, 0.6, 0.3],
+                              }}
+                              transition={{
+                                duration: 2,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                              }}
+                              className='absolute inset-0 bg-white/20 pointer-events-none'
+                            />
+                          )}
+                          
+                          <div className='absolute inset-0 flex flex-col items-center justify-center pointer-events-none'>
+                            <div className='text-white text-center flex flex-col items-center gap-2'>
+                              <motion.div
+                                animate={{
+                                  scale: isActive ? 1.2 : 1,
+                                  opacity: isActive ? 1 : 0.8,
+                                }}
+                                transition={{ type: 'spring' }}
+                                className='text-3xl'
+                              >
+                                {criterion.icon}
+                              </motion.div>
+                              
+                              <div className='font-bold drop-shadow-lg text-base'>
+                                {criterion.percentage}%
+                              </div>
+                              
+                              {isActive && criterion.percentage > 5 && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  className='text-xs text-center font-medium px-1'
+                                >
+                                  {criterion.title}
+                                </motion.div>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {isActive && (
+                            <motion.div
+                              initial={{ scaleX: 0 }}
+                              animate={{ scaleX: 1 }}
+                              className='absolute bottom-0 left-0 right-0 h-1 bg-white/50 pointer-events-none'
+                            />
+                          )}
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Mobile: Grid of cards */}
+                <div className='md:hidden grid grid-cols-2 gap-3 mb-6'>
                   {criteria.map((criterion, index) => (
                     <motion.button
                       key={index}
                       onClick={() => setActiveCriterion(index)}
-                      className={`w-full text-left p-4 rounded-lg transition-all duration-200 mb-2 ${
-                        activeCriterion === index
-                          ? 'bg-gray-100 dark:bg-white/10 shadow-md ring-1 ring-gray-200 dark:ring-white/20'
-                          : 'hover:bg-gray-50 dark:hover:bg-white/5'
+                      className={`p-3 rounded-xl border-2 transition-all ${
+                        activeCriterion === index 
+                          ? 'border-white/40 shadow-lg' 
+                          : 'border-white/20 hover:border-white/30'
                       }`}
-                      whileHover={{ x: 2 }}
+                      style={{
+                        background:
+                          criterion.color === 'purple'
+                            ? 'linear-gradient(135deg, #a679f0, #5599fe)'
+                            : criterion.color === 'green'
+                            ? 'linear-gradient(135deg, #48df7b, #54ae70)'
+                            : 'linear-gradient(135deg, #5599fe, #48df7b)',
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      <div className='flex items-center justify-between'>
-                        <div className='flex items-center gap-3'>
-                          <div
-                            className='w-10 h-10 rounded-lg flex items-center justify-center text-white'
-                            style={{
-                              background:
-                                criterion.color === 'purple'
-                                  ? 'linear-gradient(135deg, #a679f0, #5599fe)'
-                                  : criterion.color === 'green'
-                                  ? 'linear-gradient(135deg, #48df7b, #54ae70)'
-                                  : 'linear-gradient(135deg, #5599fe, #48df7b)',
-                            }}
-                          >
+                      <div className='text-white text-center'>
+                        <div className='flex items-center justify-center gap-2 mb-2'>
+                          <div className='text-2xl'>
                             {criterion.icon}
                           </div>
-                          <div>
-                            <h3 className='text-sm font-semibold text-gray-900 dark:text-white'>
-                              {criterion.title}
-                            </h3>
-                            <div className='flex items-center gap-2 mt-1'>
-                              <div className='w-16 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden'>
-                                <div
-                                  className='h-full bg-gradient-to-r from-[#a679f0] to-[#5599fe]'
-                                  style={{ width: `${criterion.percentage}%` }}
-                                />
-                              </div>
-                              <span className='text-xs font-medium text-gray-600 dark:text-white/60'>
-                                {criterion.percentage}%
-                              </span>
-                            </div>
+                          <div className='font-bold text-lg'>
+                            {criterion.percentage}%
                           </div>
+                        </div>
+                        <div className='text-xs font-medium leading-tight'>
+                          {criterion.title}
                         </div>
                       </div>
                     </motion.button>
                   ))}
                 </div>
+                
               </div>
-
-              <div className='flex-1 p-8'>
-                <motion.div
-                  key={activeCriterion}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
+              
+              {/* Active criterion details */}
+              <motion.div
+                key={activeCriterion}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+                className='mt-8 md:mt-16'
+              >
+                <TransformCard
+                  rotation='rotate-[-0.5deg]'
+                  background='bg-white dark:bg-gray-900'
+                  border='border-2 border-gray-200 dark:border-gray-700'
+                  shadow='2xl'
+                  className='p-4 md:p-8'
                 >
-                  <div className='mb-6'>
-                    <div className='flex items-center gap-4 mb-4'>
-                      <div
-                        className='w-16 h-16 rounded-xl flex items-center justify-center text-white text-2xl'
-                        style={{
-                          background:
-                            criteria[activeCriterion].color === 'purple'
-                              ? 'linear-gradient(135deg, #a679f0, #5599fe)'
-                              : criteria[activeCriterion].color === 'green'
-                              ? 'linear-gradient(135deg, #48df7b, #54ae70)'
-                              : 'linear-gradient(135deg, #5599fe, #48df7b)',
-                        }}
-                      >
-                        {criteria[activeCriterion].icon}
-                      </div>
-                      <div>
-                        <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
+                  <div className='flex flex-col md:flex-row items-start gap-4 md:gap-6'>
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', delay: 0.1 }}
+                      className='w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-white text-2xl md:text-3xl flex-shrink-0 mx-auto md:mx-0'
+                      style={{
+                        background:
+                          criteria[activeCriterion].color === 'purple'
+                            ? 'linear-gradient(135deg, #a679f0, #5599fe)'
+                            : criteria[activeCriterion].color === 'green'
+                            ? 'linear-gradient(135deg, #48df7b, #54ae70)'
+                            : 'linear-gradient(135deg, #5599fe, #48df7b)',
+                      }}
+                    >
+                      {criteria[activeCriterion].icon}
+                    </motion.div>
+                    
+                    <div className='flex-1 text-center md:text-left'>
+                      <div className='flex flex-col md:flex-row md:items-baseline justify-between mb-4'>
+                        <h3 className='text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-2 md:mb-0'>
                           {criteria[activeCriterion].title}
-                        </h2>
-                        <div className='flex items-center gap-2 mt-1'>
-                          <span className='text-3xl font-bold bg-gradient-to-r from-[#a679f0] to-[#5599fe] bg-clip-text text-transparent'>
-                            {criteria[activeCriterion].percentage}%
-                          </span>
-                          <span className='text-sm text-gray-500 dark:text-white/50'>
-                            of total score
-                          </span>
+                        </h3>
+                        <div className='text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#a679f0] to-[#5599fe] bg-clip-text text-transparent'>
+                          {criteria[activeCriterion].percentage}%
+                        </div>
+                      </div>
+                      
+                      <p className='text-gray-600 dark:text-white/70 mb-6 text-sm md:text-base'>
+                        {criteria[activeCriterion].description}
+                      </p>
+                      
+                      <div className='space-y-3'>
+                        <h4 className='text-xs md:text-sm font-medium text-gray-500 dark:text-white/60 uppercase tracking-wide'>
+                          Key Evaluation Points
+                        </h4>
+                        <div className='grid grid-cols-1 gap-3'>
+                          {criteria[activeCriterion].details.map((detail, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.1 }}
+                              className='flex items-start gap-3'
+                            >
+                              <div className='w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#a679f0] to-[#5599fe] mt-2 flex-shrink-0' />
+                              <span className='text-xs md:text-sm text-gray-700 dark:text-white/80'>
+                                {detail}
+                              </span>
+                            </motion.div>
+                          ))}
                         </div>
                       </div>
                     </div>
-
-                    <p className='text-gray-600 dark:text-white/70 mb-6'>
-                      {criteria[activeCriterion].description}
-                    </p>
-
-                    <div className='space-y-3'>
-                      <h3 className='text-sm font-medium text-gray-500 dark:text-white/60 uppercase tracking-wide'>
-                        Key Evaluation Points
-                      </h3>
-                      <div className='space-y-2'>
-                        {criteria[activeCriterion].details.map((detail, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                            className='flex items-start gap-3'
-                          >
-                            <div className='w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#a679f0] to-[#5599fe] mt-2 flex-shrink-0' />
-                            <span className='text-gray-700 dark:text-white/80'>
-                              {detail}
-                            </span>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
                   </div>
-
-                  <TransformCard
-                    rotation='rotate-[-0.5deg]'
-                    background='bg-gradient-to-br from-[#a679f0]/10 to-[#5599fe]/10 dark:from-[#a679f0]/20 dark:to-[#5599fe]/20'
-                    border='border border-[#a679f0]/20'
-                    className='p-4 mt-6'
-                  >
-                    <div className='flex items-center gap-2 text-sm'>
-                      <div className='w-2 h-2 rounded-full bg-[#48df7b] animate-pulse' />
-                      <span className='text-gray-600 dark:text-white/70'>
-                        Pro tip: Focus on {criteria[activeCriterion].percentage >= 20 ? 'this high-value criterion' : 'combining this with other criteria'} for maximum impact
-                      </span>
-                    </div>
-                  </TransformCard>
-                </motion.div>
-              </div>
+                </TransformCard>
+              </motion.div>
             </div>
           </div>
         </motion.div>
@@ -525,7 +619,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
           </p>
         </motion.div>
       </div>
-    </section>
+      </section>
     </>
   );
 };
