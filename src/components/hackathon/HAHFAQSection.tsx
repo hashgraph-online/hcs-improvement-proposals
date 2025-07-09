@@ -65,11 +65,16 @@ export const FAQItem: React.FC<FAQItemProps> = ({
     >
       <TransformCard
         rotation={`rotate-[${index % 2 === 0 ? '0.5' : '-0.5'}deg]`}
-        background={isOpen ? 
-          `bg-gradient-to-br from-[${colorSet.primary}]/10 to-[${colorSet.secondary}]/10 dark:from-[${colorSet.primary}]/20 dark:to-[${colorSet.secondary}]/20` : 
-          'bg-white dark:bg-gray-800'
+        background={
+          isOpen
+            ? `bg-gradient-to-br from-[${colorSet.primary}]/10 to-[${colorSet.secondary}]/10 dark:from-[${colorSet.primary}]/20 dark:to-[${colorSet.secondary}]/20`
+            : 'bg-white dark:bg-gray-800'
         }
-        border={`border ${isOpen ? `border-[${colorSet.primary}]/20` : 'border-gray-200 dark:border-gray-700'}`}
+        border={`border ${
+          isOpen
+            ? `border-[${colorSet.primary}]/20`
+            : 'border-gray-200 dark:border-gray-700'
+        }`}
         shadow='lg'
         className='overflow-hidden transition-all duration-300 hover:scale-[1.02]'
       >
@@ -80,14 +85,14 @@ export const FAQItem: React.FC<FAQItemProps> = ({
           <div className='flex items-center gap-4'>
             {icon && (
               <motion.div
-                animate={{ 
+                animate={{
                   rotate: isOpen ? 360 : 0,
-                  scale: isOpen ? 1.1 : 1
+                  scale: isOpen ? 1.1 : 1,
                 }}
                 transition={{ duration: 0.5 }}
                 className='flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white'
-                style={{ 
-                  background: `linear-gradient(135deg, ${colorSet.primary}, ${colorSet.secondary})` 
+                style={{
+                  background: `linear-gradient(135deg, ${colorSet.primary}, ${colorSet.secondary})`,
                 }}
               >
                 {icon}
@@ -106,7 +111,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
             <FaChevronDown className='text-xl' />
           </motion.div>
         </button>
-        
+
         <AnimatePresence>
           {isOpen && (
             <motion.div
@@ -116,9 +121,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
               transition={{ duration: 0.3 }}
             >
               <div className='h-px w-full bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent' />
-              <div className='px-6 pb-6 pt-4'>
-                {answer}
-              </div>
+              <div className='px-6 pb-6 pt-4'>{answer}</div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -141,17 +144,18 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            The AI Track is a specialized track within the Hedera Africa Hackathon, 
-            co-led and sponsored by Hashgraph Online in collaboration with The Hashgraph 
-            Association and Exponential Science. It focuses on building autonomous AI 
-            agents using Hedera's technology.
+            The AI Track is a specialized track within the Hedera Africa
+            Hackathon, co-led and sponsored by Hashgraph Online in collaboration
+            with The Hashgraph Association and Exponential Science. It focuses
+            on building autonomous AI agents using Hedera's technology.
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
             className='text-gray-700 dark:text-gray-300 mt-4'
           >
-            Participants will leverage the OpenConvAI standard and the Hedera Agent Kit to 
-            create innovative AI solutions that can transform Africa's technological landscape.
+            Participants will leverage the OpenConvAI standard and the Hedera
+            Agent Kit to create innovative AI solutions that can transform
+            Africa's technological landscape.
           </HackathonTypography>
         </>
       ),
@@ -165,16 +169,18 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            The AI Track is open to participants from all around the world! Whether 
-            you're a student, professional developer, or AI enthusiast, regardless of 
-            your experience level with Web3 or AI, you're welcome to join.
+            The AI Track is open to participants from all around the world!
+            Whether you're a student, professional developer, or AI enthusiast,
+            regardless of your experience level with Web3 or AI, you're welcome
+            to join.
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            We encourage developers globally to bring their unique perspectives and 
-            innovative ideas to build AI solutions that can impact Africa and beyond.
+            We encourage developers globally to bring their unique perspectives
+            and innovative ideas to build AI solutions that can impact Africa
+            and beyond.
           </HackathonTypography>
         </>
       ),
@@ -188,17 +194,26 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            The Hedera Africa Hackathon is a global virtual event open to participants 
-            from all around the world. While local hacking stations will be based in 
-            Africa for in-person collaboration, all workshops, mentoring sessions, and 
-            online collaboration are accessible globally.
+            The Hedera Africa Hackathon is a global virtual event open to
+            participants from all around the world. While local hacking stations
+            will be based in Africa for in-person collaboration, all workshops,
+            mentoring sessions, and online collaboration are accessible
+            globally.
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            Join our Telegram channel for more information about participating from 
-            your location: <a href="https://t.me/hashinals" target="_blank" rel="noopener noreferrer" className="text-[#5599fe] dark:text-[#48df7b] hover:underline">t.me/hashinals</a>
+            Join our Telegram channel for more information about participating
+            from your location:{' '}
+            <a
+              href='https://t.me/hashinals'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-[#5599fe] dark:text-[#48df7b] hover:underline'
+            >
+              t.me/hashinals
+            </a>
           </HackathonTypography>
         </>
       ),
@@ -212,18 +227,18 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            Absolutely! We provide comprehensive resources for beginners, including 
-            tutorials on Hedera technology, the OpenConvAI standard, and AI agent 
-            development. Our Office Hours and workshops are designed to help you 
-            get started.
+            Absolutely! We provide comprehensive resources for beginners,
+            including tutorials on Hedera technology, the OpenConvAI standard,
+            and AI agent development. Our Office Hours and workshops are
+            designed to help you get started.
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            The hackathon is an excellent opportunity to learn these cutting-edge 
-            technologies while building real-world applications. Mentors will be 
-            available throughout to guide you on your journey.
+            The hackathon is an excellent opportunity to learn these
+            cutting-edge technologies while building real-world applications.
+            Mentors will be available throughout to guide you on your journey.
           </HackathonTypography>
         </>
       ),
@@ -246,7 +261,10 @@ const HAHFAQSection: React.FC = () => {
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#5599fe] text-xs mt-1.5 mr-2 flex-shrink-0' />
-              <div>Hands-on workshops covering Hedera, AI development, and the OpenConvAI Standard</div>
+              <div>
+                Hands-on workshops covering Hedera, AI development, and the
+                OpenConvAI Standard
+              </div>
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#48df7b] text-xs mt-1.5 mr-2 flex-shrink-0' />
@@ -254,7 +272,10 @@ const HAHFAQSection: React.FC = () => {
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#a679f0] text-xs mt-1.5 mr-2 flex-shrink-0' />
-              <div>Direct access to Hashgraph Online team via Telegram (t.me/hashinals)</div>
+              <div>
+                Direct access to Hashgraph Online team via Telegram
+                (t.me/hashinals)
+              </div>
             </div>
           </div>
         </>
@@ -269,17 +290,17 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            The AI Track is part of the larger Hedera Africa Hackathon with a total 
-            prize pool of $2 million across all tracks. Specific prize allocations 
-            for the AI Track will be announced soon.
+            The AI Track is part of the larger Hedera Africa Hackathon with a
+            total prize pool of $1 million across all tracks. Specific prize
+            allocations for the AI Track will be announced soon.
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            Beyond monetary prizes, winners may receive opportunities for further 
-            development support, ecosystem partnerships, and integration opportunities 
-            with Hashgraph Online and our partner networks.
+            Beyond monetary prizes, winners may receive opportunities for
+            further development support, ecosystem partnerships, and integration
+            opportunities with Hashgraph Online and our partner networks.
           </HackathonTypography>
         </>
       ),
@@ -372,39 +393,44 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            Build innovative Web3 AI solutions that leverage Hedera's unique capabilities. 
-            Focus on decentralized, trustless systems that showcase the power of combining 
-            AI with blockchain technology:
+            Build innovative Web3 AI solutions that leverage Hedera's unique
+            capabilities. Focus on decentralized, trustless systems that
+            showcase the power of combining AI with blockchain technology:
           </HackathonTypography>
           <div className='mt-3 space-y-2 text-black dark:text-white'>
             <div className='flex items-start'>
               <FaCircle className='text-[#a679f0] text-xs mt-1.5 mr-2 flex-shrink-0' />
               <div>
-                DeFi AI agents for automated trading, yield optimization, and risk management
+                DeFi AI agents for automated trading, yield optimization, and
+                risk management
               </div>
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#5599fe] text-xs mt-1.5 mr-2 flex-shrink-0' />
               <div>
-                Decentralized AI oracles for real-time data feeds and cross-chain intelligence
+                Decentralized AI oracles for real-time data feeds and
+                cross-chain intelligence
               </div>
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#48df7b] text-xs mt-1.5 mr-2 flex-shrink-0' />
               <div>
-                NFT-powered AI agents for dynamic digital assets and generative art
+                NFT-powered AI agents for dynamic digital assets and generative
+                art
               </div>
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#a679f0] text-xs mt-1.5 mr-2 flex-shrink-0' />
               <div>
-                DAO governance assistants for proposal analysis and community coordination
+                DAO governance assistants for proposal analysis and community
+                coordination
               </div>
             </div>
             <div className='flex items-start'>
               <FaCircle className='text-[#5599fe] text-xs mt-1.5 mr-2 flex-shrink-0' />
               <div>
-                Web3 gaming AI agents for autonomous NPCs and player-owned economies
+                Web3 gaming AI agents for autonomous NPCs and player-owned
+                economies
               </div>
             </div>
           </div>
@@ -412,9 +438,10 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            Focus on solutions that leverage the OpenConvAI Standard to create 
-            trustless, decentralized AI systems. Think about how AI agents can enhance 
-            DeFi protocols, improve on-chain governance, or create new Web3 primitives.
+            Focus on solutions that leverage the OpenConvAI Standard to create
+            trustless, decentralized AI systems. Think about how AI agents can
+            enhance DeFi protocols, improve on-chain governance, or create new
+            Web3 primitives.
           </HackathonTypography>
         </>
       ),
@@ -454,14 +481,16 @@ const HAHFAQSection: React.FC = () => {
             <div className='flex items-start'>
               <FaCode className='text-[#48df7b] mt-1 mr-2 flex-shrink-0' />
               <div>
-                <strong>Demo video</strong> (5 minutes) showing your AI agent in action
+                <strong>Demo video</strong> (5 minutes) showing your AI agent in
+                action
               </div>
             </div>
 
             <div className='flex items-start'>
               <FaFileAlt className='text-[#a679f0] mt-1 mr-2 flex-shrink-0' />
               <div>
-                <strong>Presentation deck</strong> outlining your solution and impact
+                <strong>Presentation deck</strong> outlining your solution and
+                impact
               </div>
             </div>
           </div>
@@ -470,7 +499,8 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            All development must occur during the hackathon period (August 1 - September 30).
+            All development must occur during the hackathon period (August 1 -
+            September 30).
           </HackathonTypography>
         </>
       ),
@@ -484,15 +514,15 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            Teams can have up to 5 human members. There's no limit on AI agent 
-            collaborators - in fact, we encourage you to leverage AI assistance 
+            Teams can have up to 5 human members. There's no limit on AI agent
+            collaborators - in fact, we encourage you to leverage AI assistance
             throughout your development process!
           </HackathonTypography>
           <HackathonTypography
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            Solo participants are welcome, and we have channels in our Telegram 
+            Solo participants are welcome, and we have channels in our Telegram
             community to help individuals find team members if desired.
           </HackathonTypography>
         </>
@@ -514,14 +544,16 @@ const HAHFAQSection: React.FC = () => {
             <div className='flex items-start'>
               <FaRobot className='text-[#a679f0] mt-1 mr-2 flex-shrink-0' />
               <div>
-                <strong>OpenConvAI Standard</strong> - For AI agent communication
+                <strong>OpenConvAI Standard</strong> - For AI agent
+                communication
               </div>
             </div>
 
             <div className='flex items-start'>
               <FaBrain className='text-[#5599fe] mt-1 mr-2 flex-shrink-0' />
               <div>
-                <strong>Hedera Agent Kit</strong> - Pre-built tools for Hedera integration
+                <strong>Hedera Agent Kit</strong> - Pre-built tools for Hedera
+                integration
               </div>
             </div>
 
@@ -535,7 +567,8 @@ const HAHFAQSection: React.FC = () => {
             <div className='flex items-start'>
               <FaRobot className='text-[#a679f0] mt-1 mr-2 flex-shrink-0' />
               <div>
-                <strong>Hedera JavaScript SDK</strong> - For blockchain interactions
+                <strong>Hedera JavaScript SDK</strong> - For blockchain
+                interactions
               </div>
             </div>
           </div>
@@ -544,7 +577,7 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='mt-4 text-gray-700 dark:text-gray-300'
           >
-            Plus comprehensive documentation, tutorials, and example projects to 
+            Plus comprehensive documentation, tutorials, and example projects to
             help you get started quickly.
           </HackathonTypography>
         </>
@@ -559,7 +592,7 @@ const HAHFAQSection: React.FC = () => {
             variant='body1'
             className='text-gray-700 dark:text-gray-300'
           >
-            The Hedera Africa Hackathon runs for 2 months, from August 1st to 
+            The Hedera Africa Hackathon runs for 2 months, from August 1st to
             September 30th, 2025. This extended timeline allows participants to:
           </HackathonTypography>
           <div className='mt-3 space-y-2 text-black dark:text-white'>
@@ -610,7 +643,7 @@ const HAHFAQSection: React.FC = () => {
         />
       </div>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10'>
-        <motion.div 
+        <motion.div
           className='text-center mb-16'
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -626,9 +659,11 @@ const HAHFAQSection: React.FC = () => {
               className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#a679f0]/10 to-[#5599fe]/10 dark:from-[#a679f0]/20 dark:to-[#5599fe]/20 border border-[#a679f0]/20 dark:border-[#a679f0]/30 mb-4'
             >
               <FaQuestion className='text-[#a679f0] mr-2' />
-              <span className='text-sm font-bold text-[#a679f0] dark:text-[#48df7b]'>KNOWLEDGE BASE</span>
+              <span className='text-sm font-bold text-[#a679f0] dark:text-[#48df7b]'>
+                KNOWLEDGE BASE
+              </span>
             </motion.div>
-            
+
             <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
               <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
                 Frequently Asked Questions
@@ -641,10 +676,15 @@ const HAHFAQSection: React.FC = () => {
             color='muted'
             className='max-w-3xl mx-auto'
           >
-            Everything you need to know about the AI Track at Hedera Africa Hackathon. 
-            Can't find what you're looking for? Join our Telegram community at{' '}
-            <a href="https://t.me/hashinals" target="_blank" rel="noopener noreferrer" 
-               className="text-[#5599fe] dark:text-[#48df7b] hover:underline font-medium">
+            Everything you need to know about the AI Track at Hedera Africa
+            Hackathon. Can't find what you're looking for? Join our Telegram
+            community at{' '}
+            <a
+              href='https://t.me/hashinals'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='text-[#5599fe] dark:text-[#48df7b] hover:underline font-medium'
+            >
               t.me/hashinals
             </a>
           </Typography>

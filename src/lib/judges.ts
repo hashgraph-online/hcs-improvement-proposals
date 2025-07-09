@@ -51,6 +51,7 @@ export const judges: Judge[] = [
       'Community Building',
       'Ecosystem Development',
     ],
+    events: ['africa-hackathon'],
   },
   {
     name: 'Brady Gentile',
@@ -65,6 +66,18 @@ export const judges: Judge[] = [
       'Product Marketing',
       'Open Source',
     ],
+  },
+  {
+    name: 'Gaurang Torvekar',
+    role: 'Co-Founder',
+    company: 'Bonzo Finance Labs',
+    bio: 'Gaurang is a protocol-level innovator with 8+ years building blockchain products. He is the CTO and co-founder of Bonzo Finance, which has generated over $50M in TVL (Total Value Locked). Gaurang has earned international recognition with 20+ major media features, including Forbes and CoinDesk. Currently pioneering how conversational AI transforms complex crypto operations into intuitive experiences, he brings proven expertise in scaling Web3 infrastructure and deep technical knowledge to evaluate the next generation of AI-native decentralized applications.',
+    image: '/img/hackathon/gaurang.jpg',
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/gaurangtorvekar/' },
+      { type: 'website', url: 'https://bonzo.finance/' },
+    ],
+    events: ['africa-hackathon'],
   },
   {
     name: 'Michael Kantor',
@@ -116,6 +129,17 @@ export const judges: Judge[] = [
     bio: 'Pluto is the CTO of HashPack.',
     image: '/img/hackathon/pluto.png',
     socials: [{ type: 'twitter', url: 'https://x.com/pluto_hashpack' }],
+  },
+  {
+    name: 'Patricia Carapinha',
+    role: 'Founder, SentX',
+    company: 'SentX',
+    bio: 'Patricia is a Co-Founder, the leading NFT marketplace on Hedera.',
+    image:
+      'https://pbs.twimg.com/profile_images/1757434156475179009/nirrAh1U_400x400.jpg',
+    socials: [{ type: 'twitter', url: 'https://x.com/PattyAlexx' }],
+    events: ['africa-hackathon'],
+    demoDay: true,
   },
   {
     name: 'Quincy Jones',
@@ -356,7 +380,7 @@ export const mentors: Judge[] = [
     ],
     isAI: false,
   },
-    {
+  {
     name: 'Michael Kantor',
     role: 'President',
     company: 'Hashgraph Online',

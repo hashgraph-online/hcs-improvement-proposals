@@ -24,6 +24,7 @@ import HackathonTypography from './HackathonTypography';
 import ToolCard from '../ui/ToolCard';
 import { TimelineItem } from './TimelineItem';
 import { TransformCard, Typography, SidebarNavButton } from '../ui';
+import { Highlight } from 'prism-react-renderer';
 
 interface Tool {
   icon: React.ReactNode;
@@ -35,16 +36,143 @@ interface Tool {
   image?: string;
   isNew?: boolean;
   color: 'purple' | 'blue' | 'green';
+  quickStart?: string;
+  docsLink?: string;
 }
+
+const customLightTheme = {
+  plain: {
+    color: '#1a202c',
+    backgroundColor: '#f9fafb',
+  },
+  styles: [
+    {
+      types: ['comment', 'block-comment', 'prolog', 'doctype', 'cdata'],
+      style: { color: '#6b7280', fontStyle: 'italic' },
+    },
+    {
+      types: ['punctuation'],
+      style: { color: '#6b7280' },
+    },
+    {
+      types: ['tag', 'attr-name', 'namespace', 'deleted'],
+      style: { color: '#dc2626' },
+    },
+    {
+      types: ['function-name'],
+      style: { color: '#2563eb' },
+    },
+    {
+      types: ['boolean', 'number', 'function'],
+      style: { color: '#7c3aed' },
+    },
+    {
+      types: ['property', 'class-name', 'constant', 'symbol'],
+      style: { color: '#ea580c' },
+    },
+    {
+      types: ['selector', 'important', 'atrule', 'keyword', 'builtin'],
+      style: { color: '#0891b2' },
+    },
+    {
+      types: ['string', 'char', 'attr-value', 'regex', 'variable'],
+      style: { color: '#059669' },
+    },
+    {
+      types: ['operator', 'entity', 'url'],
+      style: { color: '#7c3aed' },
+    },
+    {
+      types: ['at-rule', 'keyword'],
+      style: { color: '#7c3aed', fontWeight: 'bold' },
+    },
+  ],
+};
+
+const customDarkTheme = {
+  plain: {
+    color: '#ffffff',
+    backgroundColor: 'transparent',
+  },
+  styles: [
+    {
+      types: ['comment', 'block-comment', 'prolog', 'doctype', 'cdata'],
+      style: { color: '#a1a1aa', fontStyle: 'italic' },
+    },
+    {
+      types: ['punctuation'],
+      style: { color: '#fafafa' },
+    },
+    {
+      types: ['tag', 'attr-name', 'namespace', 'deleted'],
+      style: { color: '#ff6b6b' },
+    },
+    {
+      types: ['function-name'],
+      style: { color: '#4fc3f7' },
+    },
+    {
+      types: ['boolean', 'number', 'function'],
+      style: { color: '#ba68c8' },
+    },
+    {
+      types: ['property', 'class-name', 'constant', 'symbol'],
+      style: { color: '#ffb74d' },
+    },
+    {
+      types: ['selector', 'important', 'atrule', 'keyword', 'builtin'],
+      style: { color: '#4dd0e1' },
+    },
+    {
+      types: ['string', 'char', 'attr-value', 'regex', 'variable'],
+      style: { color: '#81c784' },
+    },
+    {
+      types: ['operator', 'entity', 'url'],
+      style: { color: '#ce93d8' },
+    },
+    {
+      types: ['at-rule', 'keyword'],
+      style: { color: '#ba68c8', fontWeight: 'bold' },
+    },
+  ],
+};
 
 const HAHToolsTimelineSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeToolIndex, setActiveToolIndex] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
+
+  React.useEffect(() => {
+    const checkDarkMode = () => {
+      const isDark =
+        document.documentElement.classList.contains('dark') ||
+        document.documentElement.getAttribute('data-theme') === 'dark' ||
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDarkMode(isDark);
+    };
+
+    checkDarkMode();
+
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme'],
+    });
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', checkDarkMode);
+
+    return () => {
+      observer.disconnect();
+      mediaQuery.removeEventListener('change', checkDarkMode);
+    };
+  }, []);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -62,6 +190,24 @@ const HAHToolsTimelineSection: React.FC = () => {
       installCommand: 'npm install @hashgraphonline/standards-sdk',
       isNew: true,
       color: 'green',
+      quickStart: `import { HCS10Client, AgentBuilder, AIAgentCapability, InboundTopicType } from '@hashgraphonline/standards-sdk';
+
+const hcs10Client = new HCS10Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const agentBuilder = new AgentBuilder()
+  .setName('DataAnalysisBot')
+  .setDescription('AI agent for data analysis and insights')
+  .setCapabilities([AIAgentCapability.TEXT_GENERATION, AIAgentCapability.DATA_ANALYSIS])
+  .setAgentType('autonomous')
+  .setModel('gpt-4o')
+  .setInboundTopicType(InboundTopicType.PUBLIC);
+
+const agent = await hcs10Client.createAndRegisterAgent(agentBuilder);`,
+      docsLink: '/docs/libraries/standards-sdk/',
     },
     {
       icon: <FaRobot />,
@@ -71,6 +217,14 @@ const HAHToolsTimelineSection: React.FC = () => {
       link: 'https://github.com/hedera-dev/hedera-agent-kit',
       installCommand: 'npm i hedera-agent-kit',
       color: 'purple',
+      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
+
+const agent = new HederaConversationalAgent(signer, {
+  openAIApiKey: process.env.OPENAI_API_KEY
+});
+await agent.initialize();
+const response = await agent.processMessage('Send 10 HBAR to 0.0.12345');`,
+      docsLink: 'https://github.com/hedera-dev/hedera-agent-kit/blob/main/README.md',
     },
     {
       icon: <FaCode />,
@@ -80,16 +234,58 @@ const HAHToolsTimelineSection: React.FC = () => {
       link: 'https://github.com/hiero-ledger/hiero-sdk-js',
       installCommand: 'npm install @hashgraph/sdk',
       color: 'blue',
+      quickStart: `import { Client, TopicCreateTransaction, TopicMessageSubmitTransaction } from '@hashgraph/sdk';
+
+const client = Client.forTestnet();
+client.setOperator(
+  process.env.HEDERA_ACCOUNT_ID!,
+  process.env.HEDERA_PRIVATE_KEY!
+);
+
+// Create a topic for agent communication
+const topicTx = await new TopicCreateTransaction()
+  .setTopicMemo('AI Agent Communication Topic')
+  .execute(client);
+
+const topicId = (await topicTx.getReceipt(client)).topicId;
+
+// Submit a message to the topic
+const messageTx = await new TopicMessageSubmitTransaction()
+  .setTopicId(topicId!)
+  .setMessage('Hello from AI Agent!')
+  .execute(client);`,
+      docsLink: 'https://docs.hedera.com/hedera/sdks-and-apis/sdks',
     },
     {
-      icon: <FaRobot />,
-      title: 'Standards AgentKit',
+      icon: <FaPlug />,
+      title: 'Standards Agent Plugin',
       description:
-        'Next-generation toolkit for building conversational AI agents with integrated Hedera Consensus Service support.',
-      link: 'https://hashgraphonline.com/docs/libraries/standards-agent-kit/',
-      installCommand: 'npm install @hashgraphonline/standards-agent-kit',
+        'OpenConvAI plugin for Hedera Agent Kit that enables conversational AI agents to communicate using HCS-10 standards.',
+      link: 'https://github.com/hashgraph-online/standards-agent-plugin',
+      installCommand: 'npm install @hashgraphonline/standards-agent-plugin',
       isNew: true,
-      color: 'purple',
+      color: 'green',
+      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
+import { OpenConvAIPlugin } from '@hashgraphonline/standards-agent-plugin';
+
+// Create the plugin
+const plugin = new OpenConvAIPlugin();
+
+// Use with HederaConversationalAgent
+const agent = new HederaConversationalAgent(signer, {
+  pluginConfig: {
+    plugins: [plugin],
+    appConfig: {
+      stateManager: plugin.getStateManager()
+    }
+  },
+  openAIApiKey: process.env.OPENAI_API_KEY
+});
+
+await agent.initialize();
+
+// Now you can use HCS-10 commands through conversation
+const response = await agent.processMessage('Register me as an AI agent named TestBot');`,
     },
     {
       icon: <FaComments />,
@@ -100,6 +296,39 @@ const HAHToolsTimelineSection: React.FC = () => {
       visitCommand: 'Open moonscape.tech in your browser',
       image: '/use-cases/moonscape-portal.jpg',
       color: 'blue',
+      quickStart: `1. Visit moonscape.tech
+2. Connect your Hedera wallet
+3. Browse available AI agents
+4. Start conversations with agents
+5. Create your own agent profile`,
+    },
+    {
+      icon: <FaRobot />,
+      title: 'Standards AgentKit',
+      description:
+        'Next-generation toolkit for building conversational AI agents with integrated Hedera Consensus Service support.',
+      link: '/docs/libraries/standards-agent-kit/',
+      installCommand: 'npm install @hashgraphonline/standards-agent-kit',
+      isNew: true,
+      color: 'purple',
+      quickStart: `import { initializeStandardsAgentKit } from '@hashgraphonline/standards-agent-kit';
+
+const { hederaKit, hcs10Builder, tools, stateManager } = await initializeStandardsAgentKit({
+  clientConfig: {
+    operatorId: process.env.HEDERA_ACCOUNT_ID!,
+    operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+    network: 'testnet'
+  },
+  createAllTools: true
+});
+
+// Register an agent
+const result = await tools.registerAgentTool.invoke({
+  name: 'My AI Agent',
+  description: 'An autonomous AI agent for data analysis',
+  capabilities: [0] // TEXT_GENERATION
+});`,
+      docsLink: '/docs/libraries/standards-agent-kit/',
     },
   ];
 
@@ -234,40 +463,37 @@ const HAHToolsTimelineSection: React.FC = () => {
             className='max-w-5xl mx-auto mb-16'
           >
             <div className='bg-white dark:bg-gray-900 rounded-xl lg:rounded-3xl shadow-2xl ring-1 ring-gray-200/50 dark:ring-gray-600 overflow-hidden backdrop-blur-xl'>
-              <div className='bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 py-2 lg:py-4 border-b border-gray-200/30 dark:border-gray-700'>
+              <div className='bg-gray-100 dark:bg-gray-800 px-4 lg:px-6 py-3 lg:py-4 border-b border-gray-200/30 dark:border-gray-700'>
                 <div className='flex items-center justify-between'>
-                  <div className='flex items-center gap-2 lg:gap-4'>
-                    <div className='flex gap-1 lg:gap-1.5'>
+                  <div className='flex items-center gap-2 lg:gap-4 min-w-0'>
+                    <div className='flex gap-1 lg:gap-1.5 flex-shrink-0'>
                       <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-red-400'></div>
                       <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-yellow-400'></div>
                       <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-green-400'></div>
                     </div>
-                    <div className='text-xs lg:text-sm font-mono text-gray-600 dark:text-white/60'>
+                    <div className='text-xs lg:text-sm font-mono text-gray-600 dark:text-white/60 truncate'>
                       ai-developer-tools.dev
                     </div>
                   </div>
-                  <div className='flex items-center gap-3'>
-                    <div className='px-2 py-1 rounded text-xs font-mono bg-[#48df7b]/20 dark:bg-[#48df7b]/20 text-[#2a7e4a] dark:text-[#48df7b] font-semibold'>
+                  <div className='flex items-center gap-3 flex-shrink-0'>
+                    <div className='px-2 py-1 rounded text-xs font-mono bg-[#48df7b]/20 dark:bg-[#48df7b]/20 text-[#2a7e4a] dark:text-[#48df7b] font-semibold whitespace-nowrap'>
                       {tools.length} tools available
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div
-                className='flex flex-col lg:flex-row'
-                style={{ minHeight: '480px' }}
-              >
-                <div className='lg:w-80 bg-white dark:bg-gray-900 border-b lg:border-b-0 lg:border-r border-gray-200/30 dark:border-gray-700'>
+              <div className='flex flex-col lg:flex-row min-h-[480px] overflow-hidden'>
+                <div className='w-full lg:w-80 lg:min-w-[20rem] lg:max-w-[20rem] lg:flex-shrink-0 bg-white dark:bg-gray-900 border-b lg:border-b-0 lg:border-r border-gray-200/30 dark:border-gray-700'>
                   <div className='px-4 py-3 border-b border-gray-200/30 dark:border-gray-700'>
                     <div className='flex items-center gap-2 text-sm font-mono text-gray-600 dark:text-white/60'>
-                      <FiGitBranch className='w-4 h-4' />
-                      <span>tool directory</span>
-                      <div className='w-2 h-2 rounded-full animate-pulse bg-[#48df7b]'></div>
+                      <FiGitBranch className='w-4 h-4 flex-shrink-0' />
+                      <span className='truncate'>tool directory</span>
+                      <div className='w-2 h-2 rounded-full animate-pulse bg-[#48df7b] flex-shrink-0'></div>
                     </div>
                   </div>
 
-                  <div className='p-2 space-y-1 bg-white dark:bg-gray-900'>
+                  <div className='p-2 space-y-1 bg-white dark:bg-gray-900 overflow-y-auto max-h-96 lg:max-h-none lg:h-full'>
                     {tools.map((tool, index) => (
                       <SidebarNavButton
                         key={index}
@@ -275,9 +501,9 @@ const HAHToolsTimelineSection: React.FC = () => {
                         onClick={() => setActiveToolIndex(index)}
                         className='p-3'
                       >
-                        <div className='flex items-center gap-3'>
+                        <div className='flex items-center gap-3 min-w-0'>
                           <div
-                            className='w-8 h-8 rounded-lg flex items-center justify-center text-sm'
+                            className='w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0'
                             style={{
                               background:
                                 tool.color === 'purple'
@@ -289,9 +515,9 @@ const HAHToolsTimelineSection: React.FC = () => {
                           >
                             {tool.icon}
                           </div>
-                          <div className='flex-1'>
-                            <div className='flex items-center gap-2'>
-                              <h3 className={`text-sm font-semibold transition-colors ${
+                          <div className='flex-1 min-w-0'>
+                            <div className='flex items-center gap-2 mb-1'>
+                              <h3 className={`text-sm font-semibold transition-colors truncate ${
                                 activeToolIndex === index
                                   ? 'text-gray-900 dark:text-white'
                                   : 'text-gray-700 dark:text-white/80'
@@ -299,12 +525,12 @@ const HAHToolsTimelineSection: React.FC = () => {
                                 {tool.title}
                               </h3>
                               {tool.isNew && (
-                                <span className='text-xs px-1.5 py-0.5 rounded-full bg-[#48df7b]/20 text-[#48df7b] font-bold'>
+                                <span className='text-xs px-1.5 py-0.5 rounded-full bg-[#48df7b]/20 text-[#48df7b] font-bold flex-shrink-0'>
                                   NEW
                                 </span>
                               )}
                             </div>
-                            <p className={`text-xs line-clamp-1 transition-colors ${
+                            <p className={`text-xs line-clamp-2 transition-colors ${
                               activeToolIndex === index
                                 ? 'text-gray-600 dark:text-white/90'
                                 : 'text-gray-500 dark:text-white/60'
@@ -318,7 +544,7 @@ const HAHToolsTimelineSection: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='flex-1 p-6 lg:p-8 bg-white dark:bg-gray-900'>
+                <div className='flex-1 min-w-0 max-w-full p-4 lg:p-6 xl:p-8 bg-white dark:bg-gray-900 overflow-auto'>
                   <motion.div
                     key={activeToolIndex}
                     initial={{ opacity: 0, x: 20 }}
@@ -455,7 +681,54 @@ const HAHToolsTimelineSection: React.FC = () => {
                       </div>
                     )}
 
-                    <div className='flex gap-4'>
+                    {tools[activeToolIndex].quickStart && (
+                      <div className='mb-8'>
+                        <h3 className='text-sm font-medium text-gray-500 dark:text-white/60 mb-3'>
+                          QUICK START
+                        </h3>
+                        <div className='bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-black overflow-hidden rounded-xl border border-gray-200/50 dark:border-white/20'>
+                          <Highlight
+                            theme={isDarkMode ? customDarkTheme : customLightTheme}
+                            code={tools[activeToolIndex].quickStart!}
+                            language='typescript'
+                          >
+                            {({
+                              className,
+                              style,
+                              tokens,
+                              getLineProps,
+                              getTokenProps,
+                            }) => (
+                              <pre
+                                className={`${className} p-4 text-sm font-mono leading-relaxed overflow-x-auto`}
+                                style={{
+                                  ...style,
+                                  backgroundColor: 'transparent',
+                                  margin: 0,
+                                }}
+                              >
+                                {tokens.map((line, i) => (
+                                  <div
+                                    key={i}
+                                    {...getLineProps({ line })}
+                                    className='hover:bg-black/5 dark:hover:bg-white/5 transition-colors duration-200'
+                                  >
+                                    {line.map((token, key) => (
+                                      <span
+                                        key={key}
+                                        {...getTokenProps({ token })}
+                                      />
+                                    ))}
+                                  </div>
+                                ))}
+                              </pre>
+                            )}
+                          </Highlight>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className='flex flex-col sm:flex-row gap-4 flex-wrap'>
                       {tools[activeToolIndex].link !== '#' ? (
                         <PrimaryButton
                           href={tools[activeToolIndex].link}
@@ -472,6 +745,17 @@ const HAHToolsTimelineSection: React.FC = () => {
                         >
                           Coming Soon
                         </button>
+                      )}
+                      
+                      {tools[activeToolIndex].docsLink && tools[activeToolIndex].docsLink !== tools[activeToolIndex].link && (
+                        <PrimaryButton
+                          href={tools[activeToolIndex].docsLink}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          icon={<FaBookOpen />}
+                        >
+                          Documentation
+                        </PrimaryButton>
                       )}
                     </div>
                   </motion.div>
