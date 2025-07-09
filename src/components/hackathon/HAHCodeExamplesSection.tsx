@@ -753,13 +753,13 @@ const handleTransactionRequest = async (
               repositories.
             </p>
             <PrimaryButton
-              href='https://github.com/hashgraph-online/standards-sdk/tree/main/demo/hcs-10'
+              href='https://hashgraphonline.com/docs/libraries/standards-sdk/hcs-10/examples'
               target='_blank'
               rel='noopener noreferrer'
               size='sm'
               icon={<FaArrowRight />}
             >
-              View on GitHub
+              View Examples
             </PrimaryButton>
           </TransformCard>
 

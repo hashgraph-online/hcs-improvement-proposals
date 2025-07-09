@@ -153,8 +153,7 @@ const HAHHeroSection: React.FC = () => {
                 target='_blank'
                 rel='noopener noreferrer'
                 size='lg'
-                variant='secondary'
-                className='border-gray-300 dark:border-gray-600'
+                className='bg-gray-600 hover:bg-gray-700 text-white border-0'
                 icon={<FaGlobe />}
               >
                 View Main Event

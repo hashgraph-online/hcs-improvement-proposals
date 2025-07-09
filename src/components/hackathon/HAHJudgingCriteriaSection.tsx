@@ -19,9 +19,14 @@ import {
   FaLightbulb,
   FaCheck,
   FaUsers,
+  FaEnvelope,
 } from 'react-icons/fa';
 import { TransformCard, Typography } from '../ui';
 import PrimaryButton from './PrimaryButton';
+
+type HAHJudgingCriteriaSectionProps = {
+  onNewsletterClick?: () => void;
+};
 
 interface Criterion {
   icon: React.ReactNode;
@@ -32,7 +37,7 @@ interface Criterion {
   details: string[];
 }
 
-const HAHJudgingCriteriaSection: React.FC = () => {
+const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ onNewsletterClick }) => {
   const [activeCriterion, setActiveCriterion] = useState(0);
   const [hoveredSegment, setHoveredSegment] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -150,22 +155,16 @@ const HAHJudgingCriteriaSection: React.FC = () => {
       color: 'purple' as const,
     },
     {
-      icon: <FaVideo />,
-      title: 'Demo Video',
-      description: 'Create a 5-minute video showcasing your AI solution in action',
-      color: 'blue' as const,
-    },
-    {
       icon: <FaFileAlt />,
       title: 'Technical Documentation',
       description: 'Submit detailed architecture and integration documentation',
-      color: 'green' as const,
+      color: 'blue' as const,
     },
     {
       icon: <FaCog />,
       title: 'Live Deployment',
       description: 'Deploy on Hedera testnet/mainnet with verifiable transactions',
-      color: 'purple' as const,
+      color: 'green' as const,
     },
   ];
 
@@ -226,7 +225,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
           </motion.div>
 
           <div className='max-w-5xl mx-auto mb-16'>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {requirements.map((req, index) => (
                 <motion.div
                   key={index}
@@ -275,7 +274,7 @@ const HAHJudgingCriteriaSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className='mt-8'
+              className='mt-8 space-y-6'
             >
               <TransformCard
                 rotation='rotate-[-0.3deg]'
@@ -302,6 +301,33 @@ const HAHJudgingCriteriaSection: React.FC = () => {
                   </PrimaryButton>
                 </div>
               </TransformCard>
+
+              {onNewsletterClick && (
+                <TransformCard
+                  rotation='rotate-[0.3deg]'
+                  background='bg-white dark:bg-gray-800'
+                  border='border border-gray-200 dark:border-gray-700'
+                  className='p-6'
+                >
+                  <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
+                    <div className='text-center sm:text-left'>
+                      <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-1'>
+                        Stay Updated
+                      </h3>
+                      <p className='text-sm text-gray-600 dark:text-white/70'>
+                        Get workshop alerts, deadlines, and exclusive resources
+                      </p>
+                    </div>
+                    <PrimaryButton
+                      onClick={onNewsletterClick}
+                      className='bg-[#5599fe] hover:bg-[#5599fe]/90 text-white border-0'
+                      icon={<FaEnvelope />}
+                    >
+                      Join Email List
+                    </PrimaryButton>
+                  </div>
+                </TransformCard>
+              )}
             </motion.div>
           </div>
         </div>

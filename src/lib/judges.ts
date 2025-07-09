@@ -400,6 +400,24 @@ export const mentors: Judge[] = [
     events: ['africa-hackathon'],
   },
   {
+    name: 'Brandon Davenport',
+    role: 'Dir. Communications, Hgraph',
+    company: 'Hgraph',
+    bio: 'Brandon Davenport is the Director of Communications at Hgraph, a company at the forefront of developing breakthrough data-focused products on Hedera and beyond. A recognized leader in the Hedera community, Brandon plays key roles in ecosystem-wide initiatives and has been instrumental in launching successful projects that drive innovation on the network. Based in Ottawa, Canada, Brandon is also a passionate NFT creator, musician and drummer.',
+    image: '/img/hackathon/bradon-davenport.jpeg',
+    socials: [
+      { type: 'twitter', url: 'https://x.com/itsbrandond' },
+      { type: 'linkedin', url: 'https://linkedin.com/in/brandon-davenport' },
+    ],
+    expertise: [
+      'Data Products',
+      'NFT Creation',
+      'Community Building',
+      'Ecosystem Development',
+    ],
+    events: ['africa-hackathon'],
+  },
+  {
     name: 'Brendan Graetz',
     role: 'DevRel',
     company: 'Hashgraph',

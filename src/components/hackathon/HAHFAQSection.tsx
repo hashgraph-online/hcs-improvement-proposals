@@ -21,9 +21,14 @@ import {
   FaClock,
   FaGlobe,
   FaArrowRight,
+  FaEnvelope,
 } from 'react-icons/fa';
 import HackathonTypography from './HackathonTypography';
 import { TransformCard, Typography } from '../ui';
+
+type HAHFAQSectionProps = {
+  onNewsletterClick?: () => void;
+};
 
 export type FAQItemProps = {
   question: string;
@@ -130,7 +135,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
   );
 };
 
-const HAHFAQSection: React.FC = () => {
+const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
@@ -479,14 +484,6 @@ const HAHFAQSection: React.FC = () => {
             </div>
 
             <div className='flex items-start'>
-              <FaCode className='text-[#48df7b] mt-1 mr-2 flex-shrink-0' />
-              <div>
-                <strong>Demo video</strong> (5 minutes) showing your AI agent in
-                action
-              </div>
-            </div>
-
-            <div className='flex items-start'>
               <FaFileAlt className='text-[#a679f0] mt-1 mr-2 flex-shrink-0' />
               <div>
                 <strong>Presentation deck</strong> outlining your solution and
@@ -716,15 +713,26 @@ const HAHFAQSection: React.FC = () => {
           <Typography variant='body1' color='muted' className='mb-8'>
             Join our community for real-time support and updates
           </Typography>
-          <a
-            href='https://t.me/hashinals'
-            target='_blank'
-            rel='noopener noreferrer'
-            className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105'
-          >
-            Join Telegram Community
-            <FaArrowRight />
-          </a>
+          <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+            <a
+              href='https://t.me/hashinals'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105'
+            >
+              Join Telegram Community
+              <FaArrowRight />
+            </a>
+            {onNewsletterClick && (
+              <button
+                onClick={onNewsletterClick}
+                className='inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 transform hover:scale-105'
+              >
+                <FaEnvelope />
+                Get Email Updates
+              </button>
+            )}
+          </div>
         </motion.div>
       </div>
     </section>
