@@ -26,6 +26,12 @@ const libraryData = [
     description: 'AI agent toolkit for interacting with HCS standards',
     icon: '🤖',
   },
+  {
+    title: 'Standards Agent Plugin',
+    href: '/docs/libraries/standards-agent-plugin',
+    description: 'OpenConvAI plugin for Hedera Agent Kit - enables HCS-10 agent communication',
+    icon: '🔌',
+  },
 ];
 
 export default function LibraryShowcase(): JSX.Element {

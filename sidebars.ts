@@ -226,6 +226,21 @@ const sidebars: SidebarsConfig = {
             'libraries/standards-agent-kit/plugins'
           ],
         },
+        {
+          type: 'category',
+          label: 'Standards Agent Plugin',
+          link: {
+            type: 'doc',
+            id: 'libraries/standards-agent-plugin/index',
+          },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/standards-agent-plugin/getting-started',
+            'libraries/standards-agent-plugin/tools',
+            'libraries/standards-agent-plugin/examples'
+          ],
+        },
       ],
     },
     'tooling',

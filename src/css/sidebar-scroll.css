@@ -1,0 +1,17 @@
+/* Fix Docusaurus sidebar scrolling */
+/* The main sidebar container needs to be scrollable */
+.theme-doc-sidebar-container nav.menu {
+  height: calc(100vh - var(--ifm-navbar-height));
+  overflow-y: auto;
+}
+
+/* Ensure the thin-scrollbar wrapper doesn't break scrolling */
+.theme-doc-sidebar-container .thin-scrollbar {
+  height: 100%;
+  overflow-y: visible; /* Let the parent handle scrolling */
+}
+
+/* Make sure menu lists don't have their own scroll */
+.menu__list {
+  overflow: visible;
+}

@@ -1,0 +1,8 @@
+{
+  "label": "Standards Agent Plugin",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Plugin system for AI agents to interact with HCS standards"
+  }
+}
