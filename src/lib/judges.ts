@@ -134,7 +134,7 @@ export const judges: Judge[] = [
     name: 'Patricia Carapinha',
     role: 'Founder, SentX',
     company: 'SentX',
-    bio: 'Patricia is a Co-Founder, the leading NFT marketplace on Hedera.',
+    bio: 'Patricia is a Co-Founder of SentX, the leading NFT marketplace on Hedera and Vice President of Hashgraph Online.',
     image:
       'https://pbs.twimg.com/profile_images/1757434156475179009/nirrAh1U_400x400.jpg',
     socials: [{ type: 'twitter', url: 'https://x.com/PattyAlexx' }],

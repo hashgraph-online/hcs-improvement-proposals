@@ -11,7 +11,8 @@ import {
   StatusBadge,
   TransformCard,
   Typography,
-  Terminal
+  Terminal,
+  LaptopMockup
 } from './ui';
 import { HashgraphConsensus } from './HashgraphConsensus';
 
@@ -139,48 +140,35 @@ const UseCaseSection: React.FC = () => {
             
             {/* Left Side - Clean Laptop Mockup */}
             <div className='relative lg:col-span-7 transform scale-90 sm:scale-100 lg:scale-110 origin-left ml-2 sm:ml-4'>
-              {/* Laptop Screen */}
-              <div className='relative bg-gray-800 dark:bg-gray-700 rounded-t-2xl p-3 shadow-2xl'>
-                {/* Screen Bezel */}
-                <div className='bg-black rounded-xl p-1 shadow-inner'>
-                  {/* Actual Screen */}
-                  <div className='bg-gray-900 rounded-lg overflow-hidden relative' style={{ aspectRatio: '16/10' }}>
-                    {/* Dynamic Screen Content */}
-                    <AnimatePresence mode='wait'>
-                      <motion.div
-                        key={`laptop-${currentIndex}`}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className='relative w-full h-full'
-                      >
-                        {useCases[currentIndex]?.image ? (
-                          <img
-                            src={useCases[currentIndex].image}
-                            alt={useCases[currentIndex].name}
-                            className='w-full h-full object-cover object-left rounded-lg transform -translate-y-1'
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          <div className='w-full h-full bg-gray-700 flex items-center justify-center rounded-lg'>
-                            <span className='text-white text-sm'>No Image</span>
-                          </div>
-                        )}
-                      </motion.div>
-                    </AnimatePresence>
-                  </div>
-                </div>
-                
-                {/* Camera dot */}
-                <div className='absolute top-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-600 dark:bg-gray-500 rounded-full'></div>
-              </div>
-
-              {/* Laptop Base Edge */}
-              <div className='bg-gray-700 dark:bg-gray-600 h-6 rounded-b-2xl shadow-xl' style={{ width: '105%', marginLeft: '-2.5%' }}></div>
+              <LaptopMockup>
+                {/* Dynamic Screen Content */}
+                <AnimatePresence mode='wait'>
+                  <motion.div
+                    key={`laptop-${currentIndex}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className='relative w-full h-full'
+                  >
+                    {useCases[currentIndex]?.image ? (
+                      <img
+                        src={useCases[currentIndex].image}
+                        alt={useCases[currentIndex].name}
+                        className='w-full h-full object-cover object-left'
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className='w-full h-full bg-gray-700 flex items-center justify-center'>
+                        <span className='text-white text-sm'>No Image</span>
+                      </div>
+                    )}
+                  </motion.div>
+                </AnimatePresence>
+              </LaptopMockup>
             </div>
 
             {/* Right Side - Dynamic Browser Window */}
