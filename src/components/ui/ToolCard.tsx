@@ -32,31 +32,31 @@ const ToolCard: React.FC<ToolCardProps> = ({
 
   const colorMap = {
     purple: {
-      bg: 'bg-gradient-to-br from-[#8259ef]/10 to-[#8259ef]/5',
-      iconBg: 'bg-[#8259ef]/15',
-      borderHover: 'group-hover:border-[#8259ef]',
-      text: 'text-[#8259ef]',
-      glow: 'rgba(130, 89, 239, 0.2)',
-      solid: '#8259ef',
-      buttonClass: 'bg-[#8259ef] hover:bg-[#8259ef]/90',
+      bg: 'bg-gradient-to-br from-[#a679f0]/10 to-[#a679f0]/5',
+      iconBg: 'bg-[#a679f0]/15',
+      borderHover: 'group-hover:border-[#a679f0]',
+      text: 'text-[#a679f0]',
+      glow: 'rgba(166, 121, 240, 0.2)',
+      solid: '#a679f0',
+      buttonClass: 'bg-[#a679f0] hover:bg-[#a679f0]/90',
     },
     blue: {
-      bg: 'bg-gradient-to-br from-[#2d84eb]/10 to-[#2d84eb]/5',
-      iconBg: 'bg-[#2d84eb]/15',
-      borderHover: 'group-hover:border-[#2d84eb]',
-      text: 'text-[#2d84eb]',
-      glow: 'rgba(45, 132, 235, 0.2)',
-      solid: '#2d84eb',
-      buttonClass: 'bg-[#2d84eb] hover:bg-[#2d84eb]/90',
+      bg: 'bg-gradient-to-br from-[#5599fe]/10 to-[#5599fe]/5',
+      iconBg: 'bg-[#5599fe]/15',
+      borderHover: 'group-hover:border-[#5599fe]',
+      text: 'text-[#5599fe]',
+      glow: 'rgba(85, 153, 254, 0.2)',
+      solid: '#5599fe',
+      buttonClass: 'bg-[#5599fe] hover:bg-[#5599fe]/90',
     },
     green: {
-      bg: 'bg-gradient-to-br from-[#3ec878]/10 to-[#3ec878]/5',
-      iconBg: 'bg-[#3ec878]/15',
-      borderHover: 'group-hover:border-[#3ec878]',
-      text: 'text-[#3ec878]',
-      glow: 'rgba(62, 200, 120, 0.2)',
-      solid: '#3ec878',
-      buttonClass: 'bg-[#3ec878] hover:bg-[#3ec878]/90',
+      bg: 'bg-gradient-to-br from-[#48df7b]/10 to-[#48df7b]/5',
+      iconBg: 'bg-[#48df7b]/15',
+      borderHover: 'group-hover:border-[#48df7b]',
+      text: 'text-[#48df7b]',
+      glow: 'rgba(72, 223, 123, 0.2)',
+      solid: '#48df7b',
+      buttonClass: 'bg-[#48df7b] hover:bg-[#48df7b]/90',
     },
   };
 
@@ -108,8 +108,8 @@ const ToolCard: React.FC<ToolCardProps> = ({
               {title}
             </HackathonTypography>
             {isNew && (
-              <div className='ml-3 bg-gradient-to-r from-[#8259ef]/20 to-[#3ec878]/20 rounded-full px-3 py-1'>
-                <span className='text-xs font-semibold text-[#3ec878]'>
+              <div className='ml-3 bg-gradient-to-r from-[#a679f0]/20 to-[#48df7b]/20 rounded-full px-3 py-1'>
+                <span className='text-xs font-semibold text-[#48df7b]'>
                   NEW
                 </span>
               </div>

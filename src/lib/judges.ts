@@ -20,6 +20,7 @@ export interface Judge {
   expertise?: string[];
   isAI?: boolean;
   demoDay?: boolean;
+  events?: string[];
 }
 
 export const judges: Judge[] = [
@@ -50,6 +51,7 @@ export const judges: Judge[] = [
       'Community Building',
       'Ecosystem Development',
     ],
+    events: ['africa-hackathon'],
   },
   {
     name: 'Brady Gentile',
@@ -64,6 +66,18 @@ export const judges: Judge[] = [
       'Product Marketing',
       'Open Source',
     ],
+  },
+  {
+    name: 'Gaurang Torvekar',
+    role: 'Co-Founder',
+    company: 'Bonzo Finance Labs',
+    bio: 'Gaurang is a protocol-level innovator with 8+ years building blockchain products. He is the CTO and co-founder of Bonzo Finance, which has generated over $50M in TVL (Total Value Locked). Gaurang has earned international recognition with 20+ major media features, including Forbes and CoinDesk. Currently pioneering how conversational AI transforms complex crypto operations into intuitive experiences, he brings proven expertise in scaling Web3 infrastructure and deep technical knowledge to evaluate the next generation of AI-native decentralized applications.',
+    image: '/img/hackathon/gaurang.jpg',
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/gaurangtorvekar/' },
+      { type: 'website', url: 'https://bonzo.finance/' },
+    ],
+    events: ['africa-hackathon'],
   },
   {
     name: 'Michael Kantor',
@@ -82,6 +96,7 @@ export const judges: Judge[] = [
       'Developer Tools',
     ],
     demoDay: true,
+    events: ['africa-hackathon'],
   },
   {
     name: 'Ty Smith',
@@ -114,6 +129,17 @@ export const judges: Judge[] = [
     bio: 'Pluto is the CTO of HashPack.',
     image: '/img/hackathon/pluto.png',
     socials: [{ type: 'twitter', url: 'https://x.com/pluto_hashpack' }],
+  },
+  {
+    name: 'Patricia Carapinha',
+    role: 'Founder, SentX',
+    company: 'SentX',
+    bio: 'Patricia is a Co-Founder, the leading NFT marketplace on Hedera.',
+    image:
+      'https://pbs.twimg.com/profile_images/1757434156475179009/nirrAh1U_400x400.jpg',
+    socials: [{ type: 'twitter', url: 'https://x.com/PattyAlexx' }],
+    events: ['africa-hackathon'],
+    demoDay: true,
   },
   {
     name: 'Quincy Jones',
@@ -353,6 +379,43 @@ export const mentors: Judge[] = [
       'UI/UX',
     ],
     isAI: false,
+  },
+  {
+    name: 'Michael Kantor',
+    role: 'President',
+    company: 'Hashgraph Online',
+    bio: 'Michael is the founder of KiloScribe, and President of Hashgraph Online. He has been a pioneer in Software for over a decade. Michael is also the CoCreator of the Hashinals standard for tokenized, on-chain NFTs on Hedera, which has gone on to generate 10m+ transactions for the network and 148,000+ inscribed NFTs using the standard.',
+    image: '/img/hackathon/michael-kantor.webp',
+    socials: [
+      { type: 'twitter', url: 'https://twitter.com/kantorcodes' },
+      { type: 'github', url: 'https://github.com/mkantor' },
+    ],
+    expertise: [
+      'NFTs',
+      'Tokenization',
+      'Hashgraph Standards',
+      'Developer Tools',
+    ],
+    demoDay: true,
+    events: ['africa-hackathon'],
+  },
+  {
+    name: 'Brandon Davenport',
+    role: 'Dir. Communications, Hgraph',
+    company: 'Hgraph',
+    bio: 'Brandon Davenport is the Director of Communications at Hgraph, a company at the forefront of developing breakthrough data-focused products on Hedera and beyond. A recognized leader in the Hedera community, Brandon plays key roles in ecosystem-wide initiatives and has been instrumental in launching successful projects that drive innovation on the network. Based in Ottawa, Canada, Brandon is also a passionate NFT creator, musician and drummer.',
+    image: '/img/hackathon/bradon-davenport.jpeg',
+    socials: [
+      { type: 'twitter', url: 'https://x.com/itsbrandond' },
+      { type: 'linkedin', url: 'https://linkedin.com/in/brandon-davenport' },
+    ],
+    expertise: [
+      'Data Products',
+      'NFT Creation',
+      'Community Building',
+      'Ecosystem Development',
+    ],
+    events: ['africa-hackathon'],
   },
   {
     name: 'Brendan Graetz',

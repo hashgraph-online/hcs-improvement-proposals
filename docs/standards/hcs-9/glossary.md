@@ -9,7 +9,7 @@ sidebar_position: 7
 
 Modules are the modular JSON objects that define the functions and behaviour of the poll. Each module has its own scope - for example, the vote-rules module establishes the rules around voting actions. This standard has defined several standard modules, but the intent is for developers to write their own modules and plug them into the base schema to extend the functionality to suit their specific needs.
 
-More detailed information is in the documentation: [Module Schema](../docs/metadata-schema/module-schema.md)
+More detailed information is in the documentation: [Module Schema](./specification/module-schema.md)
 
 #### vote
 

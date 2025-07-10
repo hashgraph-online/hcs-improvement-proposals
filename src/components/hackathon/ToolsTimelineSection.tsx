@@ -80,7 +80,7 @@ const ToolsTimelineSection: React.FC = () => {
     },
     {
       icon: <FaRobot />,
-      title: 'OpenConvAI AgentKit',
+      title: 'Standards AgentKit',
       description:
         'Next-generation toolkit for building conversational AI agents with integrated Hedera Consensus Service support.',
       link: 'https://hashgraphonline.com/docs/libraries/standards-agent-kit/',

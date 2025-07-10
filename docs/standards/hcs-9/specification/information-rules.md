@@ -6,7 +6,7 @@ sidebar_position: 10
 
 #### [ hcs-9 - Poll Metadata Schema ]
 
-The information-rules module defines the rules around the update action. The [information action](../hcs-8/operations.md) is defined under hcs-8.
+The information-rules module defines the rules around the update action. The [information action](../../hcs-8/operations.md) is defined under hcs-8.
 
 ```
 {
