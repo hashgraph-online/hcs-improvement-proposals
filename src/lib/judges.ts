@@ -452,7 +452,7 @@ export const mentors: Judge[] = [
   },
   {
     name: 'Patricia Carapinha',
-    role: 'Founder, SentX',
+    role: 'Co-Founder, SentX',
     company: 'SentX',
     bio: 'Patrícia Carapinha has been active in the crypto space since early 2019, bringing years of experience in Web3 strategy, ecosystem growth, and community engagement. She is the co-founder of SentX, an NFT marketplace and launchpad platform built on Hedera, where she works alongside a dedicated team to empower creators and streamline project launches through accessible, community-driven tools. As Vice President at Hashgraph Online, she helps define standards and open-source infrastructure for on‑chain applications using the Hedera Consensus Service—supporting the ecosystem’s developer tools, protocols, and hackathons. In addition, she is the Chief Financial Officer at The Mouth, a Web3-born marketing agency bridging the gap between Web3 innovation and Web2 audiences—helping projects communicate, grow, and position themselves effectively across both spaces. Since 2014, Patrícia has successfully run her own business, an experience that honed her skills in leadership, financial management, and strategic decision-making. This entrepreneurial background strengthens her ability to navigate complex projects, manage teams, and bring long-term vision to the fast-paced world of Web3. She holds a degree in International Relations and a Master’s in Criminal Psychology and Forensic Science, giving her a unique interdisciplinary lens and an analytical approach to problem-solving, communication, and organizational dynamics.',
     image:
