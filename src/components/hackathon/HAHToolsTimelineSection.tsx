@@ -493,7 +493,7 @@ const result = await tools.registerAgentTool.invoke({
                 <div className='w-full lg:w-80 lg:min-w-[20rem] lg:max-w-[20rem] lg:flex-shrink-0 bg-white dark:bg-gray-900 border-b lg:border-b-0 lg:border-r border-gray-200/30 dark:border-gray-700'>
                   <div className='px-4 py-3 border-b border-gray-200/30 dark:border-gray-700'>
                     <div className='flex items-center gap-2 text-sm font-mono text-gray-600 dark:text-white/60'>
-                      <FiGitBranch className='w-4 h-4 flex-shrink-0' />
+                      <FiGitBranch className='w-4 h-4 flex-shrink-0 text-white/60' />
                       <span className='truncate'>tool directory</span>
                       <div className='w-2 h-2 rounded-full animate-pulse bg-[#48df7b] flex-shrink-0'></div>
                     </div>
@@ -507,9 +507,9 @@ const result = await tools.registerAgentTool.invoke({
                         onClick={() => setActiveToolIndex(index)}
                         className='p-3'
                       >
-                        <div className='flex items-center gap-3 min-w-0'>
+                        <div className='flex items-start gap-3 min-w-0'>
                           <div
-                            className='w-8 h-8 rounded-lg flex items-center justify-center text-sm flex-shrink-0'
+                            className='w-8 h-8 rounded-lg flex items-center justify-center text-sm text-white flex-shrink-0'
                             style={{
                               background:
                                 tool.color === 'purple'
@@ -522,7 +522,7 @@ const result = await tools.registerAgentTool.invoke({
                             {tool.icon}
                           </div>
                           <div className='flex-1 min-w-0'>
-                            <div className='flex items-center gap-2 mb-1'>
+                            <div className='flex items-start gap-2'>
                               <h3
                                 className={`text-sm font-semibold transition-colors truncate ${
                                   activeToolIndex === index
@@ -533,13 +533,13 @@ const result = await tools.registerAgentTool.invoke({
                                 {tool.title}
                               </h3>
                               {tool.isNew && (
-                                <span className='text-xs px-1.5 py-0.5 rounded-full bg-[#48df7b]/20 text-[#48df7b] font-bold flex-shrink-0'>
+                                <span className='text-xs px-1.5 rounded-full bg-[#48df7b]/20 text-[#48df7b] font-bold flex-shrink-0'>
                                   NEW
                                 </span>
                               )}
                             </div>
                             <p
-                              className={`text-xs line-clamp-2 transition-colors ${
+                              className={`text-xs line-clamp-2 transition-colors -mt-1 ${
                                 activeToolIndex === index
                                   ? 'text-gray-600 dark:text-white/90'
                                   : 'text-gray-500 dark:text-white/60'
@@ -603,15 +603,15 @@ const result = await tools.registerAgentTool.invoke({
                             className='relative overflow-hidden bg-gray-100 dark:bg-black rounded-xl border border-gray-200/50 dark:border-white/20 hover:border-gray-300/50 dark:hover:border-white/30 transition-all cursor-pointer backdrop-blur-sm'
                           >
                             <div className='flex items-center justify-between px-4 py-2 bg-gray-200 dark:bg-black border-b border-gray-200/50 dark:border-white/20'>
-                              <div className='flex items-center gap-2'>
+                              <div className='flex items-start gap-2'>
                                 <div className='flex gap-1.5'>
                                   <div className='w-3 h-3 rounded-full bg-red-400' />
                                   <div className='w-3 h-3 rounded-full bg-yellow-400' />
                                   <div className='w-3 h-3 rounded-full bg-green-400' />
                                 </div>
-                                <FiTerminal className='w-3 h-3 text-gray-600 dark:text-white/50' />
+                                <FiTerminal className='w-3 h-3 text-white/60' />
                               </div>
-                              <div className='flex items-center gap-2'>
+                              <div className='flex items-start gap-2'>
                                 {copied ? (
                                   <motion.div
                                     initial={{ scale: 0 }}
@@ -875,41 +875,41 @@ const result = await tools.registerAgentTool.invoke({
                     viewport={{ once: true }}
                     transition={{ duration: 0.8, delay: 0.2 }}
                   >
-                    <h3 className='text-2xl lg:text-3xl font-bold mb-4 text-gray-900 dark:text-white'>
+                    <h3 className='text-2xl lg:text-3xl font-bold mb-2 text-gray-700 dark:text-white'>
                       For AI Agent Projects: Moonscape Portal
                     </h3>
-                    <p className='text-base text-gray-600 dark:text-white/70 mb-6'>
+                    <p className='text-base text-gray-600 dark:text-white/70 mb-3'>
                       If you're building an AI agent, Moonscape provides a live testing environment where judges and participants can interact with your creation.
                     </p>
 
-                    <div className='space-y-3 mb-6'>
-                      <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 rounded-xl bg-gradient-to-r from-[#48df7b] to-[#5599fe] flex items-center justify-center flex-shrink-0'>
-                          <FaComments className='w-5 h-5 text-white' />
+                    <div className='space-y-1 mb-3'>
+                      <div className='flex items-start gap-2'>
+                        <div className='w-9 h-9 rounded-lg bg-gradient-to-r from-[#48df7b] to-[#5599fe] flex items-center justify-center flex-shrink-0'>
+                          <FaComments className='w-4 h-4 text-white' />
                         </div>
                         <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-900 dark:text-white text-sm'>Chat Interface</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70'>Test through natural conversations</p>
+                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Chat Interface</h4>
+                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Test through natural conversations</p>
                         </div>
                       </div>
 
-                      <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 rounded-xl bg-gradient-to-r from-[#5599fe] to-[#a679f0] flex items-center justify-center flex-shrink-0'>
-                          <FaUserFriends className='w-5 h-5 text-white' />
+                      <div className='flex items-start gap-2'>
+                        <div className='w-9 h-9 rounded-lg bg-gradient-to-r from-[#5599fe] to-[#a679f0] flex items-center justify-center flex-shrink-0'>
+                          <FaUserFriends className='w-4 h-4 text-white' />
                         </div>
                         <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-900 dark:text-white text-sm'>Agent Discovery</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70'>Browse and connect with other agents</p>
+                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Agent Discovery</h4>
+                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Browse and connect with other agents</p>
                         </div>
                       </div>
 
-                      <div className='flex items-center gap-3'>
-                        <div className='w-10 h-10 rounded-xl bg-gradient-to-r from-[#a679f0] to-[#48df7b] flex items-center justify-center flex-shrink-0'>
-                          <FaGlobe className='w-5 h-5 text-white' />
+                      <div className='flex items-start gap-2'>
+                        <div className='w-9 h-9 rounded-lg bg-gradient-to-r from-[#a679f0] to-[#48df7b] flex items-center justify-center flex-shrink-0'>
+                          <FaGlobe className='w-4 h-4 text-white' />
                         </div>
                         <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-900 dark:text-white text-sm'>Live Demonstration</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70'>Showcase your agent in real-time</p>
+                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Live Demonstration</h4>
+                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Showcase your agent in real-time</p>
                         </div>
                       </div>
                     </div>
@@ -980,11 +980,70 @@ const result = await tools.registerAgentTool.invoke({
               initial={{ scaleY: 0 }}
               whileInView={{ scaleY: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 1.5, ease: 'easeOut' }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
               style={{
                 background:
                   'linear-gradient(180deg, #a679f0 0%, #5599fe 50%, #48df7b 100%)',
                 transformOrigin: 'top',
+              }}
+            />
+            
+            {/* Start dot */}
+            <motion.div
+              className='absolute w-2 h-2 rounded-full'
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              style={{
+                backgroundColor: '#a679f0',
+                top: '-4px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+            />
+            
+            {/* End dot */}
+            <motion.div
+              className='absolute w-2 h-2 rounded-full'
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.8 }}
+              style={{
+                backgroundColor: '#48df7b',
+                bottom: '-4px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+            />
+            
+            {/* Responsive dots for desktop */}
+            <motion.div
+              className='hidden md:block absolute w-2 h-2 rounded-full'
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              style={{
+                backgroundColor: '#a679f0',
+                top: '-4px',
+                left: '50%',
+                transform: 'translateX(-50%)',
+              }}
+            />
+            
+            <motion.div
+              className='hidden md:block absolute w-2 h-2 rounded-full'
+              initial={{ scale: 0 }}
+              whileInView={{ scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: 0.8 }}
+              style={{
+                backgroundColor: '#48df7b',
+                bottom: '-4px',
+                left: '50%',
+                transform: 'translateX(-50%)',
               }}
             />
 

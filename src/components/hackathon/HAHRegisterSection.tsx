@@ -36,8 +36,16 @@ const HAHRegisterSection: React.FC = () => {
   return (
     <section className='pt-24 sm:pt-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
       <div className='absolute inset-0'>
-        <div
+        <motion.div
           className='absolute inset-0'
+          animate={{
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
           style={{
             backgroundImage: `radial-gradient(circle at 20% 50%, rgba(166, 121, 240, 0.15) 0%, transparent 50%),
                            radial-gradient(circle at 80% 50%, rgba(72, 223, 123, 0.15) 0%, transparent 50%),
@@ -171,7 +179,7 @@ const HAHRegisterSection: React.FC = () => {
                     <FaCalendarAlt className='text-2xl text-[#a679f0]' />
                   </div>
                   <div>
-                    <Typography variant='h3' className='mb-1'>
+                    <Typography variant='h5' className='mb-1 text-gray-700 dark:text-white'>
                       2 Months to Build
                     </Typography>
                     <Typography variant='body2' color='muted'>
@@ -192,7 +200,7 @@ const HAHRegisterSection: React.FC = () => {
                     <FaGlobe className='text-2xl text-[#5599fe]' />
                   </div>
                   <div>
-                    <Typography variant='h3' className='mb-1'>
+                    <Typography variant='h5' className='mb-1'>
                       Global Virtual Event
                     </Typography>
                     <Typography variant='body2' color='muted'>
@@ -213,7 +221,7 @@ const HAHRegisterSection: React.FC = () => {
                     <FaTrophy className='text-2xl text-[#48df7b]' />
                   </div>
                   <div>
-                    <Typography variant='h3' className='mb-1'>
+                    <Typography variant='h5' className='mb-1'>
                       $1M Prize Pool
                     </Typography>
                     <Typography variant='body2' color='muted'>
@@ -268,7 +276,7 @@ const HAHRegisterSection: React.FC = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
       >
         <div className='py-12'>
-          <p className='text-sm text-gray-400 text-center mb-8'>
+          <p className='text-sm text-gray-300 text-center mb-8'>
             In collaboration with
           </p>
           <div className='flex flex-wrap items-center justify-center gap-8 sm:gap-16 md:gap-24'>

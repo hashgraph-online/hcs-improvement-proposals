@@ -170,7 +170,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
 
   return (
     <>
-      <section className='pb-24 sm:pb-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
+      <section className='pb-12 sm:pb-16 relative bg-white dark:bg-gray-900 overflow-hidden'>
         <div className='absolute inset-0'>
           <motion.div
             animate={{
@@ -193,7 +193,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
 
         <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
           <motion.div
-            className='text-center mb-16'
+            className='text-center mb-16 pt-8'
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -284,7 +284,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
               >
                 <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
                   <div className='text-center sm:text-left'>
-                    <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-1'>
+                    <h3 className='text-lg font-semibold text-gray-700 dark:text-white mb-1'>
                       Ready to Submit?
                     </h3>
                     <p className='text-sm text-gray-600 dark:text-white/70'>
@@ -301,39 +301,12 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                   </PrimaryButton>
                 </div>
               </TransformCard>
-
-              {onNewsletterClick && (
-                <TransformCard
-                  rotation='rotate-[0.3deg]'
-                  background='bg-white dark:bg-gray-800'
-                  border='border border-gray-200 dark:border-gray-700'
-                  className='p-6'
-                >
-                  <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
-                    <div className='text-center sm:text-left'>
-                      <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-1'>
-                        Stay Updated
-                      </h3>
-                      <p className='text-sm text-gray-600 dark:text-white/70'>
-                        Get workshop alerts, deadlines, and exclusive resources
-                      </p>
-                    </div>
-                    <PrimaryButton
-                      onClick={onNewsletterClick}
-                      className='bg-[#5599fe] hover:bg-[#5599fe]/90 text-white border-0'
-                      icon={<FaEnvelope />}
-                    >
-                      Join Email List
-                    </PrimaryButton>
-                  </div>
-                </TransformCard>
-              )}
             </motion.div>
           </div>
         </div>
       </section>
 
-      <section className='pt-24 sm:pt-32 pb-24 sm:pb-32 relative bg-gray-50 dark:bg-black overflow-hidden'>
+      <section className='pt-8 sm:pt-12 pb-24 sm:pb-32 relative bg-gray-50 dark:bg-black overflow-hidden'>
       <div className='absolute inset-0'>
         <motion.div
           animate={{
@@ -416,7 +389,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
 
             <div className='max-w-5xl mx-auto px-4 md:px-6'>
               <div className='mb-12'>
-                <h3 className='text-center text-xs md:text-sm font-medium text-gray-500 dark:text-white/60 uppercase tracking-wide mb-6 md:mb-8'>
+                <h3 className='text-center text-xs md:text-sm font-medium text-gray-500 dark:text-white/60 uppercase tracking-wide mb-6 md:mb-8 mt-8'>
                   {isMobile ? 'Tap any criteria to explore details' : 'Click on any segment to explore criteria details'}
                 </h3>
                 
@@ -434,7 +407,11 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                       return (
                         <motion.button
                           key={index}
-                          className='absolute top-0 bottom-0 cursor-pointer focus:outline-none border-0 p-0 m-0'
+                          className={`absolute top-0 bottom-0 cursor-pointer focus:outline-none border-0 p-0 m-0 ${
+                            index === 0 ? 'rounded-l-xl' : ''
+                          } ${
+                            index === criteria.length - 1 ? 'rounded-r-xl' : ''
+                          }`}
                           style={{
                             left: `${startPercentage}%`,
                             width: `${criterion.percentage}%`,
@@ -450,9 +427,9 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                           onMouseLeave={() => setHoveredSegment(null)}
                           animate={{ 
                             scaleY: 1,
-                            y: isActive ? '-5px' : isHovered ? '-2px' : '0px',
+                            y: '0px',
                             zIndex: isActive ? 20 : isHovered ? 10 : 1,
-                            boxShadow: isActive ? '0 -10px 30px rgba(0,0,0,0.3)' : '0 0 0 rgba(0,0,0,0)',
+                            boxShadow: isActive ? '0 0 20px rgba(0,0,0,0.2)' : '0 0 0 rgba(0,0,0,0)',
                           }}
                           transition={{ 
                             type: 'spring',
@@ -507,7 +484,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                             <motion.div
                               initial={{ scaleX: 0 }}
                               animate={{ scaleX: 1 }}
-                              className='absolute bottom-0 left-0 right-0 h-1 bg-white/50 pointer-events-none'
+                              className='absolute bottom-0 left-0 right-0 h-2 bg-white/60 pointer-events-none'
                             />
                           )}
                         </motion.button>

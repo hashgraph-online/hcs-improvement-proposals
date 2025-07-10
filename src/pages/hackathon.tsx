@@ -9,6 +9,7 @@ import HAHFAQSection from '../components/hackathon/HAHFAQSection';
 import HAHJudgingCriteriaSection from '../components/hackathon/HAHJudgingCriteriaSection';
 import HAHCodeExamplesSection from '../components/hackathon/HAHCodeExamplesSection';
 import HAHNewsletterModal from '../components/hackathon/HAHNewsletterModal';
+import HAHNewsletterSection from '../components/hackathon/HAHNewsletterSection';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
 
@@ -27,6 +28,9 @@ const HAHPage: React.FC = () => {
       <div className='min-h-screen bg-white dark:bg-gray-900 hackathon-container'>
         <div id='hero'>
           <HAHHeroSection />
+        </div>
+        <div id='newsletter'>
+          <HAHNewsletterSection onNewsletterClick={() => setShowNewsletterModal(true)} />
         </div>
         <div id='requirements'>
           <HAHJudgingCriteriaSection onNewsletterClick={() => setShowNewsletterModal(true)} />
