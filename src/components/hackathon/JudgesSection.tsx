@@ -583,6 +583,29 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
           )}
         </AnimatePresence>
 
+        {/* More Coming Soon Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className='mt-16 text-center'
+        >
+          <div className='inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
+            <div className='flex items-center gap-2'>
+              <div className='w-2 h-2 bg-hedera-green rounded-full animate-pulse' />
+              <div className='w-2 h-2 bg-hedera-green rounded-full animate-pulse animation-delay-200' />
+              <div className='w-2 h-2 bg-hedera-green rounded-full animate-pulse animation-delay-400' />
+            </div>
+            <HackathonTypography
+              variant='body1'
+              className='font-medium text-hedera-charcoal dark:text-white'
+            >
+              More Experts Coming Soon
+            </HackathonTypography>
+          </div>
+        </motion.div>
+
         {selectedPerson && (
           <SelectedPerson
             person={selectedPerson}

@@ -27,3 +27,4 @@ export {
   Variable,
   CodeHeading,
 } from './Typography';
+export { LaptopMockup } from './LaptopMockup';
