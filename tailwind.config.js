@@ -56,6 +56,7 @@ module.exports = {
         'data-flow': 'dataFlow 15s linear infinite',
         blob: 'blob 7s infinite',
         shine: 'shine 3s linear infinite',
+        shimmer: 'shimmer 2s linear infinite',
       },
       keyframes: {
         float: {
@@ -95,6 +96,10 @@ module.exports = {
         shine: {
           '0%': { backgroundPosition: '200% 0' },
           '100%': { backgroundPosition: '-200% 0' },
+        },
+        shimmer: {
+          '0%': { backgroundPosition: '-100% 0' },
+          '100%': { backgroundPosition: '100% 0' },
         },
       },
       backgroundImage: {

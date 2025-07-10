@@ -68,24 +68,19 @@ export const FAQItem: React.FC<FAQItemProps> = ({
         ease: 'easeOut',
       }}
     >
-      <TransformCard
-        rotation={`rotate-[${index % 2 === 0 ? '0.5' : '-0.5'}deg]`}
-        background={
+      <div
+        className={`relative overflow-hidden transition-all duration-300 hover:scale-[1.02] rounded-2xl ${
           isOpen
-            ? `bg-gradient-to-br from-[${colorSet.primary}]/10 to-[${colorSet.secondary}]/10 dark:from-[${colorSet.primary}]/20 dark:to-[${colorSet.secondary}]/20`
-            : 'bg-white dark:bg-gray-800'
-        }
-        border={`border ${
-          isOpen
-            ? `border-[${colorSet.primary}]/20`
-            : 'border-gray-200 dark:border-gray-700'
-        }`}
-        shadow='lg'
-        className='overflow-hidden transition-all duration-300 hover:scale-[1.02]'
+            ? 'bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-700 dark:to-gray-700/50'
+            : 'bg-white dark:bg-gray-700'
+        } shadow-lg border border-gray-200/50 dark:border-gray-600/50`}
+        style={{
+          transform: `rotate(${index % 2 === 0 ? '0.5' : '-0.5'}deg)`,
+        }}
       >
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className='flex justify-between items-center w-full p-6 text-left group'
+          className='flex justify-between items-center w-full p-6 text-left group border-0 outline-none focus:outline-none bg-white dark:bg-gray-700'
         >
           <div className='flex items-center gap-4'>
             {icon && (
@@ -103,7 +98,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
                 {icon}
               </motion.div>
             )}
-            <span className='text-base sm:text-lg font-semibold text-gray-900 dark:text-white'>
+            <span className='text-base sm:text-lg font-semibold text-gray-700 dark:text-white'>
               {question}
             </span>
           </div>
@@ -130,7 +125,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
             </motion.div>
           )}
         </AnimatePresence>
-      </TransformCard>
+      </div>
     </motion.div>
   );
 };
@@ -707,7 +702,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
           transition={{ duration: 0.8, delay: 0.3 }}
           className='text-center mt-16'
         >
-          <Typography variant='h3' className='mb-4'>
+          <Typography variant='h3' className='mb-4 text-gray-700 dark:text-white'>
             Still have questions?
           </Typography>
           <Typography variant='body1' color='muted' className='mb-8'>
@@ -718,7 +713,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
               href='https://t.me/hashinals'
               target='_blank'
               rel='noopener noreferrer'
-              className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105'
+              className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 no-underline hover:no-underline hover:text-white font-sans'
             >
               Join Telegram Community
               <FaArrowRight />
@@ -726,10 +721,10 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
             {onNewsletterClick && (
               <button
                 onClick={onNewsletterClick}
-                className='inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-900 dark:text-white font-medium rounded-xl border border-gray-200 dark:border-gray-700 transition-all duration-300 transform hover:scale-105'
+                className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#48df7b] to-[#5599fe] hover:from-[#48df7b]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 border-0 outline-none focus:outline-none font-sans'
               >
                 <FaEnvelope />
-                Get Email Updates
+                <span className="text-base">Get Email Updates</span>
               </button>
             )}
           </div>

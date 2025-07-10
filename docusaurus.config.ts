@@ -150,6 +150,10 @@ const config: Config = {
           title: 'Community',
           items: [
             {
+              label: 'Newsletter',
+              to: '/newsletter',
+            },
+            {
               label: 'Telegram',
               href: 'https://t.me/hashinals',
             },

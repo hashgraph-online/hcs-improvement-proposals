@@ -55,13 +55,46 @@ const HAHHeroSection: React.FC = () => {
 
   return (
     <section className='relative overflow-hidden bg-white dark:bg-gray-900'>
+      {/* Animated background */}
       <div className='absolute inset-0 opacity-[0.02] dark:opacity-[0.05] pointer-events-none'>
-        <div
+        <motion.div
           className='absolute inset-0'
+          animate={{
+            backgroundPosition: ['0% 0%', '100% 100%'],
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            repeatType: 'reverse',
+          }}
           style={{
             backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(166, 121, 240, 0.1) 35px, rgba(166, 121, 240, 0.1) 70px)`,
+            backgroundSize: '200% 200%',
           }}
         />
+      </div>
+      
+      {/* Floating particles */}
+      <div className='absolute inset-0 pointer-events-none'>
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className='absolute w-2 h-2 bg-gradient-to-r from-[#a679f0] to-[#5599fe] rounded-full opacity-40'
+            animate={{
+              x: [0, 100, -50, 0],
+              y: [0, -100, 50, 0],
+            }}
+            transition={{
+              duration: 10 + i * 2,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${10 + i * 20}%`,
+            }}
+          />
+        ))}
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32'>
@@ -74,13 +107,36 @@ const HAHHeroSection: React.FC = () => {
               className='space-y-4'
             >
               <div className='space-y-2'>
-                <div className='text-sm font-medium text-[#a679f0] dark:text-[#48df7b] uppercase tracking-wide'>
+                <motion.div 
+                  className='text-sm font-medium text-[#a679f0] dark:text-[#48df7b] uppercase tracking-wide'
+                  animate={{
+                    opacity: [0.6, 1, 0.6],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut',
+                  }}
+                >
                   Hedera Africa Hackathon
-                </div>
+                </motion.div>
                 <h1 className='text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight'>
-                  <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
+                  <motion.span 
+                    className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent inline-block'
+                    animate={{
+                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: 'linear',
+                    }}
+                    style={{
+                      backgroundSize: '200% 200%',
+                    }}
+                  >
                     AI Track
-                  </span>
+                  </motion.span>
                 </h1>
               </div>
 
@@ -166,68 +222,78 @@ const HAHHeroSection: React.FC = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className='relative z-10'
+            whileHover={{ scale: 1.02 }}
           >
-            <div className='bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 lg:p-12 border border-gray-200 dark:border-gray-700'>
-              <div className='text-center mb-8'>
-                <motion.div
-                  key={activeFeature}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3 }}
-                  className='inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#a679f0] to-[#5599fe] text-white text-3xl mb-4'
-                >
-                  {features[activeFeature].icon}
-                </motion.div>
-
-                <motion.h3
-                  key={`title-${activeFeature}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className='text-2xl font-bold text-gray-900 dark:text-white mb-2'
-                >
-                  {features[activeFeature].title}
-                </motion.h3>
-
-                <motion.p
-                  key={`desc-${activeFeature}`}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3, delay: 0.1 }}
-                  className='text-gray-600 dark:text-gray-400 mb-4'
-                >
-                  {features[activeFeature].description}
-                </motion.p>
-
-                {features[activeFeature].link && (
-                  <motion.a
-                    href={features[activeFeature].link}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.3, delay: 0.2 }}
-                    className='inline-flex items-center gap-2 text-sm text-[#5599fe] hover:text-[#5599fe]/80 transition-colors'
+            <div className='bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 lg:p-12 border border-gray-200 dark:border-gray-700 min-h-[520px] flex flex-col'>
+              <div className='text-center flex-1 flex flex-col justify-center'>
+                <div>
+                  <motion.div
+                    key={activeFeature}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className='inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#a679f0] to-[#5599fe] text-white text-3xl mb-4 mx-auto'
                   >
-                    Learn more
-                    <FaArrowRight className='w-3 h-3' />
-                  </motion.a>
-                )}
-              </div>
+                    {features[activeFeature].icon}
+                  </motion.div>
 
-              <div className='flex justify-center gap-2'>
-                {features.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveFeature(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === activeFeature
-                        ? 'w-8 bg-[#a679f0]'
-                        : 'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500'
-                    }`}
-                    aria-label={`View feature ${index + 1}`}
-                  />
-                ))}
+                  <motion.h3
+                    key={`title-${activeFeature}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className='text-2xl font-bold text-gray-900 dark:text-white mb-2'
+                  >
+                    {features[activeFeature].title}
+                  </motion.h3>
+
+                  <motion.p
+                    key={`desc-${activeFeature}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: 0.1 }}
+                    className='text-gray-600 dark:text-gray-400 mb-4'
+                  >
+                    {features[activeFeature].description}
+                  </motion.p>
+
+                  <div className='h-6 mt-2'>
+                    {features[activeFeature].link && (
+                      <motion.a
+                        href={features[activeFeature].link}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3, delay: 0.2 }}
+                        className='inline-flex items-center gap-2 text-sm text-[#5599fe] hover:text-[#5599fe]/80 transition-colors mx-auto'
+                      >
+                        Learn more
+                        <FaArrowRight className='w-3 h-3' />
+                      </motion.a>
+                    )}
+                  </div>
+
+                  <div className='flex justify-center gap-2 mt-6'>
+                    {features.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setActiveFeature(index)}
+                        className={`w-2.5 h-2.5 rounded-full transition-colors duration-300 border-0 outline-none ring-0 ${
+                          index === activeFeature
+                            ? 'bg-[#a679f0]'
+                            : 'bg-gray-300 dark:bg-gray-600'
+                        }`}
+                        style={{ 
+                          border: 'none',
+                          outline: 'none',
+                          boxShadow: 'none'
+                        }}
+                        aria-label={`View feature ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
 
               <motion.div
@@ -239,29 +305,27 @@ const HAHHeroSection: React.FC = () => {
                 <p className='text-xs text-gray-500 dark:text-gray-400 mb-4 text-center'>
                   In collaboration with
                 </p>
-                <div className='bg-gray-900 rounded-xl p-4'>
-                  <div className='flex flex-wrap items-center justify-center gap-4'>
-                    <div className='flex items-center gap-2'>
+                <div className='flex flex-wrap items-center justify-center gap-4'>
+                    <div className='flex items-center gap-0.5'>
                       <img
                         src='/img/logo.png'
                         alt='Hashgraph Online'
-                        className='h-6'
+                        className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
                       />
-                      <div className='text-xs font-semibold text-white'>
+                      <div className='text-xs font-semibold text-gray-700 dark:text-white'>
                         Hashgraph Online
                       </div>
                     </div>
                     <img
                       src='/img/logos/THA.svg'
                       alt='The Hashgraph Association'
-                      className='h-6'
+                      className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
                     />
                     <img
                       src='/img/logos/exponential-science.png'
                       alt='Exponential Science'
-                      className='h-6'
+                      className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
                     />
-                  </div>
                 </div>
               </motion.div>
 
@@ -288,8 +352,31 @@ const HAHHeroSection: React.FC = () => {
               </div>
             </div>
 
-            <div className='absolute -top-4 -right-4 w-32 h-32 bg-[#a679f0]/10 rounded-full blur-3xl' />
-            <div className='absolute -bottom-4 -left-4 w-32 h-32 bg-[#48df7b]/10 rounded-full blur-3xl' />
+            <motion.div 
+              className='absolute -top-4 -right-4 w-32 h-32 bg-[#a679f0]/10 rounded-full blur-3xl'
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.1, 0.2, 0.1],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+            <motion.div 
+              className='absolute -bottom-4 -left-4 w-32 h-32 bg-[#48df7b]/10 rounded-full blur-3xl'
+              animate={{
+                scale: [1.2, 1, 1.2],
+                opacity: [0.1, 0.2, 0.1],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: 'easeInOut',
+                delay: 2,
+              }}
+            />
           </motion.div>
         </div>
       </div>

@@ -390,12 +390,12 @@ const GlowingButton: React.FC<{
   return (
     <button
       onClick={onClick}
-      className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+      className={`relative px-6 py-2 rounded-full text-sm font-medium transition-all duration-300 border-0 outline-none focus:outline-none ${
         active
           ? `text-white ${
               color === 'purple' ? 'bg-hedera-purple' : 'bg-hedera-green'
             }`
-          : 'bg-white/5 backdrop-blur-sm text-gray-600 dark:text-gray-300 hover:bg-white/10'
+          : 'bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
       }`}
     >
       {active && (
@@ -498,7 +498,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
 
             <HackathonTypography
               variant='h1'
-              className='text-center bg-gradient-to-r from-[#000000] to-hedera-charcoal dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4'
+              className='text-center bg-gradient-to-r from-gray-700 to-gray-800 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4'
             >
               Meet Our <span className='text-hedera-green'>Experts</span>
             </HackathonTypography>
@@ -591,18 +591,12 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
           transition={{ duration: 0.6, delay: 0.3 }}
           className='mt-16 text-center'
         >
-          <div className='inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
-            <div className='flex items-center gap-2'>
-              <div className='w-2 h-2 bg-hedera-green rounded-full animate-pulse' />
-              <div className='w-2 h-2 bg-hedera-green rounded-full animate-pulse animation-delay-200' />
-              <div className='w-2 h-2 bg-hedera-green rounded-full animate-pulse animation-delay-400' />
-            </div>
-            <HackathonTypography
-              variant='body1'
-              className='font-medium text-hedera-charcoal dark:text-white'
-            >
-              More Experts Coming Soon
-            </HackathonTypography>
+          <div className='inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
+            <span className='font-medium relative overflow-hidden'>
+              <span className='relative z-10 bg-gradient-to-r from-hedera-charcoal via-hedera-charcoal/60 to-hedera-charcoal dark:from-white dark:via-white/60 dark:to-white bg-clip-text text-transparent bg-[length:200%_100%] animate-shimmer'>
+                More Experts Coming Soon
+              </span>
+            </span>
           </div>
         </motion.div>
 

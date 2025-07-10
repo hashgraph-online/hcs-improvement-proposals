@@ -492,7 +492,7 @@ const handleTransactionRequest = async (
   };
 
   return (
-    <section className='py-24 sm:py-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
+    <section className='pt-8 pb-24 sm:pt-12 sm:pb-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
       <div className='absolute inset-0'>
         <motion.div
           animate={{
@@ -588,7 +588,7 @@ const handleTransactionRequest = async (
                           {example.icon}
                         </div>
                         <div className='flex-1'>
-                          <div className='flex items-center gap-2 mb-1'>
+                          <div className='flex items-start gap-2'>
                             <h3
                               className={`text-sm font-semibold transition-colors ${
                                 activeExample === index
@@ -599,7 +599,7 @@ const handleTransactionRequest = async (
                               {example.title}
                             </h3>
                             <span
-                              className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                              className={`text-xs px-2 rounded-full font-medium ${
                                 example.difficulty === 'Beginner'
                                   ? 'bg-green-100 text-green-700 dark:bg-green-400/20 dark:text-green-400'
                                   : example.difficulty === 'Intermediate'
@@ -611,7 +611,7 @@ const handleTransactionRequest = async (
                             </span>
                           </div>
                           <p
-                            className={`text-xs line-clamp-2 transition-colors ${
+                            className={`text-xs line-clamp-2 transition-colors -mt-1 ${
                               activeExample === index
                                 ? 'text-gray-600 dark:text-white/90'
                                 : 'text-gray-500 dark:text-white/60'
@@ -626,7 +626,7 @@ const handleTransactionRequest = async (
                 </div>
               </div>
 
-              <div className='flex-1 lg:min-w-0'>
+              <div className='flex-1 lg:min-w-0 lg:max-h-[calc(100vh-200px)]'>
                 <motion.div
                   key={activeExample}
                   initial={{ opacity: 0, x: 20 }}
@@ -681,8 +681,8 @@ const handleTransactionRequest = async (
                     </p>
                   </div>
 
-                  <div className='flex-1 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-black overflow-hidden'>
-                    <div className='h-full overflow-auto'>
+                  <div className='flex-1 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-950 dark:to-black overflow-hidden min-h-0'>
+                    <div className='h-full overflow-y-auto'>
                       <Highlight
                         theme={isDarkMode ? customDarkTheme : customLightTheme}
                         code={examples[activeExample].code}
