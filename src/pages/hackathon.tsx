@@ -10,6 +10,7 @@ import HAHJudgingCriteriaSection from '../components/hackathon/HAHJudgingCriteri
 import HAHCodeExamplesSection from '../components/hackathon/HAHCodeExamplesSection';
 import HAHNewsletterModal from '../components/hackathon/HAHNewsletterModal';
 import HAHNewsletterSection from '../components/hackathon/HAHNewsletterSection';
+import HAHSponsorsSection from '../components/hackathon/HAHSponsorsSection';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
 
@@ -43,6 +44,9 @@ const HAHPage: React.FC = () => {
         </div>
         <div id='judges'>
           <JudgesSection event='africa-hackathon' showTBA={true} />
+        </div>
+        <div id='sponsors'>
+          <HAHSponsorsSection />
         </div>
         <div id='faq'>
           <HAHFAQSection onNewsletterClick={() => setShowNewsletterModal(true)} />

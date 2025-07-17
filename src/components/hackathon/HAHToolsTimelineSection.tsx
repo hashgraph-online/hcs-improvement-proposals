@@ -215,24 +215,6 @@ const agent = await hcs10Client.createAndRegisterAgent(agentBuilder);`,
       docsLink: '/docs/libraries/standards-sdk/',
     },
     {
-      icon: <FaRobot />,
-      title: 'Hedera Agent Kit',
-      description:
-        'A LangChain-compatible toolkit for interacting with the Hedera Network',
-      link: 'https://github.com/hedera-dev/hedera-agent-kit',
-      installCommand: 'npm i hedera-agent-kit',
-      color: 'purple',
-      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
-
-const agent = new HederaConversationalAgent(signer, {
-  openAIApiKey: process.env.OPENAI_API_KEY
-});
-await agent.initialize();
-const response = await agent.processMessage('Send 10 HBAR to 0.0.12345');`,
-      docsLink:
-        'https://github.com/hedera-dev/hedera-agent-kit/blob/main/README.md',
-    },
-    {
       icon: <FaCode />,
       title: 'Hedera JavaScript SDK',
       description:
@@ -271,27 +253,36 @@ const messageTx = await new TopicMessageSubmitTransaction()
       installCommand: 'npm install @hashgraphonline/standards-agent-plugin',
       isNew: true,
       color: 'green',
-      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
-import { OpenConvAIPlugin } from '@hashgraphonline/standards-agent-plugin';
+      quickStart: `import { StandardsKit } from '@hashgraphonline/standards-agent-plugin';
 
-// Create the plugin
-const plugin = new OpenConvAIPlugin();
-
-// Use with HederaConversationalAgent
-const agent = new HederaConversationalAgent(signer, {
-  pluginConfig: {
-    plugins: [plugin],
-    appConfig: {
-      stateManager: plugin.getStateManager()
-    }
-  },
-  openAIApiKey: process.env.OPENAI_API_KEY
+// Initialize the kit with minimal configuration
+const kit = new StandardsKit({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+  openAIApiKey: process.env.OPENAI_API_KEY!,
+  openAIModelName: 'gpt-4o-mini',
+  verbose: true,
+  // Optional: Add more plugins
+  additionalPlugins: [myCustomPlugin],
+  // Optional: Use custom state manager
+  stateManager: myCustomStateManager,
+  // Optional: Configure operational mode
+  operationalMode: 'autonomous', // or 'returnBytes'
+  // ... other optional configurations
 });
 
-await agent.initialize();
+// Initialize (automatically detects key type)
+await kit.initialize();
 
-// Now you can use HCS-10 commands through conversation
-const response = await agent.processMessage('Register me as an AI agent named TestBot');`,
+// Process a message
+const response = await kit.processMessage(
+  'Register me as an AI agent with the name TestBot, a random unique alias, and description "A test bot"'
+);
+
+// Access underlying components if needed
+const plugin = kit.getPlugin();
+const agent = kit.getConversationalAgent();`,
     },
     {
       icon: <FaComments />,
@@ -335,6 +326,80 @@ const result = await tools.registerAgentTool.invoke({
   capabilities: [0] // TEXT_GENERATION
 });`,
       docsLink: '/docs/libraries/standards-agent-kit/',
+    },
+    {
+      icon: <FaCode />,
+      title: 'Hgraph SDK',
+      description:
+        'Web3 data infrastructure SDK for Hedera with GraphQL API, real-time subscriptions, and token helpers.',
+      link: 'https://docs.hgraph.com/category/hgraph-sdk',
+      installCommand: 'npm install --save-exact @hgraph.io/sdk@latest',
+      color: 'blue',
+      quickStart: `import HgraphSDK from '@hgraph.io/sdk';
+
+// Initialize with API key
+const client = new HgraphSDK({
+  headers: {
+    'x-api-key': process.env.HGRAPH_API_KEY!,
+  },
+});
+
+// Query account information
+const { data } = await client.query({
+  query: \`
+    query GetAccount($accountId: String!) {
+      account(where: { account_id: { _eq: $accountId }}) {
+        account_id
+        alias
+        balance
+        created_timestamp
+        memo
+      }
+    }
+  \`,
+  variables: { accountId: '0.0.12345' }
+});
+
+// Subscribe to real-time token transfers
+const subscription = client.subscribe({
+  query: \`
+    subscription TokenTransfers($tokenId: String!) {
+      token_transfer_stream(
+        where: { token_id: { _eq: $tokenId }}
+        limit: 10
+      ) {
+        from_account_id
+        to_account_id
+        amount
+        consensus_timestamp
+      }
+    }
+  \`,
+  variables: { tokenId: '0.0.1234567' }
+}, {
+  next: ({ data }) => console.log('Transfer:', data),
+  error: (err) => console.error('Error:', err),
+  complete: () => console.log('Subscription complete')
+});`,
+      docsLink: 'https://docs.hgraph.com/category/hgraph-sdk',
+    },
+    {
+      icon: <FaRobot />,
+      title: 'Hedera Agent Kit',
+      description:
+        'A LangChain-compatible toolkit for interacting with the Hedera Network',
+      link: 'https://github.com/hedera-dev/hedera-agent-kit',
+      installCommand: 'npm i hedera-agent-kit@2.0.3',
+      color: 'purple',
+      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
+
+const agent = new HederaConversationalAgent(signer, {
+  openAIApiKey: process.env.OPENAI_API_KEY
+});
+await agent.initialize();
+const response = await agent.processMessage('Send 10 HBAR to 0.0.12345');`,
+      docsLink:
+        'https://github.com/hedera-dev/hedera-agent-kit/blob/main/README.md',
     },
   ];
 
@@ -879,7 +944,9 @@ const result = await tools.registerAgentTool.invoke({
                       For AI Agent Projects: Moonscape Portal
                     </h3>
                     <p className='text-base text-gray-600 dark:text-white/70 mb-3'>
-                      If you're building an AI agent, Moonscape provides a live testing environment where judges and participants can interact with your creation.
+                      If you're building an AI agent, Moonscape provides a live
+                      testing environment where judges and participants can
+                      interact with your creation.
                     </p>
 
                     <div className='space-y-1 mb-3'>
@@ -888,8 +955,12 @@ const result = await tools.registerAgentTool.invoke({
                           <FaComments className='w-4 h-4 text-white' />
                         </div>
                         <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Chat Interface</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Test through natural conversations</p>
+                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>
+                            Chat Interface
+                          </h4>
+                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>
+                            Test through natural conversations
+                          </p>
                         </div>
                       </div>
 
@@ -898,8 +969,12 @@ const result = await tools.registerAgentTool.invoke({
                           <FaUserFriends className='w-4 h-4 text-white' />
                         </div>
                         <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Agent Discovery</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Browse and connect with other agents</p>
+                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>
+                            Agent Discovery
+                          </h4>
+                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>
+                            Browse and connect with other agents
+                          </p>
                         </div>
                       </div>
 
@@ -908,8 +983,12 @@ const result = await tools.registerAgentTool.invoke({
                           <FaGlobe className='w-4 h-4 text-white' />
                         </div>
                         <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Live Demonstration</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Showcase your agent in real-time</p>
+                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>
+                            Live Demonstration
+                          </h4>
+                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>
+                            Showcase your agent in real-time
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -987,7 +1066,7 @@ const result = await tools.registerAgentTool.invoke({
                 transformOrigin: 'top',
               }}
             />
-            
+
             {/* Start dot */}
             <motion.div
               className='absolute w-2 h-2 rounded-full'
@@ -1002,7 +1081,7 @@ const result = await tools.registerAgentTool.invoke({
                 transform: 'translateX(-50%)',
               }}
             />
-            
+
             {/* End dot */}
             <motion.div
               className='absolute w-2 h-2 rounded-full'
@@ -1017,7 +1096,7 @@ const result = await tools.registerAgentTool.invoke({
                 transform: 'translateX(-50%)',
               }}
             />
-            
+
             {/* Responsive dots for desktop */}
             <motion.div
               className='hidden md:block absolute w-2 h-2 rounded-full'
@@ -1032,7 +1111,7 @@ const result = await tools.registerAgentTool.invoke({
                 transform: 'translateX(-50%)',
               }}
             />
-            
+
             <motion.div
               className='hidden md:block absolute w-2 h-2 rounded-full'
               initial={{ scale: 0 }}
