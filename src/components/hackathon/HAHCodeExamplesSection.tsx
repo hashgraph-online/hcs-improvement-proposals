@@ -477,6 +477,179 @@ const handleTransactionRequest = async (
 // "Create a new token called AfricaCoin with 1M supply"
 // "Schedule a recurring payment of 5 HBAR every week"`,
     },
+    {
+      id: 'hgraph-data-access',
+      title: 'Hgraph Data Access',
+      description:
+        'Query Hedera network data using Hgraph SDK with GraphQL for building data-driven AI agents',
+      language: 'typescript',
+      difficulty: 'Intermediate',
+      color: 'blue',
+      icon: <FaCode />,
+      code: `import HgraphSDK from '@hgraph.io/sdk';
+import { Logger } from '@hashgraphonline/standards-sdk';
+
+/**
+ * Use Hgraph SDK to access Hedera network data for your AI agent
+ * Perfect for agents that need to analyze on-chain activity
+ */
+
+const logger = new Logger({ module: 'DataAgent', level: 'info' });
+
+// Initialize Hgraph client
+const hgraph = new HgraphSDK({
+  headers: {
+    'x-api-key': process.env.HGRAPH_API_KEY!,
+  },
+});
+
+// Query account data with token balances
+const getAccountAnalysis = async (accountId: string) => {
+  const { data } = await hgraph.query({
+    query: \`
+      query AccountAnalysis($accountId: String!) {
+        account(where: { account_id: { _eq: $accountId }}) {
+          account_id
+          alias
+          balance
+          created_timestamp
+          max_automatic_token_associations
+          ethereum_nonce
+          
+          # Token holdings
+          account_balance {
+            token_id
+            balance
+            token {
+              name
+              symbol
+              decimals
+              total_supply
+            }
+          }
+          
+          # Recent activity
+          crypto_transfer(
+            limit: 10
+            order_by: { consensus_timestamp: desc }
+          ) {
+            consensus_timestamp
+            amount
+            entity_id
+            transfers
+          }
+        }
+      }
+    \`,
+    variables: { accountId }
+  });
+
+  return data.account[0];
+};
+
+// Monitor token transfers in real-time
+const monitorTokenActivity = (tokenId: string) => {
+  const subscription = hgraph.subscribe({
+    query: \`
+      subscription TokenActivity($tokenId: String!) {
+        token_transfer_stream(
+          where: { token_id: { _eq: $tokenId }}
+          order_by: { consensus_timestamp: desc }
+          limit: 100
+        ) {
+          from_account_id
+          to_account_id
+          amount
+          consensus_timestamp
+          transaction {
+            charged_tx_fee
+            max_fee
+            memo
+            result
+          }
+        }
+      }
+    \`,
+    variables: { tokenId }
+  }, {
+    next: ({ data }) => {
+      const transfers = data.token_transfer_stream;
+      
+      // Analyze transfer patterns for AI insights
+      transfers.forEach(transfer => {
+        logger.info(\`Transfer detected: \${transfer.amount} tokens\`);
+        logger.info(\`From: \${transfer.from_account_id} To: \${transfer.to_account_id}\`);
+        
+        // Your AI agent can process this data
+        // e.g., detect whale movements, analyze trading patterns
+      });
+    },
+    error: (err) => logger.error('Subscription error:', err),
+    complete: () => logger.info('Subscription completed')
+  });
+  
+  return subscription;
+};
+
+// Query NFT ownership for AI-powered recommendations
+const getNFTPortfolio = async (accountId: string) => {
+  const { data } = await hgraph.query({
+    query: \`
+      query NFTPortfolio($accountId: String!) {
+        nft(
+          where: { account_id: { _eq: $accountId }}
+          order_by: { token_id: asc, serial_number: asc }
+        ) {
+          token_id
+          serial_number
+          metadata
+          spender
+          token {
+            name
+            symbol
+            total_supply
+            metadata
+            custom_fee {
+              amount
+              collector_account_id
+            }
+          }
+        }
+      }
+    \`,
+    variables: { accountId }
+  });
+  
+  return data.nft;
+};
+
+// Example: AI agent analyzing account behavior
+export async function analyzeAccountForAI(accountId: string) {
+  logger.info(\`🔍 Analyzing account \${accountId}...\`);
+  
+  const accountData = await getAccountAnalysis(accountId);
+  const nftPortfolio = await getNFTPortfolio(accountId);
+  
+  // Build AI-ready profile
+  const profile = {
+    accountId,
+    hbarBalance: accountData.balance,
+    tokenCount: accountData.account_balance?.length || 0,
+    nftCount: nftPortfolio.length,
+    accountAge: new Date().getTime() - new Date(accountData.created_timestamp).getTime(),
+    tokens: accountData.account_balance?.map(tb => ({
+      id: tb.token_id,
+      name: tb.token.name,
+      balance: tb.balance,
+      value: calculateTokenValue(tb) // Your valuation logic
+    })) || [],
+    recentActivity: accountData.crypto_transfer
+  };
+  
+  logger.info('✅ Analysis complete:', profile);
+  return profile;
+}`,
+    },
   ];
 
   const copyToClipboard = async (code: string, exampleId: string) => {
