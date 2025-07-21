@@ -1,5 +1,5 @@
 ---
-title: "HCS-14 AID: Deterministic Agent IDs"
+title: HCS-14 AID - Deterministic Agent IDs
 description: The HCS-14 standard provides a systematic approach for generating deterministic, globally unique identifiers for AI agents that work across both web2 and web3 environments.
 sidebar_position: 14
 ---
@@ -17,6 +17,7 @@ sidebar_position: 14
   - [Abstract](#abstract)
   - [Motivation](#motivation)
   - [Specification](#specification)
+    - [Guiding Principles](#guiding-principles)
     - [Agent ID Structure](#agent-id-structure)
     - [Supported Agent Protocols](#supported-agent-protocols)
     - [Canonical Agent Data](#canonical-agent-data)
@@ -36,7 +37,11 @@ sidebar_position: 14
   - [Security Considerations](#security-considerations)
   - [Examples](#examples)
     - [Example 1: HCS-10 Agent](#example-1-hcs-10-agent)
-    - [Example 2: OLAS Service](#example-2-olas-service)
+    - [Example 2: A2A Agent](#example-2-a2a-agent)
+    - [Example 3: MCP Server](#example-3-mcp-server)
+    - [Example 4: NANDA A2A Bridge Agent](#example-4-nanda-a2a-bridge-agent)
+    - [Example 5: Virtuals Protocol Agent](#example-5-virtuals-protocol-agent)
+    - [Example 6: OLAS Service](#example-6-olas-service)
   - [Conclusion](#conclusion)
 
 ## Authors
@@ -97,6 +102,7 @@ aid:{version}:{protocol}:{hash}
 ```
 
 Where:
+
 - `aid` = Agent IDentifier prefix
 - `version` = Version of the ID specification (initially "1")
 - `protocol` = Agent communication protocol code
@@ -104,21 +110,23 @@ Where:
 
 ### Supported Agent Protocols
 
-| Code | Protocol | Description |
-|------|----------|-------------|
-| `a2a` | Agent-to-Agent | Google A2A protocol (HTTP+JSON, gRPC) |
-| `mcp` | Model Context Protocol | Anthropic MCP servers with tools/resources |
-| `hcs-10` | HCS-10 | Hedera Consensus Service conversational agents |
-| `nanda` | NANDA Protocol | Decentralized AI agent registry with A2A support |
-| `acp-virtuals` | ACP Virtuals | Virtuals Protocol for AI agent commerce |
-| `acp-ibm` | IBM ACP | IBM Agent Communication Protocol (REST-based) |
-| `olas` | OLAS/Autonolas | Autonomous service registry (discovery only) |
-| `ws` | WebSocket | Real-time WebSocket communication |
-| `rest` | RESTful API | HTTP REST-based service agents |
-| `grpc` | gRPC | High-performance gRPC agents |
-| `mqtt` | Message Queue | MQTT or message queue protocols |
-| `dao` | DAO Protocol | Decentralized autonomous agents |
-| `hybrid` | Multi-Protocol | Agents supporting multiple protocols |
+Note the list of supported protocols is not exhaustive, but is a starting point for the standard. Additional protocols can and should be added as needed.
+
+| Code           | Protocol               | Description                                      |
+| -------------- | ---------------------- | ------------------------------------------------ |
+| `a2a`          | Agent-to-Agent         | Google A2A protocol (HTTP+JSON, gRPC)            |
+| `mcp`          | Model Context Protocol | Anthropic MCP servers with tools/resources       |
+| `hcs-10`       | HCS-10                 | Hedera Consensus Service conversational agents   |
+| `nanda`        | NANDA Protocol         | Decentralized AI agent registry with A2A support |
+| `acp-virtuals` | ACP Virtuals           | Virtuals Protocol for AI agent commerce          |
+| `acp-ibm`      | IBM ACP                | IBM Agent Communication Protocol (REST-based)    |
+| `olas`         | OLAS/Autonolas         | Autonomous service registry (discovery only)     |
+| `ws`           | WebSocket              | Real-time WebSocket communication                |
+| `rest`         | RESTful API            | HTTP REST-based service agents                   |
+| `grpc`         | gRPC                   | High-performance gRPC agents                     |
+| `mqtt`         | Message Queue          | MQTT or message queue protocols                  |
+| `dao`          | DAO Protocol           | Decentralized autonomous agents                  |
+| `hybrid`       | Multi-Protocol         | Agents supporting multiple protocols             |
 
 ### Canonical Agent Data
 
@@ -136,12 +144,14 @@ The hash is computed from a canonical JSON representation containing ONLY these 
 ```
 
 **IMPORTANT**: To ensure deterministic ID generation:
+
 - The hash is computed using ONLY the six required fields above
 - Communication details (endpoints, topic IDs, etc.) are NOT included in the hash
 - This ensures the same agent always generates the same ID regardless of endpoint changes or metadata updates
 - All agents MUST provide these six fields to generate a valid HCS-14 ID
 
 **Communication Details**: While not part of the ID hash, agents should separately maintain:
+
 - **A2A**: Service endpoints (e.g., `https://api.example.com/agents/assistant`)
 - **HCS-10**: Topic IDs (e.g., `0.0.789123`)
 - **MCP**: Server endpoints or stdio commands
@@ -151,6 +161,7 @@ The hash is computed from a canonical JSON representation containing ONLY these 
 These communication details should be discoverable through the protocol's native discovery mechanisms or stored in a registry that maps HCS-14 IDs to current communication endpoints.
 
 Field normalization rules:
+
 - Trim all whitespace from strings
 - Normalize registry and protocol to lowercase
 - Sort capabilities array numerically
@@ -160,15 +171,15 @@ Field normalization rules:
 
 Most protocols provide native unique identifiers that ensure global uniqueness:
 
-| Protocol | Native ID Type | Example |
-|----------|----------------|---------|
-| `hcs-10` | Hedera Account ID | `"0.0.123456"` |
-| `a2a` | Domain + Agent Card ID | `"example.com:salesforce-agent"` |
-| `nanda` | Agent ID (from AGENT_ID env) | `"pirate-bot"` |
-| `mcp` | Server ID | `"mcp-filesystem"` |
-| `olas` | Chain:Service ID | `"1:42"` |
-| `acp-virtuals` | Wallet Address | `"0x742d35Cc...41Bd"` |
-| `acp-ibm` | Agent URI | `"https://api.example.com/agents/123"` |
+| Protocol       | Native ID Type               | Example                                |
+| -------------- | ---------------------------- | -------------------------------------- |
+| `hcs-10`       | Hedera Account ID            | `"0.0.123456"`                         |
+| `a2a`          | Domain + Agent Card ID       | `"example.com:salesforce-agent"`       |
+| `nanda`        | Agent ID (from AGENT_ID env) | `"pirate-bot"`                         |
+| `mcp`          | Server ID                    | `"mcp-filesystem"`                     |
+| `olas`         | Chain:Service ID             | `"1:42"`                               |
+| `acp-virtuals` | Wallet Address               | `"0x742d35Cc...41Bd"`                  |
+| `acp-ibm`      | Agent URI                    | `"https://api.example.com/agents/123"` |
 
 ### Agent Capabilities
 
@@ -176,59 +187,60 @@ Capabilities are represented as numeric enums to ensure deterministic sorting.
 
 #### Core Capabilities (0-19)
 
-| Value | Capability | Description |
-|-------|------------|-------------|
-| 0 | Text Generation | Generate human-like text for content and conversation |
-| 1 | Image Generation | Create or modify visual content from prompts |
-| 2 | Audio Generation | Synthesize speech, music, or sound content |
-| 3 | Video Generation | Produce dynamic video content and animations |
-| 4 | Code Generation | Generate and modify code across programming languages |
-| 5 | Language Translation | Convert text between different languages |
-| 6 | Content Summarization | Extract key insights from lengthy content |
-| 7 | Knowledge Retrieval | Access and reason over structured data |
-| 8 | Data Visualization | Create visual representations of data |
-| 9 | Market Intelligence | Analyze financial and economic trends |
-| 10 | Transaction Analytics | Monitor and analyze transaction patterns |
-| 11 | Smart Contract Audit | Evaluate blockchain code for security |
-| 12 | Governance Facilitation | Support decentralized decision-making |
-| 13 | Security Monitoring | Detect threats and security anomalies |
-| 14 | Compliance Analysis | Ensure regulatory and legal adherence |
-| 15 | Fraud Detection | Identify and prevent fraudulent activities |
-| 16 | Multi-Agent Coordination | Orchestrate multiple agent interactions |
-| 17 | API Integration | Connect with external systems and services |
-| 18 | Workflow Automation | Automate routine tasks and processes |
-| 19 | Real-time Communication | Support live messaging and interaction |
+| Value | Capability               | Description                                           |
+| ----- | ------------------------ | ----------------------------------------------------- |
+| 0     | Text Generation          | Generate human-like text for content and conversation |
+| 1     | Image Generation         | Create or modify visual content from prompts          |
+| 2     | Audio Generation         | Synthesize speech, music, or sound content            |
+| 3     | Video Generation         | Produce dynamic video content and animations          |
+| 4     | Code Generation          | Generate and modify code across programming languages |
+| 5     | Language Translation     | Convert text between different languages              |
+| 6     | Content Summarization    | Extract key insights from lengthy content             |
+| 7     | Knowledge Retrieval      | Access and reason over structured data                |
+| 8     | Data Visualization       | Create visual representations of data                 |
+| 9     | Market Intelligence      | Analyze financial and economic trends                 |
+| 10    | Transaction Analytics    | Monitor and analyze transaction patterns              |
+| 11    | Smart Contract Audit     | Evaluate blockchain code for security                 |
+| 12    | Governance Facilitation  | Support decentralized decision-making                 |
+| 13    | Security Monitoring      | Detect threats and security anomalies                 |
+| 14    | Compliance Analysis      | Ensure regulatory and legal adherence                 |
+| 15    | Fraud Detection          | Identify and prevent fraudulent activities            |
+| 16    | Multi-Agent Coordination | Orchestrate multiple agent interactions               |
+| 17    | API Integration          | Connect with external systems and services            |
+| 18    | Workflow Automation      | Automate routine tasks and processes                  |
+| 19    | Real-time Communication  | Support live messaging and interaction                |
 
 #### Protocol-Specific Capabilities (20-39)
 
-| Value | Capability | Description |
-|-------|------------|-------------|
-| 20 | Resource Provider | Expose data resources (MCP) |
-| 21 | Tool Provider | Provide executable tools (MCP) |
-| 22 | Prompt Templates | Offer reusable prompt templates |
-| 23 | File System Access | Access local or remote file systems |
-| 24 | Database Integration | Connect to and query databases |
-| 25 | Web Access | Browse and analyze web content |
-| 26 | Knowledge Base | Serve specialized knowledge repositories |
-| 27 | Memory Persistence | Maintain context between sessions |
-| 28 | Code Analysis | Understand and manipulate code |
-| 29 | Document Processing | Process various document formats |
-| 30 | Calendar Management | Handle scheduling and time management |
-| 31 | Search Services | Provide specialized search capabilities |
-| 32 | Assistant Orchestration | Manage multiple AI assistant interactions |
-| 33 | Blockchain Integration | Interact with blockchain networks |
-| 34 | Consensus Participation | Participate in consensus mechanisms |
-| 35 | Identity Verification | Verify and manage digital identities |
-| 36 | Cryptographic Operations | Perform encryption and signing |
-| 37 | Event Streaming | Handle real-time event streams |
-| 38 | Message Routing | Route messages between agents |
-| 39 | Trust Attestation | Provide trust and reputation services |
+| Value | Capability               | Description                               |
+| ----- | ------------------------ | ----------------------------------------- |
+| 20    | Resource Provider        | Expose data resources (MCP)               |
+| 21    | Tool Provider            | Provide executable tools (MCP)            |
+| 22    | Prompt Templates         | Offer reusable prompt templates           |
+| 23    | File System Access       | Access local or remote file systems       |
+| 24    | Database Integration     | Connect to and query databases            |
+| 25    | Web Access               | Browse and analyze web content            |
+| 26    | Knowledge Base           | Serve specialized knowledge repositories  |
+| 27    | Memory Persistence       | Maintain context between sessions         |
+| 28    | Code Analysis            | Understand and manipulate code            |
+| 29    | Document Processing      | Process various document formats          |
+| 30    | Calendar Management      | Handle scheduling and time management     |
+| 31    | Search Services          | Provide specialized search capabilities   |
+| 32    | Assistant Orchestration  | Manage multiple AI assistant interactions |
+| 33    | Blockchain Integration   | Interact with blockchain networks         |
+| 34    | Consensus Participation  | Participate in consensus mechanisms       |
+| 35    | Identity Verification    | Verify and manage digital identities      |
+| 36    | Cryptographic Operations | Perform encryption and signing            |
+| 37    | Event Streaming          | Handle real-time event streams            |
+| 38    | Message Routing          | Route messages between agents             |
+| 39    | Trust Attestation        | Provide trust and reputation services     |
 
 ### Protocol Identifiers
 
 Protocol identifiers use **string values** rather than enums to provide flexibility for:
+
 - Adding new protocols without code changes
-- Supporting protocol aliases and variations  
+- Supporting protocol aliases and variations
 - Handling protocols with similar names (e.g., `acp-ibm` vs `acp-virtuals`)
 - Future protocol evolution and versioning
 
@@ -246,8 +258,13 @@ The hash generation process follows these steps:
 ```typescript
 function generateAgentId(agentData: AgentData): string {
   // 1. Validate required fields
-  if (!agentData.registry || !agentData.name || !agentData.version || 
-      !agentData.protocol || !agentData.nativeId) {
+  if (
+    !agentData.registry ||
+    !agentData.name ||
+    !agentData.version ||
+    !agentData.protocol ||
+    !agentData.nativeId
+  ) {
     throw new Error('Missing required fields');
   }
 
@@ -258,7 +275,7 @@ function generateAgentId(agentData: AgentData): string {
     version: agentData.version.trim(),
     protocol: agentData.protocol.toLowerCase().trim(),
     nativeId: agentData.nativeId.trim(),
-    capabilities: (agentData.capabilities || []).sort((a, b) => a - b)
+    capabilities: (agentData.capabilities || []).sort((a, b) => a - b),
   };
 
   // 3. Generate hash
@@ -277,7 +294,7 @@ For A2A protocol agents, capabilities are extracted from Agent Cards:
 ```typescript
 function extractCapabilitiesFromAgentCard(agentCard: AgentCard): number[] {
   const capabilities: number[] = [];
-  
+
   // Map A2A skills to capability enums
   for (const skill of agentCard.skills || []) {
     const skillLower = skill.name.toLowerCase();
@@ -286,15 +303,14 @@ function extractCapabilitiesFromAgentCard(agentCard: AgentCard): number[] {
     if (skillLower.includes('search')) capabilities.push(31); // Search Services
     if (skillLower.includes('data')) capabilities.push(7); // Knowledge Retrieval
   }
-  
+
   // Add protocol-specific capabilities
   if (agentCard.capabilities?.streaming) capabilities.push(19); // Real-time Communication
   if (agentCard.capabilities?.pushNotifications) capabilities.push(17); // API Integration
-  
+
   return [...new Set(capabilities)].sort((a, b) => a - b);
 }
 ```
-
 
 ## Implementation
 
@@ -311,7 +327,9 @@ Implementations must:
 ### Test Vectors
 
 #### Test Vector 1: HCS-10 Agent
+
 **Input:**
+
 ```json
 {
   "registry": "hedera",
@@ -324,14 +342,24 @@ Implementations must:
 ```
 
 **Canonical JSON:**
+
 ```json
-{"capabilities":[0,17],"name":"Support Agent","nativeId":"0.0.123456","protocol":"hcs-10","registry":"hedera","version":"1.0.0"}
+{
+  "capabilities": [0, 17],
+  "name": "Support Agent",
+  "nativeId": "0.0.123456",
+  "protocol": "hcs-10",
+  "registry": "hedera",
+  "version": "1.0.0"
+}
 ```
 
 **Expected ID Format:** `aid:1:hcs-10:{base58hash}`
 
 #### Test Vector 2: A2A Agent
+
 **Input:**
+
 ```json
 {
   "registry": "google",
@@ -344,8 +372,16 @@ Implementations must:
 ```
 
 **Canonical JSON:**
+
 ```json
-{"capabilities":[0,17,19],"name":"Customer Bot","nativeId":"salesforce-support-agent","protocol":"a2a","registry":"google","version":"2.1.0"}
+{
+  "capabilities": [0, 17, 19],
+  "name": "Customer Bot",
+  "nativeId": "salesforce-support-agent",
+  "protocol": "a2a",
+  "registry": "google",
+  "version": "2.1.0"
+}
 ```
 
 **Expected ID Format:** `aid:1:a2a:{base58hash}`
@@ -373,7 +409,7 @@ Implementations must:
 ```json
 {
   "registry": "hedera",
-  "name": "Support Agent", 
+  "name": "Support Agent",
   "version": "1.0.0",
   "protocol": "hcs-10",
   "nativeId": "0.0.123456",
@@ -450,7 +486,7 @@ Implementations must:
   "registry": "olas",
   "name": "Prediction Service",
   "version": "1.2.0",
-  "protocol": "olas", 
+  "protocol": "olas",
   "nativeId": "1:42",
   "capabilities": [16, 33, 34]
 }
