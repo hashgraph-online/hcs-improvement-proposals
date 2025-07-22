@@ -119,6 +119,26 @@ const sidebars: SidebarsConfig = {
           label: 'HCS-13: Schema Registry',
         },
         {
+          type: 'doc',
+          id: 'standards/hcs-15',
+          label: 'HCS-15: Petal Discovery',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-16',
+          label: 'HCS-16: Flora Coordination',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-17',
+          label: 'HCS-17: State Hash Calculation',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-18',
+          label: 'HCS-18: Flora Discovery Protocol',
+        },
+        {
           type: 'category',
           label: 'HCS-20: Auditable Points',
           collapsible: true,
