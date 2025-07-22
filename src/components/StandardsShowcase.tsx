@@ -129,7 +129,7 @@ const standardsData = [
     icon: 'HCS-13',
   },
   {
-    title: 'HCS-15: Petal Discovery',
+    title: 'HCS-15: Petal Accounts',
     category: 'Identity & Profiles',
     status: 'draft' as const,
     description:

@@ -121,7 +121,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'doc',
           id: 'standards/hcs-15',
-          label: 'HCS-15: Petal Discovery',
+          label: 'HCS-15: Petal Accounts',
         },
         {
           type: 'doc',
