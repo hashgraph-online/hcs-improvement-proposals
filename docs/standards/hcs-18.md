@@ -83,20 +83,20 @@ Each Hedera network SHALL maintain a canonical Discovery Topic:
 - **Submit Key**: None (open submission)
 - **Admin Key**: DAO multisig (for emergency suspension only)
 - **Auto-renew Account**: DAO treasury
-- **Memo Format**: `hcs-15:0:300`
+- **Memo Format**: `hcs-18:0:300`
 
 ### Memo Configuration
 
 The discovery topic uses a standardized memo format:
 
-`hcs-15:0`
+`hcs-18:0`
 
 | Field               | Description                                    | Example Value |
 | ------------------- | ---------------------------------------------- | ------------- |
-| `protocol_standard` | Protocol identifier for this standard          | `hcs-15`      |
+| `protocol_standard` | Protocol identifier for this standard          | `hcs-18`      |
 | `indexed`           | Topic is indexed - all messages should be read | `0`           |
 
-**Example Topic Memo**: `hcs-15:0`
+**Example Topic Memo**: `hcs-18:0`
 
 ### Operations
 
@@ -118,7 +118,7 @@ All messages SHALL be valid UTF-8 JSON with the following structure:
 
 ```json
 {
-  "p": "hcs-15", // Protocol
+  "p": "hcs-18", // Protocol
   "op": "operation_type", // Operation
   "data": {} // Operation-specific data
 }
@@ -150,7 +150,7 @@ Petal advertises its availability and capabilities.
 
 ```json
 {
-  "p": "hcs-15",
+  "p": "hcs-18",
   "op": "announce",
   "data": {
     "petal": {
@@ -198,7 +198,7 @@ Proposes Flora formation to specific Petals. The HCS sequence number of this mes
 
 ```json
 {
-  "p": "hcs-15",
+  "p": "hcs-18",
   "op": "propose",
   "data": {
     "members": [
@@ -221,7 +221,7 @@ Proposes Flora formation to specific Petals. The HCS sequence number of this mes
 
 ```json
 {
-  "p": "hcs-15",
+  "p": "hcs-18",
   "op": "propose",
   "data": {
     "existing_flora": "0.0.789012", // Optional: indicates this is for an existing Flora
@@ -260,7 +260,7 @@ Response to a Flora proposal, referencing it by HCS sequence number.
 
 ```json
 {
-  "p": "hcs-15",
+  "p": "hcs-18",
   "op": "respond",
   "data": {
     "proposal_seq": 12345, // Sequence number of the proposal message
@@ -288,7 +288,7 @@ Announces successful Flora formation, referencing the original proposal.
 
 ```json
 {
-  "p": "hcs-15",
+  "p": "hcs-18",
   "op": "complete",
   "data": {
     "proposal_seq": 12345, // Original proposal sequence number
@@ -317,7 +317,7 @@ Participant withdraws from discovery, invalidating their announcement.
 
 ```json
 {
-  "p": "hcs-15",
+  "p": "hcs-18",
   "op": "withdraw",
   "data": {
     "announce_seq": 12340,
@@ -400,7 +400,7 @@ When a Petal receives multiple Flora proposals:
 2. **Explicit Rejection**: Petals MUST respond with reject to later proposals:
    ```json
    {
-     "p": "hcs-15",
+     "p": "hcs-18",
      "op": "respond",
      "data": {
        "proposal_seq": 12347,
@@ -517,7 +517,7 @@ class FloraCoordinator {
     ];
 
     const proposalMsg = await this.sendToDiscoveryTopic({
-      p: 'hcs-15',
+      p: 'hcs-18',
       op: 'propose',
       data: {
         existing_flora: this.floraAccount,
@@ -547,7 +547,7 @@ function handleProposals(proposals: HCSMessage[]): number {
   // Reject all later proposals
   for (let i = 1; i < proposals.length; i++) {
     sendResponse({
-      p: 'hcs-15',
+      p: 'hcs-18',
       op: 'respond',
       data: {
         proposal_seq: proposals[i].sequence_number,
