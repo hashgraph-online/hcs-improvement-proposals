@@ -75,7 +75,7 @@ All profiles share these common fields:
 | Field              | Type   | Required  | Description                                                                                        |
 | ------------------ | ------ | --------- | -------------------------------------------------------------------------------------------------- |
 | version            | string | Yes       | Standard version (e.g., "1.0")                                                                     |
-| type               | number | Yes       | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=server)                |
+| type               | number | Yes       | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)                |
 | display_name       | string | Yes       | Display name for the profile                                                                       |
 | **_base_account_** | string | **_Yes_** | **_Account Id of the base account for this petal's PK_**                                           |
 | alias              | string | No        | Alternative identifier                                                                             |
