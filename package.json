@@ -15,11 +15,13 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@hashgraphonline/standards-sdk": "0.0.145",
+    "@hashgraphonline/standards-sdk": "0.0.156",
     "@docusaurus/core": "^3.8.1",
     "@docusaurus/plugin-client-redirects": "^3.8.1",
+    "@docusaurus/plugin-content-blog": "^3.8.1",
     "@docusaurus/plugin-ideal-image": "^3.8.1",
     "@docusaurus/preset-classic": "^3.8.1",
+    "@docusaurus/theme-common": "^3.8.1",
     "@docusaurus/theme-mermaid": "^3.8.1",
     "@mdx-js/react": "^3.0.0",
     "@radix-ui/react-slot": "^1.1.0",
@@ -40,7 +42,8 @@
     "react-syntax-highlighter": "^15.6.1",
     "recharts": "^2.15.0",
     "tailwind-merge": "^2.5.2",
-    "three": "^0.168.0"
+    "three": "^0.168.0",
+    "tslib": "^2.8.0"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^3.8.1",
