@@ -204,6 +204,6 @@ Ready to build AI agents on Hedera?
 
 ## Related Libraries
 
-- [Standards Agent Plugin](/libraries/standards-agent-plugin) - Plugin system for AI frameworks
+- [Conversational Agent](/libraries/conversational-agent) - Standalone conversational AI agent
 - [Standards SDK](/libraries/standards-sdk) - Core SDK for HCS standards
 - [Hedera Agent Kit](https://github.com/hashgraph/hedera-agent-kit) - Base framework
