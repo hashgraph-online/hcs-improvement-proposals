@@ -12,7 +12,7 @@ The Conversational Agent (`@hashgraphonline/conversational-agent`) is a comprehe
 
 ## Overview
 
-This package provides a standalone conversational AI agent that supports all tools from the `hedera-agent-kit` v2 package and includes:
+This package provides a standalone conversational AI agent built on top of `hedera-agent-kit` v2.0.3, providing access to all Hedera network functionality while adding:
 - **HCS-10**: AI Agent Communication standard for trustless peer-to-peer messaging
 - **HCS-2**: Registry management for decentralized data storage
 - **Inscription**: Content inscription following Hashgraph Consensus Standards
@@ -54,7 +54,7 @@ const response = await agent.processMessage(
 
 // Transfer HBAR
 const transferResponse = await agent.processMessage(
-  'I want to transfer 1 HBAR to the account 0.0.800'
+  'I want to send 1 HBAR to 0.0.800'
 );
 
 console.log(response.response);
@@ -145,7 +145,7 @@ pnpm cli -- --account-id=0.0.12345 --private-key=... --openai-api-key=sk-...
 
 ## Available Tools
 
-The Conversational Agent includes all tools from the `hedera-agent-kit` v2 package, providing comprehensive access to Hedera network functionality:
+The Conversational Agent leverages `hedera-agent-kit` v2.0.3 internally, providing comprehensive access to Hedera network functionality:
 
 ### Core Hedera Tools (from hedera-agent-kit)
 - **Account Management**: Create accounts, transfer HBAR, manage allowances, get account info
