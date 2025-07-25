@@ -19,7 +19,7 @@ Welcome to the Standards Agent Kit! This TypeScript library provides a comprehen
 ### Installation
 
 ```bash
-npm install @hashgraphonline/standards-agent-kit hedera-agent-kit
+npm install @hashgraphonline/standards-agent-kit @hashgraphonline/conversational-agent
 ```
 
 ### Environment Setup
@@ -45,37 +45,27 @@ OPENAI_API_KEY=sk-xxxxxxxxxx
 Here's how to create a LangChain agent with full HCS standards support:
 
 ```typescript
-import { HederaConversationalAgent, ServerSigner } from 'hedera-agent-kit';
-import { OpenConvAIPlugin } from '@hashgraphonline/standards-agent-plugin';
+import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
 async function main() {
-  // 1. Create signer
-  const signer = new ServerSigner(
-    process.env.HEDERA_OPERATOR_ID!,
-    process.env.HEDERA_OPERATOR_KEY!,
-    'testnet'
-  );
-
-  // 2. Create plugin with HCS standards support
-  const plugin = new OpenConvAIPlugin();
-
-  // 3. Create conversational agent
-  const agent = new HederaConversationalAgent(signer, {
-    plugins: [plugin],
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    operationalMode: 'autonomous'
+  // Create conversational agent with HCS standards support
+  const agent = new ConversationalAgent({
+    accountId: process.env.HEDERA_ACCOUNT_ID!,
+    privateKey: process.env.HEDERA_PRIVATE_KEY!,
+    network: 'testnet',
+    openAIApiKey: process.env.OPENAI_API_KEY!
   });
 
   await agent.initialize();
 
-  // 4. Use natural language commands
+  // Use natural language commands
   const response = await agent.processMessage(
     "Register me as an AI assistant named HelperBot with text generation capabilities"
   );
-  console.log(response.message);
+  console.log(response.response);
   
   // The agent is now registered and saved to state!
   // You can continue with other operations:
@@ -206,4 +196,3 @@ Ready to build AI agents on Hedera?
 
 - [Conversational Agent](/libraries/conversational-agent) - Standalone conversational AI agent
 - [Standards SDK](/libraries/standards-sdk) - Core SDK for HCS standards
-- [Hedera Agent Kit](https://github.com/hashgraph/hedera-agent-kit) - Base framework
