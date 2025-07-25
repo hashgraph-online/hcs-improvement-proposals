@@ -246,43 +246,44 @@ const messageTx = await new TopicMessageSubmitTransaction()
     },
     {
       icon: <FaPlug />,
-      title: 'Standards Agent Plugin',
+      title: 'Conversational Agent',
       description:
-        'OpenConvAI plugin for Hedera Agent Kit that enables conversational AI agents to communicate using HCS-10 standards.',
-      link: 'https://github.com/hashgraph-online/standards-agent-plugin',
-      installCommand: 'npm install @hashgraphonline/standards-agent-plugin',
+        'Conversational AI agent implementing Hashgraph Consensus Standards (HCS) for agent communication, registry management, and content inscription on Hedera.',
+      link: 'https://github.com/hashgraph-online/conversational-agent',
+      installCommand: 'npm install @hashgraphonline/conversational-agent',
       isNew: true,
       color: 'green',
-      quickStart: `import { StandardsKit } from '@hashgraphonline/standards-agent-plugin';
+      quickStart: `import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
 
-// Initialize the kit with minimal configuration
-const kit = new StandardsKit({
+// Initialize the conversational agent
+const agent = new ConversationalAgent({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
   privateKey: process.env.HEDERA_PRIVATE_KEY!,
   network: 'testnet',
   openAIApiKey: process.env.OPENAI_API_KEY!,
-  openAIModelName: 'gpt-4o-mini',
+  openAIModelName: 'gpt-4o',
   verbose: true,
-  // Optional: Add more plugins
+  // Optional: Add custom plugins
   additionalPlugins: [myCustomPlugin],
   // Optional: Use custom state manager
   stateManager: myCustomStateManager,
   // Optional: Configure operational mode
   operationalMode: 'autonomous', // or 'returnBytes'
-  // ... other optional configurations
 });
 
 // Initialize (automatically detects key type)
-await kit.initialize();
+await agent.initialize();
 
 // Process a message
-const response = await kit.processMessage(
-  'Register me as an AI agent with the name TestBot, a random unique alias, and description "A test bot"'
+const response = await agent.processMessage(
+  'Register me as an AI agent with the name TestBot'
 );
 
-// Access underlying components if needed
-const plugin = kit.getPlugin();
-const agent = kit.getConversationalAgent();`,
+// Access built-in plugins if needed
+const hcs10Plugin = agent.hcs10Plugin;
+const hcs2Plugin = agent.hcs2Plugin;
+const inscribePlugin = agent.inscribePlugin;`,
+      docsLink: '/docs/libraries/conversational-agent/',
     },
     {
       icon: <FaComments />,

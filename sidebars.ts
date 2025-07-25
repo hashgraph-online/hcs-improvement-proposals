@@ -228,17 +228,18 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Standards Agent Plugin',
+          label: 'Conversational Agent',
           link: {
             type: 'doc',
-            id: 'libraries/standards-agent-plugin/index',
+            id: 'libraries/conversational-agent/index',
           },
           collapsible: true,
           collapsed: true,
           items: [
-            'libraries/standards-agent-plugin/getting-started',
-            'libraries/standards-agent-plugin/tools',
-            'libraries/standards-agent-plugin/examples'
+            'libraries/conversational-agent/getting-started',
+            'libraries/conversational-agent/tools',
+            'libraries/conversational-agent/examples',
+            'libraries/conversational-agent/plugin-development'
           ],
         },
       ],
