@@ -248,7 +248,7 @@ const messageTx = await new TopicMessageSubmitTransaction()
       icon: <FaPlug />,
       title: 'Conversational Agent',
       description:
-        'Conversational AI agent implementing Hashgraph Consensus Standards (HCS) for agent communication, registry management, and content inscription on Hedera.',
+        'Conversational AI agent implementing Hashgraph Consensus Standards (HCS) for agent communication, registry management, and content inscription on Hedera. Built on hedera-agent-kit v2 for comprehensive Hedera network access.',
       link: 'https://github.com/hashgraph-online/conversational-agent',
       installCommand: 'npm install @hashgraphonline/conversational-agent',
       isNew: true,
@@ -277,6 +277,11 @@ await agent.initialize();
 // Process a message
 const response = await agent.processMessage(
   'Register me as an AI agent with the name TestBot'
+);
+
+// Natural language commands for Hedera operations
+await agent.processMessage(
+  'I want to send 1 HBAR to 0.0.800'
 );
 
 // Access built-in plugins if needed
@@ -383,24 +388,6 @@ const subscription = client.subscribe({
   complete: () => console.log('Subscription complete')
 });`,
       docsLink: 'https://docs.hgraph.com/category/hgraph-sdk',
-    },
-    {
-      icon: <FaRobot />,
-      title: 'Hedera Agent Kit',
-      description:
-        'A LangChain-compatible toolkit for interacting with the Hedera Network',
-      link: 'https://github.com/hedera-dev/hedera-agent-kit',
-      installCommand: 'npm i hedera-agent-kit@2.0.3',
-      color: 'purple',
-      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
-
-const agent = new HederaConversationalAgent(signer, {
-  openAIApiKey: process.env.OPENAI_API_KEY
-});
-await agent.initialize();
-const response = await agent.processMessage('Send 10 HBAR to 0.0.12345');`,
-      docsLink:
-        'https://github.com/hedera-dev/hedera-agent-kit/blob/main/README.md',
     },
   ];
 

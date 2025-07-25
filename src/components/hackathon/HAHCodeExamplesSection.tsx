@@ -401,19 +401,12 @@ logger.info('Agent result:', result.output);`,
       difficulty: 'Advanced',
       color: 'green',
       icon: <FaRobot />,
-      code: `import { HederaConversationalAgent, ServerSigner } from '@hashgraphonline/hedera-agent-kit';
+      code: `import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
 import { ScheduleCreateTransaction } from '@hashgraph/sdk';
 
 /**
  * Create a transaction-processing AI agent
  */
-
-// Initialize the agent signer
-const agentSigner = new ServerSigner(
-  process.env.HEDERA_ACCOUNT_ID!,
-  process.env.HEDERA_PRIVATE_KEY!,
-  'testnet'
-);
 
 // Process incoming message from user
 const handleTransactionRequest = async (
@@ -422,12 +415,14 @@ const handleTransactionRequest = async (
   connectionTopicId: string
 ) => {
   // Create conversational agent for this user
-  const hederaAgent = new HederaConversationalAgent(agentSigner, {
-    operationalMode: 'provideBytes',
-    userAccountId,
-    verbose: false,
+  const hederaAgent = new ConversationalAgent({
+    accountId: process.env.HEDERA_ACCOUNT_ID!,
+    privateKey: process.env.HEDERA_PRIVATE_KEY!,
+    network: 'testnet',
     openAIApiKey: process.env.OPENAI_API_KEY!,
-    scheduleUserTransactionsInBytesMode: false,
+    operationalMode: 'returnBytes',
+    userAccountId,
+    verbose: false
   });
   
   await hederaAgent.initialize();
@@ -438,20 +433,11 @@ const handleTransactionRequest = async (
   const response = await hederaAgent.processMessage(message);
   
   // Handle response based on type
-  if (response.output && !response.transactionBytes) {
+  if (response.response && !response.transactionBytes) {
     // Informational response
     await agent.client.sendMessage(
       connectionTopicId,
-      response.output
-    );
-  }
-  
-  if (response.notes && response.notes.length > 0) {
-    // AI made inferences - share with user
-    const notes = response.notes.map(n => \`• \${n}\`).join('\\n');
-    await agent.client.sendMessage(
-      connectionTopicId,
-      \`📝 I made some inferences:\\n\${notes}\`
+      response.response
     );
   }
   
@@ -473,7 +459,7 @@ const handleTransactionRequest = async (
 };
 
 // Example usage:
-// "Send 10 HBAR to 0.0.12345"
+// "I want to send 10 HBAR to 0.0.12345"
 // "Create a new token called AfricaCoin with 1M supply"
 // "Schedule a recurring payment of 5 HBAR every week"`,
     },
