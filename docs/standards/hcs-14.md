@@ -54,7 +54,8 @@ sidebar_position: 14
 
 ## Authors
 
-- Kantorcodes [https://twitter.com/kantorcodes](https://twitter.com/kantorcodes)
+- Kantorcodes [https://x.com/kantorcodes](https://x.com/kantorcodes)
+- Patches [https://x.com/TMCC_Patches](https://x.com/TMCC_Patches)
 
 ## Abstract
 
