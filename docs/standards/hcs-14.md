@@ -130,16 +130,10 @@ Where:
 Both AID and UDID methods use identical parameter structures for routing:
 
 ```
-did:{method}:{hash};registry={registry};nativeId={nativeId};uid={uid}
+did:{method}:{hash};{optional_parameters}
 ```
 
-Protocol can also be specified for additional routing information:
-
-```
-did:{method}:{hash};proto={protocol};nativeId={nativeId};uid={uid}
-```
-
-Or both can be used together when helpful:
+Example with common parameters:
 
 ```
 did:{method}:{hash};registry={registry};proto={protocol};nativeId={nativeId};uid={uid}
