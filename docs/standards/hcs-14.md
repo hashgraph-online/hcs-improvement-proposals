@@ -73,10 +73,10 @@ AI agents are proliferating across diverse platforms with different identificati
 
 **Simplified Integration**: Developers building multi-agent systems currently need to implement custom translation and routing for each protocol pair. A universal identification standard reduces this complexity, allowing developers to focus on agent capabilities rather than integration challenges.
 
-The HCS-14 standard builds upon these opportunities by introducing deterministic, self-describing agent identifiers that complement existing protocol identification systems. By respecting and leveraging each protocol's native unique identifiers while adding a universal layer, we create a system where:
+The HCS-14 standard builds upon these opportunities by introducing universal, self-describing agent identifiers that complement existing protocol identification systems. By respecting and leveraging each protocol's native unique identifiers while adding a universal layer, we create a system where:
 
 - **Any agent can be uniquely identified** regardless of its native protocol
-- **IDs are generated deterministically** - the same agent always produces the same ID
+- **Dual identification methods** - deterministic generation for discovered agents (AID) or preservation of existing DIDs (UDID)
 - **No central authority is required** - anyone can generate and verify IDs
 - **Cross-protocol communication becomes trivial** - IDs contain routing information
 - **Agent migration is possible** - agents can move between protocols while maintaining identity
