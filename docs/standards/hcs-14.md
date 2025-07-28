@@ -79,7 +79,7 @@ The HCS-14 standard builds upon these opportunities by introducing universal, se
 - **Dual identification methods** - deterministic generation for discovered agents (AID) or preservation of existing DIDs (UDID)
 - **No central authority is required** - anyone can generate and verify IDs
 - **Cross-protocol communication becomes trivial** - IDs contain routing information
-- **Agent migration is possible** - agents can move between protocols while maintaining identity
+- **Protocol-native identity** - agents maintain their protocol-specific identities while gaining universal discoverability
 - **Trust can be verified cryptographically** - the ID itself proves the agent's properties
 
 ## Specification
