@@ -121,7 +121,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'doc',
           id: 'standards/hcs-14',
-          label: 'HCS-14: Universal Deterministic Identifiers',
+          label: 'HCS-14: Universal Agent ID Standard',
         },
         {
           type: 'category',

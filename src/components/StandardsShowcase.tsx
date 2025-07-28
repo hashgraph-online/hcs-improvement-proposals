@@ -102,7 +102,7 @@ const standardsData = [
     icon: 'HCS-13'
   },
   {
-    title: 'HCS-14: Universal Deterministic Identifiers',
+    title: 'HCS-14: Universal Agent ID Standard',
     category: 'AI & Communication',
     status: 'draft' as const,
     description: 'W3C DID-based standard for deterministic, globally unique AI agent identifiers. Enables cross-protocol agent discovery and communication.',

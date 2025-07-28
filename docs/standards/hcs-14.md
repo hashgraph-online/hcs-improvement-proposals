@@ -1,16 +1,16 @@
 ---
-title: HCS-14 AID - Deterministic Agent IDs
-description: The HCS-14 standard provides a systematic approach for generating deterministic, globally unique identifiers for AI agents that work across both web2 and web3 environments.
+title: HCS-14 - Universal Agent ID Standard
+description: The HCS-14 standard provides a systematic approach for generating globally unique identifiers for AI agents that work across both web2 and web3 environments.
 sidebar_position: 14
 ---
 
-# HCS-14 Standard: Universal Deterministic Identifiers (UDID) for AI Agents
+# HCS-14 Standard: Universal Agent ID Standard
 
 ### Status: Draft
 
 ### Table of Contents
 
-- [HCS-14 Standard: Universal Deterministic Identifiers (UDID) for AI Agents](#hcs-14-standard-universal-deterministic-identifiers-udid-for-ai-agents)
+- [HCS-14 Standard: Universal Agent ID Standard](#hcs-14-standard-universal-agent-id-standard)
     - [Status: Draft](#status-draft)
     - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
@@ -59,7 +59,7 @@ sidebar_position: 14
 
 ## Abstract
 
-The HCS-14 standard provides a systematic approach for generating deterministic, globally unique identifiers for AI agents using the W3C Decentralized Identifier (DID) framework. By introducing the UDID (Universal Deterministic Identifier) DID method, this standard enables consistent agent identification across web2 APIs, web3 protocols, and hybrid systems without requiring any specific infrastructure dependencies. The UDID method embeds routing information directly in the DID, making agent discovery and communication seamless across protocol boundaries.
+The HCS-14 standard provides a systematic approach for generating globally unique identifiers for AI agents using the W3C Decentralized Identifier (DID) framework. By introducing dual DID methods (AID for registry-generated and UDID for self-sovereign identifiers), this standard enables consistent agent identification across web2 APIs, web3 protocols, and hybrid systems without requiring any specific infrastructure dependencies. Both methods embed routing information directly in the DID, making agent discovery and communication seamless across protocol boundaries.
 
 ## Motivation
 
@@ -86,21 +86,19 @@ The HCS-14 standard builds upon these opportunities by introducing deterministic
 
 ### Guiding Principles
 
-The HCS-14 standard is built on seven foundational principles that ensure its universality and longevity:
+The HCS-14 standard is built on six foundational principles that ensure its universality and longevity:
 
-1. **Deterministic Generation**: The same agent data must always produce the exact same identifier, regardless of who generates it or when. This enables trustless verification and ensures consistency across systems. Like a fingerprint, the ID is an inherent property of the agent's core attributes.
+1. **Decentralized Generation**: No central registry, no governing body, no permission required. Anyone can generate valid HCS-14 IDs using only the agent's public data and the standard's algorithm. This follows the permissionless model used in both Web2 API development and Web3 smart contract deployment.
 
-2. **Decentralized Generation**: No central registry, no governing body, no permission required. Anyone can generate valid HCS-14 IDs using only the agent's public data and the standard's algorithm. This follows the permissionless model used in both Web2 API development and Web3 smart contract deployment.
+2. **Self-Describing Structure**: The DID itself contains enough information to route messages to the agent without external lookups. By embedding registry and native ID information in the DID parameters (`did:udid:hash;registry=...;nativeId=...`), we enable direct routing across protocol boundaries - a critical feature for true interoperability.
 
-3. **Self-Describing Structure**: The DID itself contains enough information to route messages to the agent without external lookups. By embedding registry and native ID information in the DID parameters (`did:udid:hash;registry=...;nativeId=...`), we enable direct routing across protocol boundaries - a critical feature for true interoperability.
+3. **Cryptographic Verifiability**: Any party can verify that an HCS-14 ID correctly represents an agent by regenerating it from the agent's public data. This creates a trustless system where the ID itself is the proof of authenticity, eliminating the need for certificate authorities or attestation services.
 
-4. **Cryptographic Verifiability**: Any party can verify that an HCS-14 ID correctly represents an agent by regenerating it from the agent's public data. This creates a trustless system where the ID itself is the proof of authenticity, eliminating the need for certificate authorities or attestation services.
+4. **Collision-Resistant Design**: By using SHA-384 hashing with carefully structured canonical data, we achieve cryptographic assurance against ID collisions. The probability of two different agents generating the same ID is effectively zero (2^-384), ensuring global uniqueness without coordination.
 
-5. **Collision-Resistant Design**: By using SHA-256 hashing with carefully structured canonical data, we achieve cryptographic assurance against ID collisions. The probability of two different agents generating the same ID is effectively zero (2^-256), ensuring global uniqueness without coordination.
+5. **Protocol-Agnostic Architecture**: Whether an agent operates through centralized API infrastructure, runs as a smart contract, or leverages consensus mechanisms, the HCS-14 ID works the same way. This universality creates bridges between Web2 and Web3, enabling agents to communicate across different infrastructures while respecting each protocol's unique strengths.
 
-6. **Protocol-Agnostic Architecture**: Whether an agent operates through centralized API infrastructure, runs as a smart contract, or leverages consensus mechanisms, the HCS-14 ID works the same way. This universality creates bridges between Web2 and Web3, enabling agents to communicate across different infrastructures while respecting each protocol's unique strengths.
-
-7. **Future-Proof Evolution**: The DID framework and parameter structure allow the standard to evolve without breaking existing implementations. New parameters can be added while maintaining backward compatibility, ensuring that early adopters aren't left behind as the ecosystem grows.
+6. **Future-Proof Evolution**: The DID framework and parameter structure allow the standard to evolve without breaking existing implementations. New parameters can be added while maintaining backward compatibility, ensuring that early adopters aren't left behind as the ecosystem grows.
 
 ### DID Structure
 
@@ -223,6 +221,7 @@ The hash is computed from a canonical JSON representation containing ONLY these 
 - Communication details (endpoints, topic IDs, etc.) are NOT included in the hash
 - This ensures the same agent always generates the same ID regardless of endpoint changes or metadata updates
 - All agents MUST provide these six fields to generate a valid HCS-14 ID
+- For self-sovereign agents where no specific registry applies, the registry field MUST be set to "self"
 
 **Communication Details**: While not part of the ID hash, agents should separately maintain:
 
@@ -247,7 +246,7 @@ Most protocols provide native unique identifiers that ensure global uniqueness:
 
 | Protocol       | Native ID Type               | Example                                  |
 | -------------- | ---------------------------- | ---------------------------------------- |
-| `hcs-10`       | Ed25519 or ECDSA Public Key  | `"302a300506032b6570032100e7d..."` (hex) |
+| `hcs-10`       | Ed25519 or ECDSA Public Key  | `"e7d59d8bff3f9e1784cd4e7f340fb..."` (hex) |
 | `a2a`          | Domain hosting agent.json    | `"microsoft.com"`                        |
 | `nanda`        | Agent ID (from AGENT_ID env) | `"pirate-bot"`                           |
 | `mcp`          | Server ID                    | `"mcp-filesystem"`                       |
@@ -328,7 +327,7 @@ The hash generation process follows these steps:
 2. **Normalize** strings (lowercase registry/protocol, trim whitespace)
 3. **Sort** capabilities numerically and object keys lexicographically
 4. **Serialize** to canonical JSON with sorted keys
-5. **Hash** using SHA-256 with UTF-8 encoding
+5. **Hash** using SHA-384 with UTF-8 encoding
 6. **Encode** hash as Base58
 
 ```typescript
@@ -356,7 +355,7 @@ function generateAgentDID(agentData: AgentData): string {
 
   // 3. Generate hash
   const sortedJson = JSON.stringify(canonical, Object.keys(canonical).sort());
-  const hash = sha256(sortedJson);
+  const hash = sha384(sortedJson);
   const base58Hash = bs58.encode(hash);
 
   // 4. Build DID with parameters
@@ -446,7 +445,7 @@ Implementations must:
   "name": "Support Agent",
   "version": "1.0.0",
   "protocol": "hcs-10",
-  "nativeId": "302a300506032b6570032100e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
+  "nativeId": "e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
   "skills": [0, 17]
 }
 ```
@@ -457,7 +456,7 @@ Implementations must:
 {
   "skills": [0, 17],
   "name": "Support Agent",
-  "nativeId": "302a300506032b6570032100e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
+  "nativeId": "e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
   "protocol": "hcs-10",
   "registry": "hol",
   "version": "1.0.0"
@@ -528,7 +527,7 @@ Implementations MUST comply with the following technical specifications:
   "name": "Support Agent",
   "version": "1.0.0",
   "protocol": "hcs-10",
-  "nativeId": "302a300506032b6570032100e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
+  "nativeId": "e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
   "skills": [0, 17]
 }
 ```
