@@ -68,18 +68,6 @@ export const judges: Judge[] = [
     ],
   },
   {
-    name: 'Gaurang Torvekar',
-    role: 'Co-Founder',
-    company: 'Bonzo Finance Labs',
-    bio: 'Gaurang is a protocol-level innovator with 8+ years building blockchain products. He is the CTO and co-founder of Bonzo Finance, which has generated over $50M in TVL (Total Value Locked). Gaurang has earned international recognition with 20+ major media features, including Forbes and CoinDesk. Currently pioneering how conversational AI transforms complex crypto operations into intuitive experiences, he brings proven expertise in scaling Web3 infrastructure and deep technical knowledge to evaluate the next generation of AI-native decentralized applications.',
-    image: '/img/hackathon/gaurang.jpg',
-    socials: [
-      { type: 'linkedin', url: 'https://www.linkedin.com/in/gaurangtorvekar/' },
-      { type: 'website', url: 'https://bonzo.finance/' },
-    ],
-    events: ['africa-hackathon'],
-  },
-  {
     name: 'Michael Kantor',
     role: 'President',
     company: 'Hashgraph Online',
@@ -404,6 +392,24 @@ export const mentors: Judge[] = [
       'NFT Creation',
       'Community Building',
       'Ecosystem Development',
+    ],
+    events: ['africa-hackathon'],
+  },
+  {
+    name: 'Gaurang Torvekar',
+    role: 'Co-Founder',
+    company: 'Bonzo Finance Labs',
+    bio: 'Gaurang is a protocol-level innovator with 8+ years building blockchain products. He is the CTO and co-founder of Bonzo Finance, which has generated over $50M in TVL (Total Value Locked). Gaurang has earned international recognition with 20+ major media features, including Forbes and CoinDesk. Currently pioneering how conversational AI transforms complex crypto operations into intuitive experiences, he brings proven expertise in scaling Web3 infrastructure and deep technical knowledge to evaluate the next generation of AI-native decentralized applications.',
+    image: '/img/hackathon/gaurang.jpg',
+    socials: [
+      { type: 'linkedin', url: 'https://www.linkedin.com/in/gaurangtorvekar/' },
+      { type: 'website', url: 'https://bonzo.finance/' },
+    ],
+    expertise: [
+      'DeFi Protocols',
+      'Conversational AI',
+      'Web3 Infrastructure',
+      'Protocol Design',
     ],
     events: ['africa-hackathon'],
   },

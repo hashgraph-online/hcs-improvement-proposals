@@ -509,6 +509,7 @@ textarea {
   transition: color 0.2s ease, background-color 0.2s ease;
   padding: 0.5rem 0.75rem;
   border-radius: 0.25rem;
+  margin: 0 0.125rem;
 }
 
 .navbar__link:hover,
@@ -628,6 +629,39 @@ textarea {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* Mobile menu dropdown arrow - use filter to make it white in both themes */
+.navbar-sidebar .menu__link--sublist-caret:after {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+[data-theme='light'] .navbar-sidebar .menu__link--sublist-caret:after,
+[data-theme='dark'] .navbar-sidebar .menu__link--sublist-caret:after {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+/* Mobile sidebar close X button - force white in both themes using filter */
+.navbar-sidebar__close {
+  color: #ffffff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+[data-theme='light'] .navbar-sidebar__close,
+[data-theme='dark'] .navbar-sidebar__close {
+  color: #ffffff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Ensure the X icon SVG is white */
+.navbar-sidebar__close svg {
+  fill: #ffffff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+[data-theme='light'] .navbar-sidebar__close svg,
+[data-theme='dark'] .navbar-sidebar__close svg {
+  fill: #ffffff !important;
 .navbar-sidebar .menu__list-item-collapsible .menu__link--sublist:after {
   filter: brightness(0) invert(1) !important;
 }
@@ -644,11 +678,104 @@ textarea {
   }
 }
 
+/* Hackathons dropdown styling with consistent blue color */
+.navbar__item.dropdown > .navbar__link:hover,
+.navbar__item.dropdown > .navbar__link[aria-expanded="true"],
+.navbar__item.dropdown > .navbar__link.navbar__link--active[aria-expanded="true"] {
+  background-color: #6289d5 !important;
+  color: #ffffff !important;
+  border-radius: 0.25rem !important;
+}
+
+/* Remove bottom border radius when dropdown is open for seamless look */
+.navbar__item.dropdown > .navbar__link[aria-expanded="true"] {
+  border-radius: 0.25rem 0.25rem 0 0 !important;
+}
+
+/* Ensure the dropdown parent stays highlighted when dropdown is open */
+.navbar__item.dropdown:hover > .navbar__link,
+.navbar__item.dropdown.dropdown--hoverable:hover > .navbar__link,
+.navbar__item.dropdown.dropdown--show > .navbar__link {
+  background-color: #6289d5 !important;
+  color: #ffffff !important;
+}
+
+/* Simple dropdown that extends from navbar */
 .navbar__item.dropdown .dropdown__menu {
-  background-color: var(--brand-keywords);
-  border-radius: 0.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* Use solid blue color to match highlighted Hackathons */
+  background: #6289d5;
+  
+  /* Simple positioning */
+  margin-top: -1px;
+  border: none;
+  border-radius: 0 8px 8px 8px;
+  padding: 0.75rem 0;
+  min-width: 280px;
+  box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
+  
+  /* Shift dropdown to the right */
+  transform: translateX(12px) !important;
+  
+  /* Animation */
+  animation: dropdownSlideDown 0.3s ease-out;
+  transform-origin: top;
+}
+
+/* Dropdown animation */
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateX(12px) translateY(-10px) scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(12px) translateY(0) scaleY(1);
+  }
+}
+
+/* Style sub-items */
+.dropdown__link--sub {
+  font-size: 0.875rem !important;
+  padding-left: 2rem !important;
+  opacity: 0.9;
+}
+
+/* Prevent sub-items from being highlighted when parent is active */
+.dropdown__link--sub.dropdown__link--active {
+  background-color: transparent !important;
+  color: #e0e7ff !important;
+}
+
+.dropdown__link--sub.dropdown__link--active:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mobile sidebar: Keep parent highlighted but not sub-items */
+.navbar-sidebar .dropdown__link--parent.menu__link--active {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Remove highlighting from sub-items in mobile */
+.navbar-sidebar .dropdown__link--sub {
+  background-color: transparent !important;
+}
+
+.navbar-sidebar .dropdown__link--sub.menu__link--active {
+  background-color: transparent !important;
+  color: #e0e7ff !important;
+}
+
+.navbar-sidebar .dropdown__link--sub:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.dropdown__link--parent {
+  font-weight: 600 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem !important;
 }
 
 .navbar__item.dropdown .dropdown__link {
@@ -4243,6 +4370,61 @@ main .theme-doc-generated-index-item:hover::after,
   background: rgba(85, 153, 254, 0.1);
 }
 
+/* Animation delay utilities */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1000ms;
+}
+
+/* Bouncing dots animation - sequential bounce */
+@keyframes bounce-dot-1 {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateY(0);
+  }
+  10% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce-dot-2 {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce-dot-3 {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-dot-1 {
+  animation: bounce-dot-1 2s ease-in-out infinite;
+}
+
+.animate-bounce-dot-2 {
+  animation: bounce-dot-2 2s ease-in-out infinite;
+}
+
+.animate-bounce-dot-3 {
+  animation: bounce-dot-3 2s ease-in-out infinite;
 /* Fix spacing for nested items */
 .menu__list-item-collapsible .menu__list .menu__list-item {
   margin-bottom: 0;

@@ -88,8 +88,8 @@ const TabbedCodeBlock: React.FC<TabbedCodeBlockProps> = ({
       <div className='flex items-center justify-between px-4 py-3 bg-gradient-to-r from-gray-50/90 to-gray-100/90 dark:from-gray-800/90 dark:to-gray-900/90 border-b border-gray-200/50 dark:border-gray-700/50'>
         <div className='flex items-center gap-2'>
           <div className='flex gap-1.5 mr-3'>
-            <div className='w-3 h-3 rounded-full bg-[#FF5F57]'></div>
-            <div className='w-3 h-3 rounded-full bg-[#FFBD2E]'></div>
+            <div className='w-3 h-3 rounded-full bg-brand-purple'></div>
+            <div className='w-3 h-3 rounded-full bg-brand-blue'></div>
             <div className='w-3 h-3 rounded-full bg-[#28CA41]'></div>
           </div>
 
