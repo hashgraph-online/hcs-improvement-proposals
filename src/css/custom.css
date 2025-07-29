@@ -662,6 +662,8 @@ textarea {
 [data-theme='light'] .navbar-sidebar__close svg,
 [data-theme='dark'] .navbar-sidebar__close svg {
   fill: #ffffff !important;
+}
+
 .navbar-sidebar .menu__list-item-collapsible .menu__link--sublist:after {
   filter: brightness(0) invert(1) !important;
 }
@@ -4425,6 +4427,8 @@ main .theme-doc-generated-index-item:hover::after,
 
 .animate-bounce-dot-3 {
   animation: bounce-dot-3 2s ease-in-out infinite;
+}
+
 /* Fix spacing for nested items */
 .menu__list-item-collapsible .menu__list .menu__list-item {
   margin-bottom: 0;
