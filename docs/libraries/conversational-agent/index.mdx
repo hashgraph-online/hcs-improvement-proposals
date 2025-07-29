@@ -88,6 +88,7 @@ if (bytesResponse.transactionBytes) {
 - **TypeScript Support**: Full type definitions for all components
 - **State Management**: Integrated state management for agent operations
 - **CLI Interface**: Beautiful terminal interface for interactive agent communication
+- **MCP Support**: Extend agent capabilities with Model Context Protocol servers for file operations, databases, and external services
 
 ## How It Works
 
@@ -341,6 +342,46 @@ Available plugin IDs:
 - Standard plugins: `hcs-10`, `hcs-2`, `inscribe`
 - Core Hedera plugins: `hts-token`, `account`, `file-service`, `consensus-service`, `smart-contract`, `network`
 
+## MCP (Model Context Protocol) Integration
+
+The Conversational Agent supports MCP servers, enabling integration with external tools and services. This allows your agent to access file systems, databases, and third-party APIs.
+
+### Quick MCP Setup
+
+```typescript
+import { ConversationalAgent, MCPServers } from '@hashgraphonline/conversational-agent';
+
+// Create an agent with MCP servers
+const agent = ConversationalAgent.withMCP(
+  {
+    accountId: '0.0.123456',
+    privateKey: 'your-private-key',
+    openAIApiKey: 'your-openai-key',
+  },
+  [
+    MCPServers.filesystem('/home/user/documents'),
+    MCPServers.github('your-github-token'),
+  ]
+);
+
+await agent.initialize();
+
+// Agent can now access files and GitHub
+const response = await agent.processMessage(
+  'Read the README.md file and create a GitHub issue about any TODOs'
+);
+```
+
+### Available MCP Servers
+
+- **filesystem**: Read, write, and manage local files
+- **github**: Create issues, manage repositories
+- **slack**: Send messages to Slack channels
+- **postgres/sqlite**: Query and manage databases
+- **googleDrive**: Access Google Drive documents
+
+[Learn more about MCP Integration →](./mcp-servers)
+
 ## Configuration Options
 
 | Option | Type | Default | Description |
@@ -356,6 +397,7 @@ Available plugin IDs:
 | `additionalPlugins` | BasePlugin[] | [] | Additional plugins to load |
 | `stateManager` | IStateManager | OpenConvaiState | Custom state manager |
 | `enabledPlugins` | string[] | undefined | Filter which plugins to enable by ID |
+| `mcpServers` | MCPServerConfig[] | undefined | MCP servers to connect to |
 
 ## Compatibility Note
 
