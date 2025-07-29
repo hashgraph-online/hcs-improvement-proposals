@@ -91,6 +91,7 @@ The CLI provides:
 - 💬 Interactive chat with your agent
 - 🔐 Secure credential input
 - 📊 Real-time transaction feedback
+- 🔌 MCP server configuration and management
 
 ## Your First Agent Operations
 
@@ -285,6 +286,61 @@ const agent = new ConversationalAgent({
 ```
 
 See the [Plugin Development Guide](https://github.com/hashgraph-online/conversational-agent/blob/main/docs/PLUGIN_DEVELOPMENT.md) for details.
+
+## Using MCP Servers
+
+MCP (Model Context Protocol) servers extend your agent's capabilities with external tools and services.
+
+### Basic MCP Setup
+
+```typescript
+import { ConversationalAgent, MCPServers } from '@hashgraphonline/conversational-agent';
+
+// Create agent with filesystem access
+const agent = new ConversationalAgent({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+  openAIApiKey: process.env.OPENAI_API_KEY!,
+  mcpServers: [
+    MCPServers.filesystem('/home/user/documents')
+  ]
+});
+
+await agent.initialize();
+
+// Agent can now read and write files
+const response = await agent.processMessage(
+  "Read the project README.md file and summarize it"
+);
+```
+
+### CLI MCP Configuration
+
+The CLI allows you to configure MCP servers interactively:
+
+1. Run the CLI: `pnpm cli`
+2. Select "MCP Servers" from the main menu
+3. Enable the filesystem server and set the path
+4. Add custom MCP servers as needed
+
+Your MCP configuration is saved in `~/.hashgraphonline/mcp-config.json` and automatically loaded on startup.
+
+### Common MCP Use Cases
+
+```typescript
+// File operations
+"Read all .txt files in the current directory"
+"Create a new file called notes.md with my meeting summary"
+
+// With GitHub integration
+"Check for open issues in my repository"
+"Create a pull request with the changes we discussed"
+
+// With database access
+"Query the users table and show me recent signups"
+"Update the status field for order ID 12345"
+```
 
 ## Next Steps
 

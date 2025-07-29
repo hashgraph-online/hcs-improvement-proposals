@@ -233,10 +233,11 @@ const sidebars: SidebarsConfig = {
             id: 'libraries/conversational-agent/index',
           },
           collapsible: true,
-          collapsed: true,
+          collapsed: false,
           items: [
             'libraries/conversational-agent/getting-started',
             'libraries/conversational-agent/tools',
+            'libraries/conversational-agent/mcp-servers',
             'libraries/conversational-agent/examples',
             'libraries/conversational-agent/plugin-development'
           ],

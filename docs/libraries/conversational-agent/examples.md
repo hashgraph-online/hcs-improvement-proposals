@@ -457,10 +457,216 @@ async function errorHandlingExample() {
 errorHandlingExample().catch(console.error);
 ```
 
+## MCP Server Examples
+
+### File Management Agent
+
+```typescript
+import { ConversationalAgent, MCPServers } from '@hashgraphonline/conversational-agent';
+
+async function fileManagementExample() {
+  // Create agent with filesystem access
+  const agent = ConversationalAgent.withMCP(
+    {
+      accountId: process.env.HEDERA_ACCOUNT_ID!,
+      privateKey: process.env.HEDERA_PRIVATE_KEY!,
+      openAIApiKey: process.env.OPENAI_API_KEY!,
+    },
+    [MCPServers.filesystem('/home/user/projects')]
+  );
+
+  await agent.initialize();
+
+  console.log('\n=== File Operations ===');
+  
+  // Read and analyze files
+  await agent.processMessage(
+    "Read all JavaScript files in the src directory and list the exported functions"
+  );
+
+  // Create documentation
+  await agent.processMessage(
+    "Create a README.md file with documentation for all the .js files in this directory"
+  );
+
+  // Organize files
+  await agent.processMessage(
+    "Create folders for components, utils, and tests, then move files accordingly"
+  );
+
+  // Backup configuration
+  await agent.processMessage(
+    "Create a backup of all .json configuration files in a backup folder with today's date"
+  );
+}
+
+fileManagementExample().catch(console.error);
+```
+
+### Development Assistant
+
+```typescript
+async function developmentAssistant() {
+  // Agent with multiple MCP servers
+  const agent = new ConversationalAgent({
+    accountId: process.env.HEDERA_ACCOUNT_ID!,
+    privateKey: process.env.HEDERA_PRIVATE_KEY!,
+    openAIApiKey: process.env.OPENAI_API_KEY!,
+    mcpServers: [
+      MCPServers.filesystem('./'),
+      MCPServers.github(process.env.GITHUB_TOKEN!),
+      MCPServers.postgres('postgresql://localhost/devdb')
+    ]
+  });
+
+  await agent.initialize();
+
+  // Complete development workflow
+  console.log('\n=== Development Workflow ===');
+  
+  // Analyze codebase
+  await agent.processMessage(
+    "Read all test files and identify which components lack test coverage"
+  );
+
+  // Create GitHub issues
+  await agent.processMessage(
+    "Create GitHub issues for each component that needs tests"
+  );
+
+  // Update database
+  await agent.processMessage(
+    "Update the code_quality table with the current test coverage metrics"
+  );
+
+  // Generate report
+  await agent.processMessage(
+    "Create a markdown report summarizing code quality and save it as quality-report.md"
+  );
+}
+```
+
+### Data Analysis Agent
+
+```typescript
+async function dataAnalysisExample() {
+  const agent = ConversationalAgent.withMCP(
+    {
+      accountId: process.env.HEDERA_ACCOUNT_ID!,
+      privateKey: process.env.HEDERA_PRIVATE_KEY!,
+      openAIApiKey: process.env.OPENAI_API_KEY!,
+    },
+    [
+      MCPServers.postgres('postgresql://localhost/analytics'),
+      MCPServers.filesystem('./reports')
+    ]
+  );
+
+  await agent.initialize();
+
+  console.log('\n=== Data Analysis ===');
+  
+  // Query and analyze data
+  await agent.processMessage(
+    "Query the sales table for Q4 data and calculate the growth rate compared to Q3"
+  );
+
+  // Generate visualizations data
+  await agent.processMessage(
+    "Create a JSON file with monthly sales data formatted for chart visualization"
+  );
+
+  // Create comprehensive report
+  await agent.processMessage(
+    "Write a detailed analysis report including trends, insights, and recommendations, save as q4-analysis.md"
+  );
+}
+```
+
+### Agent with Filtered MCP Tools
+
+```typescript
+async function filteredMCPExample() {
+  // Agent with tool filtering for safety
+  const agent = new ConversationalAgent({
+    accountId: process.env.HEDERA_ACCOUNT_ID!,
+    privateKey: process.env.HEDERA_PRIVATE_KEY!,
+    openAIApiKey: process.env.OPENAI_API_KEY!,
+    mcpServers: [MCPServers.filesystem('/tmp/safe-directory')],
+    toolFilter: (tool) => {
+      // Only allow read operations and safe writes
+      const safeTool = ['read_file', 'list_directory', 'write_file'].includes(tool.name);
+      const unsafeOperation = tool.name.includes('delete') || tool.name.includes('remove');
+      return safeTool && !unsafeOperation;
+    }
+  });
+
+  await agent.initialize();
+
+  // These operations will work
+  await agent.processMessage("Read all text files");
+  await agent.processMessage("Create a summary.txt file");
+
+  // These will be blocked by the filter
+  await agent.processMessage("Delete old files"); // Blocked
+  await agent.processMessage("Remove temporary directory"); // Blocked
+}
+```
+
+### Combined HCS and MCP Operations
+
+```typescript
+async function combinedOperations() {
+  // Agent with HCS tools and MCP servers
+  const agent = new ConversationalAgent({
+    accountId: process.env.HEDERA_ACCOUNT_ID!,
+    privateKey: process.env.HEDERA_PRIVATE_KEY!,
+    openAIApiKey: process.env.OPENAI_API_KEY!,
+    mcpServers: [
+      MCPServers.filesystem('./agent-data'),
+      MCPServers.postgres('postgresql://localhost/agentdb')
+    ]
+  });
+
+  await agent.initialize();
+
+  console.log('\n=== Combined Operations ===');
+  
+  // Register agent and save profile
+  await agent.processMessage(
+    "Register me as DataAnalyzer with analytics capabilities"
+  );
+
+  await agent.processMessage(
+    "Save my agent profile to agent-profile.json"
+  );
+
+  // Find agents and save results
+  await agent.processMessage(
+    "Find all agents with analytics tag and save the list to analytics-agents.json"
+  );
+
+  // Track connections in database
+  await agent.processMessage(
+    "Connect to agent 0.0.123456"
+  );
+
+  await agent.processMessage(
+    "Insert this connection into the agent_connections table"
+  );
+
+  // Inscribe important data
+  await agent.processMessage(
+    "Read agent-profile.json and inscribe it on Hedera"
+  );
+}
+```
+
 ## See Also
 
 - [Getting Started](./getting-started) - Quick start guide
 - [Available Tools](./tools) - Complete tool documentation
+- [MCP Servers](./mcp-servers) - External tool integration guide
 - [Plugin Development Guide](https://github.com/hashgraph-online/conversational-agent/blob/main/docs/PLUGIN_DEVELOPMENT.md) - Create custom plugins
 - [HCS-10 Standard](/docs/standards/hcs-10) - OpenConvAI specification
 - [HCS-2 Standard](/docs/standards/hcs-2) - Registry specification
