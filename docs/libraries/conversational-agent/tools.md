@@ -5,7 +5,7 @@ description: Complete list of tools provided by the Conversational Agent
 
 # Available Tools
 
-The Conversational Agent provides a comprehensive set of 22 tools across three built-in plugins, plus all the standard tools from hedera-agent-kit.
+The Conversational Agent provides a comprehensive set of 22 tools across three built-in plugins, plus all the standard tools from hedera-agent-kit. Additionally, when MCP servers are configured, you gain access to their respective tools for file operations, databases, and external services.
 
 ## Tool Categories
 
@@ -152,8 +152,57 @@ For detailed documentation on specific tool sets:
 - [Inscription SDK Documentation](https://github.com/hashgraph-online/inscription-sdk) - Content inscription details
 - [Hedera Agent Kit Tools](https://www.npmjs.com/package/hedera-agent-kit/v/2.0.3) - Core Hedera tools
 
+## MCP Server Tools
+
+When MCP servers are configured, additional tools become available based on the server type:
+
+### Filesystem Tools (when filesystem server is enabled)
+- **read_file** - Read contents of files
+- **write_file** - Create or update files
+- **list_directory** - List directory contents
+- **create_directory** - Create new directories
+- **delete_file** - Remove files
+- **move_file** - Move or rename files
+
+### GitHub Tools (when GitHub server is enabled)
+- **create_issue** - Create GitHub issues
+- **list_issues** - List repository issues
+- **create_pull_request** - Create PRs
+- **list_branches** - View branches
+- **get_commits** - Access commit history
+
+### Database Tools (when PostgreSQL/SQLite server is enabled)
+- **execute_query** - Run SQL queries
+- **list_tables** - View database tables
+- **describe_table** - Get table schema
+- **insert_data** - Add records
+- **update_data** - Modify records
+- **delete_data** - Remove records
+
+### Natural Language MCP Examples
+
+```typescript
+// With filesystem MCP server
+"Read all .js files in the src directory"
+"Create a backup of config.json"
+"Delete temporary files from the cache folder"
+
+// With GitHub MCP server
+"Create an issue about the performance bug"
+"List all open pull requests"
+"Show recent commits on the main branch"
+
+// With database MCP server
+"Query users created in the last 7 days"
+"Update order status to shipped for order 12345"
+"Show the schema for the products table"
+```
+
+For detailed MCP configuration and usage, see the [MCP Servers Guide](./mcp-servers).
+
 ## See Also
 
 - [Getting Started](./getting-started) - Quick start guide
 - [Examples](./examples) - Practical usage examples
 - [Plugin Development Guide](./plugin-development) - Create custom tools
+- [MCP Servers](./mcp-servers) - External tool integration
