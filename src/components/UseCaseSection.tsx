@@ -178,8 +178,8 @@ const UseCaseSection: React.FC = () => {
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-3'>
                     <div className='flex gap-1.5'>
-                      <div className='w-3 h-3 rounded-full bg-red-400'></div>
-                      <div className='w-3 h-3 rounded-full bg-yellow-400'></div>
+                      <div className='w-3 h-3 rounded-full bg-brand-purple'></div>
+                      <div className='w-3 h-3 rounded-full bg-brand-blue'></div>
                       <div className='w-3 h-3 rounded-full bg-green-400'></div>
                     </div>
                     <div className='text-xs font-mono text-gray-700 dark:text-gray-300'>

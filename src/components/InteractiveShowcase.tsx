@@ -137,8 +137,8 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-2'>
                     <div className='flex gap-1'>
-                      <div className='w-2.5 h-2.5 rounded-full bg-red-400'></div>
-                      <div className='w-2.5 h-2.5 rounded-full bg-yellow-400'></div>
+                      <div className='w-2.5 h-2.5 rounded-full bg-brand-purple'></div>
+                      <div className='w-2.5 h-2.5 rounded-full bg-brand-blue'></div>
                       <div className='w-2.5 h-2.5 rounded-full bg-green-400'></div>
                     </div>
                     <div className='text-xs font-mono text-gray-700 dark:text-gray-300'>
@@ -213,8 +213,8 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-4'>
                   <div className='flex gap-1.5'>
-                    <div className='w-3 h-3 rounded-full bg-red-400'></div>
-                    <div className='w-3 h-3 rounded-full bg-yellow-400'></div>
+                    <div className='w-3 h-3 rounded-full bg-brand-purple'></div>
+                    <div className='w-3 h-3 rounded-full bg-brand-blue'></div>
                     <div className='w-3 h-3 rounded-full bg-green-400'></div>
                   </div>
                   <div className='text-sm font-mono text-gray-700 dark:text-gray-300'>

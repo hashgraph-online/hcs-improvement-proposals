@@ -374,7 +374,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
             <FaCheckCircle className='text-[#48df7b] text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                October 2025
+                November 2025
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Winners Announced
