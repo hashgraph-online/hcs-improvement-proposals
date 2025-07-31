@@ -200,6 +200,8 @@ const HAHHeroSection: React.FC = () => {
                 size='lg'
                 className='bg-[#a679f0] hover:bg-[#a679f0]/90 text-white border-0'
                 icon={<FaArrowRight />}
+                data-umami-event="hackathon-register-dorahacks-hero"
+                data-umami-event-category="hackathon"
               >
                 Register on DoraHacks
               </PrimaryButton>
@@ -211,6 +213,8 @@ const HAHHeroSection: React.FC = () => {
                 size='lg'
                 className='bg-gray-600 hover:bg-gray-700 text-white border-0'
                 icon={<FaGlobe />}
+                data-umami-event="hackathon-view-main-event-hero"
+                data-umami-event-category="hackathon"
               >
                 View Main Event
               </PrimaryButton>
@@ -305,7 +309,8 @@ const HAHHeroSection: React.FC = () => {
                 <p className='text-xs text-gray-500 dark:text-gray-400 mb-4 text-center'>
                   In collaboration with
                 </p>
-                <div className='flex flex-wrap items-center justify-center gap-4'>
+                <div className='flex flex-wrap items-center justify-center gap-6'>
+                  <div className='flex flex-wrap items-center justify-center gap-4'>
                     <div className='flex items-center gap-0.5'>
                       <img
                         src='/img/logo.png'
@@ -326,6 +331,26 @@ const HAHHeroSection: React.FC = () => {
                       alt='Exponential Science'
                       className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
                     />
+                  </div>
+                  <div className='flex items-center gap-4 pl-6 border-l border-gray-300 dark:border-gray-600'>
+                    <div className='flex flex-col items-center gap-1'>
+                      <span className='text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500'>Media Partner</span>
+                      <a
+                        href='https://genfinity.io/'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='inline-block'
+                        data-umami-event="hackathon-genfinity-visit"
+                        data-umami-event-category="hackathon"
+                      >
+                        <img
+                          src='/img/hackathon/genfinity-logo.webp'
+                          alt='Genfinity - Media Partner'
+                          className='h-5 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none] hover:opacity-80 transition-opacity'
+                        />
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
 

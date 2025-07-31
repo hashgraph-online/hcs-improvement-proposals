@@ -109,6 +109,7 @@ export const judges: Judge[] = [
     bio: 'Tudor is the founder of Builder Labs.',
     image: '/img/hackathon/tudor-h.jpg',
     socials: [{ type: 'twitter', url: 'https://x.com/Tudor_Holotescu' }],
+    events: ['africa-hackathon'],
   },
   {
     name: 'Pluto',
@@ -466,5 +467,14 @@ export const mentors: Judge[] = [
     socials: [{ type: 'twitter', url: 'https://x.com/PattyAlexx' }],
     events: ['africa-hackathon'],
     demoDay: true,
+  },
+  {
+    name: 'Tudor Holotescu',
+    role: 'Founder, Builder Labs',
+    company: 'Builder Labs',
+    bio: 'Tudor is the founder of Builder Labs.',
+    image: '/img/hackathon/tudor-h.jpg',
+    socials: [{ type: 'twitter', url: 'https://x.com/Tudor_Holotescu' }],
+    events: ['africa-hackathon'],
   },
 ];

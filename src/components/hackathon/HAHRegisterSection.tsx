@@ -248,6 +248,8 @@ const HAHRegisterSection: React.FC = () => {
                 size='lg'
                 className='bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white border-0'
                 icon={<FaArrowRight />}
+                data-umami-event="hackathon-register-dorahacks"
+                data-umami-event-category="hackathon"
               >
                 Register on DoraHacks
               </PrimaryButton>
@@ -260,6 +262,8 @@ const HAHRegisterSection: React.FC = () => {
                 variant='secondary'
                 className='border-2 border-gray-300 dark:border-gray-600 hover:border-[#a679f0] dark:hover:border-[#48df7b] transition-colors'
                 icon={<FaGlobe />}
+                data-umami-event="hackathon-view-main-event"
+                data-umami-event-category="hackathon"
               >
                 View Main Event
               </PrimaryButton>

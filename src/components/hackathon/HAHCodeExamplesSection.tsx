@@ -917,6 +917,8 @@ export async function analyzeAccountForAI(accountId: string) {
               rel='noopener noreferrer'
               size='sm'
               icon={<FaArrowRight />}
+              data-umami-event="hackathon-view-code-examples"
+              data-umami-event-category="hackathon"
             >
               View Examples
             </PrimaryButton>
@@ -942,6 +944,8 @@ export async function analyzeAccountForAI(accountId: string) {
               rel='noopener noreferrer'
               size='sm'
               icon={<FaArrowRight />}
+              data-umami-event="hackathon-try-demos"
+              data-umami-event-category="hackathon"
             >
               Try Demos
             </PrimaryButton>
