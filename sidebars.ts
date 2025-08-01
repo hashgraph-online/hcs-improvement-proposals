@@ -119,6 +119,11 @@ const sidebars: SidebarsConfig = {
           label: 'HCS-13: Schema Registry',
         },
         {
+          type: 'doc',
+          id: 'standards/hcs-14',
+          label: 'HCS-14: Universal Agent ID Standard',
+        },
+        {
           type: 'category',
           label: 'HCS-20: Auditable Points',
           collapsible: true,
