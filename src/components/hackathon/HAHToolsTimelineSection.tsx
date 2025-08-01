@@ -190,10 +190,10 @@ const HAHToolsTimelineSection: React.FC = () => {
       icon: <FaGithub />,
       title: 'Standards SDK',
       description:
-        'Access the full suite of HCS Improvement Proposals and reference implementations including the OpenConvAI SDK.',
+        'Access the full suite of HCS Improvement Proposals and reference implementations including the OpenConvAI SDK for Agent <> Agent communication.',
       link: 'https://hashgraphonline.com/docs/libraries/standards-sdk/',
       installCommand: 'npm install @hashgraphonline/standards-sdk',
-      isNew: true,
+      isNew: false,
       color: 'green',
       quickStart: `import { HCS10Client, AgentBuilder, AIAgentCapability, InboundTopicType } from '@hashgraphonline/standards-sdk';
 
@@ -213,6 +213,62 @@ const agentBuilder = new AgentBuilder()
 
 const agent = await hcs10Client.createAndRegisterAgent(agentBuilder);`,
       docsLink: '/docs/libraries/standards-sdk/',
+    },
+    {
+      icon: <FaRobot />,
+      title: 'Hedera Agent Kit',
+      description:
+        'AI-powered toolkit for building intelligent agents that interact with Hedera blockchain. Complete rewrite focused on developer experience with LangChain integration.',
+      link: 'https://github.com/hedera-dev/hedera-agent-kit',
+      installCommand:
+        'npm install hedera-agent-kit @langchain/openai @hashgraph/sdk',
+      isNew: true,
+      color: 'purple',
+      quickStart: `import { HederaLangchainToolkit } from 'hedera-agent-kit';
+import { Client } from '@hashgraph/sdk';
+import { ChatOpenAI } from '@langchain/openai';
+import { createToolCallingAgent } from 'langchain/agents';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+
+// Initialize Hedera client
+const client = Client.forTestnet();
+client.setOperator(
+  process.env.HEDERA_ACCOUNT_ID!,
+  process.env.HEDERA_PRIVATE_KEY!
+);
+
+// Create the toolkit with AI agent capabilities
+const hederaToolkit = new HederaLangchainToolkit({
+  client,
+  configuration: {
+    plugins: ['coreQueries', 'tokenOperations', 'topicMessaging']
+  }
+});
+
+// Get available tools for the agent
+const tools = hederaToolkit.getTools();
+
+// Create AI agent with Hedera tools
+const agent = createToolCallingAgent({
+  llm: new ChatOpenAI({
+    model: 'gpt-4',
+    temperature: 0.1,
+  }),
+  tools,
+  prompt: ChatPromptTemplate.fromMessages([
+    ['system', 'You are a Hedera blockchain assistant. Help users interact with Hedera through natural language.'],
+    ['human', '{input}'],
+    ['placeholder', '{agent_scratchpad}']
+  ])
+});
+
+// Execute agent with natural language commands
+const result = await agent.invoke({
+  input: 'Send 5 HBAR to account 0.0.12345 and create a topic for updates'
+});
+
+console.log('Agent result:', result.output);`,
+      docsLink: 'https://github.com/hedera-dev/hedera-agent-kit',
     },
     {
       icon: <FaCode />,
@@ -248,7 +304,7 @@ const messageTx = await new TopicMessageSubmitTransaction()
       icon: <FaPlug />,
       title: 'Conversational Agent',
       description:
-        'Conversational AI agent implementing Hashgraph Consensus Standards (HCS) for agent communication, registry management, and content inscription on Hedera. Built on hedera-agent-kit v2 for comprehensive Hedera network access.',
+        'Conversational AI agent implementing Hashgraph Consensus Standards (HCS) for agent communication, registry management, and content inscription on Hedera. Built on hedera-agent-kit for comprehensive Hedera network access.',
       link: 'https://github.com/hashgraph-online/conversational-agent',
       installCommand: 'npm install @hashgraphonline/conversational-agent',
       isNew: true,
@@ -306,34 +362,6 @@ const inscribePlugin = agent.inscribePlugin;`,
 5. Create your own agent profile`,
     },
     {
-      icon: <FaRobot />,
-      title: 'Standards AgentKit',
-      description:
-        'Next-generation toolkit for building conversational AI agents with integrated Hedera Consensus Service support.',
-      link: '/docs/libraries/standards-agent-kit/',
-      installCommand: 'npm install @hashgraphonline/standards-agent-kit',
-      isNew: true,
-      color: 'purple',
-      quickStart: `import { initializeStandardsAgentKit } from '@hashgraphonline/standards-agent-kit';
-
-const { hederaKit, hcs10Builder, tools, stateManager } = await initializeStandardsAgentKit({
-  clientConfig: {
-    operatorId: process.env.HEDERA_ACCOUNT_ID!,
-    operatorKey: process.env.HEDERA_PRIVATE_KEY!,
-    network: 'testnet'
-  },
-  createAllTools: true
-});
-
-// Register an agent
-const result = await tools.registerAgentTool.invoke({
-  name: 'My AI Agent',
-  description: 'An autonomous AI agent for data analysis',
-  capabilities: [0] // TEXT_GENERATION
-});`,
-      docsLink: '/docs/libraries/standards-agent-kit/',
-    },
-    {
       icon: <FaCode />,
       title: 'Hgraph SDK',
       description:
@@ -388,6 +416,104 @@ const subscription = client.subscribe({
   complete: () => console.log('Subscription complete')
 });`,
       docsLink: 'https://docs.hgraph.com/category/hgraph-sdk',
+    },
+    {
+      icon: <FaRobot />,
+      title: 'Memejob SDK',
+      description:
+        'TypeScript SDK for launching and trading Hedera tokens through the memejob protocol - perfect for AI agents managing meme tokens.',
+      link: 'https://github.com/buidler-labs/memejob-sdk-js',
+      installCommand: 'npm install @buidler-labs/memejob-sdk-js',
+      isNew: true,
+      color: 'green',
+      quickStart: `import { AccountId, ContractId, PrivateKey } from "@hashgraph/sdk";
+import {
+  CONTRACT_DEPLOYMENTS,
+  createAdapter,
+  getChain,
+  MJClient,
+  NativeAdapter,
+} from "@buidlerlabs/memejob-sdk-js";
+
+// Initialize the Memejob client
+const contractId = ContractId.fromString(
+  CONTRACT_DEPLOYMENTS.mainnet.contractId
+);
+
+const client = new MJClient(
+  createAdapter(NativeAdapter, {
+    operator: {
+      accountId: AccountId.fromString(process.env.HEDERA_ACCOUNT_ID!),
+      privateKey: PrivateKey.fromStringECDSA(process.env.HEDERA_PRIVATE_KEY!),
+    },
+  }),
+  {
+    chain: getChain("mainnet"),
+    contractId,
+  }
+);
+
+// Create a meme token
+const tokenInfo = {
+  name: "AI Agent Token",
+  symbol: "AIAGENT",
+  memo: "ipfs://QmYourTokenMetadataCID",
+};
+
+const token = await client.createToken(tokenInfo, {
+  amount: 100000000000n,
+  distributeRewards: true,
+  referrer: "0x000...000",
+});
+
+console.log('Token created:', token);
+
+// Buy tokens from the bonding curve
+const buyResult = await token.buy({
+  amount: 100000000000000n, // Amount in smallest unit
+  referrer: "0x000...000"
+});
+
+console.log('Buy result:', buyResult.status);
+console.log('Tokens bought:', buyResult.amount);
+
+// Sell tokens back to the curve
+const sellResult = await token.sell({
+  amount: 50000000000000n, // Amount to sell
+  instant: true,
+});
+
+console.log('Sell result:', sellResult.status);
+console.log('Tokens sold:', sellResult.amount);`,
+      docsLink: 'https://github.com/buidler-labs/memejob-sdk-js',
+    },
+    {
+      icon: <FaRobot />,
+      title: 'Standards AgentKit',
+      description:
+        'A langchain-based toolkit which implements HCS standards. Can be used directly or through the Conversational Agent.',
+      link: '/docs/libraries/standards-agent-kit/',
+      installCommand: 'npm install @hashgraphonline/standards-agent-kit',
+      isNew: false,
+      color: 'purple',
+      quickStart: `import { initializeStandardsAgentKit } from '@hashgraphonline/standards-agent-kit';
+
+const { hederaKit, hcs10Builder, tools, stateManager } = await initializeStandardsAgentKit({
+  clientConfig: {
+    operatorId: process.env.HEDERA_ACCOUNT_ID!,
+    operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+    network: 'testnet'
+  },
+  createAllTools: true
+});
+
+// Register an agent
+const result = await tools.registerAgentTool.invoke({
+  name: 'My AI Agent',
+  description: 'An autonomous AI agent for data analysis',
+  capabilities: [0] // TEXT_GENERATION
+});`,
+      docsLink: '/docs/libraries/standards-agent-kit/',
     },
   ];
 
