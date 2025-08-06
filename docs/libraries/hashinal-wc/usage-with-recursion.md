@@ -1,8 +1,26 @@
-# Usage with HCS-3 Recursion
+---
+title: Hashinals Guide
+sidebar_position: 7
+description: Build inscribed HTML applications using HCS-3 standard
+pagination_prev: libraries/hashinal-wc/usage-with-vite
+pagination_next: libraries/hashinal-wc/topics
+---
 
-Here's a minimal example showing how to use HCS-3 recursion to load the WalletConnect SDK and display a user's balance.
+# Hashinals Guide
 
-Before you begin, see the [installation guide](./installation.md) and [recursion guide](../recursion-sdk/usage.md) for details.
+Build fully on-chain HTML applications (Hashinals) using HCS-3 recursion to load the WalletConnect SDK directly from Hedera.
+
+## Overview
+
+Hashinals are inscribed HTML applications that run entirely from data stored on Hedera using the HCS-3 standard. This guide shows how to create a simple wallet-connected Hashinal.
+
+## Prerequisites
+
+- Understanding of HCS-3 recursion
+- WalletConnect project ID ([get one here](https://cloud.walletconnect.com/))
+- Basic HTML/JavaScript knowledge
+
+For more details, see the [installation guide](./installation.md) and [recursion guide](../recursion-sdk/usage.md).
 
 ## Create index.html
 
@@ -83,7 +101,7 @@ Before you begin, see the [installation guide](./installation.md) and [recursion
           .getElementById('connectWallet')
           .addEventListener('click', async () => {
             try {
-              const { accountId, balance } = await sdk.await connectWallet(
+              const { accountId, balance } = await sdk.connectWallet(
                 PROJECT_ID,
                 APP_METADATA
               );
@@ -111,21 +129,33 @@ Before you begin, see the [installation guide](./installation.md) and [recursion
 </html>
 ```
 
-## Key Points
+## How It Works
 
-1. The WalletConnect SDK is loaded via HCS-3 recursion from topic `0.0.7797532`
-2. The `HCSReady` callback ensures our code runs after the SDK is loaded
-3. No build step or additional inscriptions needed - everything runs in the browser
+### Key Points
 
-## Common Issues
+1. **SDK Loading**: The WalletConnect SDK is loaded via HCS-3 recursion from topic `0.0.7797532`
+2. **Initialization**: The `HCSReady` callback ensures our code runs after the SDK is loaded
+3. **No Build Required**: Everything runs directly in the browser - no build step or npm needed
+4. **Fully On-Chain**: Your entire application can be inscribed to Hedera
 
-1. **Modal not displaying**
+## Troubleshooting
 
-   - If you've enabled strict hosts in Wallet Connect, ensure your local host or other domains is in the list of allowed hosts.
-   - Verify HCS-3 configuration is properly set
-   - Check browser console for loading errors
+### Modal Not Displaying
 
-2. **Connection Issues**
-   - Verify PROJECT_ID is valid
+- **Strict Hosts**: If you've enabled strict hosts in WalletConnect, ensure your domain is in the allowed list
+- **HCS-3 Config**: Verify the HCS-3 configuration attributes are properly set
+- **Console Errors**: Check browser console for SDK loading errors
 
-Remember to replace `YOUR_PROJECT_ID` with your actual WalletConnect project ID!
+### Connection Issues
+
+- **Project ID**: Verify your WalletConnect project ID is valid
+- **Network**: Ensure you're using the correct network (mainnet/testnet)
+- **Browser**: Some browsers may block popups - check your browser settings
+
+## Next Steps
+
+- Explore [API Methods](./methods) for more SDK capabilities
+- Learn about [HCS Topics](./topics) for message handling
+- Check out the [HCS-3 standard](../../standards/hcs-3) for advanced recursion features
+
+> **Important**: Remember to replace `YOUR_PROJECT_ID` with your actual WalletConnect project ID!

@@ -1,8 +1,26 @@
-# Usage with Vite
+---
+title: Vite Integration
+sidebar_position: 6
+description: Fast development with Vite and Hedera wallet connectivity
+pagination_prev: libraries/hashinal-wc/usage-with-nextjs
+pagination_next: libraries/hashinal-wc/usage-with-recursion
+---
 
-Let's build a simple web application that connects to a Hedera wallet. We'll use Vite for quick setup and modern browser support.
+# Vite Integration
 
-Before you begin, see the [installation guide](./installation.md) for details.
+Build blazing-fast web applications with Hedera wallet connectivity using Vite's modern development experience.
+
+## Overview
+
+This guide shows how to integrate Hashinal Wallet Connect SDK with Vite for a lightweight, fast development setup with hot module replacement and optimized builds.
+
+## Prerequisites
+
+- Node.js 20+ installed
+- Basic knowledge of JavaScript/HTML
+- WalletConnect project ID ([get one here](https://cloud.walletconnect.com/))
+
+Before you begin, see the [installation guide](./installation.md) for package details.
 
 ## Step 1: Project Setup
 
@@ -169,15 +187,34 @@ npm run build
 
 This will create optimized files in the `dist` directory.
 
-## Common Issues and Solutions
+## Troubleshooting
 
-1. **Build Errors**
-   - Check that all dependencies are installed
-   - Verify Vite configuration is correct
-   - Make sure all imports are properly resolved
+### Build Errors
+- Check that all dependencies are installed: `npm list`
+- Verify Vite configuration matches the example above
+- Ensure all imports are properly resolved
 
-2. **Runtime Errors**
-   - Check browser console for detailed error messages
-   - Verify PROJECT_ID is valid
-   - Ensure wallet supports WalletConnect v2
+### Runtime Errors
+- Check browser console for detailed error messages
+- Verify your WalletConnect PROJECT_ID is valid
+- Ensure the wallet you're using supports WalletConnect v2
+
+### Connection Issues
+- Clear browser cache and localStorage
+- Try a different wallet (HashPack, Blade, etc.)
+- Check network connectivity
+
+## Best Practices
+
+1. **Environment Variables**: Always use `.env` files for sensitive data
+2. **Error Handling**: Implement proper error boundaries and user feedback
+3. **Loading States**: Show loading indicators during wallet operations
+4. **Network Detection**: Check and display the current Hedera network
+5. **Session Persistence**: The SDK automatically handles session persistence
+
+## Next Steps
+
+- Explore [API Methods](./methods) for advanced SDK features
+- Learn about [HCS Topics](./topics) for message handling
+- Check out [React Integration](./usage-with-react) for component-based apps
 
