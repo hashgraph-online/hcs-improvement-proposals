@@ -225,6 +225,12 @@ const agent = await hcs10Client.createAndRegisterAgent(agentBuilder);`,
       isNew: true,
       color: 'purple',
       quickStart: `import { HederaLangchainToolkit } from 'hedera-agent-kit';
+import { 
+  coreHTSPlugin, 
+  coreAccountPlugin, 
+  coreConsensusPlugin, 
+  coreQueriesPlugin 
+} from 'hedera-agent-kit';
 import { Client } from '@hashgraph/sdk';
 import { ChatOpenAI } from '@langchain/openai';
 import { createToolCallingAgent } from 'langchain/agents';
@@ -241,7 +247,7 @@ client.setOperator(
 const hederaToolkit = new HederaLangchainToolkit({
   client,
   configuration: {
-    plugins: ['coreQueries', 'tokenOperations', 'topicMessaging']
+    plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin]
   }
 });
 

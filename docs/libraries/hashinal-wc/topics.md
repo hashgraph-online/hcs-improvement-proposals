@@ -1,8 +1,12 @@
 ---
-sidebar_position: 2
+title: HCS Topics
+sidebar_position: 8
+description: Work with Hedera Consensus Service topics and messages
+pagination_prev: libraries/hashinal-wc/usage-with-recursion
+pagination_next: null
 ---
 
-# Version History & Topics
+# HCS Topics & Version History
 
 ## Overview
 
@@ -166,19 +170,7 @@ hcs://1/0.0.8084872
 ## Support & Updates
 
 - **GitHub**: [hashgraph-online/hashinal-wc](https://github.com/hashgraph-online/hashinal-wc)
-- **NPM**: [@hashgraphonline/hashinal-wc](https://www.npmjs.com/package/@hashgraphonline/hashinal-wc)
-- **Discord**: Join the Hashgraph Online community for support
-
-## Future Versions
-
-Upcoming features planned for future releases:
-
-- [ ] Multi-signature support
-- [ ] Scheduled transactions
-- [ ] Enhanced batching capabilities
-- [ ] Offline transaction signing
-- [ ] Hardware wallet integration
-
+- **NPM**: [@hashgraphonline/hashinal-wc](https://www.npmjs.com/package/@hashgraphonline/hashinal-wc) 
 ---
 
 💡 **Tip**: Always use the latest version for new projects to access all features and security updates. For production Hashinals, consider pinning to a specific stable version to ensure consistent behavior.
