@@ -34,9 +34,13 @@ graph TB
         Other[Other JS<br/>Frameworks]
     end
 
-    subgraph "SDK Layer"
+    subgraph "Abstraction Layer"
         UMD[UMD Build<br/>window.HashinalsWalletConnectSDK]
         ESM[ESM Build<br/>@hashgraphonline/hashinal-wc]
+    end
+
+    subgraph "SDK Layer"
+        HWC[Hedera Wallet Connect<br/>@hashgraph/hedera-wallet-connect]
     end
 
     subgraph "Protocol Layer"
@@ -56,27 +60,30 @@ graph TB
     Vue --> ESM
     Other --> ESM
 
-    UMD --> WC
-    ESM --> WC
+    UMD --> HWC
+    ESM --> HWC
     UMD --> HCS
 
+    HWC --> WC
     WC --> HashPack
     WC --> Blade
     WC --> Kabila
     WC --> OtherWallets
 
     classDef app fill:#e1f5fe,stroke:#01579b,stroke-width:2px
-    classDef sdk fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef abstraction fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef sdk fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
     classDef protocol fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    classDef wallet fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    classDef wallet fill:#fce4ec,stroke:#880e4f,stroke-width:2px
 
     class HTML,React,Vue,Other app
-    class UMD,ESM sdk
+    class UMD,ESM abstraction
+    class HWC sdk
     class WC,HCS protocol
     class HashPack,Blade,Kabila,OtherWallets wallet
 ```
 
-## Core Features
+## Quick Start
 
 ### Wallet Operations
 
@@ -111,8 +118,6 @@ graph TB
 | **Execute Contracts** | Call smart contract functions | DeFi protocols |
 | **Read Contracts** | Query contract state without gas | Data fetching |
 | **Contract Parameters** | Build complex function parameters | Advanced interactions |
-
-## Quick Start
 
 ### For Inscribed HTML (Hashinals)
 
@@ -162,6 +167,42 @@ await sdk.init(
 const session = await sdk.connect();
 ```
 
+## Core Features
+
+### Wallet Operations
+
+| Feature | Description | Use Case |
+|---------|-------------|----------|
+| **Connect/Disconnect** | Establish and manage wallet connections | User authentication |
+| **Account Info** | Retrieve account details and balances | Display user data |
+| **HBAR Transfers** | Send HBAR between accounts | Payments, tips |
+| **Token Operations** | Transfer, associate, dissociate tokens | DeFi, gaming |
+
+### Topic & Messaging
+
+| Feature | Description | Use Case |
+|---------|-------------|----------|
+| **Create Topics** | Create new HCS topics with optional keys | Decentralized messaging |
+| **Submit Messages** | Write messages to HCS topics | Data storage, communication |
+| **Retrieve Messages** | Read messages from topics | Data retrieval, verification |
+
+### NFT & Token Management
+
+| Feature | Description | Use Case |
+|---------|-------------|----------|
+| **Create Tokens** | Deploy new fungible or non-fungible tokens | Token launches |
+| **Mint NFTs** | Mint NFTs with metadata | Digital collectibles |
+| **NFT Validation** | Verify NFT ownership | Access control, gating |
+| **Token Queries** | Get account tokens and NFTs | Portfolio display |
+
+### Smart Contract Integration
+
+| Feature | Description | Use Case |
+|---------|-------------|----------|
+| **Execute Contracts** | Call smart contract functions | DeFi protocols |
+| **Read Contracts** | Query contract state without gas | Data fetching |
+| **Contract Parameters** | Build complex function parameters | Advanced interactions |
+
 ## Supported Wallets
 
 The SDK supports all WalletConnect-compatible Hedera wallets:
@@ -181,32 +222,6 @@ The SDK supports all Hedera networks:
 | **Testnet** | `LedgerId.TESTNET` | Development and testing |
 | **Previewnet** | `LedgerId.PREVIEWNET` | Preview features |
 
-## Common Use Cases
-
-### 1. DeFi Applications
-- Token swaps and transfers
-- Liquidity provision
-- Smart contract interactions
-
-### 2. NFT Marketplaces
-- Minting and trading NFTs
-- Ownership verification
-- Metadata management
-
-### 3. Decentralized Messaging
-- Creating communication channels
-- Storing encrypted messages
-- Building chat applications
-
-### 4. Gaming Applications
-- In-game asset management
-- Player authentication
-- Achievement tracking
-
-### 5. Inscribed Hashinals
-- Interactive on-chain applications
-- Decentralized websites
-- Digital art and collectibles
 
 ## Getting Started
 

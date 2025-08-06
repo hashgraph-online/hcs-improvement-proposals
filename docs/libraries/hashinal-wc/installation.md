@@ -95,19 +95,19 @@ Before installing the SDK for modern JavaScript applications, ensure you have:
 
 | Requirement | Version | Installation |
 |-------------|---------|-------------|
-| **Node.js** | ≥ 18.0 | [Download](https://nodejs.org/) or use [NVM](https://github.com/nvm-sh/nvm) |
+| **Node.js** | ≥ 20.0 | [Download](https://nodejs.org/) or use [NVM](https://github.com/nvm-sh/nvm) |
 | **NPM** | ≥ 8.0 | Included with Node.js |
 | **Yarn** (optional) | ≥ 1.22 | `npm install --global yarn` |
 
 ```bash
 # Check your versions
-node --version  # Should be >= 18.0.0
+node --version  # Should be >= 20.0.0
 npm --version   # Should be >= 8.0.0
 
 # Using NVM (recommended)
-nvm install 18
-nvm use 18
-nvm alias default 18
+nvm install 20
+nvm use 20
+nvm alias default 20
 ```
 
 #### 2. WalletConnect Project ID
