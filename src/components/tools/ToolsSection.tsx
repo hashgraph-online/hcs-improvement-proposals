@@ -14,6 +14,7 @@ import {
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
 import PrimaryButton from '../hackathon/PrimaryButton';
 import { SidebarNavButton } from '../ui';
+import MoonscapeTestingSection from '../ui/MoonscapeTestingSection';
 import { Highlight } from 'prism-react-renderer';
 
 interface Tool {
@@ -899,6 +900,8 @@ const result = await tools.registerAgentTool.invoke({
             </a>
           </div>
         </div>
+
+        <MoonscapeTestingSection variant="general" />
       </div>
     </section>
   );
