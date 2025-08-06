@@ -1,5 +1,9 @@
 ---
-sidebar_position: 1
+title: Installation
+sidebar_position: 2
+description: Set up Hashinal Wallet Connect SDK for your project
+pagination_prev: libraries/hashinal-wc/overview
+pagination_next: libraries/hashinal-wc/methods
 ---
 
 # Installation Guide

@@ -1,8 +1,12 @@
 ---
-sidebar_position: 2
+title: HCS Topics
+sidebar_position: 8
+description: Work with Hedera Consensus Service topics and messages
+pagination_prev: libraries/hashinal-wc/usage-with-recursion
+pagination_next: null
 ---
 
-# Version History & Topics
+# HCS Topics & Version History
 
 ## Overview
 

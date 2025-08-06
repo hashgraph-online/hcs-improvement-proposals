@@ -1,8 +1,12 @@
 ---
+title: API Methods
 sidebar_position: 3
+description: Complete reference for all SDK methods
+pagination_prev: libraries/hashinal-wc/installation
+pagination_next: libraries/hashinal-wc/usage-with-react
 ---
 
-# API Reference
+# API Methods
 
 Complete reference documentation for all Hashinal Wallet Connect SDK methods.
 
