@@ -208,8 +208,8 @@ logger.info(\`Outbound Topic: \${agent.outboundTopicId}\`);
       difficulty: 'Advanced',
       color: 'purple',
       icon: <FaRobot />,
-      code: `import { HederaLangchainToolkit } from 'hedera-agent-kit';
-import { Client } from '@hashgraph/sdk';
+      code: `import { HederaLangchainToolkit, coreQueriesPlugin } from 'hedera-agent-kit';
+import { Client, PrivateKey } from '@hashgraph/sdk';
 import { ChatOpenAI } from '@langchain/openai';
 import { createToolCallingAgent, AgentExecutor } from 'langchain/agents';
 import { ChatPromptTemplate } from '@langchain/core/prompts';
@@ -222,27 +222,19 @@ import { Logger } from '@hashgraphonline/standards-sdk';
 
 const logger = new Logger({ module: 'HederaAgent', level: 'info' });
 
-// Initialize Hedera client
-const client = Client.forTestnet();
-client.setOperator(
-  process.env.HEDERA_ACCOUNT_ID!,
-  process.env.HEDERA_PRIVATE_KEY!
+// Initialize Hedera client with proper private key formatting
+const client = Client.forTestnet().setOperator(
+  process.env.ACCOUNT_ID!,
+  PrivateKey.fromStringDer(process.env.PRIVATE_KEY!)
 );
 
 // Create Hedera toolkit with AI agent capabilities
 const hederaToolkit = new HederaLangchainToolkit({
   client,
   configuration: {
-    // Available plugins for different blockchain operations
-    plugins: [
-      'coreQueries',      // Account info, balance queries
-      'tokenOperations',  // Create/transfer tokens
-      'topicMessaging',   // HCS topic operations
-      'smartContracts',   // Contract interactions
-      'fileOperations'    // File service operations
-    ],
-    // Execution mode: 'autonomous' or 'returnBytes'
-    executionMode: 'autonomous' // Automatically execute transactions
+    plugins: [coreQueriesPlugin] // Load core queries plugin
+    // Additional plugins can be imported and added as needed
+    // See: https://github.com/hedera-dev/hedera-agent-kit/tree/main/typescript/src/plugins
   }
 });
 
@@ -251,147 +243,64 @@ const tools = hederaToolkit.getTools();
 
 logger.info(\`Loaded \${tools.length} Hedera tools for the agent\`);
 
-// Create AI agent with specialized Hedera prompt
+// Load the structured chat prompt template
+const prompt = ChatPromptTemplate.fromMessages([
+  ['system', 'You are a helpful assistant'],
+  ['placeholder', '{chat_history}'],
+  ['human', '{input}'],
+  ['placeholder', '{agent_scratchpad}'],
+]);
+
+// Create the underlying agent
 const agent = createToolCallingAgent({
   llm: new ChatOpenAI({
-    model: 'gpt-4-turbo-preview',
-    temperature: 0.1, // Low temperature for precise blockchain operations
-    maxTokens: 2000,
+    model: 'gpt-4o-mini',
+    temperature: 0.7,
   }),
   tools,
-  prompt: ChatPromptTemplate.fromMessages([
-    ['system', \`You are HederaBot, an expert AI assistant for Hedera blockchain operations.
-    
-    You can help users with:
-    - Transferring HBAR and tokens
-    - Creating and managing tokens (fungible and NFTs)
-    - Topic messaging for communication
-    - Querying account information and balances
-    - Smart contract interactions
-    - File operations on Hedera File Service
-    
-    Always:
-    - Confirm transaction details before execution
-    - Provide clear explanations of what you're doing
-    - Handle errors gracefully and suggest solutions
-    - Use proper units (HBAR vs tinybars, token decimals)
-    - Validate account IDs and addresses
-    
-    Be professional, accurate, and helpful.\`],
-    ['human', '{input}'],
-    ['placeholder', '{agent_scratchpad}']
-  ])
+  prompt,
 });
 
-// Create agent executor
+// Wrap everything in an executor that will maintain memory
 const agentExecutor = new AgentExecutor({
   agent,
   tools,
-  verbose: true,
-  maxIterations: 10,
-  returnIntermediateSteps: true
 });
 
-// Example: Multi-step blockchain operation
-export async function executeComplexBlockchainTask() {
-  logger.info('🤖 Starting complex blockchain task...');
-  
+// Example usage with different prompts
+async function main() {
   try {
-    const result = await agentExecutor.invoke({
-      input: \`I need to:
-      1. Check my account balance
-      2. Create a new fungible token called "HackathonCoin" with symbol "HACK" and supply of 1,000,000
-      3. Create a new HCS topic for project updates
-      4. Send a message to the topic announcing the token launch
-      5. Transfer 1000 tokens to account 0.0.12345
-      
-      Please execute these steps and provide status updates.\`
+    // Example 1: Check balance
+    const balanceResponse = await agentExecutor.invoke({ 
+      input: "what's my balance?" 
     });
+    logger.info('Balance:', balanceResponse.output);
     
-    logger.info('✅ Complex task completed!');
-    logger.info('Result:', result.output);
+    // Example 2: Create a token
+    const tokenResponse = await agentExecutor.invoke({ 
+      input: "create a new token called 'TestToken' with symbol 'TEST'" 
+    });
+    logger.info('Token creation:', tokenResponse.output);
     
-    return result;
+    // Example 3: Transfer HBAR
+    const transferResponse = await agentExecutor.invoke({ 
+      input: "transfer 5 HBAR to account 0.0.1234" 
+    });
+    logger.info('Transfer:', transferResponse.output);
+    
+    // Example 4: Create topic
+    const topicResponse = await agentExecutor.invoke({ 
+      input: "create a new topic for project updates" 
+    });
+    logger.info('Topic creation:', topicResponse.output);
+    
   } catch (error) {
-    logger.error('❌ Task failed:', error);
-    throw error;
+    logger.error('Error:', error);
   }
 }
 
-// Example: Token management agent
-export async function createTokenManagementAgent() {
-  const tokenAgent = createToolCallingAgent({
-    llm: new ChatOpenAI({ model: 'gpt-4', temperature: 0 }),
-    tools: tools.filter(tool => 
-      tool.name.includes('token') || 
-      tool.name.includes('balance') ||
-      tool.name.includes('transfer')
-    ),
-    prompt: ChatPromptTemplate.fromMessages([
-      ['system', 'You are a token management specialist. Help users create, manage, and transfer tokens on Hedera.'],
-      ['human', '{input}'],
-      ['placeholder', '{agent_scratchpad}']
-    ])
-  });
-  
-  const tokenExecutor = new AgentExecutor({
-    agent: tokenAgent,
-    tools: tools.filter(tool => tool.name.includes('token')),
-    verbose: true
-  });
-  
-  return tokenExecutor;
-}
-
-// Example: Communication agent for HCS topics
-export async function createCommunicationAgent(topicId: string) {
-  const commAgent = createToolCallingAgent({
-    llm: new ChatOpenAI({ model: 'gpt-3.5-turbo', temperature: 0.3 }),
-    tools: tools.filter(tool => tool.name.includes('topic')),
-    prompt: ChatPromptTemplate.fromMessages([
-      ['system', \`You manage communication on HCS topic \${topicId}. 
-      Help users send messages, monitor topics, and manage communication flows.\`],
-      ['human', '{input}'],
-      ['placeholder', '{agent_scratchpad}']
-    ])
-  });
-  
-  return new AgentExecutor({
-    agent: commAgent,
-    tools: tools.filter(tool => tool.name.includes('topic')),
-    verbose: true
-  });
-}
-
-// Example usage: Natural language blockchain interactions
-export async function runNaturalLanguageExample() {
-  const examples = [
-    "What's my account balance?",
-    "Create a token called MyToken with 1M supply",
-    "Send 100 HBAR to account 0.0.98765",
-    "Create a topic for team communication",
-    "Check the balance of token 0.0.123456 in my account"
-  ];
-  
-  for (const example of examples) {
-    logger.info(\`Executing: "\${example}"\`);
-    
-    try {
-      const result = await agentExecutor.invoke({ input: example });
-      logger.info('Result:', result.output);
-    } catch (error) {
-      logger.error('Error:', error.message);
-    }
-    
-    // Wait between operations
-    await new Promise(resolve => setTimeout(resolve, 2000));
-  }
-}
-
-// Run the agent
-executeComplexBlockchainTask()
-  .then(() => logger.info('🎉 Agent execution completed!'))
-  .catch(error => logger.error('Agent failed:', error));`,
+// Run the main function
+main().catch(console.error);`,
     },
     {
       id: 'connection-handling',
