@@ -7,6 +7,46 @@
  * work well for content-centric websites.
  */
 
+/* Fix for sidebar navigation hydration issues */
+.menu__list-item-collapsible .menu__list {
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Ensure collapsed items are properly hidden */
+.menu__list-item-collapsible.menu__list-item--collapsed .menu__list {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Ensure expanded items are properly visible */
+.menu__list-item-collapsible:not(.menu__list-item--collapsed) .menu__list {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Force proper initialization of collapsible states */
+.menu__list-item-collapsible {
+  position: relative;
+}
+
+.menu__list-item-collapsible
+  .menu__link--sublist[aria-expanded='true']
+  + .menu__list {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.menu__list-item-collapsible
+  .menu__link--sublist[aria-expanded='false']
+  + .menu__list {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
 /* Blog post title styling - main content area and individual posts */
 main article header h2,
 main article header h2 a,
@@ -469,6 +509,7 @@ textarea {
   transition: color 0.2s ease, background-color 0.2s ease;
   padding: 0.5rem 0.75rem;
   border-radius: 0.25rem;
+  margin: 0 0.125rem;
 }
 
 .navbar__link:hover,
@@ -588,7 +629,42 @@ textarea {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-.navbar-sidebar .menu__list-item-collapsible .menu__link--sublist-caret:after {
+/* Mobile menu dropdown arrow - use filter to make it white in both themes */
+.navbar-sidebar .menu__link--sublist-caret:after {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+[data-theme='light'] .navbar-sidebar .menu__link--sublist-caret:after,
+[data-theme='dark'] .navbar-sidebar .menu__link--sublist-caret:after {
+  filter: brightness(0) invert(1) !important;
+  opacity: 1 !important;
+}
+
+/* Mobile sidebar close X button - force white in both themes using filter */
+.navbar-sidebar__close {
+  color: #ffffff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+[data-theme='light'] .navbar-sidebar__close,
+[data-theme='dark'] .navbar-sidebar__close {
+  color: #ffffff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+/* Ensure the X icon SVG is white */
+.navbar-sidebar__close svg {
+  fill: #ffffff !important;
+  filter: brightness(0) invert(1) !important;
+}
+
+[data-theme='light'] .navbar-sidebar__close svg,
+[data-theme='dark'] .navbar-sidebar__close svg {
+  fill: #ffffff !important;
+}
+
+.navbar-sidebar .menu__list-item-collapsible .menu__link--sublist:after {
   filter: brightness(0) invert(1) !important;
 }
 
@@ -604,11 +680,104 @@ textarea {
   }
 }
 
+/* Hackathons dropdown styling with consistent blue color */
+.navbar__item.dropdown > .navbar__link:hover,
+.navbar__item.dropdown > .navbar__link[aria-expanded="true"],
+.navbar__item.dropdown > .navbar__link.navbar__link--active[aria-expanded="true"] {
+  background-color: #6289d5 !important;
+  color: #ffffff !important;
+  border-radius: 0.25rem !important;
+}
+
+/* Remove bottom border radius when dropdown is open for seamless look */
+.navbar__item.dropdown > .navbar__link[aria-expanded="true"] {
+  border-radius: 0.25rem 0.25rem 0 0 !important;
+}
+
+/* Ensure the dropdown parent stays highlighted when dropdown is open */
+.navbar__item.dropdown:hover > .navbar__link,
+.navbar__item.dropdown.dropdown--hoverable:hover > .navbar__link,
+.navbar__item.dropdown.dropdown--show > .navbar__link {
+  background-color: #6289d5 !important;
+  color: #ffffff !important;
+}
+
+/* Simple dropdown that extends from navbar */
 .navbar__item.dropdown .dropdown__menu {
-  background-color: var(--brand-keywords);
-  border-radius: 0.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  /* Use solid blue color to match highlighted Hackathons */
+  background: #6289d5;
+  
+  /* Simple positioning */
+  margin-top: -1px;
+  border: none;
+  border-radius: 0 8px 8px 8px;
+  padding: 0.75rem 0;
+  min-width: 280px;
+  box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
+  
+  /* Shift dropdown to the right */
+  transform: translateX(12px) !important;
+  
+  /* Animation */
+  animation: dropdownSlideDown 0.3s ease-out;
+  transform-origin: top;
+}
+
+/* Dropdown animation */
+@keyframes dropdownSlideDown {
+  from {
+    opacity: 0;
+    transform: translateX(12px) translateY(-10px) scaleY(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(12px) translateY(0) scaleY(1);
+  }
+}
+
+/* Style sub-items */
+.dropdown__link--sub {
+  font-size: 0.875rem !important;
+  padding-left: 2rem !important;
+  opacity: 0.9;
+}
+
+/* Prevent sub-items from being highlighted when parent is active */
+.dropdown__link--sub.dropdown__link--active {
+  background-color: transparent !important;
+  color: #e0e7ff !important;
+}
+
+.dropdown__link--sub.dropdown__link--active:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Mobile sidebar: Keep parent highlighted but not sub-items */
+.navbar-sidebar .dropdown__link--parent.menu__link--active {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Remove highlighting from sub-items in mobile */
+.navbar-sidebar .dropdown__link--sub {
+  background-color: transparent !important;
+}
+
+.navbar-sidebar .dropdown__link--sub.menu__link--active {
+  background-color: transparent !important;
+  color: #e0e7ff !important;
+}
+
+.navbar-sidebar .dropdown__link--sub:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.dropdown__link--parent {
+  font-weight: 600 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem !important;
 }
 
 .navbar__item.dropdown .dropdown__link {
@@ -2401,6 +2570,1460 @@ main .theme-doc-generated-index-item:hover::after,
   color: #fbbf24;
 }
 
+.standards-grid h2 {
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+  color: var(--ifm-color-primary);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-bottom: 2px solid var(--ifm-color-primary-lightest);
+  padding-bottom: 0.5rem;
+}
+
+.standards-grid h2:first-of-type {
+  margin-top: 1rem;
+}
+
+[data-theme='dark'] .standards-grid h2 {
+  color: var(--ifm-color-primary-light);
+  border-bottom-color: var(--ifm-color-primary-darkest);
+}
+
+.standard-card.missing {
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.standard-card.missing h3 {
+  color: var(--ifm-color-emphasis-600);
+}
+
+[data-theme='dark'] .standard-card.missing h3 {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* Responsive design */
+@media (min-width: 768px) {
+  .standards-grid {
+    gap: 1.5rem;
+  }
+
+  .standard-card {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* For very wide screens, we could add a 2-column layout */
+  .standards-grid .standard-card {
+    max-width: none;
+  }
+}
+
+/* Category page styling for ALL generated index pages */
+/* Add background pattern to category pages */
+.theme-doc-category-generated-index,
+[class*='generatedIndexPage'] {
+  position: relative !important;
+  min-height: 100vh !important;
+}
+
+/* Force styling on any article that looks like a generated index item */
+article[class*='generatedIndexItem'] {
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  background: var(--ifm-background-surface-color) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+article[class*='generatedIndexItem']::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  opacity: 0.8 !important;
+}
+
+article[class*='generatedIndexItem']::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  background: linear-gradient(
+    135deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  border-radius: 0.75rem !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+article[class*='generatedIndexItem']:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15) !important;
+  border-color: transparent !important;
+}
+
+article[class*='generatedIndexItem']:hover::after {
+  opacity: 0.1 !important;
+}
+
+.theme-doc-category-generated-index::before,
+[class*='generatedIndexPage']::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  left: -50% !important;
+  width: 200% !important;
+  height: 200% !important;
+  background-image: radial-gradient(
+      circle at 20% 50%,
+      rgba(85, 153, 254, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(181, 108, 255, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 20%,
+      rgba(72, 223, 123, 0.02) 0%,
+      transparent 50%
+    ) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  animation: floatBackground 30s ease-in-out infinite !important;
+}
+
+/* Target ALL generated index items - with multiple selectors for different Docusaurus versions */
+.theme-doc-category-generated-index .theme-doc-generated-index-item,
+.generatedIndexPage_node_modules-\@docusaurus-plugin-content-docs-lib-theme-DocCategoryGeneratedIndexPage-styles-module
+  .generatedIndexItem_node_modules-\@docusaurus-theme-classic-lib-theme-DocCategoryGeneratedIndexPage-styles-module,
+div[class*='generatedIndexPage'] article[class*='generatedIndexItem'],
+main .theme-doc-generated-index-item {
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  background: var(--ifm-background-surface-color) !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  z-index: 1 !important;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item::before,
+.generatedIndexPage_node_modules-\@docusaurus-plugin-content-docs-lib-theme-DocCategoryGeneratedIndexPage-styles-module
+  .generatedIndexItem_node_modules-\@docusaurus-theme-classic-lib-theme-DocCategoryGeneratedIndexPage-styles-module::before,
+div[class*='generatedIndexPage'] article[class*='generatedIndexItem']::before,
+main .theme-doc-generated-index-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+/* Add the glow effect for hover */
+.theme-doc-category-generated-index .theme-doc-generated-index-item::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  background: linear-gradient(
+    135deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  border-radius: 0.75rem !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15) !important;
+  border-color: transparent !important;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:hover::after {
+  opacity: 0.1 !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item {
+  background: rgba(30, 30, 32, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4) !important;
+  background: rgba(30, 30, 32, 0.8) !important;
+}
+
+/* Style ALL titles on category pages */
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 {
+  margin-top: 0 !important;
+  margin-bottom: 0.75rem !important;
+  position: relative !important;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a {
+  color: var(--ifm-color-primary) !important;
+  text-decoration: none !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+  display: block !important;
+  transition: color 0.2s ease !important;
+}
+
+.theme-doc-category-generated-index .theme-doc-generated-index-item h3 a:hover {
+  color: var(--ifm-color-primary-dark) !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a {
+  color: var(--ifm-color-primary-light) !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a:hover {
+  color: var(--ifm-color-primary-lightest) !important;
+}
+
+/* Create a custom script to handle title text replacement */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-1'] {
+  /* Text content will be modified by CSS to show only the name part */
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-2'] {
+  /* Text content will be modified by CSS to show only the name part */
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-3'] {
+  /* Text content will be modified by CSS to show only the name part */
+}
+
+/* Add HCS number above title using CSS text manipulation */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-1']::before {
+  content: 'HCS-1';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-2']::before {
+  content: 'HCS-2';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-3']::before {
+  content: 'HCS-3';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-5']::before {
+  content: 'HCS-5';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-6']::before {
+  content: 'HCS-6';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-7']::before {
+  content: 'HCS-7';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-8']::before {
+  content: 'HCS-8';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-9']::before {
+  content: 'HCS-9';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-10']::before {
+  content: 'HCS-10';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-11']::before {
+  content: 'HCS-11';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-13']::before {
+  content: 'HCS-13';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='hcs-20']::before {
+  content: 'HCS-20';
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a::before {
+  position: absolute;
+  top: -2rem;
+  left: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Roboto Mono', monospace;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a::before {
+  color: var(--ifm-color-emphasis-500);
+}
+
+/* Style ALL descriptions on category pages */
+.theme-doc-category-generated-index .theme-doc-generated-index-item p {
+  margin-bottom: 1rem !important;
+  position: relative !important;
+  color: var(--ifm-color-emphasis-700) !important;
+  line-height: 1.6 !important;
+  font-size: 0.9rem !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  p {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+
+/* Recursion SDK Category Page Styling */
+/* Target any generated index page that contains "Recursion SDK" in its content */
+.generatedIndexPage_node_modules-\@docusaurus-plugin-content-docs-lib-theme-DocCategoryGeneratedIndexPage-styles-module,
+.theme-doc-category-generated-index {
+  /* This will apply to all category pages, we'll make it specific below */
+}
+
+/* Add subtle background pattern for Recursion SDK */
+.theme-doc-category-generated-index:has(
+    .theme-doc-generated-index-item a[href*='/docs/libraries/recursion-sdk/']
+  )::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(
+      circle at 20% 50%,
+      rgba(85, 153, 254, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(181, 108, 255, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 20%,
+      rgba(72, 223, 123, 0.02) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: floatBackground 30s ease-in-out infinite;
+}
+
+/* Recursion SDK specific card styling */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  ) {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Add gradient top border */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  )::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #5599fe 0%, #b56cff 50%, #48df7b 100%);
+  opacity: 0.8;
+}
+
+/* Add hover glow effect */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  )::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #5599fe 0%, #b56cff 50%, #48df7b 100%);
+  border-radius: 0.75rem;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  ):hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15);
+  border-color: transparent;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  ):hover::after {
+  opacity: 0.1;
+}
+
+/* Dark mode adjustments */
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  ) {
+  background: rgba(30, 30, 32, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(
+    a[href*='/docs/libraries/recursion-sdk/']
+  ):hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  background: rgba(30, 30, 32, 0.8);
+}
+
+/* Style the titles */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  a[href*='/docs/libraries/recursion-sdk/'] {
+  color: var(--ifm-color-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  a[href*='/docs/libraries/recursion-sdk/']:hover {
+  color: var(--ifm-color-primary-dark);
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  a[href*='/docs/libraries/recursion-sdk/'] {
+  color: var(--ifm-color-primary-light);
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  a[href*='/docs/libraries/recursion-sdk/']:hover {
+  color: var(--ifm-color-primary-lightest);
+}
+
+/* Add icon before each item based on content */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='/docs/libraries/recursion-sdk/what-is-recursion']::before {
+  content: '🔄 ';
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='/docs/libraries/recursion-sdk/usage']::before {
+  content: '🚀 ';
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='/docs/libraries/recursion-sdk/functions']::before {
+  content: '📚 ';
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  h3
+  a[href*='/docs/libraries/recursion-sdk/advanced-examples']::before {
+  content: '🎯 ';
+  font-size: 1.5rem;
+  vertical-align: middle;
+  margin-right: 0.5rem;
+}
+
+/* Style the descriptions for recursion SDK items */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(a[href*='/docs/libraries/recursion-sdk/'])
+  p {
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item:has(a[href*='/docs/libraries/recursion-sdk/'])
+  p {
+  color: var(--ifm-color-emphasis-600);
+}
+
+/* Alternative approach - style all items on libraries category pages */
+/* This targets the generated index items within the libraries section */
+main[class*='docMainContainer'] .theme-doc-category-generated-index-item {
+  /* Check if this is in the libraries section by looking at breadcrumbs or URL */
+}
+
+/* More specific - target items that contain recursion-related content */
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/what-is-recursion'])
+  ),
+.theme-doc-category-generated-index-item:has(h3:has(a[href$='/usage'])),
+.theme-doc-category-generated-index-item:has(h3:has(a[href$='/functions'])),
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/advanced-examples'])
+  ) {
+  background: var(--ifm-background-surface-color) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Add gradient top border to these specific items */
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/what-is-recursion'])
+  )::before,
+.theme-doc-category-generated-index-item:has(h3:has(a[href$='/usage']))::before,
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/functions'])
+  )::before,
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/advanced-examples'])
+  )::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  opacity: 0.8 !important;
+}
+
+/* Hover effects for these items */
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/what-is-recursion'])
+  ):hover,
+.theme-doc-category-generated-index-item:has(h3:has(a[href$='/usage'])):hover,
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/functions'])
+  ):hover,
+.theme-doc-category-generated-index-item:has(
+    h3:has(a[href$='/advanced-examples'])
+  ):hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15) !important;
+  border-color: transparent !important;
+}
+
+/* Transform "Status: Published" text into green tag */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  p
+  strong:first-child {
+  display: none; /* Hide "Status:" label */
+}
+
+/* Fallback approach for Recursion SDK styling - target all generated index items and filter by parent */
+/* This should work even without :has() support */
+.theme-doc-category-generated-index .theme-doc-generated-index-item {
+  /* Default styles that we'll override for specific pages */
+}
+
+/* When inside a recursion SDK page, style ALL the index items */
+/* Using attribute selectors and nested selectors */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  a[href*='recursion-sdk'] {
+  /* This targets links containing recursion-sdk */
+}
+
+/* Most compatible approach - add styles to all category index items, then be specific */
+/* Target the parent container when it has recursion content */
+article:has(h1:contains('Recursion SDK'))
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item,
+div[class*='generatedIndexPage'] .theme-doc-category-generated-index-item {
+  background: var(--ifm-background-surface-color) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Apply gradient borders to items on any generated index page for now */
+div[class*='generatedIndexPage']
+  .theme-doc-category-generated-index-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  opacity: 0.8 !important;
+}
+
+/* Hover states */
+div[class*='generatedIndexPage']
+  .theme-doc-category-generated-index-item:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15) !important;
+  border-color: transparent !important;
+}
+
+/* Enhanced Library Category Pages Styling */
+/* This should style all library category pages including Recursion SDK and Hashinal WC */
+.theme-doc-category-generated-index header + * .theme-doc-generated-index-item {
+  background: var(--ifm-background-surface-color) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Add gradient top border to library items */
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  opacity: 0.8 !important;
+}
+
+/* Hover glow effect */
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  background: linear-gradient(
+    135deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  border-radius: 0.75rem !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+/* Hover state for library items */
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15) !important;
+  border-color: transparent !important;
+}
+
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item:hover::after {
+  opacity: 0.1 !important;
+}
+
+/* Dark mode adjustments for library items */
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item {
+  background: rgba(30, 30, 32, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4) !important;
+  background: rgba(30, 30, 32, 0.8) !important;
+}
+
+/* Style the titles in library category pages */
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item
+  h3
+  a {
+  color: var(--ifm-color-primary) !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  transition: color 0.2s ease !important;
+}
+
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item
+  h3
+  a:hover {
+  color: var(--ifm-color-primary-dark) !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item
+  h3
+  a {
+  color: var(--ifm-color-primary-light) !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item
+  h3
+  a:hover {
+  color: var(--ifm-color-primary-lightest) !important;
+}
+
+/* Style descriptions in library pages */
+.theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item
+  p {
+  color: var(--ifm-color-emphasis-700) !important;
+  line-height: 1.6 !important;
+  margin-bottom: 0 !important;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  header
+  + *
+  .theme-doc-generated-index-item
+  p {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+
+/* Ultimate fallback - style ALL generated index items everywhere */
+/* This will definitely work but might affect more pages than intended */
+article .theme-doc-generated-index-item,
+main .theme-doc-generated-index-item,
+.theme-doc-generated-index-item {
+  background: var(--ifm-background-surface-color) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  border-radius: 0.75rem !important;
+  padding: 1.5rem !important;
+  margin-bottom: 1rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+}
+
+article .theme-doc-generated-index-item::before,
+main .theme-doc-generated-index-item::before,
+.theme-doc-generated-index-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 4px !important;
+  background: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  opacity: 0.8 !important;
+}
+
+article .theme-doc-generated-index-item::after,
+main .theme-doc-generated-index-item::after,
+.theme-doc-generated-index-item::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  background: linear-gradient(
+    135deg,
+    #5599fe 0%,
+    #b56cff 50%,
+    #48df7b 100%
+  ) !important;
+  border-radius: 0.75rem !important;
+  opacity: 0 !important;
+  z-index: -1 !important;
+  transition: opacity 0.3s ease !important;
+}
+
+article .theme-doc-generated-index-item:hover,
+main .theme-doc-generated-index-item:hover,
+.theme-doc-generated-index-item:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15) !important;
+  border-color: transparent !important;
+}
+
+article .theme-doc-generated-index-item:hover::after,
+main .theme-doc-generated-index-item:hover::after,
+.theme-doc-generated-index-item:hover::after {
+  opacity: 0.1 !important;
+}
+
+[data-theme='dark'] article .theme-doc-generated-index-item,
+[data-theme='dark'] main .theme-doc-generated-index-item,
+[data-theme='dark'] .theme-doc-generated-index-item {
+  background: rgba(30, 30, 32, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme='dark'] article .theme-doc-generated-index-item:hover,
+[data-theme='dark'] main .theme-doc-generated-index-item:hover,
+[data-theme='dark'] .theme-doc-generated-index-item:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4) !important;
+  background: rgba(30, 30, 32, 0.8) !important;
+}
+
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  p
+  strong
+  + text:contains('Published'),
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  p:first-of-type::after {
+  content: '';
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+/* Add published/draft styling based on text content */
+.theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  p:first-of-type::before {
+  content: 'Published';
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #059669;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  margin-bottom: 0.75rem;
+  margin-right: 0.5rem;
+}
+
+[data-theme='dark']
+  .theme-doc-category-generated-index
+  .theme-doc-generated-index-item
+  p:first-of-type::before {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #10b981;
+}
+
+/* Clean Standards Page Styling */
+.elaborate-standards-page {
+  background: var(--ifm-background-color);
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Add subtle background pattern */
+.elaborate-standards-page::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: radial-gradient(
+      circle at 20% 50%,
+      rgba(85, 153, 254, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(181, 108, 255, 0.03) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 40% 20%,
+      rgba(72, 223, 123, 0.02) 0%,
+      transparent 50%
+    );
+  pointer-events: none;
+  z-index: 0;
+  animation: floatBackground 30s ease-in-out infinite;
+}
+
+@keyframes floatBackground {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-30px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(30px, -20px) scale(0.95);
+  }
+}
+
+.elaborate-standards-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Hide TOC and use full width on standards index page */
+[data-doc-id='standards/index'] .theme-doc-toc-desktop,
+[data-doc-id='standards/index'] aside[class*='tocCollapsible'] {
+  display: none !important;
+}
+
+[data-doc-id='standards/index'] div[class*='docItemContainer'] {
+  max-width: 100% !important;
+}
+
+[data-doc-id='standards/index'] div[class*='docItemCol'] {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+
+/* Remove the right padding/margin that was for TOC */
+[data-doc-id='standards/index'] article {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+[data-doc-id='standards/index'] .elaborate-standards-page {
+  width: 100%;
+}
+
+/* Force the row to use full width */
+[data-doc-id='standards/index'] .row {
+  margin-right: 0 !important;
+}
+
+/* Apply same full-width styles to library pages */
+[data-doc-id='libraries/index'] .theme-doc-toc-desktop,
+[data-doc-id='libraries/index'] aside[class*='tocCollapsible'],
+[data-doc-id='libraries/recursion-sdk/index'] .theme-doc-toc-desktop,
+[data-doc-id='libraries/recursion-sdk/index'] aside[class*='tocCollapsible'],
+[data-doc-id='libraries/hashinal-wc/index'] .theme-doc-toc-desktop,
+[data-doc-id='libraries/hashinal-wc/index'] aside[class*='tocCollapsible'] {
+  display: none !important;
+}
+
+[data-doc-id='libraries/index'] div[class*='docItemContainer'],
+[data-doc-id='libraries/recursion-sdk/index'] div[class*='docItemContainer'],
+[data-doc-id='libraries/hashinal-wc/index'] div[class*='docItemContainer'] {
+  max-width: 100% !important;
+}
+
+[data-doc-id='libraries/index'] div[class*='docItemCol'],
+[data-doc-id='libraries/recursion-sdk/index'] div[class*='docItemCol'],
+[data-doc-id='libraries/hashinal-wc/index'] div[class*='docItemCol'] {
+  max-width: 100% !important;
+  flex: 0 0 100% !important;
+}
+
+[data-doc-id='libraries/index'] article,
+[data-doc-id='libraries/recursion-sdk/index'] article,
+[data-doc-id='libraries/hashinal-wc/index'] article {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+[data-doc-id='libraries/index'] .elaborate-standards-page,
+[data-doc-id='libraries/recursion-sdk/index'] .elaborate-standards-page,
+[data-doc-id='libraries/hashinal-wc/index'] .elaborate-standards-page {
+  width: 100%;
+}
+
+[data-doc-id='libraries/index'] .row,
+[data-doc-id='libraries/recursion-sdk/index'] .row,
+[data-doc-id='libraries/hashinal-wc/index'] .row {
+  margin-right: 0 !important;
+}
+
+.elaborate-standards-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.standards-main-title {
+  font-size: 3rem !important;
+  font-weight: 800 !important;
+  margin: 0 0 0.5rem 0 !important;
+  background-image: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 40%,
+    #48df7b 80%
+  ) !important;
+  background-size: 100% 100%;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  letter-spacing: -0.02em !important;
+  font-family: 'Roboto Mono', monospace !important;
+  color: transparent !important;
+  display: inline-block !important;
+}
+
+.elaborate-standards-header h1,
+.elaborate-standards-page h1,
+[data-doc-id='standards/index'] h1,
+.container h1[style*='fontFamily'] {
+  font-size: 3rem !important;
+  font-weight: 800 !important;
+  margin: 0 0 0.5rem 0 !important;
+  background-image: linear-gradient(
+    90deg,
+    #5599fe 0%,
+    #b56cff 40%,
+    #48df7b 80%
+  ) !important;
+  background-size: 100% 100%;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  letter-spacing: -0.02em !important;
+  font-family: 'Roboto Mono', monospace !important;
+  color: transparent !important;
+  display: inline-block !important;
+}
+
+.elaborate-standards-subtitle {
+  font-size: 1.125rem;
+  color: var(--ifm-color-emphasis-700);
+  max-width: 600px;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  line-height: 1.5;
+}
+
+[data-theme='dark'] .elaborate-standards-subtitle {
+  color: var(--ifm-color-emphasis-600);
+}
+
+.elaborate-standards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  animation: fadeInGrid 0.6s ease-out;
+}
+
+@keyframes fadeInGrid {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .elaborate-standards-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .elaborate-standards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+.elaborate-standard-card {
+  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  animation: cardFadeIn 0.5s ease-out forwards;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Staggered animation for cards */
+.elaborate-standard-card:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.elaborate-standard-card:nth-child(2) {
+  animation-delay: 0.1s;
+}
+.elaborate-standard-card:nth-child(3) {
+  animation-delay: 0.15s;
+}
+.elaborate-standard-card:nth-child(4) {
+  animation-delay: 0.2s;
+}
+.elaborate-standard-card:nth-child(5) {
+  animation-delay: 0.25s;
+}
+.elaborate-standard-card:nth-child(6) {
+  animation-delay: 0.3s;
+}
+.elaborate-standard-card:nth-child(7) {
+  animation-delay: 0.35s;
+}
+.elaborate-standard-card:nth-child(8) {
+  animation-delay: 0.4s;
+}
+.elaborate-standard-card:nth-child(9) {
+  animation-delay: 0.45s;
+}
+.elaborate-standard-card:nth-child(10) {
+  animation-delay: 0.5s;
+}
+.elaborate-standard-card:nth-child(11) {
+  animation-delay: 0.55s;
+}
+.elaborate-standard-card:nth-child(12) {
+  animation-delay: 0.6s;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.elaborate-standard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #5599fe 0%, #b56cff 50%, #48df7b 100%);
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+/* Add hover glow effect */
+.elaborate-standard-card::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(135deg, #5599fe 0%, #b56cff 50%, #48df7b 100%);
+  border-radius: 0.75rem;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+.elaborate-standard-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 24px rgba(63, 65, 116, 0.15);
+  border-color: transparent;
+}
+
+.elaborate-standard-card:hover::before {
+  opacity: 1;
+}
+
+.elaborate-standard-card:hover::after {
+  opacity: 0.1;
+}
+
+[data-theme='dark'] .elaborate-standard-card {
+  background: rgba(30, 30, 32, 0.6);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme='dark'] .elaborate-standard-card:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.4);
+  background: rgba(30, 30, 32, 0.8);
+}
+
+.elaborate-standard-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.elaborate-standard-number {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--brand-keywords);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-family: 'Roboto Mono', monospace;
+  background: linear-gradient(
+    135deg,
+    rgba(63, 65, 116, 0.1) 0%,
+    rgba(85, 153, 254, 0.1) 100%
+  );
+  padding: 0.3rem 0.6rem;
+  border-radius: 0.375rem;
+}
+
+[data-theme='dark'] .elaborate-standard-number {
+  color: var(--brand-functions);
+  background: linear-gradient(
+    135deg,
+    rgba(85, 153, 254, 0.15) 0%,
+    rgba(63, 65, 116, 0.15) 100%
+  );
+}
+
+.elaborate-standard-badges {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+}
+
+.elaborate-complexity-badge {
+  font-size: 0.625rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.elaborate-status-badge {
+  font-size: 0.625rem;
+  font-weight: 500;
+  padding: 0.15rem 0.4rem;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.elaborate-status-published {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #059669;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+[data-theme='dark'] .elaborate-status-published {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #10b981;
+}
+
+.elaborate-status-draft {
+  background-color: rgba(251, 191, 36, 0.1);
+  color: #d97706;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+[data-theme='dark'] .elaborate-status-draft {
+  background-color: rgba(251, 191, 36, 0.2);
+  color: #fbbf24;
+}
+
 .elaborate-standard-title {
   margin: 0 0 0.4rem 0;
   font-size: 1.125rem;
@@ -2725,6 +4348,7 @@ main .theme-doc-generated-index-item:hover::after,
   margin-left: 0.75rem;
   padding-left: 0.75rem;
   border-left: 2px solid var(--ifm-color-emphasis-200);
+  margin-bottom: 0;
 }
 
 [data-theme='dark'] .menu__list-item-collapsible .menu__list {
@@ -2736,6 +4360,7 @@ main .theme-doc-generated-index-item:hover::after,
   font-size: 0.875rem;
   opacity: 0.9;
   padding: 0.4rem 0.75rem;
+  margin-bottom: 0;
 }
 
 .menu__list-item-collapsible .menu__list .menu__link:hover {
@@ -2745,4 +4370,167 @@ main .theme-doc-generated-index-item:hover::after,
 
 [data-theme='dark'] .menu__list-item-collapsible .menu__list .menu__link:hover {
   background: rgba(85, 153, 254, 0.1);
+}
+
+/* Animation delay utilities */
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+.animation-delay-1000 {
+  animation-delay: 1000ms;
+}
+
+/* Bouncing dots animation - sequential bounce */
+@keyframes bounce-dot-1 {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateY(0);
+  }
+  10% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce-dot-2 {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes bounce-dot-3 {
+  0%, 20%, 40%, 60%, 80%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-bounce-dot-1 {
+  animation: bounce-dot-1 2s ease-in-out infinite;
+}
+
+.animate-bounce-dot-2 {
+  animation: bounce-dot-2 2s ease-in-out infinite;
+}
+
+.animate-bounce-dot-3 {
+  animation: bounce-dot-3 2s ease-in-out infinite;
+}
+
+/* Fix spacing for nested items */
+.menu__list-item-collapsible .menu__list .menu__list-item {
+  margin-bottom: 0;
+}
+
+/* Sidebar navigation with proper text handling */
+.theme-doc-sidebar-container {
+  position: relative;
+}
+
+/* Ensure sidebar links handle long text properly */
+.theme-doc-sidebar-container .menu__link {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Prevent sidebar from being too narrow */
+.theme-doc-sidebar-container {
+  min-width: 280px;
+}
+
+/* Handle very long navigation labels */
+.menu__list-item .menu__link {
+  display: block;
+  line-height: 1.4;
+  white-space: normal;
+  text-overflow: unset;
+  overflow: visible;
+}
+
+/* Proper spacing between expanded sections */
+.menu__list-item-collapsible:not(.menu__list-item--collapsed) {
+  margin-bottom: 0.25rem;
+}
+
+/* Visual indication for scrollable content */
+.theme-doc-sidebar-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--ifm-background-surface-color)
+  );
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+[data-theme='dark'] .theme-doc-sidebar-container::after {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--ifm-background-surface-color)
+  );
+}
+
+/* Improve readability of nested navigation */
+.menu__list-item-collapsible .menu__list .menu__link {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.menu__list-item-collapsible .menu__list .menu__link::before {
+  content: '└';
+  position: absolute;
+  left: 0.75rem;
+  color: var(--ifm-color-emphasis-400);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Last item in nested list gets different connector */
+.menu__list-item-collapsible
+  .menu__list
+  .menu__list-item:last-child
+  .menu__link::before {
+  content: '└';
+}
+
+/* Non-last items get different connector */
+.menu__list-item-collapsible
+  .menu__list
+  .menu__list-item:not(:last-child)
+  .menu__link::before {
+  content: '├';
+}
+
+/* Clean up excessive nesting visual clutter */
+.menu__list-item-collapsible
+  .menu__list
+  .menu__list-item-collapsible
+  .menu__list
+  .menu__link::before {
+  content: '•';
+  font-size: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
 }

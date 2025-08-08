@@ -194,6 +194,8 @@ const HAHNewsletterSection: React.FC<HAHNewsletterSectionProps> = ({ onNewslette
                       size='lg'
                       className='bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white border-0 shadow-lg'
                       icon={<FaStar />}
+                      data-umami-event="hackathon-newsletter-open"
+                      data-umami-event-category="hackathon"
                     >
                       Join Email List
                     </PrimaryButton>

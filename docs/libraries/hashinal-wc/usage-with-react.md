@@ -1,6 +1,20 @@
-# Using Hashinals Wallet Connect with React
+---
+title: React Integration
+sidebar_position: 4
+description: Build React applications with Hedera wallet connectivity
+pagination_prev: libraries/hashinal-wc/methods
+pagination_next: libraries/hashinal-wc/usage-with-nextjs
+---
 
-This guide demonstrates how to integrate the Hashinals Wallet Connect SDK with a React application.
+# React Integration
+
+Build modern React applications with seamless Hedera wallet integration using Hashinal Wallet Connect SDK.
+
+## Prerequisites
+
+- Node.js 20+ installed
+- Basic knowledge of React and React Hooks
+- WalletConnect project ID ([get one here](https://cloud.walletconnect.com/))
 
 ## Setup
 
@@ -315,10 +329,31 @@ REACT_APP_WALLETCONNECT_PROJECT_ID=your_project_id_here
 
 Make sure to replace `your_project_id_here` with your actual WalletConnect project ID from the [WalletConnect Dashboard](https://cloud.walletconnect.com/).
 
-## Notes
+## Best Practices
 
-1. The SDK uses singleton pattern, so you only need to initialize it once.
-2. Make sure to handle errors appropriately in your components.
-3. The provider maintains wallet connection state and provides methods for interacting with the Hedera Hashgraph.
-4. All HCS-2 messages must follow the standard format and include required fields.
-5. The memo field in HCS-2 messages is limited to 500 characters.
+1. **Singleton Pattern**: The SDK uses singleton pattern - initialize once per app
+2. **Error Handling**: Always wrap SDK calls in try-catch blocks with user feedback
+3. **State Management**: The provider maintains wallet state across your app
+4. **HCS-2 Compliance**: All messages must follow the HCS-2 standard format
+5. **Memo Limits**: HCS-2 memo field is limited to 500 characters
+6. **Loading States**: Show loading indicators during async operations
+7. **Network Detection**: Display the current network (mainnet/testnet)
+8. **Session Recovery**: The SDK automatically recovers sessions on page refresh
+
+## Common Patterns
+
+### Auto-Connect on Load
+The provider automatically checks for existing sessions on initialization, providing seamless user experience.
+
+### Error Boundaries
+Wrap your app with React error boundaries to gracefully handle wallet errors.
+
+### TypeScript Support
+The SDK includes full TypeScript definitions for better development experience.
+
+## Next Steps
+
+- Explore [API Methods](./methods) for all available SDK functions
+- Learn about [HCS Topics](./topics) for advanced messaging
+- Check out [Next.js Integration](./usage-with-nextjs) for SSR support
+- Review the [Hashinals Guide](./usage-with-recursion) for on-chain apps

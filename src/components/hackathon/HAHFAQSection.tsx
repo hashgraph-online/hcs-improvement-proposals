@@ -374,7 +374,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
             <FaCheckCircle className='text-[#48df7b] text-xs mr-3 flex-shrink-0' />
             <div>
               <span className='font-medium text-black dark:text-white'>
-                October 2025
+                November 2025
               </span>
               <span className='ml-4 text-black dark:text-white'>
                 Winners Announced
@@ -714,6 +714,8 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
               target='_blank'
               rel='noopener noreferrer'
               className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 no-underline hover:no-underline hover:text-white font-sans'
+              data-umami-event="hackathon-telegram-join"
+              data-umami-event-category="hackathon"
             >
               Join Telegram Community
               <FaArrowRight />
@@ -722,6 +724,8 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
               <button
                 onClick={onNewsletterClick}
                 className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#48df7b] to-[#5599fe] hover:from-[#48df7b]/90 hover:to-[#5599fe]/90 text-white font-medium rounded-xl transition-all duration-300 transform hover:scale-105 border-0 outline-none focus:outline-none font-sans'
+                data-umami-event="hackathon-newsletter-open-faq"
+                data-umami-event-category="hackathon"
               >
                 <FaEnvelope />
                 <span className="text-base">Get Email Updates</span>

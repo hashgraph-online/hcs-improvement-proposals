@@ -1,57 +1,63 @@
 import React from 'react';
 import CategoryShowcase from './CategoryShowcase';
 
-const hashinalWCData = [
+const hashintalWCData = [
+  {
+    title: 'Overview',
+    href: '/docs/libraries/hashinal-wc/overview',
+    description: 'Introduction to Hashinal Wallet Connect SDK and its core features',
+    icon: '📖',
+  },
   {
     title: 'Installation',
     href: '/docs/libraries/hashinal-wc/installation',
-    description: 'Get started with Hashinal Wallet Connect by installing and setting up the library',
+    description: 'Get started with Hashinal Wallet Connect SDK installation and setup',
     icon: '📦',
   },
   {
-    title: 'Methods',
+    title: 'API Methods',
     href: '/docs/libraries/hashinal-wc/methods',
-    description: 'Explore all available methods for interacting with Hedera wallets',
-    icon: '🛠️',
+    description: 'Complete reference for all SDK methods and their usage',
+    icon: '🔧',
   },
   {
-    title: 'Topics',
-    href: '/docs/libraries/hashinal-wc/topics',
-    description: 'Learn about important topics and concepts in Hashinal Wallet Connect',
-    icon: '📚',
-  },
-  {
-    title: 'Usage with React',
+    title: 'React Integration',
     href: '/docs/libraries/hashinal-wc/usage-with-react',
-    description: 'Integrate Hashinal Wallet Connect with your React applications',
+    description: 'Build React applications with wallet connectivity',
     icon: '⚛️',
   },
   {
-    title: 'Usage with Next.js',
+    title: 'Next.js Integration',
     href: '/docs/libraries/hashinal-wc/usage-with-nextjs',
-    description: 'Integrate Hashinal Wallet Connect with Next.js applications',
+    description: 'Server-side rendering with Next.js and wallet integration',
     icon: '▲',
   },
   {
-    title: 'Usage with Vite',
+    title: 'Vite Integration',
     href: '/docs/libraries/hashinal-wc/usage-with-vite',
-    description: 'Integrate Hashinal Wallet Connect with Vite-powered applications',
+    description: 'Fast development with Vite and Hedera wallets',
     icon: '⚡',
   },
   {
-    title: 'Usage with Recursion',
+    title: 'Hashinals Guide',
     href: '/docs/libraries/hashinal-wc/usage-with-recursion',
-    description: 'Combine Hashinal Wallet Connect with HCS-3 Recursion for powerful dApps',
-    icon: '🔄',
+    description: 'Build inscribed HTML applications using HCS-3 standard',
+    icon: '🎨',
+  },
+  {
+    title: 'HCS Topics',
+    href: '/docs/libraries/hashinal-wc/topics',
+    description: 'Work with Hedera Consensus Service topics and messages',
+    icon: '💬',
   },
 ];
 
-export default function HashinalWCShowcase(): JSX.Element {
+export default function HashinalWCShowcase() {
   return (
     <CategoryShowcase
       title="Hashinal Wallet Connect"
       subtitle="Connect and interact with Hedera wallets in your applications"
-      items={hashinalWCData}
+      items={hashintalWCData}
     />
   );
 }

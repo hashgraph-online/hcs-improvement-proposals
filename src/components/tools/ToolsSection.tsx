@@ -1,34 +1,19 @@
 import React, { useRef, useState } from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   FaCode,
   FaRobot,
   FaPlug,
   FaArrowRight,
-  FaCalendarAlt,
-  FaLaptopCode,
-  FaVideo,
-  FaFlag,
-  FaHeadset,
   FaGithub,
   FaBookOpen,
-  FaUserFriends,
-  FaPaperPlane,
   FaExternalLinkAlt,
   FaGlobe,
   FaComments,
 } from 'react-icons/fa';
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
-import PrimaryButton from './PrimaryButton';
-import HackathonTypography from './HackathonTypography';
-import ToolCard from '../ui/ToolCard';
-import { TimelineItem } from './TimelineItem';
-import {
-  TransformCard,
-  Typography,
-  SidebarNavButton,
-  LaptopMockup,
-} from '../ui';
+import PrimaryButton from '../hackathon/PrimaryButton';
+import { SidebarNavButton } from '../ui';
 import MoonscapeTestingSection from '../ui/MoonscapeTestingSection';
 import { Highlight } from 'prism-react-renderer';
 
@@ -144,15 +129,11 @@ const customDarkTheme = {
   ],
 };
 
-const HAHToolsTimelineSection: React.FC = () => {
+const ToolsSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [activeToolIndex, setActiveToolIndex] = useState(0);
   const [copied, setCopied] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
 
   React.useEffect(() => {
     const checkDarkMode = () => {
@@ -226,12 +207,6 @@ const agent = await hcs10Client.createAndRegisterAgent(agentBuilder);`,
       isNew: true,
       color: 'purple',
       quickStart: `import { HederaLangchainToolkit } from 'hedera-agent-kit';
-import { 
-  coreHTSPlugin, 
-  coreAccountPlugin, 
-  coreConsensusPlugin, 
-  coreQueriesPlugin 
-} from 'hedera-agent-kit';
 import { Client } from '@hashgraph/sdk';
 import { ChatOpenAI } from '@langchain/openai';
 import { createToolCallingAgent } from 'langchain/agents';
@@ -248,7 +223,7 @@ client.setOperator(
 const hederaToolkit = new HederaLangchainToolkit({
   client,
   configuration: {
-    plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin]
+    plugins: ['coreQueries', 'tokenOperations', 'topicMessaging']
   }
 });
 
@@ -524,65 +499,11 @@ const result = await tools.registerAgentTool.invoke({
     },
   ];
 
-  const timeline = [
-    {
-      icon: <FaBookOpen />,
-      date: 'Now - August 1st, 2025',
-      title: 'Registration Open',
-      description:
-        'Register early for the hackathon to get access to exclusive workshops and resources.',
-      isHighlighted: true,
-    },
-    {
-      icon: <FaHeadset />,
-      date: 'Now - September 30th, 2025',
-      title: 'Weekly X Spaces & Workshops',
-      description:
-        'Join us every Thursday at 10am EDT for Hedera x AI X Spaces, plus hands-on workshops and tutorials.',
-      isHighlighted: true,
-    },
-    {
-      icon: <FaFlag />,
-      date: 'August 1st, 2025',
-      title: 'Hackathon Kickoff',
-      description:
-        'Official opening of the AI Track with introduction to the challenges, tools, and resources.',
-    },
-    {
-      icon: <FaLaptopCode />,
-      date: 'August 1st - September 30th, 2025',
-      title: 'Building Phase',
-      description:
-        'Two months to build innovative AI agents on Hedera with support from technical mentors.',
-    },
-    {
-      icon: <FaUserFriends />,
-      date: 'Early September 2025',
-      title: 'Midpoint Check-in',
-      description:
-        'Optional progress review with mentors to receive feedback and guidance for the final stretch.',
-    },
-    {
-      icon: <FaVideo />,
-      date: 'September 30th, 2025',
-      title: 'Submission Deadline',
-      description:
-        'Final projects must be submitted, including code, documentation, and video demo.',
-    },
-    {
-      icon: <FaCalendarAlt />,
-      date: 'November 2025',
-      title: 'Winners Announced',
-      description:
-        'Top projects will be announced and winners will receive their prizes.',
-    },
-  ];
-
   return (
     <section
       ref={sectionRef}
       className='py-24 sm:py-32 relative bg-white dark:bg-black overflow-hidden'
-      id='tools-timeline'
+      id='tools-section'
     >
       <div className='absolute inset-0'>
         <motion.div
@@ -637,12 +558,12 @@ const result = await tools.registerAgentTool.invoke({
 
             <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
               <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
-                Essential Tools for AI Development
+                Essential Tools for Development
               </span>
             </h2>
 
             <p className='text-base text-gray-600 dark:text-white/70 max-w-3xl mx-auto'>
-              Everything you need to build autonomous AI solutions on Hedera.
+              Everything you need to build innovative solutions on Hedera.
               From SDKs to integration plugins, we've got you covered.
             </p>
           </motion.div>
@@ -664,7 +585,7 @@ const result = await tools.registerAgentTool.invoke({
                       <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-green-400'></div>
                     </div>
                     <div className='text-xs lg:text-sm font-mono text-gray-600 dark:text-white/60 truncate'>
-                      ai-developer-tools.dev
+                      developer-tools.dev
                     </div>
                   </div>
                   <div className='flex items-center gap-3 flex-shrink-0'>
@@ -980,202 +901,10 @@ const result = await tools.registerAgentTool.invoke({
           </div>
         </div>
 
-        <MoonscapeTestingSection variant="hackathon" />
-
-        <div className='mt-12 md:mt-16'>
-          <motion.div
-            className='text-center mb-8'
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#5599fe]/10 to-[#48df7b]/10 dark:from-[#5599fe]/20 dark:to-[#48df7b]/20 border border-[#5599fe]/20 dark:border-[#5599fe]/30 mb-6'
-            >
-              <FaCalendarAlt className='text-[#5599fe] mr-2' />
-              <span className='text-sm font-bold text-[#5599fe] dark:text-[#48df7b]'>
-                EVENT SCHEDULE
-              </span>
-            </motion.div>
-
-            <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
-              <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
-                Hackathon Timeline
-              </span>
-            </h2>
-
-            <p className='text-base text-gray-600 dark:text-white/70 max-w-3xl mx-auto'>
-              Mark your calendar with these important dates for the AI Track at
-              Hedera Africa Hackathon.
-            </p>
-          </motion.div>
-
-          <div className='relative max-w-4xl mx-auto'>
-            <motion.div
-              className='absolute left-8 md:left-1/2 transform md:-translate-x-1/2 w-0.5 h-full'
-              initial={{ scaleY: 0 }}
-              whileInView={{ scaleY: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: 'easeOut' }}
-              style={{
-                background:
-                  'linear-gradient(180deg, #a679f0 0%, #5599fe 50%, #48df7b 100%)',
-                transformOrigin: 'top',
-              }}
-            />
-
-            {/* Start dot */}
-            <motion.div
-              className='absolute w-2 h-2 rounded-full'
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              style={{
-                backgroundColor: '#a679f0',
-                top: '-4px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              }}
-            />
-
-            {/* End dot */}
-            <motion.div
-              className='absolute w-2 h-2 rounded-full'
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.8 }}
-              style={{
-                backgroundColor: '#48df7b',
-                bottom: '-4px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              }}
-            />
-
-            {/* Responsive dots for desktop */}
-            <motion.div
-              className='hidden md:block absolute w-2 h-2 rounded-full'
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              style={{
-                backgroundColor: '#a679f0',
-                top: '-4px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              }}
-            />
-
-            <motion.div
-              className='hidden md:block absolute w-2 h-2 rounded-full'
-              initial={{ scale: 0 }}
-              whileInView={{ scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, delay: 0.8 }}
-              style={{
-                backgroundColor: '#48df7b',
-                bottom: '-4px',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              }}
-            />
-
-            <div className='space-y-4 md:-space-y-8'>
-              {timeline.map((event, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className={`relative flex items-center ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  } flex-row`}
-                  style={{ zIndex: timeline.length - index }}
-                >
-                  <div
-                    className='absolute left-8 md:left-1/2 transform md:-translate-x-1/2 pointer-events-none'
-                    style={{ zIndex: 100 }}
-                  >
-                    <div
-                      className={`w-4 h-4 rounded-full border-4 ring-2 ring-white ${
-                        event.isHighlighted
-                          ? 'bg-white border-[#a679f0]'
-                          : 'bg-white border-[#5599fe]'
-                      }`}
-                      style={{
-                        boxShadow: event.isHighlighted
-                          ? '0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(166, 121, 240, 0.5)'
-                          : '0 4px 12px rgba(0, 0, 0, 0.15), 0 0 20px rgba(85, 153, 254, 0.5)',
-                      }}
-                    />
-                  </div>
-
-                  <div
-                    className={`ml-16 md:ml-0 ${
-                      index % 2 === 0
-                        ? 'md:mr-auto md:pr-12'
-                        : 'md:ml-auto md:pl-12'
-                    } md:w-[52%]`}
-                  >
-                    <TransformCard
-                      rotation={`rotate-[${
-                        index % 2 === 0 ? '-0.5' : '0.5'
-                      }deg]`}
-                      background={
-                        event.isHighlighted
-                          ? 'bg-gradient-to-br from-[#a679f0]/10 to-[#5599fe]/10 dark:from-[#a679f0]/20 dark:to-[#5599fe]/20'
-                          : 'bg-white dark:bg-black'
-                      }
-                      border={`border ${
-                        event.isHighlighted
-                          ? 'border-[#a679f0]/20'
-                          : 'border-gray-200 dark:border-white/20'
-                      }`}
-                      shadow='lg'
-                      className='p-4 md:p-5 hover:scale-[1.02] transition-all duration-300'
-                    >
-                      <div className='flex items-start gap-4'>
-                        <div
-                          className='w-10 h-10 rounded-xl flex items-center justify-center text-white flex-shrink-0'
-                          style={{
-                            background: event.isHighlighted
-                              ? 'linear-gradient(135deg, #a679f0, #5599fe)'
-                              : 'linear-gradient(135deg, #5599fe, #48df7b)',
-                          }}
-                        >
-                          {event.icon}
-                        </div>
-                        <div className='flex-grow'>
-                          <div className='text-xs font-bold text-[#a679f0] uppercase tracking-wide mb-1'>
-                            {event.date}
-                          </div>
-                          <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
-                            {event.title}
-                          </h3>
-                          <p className='text-sm text-gray-600 dark:text-white/70'>
-                            {event.description}
-                          </p>
-                        </div>
-                      </div>
-                    </TransformCard>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
+        <MoonscapeTestingSection variant="general" />
       </div>
     </section>
   );
 };
 
-export default HAHToolsTimelineSection;
+export default ToolsSection;

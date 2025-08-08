@@ -27,10 +27,10 @@ const libraryData = [
     icon: '🤖',
   },
   {
-    title: 'Standards Agent Plugin',
-    href: '/docs/libraries/standards-agent-plugin',
-    description: 'OpenConvAI plugin for Hedera Agent Kit - enables HCS-10 agent communication',
-    icon: '🔌',
+    title: 'Conversational Agent',
+    href: '/docs/libraries/conversational-agent',
+    description: 'Conversational AI agent implementing HCS-10 communication, HCS-2 registries, and content inscription',
+    icon: '💬',
   },
 ];
 
