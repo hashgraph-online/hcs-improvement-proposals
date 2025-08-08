@@ -150,7 +150,7 @@ Implementation Workflow
 Integration with Existing Standards
 
 - Complements HCS-22 by providing a precise method for state synchronization.
-- Easily integrated with HCS-21 for consistent state verification across cluster members.
+- Easily integrated with HCS-15 for consistent state verification across cluster members.
 
 ## Deterministic, application-level public key for Keylist + Threshold Keys (Floras, Blooms, Meadows, etc)
 

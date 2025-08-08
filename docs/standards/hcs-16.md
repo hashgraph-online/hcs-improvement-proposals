@@ -40,7 +40,7 @@ sidebar_position: 16
 
 ## Abstract
 
-Flora accounts extend the **HCS‑21 Petal account** concept to groups of two or more independent accounts that wish to transact and maintain shared state under a single on‑chain entity. A Flora account is controlled by a **threshold key** (or key list) composed of the public keys of its member Petal accounts, and is accompanied by three mandatory Hedera Consensus Service (HCS) topics: **communication**, **transaction**, and **state**, each protected by the same keylist (with varying thresholds). This standard defines:
+Flora accounts extend the **HCS‑15 Petal account** concept to groups of two or more independent accounts that wish to transact and maintain shared state under a single on‑chain entity. A Flora account is controlled by a **threshold key** (or key list) composed of the public keys of its member Petal accounts, and is accompanied by three mandatory Hedera Consensus Service (HCS) topics: **communication**, **transaction**, and **state**, each protected by the same keylist (with varying thresholds). This standard defines:
 
 - The canonical JSON schema for Flora metadata stored in account memos and HCS messages.
 - The on‑chain and off‑chain message flows required to create, operate, and dissolve a Flora.
@@ -55,7 +55,7 @@ Modern autonomous agents and decentralized applications increasingly require **t
 1. **Discoverability & Negotiation** – Flora requests travel over existing HCS‑10 channels, leveraging the addressing and routing primitives agents already use.
 2. **Native Multisig** – Hedera’s ThresholdKey is used directly; no Solidity bridges or custom bytecode are needed, reducing gas and audit surface.
 3. **Topic‑Scoped State** – Flora’s dedicated topics isolate chat, scheduled transactions, and state attestations, preserving privacy and concurrency.
-4. **Composability** – Because each member is itself a Petal account, existing HCS‑21 tooling (profile resolution, escrow partitioning, etc.) works unchanged inside a Flora.
+4. **Composability** – Because each member is itself a Petal account, existing HCS‑15 tooling (profile resolution, escrow partitioning, etc.) works unchanged inside a Flora.
 
 ---
 
@@ -63,7 +63,7 @@ Modern autonomous agents and decentralized applications increasingly require **t
 
 | Term                         | Meaning                                                                      |
 | ---------------------------- | ---------------------------------------------------------------------------- |
-| **Petal**                    | An HCS‑21 account that shares a private key with its Base account.           |
+| **Petal**                    | An HCS‑15 account that shares a private key with its Base account.           |
 | **Member**                   | A Petal account that participates in a Flora.                                |
 | **Flora**                    | The multisig account created under HCS‑22.                                   |
 | **Threshold Key `T/M`**      | A key that requires `T` valid signatures out of `M` total keys.              |
@@ -525,4 +525,4 @@ async function createTopic(
 
 - [HCS‑10] – Message Envelope & Routing
 - [HCS‑11] – Root Profile Schema
-- [HCS‑21] – Petal Accounts
+- [HCS‑15] – Petal Accounts
