@@ -1243,7 +1243,7 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
               in action.
             </p>
             <PrimaryButton
-              href='https://hashgraphonline.com/docs/libraries/standards-agent-kit/examples'
+              href='https://github.com/hashgraph-online/conversational-agent'
               target='_blank'
               rel='noopener noreferrer'
               size='sm'
