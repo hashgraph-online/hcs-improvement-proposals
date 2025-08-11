@@ -101,6 +101,17 @@ export const useCases: UseCase[] = [
     tagline:
       'Empowering artists to showcase their digital creations on Hedera.',
   },
+   {
+    name: 'HGrimoire',
+    description:
+      "HGrimoire is wallet-like explorer, tool suite, and Hashinal Grims portal built on Hedera.",
+    image: '/use-cases/hgrimoire.png',
+    color: '#181817ff',
+    link: 'https://grimterminal.app/',
+    creator: 'Hashinal Grims',
+    tagline:
+      'Seek, and the chapters shall unfold.',
+  },
 ];
 
 const UseCaseCard: React.FC<{ useCase: UseCase; index: number }> = ({

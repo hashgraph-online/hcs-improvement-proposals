@@ -113,8 +113,8 @@ const HAHRegisterSection: React.FC = () => {
               >
                 <div className='space-y-4'>
                   <div className='flex items-center gap-2 mb-6'>
-                    <div className='w-3 h-3 rounded-full bg-red-500' />
-                    <div className='w-3 h-3 rounded-full bg-yellow-500' />
+                    <div className='w-3 h-3 rounded-full bg-brand-purple' />
+                    <div className='w-3 h-3 rounded-full bg-brand-blue' />
                     <div className='w-3 h-3 rounded-full bg-green-500' />
                     <span className='ml-auto text-xs text-gray-500 font-mono'>
                       hackathon.sh
@@ -179,7 +179,10 @@ const HAHRegisterSection: React.FC = () => {
                     <FaCalendarAlt className='text-2xl text-[#a679f0]' />
                   </div>
                   <div>
-                    <Typography variant='h5' className='mb-1 text-gray-700 dark:text-white'>
+                    <Typography
+                      variant='h5'
+                      className='mb-1 text-gray-700 dark:text-white'
+                    >
                       2 Months to Build
                     </Typography>
                     <Typography variant='body2' color='muted'>
@@ -248,6 +251,8 @@ const HAHRegisterSection: React.FC = () => {
                 size='lg'
                 className='bg-gradient-to-r from-[#a679f0] to-[#5599fe] hover:from-[#a679f0]/90 hover:to-[#5599fe]/90 text-white border-0'
                 icon={<FaArrowRight />}
+                data-umami-event='hackathon-register-dorahacks'
+                data-umami-event-category='hackathon'
               >
                 Register on DoraHacks
               </PrimaryButton>
@@ -260,6 +265,8 @@ const HAHRegisterSection: React.FC = () => {
                 variant='secondary'
                 className='border-2 border-gray-300 dark:border-gray-600 hover:border-[#a679f0] dark:hover:border-[#48df7b] transition-colors'
                 icon={<FaGlobe />}
+                data-umami-event='hackathon-view-main-event'
+                data-umami-event-category='hackathon'
               >
                 View Main Event
               </PrimaryButton>
@@ -276,30 +283,34 @@ const HAHRegisterSection: React.FC = () => {
         transition={{ duration: 0.6, delay: 0.4 }}
       >
         <div className='py-12'>
-          <p className='text-sm text-gray-300 text-center mb-8'>
-            In collaboration with
+          <p className='text-xs text-gray-300 mb-4 text-center'>
+            Organized by THA & ESF, operated by DAR Blockchain, and AI Track
+            sponsored by Hashgraph Online
           </p>
-          <div className='flex flex-wrap items-center justify-center gap-8 sm:gap-16 md:gap-24'>
+          <div className='flex flex-wrap items-center justify-center gap-4'>
             <img
               src='/img/logos/THA.svg'
-              alt='The Hashgraph Association'
-              className='h-10 sm:h-12 object-contain'
+              alt='The Hashgraph Association - Organizer'
+              className='h-8 object-contain'
             />
             <img
               src='/img/logos/exponential-science.png'
-              alt='Exponential Science'
-              className='h-10 sm:h-12 object-contain'
+              alt='Exponential Science - Organizer'
+              className='h-8 object-contain'
             />
-            <div className='flex items-center gap-3'>
+            <img
+              src='/img/dar-blockchain-dark.png'
+              alt='DAR Blockchain - Operator'
+              className='h-8 object-contain'
+            />
+            <div className='flex items-center gap-0.5'>
               <img
                 src='/img/logo.png'
                 alt='Hashgraph Online'
-                className='h-10 sm:h-12 object-contain'
+                className='h-8 object-contain'
               />
-              <div>
-                <div className='text-lg font-semibold text-white'>
-                  Hashgraph Online
-                </div>
+              <div className='text-sm font-semibold text-white'>
+                Hashgraph Online
               </div>
             </div>
           </div>

@@ -93,8 +93,8 @@ const Terminal: TerminalComponent = ({
           className={`px-4 py-3 flex items-center space-x-2 bg-gray-200 dark:bg-gray-800`}
         >
           <div className='flex space-x-2'>
-            <div className='w-3 h-3 bg-red-500 rounded-full'></div>
-            <div className='w-3 h-3 bg-yellow-500 rounded-full'></div>
+            <div className='w-3 h-3 bg-brand-purple rounded-full'></div>
+            <div className='w-3 h-3 bg-brand-blue rounded-full'></div>
             <div className='w-3 h-3 bg-brand-green rounded-full'></div>
           </div>
           <span className='text-sm font-mono text-gray-600 dark:text-gray-400 ml-4'>{title}</span>

@@ -29,6 +29,7 @@ import {
   SidebarNavButton,
   LaptopMockup,
 } from '../ui';
+import MoonscapeTestingSection from '../ui/MoonscapeTestingSection';
 import { Highlight } from 'prism-react-renderer';
 
 interface Tool {
@@ -190,10 +191,10 @@ const HAHToolsTimelineSection: React.FC = () => {
       icon: <FaGithub />,
       title: 'Standards SDK',
       description:
-        'Access the full suite of HCS Improvement Proposals and reference implementations including the OpenConvAI SDK.',
+        'Access the full suite of HCS Improvement Proposals and reference implementations including the OpenConvAI SDK for Agent <> Agent communication.',
       link: 'https://hashgraphonline.com/docs/libraries/standards-sdk/',
       installCommand: 'npm install @hashgraphonline/standards-sdk',
-      isNew: true,
+      isNew: false,
       color: 'green',
       quickStart: `import { HCS10Client, AgentBuilder, AIAgentCapability, InboundTopicType } from '@hashgraphonline/standards-sdk';
 
@@ -218,19 +219,63 @@ const agent = await hcs10Client.createAndRegisterAgent(agentBuilder);`,
       icon: <FaRobot />,
       title: 'Hedera Agent Kit',
       description:
-        'A LangChain-compatible toolkit for interacting with the Hedera Network',
+        'AI-powered toolkit for building intelligent agents that interact with Hedera blockchain. Complete rewrite focused on developer experience with LangChain integration.',
       link: 'https://github.com/hedera-dev/hedera-agent-kit',
-      installCommand: 'npm i hedera-agent-kit',
+      installCommand:
+        'npm install hedera-agent-kit @langchain/openai @hashgraph/sdk',
+      isNew: true,
       color: 'purple',
-      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
+      quickStart: `import { HederaLangchainToolkit } from 'hedera-agent-kit';
+import { 
+  coreHTSPlugin, 
+  coreAccountPlugin, 
+  coreConsensusPlugin, 
+  coreQueriesPlugin 
+} from 'hedera-agent-kit';
+import { Client } from '@hashgraph/sdk';
+import { ChatOpenAI } from '@langchain/openai';
+import { createToolCallingAgent } from 'langchain/agents';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
 
-const agent = new HederaConversationalAgent(signer, {
-  openAIApiKey: process.env.OPENAI_API_KEY
+// Initialize Hedera client
+const client = Client.forTestnet();
+client.setOperator(
+  process.env.HEDERA_ACCOUNT_ID!,
+  process.env.HEDERA_PRIVATE_KEY!
+);
+
+// Create the toolkit with AI agent capabilities
+const hederaToolkit = new HederaLangchainToolkit({
+  client,
+  configuration: {
+    plugins: [coreHTSPlugin, coreAccountPlugin, coreConsensusPlugin, coreQueriesPlugin]
+  }
 });
-await agent.initialize();
-const response = await agent.processMessage('Send 10 HBAR to 0.0.12345');`,
-      docsLink:
-        'https://github.com/hedera-dev/hedera-agent-kit/blob/main/README.md',
+
+// Get available tools for the agent
+const tools = hederaToolkit.getTools();
+
+// Create AI agent with Hedera tools
+const agent = createToolCallingAgent({
+  llm: new ChatOpenAI({
+    model: 'gpt-4',
+    temperature: 0.1,
+  }),
+  tools,
+  prompt: ChatPromptTemplate.fromMessages([
+    ['system', 'You are a Hedera blockchain assistant. Help users interact with Hedera through natural language.'],
+    ['human', '{input}'],
+    ['placeholder', '{agent_scratchpad}']
+  ])
+});
+
+// Execute agent with natural language commands
+const result = await agent.invoke({
+  input: 'Send 5 HBAR to account 0.0.12345 and create a topic for updates'
+});
+
+console.log('Agent result:', result.output);`,
+      docsLink: 'https://github.com/hedera-dev/hedera-agent-kit',
     },
     {
       icon: <FaCode />,
@@ -264,34 +309,49 @@ const messageTx = await new TopicMessageSubmitTransaction()
     },
     {
       icon: <FaPlug />,
-      title: 'Standards Agent Plugin',
+      title: 'Conversational Agent',
       description:
-        'OpenConvAI plugin for Hedera Agent Kit that enables conversational AI agents to communicate using HCS-10 standards.',
-      link: 'https://github.com/hashgraph-online/standards-agent-plugin',
-      installCommand: 'npm install @hashgraphonline/standards-agent-plugin',
+        'Conversational AI agent implementing Hashgraph Consensus Standards (HCS) for agent communication, registry management, and content inscription on Hedera. Built on hedera-agent-kit for comprehensive Hedera network access.',
+      link: 'https://github.com/hashgraph-online/conversational-agent',
+      installCommand: 'npm install @hashgraphonline/conversational-agent',
       isNew: true,
       color: 'green',
-      quickStart: `import { HederaConversationalAgent } from 'hedera-agent-kit';
-import { OpenConvAIPlugin } from '@hashgraphonline/standards-agent-plugin';
+      quickStart: `import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
 
-// Create the plugin
-const plugin = new OpenConvAIPlugin();
-
-// Use with HederaConversationalAgent
-const agent = new HederaConversationalAgent(signer, {
-  pluginConfig: {
-    plugins: [plugin],
-    appConfig: {
-      stateManager: plugin.getStateManager()
-    }
-  },
-  openAIApiKey: process.env.OPENAI_API_KEY
+// Initialize the conversational agent
+const agent = new ConversationalAgent({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+  openAIApiKey: process.env.OPENAI_API_KEY!,
+  openAIModelName: 'gpt-4o',
+  verbose: true,
+  // Optional: Add custom plugins
+  additionalPlugins: [myCustomPlugin],
+  // Optional: Use custom state manager
+  stateManager: myCustomStateManager,
+  // Optional: Configure operational mode
+  operationalMode: 'autonomous', // or 'returnBytes'
 });
 
+// Initialize (automatically detects key type)
 await agent.initialize();
 
-// Now you can use HCS-10 commands through conversation
-const response = await agent.processMessage('Register me as an AI agent named TestBot');`,
+// Process a message
+const response = await agent.processMessage(
+  'Register me as an AI agent with the name TestBot'
+);
+
+// Natural language commands for Hedera operations
+await agent.processMessage(
+  'I want to send 1 HBAR to 0.0.800'
+);
+
+// Access built-in plugins if needed
+const hcs10Plugin = agent.hcs10Plugin;
+const hcs2Plugin = agent.hcs2Plugin;
+const inscribePlugin = agent.inscribePlugin;`,
+      docsLink: '/docs/libraries/conversational-agent/',
     },
     {
       icon: <FaComments />,
@@ -309,13 +369,139 @@ const response = await agent.processMessage('Register me as an AI agent named Te
 5. Create your own agent profile`,
     },
     {
+      icon: <FaCode />,
+      title: 'Hgraph SDK',
+      description:
+        'Web3 data infrastructure SDK for Hedera with GraphQL API, real-time subscriptions, and token helpers.',
+      link: 'https://docs.hgraph.com/category/hgraph-sdk',
+      installCommand: 'npm install --save-exact @hgraph.io/sdk@latest',
+      color: 'blue',
+      quickStart: `import HgraphSDK from '@hgraph.io/sdk';
+
+// Initialize with API key
+const client = new HgraphSDK({
+  headers: {
+    'x-api-key': process.env.HGRAPH_API_KEY!,
+  },
+});
+
+// Query account information
+const { data } = await client.query({
+  query: \`
+    query GetAccount($accountId: String!) {
+      account(where: { account_id: { _eq: $accountId }}) {
+        account_id
+        alias
+        balance
+        created_timestamp
+        memo
+      }
+    }
+  \`,
+  variables: { accountId: '0.0.12345' }
+});
+
+// Subscribe to real-time token transfers
+const subscription = client.subscribe({
+  query: \`
+    subscription TokenTransfers($tokenId: String!) {
+      token_transfer_stream(
+        where: { token_id: { _eq: $tokenId }}
+        limit: 10
+      ) {
+        from_account_id
+        to_account_id
+        amount
+        consensus_timestamp
+      }
+    }
+  \`,
+  variables: { tokenId: '0.0.1234567' }
+}, {
+  next: ({ data }) => console.log('Transfer:', data),
+  error: (err) => console.error('Error:', err),
+  complete: () => console.log('Subscription complete')
+});`,
+      docsLink: 'https://docs.hgraph.com/category/hgraph-sdk',
+    },
+    {
+      icon: <FaRobot />,
+      title: 'Memejob SDK',
+      description:
+        'TypeScript SDK for launching and trading Hedera tokens through the memejob protocol - perfect for AI agents managing meme tokens.',
+      link: 'https://github.com/buidler-labs/memejob-sdk-js',
+      installCommand: 'npm install @buidler-labs/memejob-sdk-js',
+      isNew: true,
+      color: 'green',
+      quickStart: `import { AccountId, ContractId, PrivateKey } from "@hashgraph/sdk";
+import {
+  CONTRACT_DEPLOYMENTS,
+  createAdapter,
+  getChain,
+  MJClient,
+  NativeAdapter,
+} from "@buidlerlabs/memejob-sdk-js";
+
+// Initialize the Memejob client
+const contractId = ContractId.fromString(
+  CONTRACT_DEPLOYMENTS.mainnet.contractId
+);
+
+const client = new MJClient(
+  createAdapter(NativeAdapter, {
+    operator: {
+      accountId: AccountId.fromString(process.env.HEDERA_ACCOUNT_ID!),
+      privateKey: PrivateKey.fromStringECDSA(process.env.HEDERA_PRIVATE_KEY!),
+    },
+  }),
+  {
+    chain: getChain("mainnet"),
+    contractId,
+  }
+);
+
+// Create a meme token
+const tokenInfo = {
+  name: "AI Agent Token",
+  symbol: "AIAGENT",
+  memo: "ipfs://QmYourTokenMetadataCID",
+};
+
+const token = await client.createToken(tokenInfo, {
+  amount: 100000000000n,
+  distributeRewards: true,
+  referrer: "0x000...000",
+});
+
+console.log('Token created:', token);
+
+// Buy tokens from the bonding curve
+const buyResult = await token.buy({
+  amount: 100000000000000n, // Amount in smallest unit
+  referrer: "0x000...000"
+});
+
+console.log('Buy result:', buyResult.status);
+console.log('Tokens bought:', buyResult.amount);
+
+// Sell tokens back to the curve
+const sellResult = await token.sell({
+  amount: 50000000000000n, // Amount to sell
+  instant: true,
+});
+
+console.log('Sell result:', sellResult.status);
+console.log('Tokens sold:', sellResult.amount);`,
+      docsLink: 'https://github.com/buidler-labs/memejob-sdk-js',
+    },
+    {
       icon: <FaRobot />,
       title: 'Standards AgentKit',
       description:
-        'Next-generation toolkit for building conversational AI agents with integrated Hedera Consensus Service support.',
+        'A langchain-based toolkit which implements HCS standards. Can be used directly or through the Conversational Agent.',
       link: '/docs/libraries/standards-agent-kit/',
       installCommand: 'npm install @hashgraphonline/standards-agent-kit',
-      isNew: true,
+      isNew: false,
       color: 'purple',
       quickStart: `import { initializeStandardsAgentKit } from '@hashgraphonline/standards-agent-kit';
 
@@ -385,7 +571,7 @@ const result = await tools.registerAgentTool.invoke({
     },
     {
       icon: <FaCalendarAlt />,
-      date: 'October 2025',
+      date: 'November 2025',
       title: 'Winners Announced',
       description:
         'Top projects will be announced and winners will receive their prizes.',
@@ -473,8 +659,8 @@ const result = await tools.registerAgentTool.invoke({
                 <div className='flex items-center justify-between'>
                   <div className='flex items-center gap-2 lg:gap-4 min-w-0'>
                     <div className='flex gap-1 lg:gap-1.5 flex-shrink-0'>
-                      <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-red-400'></div>
-                      <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-yellow-400'></div>
+                      <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-brand-purple'></div>
+                      <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-brand-blue'></div>
                       <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-green-400'></div>
                     </div>
                     <div className='text-xs lg:text-sm font-mono text-gray-600 dark:text-white/60 truncate'>
@@ -605,8 +791,8 @@ const result = await tools.registerAgentTool.invoke({
                             <div className='flex items-center justify-between px-4 py-2 bg-gray-200 dark:bg-black border-b border-gray-200/50 dark:border-white/20'>
                               <div className='flex items-start gap-2'>
                                 <div className='flex gap-1.5'>
-                                  <div className='w-3 h-3 rounded-full bg-red-400' />
-                                  <div className='w-3 h-3 rounded-full bg-yellow-400' />
+                                  <div className='w-3 h-3 rounded-full bg-brand-purple' />
+                                  <div className='w-3 h-3 rounded-full bg-brand-blue' />
                                   <div className='w-3 h-3 rounded-full bg-green-400' />
                                 </div>
                                 <FiTerminal className='w-3 h-3 text-white/60' />
@@ -794,152 +980,7 @@ const result = await tools.registerAgentTool.invoke({
           </div>
         </div>
 
-        <div className='mt-24'>
-          <motion.div
-            className='text-center mb-16'
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
-              className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#48df7b]/10 to-[#5599fe]/10 dark:from-[#48df7b]/20 dark:to-[#5599fe]/20 border border-[#48df7b]/20 dark:border-[#48df7b]/30 mb-6'
-            >
-              <FaComments className='text-[#48df7b] mr-2' />
-              <span className='text-sm font-bold text-[#48df7b] dark:text-[#5599fe]'>
-                TESTING YOUR AI AGENT
-              </span>
-            </motion.div>
-
-            <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
-              <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
-                Testing Your AI Project
-              </span>
-            </h2>
-
-            <p className='text-base text-gray-600 dark:text-white/70 max-w-3xl mx-auto'>
-              Building an AI agent? Use the Moonscape Portal to interact with
-              your agent in a real-world environment.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className='max-w-6xl mx-auto'
-          >
-            <div className='relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900 ring-1 ring-gray-200/50 dark:ring-gray-600'>
-              <div className='absolute inset-0'>
-                <div className='absolute inset-0 bg-gradient-to-br from-[#48df7b]/5 via-[#5599fe]/5 to-[#a679f0]/5 dark:from-[#48df7b]/10 dark:via-[#5599fe]/10 dark:to-[#a679f0]/10' />
-                <motion.div
-                  animate={{
-                    backgroundPosition: ['0% 0%', '100% 100%'],
-                  }}
-                  transition={{
-                    duration: 20,
-                    repeat: Infinity,
-                    repeatType: 'reverse',
-                  }}
-                  className='absolute inset-0 opacity-30'
-                  style={{
-                    backgroundImage:
-                      'radial-gradient(circle at 20% 80%, #48df7b 0%, transparent 50%), radial-gradient(circle at 80% 20%, #5599fe 0%, transparent 50%), radial-gradient(circle at 40% 40%, #a679f0 0%, transparent 50%)',
-                    backgroundSize: '200% 200%',
-                  }}
-                />
-              </div>
-
-              <div className='relative grid lg:grid-cols-12 gap-8 p-8 lg:p-12'>
-                {/* Laptop - Takes up more space like homepage */}
-                <div className='lg:col-span-7 transform scale-90 sm:scale-100 lg:scale-105 origin-left pr-4'>
-                  <LaptopMockup>
-                    <img
-                      src='/use-cases/moonscape-portal.jpg'
-                      alt='Moonscape Portal Interface'
-                      className='w-full h-full object-cover object-left'
-                    />
-                  </LaptopMockup>
-                </div>
-
-                {/* Content - Smaller column like homepage */}
-                <div className='lg:col-span-5 flex flex-col justify-center pl-4'>
-                  <motion.div
-                    initial={{ opacity: 0, x: 20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                  >
-                    <h3 className='text-2xl lg:text-3xl font-bold mb-2 text-gray-700 dark:text-white'>
-                      For AI Agent Projects: Moonscape Portal
-                    </h3>
-                    <p className='text-base text-gray-600 dark:text-white/70 mb-3'>
-                      If you're building an AI agent, Moonscape provides a live testing environment where judges and participants can interact with your creation.
-                    </p>
-
-                    <div className='space-y-1 mb-3'>
-                      <div className='flex items-start gap-2'>
-                        <div className='w-9 h-9 rounded-lg bg-gradient-to-r from-[#48df7b] to-[#5599fe] flex items-center justify-center flex-shrink-0'>
-                          <FaComments className='w-4 h-4 text-white' />
-                        </div>
-                        <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Chat Interface</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Test through natural conversations</p>
-                        </div>
-                      </div>
-
-                      <div className='flex items-start gap-2'>
-                        <div className='w-9 h-9 rounded-lg bg-gradient-to-r from-[#5599fe] to-[#a679f0] flex items-center justify-center flex-shrink-0'>
-                          <FaUserFriends className='w-4 h-4 text-white' />
-                        </div>
-                        <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Agent Discovery</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Browse and connect with other agents</p>
-                        </div>
-                      </div>
-
-                      <div className='flex items-start gap-2'>
-                        <div className='w-9 h-9 rounded-lg bg-gradient-to-r from-[#a679f0] to-[#48df7b] flex items-center justify-center flex-shrink-0'>
-                          <FaGlobe className='w-4 h-4 text-white' />
-                        </div>
-                        <div className='flex-1'>
-                          <h4 className='font-semibold text-gray-700 dark:text-white text-sm leading-tight'>Live Demonstration</h4>
-                          <p className='text-xs text-gray-600 dark:text-white/70 -mt-1.5'>Showcase your agent in real-time</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className='flex gap-2'>
-                      <a
-                        href='https://moonscape.tech/openconvai/chat'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#5599fe] to-[#a679f0] text-white font-medium text-sm rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap'
-                      >
-                        <FaExternalLinkAlt className='w-3 h-3' />
-                        Launch Chat
-                      </a>
-                      <a
-                        href='https://moonscape.tech/openconvai/agents'
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all border-2 border-gray-200 dark:border-white/20 hover:border-gray-300 dark:hover:border-white/40 text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 bg-transparent whitespace-nowrap'
-                      >
-                        <FaUserFriends className='w-3 h-3' />
-                        Browse Agents
-                      </a>
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        <MoonscapeTestingSection variant="hackathon" />
 
         <div className='mt-12 md:mt-16'>
           <motion.div
@@ -987,7 +1028,7 @@ const result = await tools.registerAgentTool.invoke({
                 transformOrigin: 'top',
               }}
             />
-            
+
             {/* Start dot */}
             <motion.div
               className='absolute w-2 h-2 rounded-full'
@@ -1002,7 +1043,7 @@ const result = await tools.registerAgentTool.invoke({
                 transform: 'translateX(-50%)',
               }}
             />
-            
+
             {/* End dot */}
             <motion.div
               className='absolute w-2 h-2 rounded-full'
@@ -1017,7 +1058,7 @@ const result = await tools.registerAgentTool.invoke({
                 transform: 'translateX(-50%)',
               }}
             />
-            
+
             {/* Responsive dots for desktop */}
             <motion.div
               className='hidden md:block absolute w-2 h-2 rounded-full'
@@ -1032,7 +1073,7 @@ const result = await tools.registerAgentTool.invoke({
                 transform: 'translateX(-50%)',
               }}
             />
-            
+
             <motion.div
               className='hidden md:block absolute w-2 h-2 rounded-full'
               initial={{ scale: 0 }}

@@ -163,6 +163,7 @@ const sidebars: SidebarsConfig = {
           collapsible: true,
           collapsed: true,
           items: [
+            'libraries/hashinal-wc/overview',
             'libraries/hashinal-wc/installation',
             'libraries/hashinal-wc/methods',
             'libraries/hashinal-wc/topics',
@@ -183,6 +184,10 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/standards-sdk/overview',
+            'libraries/standards-sdk/hcs-2',
+            'libraries/standards-sdk/hcs-3',
+            'libraries/standards-sdk/hcs-6',
+            'libraries/standards-sdk/hcs-7',
             {
               type: 'category',
               label: 'HCS-10',
@@ -197,16 +202,14 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-10/browser',
                 'libraries/standards-sdk/hcs-10/connections-manager',
                 'libraries/standards-sdk/hcs-10/examples',
-                'libraries/standards-sdk/hcs-10/server',
-                'libraries/standards-sdk/hcs-10/index'
+                'libraries/standards-sdk/hcs-10/server'
               ],
             },
-            'libraries/standards-sdk/hcs-3',
-            'libraries/standards-sdk/hcs-7',
             'libraries/standards-sdk/hcs-11',
             'libraries/standards-sdk/hcs-20',
             'libraries/standards-sdk/inscribe',
-            'libraries/standards-sdk/utils-services'
+            'libraries/standards-sdk/utils-services',
+            'libraries/standards-sdk/configuration'
           ],
         },
         {
@@ -228,17 +231,19 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Standards Agent Plugin',
+          label: 'Conversational Agent',
           link: {
             type: 'doc',
-            id: 'libraries/standards-agent-plugin/index',
+            id: 'libraries/conversational-agent/index',
           },
           collapsible: true,
-          collapsed: true,
+          collapsed: false,
           items: [
-            'libraries/standards-agent-plugin/getting-started',
-            'libraries/standards-agent-plugin/tools',
-            'libraries/standards-agent-plugin/examples'
+            'libraries/conversational-agent/getting-started',
+            'libraries/conversational-agent/tools',
+            'libraries/conversational-agent/mcp-servers',
+            'libraries/conversational-agent/examples',
+            'libraries/conversational-agent/plugin-development'
           ],
         },
       ],

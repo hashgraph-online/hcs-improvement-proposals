@@ -6,10 +6,10 @@ import JudgesSection from '../components/hackathon/JudgesSection';
 import HAHToolsTimelineSection from '../components/hackathon/HAHToolsTimelineSection';
 import HAHRegisterSection from '../components/hackathon/HAHRegisterSection';
 import HAHFAQSection from '../components/hackathon/HAHFAQSection';
-import HAHJudgingCriteriaSection from '../components/hackathon/HAHJudgingCriteriaSection';
 import HAHCodeExamplesSection from '../components/hackathon/HAHCodeExamplesSection';
 import HAHNewsletterModal from '../components/hackathon/HAHNewsletterModal';
 import HAHNewsletterSection from '../components/hackathon/HAHNewsletterSection';
+import HAHSponsorsSection from '../components/hackathon/HAHSponsorsSection';
 import '../css/hackathon-fonts.css';
 import './hackathon-styles.css';
 
@@ -32,9 +32,6 @@ const HAHPage: React.FC = () => {
         <div id='newsletter'>
           <HAHNewsletterSection onNewsletterClick={() => setShowNewsletterModal(true)} />
         </div>
-        <div id='requirements'>
-          <HAHJudgingCriteriaSection onNewsletterClick={() => setShowNewsletterModal(true)} />
-        </div>
         <div id='tools'>
           <HAHToolsTimelineSection />
         </div>
@@ -43,6 +40,9 @@ const HAHPage: React.FC = () => {
         </div>
         <div id='judges'>
           <JudgesSection event='africa-hackathon' showTBA={true} />
+        </div>
+        <div id='sponsors'>
+          <HAHSponsorsSection />
         </div>
         <div id='faq'>
           <HAHFAQSection onNewsletterClick={() => setShowNewsletterModal(true)} />
