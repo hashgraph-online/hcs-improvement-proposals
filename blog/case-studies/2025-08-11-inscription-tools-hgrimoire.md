@@ -1,13 +1,13 @@
 ---
-slug: hashinals-inscribe-utilities-hgrimoire
-title: Hashinals and Inscribe Utilities - On-Chain Inscription and Retrieval Use Case with HGrimoire
-authors: [Hue]
-tags: [case-study, hashinals, inscription, hgrimoire]
+slug: inscribe-utilities-hgrimoire
+title: Inscribe Utilities - On-Chain Inscription and Retrieval Use Case with HGrimoire
+authors: [hue]
+tags: [case-study, hcs-1, inscribe-utilities, hgrimoire]
 date: 2025-11-08T10:54:20-01:00
 ---
 
 
-# Hashinals and Inscribe Utilities: On-Chain Inscription and Retrieval Use Case with HGrimoire
+# Inscribe Utilities: On-Chain Inscription and Retrieval Use Case with HGrimoire
 
 ## HGrimoire: A wallet-like explorer, tool suite, and HGrim portal built on Hedera
 
