@@ -141,7 +141,7 @@ export const Person: React.FC<PersonProps> = ({
       </div>
 
       <motion.div
-        className='mt-3 text-center px-2'
+        className='mt-2 text-center px-1'
         initial={{ opacity: 0 }}
         animate={
           isInView
@@ -150,18 +150,18 @@ export const Person: React.FC<PersonProps> = ({
         }
       >
         <HackathonTypography
-          variant='subtitle1'
-          className='font-styrene text-black dark:text-white'
+          variant='body2'
+          className='font-styrene text-black dark:text-white font-semibold'
         >
           {person.name}
         </HackathonTypography>
         <HackathonTypography
-          variant='body2'
-          className='text-hedera-charcoal dark:text-hedera-smoke'
+          variant='caption'
+          className='text-hedera-charcoal dark:text-hedera-smoke text-xs'
         >
           {person.role}
         </HackathonTypography>
-        <HackathonTypography variant='caption' color='green'>
+        <HackathonTypography variant='caption' color='green' className='text-xs'>
           {person.company}
         </HackathonTypography>
       </motion.div>
@@ -434,13 +434,16 @@ interface JudgesSectionProps {
 
 export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = false }) => {
   const [selectedPerson, setSelectedPerson] = useState<Judge | null>(null);
-  const [activeTab, setActiveTab] = useState<'judges' | 'mentors'>('judges');
+  const [activeTab, setActiveTab] = useState<'judges' | 'mentors'>('mentors');
   const sectionRef = useRef<HTMLDivElement>(null);
 
   // Filter judges and mentors by event if specified
-  const filteredJudges = event 
-    ? judges.filter(judge => judge.events && judge.events.includes(event))
-    : judges;
+  // For africa-hackathon, only show mentors
+  const filteredJudges = event === 'africa-hackathon' 
+    ? []
+    : (event 
+        ? judges.filter(judge => judge.events && judge.events.includes(event))
+        : judges);
   
   const filteredMentors = event
     ? mentors.filter(mentor => mentor.events && mentor.events.includes(event))
@@ -522,19 +525,19 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <GlowingButton
-              active={activeTab === 'judges'}
-              onClick={() => setActiveTab('judges')}
-              color='purple'
-            >
-              Judges
-            </GlowingButton>
-
-            <GlowingButton
               active={activeTab === 'mentors'}
               onClick={() => setActiveTab('mentors')}
               color='green'
             >
               Mentors
+            </GlowingButton>
+
+            <GlowingButton
+              active={activeTab === 'judges'}
+              onClick={() => setActiveTab('judges')}
+              color='purple'
+            >
+              Judges
             </GlowingButton>
           </motion.div>
         </div>
@@ -548,17 +551,72 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
               exit={{ opacity: 0, y: -40 }}
               transition={{ duration: 0.5 }}
             >
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8'>
-                {filteredJudges.map((judge, index) => (
-                  <Person
-                    key={index}
-                    person={judge}
-                    index={index}
-                    onClick={() => setSelectedPerson(judge)}
-                    isSelected={selectedPerson?.name === judge.name}
-                  />
-                ))}
-              </div>
+              {filteredJudges.length === 0 ? (
+                <div>
+                  <div className='mt-8 flex items-center justify-center'>
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className='text-center max-w-lg'
+                    >
+                      <div className='relative inline-block'>
+                        <div className='absolute inset-0 bg-gradient-to-r from-hedera-purple/20 to-hedera-blue/20 blur-3xl'></div>
+                        <div className='relative bg-gradient-to-br from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-2xl p-12 border border-hedera-purple/20 dark:border-hedera-purple/30'>
+                          <div className='flex items-center justify-center gap-3 mb-4'>
+                            <div className='w-2 h-2 bg-hedera-purple rounded-full animate-bounce-dot-1'></div>
+                            <div className='w-2 h-2 bg-hedera-blue rounded-full animate-bounce-dot-2'></div>
+                            <div className='w-2 h-2 bg-hedera-green rounded-full animate-bounce-dot-3'></div>
+                          </div>
+                          <HackathonTypography
+                            variant='h3'
+                            className='bg-gradient-to-r from-hedera-purple to-hedera-blue bg-clip-text text-transparent mb-3 text-center'
+                          >
+                            Judges Panel In Progress
+                          </HackathonTypography>
+                          <HackathonTypography
+                            variant='body1'
+                            className='text-gray-600 dark:text-gray-400 text-center'
+                          >
+                            We're assembling an exceptional panel of industry experts to evaluate your innovative projects.
+                          </HackathonTypography>
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+                  {/* Spacer to maintain consistent height */}
+                  <div className='mt-16'></div>
+                </div>
+              ) : (
+                <>
+                  <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 gap-y-6'>
+                    {filteredJudges.map((judge, index) => (
+                      <Person
+                        key={index}
+                        person={judge}
+                        index={index}
+                        onClick={() => setSelectedPerson(judge)}
+                        isSelected={selectedPerson?.name === judge.name}
+                      />
+                    ))}
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    className='mt-16 text-center'
+                  >
+                    <div className='inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
+                      <span className='font-medium relative overflow-hidden'>
+                        <span className='relative z-10 bg-gradient-to-r from-hedera-charcoal via-hedera-charcoal/60 to-hedera-charcoal dark:from-white dark:via-white/60 dark:to-white bg-clip-text text-transparent bg-[length:200%_100%] animate-shimmer'>
+                          More Experts Coming Soon
+                        </span>
+                      </span>
+                    </div>
+                  </motion.div>
+                </>
+              )}
             </motion.div>
           ) : (
             <motion.div
@@ -568,7 +626,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
               exit={{ opacity: 0, y: -40 }}
               transition={{ duration: 0.5 }}
             >
-              <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8'>
+              <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 gap-y-6'>
                 {filteredMentors.map((mentor, index) => (
                   <Person
                     key={index}
@@ -579,26 +637,26 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
                   />
                 ))}
               </div>
+              {filteredMentors.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  className='mt-16 text-center'
+                >
+                  <div className='inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
+                    <span className='font-medium relative overflow-hidden'>
+                      <span className='relative z-10 bg-gradient-to-r from-hedera-charcoal via-hedera-charcoal/60 to-hedera-charcoal dark:from-white dark:via-white/60 dark:to-white bg-clip-text text-transparent bg-[length:200%_100%] animate-shimmer'>
+                        More Experts Coming Soon
+                      </span>
+                    </span>
+                  </div>
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
-
-        {/* More Coming Soon Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className='mt-16 text-center'
-        >
-          <div className='inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
-            <span className='font-medium relative overflow-hidden'>
-              <span className='relative z-10 bg-gradient-to-r from-hedera-charcoal via-hedera-charcoal/60 to-hedera-charcoal dark:from-white dark:via-white/60 dark:to-white bg-clip-text text-transparent bg-[length:200%_100%] animate-shimmer'>
-                More Experts Coming Soon
-              </span>
-            </span>
-          </div>
-        </motion.div>
 
         {selectedPerson && (
           <SelectedPerson

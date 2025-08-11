@@ -249,7 +249,6 @@ Examples:
 
 - Expectation for new records to be continually added.
 - Indexers should gather `only the last message` and metadata in that message will determine the protocol and execution.
-- Processing state should start from the first message and proceed to the last sequential message number.
 
 ## TTL Use Cases
 

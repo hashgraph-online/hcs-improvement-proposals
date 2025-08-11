@@ -1,17 +1,123 @@
-/* Fix Docusaurus sidebar scrolling */
-/* The main sidebar container needs to be scrollable */
-.theme-doc-sidebar-container nav.menu {
-  height: calc(100vh - var(--ifm-navbar-height));
-  overflow-y: auto;
+/* Enhanced Docusaurus sidebar scrolling with overflow handling */
+
+/* Main sidebar container with proper scrolling */
+.theme-doc-sidebar-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Ensure the thin-scrollbar wrapper doesn't break scrolling */
-.theme-doc-sidebar-container .thin-scrollbar {
+/* Scrollable sidebar content area */
+.theme-doc-sidebar-container .thin-scrollbar,
+.theme-doc-sidebar-container .menu,
+.theme-doc-sidebar-container .menu__list {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: calc(100vh - var(--ifm-navbar-height) - 2rem) !important;
+  padding-bottom: 2rem;
+  scroll-behavior: smooth;
+}
+
+/* Custom scrollbar styling for better UX */
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar,
+.theme-doc-sidebar-container .menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar-track,
+.theme-doc-sidebar-container .menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar-thumb,
+.theme-doc-sidebar-container .menu::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+.theme-doc-sidebar-container .thin-scrollbar::-webkit-scrollbar-thumb:hover,
+.theme-doc-sidebar-container .menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode scrollbar */
+[data-theme='dark']
+  .theme-doc-sidebar-container
+  .thin-scrollbar::-webkit-scrollbar-thumb,
+[data-theme='dark']
+  .theme-doc-sidebar-container
+  .menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme='dark']
+  .theme-doc-sidebar-container
+  .thin-scrollbar::-webkit-scrollbar-thumb:hover,
+[data-theme='dark']
+  .theme-doc-sidebar-container
+  .menu::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Firefox scrollbar styling */
+.theme-doc-sidebar-container .thin-scrollbar,
+.theme-doc-sidebar-container .menu {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+[data-theme='dark'] .theme-doc-sidebar-container .thin-scrollbar,
+[data-theme='dark'] .theme-doc-sidebar-container .menu {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+/* Handle nested items properly */
+.menu__list-item-collapsible .menu__list {
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Mobile sidebar adjustments */
+@media (max-width: 996px) {
+  .navbar-sidebar .navbar-sidebar__items {
+    max-height: calc(100vh - var(--ifm-navbar-height)) !important;
+    overflow-y: auto !important;
+    padding-bottom: 2rem;
+  }
+
+  .navbar-sidebar .navbar-sidebar__items::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .navbar-sidebar .navbar-sidebar__items::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+  }
+}
+
+/* Ensure sidebar takes full available height */
+.theme-doc-sidebar-container aside {
   height: 100%;
-  overflow-y: visible; /* Let the parent handle scrolling */
+  overflow: hidden;
 }
 
-/* Make sure menu lists don't have their own scroll */
-.menu__list {
-  overflow: visible;
+/* Prevent horizontal overflow in sidebar items */
+.theme-doc-sidebar-container .menu__link {
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
+  padding: 0.5rem 0.75rem;
+}
+
+/* Handle long text in nested items */
+.menu__list-item-collapsible .menu__list .menu__link {
+  font-size: 0.875rem;
+  padding-left: 1.5rem;
+  padding-right: 0.75rem;
+}
+
+/* Smooth transitions for expand/collapse */
+.menu__list-item-collapsible .menu__list {
+  transition: all 0.3s ease-in-out;
 }
