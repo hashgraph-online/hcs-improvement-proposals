@@ -25,6 +25,8 @@ The publicly available inscription API integrates with HGrimoire to fetch, recon
 
 ## HGrimoire Viewer
 
+![HGrimoire Viewer](https://i.ibb.co/tPqK5040/viewer.png)
+
 One of HGrimoire’s primary functions is serving as the hub for [Hashinal Grims](https://hashinalgrims.com). Holders can connect and view their Grims within the dapp. The Viewer allows users to browse their Hashinal Grims, including asset details, inscription numbers, provenance, and metadata. It also supports exporting high-quality images and assets.
 
 The HGrimoire Viewer is not limited to Hashinal Grims, any supported Hedera account can be searched to explore NFTs and other Hashinals across collections. Its compact, mobile-friendly design ensures large collections and long histories remain easy to navigate.
@@ -33,14 +35,20 @@ The HGrimoire Viewer is not limited to Hashinal Grims, any supported Hedera acco
 
 HGrimoire includes several tools for inscription workflows used by creators, communities, and builders.
 
+![HGrimoire tools](https://i.ibb.co/bMs8G5kq/Screenshot-2025-08-12-011010.png)
+
 **InscribeMaster** is the primary inscription tool, guiding users from file or URL selection through validation, optional metadata entry, and submission to the network. It supports two input methods:
 
 * Small files are encoded and inscribed directly.
 * Larger files are handled via a URL flow for smooth publishing of bigger content.
 
+![Inscribe Master](https://i.ibb.co/B2VgR2gL/inscribed-master.png)
+
 It supports general file inscriptions, single Hashinals, and collection inscriptions where a ZIP file of organized images and JSON metadata is stored as a set. Users can review content, description, and fees before signing. Once submitted, the tool tracks job IDs, checks status until complete, and provides shareable links and downloadable receipts. All of this is powered by the HashgraphOnline's **Inscription SDK** for a consistent inscription process and verifiable results.
 
 **Hashinal Zip Builder** streamlines collection preparation. Creators can drag and drop images, batch-add JSON metadata, and attach secondary files. The builder enforces proper numbering, matches images to metadata, and previews folder structure. When ready, it creates a standards-compliant ZIP containing images, metadata, and any extra files. The set can then be downloaded or sent directly to inscription. This process reduces errors and saves significant time for handling large collections.
+
+![Hashinal Zip　Builder](https://i.ibb.co/Q1hT48G/zip-builder.png)
 
 ## Other Mini-Tools Using the Inscribe Utilities
 
