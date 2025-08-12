@@ -26,10 +26,10 @@ const DevHeroSection: React.FC<DevHeroSectionProps> = () => {
 
               <Typography
                 variant='h1'
-                className='text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white leading-tight'
+                className='text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight'
               >
-                <span className='text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-blue-600'>
-                  AI + Hedera
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#c89fff] via-[#5599fe] to-[#48df7b]'>
+                  HOL Desktop
                 </span>
               </Typography>
 
@@ -54,12 +54,14 @@ const DevHeroSection: React.FC<DevHeroSectionProps> = () => {
                   View on GitHub
                 </PrimaryButton>
                 <PrimaryButton
-                  href='/newsletter'
+                  href='https://t.me/hashinals'
+                  target='_blank'
+                  rel='noopener noreferrer'
                   size='lg'
                   className='bg-gray-600 hover:bg-gray-700 text-white border-0'
                   icon={<FaArrowRight />}
                 >
-                  Join Early Access
+                  Join Community
                 </PrimaryButton>
               </div>
 
@@ -67,7 +69,7 @@ const DevHeroSection: React.FC<DevHeroSectionProps> = () => {
                 <div>
                   <div className='flex items-center gap-2 mb-2'>
                     <FaDesktop className='text-purple-600 flex-shrink-0 text-lg' />
-                    <span className='font-semibold text-base'>Desktop App</span>
+                    <span className='font-semibold text-base text-gray-900 dark:text-white'>Desktop App</span>
                   </div>
                   <Typography variant='caption' color='muted' className='block'>
                     Cross-platform Electron app for Windows, macOS, and Linux
@@ -76,7 +78,7 @@ const DevHeroSection: React.FC<DevHeroSectionProps> = () => {
                 <div>
                   <div className='flex items-center gap-2 mb-2'>
                     <FaPlug className='text-blue-600 flex-shrink-0 text-lg' />
-                    <span className='font-semibold text-base'>MCP Support</span>
+                    <span className='font-semibold text-base text-gray-900 dark:text-white'>MCP Support</span>
                   </div>
                   <Typography variant='caption' color='muted' className='block'>
                     Model Context Protocol for AI-system integration
@@ -85,7 +87,7 @@ const DevHeroSection: React.FC<DevHeroSectionProps> = () => {
                 <div>
                   <div className='flex items-center gap-2 mb-2'>
                     <FaCode className='text-green-600 flex-shrink-0 text-lg' />
-                    <span className='font-semibold text-base'>Extensible</span>
+                    <span className='font-semibold text-base text-gray-900 dark:text-white'>Extensible</span>
                   </div>
                   <Typography variant='caption' color='muted' className='block'>
                     Plugin architecture for custom tools and workflows

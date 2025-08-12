@@ -174,8 +174,10 @@ const InteractiveToolsSection: React.FC<InteractiveToolsSectionProps> = ({
       className='max-w-5xl mx-auto'
     >
       <div className='text-center mb-12'>
-        <h2 className='text-2xl sm:text-3xl font-bold mb-4'>
-          {title}
+        <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
+          <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#c89fff] to-[#a679f0]'>
+            {title}
+          </span>
         </h2>
         <p className='text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto'>
           {subtitle}

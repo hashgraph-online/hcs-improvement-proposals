@@ -147,17 +147,14 @@ await agent.processMessage('Send 5 HBAR to Bob');
           <div className='mb-4'>
             <Typography
               variant='h2'
-              className='text-4xl lg:text-5xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight'
+              className='text-4xl lg:text-5xl font-mono font-black leading-tight tracking-tight'
             >
-              Technical{' '}
-              <Typography
-                variant='h2'
-                gradient='brand'
-                as='span'
-                className='text-4xl lg:text-5xl font-mono font-black leading-tight tracking-tight inline-block'
-              >
+              <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#c89fff] to-[#a679f0]'>
+                Technical
+              </span>{' '}
+              <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#7eb9ff] to-[#5599fe]'>
                 Architecture_
-              </Typography>
+              </span>
             </Typography>
             <Typography
               color='muted'
@@ -184,13 +181,13 @@ await agent.processMessage('Send 5 HBAR to Bob');
           <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto'>
             <TransformCard
               rotation='rotate-[1deg]'
-              background='bg-gradient-to-br from-purple-900 to-purple-800 dark:from-purple-800 dark:to-purple-700'
-              border='border border-purple-700/50'
+              background='bg-gradient-to-br from-[#9c6fd1] to-[#8659c7]'
+              border='border border-[#8659c7]/40'
               shadow='xl'
               rounded='3xl'
               className='p-8 h-64 flex flex-col justify-between'
             >
-              <div className='text-xs font-mono text-purple-300'>
+              <div className='text-xs font-mono text-white/90 font-semibold'>
                 // LANGCHAIN_POWERED
               </div>
               <div>
@@ -200,7 +197,7 @@ await agent.processMessage('Send 5 HBAR to Bob');
                 >
                   AI-First Design
                 </Typography>
-                <Typography className='text-sm text-purple-200'>
+                <Typography className='text-sm text-white font-medium'>
                   Built on LangChain with OpenAI/Anthropic models and smart memory management
                 </Typography>
               </div>
@@ -208,13 +205,13 @@ await agent.processMessage('Send 5 HBAR to Bob');
 
             <TransformCard
               rotation='rotate-[-0.5deg]'
-              background='bg-gradient-to-br from-blue-900 to-blue-800 dark:from-blue-800 dark:to-blue-700'
-              border='border border-blue-700/50'
+              background='bg-gradient-to-br from-[#6aa3e8] to-[#4488ed]'
+              border='border border-[#4488ed]/40'
               shadow='xl'
               rounded='3xl'
               className='p-8 h-64 flex flex-col justify-between lg:mt-8'
             >
-              <div className='text-xs font-mono text-blue-300'>
+              <div className='text-xs font-mono text-white/90 font-semibold'>
                 // HEDERA_NATIVE
               </div>
               <div>
@@ -224,7 +221,7 @@ await agent.processMessage('Send 5 HBAR to Bob');
                 >
                   Hashgraph Ready
                 </Typography>
-                <Typography className='text-sm text-blue-200'>
+                <Typography className='text-sm text-white font-medium'>
                   Full Hedera integration with HCS standards and hedera-agent-kit v2
                 </Typography>
               </div>
@@ -232,13 +229,13 @@ await agent.processMessage('Send 5 HBAR to Bob');
 
             <TransformCard
               rotation='rotate-[0.5deg]'
-              background='bg-gradient-to-br from-green-900 to-green-800 dark:from-green-800 dark:to-green-700'
-              border='border border-green-700/50'
+              background='bg-gradient-to-br from-[#4ed26a] to-[#3bc55f]'
+              border='border border-[#3bc55f]/40'
               shadow='xl'
               rounded='3xl'
               className='p-8 h-64 flex flex-col justify-between'
             >
-              <div className='text-xs font-mono text-green-300'>
+              <div className='text-xs font-mono text-white/90 font-semibold'>
                 // MCP_ENABLED
               </div>
               <div>
@@ -248,7 +245,7 @@ await agent.processMessage('Send 5 HBAR to Bob');
                 >
                   Extensible
                 </Typography>
-                <Typography className='text-sm text-green-200'>
+                <Typography className='text-sm text-white font-medium'>
                   Model Context Protocol for external systems and custom tool integration
                 </Typography>
               </div>
