@@ -163,6 +163,7 @@ const sidebars: SidebarsConfig = {
           collapsible: true,
           collapsed: true,
           items: [
+            'libraries/hashinal-wc/overview',
             'libraries/hashinal-wc/installation',
             'libraries/hashinal-wc/methods',
             'libraries/hashinal-wc/topics',
