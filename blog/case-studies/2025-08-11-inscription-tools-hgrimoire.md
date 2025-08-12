@@ -21,34 +21,38 @@ Although not an actual wallet, HGrimoire offers a familiar, user-friendly interf
 
 HGrimoire combines the creation and verification of on-chain content in one place. The Inscribe Utilities from HashgraphOnline make it simple to publish content and structured messages to Hedera’s Consensus Service, following the HCS-1 standard for reliable, permanent storage.
 
-The publicly available inscription API integrates with HGrimoire to fetch, reconstruct, and display Hashinals directly in the interface. Users can easily view their on-chain assets along with key details. Behind the scenes, HGrimoire uses the Inscription SDK to manage inscription workflows, ensuring smooth and reliable inscription and retrieval within the dapp.
+The publicly available inscription API integrates with HGrimoire Viewer to fetch, reconstruct, and display Hashinals directly in the interface. Users can easily view their on-chain assets along with key details. Behind the scenes, HGrimoire uses the Inscription SDK to manage inscription workflows, ensuring smooth and reliable inscription and retrieval within the dapp.
 
 ## HGrimoire Viewer
 
-![HGrimoire Viewer](https://i.ibb.co/tPqK5040/viewer.png)
+![HGrimoire Viewer](https://kiloscribe.com/api/inscription-cdn/0.0.9593284?network=mainnet)
 
 One of HGrimoire’s primary functions is serving as the hub for [Hashinal Grims](https://hashinalgrims.com). Holders can connect and view their Grims within the dapp. The Viewer allows users to browse their Hashinal Grims, including asset details, inscription numbers, provenance, and metadata. It also supports exporting high-quality images and assets.
 
 The HGrimoire Viewer is not limited to Hashinal Grims, any supported Hedera account can be searched to explore NFTs and other Hashinals across collections. Its compact, mobile-friendly design ensures large collections and long histories remain easy to navigate.
 
+The same viewer is utilized for **HashLibrary**, a tool within HGrimoire that acts as a public hub for comic-style content on the Hedera network. Through this platform, users can seamlessly explore, read, and interact with visual narratives, ranging from indie comics and illustrated stories to graphic novel experiments. 
+
+![HashLibrary](https://kiloscribe.com/api/inscription-cdn/0.0.9593290?network=mainnet)
+
 ## Content Inscription Tools
 
 HGrimoire includes several tools for inscription workflows used by creators, communities, and builders.
 
-![HGrimoire tools](https://i.ibb.co/bMs8G5kq/Screenshot-2025-08-12-011010.png)
+![HGrimoire tools](https://kiloscribe.com/api/inscription-cdn/0.0.9593281?network=mainnet)
 
 **InscribeMaster** is the primary inscription tool, guiding users from file or URL selection through validation, optional metadata entry, and submission to the network. It supports two input methods:
 
 * Small files are encoded and inscribed directly.
 * Larger files are handled via a URL flow for smooth publishing of bigger content.
 
-![Inscribe Master](https://i.ibb.co/B2VgR2gL/inscribed-master.png)
+![Inscribe Master](https://kiloscribe.com/api/inscription-cdn/0.0.9593258?network=mainnet)
 
 It supports general file inscriptions, single Hashinals, and collection inscriptions where a ZIP file of organized images and JSON metadata is stored as a set. Users can review content, description, and fees before signing. Once submitted, the tool tracks job IDs, checks status until complete, and provides shareable links and downloadable receipts. All of this is powered by the HashgraphOnline's **Inscription SDK** for a consistent inscription process and verifiable results.
 
 **Hashinal Zip Builder** streamlines collection preparation. Creators can drag and drop images, batch-add JSON metadata, and attach secondary files. The builder enforces proper numbering, matches images to metadata, and previews folder structure. When ready, it creates a standards-compliant ZIP containing images, metadata, and any extra files. The set can then be downloaded or sent directly to inscription. This process reduces errors and saves significant time for handling large collections.
 
-![Hashinal Zip　Builder](https://i.ibb.co/Q1hT48G/zip-builder.png)
+![Hashinal Zip　Builder](https://kiloscribe.com/api/inscription-cdn/0.0.9593233?network=mainnet)
 
 ## Other Mini-Tools Using the Inscribe Utilities
 
