@@ -134,7 +134,7 @@ const config: Config = {
             { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
           ],
         },
-        { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
+        { to: '/desktop', label: 'HOL Desktop', position: 'left' },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },

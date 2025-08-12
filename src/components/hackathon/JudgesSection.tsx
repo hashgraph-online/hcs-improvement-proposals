@@ -318,7 +318,6 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                       variant='subtitle1'
                       color='purple'
                       className='font-styrene mb-3 flex items-center'>
-                    >
                       <FaNetworkWired className='mr-2' /> <span>Expertise</span>
                     </HackathonTypography>
 
