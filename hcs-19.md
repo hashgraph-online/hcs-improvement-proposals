@@ -1,5 +1,4 @@
----
-
+---------------------
 description: The HCS‑19 standard defines a comprehensive, ISO/IEC TS 27560‑aligned framework
 for AI agents to document and manage privacy compliance on the Hedera Hashgraph through
 HCS topics, enabling auditable consent management, data‑processing records, privacy‑rights
@@ -67,8 +66,8 @@ sidebar_position: 19
 
 ## Authors
 
-* **Roy Smith**
-* **Andrew Smith**
+* **[Roy Smith](https://www.linkedin.com/company/privacycheq)**
+* **[Andrew Smith](https://www.linkedin.com/in/andrew-hyde-smith/)**
 
 ## Abstract
 
@@ -123,23 +122,23 @@ documentation system. Components:
 
 #### Topic Types and Formats
 
-| Topic Type                   | Description                                 | Key Configuration             |
-| ---------------------------- | ------------------------------------------- | ----------------------------- |
-| **Consent Management**       | Records user consents and withdrawals       | Submit key (agent)            |
-| **Data‑Processing Registry** | Logs data‑processing events                 | Submit key (agent)            |
-| **Privacy‑Rights Registry**  | Handles rights requests / responses         | Submit key (agent)            |
-| **Compliance Audit**         | Stores compliance monitoring and audit logs | Submit key (agent + auditors) |
+| Topic Type                   | Description                                 | Key Configuration             | Enum |
+| ---------------------------- | ------------------------------------------- | ----------------------------- | ---- |
+| **Consent Management**       | Records user consents and withdrawals       | Submit key (agent)            | 0    |
+| **Data‑Processing Registry** | Logs data‑processing events                 | Submit key (agent)            | 1    |
+| **Privacy‑Rights Registry**  | Handles rights requests / responses         | Submit key (agent)            | 2    |
+| **Compliance Audit**         | Stores compliance monitoring and audit logs | Submit key (agent + auditors) | 3    |
 
 #### Topic Memo Formats
 
 **Consent Management Memo**
 
 ```
-hcs-19:0:{ttl}:consent:{agent_account_id}:{jurisdiction}
+hcs-19:0:{ttl}:{topic_type}:{agent_account_id}:{jurisdiction}
 ```
 
-Other memo formats follow the same pattern, replacing `consent` with
-`processing`, `rights` or `audit` as required.
+Other memo formats follow the same pattern, replacing {topic_type} with the appropriate enum as required.
+
 
 ### Operation Reference
 
@@ -158,7 +157,7 @@ Other memo formats follow the same pattern, replacing `consent` with
 {
   "p": "hcs-19",
   "op": "consent_granted",
-  "operator_id": "0.0.123456",
+  "operator_id": "0.0.12345@0.0.4456",
   "user_id": "user_12345",
   "consent_id": "consent_67890",
   "purposes": ["service_delivery", "personalization"],
@@ -167,7 +166,7 @@ Other memo formats follow the same pattern, replacing `consent` with
   "consent_method": "explicit_opt_in",
   "data_types": ["personal_identifiers", "communication_data"],
   "retention_period": "2_years",
-  "notice_reference": "hcs://1/0.0.999888#v1.3",
+  "notice_reference": "hcs://1/0.0.999888#",
   "timestamp": "2025-01-15T10:30:00Z",
   "m": "User consent granted for customer service interactions"
 }
