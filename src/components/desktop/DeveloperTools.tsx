@@ -11,28 +11,28 @@ const DeveloperTools: React.FC<DeveloperToolsProps> = () => {
       icon: <FaDesktop />,
       title: 'HOL Desktop',
       description: 'Full-featured Electron app with chat interface, transaction approvals, and MCP server management. Cross-platform support for Windows, macOS, and Linux.',
-      link: 'https://github.com/hashgraph-online/conversational-agent/tree/main/app',
-      installCommand: 'npx @hashgraphonline/conversational-agent',
+      link: 'https://github.com/hashgraph-online/desktop',
+      installCommand: 'git clone https://github.com/hashgraph-online/desktop',
       color: 'purple',
-      quickStart: `# Quick start with npx (no installation required)
-npx @hashgraphonline/conversational-agent
-
-# Or clone and run locally
-git clone https://github.com/hashgraph-online/conversational-agent
-cd conversational-agent/app
+      quickStart: `# Clone and run locally
+git clone https://github.com/hashgraph-online/desktop
+cd desktop
 pnpm install
-pnpm dev`,
-      docsLink: 'https://github.com/hashgraph-online/conversational-agent/tree/main/app#readme'
+pnpm dev
+
+# For production build
+pnpm build`,
+      docsLink: 'https://github.com/hashgraph-online/desktop#readme'
     },
     {
       icon: <FaTerminal />,
       title: 'CLI Tool',
       description: 'Terminal interface built with Ink (React for CLIs). Same AI capabilities as HOL Desktop with keyboard navigation and terminal-native UI.',
       link: 'https://github.com/hashgraph-online/conversational-agent/tree/main/cli',
-      installCommand: 'npx @hashgraphonline/conversational-agent-cli',
+      installCommand: 'npx @hashgraphonline/conversational-agent',
       color: 'blue',
       quickStart: `# Run the CLI directly
-npx @hashgraphonline/conversational-agent-cli
+npx @hashgraphonline/conversational-agent
 
 # Set your environment variables
 export HEDERA_ACCOUNT_ID="0.0.YOUR_ID"
@@ -40,7 +40,7 @@ export HEDERA_PRIVATE_KEY="YOUR_PRIVATE_KEY"
 export OPENAI_API_KEY="YOUR_API_KEY"
 
 # Start chatting with the agent
-npx @hashgraphonline/conversational-agent-cli`,
+npx @hashgraphonline/conversational-agent`,
       docsLink: 'https://github.com/hashgraph-online/conversational-agent/tree/main/cli#readme'
     },
     {
@@ -74,7 +74,7 @@ const response = await agent.processMessage(
       icon: <FaPlug />,
       title: 'MCP Servers',
       description: 'Model Context Protocol servers enable AI agents to interact with external systems, access files, and use tools.',
-      link: 'https://github.com/hashgraph-online/conversational-agent#mcp-support',
+      link: 'https://github.com/hashgraph-online/desktop#mcp-support',
       color: 'purple',
       quickStart: `// Configure MCP servers in your app
 const mcpConfig = {
@@ -100,7 +100,7 @@ const mcpConfig = {
       icon: <FaCode />,
       title: 'Langchain Tools',
       description: 'Extend agent capabilities with custom Langchain tools for domain-specific operations and integrations.',
-      link: 'https://github.com/hashgraph-online/conversational-agent#langchain-tools',
+      link: 'https://github.com/hashgraph-online/desktop#langchain-tools',
       color: 'blue',
       quickStart: `import { Tool } from '@langchain/core/tools';
 import { z } from 'zod';

@@ -12,7 +12,7 @@ const TechnicalFeatures: React.FC = () => {
       icon: <FaCode />,
       title: 'LangChain Architecture',
       description: 'Built on LangChain with OpenAI function calling, ContentAware AgentExecutor, and smart memory management for context-aware conversations.',
-      link: 'https://github.com/hashgraph-online/conversational-agent/tree/main/src',
+      link: 'https://github.com/hashgraph-online/desktop/tree/main/src',
       color: 'purple',
       quickStart: `const agent = new ConversationalAgent({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
@@ -39,7 +39,7 @@ const response = await agent.processMessage(
       icon: <FaCubes />,
       title: 'Plugin Ecosystem',
       description: 'Modular plugin architecture with HCS standards implementation and hedera-agent-kit integration for comprehensive Hedera operations.',
-      link: 'https://github.com/hashgraph-online/conversational-agent/tree/main/src/plugins',
+      link: 'https://github.com/hashgraph-online/desktop/tree/main/src/plugins',
       color: 'blue',
       quickStart: `// HCS-10: Agent Registration
 const agent = await hcs10Plugin.registerAgent({
@@ -67,7 +67,7 @@ await inscribePlugin.inscribe(content, {
       icon: <FaPlug />,
       title: 'MCP Integration',
       description: 'Native Model Context Protocol support for connecting to filesystems, GitHub, databases, and custom servers with background connection management.',
-      link: 'https://github.com/hashgraph-online/conversational-agent/tree/main/src/mcp',
+      link: 'https://github.com/hashgraph-online/desktop/tree/main/src/mcp',
       color: 'green',
       quickStart: `// Configure MCP servers
 const mcpConfig = {
@@ -98,7 +98,7 @@ const files = await agent.listFiles('/path');
       icon: <FaRobot />,
       title: 'Operational Modes',
       description: 'Two operational modes: autonomous for direct execution and returnBytes for external signing, plus entity memory for context persistence.',
-      link: 'https://github.com/hashgraph-online/conversational-agent#operational-modes',
+      link: 'https://github.com/hashgraph-online/desktop#operational-modes',
       color: 'purple',
       quickStart: `// Autonomous mode (direct execution)
 agent.operationalMode = 'autonomous';

@@ -44,7 +44,7 @@ const DevHeroSection: React.FC<DevHeroSectionProps> = () => {
 
               <div className='flex flex-col sm:flex-row gap-4'>
                 <PrimaryButton
-                  href='https://github.com/hashgraph-online/conversational-agent'
+                  href='https://github.com/hashgraph-online/desktop'
                   target='_blank'
                   rel='noopener noreferrer'
                   size='lg'

@@ -204,8 +204,8 @@ const DesktopShowcase: React.FC = () => {
                       {activeView === 'desktop' ? (
                         <>
                           <Terminal.Line comment='# Clone and build from source:' type='comment' />
-                          <Terminal.Line command='git clone https://github.com/hashgraph-online/conversational-agent' />
-                          <Terminal.Line command='cd conversational-agent/app' />
+                          <Terminal.Line command='git clone https://github.com/hashgraph-online/desktop' />
+                          <Terminal.Line command='cd desktop' />
                           <Terminal.Line command='pnpm install' />
                           <Terminal.Line output='' type='output' />
                           <Terminal.Line comment='# For development' type='comment' />
@@ -229,8 +229,8 @@ const DesktopShowcase: React.FC = () => {
                       onClick={() => {
                         const commands = activeView === 'desktop' 
                           ? `# Clone and build from source:
-git clone https://github.com/hashgraph-online/conversational-agent
-cd conversational-agent/app
+git clone https://github.com/hashgraph-online/desktop
+cd desktop
 pnpm install
 
 # For development
