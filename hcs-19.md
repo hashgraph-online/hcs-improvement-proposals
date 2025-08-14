@@ -166,7 +166,7 @@ Other memo formats follow the same pattern, replacing {topic_type} with the appr
   "consent_method": "explicit_opt_in",
   "data_types": ["personal_identifiers", "communication_data"],
   "retention_period": "2_years",
-  "notice_reference": "hcs://1/0.0.999888#",
+  "notice_reference": "hcs://1/0.0.999888",
   "timestamp": "2025-01-15T10:30:00Z",
   "m": "User consent granted for customer service interactions"
 }
