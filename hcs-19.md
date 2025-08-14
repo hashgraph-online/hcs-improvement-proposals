@@ -462,7 +462,7 @@ HCS‑19 supports automated retention management:
   "retention_period": "2_years",
   "gdpr_lawful_basis": "article_6_1_a",
   "withdrawal_method": "email_or_chat",
-  "notice_reference": "hcs://1/0.0.999888#v1.3",
+  "notice_reference": "hcs://1/0.0.999888",
   "status": "active",
   "timestamp": "2025-01-15T10:30:00Z",
   "m": "Customer granted consent for AI customer service"
