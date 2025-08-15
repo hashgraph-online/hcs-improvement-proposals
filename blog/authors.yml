@@ -32,3 +32,13 @@ brady:
     x: bmgentile
     linkedin: bradygentile
     github: bmgentile
+
+hue:
+  name: Hue
+  title: Founder, Hashinal Grims 
+  url: https://hashinalgrims.com/
+  image_url: https://pbs.twimg.com/profile_images/1938921534304735233/dWEe5CxW_400x400.jpg
+  page:
+    permalink: '/hue'
+  socials:
+    x: hashinalgrims
