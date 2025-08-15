@@ -3,7 +3,7 @@ slug: inscribe-utilities-hgrimoire
 title: Inscribe Utilities - On-Chain Inscription and Retrieval Use Case with HGrimoire
 authors: [hue]
 tags: [case-study, hcs-1, inscribe-utilities, hgrimoire]
-date: 2025-18-08T10:54:20-01:00
+date: 2025-08-15T10:54:20-01:00
 ---
 
 
