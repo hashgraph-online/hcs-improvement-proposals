@@ -33,6 +33,7 @@ interface TypographyProps {
   mono?: boolean;
   className?: string;
   as?: keyof JSX.IntrinsicElements;
+  noDefaultSize?: boolean; // Allow disabling default sizes
 }
 
 const Typography: React.FC<TypographyProps> = ({
@@ -43,8 +44,42 @@ const Typography: React.FC<TypographyProps> = ({
   mono = false,
   className,
   as,
+  noDefaultSize = false,
 }) => {
   const getVariantClasses = () => {
+    // If noDefaultSize is true, only return font weight and non-size styles
+    if (noDefaultSize) {
+      switch (variant) {
+        case 'h1':
+          return 'font-black leading-tight tracking-tight';
+        case 'h2':
+          return 'font-black leading-tight tracking-tight';
+        case 'h3':
+          return 'font-bold leading-tight';
+        case 'h4':
+          return 'font-bold leading-tight';
+        case 'h5':
+          return 'font-bold';
+        case 'h6':
+          return 'font-bold';
+        case 'body':
+          return 'leading-relaxed';
+        case 'caption':
+          return '';
+        case 'code':
+          return 'bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded border';
+        case 'comment':
+          return 'uppercase tracking-[0.3em] lg:tracking-[0.6em]';
+        case 'function':
+          return 'font-semibold';
+        case 'variable':
+          return 'font-medium';
+        default:
+          return '';
+      }
+    }
+    
+    // Default behavior with sizes
     switch (variant) {
       case 'h1':
         return 'text-4xl lg:text-6xl xl:text-7xl font-black leading-tight tracking-tight';

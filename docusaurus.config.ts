@@ -150,6 +150,10 @@ const config: Config = {
               label: 'Standards',
               to: '/docs/standards/hcs-1',
             },
+            {
+              label: 'Brand Kit',
+              to: '/brand',
+            },
           ],
         },
         {
