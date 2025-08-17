@@ -259,7 +259,7 @@ html[data-theme='dark'] body {
 [data-theme='dark'] aside .text-brand-blue,
 [data-theme='dark'] aside [class*='isActive'],
 [data-theme='dark'] aside [class*='active'] {
-  color: #60a5fa !important; /* Bright blue for active items */
+  color: #7c85d3 !important; /* Light purple for active items */
 }
 
 /* Blog sidebar selected post styling */
@@ -563,10 +563,14 @@ textarea {
   color: #e0e7ff !important;
 }
 
-[data-theme='dark'] .navbar__link:hover,
-[data-theme='dark'] .navbar__link--active {
+[data-theme='dark'] .navbar__link:hover {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme='dark'] .navbar__link--active {
+  color: #7c85d3 !important;
+  background-color: rgba(124, 133, 211, 0.1) !important;
 }
 
 [data-theme='dark'] .footer {
@@ -623,10 +627,14 @@ textarea {
   font-weight: 500;
 }
 
-.navbar-sidebar .menu__link:hover,
-.navbar-sidebar .menu__link--active {
+.navbar-sidebar .menu__link:hover {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-sidebar .menu__link--active {
+  color: #7c85d3 !important;
+  background-color: rgba(124, 133, 211, 0.1) !important;
 }
 
 /* Mobile menu dropdown arrow - use filter to make it white in both themes */
@@ -666,6 +674,90 @@ textarea {
 
 .navbar-sidebar .menu__list-item-collapsible .menu__link--sublist:after {
   filter: brightness(0) invert(1) !important;
+}
+
+/* Fix mobile sidebar content visibility issues */
+.navbar-sidebar .navbar-sidebar__items {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.navbar-sidebar .menu__list {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.navbar-sidebar .menu__list-item {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure collapsible sidebar content shows properly on mobile */
+@media (max-width: 996px) {
+  .navbar-sidebar .menu__list-item-collapsible .menu__list {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .navbar-sidebar .menu__list-item-collapsible.menu__list-item--collapsed .menu__list {
+    display: none !important;
+  }
+
+  /* Force mobile sidebar categories to show content when expanded */
+  .navbar-sidebar .menu__list-item-collapsible[aria-expanded="true"] .menu__list {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure mobile sidebar has proper height and scrolling */
+  .navbar-sidebar {
+    height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  .navbar-sidebar .navbar-sidebar__items {
+    height: auto !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+  }
+
+  /* Force navbar menu items to show in mobile sidebar */
+  .navbar-sidebar .navbar__items {
+    display: flex !important;
+    flex-direction: column !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .navbar-sidebar .navbar__item {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
+
+  .navbar-sidebar .navbar__link {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure dropdowns work in mobile sidebar */
+  .navbar-sidebar .dropdown__menu {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
 }
 
 /* Responsive adjustments */
@@ -939,6 +1031,18 @@ textarea {
 
 [data-theme='dark'] .markdown table td {
   border-bottom-color: rgba(255, 255, 255, 0.05);
+  color: #7c85d3;
+}
+
+[data-theme='dark'] .markdown table th {
+  background-color: rgba(30, 41, 59, 0.9);
+  border-bottom-color: rgba(85, 153, 254, 0.3);
+  color: #7c85d3;
+}
+
+/* TOC active link highlighting in dark mode */
+[data-theme='dark'] {
+  --ifm-toc-link-color: #7c85d3;
 }
 
 /* Section dividers */
