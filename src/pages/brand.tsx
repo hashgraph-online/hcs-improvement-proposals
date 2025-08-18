@@ -388,17 +388,6 @@ const BrandPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className='mt-8 p-4 bg-gradient-to-br from-[#5599fe]/10 to-[#48df7b]/10 rounded-xl'>
-                <Typography variant='h3' className='text-sm font-semibold mb-2'>
-                  Need Help?
-                </Typography>
-                <Typography variant='body' className='text-gray-600 dark:text-gray-300'>
-                  For questions about brand usage or to request additional assets, please contact us at{' '}
-                  <a href='mailto:brand@hashgraphonline.com' className='text-[#5599fe] hover:underline'>
-                    brand@hashgraphonline.com
-                  </a>
-                </Typography>
-              </div>
             </motion.div>
           </div>
         </section>
