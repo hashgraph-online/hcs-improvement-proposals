@@ -118,19 +118,49 @@ const config: Config = {
           position: 'left',
           to: '/hackathon',
           items: [
-            { 
-              to: '/hackathon', 
+            {
+              to: '/hackathon',
               label: 'AI Track - Africa Hackathon',
-              className: 'dropdown__link--parent'
+              className: 'dropdown__link--parent',
             },
-            { to: '/hackathon#requirements', label: '→ Submission Requirements', className: 'dropdown__link--sub' },
-            { to: '/hackathon#tools', label: '→ Developer Tools', className: 'dropdown__link--sub' },
-            { to: '/hackathon#examples', label: '→ Code Examples', className: 'dropdown__link--sub' },
-            { to: '/hackathon#judges', label: '→ Experts', className: 'dropdown__link--sub' },
-            { to: '/hackathon#faq', label: '→ FAQ', className: 'dropdown__link--sub' },
-            { to: '/hackathon#register', label: '→ Register', className: 'dropdown__link--sub' },
-            { type: 'html', value: '<hr style="margin: 8px 0; opacity: 0.2;">' },
-            { to: '/hedera-ai-agents-hackathon', label: 'OpenConvAI Hackathon (Ended)' },
+            {
+              to: '/hackathon#requirements',
+              label: '→ Submission Requirements',
+              className: 'dropdown__link--sub',
+            },
+            {
+              to: '/hackathon#tools',
+              label: '→ Developer Tools',
+              className: 'dropdown__link--sub',
+            },
+            {
+              to: '/hackathon#examples',
+              label: '→ Code Examples',
+              className: 'dropdown__link--sub',
+            },
+            {
+              to: '/hackathon#judges',
+              label: '→ Experts',
+              className: 'dropdown__link--sub',
+            },
+            {
+              to: '/hackathon#faq',
+              label: '→ FAQ',
+              className: 'dropdown__link--sub',
+            },
+            {
+              to: '/hackathon#register',
+              label: '→ Register',
+              className: 'dropdown__link--sub',
+            },
+            {
+              type: 'html',
+              value: '<hr style="margin: 8px 0; opacity: 0.2;">',
+            },
+            {
+              to: '/hedera-ai-agents-hackathon',
+              label: 'OpenConvAI Hackathon (Ended)',
+            },
             { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
           ],
         },
@@ -228,7 +258,6 @@ const config: Config = {
   } satisfies Preset.ThemeConfig,
 
   plugins: [
-    '@docusaurus/plugin-ideal-image',
     async function myPlugin(context, options) {
       return {
         name: 'docusaurus-tailwindcss',
