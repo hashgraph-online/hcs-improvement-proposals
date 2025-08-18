@@ -702,13 +702,17 @@ textarea {
     visibility: visible !important;
     opacity: 1 !important;
   }
-  
-  .navbar-sidebar .menu__list-item-collapsible.menu__list-item--collapsed .menu__list {
+
+  .navbar-sidebar
+    .menu__list-item-collapsible.menu__list-item--collapsed
+    .menu__list {
     display: none !important;
   }
 
   /* Force mobile sidebar categories to show content when expanded */
-  .navbar-sidebar .menu__list-item-collapsible[aria-expanded="true"] .menu__list {
+  .navbar-sidebar
+    .menu__list-item-collapsible[aria-expanded='true']
+    .menu__list {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -760,6 +764,70 @@ textarea {
   }
 }
 
+/* Disable secondary panel entirely on mobile */
+@media (max-width: 996px) {
+  .navbar-sidebar__items--show-secondary {
+    display: block !important;
+  }
+  .navbar-sidebar__secondary {
+    display: none !important;
+  }
+}
+
+/* On mobile, ensure primary nav items render; override secondary toggle */
+@media (max-width: 996px) {
+  .navbar-sidebar .navbar-sidebar__items {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .navbar-sidebar.navbar-sidebar--show-secondary .navbar-sidebar__items {
+    display: block !important;
+  }
+  .navbar-sidebar.navbar-sidebar--show-secondary .navbar-sidebar__secondary {
+    display: none !important;
+  }
+}
+
+/* Keep good contrast for mobile drawer links without affecting layout */
+.navbar-sidebar .navbar__link {
+  color: #ffffff !important;
+}
+.navbar-sidebar .navbar__link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* High-contrast active state in mobile drawer */
+@media (max-width: 996px) {
+  .navbar-sidebar .menu__link--active,
+  .navbar-sidebar .navbar__link--active,
+  .navbar-sidebar .dropdown__link--active,
+  .navbar-sidebar a[aria-current='page'] {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.16) !important;
+  }
+}
+
+/* Ensure drawer panels are not slid off-screen on mobile */
+@media (max-width: 996px) {
+  .navbar-sidebar__items {
+    transform: none !important;
+  }
+  .navbar-sidebar__items .navbar-sidebar__item {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 1 !important;
+  }
+}
+
+/* Hide "Back to main menu" label but keep the back button icon tappable */
+.navbar-sidebar__back .navbar-sidebar__back-title {
+  display: none !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 996px) {
   .navbar__title {
@@ -774,15 +842,16 @@ textarea {
 
 /* Hackathons dropdown styling with consistent blue color */
 .navbar__item.dropdown > .navbar__link:hover,
-.navbar__item.dropdown > .navbar__link[aria-expanded="true"],
-.navbar__item.dropdown > .navbar__link.navbar__link--active[aria-expanded="true"] {
+.navbar__item.dropdown > .navbar__link[aria-expanded='true'],
+.navbar__item.dropdown
+  > .navbar__link.navbar__link--active[aria-expanded='true'] {
   background-color: #6289d5 !important;
   color: #ffffff !important;
   border-radius: 0.25rem !important;
 }
 
 /* Remove bottom border radius when dropdown is open for seamless look */
-.navbar__item.dropdown > .navbar__link[aria-expanded="true"] {
+.navbar__item.dropdown > .navbar__link[aria-expanded='true'] {
   border-radius: 0.25rem 0.25rem 0 0 !important;
 }
 
@@ -798,7 +867,7 @@ textarea {
 .navbar__item.dropdown .dropdown__menu {
   /* Use solid blue color to match highlighted Hackathons */
   background: #6289d5;
-  
+
   /* Simple positioning */
   margin-top: -1px;
   border: none;
@@ -806,10 +875,10 @@ textarea {
   padding: 0.75rem 0;
   min-width: 280px;
   box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
-  
+
   /* Shift dropdown to the right */
   transform: translateX(12px) !important;
-  
+
   /* Animation */
   animation: dropdownSlideDown 0.3s ease-out;
   transform-origin: top;
@@ -4495,7 +4564,12 @@ main .theme-doc-generated-index-item:hover::after,
 
 /* Bouncing dots animation - sequential bounce */
 @keyframes bounce-dot-1 {
-  0%, 20%, 40%, 60%, 80%, 100% {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   10% {
@@ -4504,7 +4578,12 @@ main .theme-doc-generated-index-item:hover::after,
 }
 
 @keyframes bounce-dot-2 {
-  0%, 20%, 40%, 60%, 80%, 100% {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   30% {
@@ -4513,7 +4592,12 @@ main .theme-doc-generated-index-item:hover::after,
 }
 
 @keyframes bounce-dot-3 {
-  0%, 20%, 40%, 60%, 80%, 100% {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   50% {
