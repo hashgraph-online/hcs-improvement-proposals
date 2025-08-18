@@ -35,9 +35,8 @@ const StartPage: React.FC = () => {
       id: 'creator',
       icon: <FaPalette className='text-3xl' />,
       title: "I'm a Creator",
-      description: 'Launch content with Moonscape and create Hashinals.',
+      description: 'Put your NFTs and content 100% on-chain.',
       links: [
-        { label: 'Moonscape', href: 'https://moonscape.tech' },
         { label: 'Hashinals', href: 'https://kiloscribe.com' },
       ],
       color: '#a679f0',
@@ -211,10 +210,10 @@ const StartPage: React.FC = () => {
                         whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
                         transition={{ duration: 0.5 }}
                       >
-                        <div className={track.id === 'hacker' ? 'text-[#3f4174] dark:text-[#8b92d4]' : ''} style={{ color: track.id === 'hacker' ? undefined : track.color }}>{track.icon}</div>
+                        <div className={track.id === 'hacker' ? 'text-[#3f4174] dark:text-[#8b92d4]' : track.id === 'degen' ? 'text-[#3bb768] dark:text-[#48df7b]' : ''} style={{ color: track.id === 'hacker' || track.id === 'degen' ? undefined : track.color }}>{track.icon}</div>
                       </motion.div>
                       <Typography variant='h4' className='text-xl font-bold mb-2 relative z-10'>
-                        <span className={`text-transparent bg-clip-text bg-gradient-to-r ${track.id === 'hacker' ? 'text-transparent dark:text-[#8b92d4] dark:bg-none' : ''}`} style={{ backgroundImage: `linear-gradient(45deg, ${track.color}, ${track.color}aa)` }}>
+                        <span className={`text-transparent bg-clip-text bg-gradient-to-r ${track.id === 'hacker' ? 'text-transparent dark:text-[#8b92d4] dark:bg-none' : track.id === 'degen' ? 'text-transparent dark:text-[#48df7b] dark:bg-none' : ''}`} style={{ backgroundImage: track.id === 'degen' ? `linear-gradient(45deg, #3bb768, #3bb768aa)` : `linear-gradient(45deg, ${track.color}, ${track.color}aa)` }}>
                           {track.title}
                         </span>
                       </Typography>
@@ -251,10 +250,10 @@ const StartPage: React.FC = () => {
                                 whileHover={{ x: 4 }}
                               >
                                 <span className='text-sm font-semibold text-gray-900' style={{ color: 'inherit' }}>
-                                  <span className='dark:hidden text-gray-900'>{link.label}</span>
-                                  <span className='hidden dark:inline' style={{ color: track.id === 'hacker' ? '#8b92d4' : track.color }}>{link.label}</span>
+                                  <span className={`dark:hidden ${track.id === 'degen' ? 'text-[#3bb768]' : 'text-gray-900'}`}>{link.label}</span>
+                                  <span className='hidden dark:inline' style={{ color: track.id === 'hacker' ? '#8b92d4' : track.id === 'degen' ? '#48df7b' : track.color }}>{link.label}</span>
                                 </span>
-                                <FiArrowRight className='opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1' style={{ color: track.id === 'hacker' ? '#8b92d4' : track.color }} />
+                                <FiArrowRight className='opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1' style={{ color: track.id === 'hacker' ? '#8b92d4' : track.id === 'degen' ? '#3bb768' : track.color }} />
                               </motion.a>
                             ))}
                           </div>
