@@ -202,6 +202,8 @@ const StartPage: React.FC = () => {
                       }}
                       whileHover={{ scale: 1.02, rotateZ: 0.5 }}
                       whileTap={{ scale: 0.98 }}
+                      data-umami-event={`start-track-${track.id}-select`}
+                      data-umami-event-category="start-page"
                     >
                       <div className='absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500' style={{ background: `linear-gradient(135deg, ${track.color}10, transparent)` }} />
                       <motion.div 
@@ -248,6 +250,8 @@ const StartPage: React.FC = () => {
                                 rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
                                 className='flex items-center justify-between p-3 rounded-lg hover:bg-white/80 dark:hover:bg-gray-600/80 transition-all group backdrop-blur-sm bg-white/20 dark:bg-gray-800/40'
                                 whileHover={{ x: 4 }}
+                                data-umami-event={`start-track-${track.id}-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+                                data-umami-event-category="start-page"
                               >
                                 <span className='text-sm font-semibold text-gray-900' style={{ color: 'inherit' }}>
                                   <span className={`dark:hidden ${track.id === 'degen' ? 'text-[#3bb768]' : 'text-gray-900'}`}>{link.label}</span>
@@ -317,6 +321,8 @@ const StartPage: React.FC = () => {
                       rel={tool.link.startsWith('http') ? 'noopener noreferrer' : undefined}
                       className='absolute top-4 right-4 w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm opacity-60 hover:opacity-100 transition-all z-10 cursor-pointer'
                       whileHover={{ scale: 1.1 }}
+                      data-umami-event={`start-tool-${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      data-umami-event-category="start-page"
                     >
                       <FiExternalLink className='text-base' style={{ color: tool.color }} />
                     </motion.a>
@@ -402,6 +408,8 @@ const StartPage: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] text-white rounded-lg font-semibold hover:bg-[#4488ee] transition-colors'
+                    data-umami-event="start-join-x-space"
+                    data-umami-event-category="start-page"
                   >
                     Join X Space
                     <FiExternalLink />
@@ -437,6 +445,8 @@ const StartPage: React.FC = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className='inline-flex items-center gap-2 px-6 py-3 bg-[#48df7b] text-white rounded-lg font-semibold hover:bg-[#3dcf6b] transition-colors'
+                    data-umami-event="start-join-telegram"
+                    data-umami-event-category="start-page"
                   >
                     Join Telegram
                     <FiExternalLink />
@@ -474,6 +484,8 @@ const StartPage: React.FC = () => {
                     whileHover={{ scale: 1.08, boxShadow: '0 10px 30px rgba(166, 121, 240, 0.3)' }}
                     whileTap={{ scale: 0.95 }}
                     className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#8b5cf6] text-white rounded-xl font-bold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1'
+                    data-umami-event="start-newsletter-subscribe"
+                    data-umami-event-category="start-page"
                   >
                     Subscribe
                     <motion.span
