@@ -1,4 +1,5 @@
 ---
+title: "HCS‑19 Standard: AI Agent Privacy Compliance"
 description: The HCS‑19 standard defines a comprehensive, ISO/IEC TS 27560‑aligned framework
 for AI agents to document and manage privacy compliance on the Hedera Hashgraph through
 HCS topics, enabling auditable consent management, data‑processing records, privacy‑rights
