@@ -185,10 +185,10 @@ graph TB
 **Consent Management Memo**
 
 ```
-hcs-19:0:{ttl}:{topic_type}:{agent_account_id}:{jurisdiction}
+hcs-19:0:\{ttl\}:\{topic_type\}:\{agent_account_id\}:\{jurisdiction\}
 ```
 
-Other memo formats follow the same pattern, replacing {topic_type} with the appropriate enum as required.
+Other memo formats follow the same pattern, replacing \{topic_type\} with the appropriate enum as required.
 
 
 ### Operation Reference
