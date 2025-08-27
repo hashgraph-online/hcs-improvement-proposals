@@ -36,6 +36,7 @@ sidebar_position: 11
         - [Complete Verification Example](#complete-verification-example)
         - [Complete Client Verification Implementation](#complete-client-verification-implementation)
     - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
+    - [HCS-19 Integration for Privacy Compliance](#hcs-19-integration-for-privacy-compliance)
     - [Profile Update Flow](#profile-update-flow)
     - [Enums and Constants](#enums-and-constants)
       - [Profile Types](#profile-types-1)
@@ -142,6 +143,7 @@ All profiles share these common fields:
 | properties      | object | No       | Additional unstructured profile properties                                                         |
 | inboundTopicId  | string | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                       |
 | outboundTopicId | string | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                               |
+| privacy_compliance | object | No   | Optional [HCS-19](/docs/standards/hcs-19) compliance metadata and topic references                 |
 
 ### Profile Types
 
@@ -618,6 +620,26 @@ sequenceDiagram
 
 The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-10](/docs/standards/hcs-10) topics for bidirectional communication with AI agents.
 
+### HCS-19 Integration for Privacy Compliance
+
+HCS-19 defines a privacy-compliance framework for recording consent, processing, rights, and audit logs on HCS. When an AI agent processes personal data, HCS-11 profiles SHOULD include a `privacy_compliance` object to declare compliance posture and reference the relevant HCS-19 topics.
+
+| Field                  | Type     | Required | Description |
+| ---------------------- | -------- | -------- | ----------- |
+| privacy_compliance.standards          | string[] | No | Applicable legal frameworks (e.g., "gdpr", "ccpa", "ddp") |
+| privacy_compliance.jurisdictions      | string[] | No | ISO-3166 style region codes (e.g., "EU", "US-CA") |
+| privacy_compliance.consent_topic_id   | string   | No | HCS topic ID for Consent Management (HCS-19 Type 0) |
+| privacy_compliance.processing_topic_id| string   | No | HCS topic ID for Processing Registry (HCS-19 Type 1) |
+| privacy_compliance.rights_topic_id    | string   | No | HCS topic ID for Rights Registry (HCS-19 Type 2) |
+| privacy_compliance.audit_topic_id     | string   | No | HCS topic ID for Compliance Audit (HCS-19 Type 3) |
+| privacy_compliance.dpo_contact        | string   | No | Data Protection Officer contact |
+| privacy_compliance.privacy_policy_url | string   | No | Public URL of privacy policy/notice |
+| privacy_compliance.retention_policy   | string   | No | Default retention policy description |
+
+Notes:
+- See [HCS-19](/docs/standards/hcs-19) for topic types, message schemas, and consent receipt guidance.
+- Profiles that include `privacy_compliance` enable clients to discover and verify HCS-19 topics for consent and compliance workflows.
+
 ### Profile Update Flow
 
 Profiles can be updated according to the protocol used for reference:
@@ -762,6 +784,17 @@ AI Agent Profile with HCS-10:
   "profileImage": "hcs://1/0.0.12345",
   "inboundTopicId": "0.0.789101",
   "outboundTopicId": "0.0.789102",
+  "privacy_compliance": {
+    "standards": ["gdpr", "ccpa", "ddp"],
+    "jurisdictions": ["EU", "US-CA", "US"],
+    "consent_topic_id": "0.0.789101",
+    "processing_topic_id": "0.0.789102",
+    "rights_topic_id": "0.0.789103",
+    "audit_topic_id": "0.0.789104",
+    "dpo_contact": "dpo@example.com",
+    "privacy_policy_url": "https://example.com/privacy",
+    "retention_policy": "2_years_default"
+  },
   "properties": {
     "description": "General-purpose Hedera assistant",
     "version": "1.0.0",
