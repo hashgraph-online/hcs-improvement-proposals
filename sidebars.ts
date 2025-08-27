@@ -119,6 +119,11 @@ const sidebars: SidebarsConfig = {
           label: 'HCS-13: Schema Registry',
         },
         {
+          type: 'doc',
+          id: 'standards/hcs-19',
+          label: 'HCS-19: AI Agent Privacy Compliance',
+        },
+        {
           type: 'category',
           label: 'HCS-20: Auditable Points',
           collapsible: true,
