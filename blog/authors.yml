@@ -14,7 +14,7 @@ michelle-baez:
   name: Michelle Baez
   title: Head of Marketing, Hashgraph Online
   url: https://www.linkedin.com/in/michellebaezny/
-  image_url: https://media.licdn.com/dms/image/v2/D4E03AQHe2C3YoBs4nA/profile-displayphoto-scale_400_400/B4EZg9i7o4GYAg-/0/1753379224587?e=1756339200&v=beta&t=TH9u6gy_UbfVV7ZYpdkIWEBnjtwwTTFyz8r1Swl6egE
+  image_url: https://media.licdn.com/dms/image/v2/D4E03AQHe2C3YoBs4nA/profile-displayphoto-crop_800_800/B4EZg9i7o4GYAI-/0/1753379224493?e=1759363200&v=beta&t=Nky_CAeyhJDJa9jNAEPBLu_2EaA_OkVFDaldJbnFrKY
   page:
     permalink: '/michelle-baez'
   socials:
@@ -42,3 +42,9 @@ hue:
     permalink: '/hue'
   socials:
     x: hashinalgrims
+
+hashgraphonline:
+  name: Hashgraph Online
+  title: Decentralized Standards Organization
+  url: https://hashgraphonline.com/
+  image_url: https://hashgraphonline.com/img/logo.png
