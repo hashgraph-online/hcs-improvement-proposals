@@ -504,7 +504,7 @@ Implementations MUST comply with the following technical specifications:
 
 2. **Deterministic Serialization**: JSON objects MUST be serialized with keys sorted lexicographically. Skills arrays MUST be sorted numerically in ascending order.
 
-3. **Hash Generation**: SHA-256 MUST be applied to UTF-8 encoded canonical JSON. The resulting hash MUST be encoded using Base58.
+3. **Hash Generation**: SHA-384 MUST be applied to UTF-8 encoded canonical JSON. The resulting hash MUST be encoded using Base58.
 
 4. **Field Validation**: All required fields (registry, name, version, protocol, nativeId, skills) MUST be present and non-empty.
 
