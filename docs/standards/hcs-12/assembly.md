@@ -2,7 +2,7 @@
 
 ## Overview
 
-For implementation details of the Assembly Layer in the standards-sdk, see the [SDK Implementation](./sdk-implementation.md) documentation.
+For implementation details of the Assembly Layer in the standards-sdk, see the [HCS-12 SDK Guide](../../libraries/standards-sdk/hcs-12/index) documentation.
 
 The Assembly Layer defines how to combine Actions (WASM modules) and Blocks (UI components) into complete HashLink experiences. Assembly definitions MAY be large; implementations SHOULD store large configurations using HCS-1 and reference them via the `data` field.
 

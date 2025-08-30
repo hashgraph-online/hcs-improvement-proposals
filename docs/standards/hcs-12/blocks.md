@@ -2,7 +2,7 @@
 
 ## Overview
 
-For implementation details of the Blocks Layer in the standards-sdk, see the [SDK Implementation](./sdk-implementation.md) documentation.
+For implementation details of the Blocks Layer in the standards-sdk, see the [HCS-12 SDK Guide](../../libraries/standards-sdk/hcs-12/index) documentation.
 
 The Blocks Layer implements a decentralized, composable UI component system based on WordPress's Gutenberg block format. Blocks are stored as immutable assets via HCS-1, with their definitions and templates stored separately. Assemblies reference blocks directly by their HCS-1 topic IDs.
 
