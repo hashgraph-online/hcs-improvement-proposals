@@ -521,8 +521,8 @@ const containerBlock = BlockBuilder.createContainerBlock(
 - Use semantic HTML for accessibility
 - Include ARIA labels where appropriate
 - Avoid inline styles - use CSS classes
-- Escape user content with {{}} (double braces)
-- Only use \{\{\{html\}\}\} for trusted content
+- Escape user content with `{{ }}` (double braces)
+- Only use `{{{html}}}` for trusted content
 
 ### Attribute Design
 - Choose intuitive attribute names

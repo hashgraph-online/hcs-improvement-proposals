@@ -486,27 +486,27 @@ try {
 
 ### Development
 
-- ✅ **Use builders** for all component creation
-- ✅ **Validate early** with schema validation
-- ✅ **Handle errors** gracefully with fallbacks
-- ✅ **Test locally** before mainnet deployment
-- ✅ **Version properly** for upgradability
+- Use builders for all component creation
+- Validate early with schema validation
+- Handle errors with explicit fallbacks
+- Test locally before mainnet deployment
+- Version modules to enable upgradability
 
 ### Production
 
-- ✅ **Cache aggressively** to reduce network calls
-- ✅ **Validate WASM** before execution
-- ✅ **Monitor performance** with built-in metrics
-- ✅ **Implement rate limiting** for actions
-- ✅ **Use compression** for large templates
+- Cache to reduce network calls
+- Validate WASM modules before execution
+- Monitor performance with metrics
+- Implement rate limiting for actions
+- Use compression for large templates
 
 ### Security
 
-- ✅ **Sanitize templates** to prevent XSS
-- ✅ **Validate parameters** with schemas
-- ✅ **Check capabilities** before execution
-- ✅ **Verify signatures** for authentication
-- ✅ **Audit actions** for compliance
+- Sanitize templates to prevent XSS
+- Validate parameters with schemas
+- Check capabilities before execution
+- Verify signatures for authentication
+- Audit actions for compliance
 
 ---
 
@@ -514,18 +514,18 @@ try {
 
 ### Issue: "Module not found: fs"
 
-**Solution:** Use the browser client in web environments:
+Solution: Use the browser client in web environments:
 ```typescript
-// ❌ Wrong - Server client in browser
+// Wrong: Server client in browser
 import { HCS12Client } from '@hashgraphonline/standards-sdk';
 
-// ✅ Correct - Browser client for web
+// Correct: Browser client for web
 import { HCS12BrowserClient } from '@hashgraphonline/standards-sdk';
 ```
 
 ### Issue: "WASM execution failed"
 
-**Solution:** Ensure module implements required interface:
+Solution: Ensure the module implements the required interface:
 ```typescript
 // Check module exports
 const validator = new WasmValidator();
@@ -537,7 +537,7 @@ if (!report.valid) {
 
 ### Issue: "Template rendering error"
 
-**Solution:** Validate template syntax:
+Solution: Validate template syntax:
 ```typescript
 // Precompile to catch errors early
 try {
@@ -565,7 +565,7 @@ Explore the complete SDK documentation:
 
 ## Resources
 
-- **[HCS-12 Standard](../../standards/hcs-12/)** - Technical specification
+- **[HCS-12 Standard](/docs/standards/hcs-12/)** - Technical specification
 - **[GitHub Repository](https://github.com/hashgraphonline/standards-sdk)** - Source code
 - **[Examples](https://github.com/hashgraphonline/standards-sdk/tree/main/demo/hcs-12)** - Sample applications
-- **[Discord Community](https://discord.gg/hashgraph)** - Get help and share ideas
+- **[Telegram Community](https://t.me/hashinals)** - Get help and share ideas

@@ -2,7 +2,7 @@
 
 ## Overview
 
-For implementation details of the Actions Layer in the standards-sdk, see the [HCS-12 SDK Guide](../../libraries/standards-sdk/hcs-12/index) documentation.
+For implementation details of the Actions Layer in the standards-sdk, see the [HCS-12 SDK Guide](/docs/libraries/standards-sdk/hcs-12/) documentation.
 
 The Actions Layer provides deterministic computation through WebAssembly modules. By compiling Rust to WASM and executing in a sandboxed environment, Actions enable deterministic computation and transaction preparation.
 

@@ -25,7 +25,7 @@ The standard consists of three interconnected layers:
 - **[Blocks](./blocks.md)** - UI components for user interaction
 - **[Assembly](./assembly.md)** - Composition layer for combining actions and blocks
 
-For implementation details, see the **[Standards SDK HCS-12 Guide](../../libraries/standards-sdk/hcs-12/index)** which documents the TypeScript/JavaScript implementation.
+For implementation details, see the **[Standards SDK HCS-12 Guide](/docs/libraries/standards-sdk/hcs-12/)** which documents the TypeScript/JavaScript implementation.
 
 ## Architecture Overview
 
