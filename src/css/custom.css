@@ -171,9 +171,59 @@ ul.tags.expanded::after {
   color: white !important;
 }
 
-.navbar__items--right button {
-  opacity: 1 !important;
-  color: white !important;
+/* Do not force all right-side navbar buttons to white; it breaks DocSearch */
+/* Style the color mode toggle explicitly above; leave other buttons default */
+
+/* DocSearch styles: ensure contrast on light navbar */
+.DocSearch-Button {
+  background: #ffffff !important;
+  color: var(--ifm-color-emphasis-700) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  margin-right: 0.5rem;
+}
+.DocSearch-Button-Placeholder,
+.DocSearch-Input::placeholder {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+.DocSearch-Search-Icon {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+.DocSearch-Input {
+  color: var(--ifm-color-emphasis-900) !important;
+}
+
+/* Dark mode: navbar stays light; keep docsearch readable */
+[data-theme='dark'] .DocSearch-Button {
+  background: #ffffff !important;
+  color: var(--ifm-color-emphasis-700) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  margin-right: 0.5rem;
+}
+[data-theme='dark'] .DocSearch-Button-Placeholder,
+[data-theme='dark'] .DocSearch-Input::placeholder {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+[data-theme='dark'] .DocSearch-Search-Icon {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+[data-theme='dark'] .DocSearch-Input {
+  color: var(--ifm-color-emphasis-900) !important;
+}
+
+/* Hide the Cmd/Ctrl+K keycaps inside the DocSearch button */
+.DocSearch-Button-Keys {
+  display: none !important;
+}
+
+/* Place the search before the theme toggle via Docusaurus CSS var */
+.navbar__items--right {
+  --docusaurus-navbar-search-input-order: 10;
+}
+
+/* Ensure the theme toggle remains clickable above search button */
+.navbar__items--right [class*='toggleButton'] {
+  position: relative;
+  z-index: 1;
 }
 
 /* Keep navbar background light in both themes */

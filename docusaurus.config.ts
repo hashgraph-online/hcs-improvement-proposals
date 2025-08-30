@@ -87,8 +87,20 @@ const config: Config = {
   ],
 
   themeConfig: {
+    algolia: {
+      appId: process.env.DOCSEARCH_APP_ID || 'DOCSEARCH_APP_ID',
+      apiKey: process.env.DOCSEARCH_API_KEY || 'DOCSEARCH_API_KEY',
+      indexName: process.env.DOCSEARCH_INDEX_NAME || 'DOCSEARCH_INDEX_NAME',
+      contextualSearch: true,
+    },
     // Replace with your project's social card
     image: 'img/og-card.png',
+    algolia: {
+      appId: 'INUYES5FGM',
+      apiKey: '2b3fe9b2882e46e19fa5fce6272efe4f',
+      indexName: 'Docs',
+      contextualSearch: true,
+    },
     blog: {
       sidebar: {
         groupByYear: true,
@@ -280,6 +292,10 @@ const config: Config = {
           {
             from: '/hedera-ai',
             to: '/hederaai',
+          },
+          {
+            from: '/hackathon',
+            to: 'https://hedera-hackathon.hashgraph.swiss/tools#track4',
           },
         ],
       },

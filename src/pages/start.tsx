@@ -15,7 +15,7 @@ interface TrackCard {
 }
 
 const StartPage: React.FC = () => {
-  const [selectedTrack, setSelectedTrack] = useState<string | null>(null);
+  const [selectedTrack, setSelectedTrack] = useState<string | null>('hacker');
 
   const tracks: TrackCard[] = [
     {
@@ -26,20 +26,10 @@ const StartPage: React.FC = () => {
       links: [
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
-        { label: 'Standards Agent Kit', href: '/docs/libraries/standards-agent-kit' },
+        { label: 'Conversational Agent', href: '/docs/libraries/conversational-agent' },
         { label: 'Desktop App', href: '/desktop' },
       ],
       color: '#5599fe',
-    },
-    {
-      id: 'creator',
-      icon: <FaPalette className='text-3xl' />,
-      title: "I'm a Creator",
-      description: 'Put your NFTs and content 100% on-chain.',
-      links: [
-        { label: 'Hashinals', href: 'https://kiloscribe.com' },
-      ],
-      color: '#a679f0',
     },
     {
       id: 'hacker',
@@ -47,8 +37,8 @@ const StartPage: React.FC = () => {
       title: "I'm a Hacker",
       description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
       links: [
-        { label: 'Hackathon Details', href: 'https://hedera-hackathon.hashgraph.swiss/tools#track4' },
-        { label: 'Register Now', href: 'https://hedera-hackathon.hashgraph.swiss/tools#track4' },
+        { label: 'Register Now', href: '/hackathon' },
+        { label: 'Tools', href: '/tools' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
       ],
@@ -66,6 +56,16 @@ const StartPage: React.FC = () => {
         { label: 'Blog', href: '/blog' },
       ],
       color: '#48df7b',
+    },
+    {
+      id: 'creator',
+      icon: <FaPalette className='text-3xl' />,
+      title: "I'm a Creator",
+      description: 'Put your NFTs and content 100% on-chain.',
+      links: [
+        { label: 'Hashinals', href: 'https://kiloscribe.com' },
+      ],
+      color: '#a679f0',
     },
   ];
 
@@ -93,7 +93,7 @@ const StartPage: React.FC = () => {
     },
     {
       name: 'Standards SDK',
-      description: 'JavaScript library for Hedera standards implementation',
+      description: 'JavaScript library for HCS (Hashgraph Consensus Standards) implementation',
       icon: <FaFlask />,
       link: '/docs/libraries/standards-sdk',
       color: '#ff6b6b',
@@ -163,10 +163,10 @@ const StartPage: React.FC = () => {
                 >
                   <Typography variant='h1' className='text-3xl sm:text-4xl lg:text-5xl font-bold mb-4'>
                     <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b]'>
-                      Start building on{' '}
+                      Start building on
                     </span>
                     <motion.span 
-                      className='text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#48df7b] to-[#5599fe]'
+                      className='block text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#48df7b] to-[#5599fe]'
                       animate={{ 
                         backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
                       }}
@@ -246,8 +246,8 @@ const StartPage: React.FC = () => {
                               <motion.a
                                 key={link.label}
                                 href={link.href}
-                                target={link.href.startsWith('http') ? '_blank' : undefined}
-                                rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                                target='_blank'
+                                rel='noopener noreferrer'
                                 className='flex items-center justify-between p-3 rounded-lg hover:bg-white/80 dark:hover:bg-gray-600/80 transition-all group backdrop-blur-sm bg-white/20 dark:bg-gray-800/40'
                                 whileHover={{ x: 4 }}
                                 data-umami-event={`start-track-${track.id}-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
@@ -264,87 +264,6 @@ const StartPage: React.FC = () => {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Featured Tools Section */}
-        <section className='py-16 lg:py-20 bg-gray-50 dark:bg-gray-800/30'>
-          <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <motion.div 
-                className='text-center mb-12'
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
-                <Typography variant='h2' className='text-3xl lg:text-4xl font-bold mb-4'>
-                  <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b]'>
-                    Featured Tools
-                  </span>
-                </Typography>
-                <Typography variant='body' className='text-gray-600 dark:text-gray-300'>
-                  Everything you need to build on Hedera
-                </Typography>
-              </motion.div>
-
-              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-                {tools.map((tool, index) => (
-                  <motion.div
-                    key={tool.name}
-                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: index * 0.1,
-                      type: "spring",
-                      stiffness: 200
-                    }}
-                    whileHover={{ y: -8, scale: 1.02 }}
-                    className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group'
-                  >
-                    <div className='absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500' style={{ background: `linear-gradient(135deg, ${tool.color}10, transparent)` }} />
-                    
-                    <motion.a
-                      href={tool.link}
-                      target={tool.link.startsWith('http') ? '_blank' : undefined}
-                      rel={tool.link.startsWith('http') ? 'noopener noreferrer' : undefined}
-                      className='absolute top-4 right-4 w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm opacity-60 hover:opacity-100 transition-all z-10 cursor-pointer'
-                      whileHover={{ scale: 1.1 }}
-                      data-umami-event={`start-tool-${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
-                      data-umami-event-category="start-page"
-                    >
-                      <FiExternalLink className='text-base' style={{ color: tool.color }} />
-                    </motion.a>
-
-                    <motion.div 
-                      className='flex items-center justify-center w-14 h-14 rounded-xl mb-4 relative z-10' 
-                      style={{ backgroundColor: `${tool.color}20` }}
-                      whileHover={{ rotate: 360, scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      <div style={{ color: tool.color }} className='text-3xl'>
-                        {tool.icon}
-                      </div>
-                    </motion.div>
-                    <Typography variant='h4' className='text-xl font-bold mb-2 relative z-10'>
-                      <span className='text-transparent bg-clip-text bg-gradient-to-r' style={{ backgroundImage: `linear-gradient(45deg, ${tool.color}, ${tool.color}cc)` }}>
-                        {tool.name}
-                      </span>
-                    </Typography>
-                    <Typography variant='body' className='text-sm text-gray-600 dark:text-gray-400 relative z-10'>
-                      {tool.description}
-                    </Typography>
                   </motion.div>
                 ))}
               </div>
@@ -407,7 +326,7 @@ const StartPage: React.FC = () => {
                     rel='noopener noreferrer'
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] text-white rounded-lg font-semibold hover:bg-[#4488ee] transition-colors'
+                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] text-white hover:text-white rounded-lg font-semibold hover:bg-[#4488ee] transition-colors'
                     data-umami-event="start-join-x-space"
                     data-umami-event-category="start-page"
                   >
@@ -444,7 +363,7 @@ const StartPage: React.FC = () => {
                     rel='noopener noreferrer'
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#48df7b] text-white rounded-lg font-semibold hover:bg-[#3dcf6b] transition-colors'
+                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#48df7b] text-white hover:text-white rounded-lg font-semibold hover:bg-[#3dcf6b] transition-colors'
                     data-umami-event="start-join-telegram"
                     data-umami-event-category="start-page"
                   >
@@ -481,9 +400,11 @@ const StartPage: React.FC = () => {
                   </Typography>
                   <motion.a
                     href='/newsletter'
+                    target='_blank'
+                    rel='noopener noreferrer'
                     whileHover={{ scale: 1.08, boxShadow: '0 10px 30px rgba(166, 121, 240, 0.3)' }}
                     whileTap={{ scale: 0.95 }}
-                    className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#8b5cf6] text-white rounded-xl font-bold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1'
+                    className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#8b5cf6] text-white hover:text-white rounded-xl font-bold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1'
                     data-umami-event="start-newsletter-subscribe"
                     data-umami-event-category="start-page"
                   >
@@ -515,6 +436,89 @@ const StartPage: React.FC = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* Featured Tools Section */}
+        <section className='py-16 lg:py-20 bg-gray-50 dark:bg-gray-800/30'>
+          <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div 
+                className='text-center mb-12'
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                <Typography variant='h2' className='text-3xl lg:text-4xl font-bold mb-4'>
+                  <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b]'>
+                    Featured Tools
+                  </span>
+                </Typography>
+                <Typography variant='body' className='text-gray-600 dark:text-gray-300'>
+                  Everything you need to build on Hedera
+                </Typography>
+              </motion.div>
+
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+                {tools.map((tool, index) => (
+                  <motion.div
+                    key={tool.name}
+                    initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                    whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      duration: 0.5, 
+                      delay: index * 0.1,
+                      type: "spring",
+                      stiffness: 200
+                    }}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                    className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all relative overflow-hidden group'
+                  >
+                    <div className='absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500' style={{ background: `linear-gradient(135deg, ${tool.color}10, transparent)` }} />
+                    
+                    <motion.a
+                      href={tool.link}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='absolute top-4 right-4 w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center shadow-sm opacity-60 hover:opacity-100 transition-all z-10 cursor-pointer'
+                      whileHover={{ scale: 1.1 }}
+                      data-umami-event={`start-tool-${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
+                      data-umami-event-category="start-page"
+                    >
+                      <FiExternalLink className='text-base' style={{ color: tool.color }} />
+                    </motion.a>
+
+                    <motion.div 
+                      className='flex items-center justify-center w-14 h-14 rounded-xl mb-4 relative z-10' 
+                      style={{ backgroundColor: `${tool.color}20` }}
+                      whileHover={{ rotate: 360, scale: 1.1 }}
+                      transition={{ duration: 0.6 }}
+                    >
+                      <div style={{ color: tool.color }} className='text-3xl'>
+                        {tool.icon}
+                      </div>
+                    </motion.div>
+                    <Typography variant='h4' className='text-xl font-bold mb-2 relative z-10'>
+                      <span className='text-transparent bg-clip-text bg-gradient-to-r' style={{ backgroundImage: `linear-gradient(45deg, ${tool.color}, ${tool.color}cc)` }}>
+                        {tool.name}
+                      </span>
+                    </Typography>
+                    <Typography variant='body' className='text-sm text-gray-600 dark:text-gray-400 relative z-10'>
+                      {tool.description}
+                    </Typography>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+
+        
       </div>
     </Layout>
   );

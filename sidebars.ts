@@ -56,6 +56,21 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'HCS-12: HashLinks',
+          link: {
+            type: 'doc',
+            id: 'standards/hcs-12/index',
+          },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'standards/hcs-12/actions',
+            'standards/hcs-12/blocks',
+            'standards/hcs-12/assembly',
+          ],
+        },
+        {
+          type: 'category',
           label: 'HCS-8: Poll Topic',
           link: {
             type: 'doc',
@@ -210,6 +225,26 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-10/server'
               ],
             },
+            {
+              type: 'category',
+              label: 'HCS-12',
+              link: {
+                type: 'doc',
+                id: 'libraries/standards-sdk/hcs-12/index',
+              },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-12/rendering',
+                'libraries/standards-sdk/hcs-12/assembly',
+                'libraries/standards-sdk/hcs-12/registries',
+                'libraries/standards-sdk/hcs-12/blocks',
+                'libraries/standards-sdk/hcs-12/actions',
+                'libraries/standards-sdk/hcs-12/wasm',
+                'libraries/standards-sdk/hcs-12/security',
+                'libraries/standards-sdk/hcs-12/validation',
+              ],
+            },
             'libraries/standards-sdk/hcs-11',
             'libraries/standards-sdk/hcs-20',
             'libraries/standards-sdk/inscribe',
@@ -245,6 +280,11 @@ const sidebars: SidebarsConfig = {
           collapsed: false,
           items: [
             'libraries/conversational-agent/getting-started',
+            'libraries/conversational-agent/entity-memory',
+            'libraries/conversational-agent/operational-modes-and-transactions',
+            'libraries/conversational-agent/content-references-and-hashlinks',
+            'libraries/conversational-agent/factory-helpers-and-plugins',
+            'libraries/conversational-agent/forms-and-parameters',
             'libraries/conversational-agent/tools',
             'libraries/conversational-agent/mcp-servers',
             'libraries/conversational-agent/examples',
