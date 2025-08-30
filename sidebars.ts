@@ -56,21 +56,6 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'HCS-12: HashLinks',
-          link: {
-            type: 'doc',
-            id: 'standards/hcs-12/index',
-          },
-          collapsible: true,
-          collapsed: true,
-          items: [
-            'standards/hcs-12/actions',
-            'standards/hcs-12/blocks',
-            'standards/hcs-12/assembly',
-          ],
-        },
-        {
-          type: 'category',
           label: 'HCS-8: Poll Topic',
           link: {
             type: 'doc',
@@ -127,6 +112,21 @@ const sidebars: SidebarsConfig = {
           type: 'doc',
           id: 'standards/hcs-11',
           label: 'HCS-11: Profile Metadata',
+        },
+        {
+          type: 'category',
+          label: 'HCS-12: HashLinks',
+          link: {
+            type: 'doc',
+            id: 'standards/hcs-12/index',
+          },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'standards/hcs-12/actions',
+            'standards/hcs-12/blocks',
+            'standards/hcs-12/assembly',
+          ],
         },
         {
           type: 'doc',
@@ -225,6 +225,7 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-10/server'
               ],
             },
+            'libraries/standards-sdk/hcs-11',
             {
               type: 'category',
               label: 'HCS-12',
@@ -245,7 +246,6 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-12/validation',
               ],
             },
-            'libraries/standards-sdk/hcs-11',
             'libraries/standards-sdk/hcs-20',
             'libraries/standards-sdk/inscribe',
             'libraries/standards-sdk/utils-services',
