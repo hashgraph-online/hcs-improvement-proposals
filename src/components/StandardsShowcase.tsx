@@ -115,6 +115,16 @@ const standardsData = [
     icon: 'HCS-11',
   },
   {
+    title: 'HCS-12: HashLinks',
+    category: 'Application Composition',
+    status: 'draft' as const,
+    description:
+      'Composes WASM actions, Gutenberg UI blocks, and assemblies into interactive on-chain experiences registered via HCS topics.',
+    features: ['WASM actions', 'Gutenberg blocks', 'Assembly composition'],
+    href: '/docs/standards/hcs-12',
+    icon: 'HCS-12',
+  },
+  {
     title: 'HCS-13: Schema Registry',
     category: 'Infrastructure',
     status: 'draft' as const,
@@ -155,7 +165,7 @@ export default function StandardsShowcase(): JSX.Element {
   return (
     <CategoryShowcase
       title='HCS Standards'
-      subtitle='Discover the comprehensive collection of Hedera Consensus Service standards that enable powerful decentralized applications and data management on the Hedera network.'
+      subtitle='Discover the comprehensive collection of Hashgraph Consensus Standards (HCS) authored by Hashgraph Online — enabling interoperable agent communication, registries, content inscription, and application composition.'
       items={standardsData}
       showSearch={true}
       showCategoryFilter={true}

@@ -55,6 +55,11 @@ const agent = new ConversationalAgent({
       args: ['-y', '@modelcontextprotocol/server-filesystem', '/tmp'],
       transport: 'stdio',
       autoConnect: true,
+      // Optional metadata for better tool selection
+      additionalContext: 'Use for reading/writing local project files',
+      toolDescriptions: {
+        'read_file': 'Read UTF-8 text files from the specified directory',
+      },
     }
   ],
 });
@@ -199,7 +204,7 @@ MCP configurations are stored in:
 - `~/.hashgraphonline/mcp-config.json` (macOS/Linux)
 - `%USERPROFILE%\.hashgraphonline\mcp-config.json` (Windows)
 
-Example configuration:
+Example configuration (supports `stdio`, `http`, or `websocket` transports, plus optional `additionalContext` and `toolDescriptions`):
 ```json
 {
   "servers": [
@@ -208,7 +213,11 @@ Example configuration:
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/docs"],
       "transport": "stdio",
-      "autoConnect": true
+      "autoConnect": true,
+      "additionalContext": "Use for reading and writing local docs",
+      "toolDescriptions": {
+        "read_file": "Read UTF-8 text files from the documents directory"
+      }
     },
     {
       "name": "github",
@@ -240,7 +249,12 @@ const customServer: MCPServerConfig = {
     DEBUG: 'true',
   },
   transport: 'http',
-  autoConnect: true
+  autoConnect: true,
+  additionalContext: 'Use for retrieving product data and posting updates',
+  toolDescriptions: {
+    'get_product': 'Fetch product details by SKU',
+    'update_price': 'Update product price with proper currency handling'
+  }
 };
 
 const agent = new ConversationalAgent({
