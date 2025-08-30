@@ -136,40 +136,6 @@ const config: Config = {
               className: 'dropdown__link--parent',
             },
             {
-              to: '/hackathon#requirements',
-              label: '→ Submission Requirements',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#tools',
-              label: '→ Developer Tools',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#examples',
-              label: '→ Code Examples',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#judges',
-              label: '→ Experts',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#faq',
-              label: '→ FAQ',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#register',
-              label: '→ Register',
-              className: 'dropdown__link--sub',
-            },
-            {
-              type: 'html',
-              value: '<hr style="margin: 8px 0; opacity: 0.2;">',
-            },
-            {
               to: '/hedera-ai-agents-hackathon',
               label: 'OpenConvAI Hackathon (Ended)',
             },
@@ -295,7 +261,7 @@ const config: Config = {
           },
           {
             from: '/hackathon',
-            to: 'https://hedera-hackathon.hashgraph.swiss/tools#track4',
+            to: 'https://bit.ly/45Wky3z',
           },
         ],
       },
