@@ -57,12 +57,32 @@ const agent = new ConversationalAgent({
   privateKey: process.env.HEDERA_PRIVATE_KEY!,
   network: 'testnet',
   openAIApiKey: process.env.OPENAI_API_KEY!,
+  // LLM provider and model (OpenAI or Anthropic)
+  llmProvider: 'openai', // or 'anthropic'
   openAIModelName: 'gpt-4o',
+  // Optional: enable entity memory and configure limits
+  entityMemoryEnabled: true,
+  entityMemoryConfig: { maxTokens: 6000, reserveTokens: 1000 },
+  // Optional: dedicated provider/model for entity extraction/resolution
+  entityMemoryProvider: 'openai', // or 'anthropic'
+  entityMemoryModelName: 'gpt-4o-mini',
   verbose: true
 });
 
 // Initialize the agent
 await agent.initialize();
+
+// Using OpenRouter instead of OpenAI/Anthropic
+const openRouterAgent = new ConversationalAgent({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+  openAIApiKey: process.env.OPENAI_API_KEY!,
+  openRouterApiKey: process.env.OPENROUTER_API_KEY!,
+  llmProvider: 'openrouter',
+  openAIModelName: 'openrouter/auto',
+});
+await openRouterAgent.initialize();
 ```
 
 ## Using the CLI

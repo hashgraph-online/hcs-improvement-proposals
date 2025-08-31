@@ -87,8 +87,20 @@ const config: Config = {
   ],
 
   themeConfig: {
+    algolia: {
+      appId: process.env.DOCSEARCH_APP_ID || 'DOCSEARCH_APP_ID',
+      apiKey: process.env.DOCSEARCH_API_KEY || 'DOCSEARCH_API_KEY',
+      indexName: process.env.DOCSEARCH_INDEX_NAME || 'DOCSEARCH_INDEX_NAME',
+      contextualSearch: true,
+    },
     // Replace with your project's social card
     image: 'img/og-card.png',
+    algolia: {
+      appId: 'INUYES5FGM',
+      apiKey: '2b3fe9b2882e46e19fa5fce6272efe4f',
+      indexName: 'Docs',
+      contextualSearch: true,
+    },
     blog: {
       sidebar: {
         groupByYear: true,
@@ -122,40 +134,6 @@ const config: Config = {
               to: '/hackathon',
               label: 'AI Track - Africa Hackathon',
               className: 'dropdown__link--parent',
-            },
-            {
-              to: '/hackathon#requirements',
-              label: '→ Submission Requirements',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#tools',
-              label: '→ Developer Tools',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#examples',
-              label: '→ Code Examples',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#judges',
-              label: '→ Experts',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#faq',
-              label: '→ FAQ',
-              className: 'dropdown__link--sub',
-            },
-            {
-              to: '/hackathon#register',
-              label: '→ Register',
-              className: 'dropdown__link--sub',
-            },
-            {
-              type: 'html',
-              value: '<hr style="margin: 8px 0; opacity: 0.2;">',
             },
             {
               to: '/hedera-ai-agents-hackathon',
@@ -280,6 +258,10 @@ const config: Config = {
           {
             from: '/hedera-ai',
             to: '/hederaai',
+          },
+          {
+            from: '/hackathon',
+            to: 'https://link.hashgraphonline.com/hederahacks',
           },
         ],
       },
