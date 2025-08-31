@@ -261,7 +261,7 @@ const config: Config = {
           },
           {
             from: '/hackathon',
-            to: 'https://bit.ly/45Wky3z',
+            to: 'https://link.hashgraphonline.com/hederahacks',
           },
         ],
       },

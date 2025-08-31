@@ -1,4 +1,4 @@
-module.exports = function(context, options) {
+module.exports = function (context, options) {
   return {
     name: 'inject-script-plugin',
     injectHtmlTags() {
@@ -26,11 +26,11 @@ module.exports = function(context, options) {
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'AW-10841395521');
+              gtag('config', 'AW-17512816237');
             `,
           },
         ],
       };
     },
   };
-}; 
+};
