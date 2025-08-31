@@ -128,7 +128,6 @@ const config: Config = {
           type: 'dropdown',
           label: 'Hackathons',
           position: 'left',
-          to: '/hackathon',
           items: [
             {
               to: '/hackathon',
@@ -259,10 +258,7 @@ const config: Config = {
             from: '/hedera-ai',
             to: '/hederaai',
           },
-          {
-            from: '/hackathon',
-            to: 'https://link.hashgraphonline.com/hederahacks',
-          },
+          
         ],
       },
     ],
