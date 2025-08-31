@@ -37,7 +37,7 @@ const StartPage: React.FC = () => {
       title: "I'm a Hacker",
       description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
       links: [
-        { label: 'Register Now', href: '/hackathon' },
+        { label: 'Register Now', href: 'https://link.hashgraphonline.com/hederahacks' },
         { label: 'Tools', href: '/tools' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
