@@ -183,153 +183,45 @@ const StartPage: React.FC = () => {
                 </motion.div>
                 <Typography variant='h1' className='text-4xl sm:text-5xl lg:text-6xl font-bold mb-4'>
                   <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#48df7b] via-[#5599fe] to-[#a679f0]'>
-                    Join the Community
+                    Get Connected
                   </span>
                 </Typography>
-                <Typography variant='body' className='text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto'>
-                  Connect with builders, creators, and degens shaping the new internet
+                <Typography variant='body' className='text-lg text-gray-500 dark:text-gray-400 max-w-3xl mx-auto mb-8'>
+                  Connect with builders, creators, and degens — get updates on our weekly $100 giveaways and exclusive alpha
                 </Typography>
-              </motion.div>
-
-              <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto'>
+                
                 <motion.div
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                  whileHover={{ scale: 1.03, rotate: 0.5 }}
-                  whileTap={{ scale: 0.98 }}
-                  className='bg-gradient-to-br from-[#5599fe]/10 via-[#a679f0]/10 to-[#48df7b]/10 rounded-2xl p-8 text-center relative overflow-hidden group'
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  className='flex justify-center'
                 >
-                  <div className='flex justify-center mb-4'>
-                    <motion.div 
-                      className='w-16 h-16 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-lg relative z-10'
-                      whileHover={{ scale: 1.1, rotate: 10 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <FiMic className='text-3xl text-[#5599fe]' />
-                    </motion.div>
-                  </div>
-                  <Typography variant='h3' className='text-2xl font-bold mb-3'>
-                    <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] to-[#a679f0]'>
-                      Weekly X Spaces
-                    </span>
-                  </Typography>
-                  <Typography variant='body' className='text-gray-600 dark:text-gray-300 mb-6'>
-                    Join our X Space every Thursday — Ask questions, win $100, and connect live.
-                  </Typography>
-                  <motion.a
-                    href='https://x.com/HashgraphOnline'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] text-white hover:text-white rounded-lg font-semibold hover:bg-[#4488ee] transition-colors'
-                    data-umami-event="start-join-x-space"
-                    data-umami-event-category="start-page"
-                  >
-                    Join X Space
-                    <FiExternalLink />
-                  </motion.a>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  whileHover={{ scale: 1.03, rotate: -0.5 }}
-                  whileTap={{ scale: 0.98 }}
-                  className='bg-gradient-to-br from-[#48df7b]/10 via-[#5599fe]/10 to-[#a679f0]/10 rounded-2xl p-8 text-center relative overflow-hidden group'
-                >
-                  <div className='flex justify-center mb-4'>
-                    <motion.div 
-                      className='w-16 h-16 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-lg relative z-10'
-                      whileHover={{ scale: 1.1, rotate: -10 }}
-                      transition={{ type: "spring", stiffness: 300 }}
-                    >
-                      <FiMessageCircle className='text-3xl text-[#48df7b]' />
-                    </motion.div>
-                  </div>
-                  <Typography variant='h3' className='text-2xl font-bold mb-3'>
-                    <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#48df7b] to-[#5599fe]'>
-                      Telegram Community
-                    </span>
-                  </Typography>
-                  <Typography variant='body' className='text-gray-600 dark:text-gray-300 mb-6'>
-                    Join our dev & degen chat on Telegram for real-time discussions and alpha.
-                  </Typography>
                   <motion.a
                     href='https://t.me/hashinals'
                     target='_blank'
                     rel='noopener noreferrer'
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.05, boxShadow: '0 15px 40px rgba(72, 223, 123, 0.4)' }}
                     whileTap={{ scale: 0.95 }}
-                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#48df7b] text-white hover:text-white rounded-lg font-semibold hover:bg-[#3dcf6b] transition-colors'
+                    className='inline-flex items-center gap-4 px-10 py-5 bg-gradient-to-r from-[#48df7b] to-[#3dcf6b] text-white hover:text-white rounded-2xl font-bold hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 shadow-xl text-xl group'
                     data-umami-event="start-join-telegram"
                     data-umami-event-category="start-page"
                   >
-                    Join Telegram
-                    <FiExternalLink />
-                  </motion.a>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                  whileHover={{ scale: 1.05, rotate: 0, y: -5 }}
-                  whileTap={{ scale: 0.98 }}
-                  className='bg-gradient-to-br from-[#a679f0]/15 via-[#5599fe]/15 to-[#48df7b]/15 rounded-2xl p-8 text-center relative overflow-hidden group border border-[#a679f0]/20 shadow-lg hover:shadow-2xl'
-                >
-                  <div className='flex justify-center mb-4'>
-                    <motion.div 
-                      className='w-16 h-16 rounded-full bg-white dark:bg-gray-800 flex items-center justify-center shadow-lg relative z-10'
-                      whileHover={{ scale: 1.1, rotate: 5 }}
+                    <motion.div
+                      className='w-8 h-8 flex items-center justify-center'
+                      whileHover={{ rotate: 10 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <FiMail className='text-3xl text-[#a679f0]' />
+                      <FiMessageCircle className='text-2xl' />
                     </motion.div>
-                  </div>
-                  <Typography variant='h3' className='text-2xl font-bold mb-3'>
-                    <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] to-[#5599fe]'>
-                      Newsletter
-                    </span>
-                  </Typography>
-                  <Typography variant='body' className='text-gray-600 dark:text-gray-300 mb-6'>
-                    Get the latest updates on Hedera, AI, and web3 developments delivered to your inbox.
-                  </Typography>
-                  <motion.a
-                    href='/newsletter'
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    whileHover={{ scale: 1.08, boxShadow: '0 10px 30px rgba(166, 121, 240, 0.3)' }}
-                    whileTap={{ scale: 0.95 }}
-                    className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#a679f0] to-[#8b5cf6] text-white hover:text-white rounded-xl font-bold hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1'
-                    data-umami-event="start-newsletter-subscribe"
-                    data-umami-event-category="start-page"
-                  >
-                    Subscribe
-                    <motion.span
-                      animate={{ x: [0, 3, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
+                    Join Telegram Community
+                    <motion.div
+                      animate={{ x: [0, 4, 0] }}
+                      transition={{ duration: 2, repeat: Infinity }}
                     >
-                      <FiExternalLink />
-                    </motion.span>
+                      <FiExternalLink className='text-xl' />
+                    </motion.div>
                   </motion.a>
                 </motion.div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-                className='mt-12 text-center p-6 bg-gray-100 dark:bg-gray-800 rounded-xl'
-              >
-                <Typography variant='body' className='text-gray-600 dark:text-gray-300 italic'>
-                  "Open tools and open standards for the future of decentralized applications."
-                </Typography>
-                <Typography variant='caption' className='text-gray-500 dark:text-gray-400 mt-2'>
-                  — Hashgraph Online Community
-                </Typography>
               </motion.div>
             </motion.div>
           </div>
