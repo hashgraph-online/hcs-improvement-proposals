@@ -351,7 +351,7 @@ function generateAgentDID(agentData: AgentData): string {
     version: agentData.version.trim(),
     protocol: agentData.protocol.toLowerCase().trim(),
     nativeId: agentData.nativeId.trim(),
-    skills: (agentData.capabilities || []).sort((a, b) => a - b),
+    skills: (agentData.skills || []).sort((a, b) => a - b),
   };
 
   // 3. Generate hash
