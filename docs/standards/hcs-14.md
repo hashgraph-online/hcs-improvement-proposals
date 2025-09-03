@@ -136,7 +136,7 @@ did:{method}:{hash};{optional_parameters}
 Example with common parameters:
 
 ```
-did:{method}:{hash};registry={registry};proto={protocol};nativeId={nativeId};uid={uid}
+did:{method}:{hash};registry={registry};proto={protocol};nativeId={nativeId};uid={uid};domain={domain}
 ```
 
 Parameter definitions:
@@ -146,6 +146,7 @@ Parameter definitions:
 - `proto` = Protocol identifier (e.g., "hcs-10", "a2a", "mcp")
 - `nativeId` = Protocol's native unique identifier (Ed25519 or ECDSA public key hex for HCS-10, domain for A2A/NANDA)
 - `uid` = Unique identifier within the registry (e.g., agent name for NANDA, account ID for HCS-10)
+- `domain` = Domain identifier for an agent (e.g. domain.com / foo.hbar / bar.eth / alice.btc) 
 
 Note: Both `registry` and `proto` can be specified together as they serve different purposes - registry indicates the organization/namespace while proto indicates the communication protocol. The uid parameter is required and should be "0" if not applicable.
 
