@@ -56,7 +56,8 @@ sidebar_position: 14
 
 - Kantorcodes [https://x.com/kantorcodes](https://x.com/kantorcodes)
 - Patches [https://x.com/TMCC_Patches](https://x.com/TMCC_Patches)
-- Ahmer Inam [https://www.linkedin.com/in/ahmer/]
+- Ahmer Inam [https://www.linkedin.com/in/ahmer/](https://www.linkedin.com/in/ahmer/)
+- Jake Hall [https://www.linkedin.com/in/jake-hall-62b6b7176/](https://www.linkedin.com/in/jake-hall-62b6b7176/)
 
 ## Abstract
 
