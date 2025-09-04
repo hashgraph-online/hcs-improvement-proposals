@@ -33,7 +33,6 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
     if (!isOpen) return;
 
     const handleMessage = (event: MessageEvent) => {
-      // Listen for Sibforms success messages
       if (event.data && typeof event.data === 'string') {
         if (
           event.data.includes('success') ||
@@ -43,7 +42,6 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           handleSuccess();
         }
       }
-      // Also listen for object-based messages
       if (event.data && typeof event.data === 'object') {
         if (
           event.data.type === 'form_submitted' ||
@@ -63,9 +61,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
     if (!isOpen) return;
 
     const fallbackTimer = setTimeout(() => {
-      // If modal is still open after 30 seconds, show the manual success button more prominently
       if (isOpen && !showSuccessMessage) {
-        // Could add a hint here that they can click "I submitted the form" if they completed it
+        // hint area (no-op)
       }
     }, 30000);
 
@@ -86,10 +83,9 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
     }
   }, [showSuccessMessage, countdown, onClose]);
 
-  // Function to trigger success state (can be called manually)
   const handleSuccess = () => {
     setShowSuccessMessage(true);
-    setCountdown(3); // 3 second countdown
+    setCountdown(3);
   };
 
   return (

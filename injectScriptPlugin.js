@@ -10,6 +10,7 @@ module.exports = function (context, options) {
               async: true,
               src: 'https://stats.tier.bot/script.js',
               'data-website-id': '09a60445-7371-492c-9d75-c17be79fa569',
+              'data-domains': 'hashgraphonline.com',
             },
           },
           // Google Ads tag (gtag.js)

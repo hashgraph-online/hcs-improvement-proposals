@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '@theme/Layout';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -38,6 +38,60 @@ const StartPage: React.FC = () => {
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] =
     useState<boolean>(false);
 
+  const STORAGE_KEY = 'startPageProgress';
+
+  // Load saved progress on mount (browser only)
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      const raw = window.localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        return;
+      }
+      const parsed = JSON.parse(raw) as {
+        currentStep?: number;
+        completedSteps?: number[];
+        finishedSteps?: number[];
+        selectedTrack?: string | null;
+      };
+      if (parsed.selectedTrack !== undefined) {
+        setSelectedTrack(parsed.selectedTrack);
+      }
+      if (typeof parsed.currentStep === 'number') {
+        setCurrentStep(Math.min(Math.max(parsed.currentStep, 1), 5));
+      }
+      if (Array.isArray(parsed.completedSteps)) {
+        setCompletedSteps(new Set(parsed.completedSteps));
+      }
+      if (Array.isArray(parsed.finishedSteps)) {
+        setFinishedSteps(new Set(parsed.finishedSteps));
+      }
+    } catch {
+      // ignore malformed storage
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist progress when it changes
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      const payload = {
+        currentStep,
+        completedSteps: Array.from(completedSteps),
+        finishedSteps: Array.from(finishedSteps),
+        selectedTrack,
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore write errors
+    }
+  }, [currentStep, completedSteps, finishedSteps, selectedTrack]);
+
   const completeStep = (step: number) => {
     setCompletedSteps((prev) => new Set([...prev, step]));
     setFinishedSteps((prev) => new Set([...prev, step]));
@@ -57,6 +111,17 @@ const StartPage: React.FC = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
+  };
+
+  const goToStep = (step: number) => {
+    if (step < 1 || step > 5) {
+      return;
+    }
+    if (step > currentStep) {
+      const previousSteps = Array.from({ length: step - 1 }, (_, i) => i + 1);
+      setFinishedSteps((prev) => new Set([...prev, ...previousSteps]));
+    }
+    setCurrentStep(step);
   };
 
   // Calculate progress to align with dot positions: 0%, 25%, 50%, 75%, 100%
@@ -292,7 +357,7 @@ const StartPage: React.FC = () => {
                   {[1, 2, 3, 4, 5].map((step) => (
                     <motion.div
                       key={step}
-                      className={`absolute w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-300 ${
+                      className={`absolute w-8 h-8 rounded-full border-2 flex items-center justify-center text-sm font-bold transition-all duration-300 cursor-pointer ${
                         completedSteps.has(step)
                           ? 'bg-green-500 border-green-500 text-white'
                           : finishedSteps.has(step)
@@ -308,6 +373,9 @@ const StartPage: React.FC = () => {
                       animate={
                         finishedSteps.has(step) ? { scale: [1, 1.2, 1] } : {}
                       }
+                      data-umami-event={`goto-step-${step}`}
+                      data-umami-event-category='navigation'
+                      onClick={() => goToStep(step)}
                     >
                       {completedSteps.has(step)
                         ? '✓'
@@ -376,12 +444,6 @@ const StartPage: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl cursor-pointer mb-6'
-                  data-umami-event='newsletter-subscribe'
-                  data-umami-event-category='engagement'
-                  onClick={() => {
-                    setIsNewsletterModalOpen(true);
-                    completeStep(1);
-                  }}
                 >
                   <div className='flex justify-center mb-4'>
                     <div className='w-16 h-16 rounded-full bg-[#a679f0]/10 flex items-center justify-center'>
@@ -395,7 +457,15 @@ const StartPage: React.FC = () => {
                     Stay informed with weekly updates, new tools, and important
                     announcements.
                   </Typography>
-                  <div className='inline-flex items-center gap-2 px-6 py-3 bg-[#a679f0] text-white rounded-lg font-semibold'>
+                  <div
+                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#a679f0] text-white rounded-lg font-semibold'
+                    data-umami-event='newsletter-subscribe'
+                    data-umami-event-category='engagement'
+                    onClick={() => {
+                      setIsNewsletterModalOpen(true);
+                      completeStep(1);
+                    }}
+                  >
                     Subscribe Now <FiMail />
                   </div>
                 </motion.div>
@@ -406,7 +476,9 @@ const StartPage: React.FC = () => {
                   className='inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#a679f0]/10 to-[#a679f0]/20 hover:from-[#a679f0]/20 hover:to-[#a679f0]/30 border border-[#a679f0]/30 text-[#a679f0] dark:text-[#a679f0] rounded-xl font-medium cursor-pointer transition-all duration-200 shadow-md hover:shadow-lg'
                   data-umami-event='skip-step-1'
                   data-umami-event-category='navigation'
-                  onClick={() => skipStep(1)}
+                  onClick={() => {
+                    skipStep(1);
+                  }}
                 >
                   Skip this step <FiArrowRight className='text-sm' />
                 </motion.div>
@@ -442,12 +514,6 @@ const StartPage: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl cursor-pointer mb-6'
-                  data-umami-event='external-link-x-twitter'
-                  data-umami-event-category='social'
-                  onClick={() => {
-                    completeStep(2);
-                    window.open('https://x.com/HashgraphOnline', '_blank');
-                  }}
                 >
                   <div className='flex justify-center mb-4'>
                     <div className='w-16 h-16 rounded-full bg-[#5599fe]/10 flex items-center justify-center'>
@@ -461,7 +527,15 @@ const StartPage: React.FC = () => {
                     Connect with the Hedera x AI community, get your questions
                     answered, and participate in weekly giveaways.
                   </Typography>
-                  <div className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] text-white rounded-lg font-semibold'>
+                  <div
+                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] text-white rounded-lg font-semibold'
+                    data-umami-event='external-link-x-twitter'
+                    data-umami-event-category='social'
+                    onClick={() => {
+                      completeStep(2);
+                      window.open('https://x.com/HashgraphOnline', '_blank');
+                    }}
+                  >
                     Join Hedera x AI <FiExternalLink />
                   </div>
                 </motion.div>
@@ -520,12 +594,6 @@ const StartPage: React.FC = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl cursor-pointer mb-6'
-                  data-umami-event='external-link-telegram'
-                  data-umami-event-category='social'
-                  onClick={() => {
-                    completeStep(3);
-                    window.open('https://t.me/hashinals', '_blank');
-                  }}
                 >
                   <div className='flex justify-center mb-4'>
                     <div className='w-16 h-16 rounded-full bg-[#48df7b]/10 flex items-center justify-center'>
@@ -539,7 +607,15 @@ const StartPage: React.FC = () => {
                     Get instant access to our active community of builders,
                     share projects, and get help when you need it.
                   </Typography>
-                  <div className='inline-flex items-center gap-2 px-6 py-3 bg-[#48df7b] text-white rounded-lg font-semibold'>
+                  <div
+                    className='inline-flex items-center gap-2 px-6 py-3 bg-[#48df7b] text-white rounded-lg font-semibold'
+                    data-umami-event='external-link-telegram'
+                    data-umami-event-category='social'
+                    onClick={() => {
+                      completeStep(3);
+                      window.open('https://t.me/hashinals', '_blank');
+                    }}
+                  >
                     Join Telegram <FiExternalLink />
                   </div>
                 </motion.div>
