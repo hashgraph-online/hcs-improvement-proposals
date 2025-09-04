@@ -80,7 +80,7 @@ openconvai:
 
 hackathon:
   label: Hackathon
-  permalink: /hackathon
+  permalink: /blog/tags/hackathon
   description: Hackathon events and competitions
 
 winners:

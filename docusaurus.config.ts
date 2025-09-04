@@ -87,12 +87,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    algolia: {
-      appId: process.env.DOCSEARCH_APP_ID || 'DOCSEARCH_APP_ID',
-      apiKey: process.env.DOCSEARCH_API_KEY || 'DOCSEARCH_API_KEY',
-      indexName: process.env.DOCSEARCH_INDEX_NAME || 'DOCSEARCH_INDEX_NAME',
-      contextualSearch: true,
-    },
     // Replace with your project's social card
     image: 'img/og-card.png',
     algolia: {
@@ -225,13 +219,7 @@ const config: Config = {
         },
       ],
     },
-    scripts: [
-      {
-        src: 'https://stats.tier.bot/script.js',
-        async: true,
-        'data-website-id': '09a60445-7371-492c-9d75-c17be79fa569',
-      },
-    ],
+    scripts: [],
   } satisfies Preset.ThemeConfig,
 
   plugins: [
