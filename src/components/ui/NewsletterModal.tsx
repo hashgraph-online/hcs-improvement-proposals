@@ -35,13 +35,20 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
     const handleMessage = (event: MessageEvent) => {
       // Listen for Sibforms success messages
       if (event.data && typeof event.data === 'string') {
-        if (event.data.includes('success') || event.data.includes('thank') || event.data.includes('submitted')) {
+        if (
+          event.data.includes('success') ||
+          event.data.includes('thank') ||
+          event.data.includes('submitted')
+        ) {
           handleSuccess();
         }
       }
       // Also listen for object-based messages
       if (event.data && typeof event.data === 'object') {
-        if (event.data.type === 'form_submitted' || event.data.status === 'success') {
+        if (
+          event.data.type === 'form_submitted' ||
+          event.data.status === 'success'
+        ) {
           handleSuccess();
         }
       }
@@ -93,6 +100,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          data-umami-event='newsletter-modal-backdrop-click'
+          data-umami-event-category='engagement'
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               onClose();
@@ -115,7 +124,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                     Join Our Newsletter
                   </h2>
                   <p className='text-gray-600 dark:text-gray-400 mt-1'>
-                    Stay updated with the latest news, standards, and innovations in the Hedera ecosystem.
+                    Stay updated with the latest news, standards, and
+                    innovations in the Hedera ecosystem.
                   </p>
                 </div>
               </div>
@@ -123,6 +133,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                 onClick={onClose}
                 className='text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors flex-shrink-0'
                 aria-label='Close modal'
+                data-umami-event='newsletter-modal-close-x'
+                data-umami-event-category='engagement'
               >
                 <FaRegTimesCircle size={24} />
               </button>
@@ -149,7 +161,9 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                 >
                   <div className='flex items-center justify-center gap-2 text-green-600 mb-2'>
                     <FiCheck className='text-xl' />
-                    <span className='font-medium'>Successfully subscribed!</span>
+                    <span className='font-medium'>
+                      Successfully subscribed!
+                    </span>
                   </div>
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
                     Closing in {countdown} second{countdown !== 1 ? 's' : ''}...
@@ -158,7 +172,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
               ) : (
                 <div className='space-y-3'>
                   <p className='text-sm text-gray-600 dark:text-gray-400 mb-3'>
-                    After submitting the form above, click the button below to continue:
+                    After submitting the form above, click the button below to
+                    continue:
                   </p>
                   <div className='flex gap-3 justify-center'>
                     <motion.button
@@ -166,15 +181,18 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                       whileTap={{ scale: 0.95 }}
                       onClick={handleSuccess}
                       className='px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2'
+                      data-umami-event='newsletter-modal-confirm-submission'
+                      data-umami-event-category='engagement'
                     >
-                      <FiCheck className='text-sm' />
-                      I submitted the form
+                      <FiCheck className='text-sm' />I submitted the form
                     </motion.button>
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={onClose}
                       className='px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors'
+                      data-umami-event='newsletter-modal-close-bottom'
+                      data-umami-event-category='engagement'
                     >
                       Close
                     </motion.button>
