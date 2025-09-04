@@ -51,8 +51,14 @@ The agent can run against multiple LLM providers. Configure the provider and mod
 Supported values for `llmProvider`:
 
 - `openai`: uses OpenAI models (e.g., `gpt-4o`, `gpt-4o-mini`).
-- `anthropic`: uses Claude models (e.g., `claude-3-7-sonnet-latest`, `claude-3-haiku-20240307`).
-- `openrouter`: uses OpenRouter routing (e.g., `openrouter/auto` or a concrete model like `openai/gpt-4o-mini`).
+- `anthropic`: uses Claude models (e.g., `claude-3-7-sonnet-latest`).
+- `openrouter`: uses OpenRouter routing (prefer vendor-prefixed models like `openai/gpt-4o-mini`).
+
+Defaults from the SDK:
+
+- `llmProvider`: `openai`
+- `openAIModelName`: `gpt-4o`
+- `network`: `testnet`
 
 ### OpenAI example
 
@@ -93,9 +99,10 @@ const agent = new ConversationalAgent({
   // Accepts either OPENROUTER_API_KEY or OPENAI_KEY (sk-or-...)
   openAIApiKey: process.env.OPENROUTER_API_KEY!,
   openRouterApiKey: process.env.OPENROUTER_API_KEY!,
-  openRouterBaseURL: process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
-  // 'openrouter/auto' lets OpenRouter route; or choose a concrete model you can access
-  openAIModelName: process.env.OPENROUTER_MODEL || 'openrouter/auto',
+  openRouterBaseURL:
+    process.env.OPENROUTER_BASE_URL || 'https://openrouter.ai/api/v1',
+  // Prefer vendor-prefixed model ids (e.g., 'openai/gpt-4o-mini'). 'openrouter/auto' may require candidates.
+  openAIModelName: process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini',
 });
 await agent.initialize();
 ```
@@ -334,6 +341,11 @@ const agent = new ConversationalAgent({
   openAIApiKey: process.env.OPENAI_API_KEY!,
   operationalMode: 'returnBytes', // Return transaction bytes instead of executing
   userAccountId: '0.0.12345', // The account that will sign the transaction
+  // Optionally, provide a wallet executor to submit bytes and return a tx id
+  walletExecutor: async (base64, network) => {
+    // Submit to a connected wallet here and return its transaction id
+    return { transactionId: '0.0.12345@1729450000.000000000' };
+  },
 });
 
 await agent.initialize();
@@ -467,31 +479,33 @@ const response = await agent.processMessage(
 
 ## Configuration Options
 
-| Option                                | Type                 | Default                      | Description                                |
-| ------------------------------------- | -------------------- | ---------------------------- | ------------------------------------------ | -------------------- | ----------------------------------------- |
-| `accountId`                           | string               | **required**                 | Hedera account ID                          |
-| `privateKey`                          | string               | **required**                 | Private key for the account                |
-| `network`                             | NetworkType          | 'testnet'                    | Network to connect to                      |
-| `openAIApiKey`                        | string               | **required**                 | OpenAI API key                             |
-| `openAIModelName`                     | string               | 'gpt-4o'                     | Model to use (OpenAI/Anthropic/OpenRouter) |
-| `llmProvider`                         | 'openai'             | 'anthropic'                  | 'openrouter'                               | 'openai'             | Select LLM provider                       |
-| `verbose`                             | boolean              | false                        | Enable verbose logging                     |
-| `operationalMode`                     | AgentOperationalMode | 'autonomous'                 | 'autonomous' or 'returnBytes'              |
-| `userAccountId`                       | string               | undefined                    | User's account ID for transaction context  |
-| `additionalPlugins`                   | BasePlugin[]         | []                           | Additional plugins to load                 |
-| `toolFilter`                          | (tool) => boolean    | undefined                    | Predicate to include/exclude tools         |
-| `stateManager`                        | IStateManager        | OpenConvaiState              | Custom state manager                       |
-| `mirrorNodeConfig`                    | object               | undefined                    | Mirror node configuration                  |
-| `disableLogging`                      | boolean              | false                        | Silence logs (still errors)                |
-| `scheduleUserTransactionsInBytesMode` | boolean              | undefined                    | Schedule when in bytes mode                |
-| `entityMemoryEnabled`                 | boolean              | true                         | Enable LLM-based entity memory             |
-| `entityMemoryConfig`                  | SmartMemoryConfig    | undefined                    | Entity memory window/config                |
-| `entityMemoryProvider`                | 'openai'             | 'anthropic'                  | 'openrouter'                               | llmProvider/'openai' | Provider for entity extraction/resolution |
-| `entityMemoryModelName`               | string               | per-provider                 | Model used for entity extraction           |
-| `openRouterApiKey`                    | string               | undefined                    | API key for OpenRouter                     |
-| `openRouterBaseURL`                   | string               | https://openrouter.ai/api/v1 | Override OpenRouter API base URL           |
-| `enabledPlugins`                      | string[]             | undefined                    | Filter which plugins to enable by ID       |
-| `mcpServers`                          | MCPServerConfig[]    | undefined                    | MCP servers to connect to                  |
+| Option                                | Type                                                    | Default                        | Description                                   |
+| ------------------------------------- | ------------------------------------------------------- | ------------------------------ | --------------------------------------------- |
+| `accountId`                           | string                                                  | required                       | Hedera account ID                             |
+| `privateKey`                          | string                                                  | required in `autonomous`       | Private key (omit in `returnBytes` mode)      |
+| `network`                             | 'mainnet' \| 'testnet' \| 'previewnet'                  | 'testnet'                      | Hedera network                                |
+| `openAIApiKey`                        | string                                                  | required                       | API key for selected provider                 |
+| `openAIModelName`                     | string                                                  | 'gpt-4o'                       | Model id for the LLM                          |
+| `llmProvider`                         | 'openai' \| 'anthropic' \| 'openrouter'                 | 'openai'                       | LLM provider                                  |
+| `verbose`                             | boolean                                                 | false                          | Verbose debug logging                         |
+| `operationalMode`                     | 'autonomous' \| 'returnBytes'                           | 'autonomous'                   | Execution mode                                |
+| `userAccountId`                       | string                                                  | undefined                      | End-user account when scheduling/user context |
+| `additionalPlugins`                   | BasePlugin[]                                            | []                             | Extra plugins to load                         |
+| `enabledPlugins`                      | string[]                                                | undefined                      | Only enable plugins matching these IDs        |
+| `toolFilter`                          | (tool: { name: string; namespace?: string }) => boolean | undefined                      | Predicate to include/exclude tools            |
+| `stateManager`                        | IStateManager                                           | OpenConvaiState                | Custom state manager                          |
+| `mirrorNodeConfig`                    | object                                                  | undefined                      | Mirror node configuration                     |
+| `disableLogging`                      | boolean                                                 | false                          | Silence logs (errors still emitted)           |
+| `scheduleUserTransactionsInBytesMode` | boolean                                                 | undefined                      | Schedule transactions in bytes mode           |
+| `entityMemoryEnabled`                 | boolean                                                 | true                           | Enable LLM-based entity memory                |
+| `entityMemoryConfig`                  | SmartMemoryConfig                                       | undefined                      | Entity memory window/config                   |
+| `entityMemoryProvider`                | 'openai' \| 'anthropic' \| 'openrouter'                 | inherits `llmProvider`         | Provider for entity extraction                |
+| `entityMemoryModelName`               | string                                                  | per-provider                   | Model for entity extraction                   |
+| `openRouterApiKey`                    | string                                                  | undefined                      | API key for OpenRouter                        |
+| `openRouterBaseURL`                   | string                                                  | 'https://openrouter.ai/api/v1' | Override OpenRouter base URL                  |
+| `mcpServers`                          | MCPServerConfig[]                                       | undefined                      | MCP servers to connect to                     |
+| `walletExecutor`                      | (base64, network) => Promise<{ transactionId: string }> | undefined                      | Wallet callback used in `returnBytes` mode    |
+| `customSignerFactory`                 | (args) => AbstractSigner                                | undefined                      | Override signer selection                     |
 
 ### Entity Memory
 

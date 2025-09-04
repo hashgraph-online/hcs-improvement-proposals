@@ -1,90 +1,82 @@
 ---
 title: Entity Memory & Smart Memory
-description: Persistent entity associations and searchable conversation memory for the Conversational Agent
+description: Persist entities (topics, tokens, accounts) and keep searchable history the agent can use for follow‑ups
 ---
 
-Overview
-- Purpose: persist important entities created during a session (topics, tokens, accounts) and keep a searchable conversation history that the agent can leverage for follow‑ups.
-- Components: LLM‑based entity extraction, entity associations store, memory window with token budgeting, and content storage with search.
+What this provides
+- A token‑bounded active window for the conversation, plus a searchable long‑term store for pruned messages.
+- Automatic entity capture: when tools create on‑chain entities (e.g., InscribeHashinalTool returns a topicId/HRL), the agent stores an association so users can refer to “that last topic” or “my token”.
+- Optional LLM extraction: the agent can run an extraction tool over responses to detect entities that weren’t explicitly emitted by the tool.
 
-How It Works
-- Extraction: after a successful `processMessage`, the agent runs an internal tool `extract_entities` to parse newly created Hedera entities from the response.
-- Association: results are normalized and stored with helpful metadata (usage hints, HRL for topics) and a flag `"isEntityAssociation": true` for fast lookup.
-- Memory window: a token‑bounded rolling window keeps the most relevant messages available to the LLM while the full content store remains searchable.
+Enable and configure
+- Enabled by default. Control with `entityMemoryEnabled` and `entityMemoryConfig`.
 
-Enable/Configure
-- Default: `entityMemoryEnabled` is enabled by default.
-- Configure limits via `entityMemoryConfig`:
-  - `maxTokens`: token cap for the active memory window
-  - `reserveTokens`: tokens reserved for response generation
-  - `modelName`: model used for token counting
-  - `storageLimit`: max messages to persist
-
-```typescript
+```ts
 import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
 
 const agent = new ConversationalAgent({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
   privateKey: process.env.HEDERA_PRIVATE_KEY!,
   openAIApiKey: process.env.OPENAI_API_KEY!,
-  // Provider and model
-  llmProvider: 'openai', // or 'anthropic'
+  llmProvider: 'openai',                // 'anthropic' | 'openrouter' also supported
   openAIModelName: 'gpt-4o',
-  // Entity memory
   entityMemoryEnabled: true,
-  entityMemoryConfig: { maxTokens: 6000, reserveTokens: 1000, storageLimit: 500 },
+  entityMemoryConfig: {
+    maxTokens: 6000,
+    reserveTokens: 1000,
+    storageLimit: 500,
+  },
+  // Optional: specialize the extraction provider/model
+  entityMemoryProvider: 'openai',       // or 'anthropic' | 'openrouter'
+  entityMemoryModelName: 'gpt-4o-mini', // defaults are sensible per provider
 });
+await agent.initialize();
 ```
 
-Reading Memory Programmatically
-- Access the underlying agent to query memory.
+Reading memory programmatically
+- Use the wrapper’s public `memoryManager` to inspect entities, search history, and view stats.
 
-```typescript
-// After initialize()
-const core = agent.getConversationalAgent(); // LangChainAgent under the hood
+```ts
+// 1) Entity associations (optionally filter by type)
+const entities = agent.memoryManager?.getEntityAssociations();
+const topics   = agent.memoryManager?.getEntityAssociations('topicId');
+const tokens   = agent.memoryManager?.getEntityAssociations('tokenId');
+const accounts = agent.memoryManager?.getEntityAssociations('accountId');
 
-// 1) List stored entity associations (optionally filter by type)
-const allEntities = core.smartMemory.getEntityAssociations();
-const topics = core.smartMemory.getEntityAssociations('topicid');
-const tokens = core.smartMemory.getEntityAssociations('tokenid');
-const accounts = core.smartMemory.getEntityAssociations('accountid');
+// 2) Search long‑term history (outside the active window)
+const hits = agent.memoryManager?.searchHistory('hcs://1/', { limit: 50 });
 
-// 2) Search conversation/content history
-const hits = core.smartMemory.searchHistory('hcs://1/', { limit: 50 });
-
-// 3) Inspect memory stats (token usage, capacity)
-const stats = core.smartMemory.getMemoryStats();
+// 3) Inspect active window stats
+const stats = agent.memoryManager?.getMemoryStats();
 ```
 
-What Gets Stored
-- EntityAssociation fields:
+What gets stored
+- EntityAssociation
   - `entityId`: Hedera ID (e.g., `0.0.12345`)
-  - `entityName`: human‑friendly name
-  - `entityType`: e.g., `topicid`, `tokenid`, `accountid`
-  - `transactionId?`: transaction that created it
-  - `createdAt`: timestamp
-- Enrichment:
-  - `usage`: quick hint on how to use the entity (e.g., “Use as tokenId for HTS operations”)
-  - `hrl`: for topics, an `hcs://1/<topicId>` link is included
+  - `entityName`: human‑friendly label
+  - `entityType`: canonicalized (e.g., `topicId`, `tokenId`, `accountId`)
+  - `createdAt`: timestamp; `transactionId?` when available
+  - Enrichment: `usage` hints (e.g., “Use as tokenId for HTS operations”), and for topics an `hrl` such as `hcs://1/<topicId>`
 
-Controlling Behavior
-- Disable entity memory completely:
-```typescript
+Controlling behavior
+```ts
+// Disable entirely
 const agent = new ConversationalAgent({
-  // ...
+  /* ... */
   entityMemoryEnabled: false,
 });
-```
-- Exclude the extraction tool via `toolFilter` if you want custom control:
-```typescript
-const agent = new ConversationalAgent({
-  // ...
+
+// Exclude LLM extraction (still keeps explicit tool-emitted entities)
+const agent2 = new ConversationalAgent({
+  /* ... */
   toolFilter: (tool) => tool.name !== 'extract_entities',
 });
 ```
 
-Notes & Best Practices
-- Model/provider: configure via `entityMemoryProvider: 'openai' | 'anthropic' | 'openrouter'` and `entityMemoryModelName`. Defaults follow `llmProvider` and choose a sensible model per provider (OpenAI: `gpt-4o-mini`, Anthropic: `claude-3-7-sonnet-latest`, OpenRouter: `openai/gpt-4o-mini`). API key sources: `openRouterApiKey` for OpenRouter (falls back to `openAIApiKey`), `openAIApiKey` for OpenAI/Anthropic.
-- Privacy: memory stores conversation content and entity associations. Avoid placing secrets or PII in prompts; sanitize content before persisting.
-- Performance: tune `maxTokens` and `reserveTokens` to balance context quality vs. generation space.
-- Robustness: only Hedera‑looking IDs are stored as associations; non‑IDs are ignored to reduce noise.
+How InscribeHashinalTool contributes
+- On successful inscription, the tool emits the topicId and HRL. The agent stores an association such as `{ entityType: 'topicId', entityId: '0.0.x', hrl: 'hcs://1/0.0.x' }`. This lets users later say “use the Hashinal topic you just created” without re‑pasting IDs.
+
+Best practices
+- Respect privacy: Avoid persisting secrets/PII in prompts.
+- Tune `maxTokens`/`reserveTokens` for your model size and response lengths.
+- Prefer referring to prior artifacts via their names/IDs—the association store makes resolution reliable and cheap.
