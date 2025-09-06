@@ -15,6 +15,7 @@ import {
   FiTerminal,
   FiDollarSign,
   FiShoppingBag,
+  FiLock,
 } from 'react-icons/fi';
 import { FaPalette, FaRocket, FaFlask } from 'react-icons/fa';
 import Typography from '../components/ui/Typography';
@@ -34,13 +35,13 @@ const StartPage: React.FC = () => {
   const [selectedTrack, setSelectedTrack] = useState<string | null>('hacker');
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
-  const [finishedSteps, setFinishedSteps] = useState<Set<number>>(new Set()); // Tracks both completed and skipped
+  const [finishedSteps, setFinishedSteps] = useState<Set<number>>(new Set());
   const [isNewsletterModalOpen, setIsNewsletterModalOpen] =
     useState<boolean>(false);
+  const [showHackathonHint, setShowHackathonHint] = useState<boolean>(false);
 
   const STORAGE_KEY = 'startPageProgress';
 
-  // Load saved progress on mount (browser only)
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -69,12 +70,9 @@ const StartPage: React.FC = () => {
         setFinishedSteps(new Set(parsed.finishedSteps));
       }
     } catch {
-      // ignore malformed storage
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Persist progress when it changes
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -88,15 +86,33 @@ const StartPage: React.FC = () => {
       };
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch {
-      // ignore write errors
     }
   }, [currentStep, completedSteps, finishedSteps, selectedTrack]);
+
+  const requiredUnlockSteps = [1, 2, 3, 4];
+  const stepsCompletedCount = requiredUnlockSteps.filter((s) =>
+    completedSteps.has(s)
+  ).length;
+  const stepsRemaining = requiredUnlockSteps.length - stepsCompletedCount;
+  const isHackathonUnlocked = stepsRemaining <= 0;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    try {
+      if (isHackathonUnlocked) {
+        window.localStorage.setItem('hackathonUnlocked', 'true');
+      }
+    } catch {
+    }
+  }, [isHackathonUnlocked]);
 
   const completeStep = (step: number) => {
     setCompletedSteps((prev) => new Set([...prev, step]));
     setFinishedSteps((prev) => new Set([...prev, step]));
     if (step < 5) {
-      setTimeout(() => setCurrentStep(step + 1), 1000); // Auto-advance after 1 second
+      setTimeout(() => setCurrentStep(step + 1), 1000);
     }
   };
 
@@ -124,8 +140,6 @@ const StartPage: React.FC = () => {
     setCurrentStep(step);
   };
 
-  // Calculate progress to align with dot positions: 0%, 25%, 50%, 75%, 100%
-  // Step 1=0%, Step 2=25%, Step 3=50%, Step 4=75%, Step 5=100%
   const progress = (currentStep - 1) * 25;
 
   const tracks: TrackCard[] = [
@@ -336,11 +350,9 @@ const StartPage: React.FC = () => {
       title='Get Started | Hashgraph Online'
       description='Choose your path and start building on Hedera with our open tools and standards'
     >
-      <div className='min-h-screen bg-white dark:bg-gray-900'>
-        {/* Progress Header */}
+      <div className='min-h-screen bg-white dark:bg-gray-900 overflow-x-hidden'>
         <div className='sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 shadow-sm'>
-          <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-4'>
-            {/* Progress Bar */}
+          <div className='container mx-auto px-5 sm:px-6 lg:px-8 py-3 sm:py-4'>
             <div className='max-w-2xl mx-auto'>
               <div className='relative'>
                 <div className='h-6 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden'>
@@ -352,7 +364,6 @@ const StartPage: React.FC = () => {
                   />
                 </div>
 
-                {/* Step Indicators */}
                 <div className='absolute -top-1 left-0 w-full h-8'>
                   {[1, 2, 3, 4, 5].map((step) => (
                     <motion.div
@@ -367,7 +378,7 @@ const StartPage: React.FC = () => {
                           : 'bg-gray-300 border-gray-300'
                       }`}
                       style={{
-                        left: `calc(${(step - 1) * 20}% + 16px)`, // Position dots with padding: 16px, 36%, 56%, 76%, 96% of container width
+                        left: `calc(${(step - 1) * 20}% + 16px)`,
                       }}
                       whileHover={{ scale: 1.1 }}
                       animate={
@@ -387,15 +398,33 @@ const StartPage: React.FC = () => {
                 </div>
               </div>
             </div>
+            <div className='max-w-2xl mx-auto mt-2 sm:mt-3 flex items-center justify-center'>
+              <div
+                className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-semibold ${
+                  isHackathonUnlocked
+                    ? 'bg-green-50 dark:bg-green-900/20 border-green-300 dark:border-green-700 text-green-700 dark:text-green-300'
+                    : 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-300 dark:border-yellow-700 text-yellow-700 dark:text-yellow-300'
+                }`}
+              >
+                {isHackathonUnlocked ? (
+                  <>
+                    <FiDollarSign /> Access Unlocked — $1M Hackathon
+                  </>
+                ) : (
+                  <>
+                    <FiLock /> Unlock $1M Hackathon — {stepsRemaining} step
+                    {stepsRemaining === 1 ? '' : 's'} remaining • ~2 min total
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Step Content */}
         <div
-          className='flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-black dark:to-blue-950/30 relative'
-          style={{ minHeight: 'calc(100vh - 120px)' }}
+          className='flex items-start md:items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-900 dark:via-black dark:to-blue-950/30 relative overflow-x-hidden pt-6 sm:pt-8'
         >
-          <div className='absolute inset-0 z-0'>
+          <div className='absolute inset-0 z-0 overflow-hidden'>
             <motion.div
               className='absolute top-20 right-20 w-96 h-96 bg-gradient-to-br from-[#5599fe]/10 to-[#a679f0]/10 rounded-full blur-3xl'
               animate={{
@@ -414,8 +443,7 @@ const StartPage: React.FC = () => {
             />
           </div>
 
-          <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-            {/* Step 1: Newsletter */}
+          <div className='container mx-auto px-5 sm:px-6 lg:px-8 relative z-10'>
             {currentStep === 1 && (
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
@@ -426,24 +454,24 @@ const StartPage: React.FC = () => {
               >
                 <Typography
                   variant='h1'
-                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'
+                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4'
                 >
                   <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#48df7b] to-[#5599fe]'>
-                    Join Our Newsletter
+                    Join & Unlock Faster
                   </span>
                 </Typography>
                 <Typography
                   variant='body'
-                  className='text-lg text-gray-600 dark:text-gray-300 mb-6'
+                  className='text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-5 sm:mb-6'
                 >
-                  Get the latest updates on HCS standards, tools, and ecosystem
-                  developments delivered to your inbox.
+                  Get the latest HCS tools, hackathon updates, and a quick
+                  start checklist. Takes ~20 seconds.
                 </Typography>
 
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl cursor-pointer mb-6'
+                  className='bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 shadow-xl cursor-pointer mb-5 sm:mb-6'
                 >
                   <div className='flex justify-center mb-4'>
                     <div className='w-16 h-16 rounded-full bg-[#a679f0]/10 flex items-center justify-center'>
@@ -454,8 +482,8 @@ const StartPage: React.FC = () => {
                     variant='body'
                     className='text-sm text-gray-600 dark:text-gray-400 mb-4'
                   >
-                    Stay informed with weekly updates, new tools, and important
-                    announcements.
+                    Stay informed with weekly updates, new tools, and
+                    announcements. Unlocks step progress instantly.
                   </Typography>
                   <div
                     className='inline-flex items-center gap-2 px-6 py-3 bg-[#a679f0] text-white rounded-lg font-semibold'
@@ -485,7 +513,6 @@ const StartPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* Step 2: X Spaces */}
             {currentStep === 2 && (
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
@@ -496,7 +523,7 @@ const StartPage: React.FC = () => {
               >
                 <Typography
                   variant='h1'
-                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'
+                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4'
                 >
                   <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b]'>
                     Hedera x AI Spaces
@@ -504,16 +531,17 @@ const StartPage: React.FC = () => {
                 </Typography>
                 <Typography
                   variant='body'
-                  className='text-lg text-gray-600 dark:text-gray-300 mb-6'
+                  className='text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-5 sm:mb-6'
                 >
                   Join our Hedera x AI Space every Thursday at 12PM ET — Ask
-                  questions, win $100, and connect live with builders.
+                  questions, win $100, and connect live with builders. Finishing
+                  this step helps unlock your hackathon portal.
                 </Typography>
 
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl cursor-pointer mb-6'
+                  className='bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 shadow-xl cursor-pointer mb-5 sm:mb-6'
                 >
                   <div className='flex justify-center mb-4'>
                     <div className='w-16 h-16 rounded-full bg-[#5599fe]/10 flex items-center justify-center'>
@@ -540,7 +568,7 @@ const StartPage: React.FC = () => {
                   </div>
                 </motion.div>
 
-                <div className='flex justify-center gap-4'>
+                <div className='flex justify-center gap-3 sm:gap-4'>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
@@ -565,7 +593,6 @@ const StartPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* Step 3: Telegram */}
             {currentStep === 3 && (
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
@@ -576,7 +603,7 @@ const StartPage: React.FC = () => {
               >
                 <Typography
                   variant='h1'
-                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'
+                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4'
                 >
                   <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#48df7b] via-[#5599fe] to-[#a679f0]'>
                     Telegram Community
@@ -584,7 +611,7 @@ const StartPage: React.FC = () => {
                 </Typography>
                 <Typography
                   variant='body'
-                  className='text-lg text-gray-600 dark:text-gray-300 mb-6'
+                  className='text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-5 sm:mb-6'
                 >
                   Join our dev & degen chat for real-time discussions, alpha,
                   and community support.
@@ -593,7 +620,7 @@ const StartPage: React.FC = () => {
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className='bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-xl cursor-pointer mb-6'
+                  className='bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 shadow-xl cursor-pointer mb-5 sm:mb-6'
                 >
                   <div className='flex justify-center mb-4'>
                     <div className='w-16 h-16 rounded-full bg-[#48df7b]/10 flex items-center justify-center'>
@@ -645,7 +672,6 @@ const StartPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* Step 4: Choose Your Path */}
             {currentStep === 4 && (
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
@@ -656,7 +682,7 @@ const StartPage: React.FC = () => {
               >
                 <Typography
                   variant='h1'
-                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-4'
+                  className='text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 sm:mb-4'
                 >
                   <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b]'>
                     Choose Your Path
@@ -664,19 +690,19 @@ const StartPage: React.FC = () => {
                 </Typography>
                 <Typography
                   variant='body'
-                  className='text-lg text-gray-600 dark:text-gray-300 mb-6'
+                  className='text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-5 sm:mb-6'
                 >
                   Not a dev? Not a problem. Our tools are made for builders and
                   believers.
                 </Typography>
 
-                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-5 sm:mb-6'>
                   {tracks.map((track, index) => (
                     <motion.div
                       key={track.id}
                       whileHover={{ y: -5, scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className='bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg cursor-pointer'
+                      className='bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-5 shadow-lg cursor-pointer'
                       data-umami-event={`select-track-${track.id}`}
                       data-umami-event-category='onboarding'
                       onClick={() => {
@@ -712,7 +738,7 @@ const StartPage: React.FC = () => {
                   ))}
                 </div>
 
-                <div className='flex justify-center mb-8'>
+                <div className='flex justify-center mb-6 sm:mb-8'>
                   <motion.div
                     whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.95 }}
@@ -727,7 +753,6 @@ const StartPage: React.FC = () => {
               </motion.div>
             )}
 
-            {/* Step 5: Explore Tools */}
             {currentStep === 5 && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
@@ -736,7 +761,54 @@ const StartPage: React.FC = () => {
                 transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
                 className='text-center max-w-6xl mx-auto relative'
               >
-                {/* Floating celebration elements */}
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className='mb-4 flex flex-col items-center gap-2'
+                >
+                  {!isHackathonUnlocked ? (
+                    <>
+                      <Typography
+                        variant='body'
+                        className='text-sm text-gray-600 dark:text-gray-300'
+                      >
+                        Complete all 4 quick steps to unlock the $1M Hackathon
+                        portal. Average time: ~2 minutes.
+                      </Typography>
+                      <div
+                        className='inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold border border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-700 dark:text-yellow-300 opacity-80 cursor-not-allowed'
+                        data-umami-event='hackathon-locked-cta'
+                        data-umami-event-category='conversion'
+                      >
+                        <FiLock /> Unlock $1M Hackathon ({stepsCompletedCount}/4)
+                      </div>
+                      {showHackathonHint && (
+                        <Typography
+                          variant='body'
+                          className='text-xs text-gray-500 dark:text-gray-400'
+                        >
+                          Tip: Finish the steps above. The button will unlock
+                          automatically.
+                        </Typography>
+                      )}
+                    </>
+                  ) : (
+                    <div
+                      className='inline-flex items-center gap-2 px-6 py-3 bg-[#5599fe] hover:bg-[#4a86e4] text-white rounded-xl font-bold shadow-lg transition-all duration-200'
+                      data-umami-event='hackathon-unlock-go'
+                      data-umami-event-category='conversion'
+                      onClick={() => {
+                        window.open(
+                          'https://hashgraphonline.com/hackathon?ref=start-unlocked',
+                          '_blank'
+                        );
+                      }}
+                    >
+                      Go to $1M Hackathon <FiArrowRight />
+                    </div>
+                  )}
+                </motion.div>
                 <motion.div
                   className='absolute -top-10 left-1/4 w-6 h-6 bg-[#48df7b] rounded-full opacity-20'
                   animate={{
@@ -840,22 +912,32 @@ const StartPage: React.FC = () => {
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
                       }}
                       whileTap={{ scale: 0.95 }}
-                      className='bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-lg cursor-pointer relative overflow-hidden'
+                      className='bg-white dark:bg-gray-800 rounded-2xl p-4 sm:p-5 shadow-lg cursor-pointer relative overflow-hidden'
                       data-umami-event={`select-tool-${tool.name
                         .toLowerCase()
                         .replace(/\s+/g, '-')}`}
                       data-umami-event-category='tool-selection'
                       onClick={() => {
+                        const isHackathonTool =
+                          tool.name.toLowerCase().includes('hackathon') ||
+                          tool.link.includes('/hackathon');
+                        if (isHackathonTool && !isHackathonUnlocked) {
+                          setShowHackathonHint(true);
+                          try {
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          } catch {}
+                          return;
+                        }
                         completeStep(5);
-                        window.open(
-                          tool.link.startsWith('http')
-                            ? tool.link
-                            : `${window.location.origin}${tool.link}`,
-                          '_blank'
-                        );
+                        const target = tool.link.startsWith('http')
+                          ? tool.link
+                          : `${window.location.origin}${tool.link}`;
+                        const finalUrl = isHackathonTool
+                          ? `${target}${target.includes('?') ? '&' : '?'}ref=start-tools`
+                          : target;
+                        window.open(finalUrl, '_blank');
                       }}
                     >
-                      {/* Shimmer effect */}
                       <motion.div
                         className='absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full'
                         animate={{ x: [-100, 400] }}
@@ -866,6 +948,20 @@ const StartPage: React.FC = () => {
                           repeatDelay: 3,
                         }}
                       />
+                      {(!isHackathonUnlocked &&
+                        (tool.name.toLowerCase().includes('hackathon') ||
+                          tool.link.includes('/hackathon'))) && (
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className='absolute inset-0 bg-black/30 backdrop-blur-[1px] z-10 flex items-center justify-center'
+                        >
+                          <div className='inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 dark:bg-gray-800/90 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 text-xs font-semibold'>
+                            <FiLock /> Complete steps to unlock
+                          </div>
+                        </motion.div>
+                      )}
+
                       <div className='flex flex-row items-start gap-3 mb-3'>
                         <motion.div
                           className='flex items-center justify-center w-12 h-12 rounded-xl flex-shrink-0 mt-1'
@@ -958,6 +1054,23 @@ const StartPage: React.FC = () => {
                   </div>
                 </motion.div>
               </motion.div>
+            )}
+            {currentStep < 5 && (
+              <div className='md:hidden fixed bottom-0 inset-x-0 z-40 px-4 pb-[env(safe-area-inset-bottom)]'>
+                <div className='mx-auto max-w-2xl mb-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur shadow-lg px-4 py-3 flex items-center justify-between'>
+                  <Typography variant='body' className='text-sm text-gray-600 dark:text-gray-300'>
+                    Step {currentStep} of 5
+                  </Typography>
+                  <div
+                    className='inline-flex items-center gap-2 px-4 py-2 bg-[#5599fe] hover:bg-[#4a86e4] text-white rounded-xl font-semibold shadow'
+                    data-umami-event='mobile-continue-skip'
+                    data-umami-event-category='navigation'
+                    onClick={() => skipStep(currentStep)}
+                  >
+                    Continue <FiArrowRight />
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
