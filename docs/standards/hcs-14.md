@@ -23,6 +23,7 @@ sidebar_position: 14
       - [Self-Sovereign Identifiers (UAID Method)](#self-sovereign-identifiers-uaid-method)
     - [DID Parameter Structure](#did-parameter-structure)
       - [Reserved and Optional Parameters (Informative)](#reserved-and-optional-parameters-informative)
+      - [Agent Purpose (Informative)](#agent-purpose-informative)
       - [Hash Generation Methods](#hash-generation-methods)
   - [DID Method Selection](#did-method-selection)
     - [Supported Agent Protocols](#supported-agent-protocols)
@@ -41,6 +42,7 @@ sidebar_position: 14
       - [Test Vector 2: A2A Agent](#test-vector-2-a2a-agent)
     - [Implementation Requirements](#implementation-requirements)
   - [Security Considerations](#security-considerations)
+  - [Trust and Reputation (Informative)](#trust-and-reputation-informative)
   - [Examples](#examples)
     - [Example 1: HCS-10 Agent](#example-1-hcs-10-agent)
     - [Example 2: A2A Agent (Microsoft)](#example-2-a2a-agent-microsoft)
@@ -156,7 +158,20 @@ Note: Both `registry` and `proto` can be specified together as they serve differ
 
 The DID parameter space is intentionally focused on routing. Descriptive semantics like an agent's purpose or taxonomy are intentionally excluded from the DID to keep identifiers stable and compact.
 
-- `p` / `purpose` (reserved): NOT part of the routing parameters and NOT required for HCS-14. If communities need to convey purpose/taxonomy, include it in the canonical agent profile (e.g., A2A `agent.json`) and/or map to skill enums. Purpose values should not appear in the DID string.
+- `p` / `purpose` (reserved): NOT part of the routing parameters and NOT required for HCS-14. If communities need to convey purpose/taxonomy, include it in the agent profile (e.g., A2A `agent.json` or HCS‑11 profile) and/or map to skill enums. Purpose values shall not appear in the DID string and are not inputs to the UAID hash.
+
+#### Agent Purpose (Informative)
+
+Purpose denotes the intended role or mission of an agent (for example, “support assistant” or “indexer”). Because purpose is descriptive and may change over time, it is excluded from:
+
+- the UAID method string and parameters; and
+- the canonical hash inputs used to derive `hash`.
+
+Recommended placement for purpose metadata:
+- A2A: a `purpose` field in `/.well-known/agent.json` alongside `skills`.
+- HCS‑11: a `purpose` field in the profile JSON (outside the UAID), optionally supported by verifiable credentials.
+
+Rationale: skills enumerations provide deterministic capability encoding; free‑text purpose complements skills without affecting identifier stability.
 
 
 #### Hash Generation Methods
@@ -604,6 +619,18 @@ Resolvers may include `alsoKnownAs` links to protocol‑specific DIDs (e.g., `di
 1. **No Secrets**: Never include private keys or secrets in canonical data
 2. **Endpoint Validation**: Validate endpoints before inclusion in hash
 3. **Registry Trust**: Trust model inherits from registry namespace verification
+
+## Trust and Reputation (Informative)
+
+“Trust” in this specification refers to distinct concepts:
+
+- Identity/cryptographic trust: anyone can verify that a UAID corresponds to canonical public data (hash regeneration or DID resolution). This is covered by HCS‑14.
+- Routing/source trust: consumers decide which registries or namespaces they rely on for discovery (e.g., `registry=hol`, `registry=olas`). HCS‑14 carries routing hints but does not endorse any registry.
+- Behavioral reputation: performance history, quality, and policy adherence of an agent. HCS‑14 does not encode reputation in the UAID or parameters. Implementations may link reputation via:
+  - DID Documents (service endpoints or `alsoKnownAs` to reputation systems); and/or
+  - verifiable credentials or signed attestations that reference the UAID.
+
+This separation keeps UAIDs stable and verifiable, while allowing ecosystems to build rich trust frameworks on top.
 
 ## Examples
 
