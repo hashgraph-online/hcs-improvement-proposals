@@ -1,10 +1,22 @@
 ---
-sidebar_position: 10
+title: Next.js Integration
+sidebar_position: 5
+description: Build server-side rendered applications with wallet connectivity
+pagination_prev: libraries/hashinal-wc/usage-with-react
+pagination_next: libraries/hashinal-wc/usage-with-vite
 ---
 
-# Usage with Next.js
+# Next.js Integration
 
-Before you begin, see the [installation guide](./installation.md) for details.
+Learn how to integrate Hashinal Wallet Connect SDK with your Next.js application for server-side rendering and modern React features.
+
+## Prerequisites
+
+- Node.js 20+ installed
+- Basic knowledge of Next.js and React
+- WalletConnect project ID ([get one here](https://cloud.walletconnect.com/))
+
+Before you begin, see the [installation guide](./installation.md) for package details.
 
 ## Setup
 
@@ -357,4 +369,37 @@ export function UpdateTopicComponent() {
 }
 ```
 
-Remember to replace `your_project_id_here` with your actual WalletConnect project ID from the [WalletConnect Dashboard](https://cloud.walletconnect.com/)!
+## Best Practices
+
+1. **Client-Side Only**: WalletConnect operations must run on the client side
+2. **Use 'use client' Directive**: Mark components that use the SDK with 'use client'
+3. **Environment Variables**: Use `NEXT_PUBLIC_` prefix for client-side env vars
+4. **Error Boundaries**: Implement error boundaries for wallet operations
+5. **Loading States**: Show skeleton loaders during wallet interactions
+6. **Session Persistence**: The SDK handles session persistence automatically
+7. **TypeScript**: Use TypeScript for better type safety and IntelliSense
+
+## Production Considerations
+
+### Performance
+- Lazy load wallet components to reduce initial bundle size
+- Use dynamic imports for wallet-related features
+
+### Security
+- Never expose private keys or sensitive data
+- Validate all user inputs before blockchain operations
+- Use environment variables for configuration
+
+### User Experience
+- Provide clear feedback for all wallet operations
+- Handle network switching gracefully
+- Show transaction status and confirmations
+
+## Next Steps
+
+- Explore [API Methods](./methods) for complete SDK reference
+- Learn about [HCS Topics](./topics) for messaging features
+- Check out [React Integration](./usage-with-react) for pure React apps
+- Review the [Hashinals Guide](./usage-with-recursion) for inscribed applications
+
+> **Important**: Remember to replace `your_project_id_here` with your actual WalletConnect project ID from the [WalletConnect Dashboard](https://cloud.walletconnect.com/)!

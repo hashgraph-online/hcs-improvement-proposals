@@ -1,582 +1,711 @@
 ---
+title: API Methods
 sidebar_position: 3
+description: Complete reference for all SDK methods
+pagination_prev: libraries/hashinal-wc/installation
+pagination_next: libraries/hashinal-wc/usage-with-react
 ---
 
-# SDK Reference
+# API Methods
 
-### `init(projectId: string, metadata: SignClientTypes.Metadata, network?: LedgerId)`
+Complete reference documentation for all Hashinal Wallet Connect SDK methods.
 
-Initializes the SDK with the given project ID, metadata, and optional network selection.
+## Method Categories
 
-UMD Example:
+The SDK provides methods organized into functional categories:
 
-```javascript
-const projectId = 'your_project_id';
-const metadata = {
-  name: 'My Hashinals App',
-  description: 'A Hashinals application using WalletConnect',
-  url: 'https://myapp.com',
-  icons: ['https://myapp.com/icon.png'],
-};
-await window.HashinalsWalletConnectSDK.init(projectId, metadata);
+```mermaid
+graph TD
+    SDK[Hashinal WC SDK] --> Connection[Connection Management]
+    SDK --> Account[Account Operations]
+    SDK --> Transfer[Transfer Operations]
+    SDK --> Topic[Topic & Messaging]
+    SDK --> Token[Token Management]
+    SDK --> NFT[NFT Operations]
+    SDK --> Contract[Smart Contracts]
+    SDK --> Query[Query Operations]
+    
+    Connection --> C1[init]
+    Connection --> C2[connect]
+    Connection --> C3[disconnect]
+    
+    Account --> A1[getAccountInfo]
+    Account --> A2[getAccountBalance]
+    Account --> A3[createAccount]
+    Account --> A4[updateAccount]
+    
+    Transfer --> T1[transferHbar]
+    Transfer --> T2[transferToken]
+    
+    classDef category fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef method fill:#fff,stroke:#333,stroke-width:1px
+    
+    class Connection,Account,Transfer,Topic,Token,NFT,Contract,Query category
+    class C1,C2,C3,A1,A2,A3,A4,T1,T2 method
 ```
 
-ESM Example:
+## Connection Management
+
+### init()
+
+Initializes the SDK with WalletConnect configuration.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `projectId` | `string` | ✅ Yes | WalletConnect Cloud Project ID |
+| `metadata` | `SignClientTypes.Metadata` | ✅ Yes | Application metadata |
+| `network` | `LedgerId` | ❌ No | Network selection (default: MAINNET) |
+
+**Metadata Structure:**
+```typescript
+interface Metadata {
+  name: string;        // Your app name
+  description: string; // App description
+  url: string;        // App URL
+  icons: string[];    // App icon URLs
+}
+```
+
+**Examples:**
+
+<details>
+<summary>UMD (Inscribed HTML)</summary>
 
 ```javascript
+await window.HashinalsWalletConnectSDK.init(
+  'your_project_id',
+  {
+    name: 'My Hashinal App',
+    description: 'Inscribed application on Hedera',
+    url: window.location.href,
+    icons: ['https://example.com/icon.png']
+  }
+);
+```
+</details>
+
+<details>
+<summary>ESM (Modern JS)</summary>
+
+```typescript
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 import { LedgerId } from '@hashgraph/sdk';
 
 const sdk = HashinalsWalletConnectSDK.getInstance();
-await sdk.init(projectId, metadata, LedgerId.TESTNET);
+await sdk.init(
+  process.env.WALLETCONNECT_PROJECT_ID,
+  {
+    name: 'My dApp',
+    description: 'Modern Hedera application',
+    url: 'https://myapp.com',
+    icons: ['https://myapp.com/icon.png']
+  },
+  LedgerId.TESTNET // Optional: specify network
+);
 ```
+</details>
 
-### `connect()`
+### connect()
 
-Opens the WalletConnect modal for users to connect their wallet.
+Opens the WalletConnect modal for wallet connection.
 
-UMD Example:
+| Returns | Description |
+|---------|-------------|
+| `Promise<SessionTypes.Struct>` | WalletConnect session object |
 
-```javascript
-const session = await window.HashinalsWalletConnectSDK.connect();
+**Session Object Contains:**
+- `topic`: Unique session identifier
+- `namespaces`: Connected blockchain namespaces
+- `acknowledged`: Connection acknowledgment status
+- `peer`: Connected wallet metadata
+
+**Examples:**
+
+<details>
+<summary>Complete Connection Flow</summary>
+
+```typescript
+try {
+  // Connect wallet
+  const session = await sdk.connect();
+  
+  if (session) {
+    console.log('Connected to:', session.peer.metadata.name);
+    console.log('Session topic:', session.topic);
+    
+    // Get account details
+    const accountInfo = await sdk.getAccountInfo();
+    console.log('Account:', accountInfo.accountId);
+    console.log('Network:', accountInfo.network);
+  }
+} catch (error) {
+  console.error('Connection failed:', error);
+}
 ```
+</details>
 
-ESM Example:
+### disconnect()
 
-```javascript
-const session = await sdk.connect();
-```
+Terminates all active wallet connections.
 
-### `disconnect()`
+| Returns | Description |
+|---------|-------------|
+| `Promise<void>` | Resolves when disconnection is complete |
 
-Disconnects from all connected wallets.
-
-UMD Example:
-
-```javascript
-await window.HashinalsWalletConnectSDK.disconnect();
-```
-
-ESM Example:
-
+**Example:**
 ```javascript
 await sdk.disconnect();
+console.log('Wallet disconnected');
 ```
 
-### `submitMessageToTopic(topicId: string, message: string, submitKey?: PrivateKey)`
+## Account Operations
 
-Submits a message to a specified Hedera topic.
+### getAccountInfo()
 
-UMD Example:
+Retrieves the connected account's information.
 
+| Returns | Description |
+|---------|-------------|
+| `Promise<{accountId: string, network: string}>` | Account ID and network |
+
+**Example:**
 ```javascript
-const topicId = '0.0.1234567';
-const message = 'Hello, Hedera!';
-const receipt = await window.HashinalsWalletConnectSDK.submitMessageToTopic(
-  topicId,
-  message
+const info = await sdk.getAccountInfo();
+console.log(`Connected: ${info.accountId} on ${info.network}`);
+// Output: Connected: 0.0.123456 on mainnet
+```
+
+### getAccountBalance()
+
+Gets the HBAR balance of the connected account.
+
+| Returns | Description |
+|---------|-------------|
+| `Promise<string>` | Balance in HBAR (as string) |
+
+**Example:**
+```javascript
+const balance = await sdk.getAccountBalance();
+console.log(`Balance: ${balance} HBAR`);
+// Output: Balance: 150.5 HBAR
+```
+
+### createAccount()
+
+Creates a new Hedera account with initial balance.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `initialBalance` | `number` | ✅ Yes | Initial balance in HBAR |
+
+| Returns | Description |
+|---------|-------------|
+| `Promise<TransactionReceipt>` | Transaction receipt with new account ID |
+
+**Example:**
+```javascript
+const receipt = await sdk.createAccount(100); // 100 HBAR initial balance
+console.log('New account:', receipt.accountId.toString());
+```
+
+### updateAccount()
+
+Updates account properties.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `accountId` | `string` | ✅ Yes | Account to update |
+| `maxAutomaticTokenAssociations` | `number` | ✅ Yes | Max auto token associations |
+
+**Example:**
+```javascript
+await sdk.updateAccount('0.0.123456', 10);
+console.log('Account updated with 10 automatic token associations');
+```
+
+## Transfer Operations
+
+### transferHbar()
+
+Transfers HBAR between accounts.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `fromAccountId` | `string` | ✅ Yes | Sender account |
+| `toAccountId` | `string` | ✅ Yes | Recipient account |
+| `amount` | `number` | ✅ Yes | Amount in HBAR |
+
+**Example:**
+```javascript
+const receipt = await sdk.transferHbar(
+  '0.0.123456',  // from
+  '0.0.789012',  // to
+  25.5           // amount in HBAR
+);
+console.log('Transfer complete:', receipt.status);
+```
+
+### transferToken()
+
+Transfers fungible tokens between accounts.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `tokenId` | `string` | ✅ Yes | Token ID |
+| `fromAccountId` | `string` | ✅ Yes | Sender account |
+| `toAccountId` | `string` | ✅ Yes | Recipient account |
+| `amount` | `number` | ✅ Yes | Amount to transfer |
+
+**Example:**
+```javascript
+await sdk.transferToken(
+  '0.0.456789',  // token ID
+  '0.0.123456',  // from account
+  '0.0.789012',  // to account
+  1000           // amount
 );
 ```
 
-ESM Example:
+## Topic & Messaging
+
+### createTopic()
+
+Creates a new HCS topic.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `memo` | `string` | ❌ No | Topic memo/description |
+| `adminKey` | `string \| PrivateKey` | ❌ No | Admin key for topic management |
+| `submitKey` | `string \| PrivateKey` | ❌ No | Submit key for access control |
+
+| Returns | Description |
+|---------|-------------|
+| `Promise<string>` | New topic ID |
+
+**Examples:**
+
+<details>
+<summary>Public Topic (No Keys)</summary>
+
+```javascript
+const topicId = await sdk.createTopic('Public discussion topic');
+console.log('Created public topic:', topicId);
+```
+</details>
+
+<details>
+<summary>Private Topic (With Keys)</summary>
 
 ```javascript
 import { PrivateKey } from '@hashgraph/sdk';
 
-const submitKey = PrivateKey.fromString(
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6'
+const adminKey = PrivateKey.generate();
+const submitKey = PrivateKey.generate();
+
+const topicId = await sdk.createTopic(
+  'Private topic',
+  adminKey.toString(),
+  submitKey.toString()
 );
-const receipt = await sdk.submitMessageToTopic(topicId, message, submitKey);
+console.log('Created private topic:', topicId);
 ```
+</details>
 
-### `transferHbar(fromAccountId: string, toAccountId: string, amount: number)`
+### submitMessageToTopic()
 
-Transfers HBAR from one account to another.
+Submits a message to an HCS topic.
 
-UMD Example:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `topicId` | `string` | ✅ Yes | Target topic ID |
+| `message` | `string` | ✅ Yes | Message content |
+| `submitKey` | `PrivateKey` | ❌ No | Required for private topics |
+
+**Examples:**
+
+<details>
+<summary>Public Topic Message</summary>
 
 ```javascript
-const fromAccountId = '0.0.1234567';
-const toAccountId = '0.0.7654321';
-const amount = 10; // in HBAR
-const receipt = await window.HashinalsWalletConnectSDK.transferHbar(
-  fromAccountId,
-  toAccountId,
-  amount
-);
-```
-
-ESM Example:
-
-```javascript
-const receipt = await sdk.transferHbar(fromAccountId, toAccountId, amount);
-```
-
-### `executeSmartContract(contractId: string, functionName: string, parameters: ContractFunctionParameters, gas: number = 100000)`
-
-Executes a function on a smart contract.
-
-UMD Example:
-
-```javascript
-const contractId = '0.0.1234567';
-const functionName = 'myFunction';
-const parameters =
-  new window.HashgraphSDK.ContractFunctionParameters().addString('Hello');
-const receipt = await window.HashinalsWalletConnectSDK.executeSmartContract(
-  contractId,
-  functionName,
-  parameters
+await sdk.submitMessageToTopic(
+  '0.0.123456',
+  JSON.stringify({ type: 'greeting', text: 'Hello Hedera!' })
 );
 ```
+</details>
 
-ESM Example:
+<details>
+<summary>Private Topic Message</summary>
 
 ```javascript
-import { ContractFunctionParameters } from '@hashgraph/sdk';
+import { PrivateKey } from '@hashgraph/sdk';
 
-const parameters = new ContractFunctionParameters().addString('Hello');
-const receipt = await sdk.executeSmartContract(
-  contractId,
-  functionName,
-  parameters,
-  150000
+const submitKey = PrivateKey.fromString('your-submit-key');
+await sdk.submitMessageToTopic(
+  '0.0.123456',
+  'Private message',
+  submitKey
 );
 ```
+</details>
 
-### `getMessages(topicId: string, lastTimestamp?: number, disableTimestampFilter: boolean = false)`
+### getMessages()
 
-Retrieves messages from a specific Hedera topic.
+Retrieves messages from a topic.
 
-UMD Example:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `topicId` | `string` | ✅ Yes | Topic to query |
+| `lastTimestamp` | `number` | ❌ No | Start timestamp (ms) |
+| `disableTimestampFilter` | `boolean` | ❌ No | Disable filtering |
 
-```javascript
-const topicId = '0.0.1234567';
-const result = await window.HashinalsWalletConnectSDK.getMessages(topicId);
-console.log(result.messages);
+| Returns | Description |
+|---------|-------------|
+| `Promise<{messages: Array}>` | Array of topic messages |
+
+**Message Structure:**
+```typescript
+interface Message {
+  consensus_timestamp: string;
+  message: string;  // Base64 encoded
+  payer_account_id: string;
+  running_hash: string;
+  sequence_number: number;
+}
 ```
 
-ESM Example:
-
+**Example:**
 ```javascript
-const result = await sdk.getMessages(topicId, 1625097600000, true);
-console.log(result.messages);
+const result = await sdk.getMessages('0.0.123456');
+result.messages.forEach(msg => {
+  const decoded = atob(msg.message);
+  console.log(`Message #${msg.sequence_number}: ${decoded}`);
+});
 ```
 
-### `transferToken(tokenId: string, fromAccountId: string, toAccountId: string, amount: number)`
+## Token Management
 
-Transfers tokens between accounts.
+### createToken()
 
-UMD Example:
+Creates a new fungible token.
 
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `name` | `string` | ✅ Yes | Token name |
+| `symbol` | `string` | ✅ Yes | Token symbol |
+| `initialSupply` | `number` | ✅ Yes | Initial supply |
+| `decimals` | `number` | ✅ Yes | Decimal places |
+| `treasuryAccountId` | `string` | ✅ Yes | Treasury account |
+| `adminKey` | `string \| PrivateKey` | ✅ Yes | Admin key |
+| `supplyKey` | `string \| PrivateKey` | ✅ Yes | Supply key |
+
+**Example:**
 ```javascript
-const tokenId = '0.0.1234567';
-const fromAccountId = '0.0.7654321';
-const toAccountId = '0.0.8765432';
-const amount = 100;
-const receipt = await window.HashinalsWalletConnectSDK.transferToken(
-  tokenId,
-  fromAccountId,
-  toAccountId,
-  amount
+const tokenId = await sdk.createToken(
+  'My Token',      // name
+  'MTK',          // symbol
+  1000000,        // initial supply
+  2,              // decimals
+  '0.0.123456',   // treasury
+  adminKey,       // admin key
+  supplyKey       // supply key
 );
+console.log('Created token:', tokenId);
 ```
 
-ESM Example:
-
-```javascript
-const receipt = await sdk.transferToken(
-  tokenId,
-  fromAccountId,
-  toAccountId,
-  amount
-);
-```
-
-### `createAccount(initialBalance: number)`
-
-Creates a new account on the Hedera Hashgraph.
-
-UMD Example:
-
-```javascript
-const initialBalance = 50; // in HBAR
-const receipt = await window.HashinalsWalletConnectSDK.createAccount(
-  initialBalance
-);
-```
-
-ESM Example:
-
-```javascript
-const receipt = await sdk.createAccount(initialBalance);
-```
-
-### `associateTokenToAccount(accountId: string, tokenId: string)`
+### associateTokenToAccount()
 
 Associates a token with an account.
 
-UMD Example:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `accountId` | `string` | ✅ Yes | Account ID |
+| `tokenId` | `string` | ✅ Yes | Token ID |
 
+**Example:**
 ```javascript
-const accountId = '0.0.1234567';
-const tokenId = '0.0.7654321';
-const receipt = await window.HashinalsWalletConnectSDK.associateTokenToAccount(
-  accountId,
-  tokenId
-);
+await sdk.associateTokenToAccount('0.0.123456', '0.0.789012');
+console.log('Token associated with account');
 ```
 
-ESM Example:
+### dissociateTokenFromAccount()
 
+Removes token association from an account.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `accountId` | `string` | ✅ Yes | Account ID |
+| `tokenId` | `string` | ✅ Yes | Token ID |
+
+**Example:**
 ```javascript
-const receipt = await sdk.associateTokenToAccount(accountId, tokenId);
+await sdk.dissociateTokenFromAccount('0.0.123456', '0.0.789012');
+console.log('Token dissociated from account');
 ```
 
-### `dissociateTokenFromAccount(accountId: string, tokenId: string)`
+### getAccountTokens()
 
-Removes a token association from an account.
+Lists all tokens associated with an account.
 
-UMD Example:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `accountId` | `string` | ✅ Yes | Account to query |
 
+| Returns | Description |
+|---------|-------------|
+| `Promise<Array>` | Array of token balances |
+
+**Example:**
 ```javascript
-const accountId = '0.0.1234567';
-const tokenId = '0.0.7654321';
-const receipt =
-  await window.HashinalsWalletConnectSDK.dissociateTokenFromAccount(
-    accountId,
-    tokenId
-  );
+const tokens = await sdk.getAccountTokens('0.0.123456');
+tokens.forEach(token => {
+  console.log(`Token ${token.token_id}: ${token.balance}`);
+});
 ```
 
-ESM Example:
+## NFT Operations
 
-```javascript
-const receipt = await sdk.dissociateTokenFromAccount(accountId, tokenId);
-```
-
-### `updateAccount(accountId: string, maxAutomaticTokenAssociations: number)`
-
-Updates an account's properties.
-
-UMD Example:
-
-```javascript
-const accountId = '0.0.1234567';
-const maxAutomaticTokenAssociations = 10;
-const receipt = await window.HashinalsWalletConnectSDK.updateAccount(
-  accountId,
-  maxAutomaticTokenAssociations
-);
-```
-
-ESM Example:
-
-```javascript
-const receipt = await sdk.updateAccount(
-  accountId,
-  maxAutomaticTokenAssociations
-);
-```
-
-### `getAccountInfo()`
-
-Fetches the account ID and network of the connected wallet.
-
-UMD Example:
-
-```javascript
-const accountInfo = await window.HashinalsWalletConnectSDK.getAccountInfo();
-console.log('Account ID:', accountInfo.accountId);
-console.log('Network:', accountInfo.network);
-```
-
-ESM Example:
-
-```javascript
-const accountInfo = await sdk.getAccountInfo();
-console.log('Account ID:', accountInfo.accountId);
-console.log('Network:', accountInfo.network);
-```
-
-### `getAccountBalance()`
-
-Retrieves the HBAR balance of the connected account.
-
-UMD Example:
-
-```javascript
-const balance = await window.HashinalsWalletConnectSDK.getAccountBalance();
-console.log('Account balance:', balance);
-```
-
-ESM Example:
-
-```javascript
-const balance = await sdk.getAccountBalance();
-console.log('Account balance:', balance);
-```
-
-### `createTopic(memo?: string, adminKey?: string, submitKey?: string)`
-
-Creates a new topic on the Hedera Hashgraph.
-
-UMD Example:
-
-```javascript
-const memo = 'My new topic';
-const adminKey =
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6';
-const submitKey =
-  '302e020100300506032b6570042204203e7b42b1d113a323daf39a35a86824a570fc92192502f5e4b4d5830dac9af0f1';
-const topicId = await window.HashinalsWalletConnectSDK.createTopic(
-  memo,
-  adminKey,
-  submitKey
-);
-console.log('New topic created:', topicId);
-```
-
-ESM Example:
-
-```javascript
-import { PrivateKey } from '@hashgraph/sdk';
-
-const memo = 'My new topic';
-const adminKey = PrivateKey.fromString(
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6'
-);
-const submitKey = PrivateKey.fromString(
-  '302e020100300506032b6570042204203e7b42b1d113a323daf39a35a86824a570fc92192502f5e4b4d5830dac9af0f1'
-);
-const topicId = await sdk.createTopic(memo, adminKey, submitKey);
-console.log('New topic created:', topicId);
-```
-
-### `createToken(name: string, symbol: string, initialSupply: number, decimals: number, treasuryAccountId: string, adminKey: string, supplyKey: string)`
-
-Creates a new token on the Hedera Hashgraph.
-
-UMD Example:
-
-```javascript
-const name = 'My Token';
-const symbol = 'MTK';
-const initialSupply = 1000000;
-const decimals = 2;
-const treasuryAccountId = '0.0.1234567';
-const adminKey =
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6';
-const supplyKey =
-  '302e020100300506032b6570042204203e7b42b1d113a323daf39a35a86824a570fc92192502f5e4b4d5830dac9af0f1';
-const tokenId = await window.HashinalsWalletConnectSDK.createToken(
-  name,
-  symbol,
-  initialSupply,
-  decimals,
-  treasuryAccountId,
-  adminKey,
-  supplyKey
-);
-console.log('New token created:', tokenId);
-```
-
-ESM Example:
-
-```javascript
-import { PrivateKey } from '@hashgraph/sdk';
-
-const name = 'My Token';
-const symbol = 'MTK';
-const initialSupply = 1000000;
-const decimals = 2;
-const treasuryAccountId = '0.0.1234567';
-const adminKey = PrivateKey.fromString(
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6'
-);
-const supplyKey = PrivateKey.fromString(
-  '302e020100300506032b6570042204203e7b42b1d113a323daf39a35a86824a570fc92192502f5e4b4d5830dac9af0f1'
-);
-const tokenId = await sdk.createToken(
-  name,
-  symbol,
-  initialSupply,
-  decimals,
-  treasuryAccountId,
-  adminKey,
-  supplyKey
-);
-console.log('New token created:', tokenId);
-```
-
-### `mintNFT(tokenId: string, metadata: string, supplyKey: PrivateKey)`
+### mintNFT()
 
 Mints a new NFT for an existing token.
 
-UMD Example:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `tokenId` | `string` | ✅ Yes | NFT collection token ID |
+| `metadata` | `string` | ✅ Yes | NFT metadata (URI or data) |
+| `supplyKey` | `PrivateKey` | ✅ Yes | Token supply key |
 
-```javascript
-const tokenId = '0.0.1234567';
-const metadata = 'ipfs://QmXxx...';
-const supplyKey =
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6';
-const receipt = await window.HashinalsWalletConnectSDK.mintNFT(
-  tokenId,
-  metadata,
-  supplyKey
-);
-console.log('NFT minted:', receipt);
-```
-
-ESM Example:
-
+**Example:**
 ```javascript
 import { PrivateKey } from '@hashgraph/sdk';
 
-const tokenId = '0.0.1234567';
-const metadata = 'ipfs://QmXxx...';
-const supplyKey = PrivateKey.fromString(
-  '302e020100300506032b657004220420f4361ec73dc43e568f1620a7b7ecb7330790b8a1c7620f1ce353aa1de4f0eaa6'
+const supplyKey = PrivateKey.fromString('your-supply-key');
+const receipt = await sdk.mintNFT(
+  '0.0.123456',
+  'ipfs://QmXxx...', // or 'hcs://1/0.0.xxxxx' for Hashinals
+  supplyKey
 );
-const receipt = await sdk.mintNFT(tokenId, metadata, supplyKey);
-console.log('NFT minted:', receipt);
+console.log('Minted NFT serial:', receipt.serials[0]);
 ```
 
-### `getAccountTokens(accountId: string)`
+### getAccountNFTs()
 
-Retrieves all tokens associated with an account.
+Retrieves NFTs owned by an account.
 
-UMD Example:
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `accountId` | `string` | ✅ Yes | Account to query |
+| `tokenId` | `string` | ❌ No | Filter by specific token |
 
+**Example:**
 ```javascript
-const accountId = '0.0.1234567';
-const tokens = await window.HashinalsWalletConnectSDK.getAccountTokens(
-  accountId
+// Get all NFTs
+const allNFTs = await sdk.getAccountNFTs('0.0.123456');
+
+// Get NFTs from specific collection
+const collectionNFTs = await sdk.getAccountNFTs('0.0.123456', '0.0.789012');
+
+console.log(`Account owns ${allNFTs.length} NFTs`);
+```
+
+### validateNFTOwnership()
+
+Verifies NFT ownership.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `serialNumber` | `string` | ✅ Yes | NFT serial number |
+| `accountId` | `string` | ✅ Yes | Account to verify |
+| `tokenId` | `string` | ✅ Yes | Token ID |
+
+| Returns | Description |
+|---------|-------------|
+| `Promise<NFT \| null>` | NFT details if owned, null otherwise |
+
+**Example:**
+```javascript
+const nft = await sdk.validateNFTOwnership('1', '0.0.123456', '0.0.789012');
+if (nft) {
+  console.log('NFT verified:', nft);
+} else {
+  console.log('Account does not own this NFT');
+}
+```
+
+## Smart Contract Operations
+
+### executeSmartContract()
+
+Executes a smart contract function.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `contractId` | `string` | ✅ Yes | Contract ID |
+| `functionName` | `string` | ✅ Yes | Function to call |
+| `parameters` | `ContractFunctionParameters` | ✅ Yes | Function parameters |
+| `gas` | `number` | ❌ No | Gas limit (default: 100000) |
+
+**Example:**
+```javascript
+import { ContractFunctionParameters } from '@hashgraph/sdk';
+
+const params = new ContractFunctionParameters()
+  .addString('Hello')
+  .addUint256(42);
+
+const receipt = await sdk.executeSmartContract(
+  '0.0.123456',     // contract ID
+  'myFunction',     // function name
+  params,           // parameters
+  150000           // gas limit
 );
-console.log('Account tokens:', tokens);
+console.log('Contract executed:', receipt.status);
 ```
 
-ESM Example:
+### readSmartContract()
 
-```javascript
-const accountId = '0.0.1234567';
-const tokens = await sdk.getAccountTokens(accountId);
-console.log('Account tokens:', tokens);
-```
+Makes a read-only contract call via mirror node.
 
-### `getTransaction(transactionId: string)`
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `data` | `string` | ✅ Yes | Encoded function call data |
+| `fromAccount` | `AccountId` | ✅ Yes | Calling account |
+| `contractId` | `ContractId` | ✅ Yes | Contract to call |
+| `estimate` | `boolean` | ❌ No | Estimate gas only |
+| `value` | `number` | ❌ No | HBAR to send |
 
-Retrieves transaction details by transaction ID from the mirror node.
-
-UMD Example:
-
-```javascript
-const transactionId = '0.0.123456@1234567890.000000000';
-const transaction = await window.HashinalsWalletConnectSDK.getTransaction(
-  transactionId
-);
-console.log(transaction);
-```
-
-ESM Example:
-
-```javascript
-const transaction = await sdk.getTransaction(transactionId);
-```
-
-### `getTransactionByTimestamp(timestamp: string)`
-
-Retrieves transaction details by consensus timestamp from the mirror node.
-
-UMD Example:
-
-```javascript
-const timestamp = '1234567890.000000000';
-const transaction =
-  await window.HashinalsWalletConnectSDK.getTransactionByTimestamp(timestamp);
-console.log(transaction);
-```
-
-ESM Example:
-
-```javascript
-const transaction = await sdk.getTransactionByTimestamp(timestamp);
-```
-
-### `getAccountNFTs(accountId: string, tokenId?: string)`
-
-Retrieves all NFTs owned by an account, with optional filtering by token ID.
-
-UMD Example:
-
-```javascript
-const accountId = '0.0.123456';
-const nfts = await window.HashinalsWalletConnectSDK.getAccountNFTs(accountId);
-console.log(nfts);
-
-// With token filter
-const tokenId = '0.0.789012';
-const filteredNfts = await window.HashinalsWalletConnectSDK.getAccountNFTs(
-  accountId,
-  tokenId
-);
-```
-
-ESM Example:
-
-```javascript
-const nfts = await sdk.getAccountNFTs(accountId);
-const filteredNfts = await sdk.getAccountNFTs(accountId, tokenId);
-```
-
-### `validateNFTOwnership(serialNumber: string, accountId: string, tokenId: string)`
-
-Validates if an account owns a specific NFT by serial number and token ID.
-
-UMD Example:
-
-```javascript
-const serialNumber = '1';
-const accountId = '0.0.123456';
-const tokenId = '0.0.789012';
-const nft = await window.HashinalsWalletConnectSDK.validateNFTOwnership(
-  serialNumber,
-  accountId,
-  tokenId
-);
-console.log(nft ? 'Account owns this NFT' : 'Account does not own this NFT');
-```
-
-ESM Example:
-
-```javascript
-const nft = await sdk.validateNFTOwnership(serialNumber, accountId, tokenId);
-```
-
-### `readSmartContract(data: string, fromAccount: AccountId, contractId: ContractId, estimate?: boolean, value?: number)`
-
-Makes a read-only call to a smart contract on the mirror node.
-
-UMD Example:
-
-```javascript
-const data = '0x...'; // Contract call data
-const fromAccount = window.HashgraphSDK.AccountId.fromString('0.0.123456');
-const contractId = window.HashgraphSDK.ContractId.fromString('0.0.789012');
-const result = await window.HashinalsWalletConnectSDK.readSmartContract(
-  data,
-  fromAccount,
-  contractId
-);
-console.log(result);
-```
-
-ESM Example:
-
+**Example:**
 ```javascript
 import { AccountId, ContractId } from '@hashgraph/sdk';
 
-const fromAccount = AccountId.fromString('0.0.123456');
-const contractId = ContractId.fromString('0.0.789012');
-const result = await sdk.readSmartContract(data, fromAccount, contractId);
+const result = await sdk.readSmartContract(
+  '0x...', // encoded function call
+  AccountId.fromString('0.0.123456'),
+  ContractId.fromString('0.0.789012')
+);
+console.log('Contract state:', result);
+```
+
+## Query Operations
+
+### getTransaction()
+
+Retrieves transaction details by ID.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `transactionId` | `string` | ✅ Yes | Transaction ID |
+
+**Example:**
+```javascript
+const tx = await sdk.getTransaction('0.0.123456@1234567890.000000000');
+console.log('Transaction:', tx);
+```
+
+### getTransactionByTimestamp()
+
+Retrieves transaction by consensus timestamp.
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `timestamp` | `string` | ✅ Yes | Consensus timestamp |
+
+**Example:**
+```javascript
+const tx = await sdk.getTransactionByTimestamp('1234567890.000000000');
+console.log('Transaction:', tx);
+```
+
+## Error Handling
+
+The SDK throws descriptive errors that should be handled appropriately:
+
+```javascript
+try {
+  await sdk.transferHbar(from, to, amount);
+} catch (error) {
+  if (error.message.includes('INSUFFICIENT_PAYER_BALANCE')) {
+    console.error('Insufficient balance for transfer');
+  } else if (error.message.includes('USER_REJECTED')) {
+    console.error('User rejected the transaction');
+  } else {
+    console.error('Transaction failed:', error.message);
+  }
+}
+```
+
+### Common Error Types
+
+| Error | Description | Solution |
+|-------|-------------|----------|
+| `USER_REJECTED` | User declined in wallet | Handle gracefully |
+| `INSUFFICIENT_PAYER_BALANCE` | Not enough HBAR | Check balance first |
+| `INVALID_ACCOUNT_ID` | Malformed account ID | Validate format |
+| `TOKEN_NOT_ASSOCIATED` | Token not associated | Associate token first |
+| `INVALID_SIGNATURE` | Key mismatch | Verify keys |
+
+## Best Practices
+
+### 1. Always Initialize First
+```javascript
+// ✅ Good
+await sdk.init(projectId, metadata);
+const session = await sdk.connect();
+
+// ❌ Bad - not initialized
+const session = await sdk.connect(); // Will fail
+```
+
+### 2. Handle Connection State
+```javascript
+let isConnected = false;
+
+async function ensureConnected() {
+  if (!isConnected) {
+    const session = await sdk.connect();
+    isConnected = !!session;
+  }
+  return isConnected;
+}
+```
+
+### 3. Validate Inputs
+```javascript
+function validateAccountId(accountId) {
+  const pattern = /^\d+\.\d+\.\d+$/;
+  if (!pattern.test(accountId)) {
+    throw new Error('Invalid account ID format');
+  }
+}
+```
+
+### 4. Use Environment Variables
+```javascript
+const PROJECT_ID = process.env.VITE_WALLETCONNECT_PROJECT_ID;
+if (!PROJECT_ID) {
+  throw new Error('WalletConnect Project ID not configured');
+}
+```
+
+## TypeScript Support
+
+The SDK includes full TypeScript definitions:
+
+```typescript
+import { 
+  HashinalsWalletConnectSDK,
+  TransactionReceipt,
+  SessionTypes 
+} from '@hashgraphonline/hashinal-wc';
+
+const sdk: HashinalsWalletConnectSDK = HashinalsWalletConnectSDK.getInstance();
+
+async function typedExample(): Promise<void> {
+  const session: SessionTypes.Struct = await sdk.connect();
+  const receipt: TransactionReceipt = await sdk.transferHbar(
+    '0.0.123456',
+    '0.0.789012',
+    10
+  );
+}
 ```

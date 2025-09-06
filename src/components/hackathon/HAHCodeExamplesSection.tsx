@@ -200,6 +200,109 @@ logger.info(\`Outbound Topic: \${agent.outboundTopicId}\`);
 // agent.client.operatorPrivateKey contains the private key`,
     },
     {
+      id: 'hedera-agent-kit',
+      title: 'Hedera Agent Kit',
+      description:
+        'Build AI agents with natural language blockchain interactions using Hedera Agent Kit and LangChain',
+      language: 'typescript',
+      difficulty: 'Advanced',
+      color: 'purple',
+      icon: <FaRobot />,
+      code: `import { HederaLangchainToolkit, coreQueriesPlugin } from 'hedera-agent-kit';
+import { Client, PrivateKey } from '@hashgraph/sdk';
+import { ChatOpenAI } from '@langchain/openai';
+import { createToolCallingAgent, AgentExecutor } from 'langchain/agents';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { Logger } from '@hashgraphonline/standards-sdk';
+
+/**
+ * Build an AI agent that can interact with Hedera blockchain through natural language
+ * Uses Hedera Agent Kit v3 for seamless blockchain operations
+ */
+
+const logger = new Logger({ module: 'HederaAgent', level: 'info' });
+
+// Initialize Hedera client with proper private key formatting
+const client = Client.forTestnet().setOperator(
+  process.env.ACCOUNT_ID!,
+  PrivateKey.fromStringDer(process.env.PRIVATE_KEY!)
+);
+
+// Create Hedera toolkit with AI agent capabilities
+const hederaToolkit = new HederaLangchainToolkit({
+  client,
+  configuration: {
+    plugins: [coreQueriesPlugin] // Load core queries plugin
+    // Additional plugins can be imported and added as needed
+    // See: https://github.com/hedera-dev/hedera-agent-kit/tree/main/typescript/src/plugins
+  }
+});
+
+// Get all available tools from the toolkit
+const tools = hederaToolkit.getTools();
+
+logger.info(\`Loaded \${tools.length} Hedera tools for the agent\`);
+
+// Load the structured chat prompt template
+const prompt = ChatPromptTemplate.fromMessages([
+  ['system', 'You are a helpful assistant'],
+  ['placeholder', '{chat_history}'],
+  ['human', '{input}'],
+  ['placeholder', '{agent_scratchpad}'],
+]);
+
+// Create the underlying agent
+const agent = createToolCallingAgent({
+  llm: new ChatOpenAI({
+    model: 'gpt-4o-mini',
+    temperature: 0.7,
+  }),
+  tools,
+  prompt,
+});
+
+// Wrap everything in an executor that will maintain memory
+const agentExecutor = new AgentExecutor({
+  agent,
+  tools,
+});
+
+// Example usage with different prompts
+async function main() {
+  try {
+    // Example 1: Check balance
+    const balanceResponse = await agentExecutor.invoke({ 
+      input: "what's my balance?" 
+    });
+    logger.info('Balance:', balanceResponse.output);
+    
+    // Example 2: Create a token
+    const tokenResponse = await agentExecutor.invoke({ 
+      input: "create a new token called 'TestToken' with symbol 'TEST'" 
+    });
+    logger.info('Token creation:', tokenResponse.output);
+    
+    // Example 3: Transfer HBAR
+    const transferResponse = await agentExecutor.invoke({ 
+      input: "transfer 5 HBAR to account 0.0.1234" 
+    });
+    logger.info('Transfer:', transferResponse.output);
+    
+    // Example 4: Create topic
+    const topicResponse = await agentExecutor.invoke({ 
+      input: "create a new topic for project updates" 
+    });
+    logger.info('Topic creation:', topicResponse.output);
+    
+  } catch (error) {
+    logger.error('Error:', error);
+  }
+}
+
+// Run the main function
+main().catch(console.error);`,
+    },
+    {
       id: 'connection-handling',
       title: 'Connection Management',
       description: 'Handle connection requests with optional fee configuration',
@@ -636,6 +739,207 @@ export async function analyzeAccountForAI(accountId: string) {
   return profile;
 }`,
     },
+    {
+      id: 'memejob-token-launch',
+      title: 'AI Token Launch with Memejob',
+      description:
+        'Launch and manage meme tokens on Hedera using the Memejob SDK - perfect for autonomous token-trading AI agents',
+      language: 'typescript',
+      difficulty: 'Advanced',
+      color: 'green',
+      icon: <FaRobot />,
+      code: `import { AccountId, ContractId, PrivateKey } from "@hashgraph/sdk";
+import {
+  CONTRACT_DEPLOYMENTS,
+  createAdapter,
+  getChain,
+  MJClient,
+  NativeAdapter,
+} from "@buidlerlabs/memejob-sdk-js";
+import { Logger } from '@hashgraphonline/standards-sdk';
+
+/**
+ * AI Agent for autonomous meme token creation and trading
+ * Uses Memejob SDK to interact with bonding curves
+ */
+
+const logger = new Logger({ module: 'MemeAgent', level: 'info' });
+
+// Initialize Memejob client for testnet
+const contractId = ContractId.fromString(
+  CONTRACT_DEPLOYMENTS.testnet.contractId
+);
+
+const client = new MJClient(
+  createAdapter(NativeAdapter, {
+    operator: {
+      accountId: AccountId.fromString(process.env.AGENT_ACCOUNT_ID!),
+      privateKey: PrivateKey.fromStringECDSA(process.env.AGENT_PRIVATE_KEY!),
+    },
+  }),
+  {
+    chain: getChain("testnet"),
+    contractId,
+  }
+);
+
+// AI Agent function to launch a new meme token
+export async function launchMemeToken(
+  tokenData: {
+    name: string;
+    symbol: string;
+    metadataCID: string; // IPFS CID containing token metadata
+  }
+) {
+  logger.info('🚀 Launching new meme token:', tokenData.name);
+  
+  try {
+    // Create token with bonding curve
+    const token = await client.createToken(
+      {
+        name: tokenData.name,
+        symbol: tokenData.symbol,
+        memo: \`ipfs://\${tokenData.metadataCID}\`,
+      },
+      {
+        amount: 1000000000000n, // Initial supply
+        distributeRewards: true,
+        referrer: "0x000...000", // Optional referrer
+      }
+    );
+    
+    logger.info('✅ Token created successfully!');
+    logger.info('Token:', token);
+    
+    return token;
+  } catch (error) {
+    logger.error('Failed to create token:', error);
+    throw error;
+  }
+}
+
+// AI Agent trading strategy based on market signals
+export async function executeTradeStrategy(
+  token: any, // Token instance from createToken
+  signal: 'buy' | 'sell',
+  amount: bigint
+) {
+  logger.info(\`📊 Executing \${signal} order for \${amount} tokens\`);
+  
+  try {
+    if (signal === 'buy') {
+      // Buy tokens from bonding curve
+      const buyResult = await token.buy({
+        amount: amount,
+        referrer: "0x000...000"
+      });
+      
+      logger.info('✅ Buy order executed:');
+      logger.info(\`Status: \${buyResult.status}\`);
+      logger.info(\`Tokens bought: \${buyResult.amount}\`);
+      logger.info(\`Transaction: \${buyResult.transactionIdOrHash}\`);
+      
+      return buyResult;
+    } else {
+      // Sell tokens to bonding curve
+      const sellResult = await token.sell({
+        amount: amount,
+        instant: true,
+      });
+      
+      logger.info('✅ Sell order executed:');
+      logger.info(\`Status: \${sellResult.status}\`);
+      logger.info(\`Tokens sold: \${sellResult.amount}\`);
+      logger.info(\`Transaction: \${sellResult.transactionIdOrHash}\`);
+      
+      return sellResult;
+    }
+  } catch (error) {
+    logger.error(\`Failed to execute \${signal} order:\`, error);
+    throw error;
+  }
+}
+
+// Monitor token performance and make trading decisions
+export async function monitorAndTrade(token: any) {
+  logger.info('🤖 Starting autonomous trading bot for token');
+  
+  // Example trading logic (customize based on your strategy)
+  const tradingLoop = setInterval(async () => {
+    try {
+      // Implement your trading logic here
+      // You might want to:
+      // 1. Check token balance
+      // 2. Monitor price movements via Mirror Node
+      // 3. Execute trades based on your strategy
+      
+      // Simple example: buy 1000 tokens every 5 minutes
+      await executeTradeStrategy(token, 'buy', 1000000000000n);
+      
+      logger.info('Automated trade executed');
+    } catch (error) {
+      logger.error('Trading loop error:', error);
+    }
+  }, 300000); // Check every 5 minutes
+  
+  return tradingLoop;
+}
+
+// Example: AI agent launching token based on trending topics
+export async function launchTrendingMemeToken() {
+  // Your AI logic to determine trending topics
+  const trendingTopic = await analyzeTrendingTopics();
+  
+  // Upload metadata to IPFS (implement this function)
+  const metadataCID = await uploadTokenMetadata({
+    name: \`\${trendingTopic} Coin\`,
+    symbol: trendingTopic.substring(0, 5).toUpperCase(),
+    description: \`AI-generated meme token based on trending topic: \${trendingTopic}\`,
+    image: await generateTokenImage(trendingTopic),
+    external_url: 'https://your-ai-agent.com',
+    attributes: [
+      {
+        trait_type: 'Creator',
+        value: 'AI Agent'
+      },
+      {
+        trait_type: 'Trend',
+        value: trendingTopic
+      }
+    ]
+  });
+  
+  const tokenData = {
+    name: \`\${trendingTopic} Coin\`,
+    symbol: trendingTopic.substring(0, 5).toUpperCase(),
+    metadataCID
+  };
+  
+  const token = await launchMemeToken(tokenData);
+  
+  // Start monitoring and trading
+  const tradingBot = await monitorAndTrade(token);
+  
+  return { token, tradingBot };
+}
+
+// Placeholder functions for AI integration
+async function analyzeTrendingTopics(): Promise<string> {
+  // Integrate with social media APIs, news feeds, etc.
+  return 'HederaAI';
+}
+
+async function generateTokenImage(topic: string): Promise<string> {
+  // Integrate with AI image generation (DALL-E, Stable Diffusion, etc.)
+  return 'https://ipfs.io/ipfs/QmExample...';
+}
+
+async function uploadTokenMetadata(metadata: any): Promise<string> {
+  // Upload to IPFS and return CID
+  // Implementation depends on your IPFS provider
+  return 'QmExampleMetadataCID...';
+}`,
+    },
   ];
 
   const copyToClipboard = async (code: string, exampleId: string) => {
@@ -917,6 +1221,8 @@ export async function analyzeAccountForAI(accountId: string) {
               rel='noopener noreferrer'
               size='sm'
               icon={<FaArrowRight />}
+              data-umami-event='hackathon-view-code-examples'
+              data-umami-event-category='hackathon'
             >
               View Examples
             </PrimaryButton>
@@ -937,11 +1243,13 @@ export async function analyzeAccountForAI(accountId: string) {
               in action.
             </p>
             <PrimaryButton
-              href='https://hashgraphonline.com/docs/libraries/standards-agent-kit/examples'
+              href='https://github.com/hashgraph-online/conversational-agent'
               target='_blank'
               rel='noopener noreferrer'
               size='sm'
               icon={<FaArrowRight />}
+              data-umami-event='hackathon-try-demos'
+              data-umami-event-category='hackathon'
             >
               Try Demos
             </PrimaryButton>

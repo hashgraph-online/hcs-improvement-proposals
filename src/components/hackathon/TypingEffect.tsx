@@ -70,7 +70,7 @@ const TypingEffect: React.FC<TypingEffectProps> = ({
     <span className={className}>
       {displayedText}
       <span
-        className={`inline-block w-0.5 h-5 ml-0.5 animate-blink ${cursorClassName}`}
+        className={`inline-block w-0.5 h-5 ml-0.5 animate-pulse ${cursorClassName}`}
       >
         |
       </span>

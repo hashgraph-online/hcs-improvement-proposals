@@ -781,7 +781,7 @@ export const MemberSection: React.FC = () => {
   const activeTheme = activeMember.theme;
 
   return (
-    <section className='relative py-20 lg:py-32 bg-gray-50 dark:bg-gray-950 overflow-hidden'>
+    <section className='relative py-12 lg:py-20 overflow-hidden'>
       <AnimatedBackground
         variant='lines'
         colors={['brand-functions', 'brand-variables']}
@@ -791,30 +791,17 @@ export const MemberSection: React.FC = () => {
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
         <div className='text-center mb-12'>
-          <div className='inline-flex items-center gap-2 mb-6 bg-white/80 dark:bg-gray-800/80 px-4 py-2 rounded-full backdrop-blur-sm'>
-            <FiTerminal className='w-4 h-4' />
-            <Typography className='text-xs font-mono text-brand-functions uppercase tracking-[0.3em] m-0'>
-              Consortium Members
-            </Typography>
-          </div>
-
           <Typography
-            variant='h2'
-            className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black text-gray-900 dark:text-white leading-tight tracking-tight mb-6'
+            variant='h1'
+            className='text-4xl lg:text-5xl xl:text-6xl font-mono font-black text-white mb-4'
           >
-            <GradientText gradient='brand' as='span'>
-              Consortium
-            </GradientText>
-            <br />
-            Organizations
+            Hashgraph Online Members
           </Typography>
-
           <Typography
-            color='muted'
-            className='text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto'
+            variant='lead'
+            className='text-lg lg:text-xl text-white font-bold max-w-3xl mx-auto'
           >
-            10 pioneering organizations building the core infrastructure, tools,
-            and applications that power the Hashgraph Online ecosystem.
+            10 pioneering organizations building the core infrastructure, tools, and applications that power the Hashgraph Online ecosystem.
           </Typography>
         </div>
 
@@ -824,8 +811,8 @@ export const MemberSection: React.FC = () => {
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-2 lg:gap-4'>
                   <div className='flex gap-1 lg:gap-1.5'>
-                    <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-red-400'></div>
-                    <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-yellow-400'></div>
+                    <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-brand-purple'></div>
+                    <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-brand-blue'></div>
                     <div className='w-2.5 h-2.5 lg:w-3 lg:h-3 rounded-full bg-green-400'></div>
                   </div>
                   <div className='text-xs lg:text-sm font-mono text-gray-700 dark:text-gray-300'>

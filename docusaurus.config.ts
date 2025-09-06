@@ -89,6 +89,12 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/og-card.png',
+    algolia: {
+      appId: 'INUYES5FGM',
+      apiKey: '2b3fe9b2882e46e19fa5fce6272efe4f',
+      indexName: 'Docs',
+      contextualSearch: true,
+    },
     blog: {
       sidebar: {
         groupByYear: true,
@@ -111,24 +117,25 @@ const config: Config = {
       },
       items: [
         { to: '/docs/standards/', label: 'Standards', position: 'left' },
-        { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
+        { to: '/tools', label: 'Tools', position: 'left' },
         {
           type: 'dropdown',
           label: 'Hackathons',
           position: 'left',
           items: [
-            { to: '/hackathon', label: 'AI Track - Africa Hackathon' },
-            { to: '/hackathon#requirements', label: '→ Submission Requirements' },
-            { to: '/hackathon#tools', label: '→ Developer Tools' },
-            { to: '/hackathon#examples', label: '→ Code Examples' },
-            { to: '/hackathon#judges', label: '→ Judges' },
-            { to: '/hackathon#faq', label: '→ FAQ' },
-            { to: '/hackathon#register', label: '→ Register' },
-            { type: 'html', value: '<hr style="margin: 8px 0;">' },
-            { to: '/hedera-ai-agents-hackathon', label: 'OpenConvAI Hackathon (Ended)' },
-            { to: '/hederaai', label: 'Hedera x AI Demo Day' },
+            {
+              to: '/hackathon',
+              label: 'AI Track - Africa Hackathon',
+              className: 'dropdown__link--parent',
+            },
+            {
+              to: '/hedera-ai-agents-hackathon',
+              label: 'OpenConvAI Hackathon (Ended)',
+            },
+            { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
           ],
         },
+        { to: '/desktop', label: 'HOL Desktop', position: 'left' },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
@@ -143,6 +150,10 @@ const config: Config = {
             {
               label: 'Standards',
               to: '/docs/standards/hcs-1',
+            },
+            {
+              label: 'Brand Kit',
+              to: '/brand',
             },
           ],
         },
@@ -208,17 +219,10 @@ const config: Config = {
         },
       ],
     },
-    scripts: [
-      {
-        src: 'https://stats.tier.bot/script.js',
-        async: true,
-        'data-website-id': '09a60445-7371-492c-9d75-c17be79fa569',
-      },
-    ],
+    scripts: [],
   } satisfies Preset.ThemeConfig,
 
   plugins: [
-    '@docusaurus/plugin-ideal-image',
     async function myPlugin(context, options) {
       return {
         name: 'docusaurus-tailwindcss',
@@ -242,6 +246,7 @@ const config: Config = {
             from: '/hedera-ai',
             to: '/hederaai',
           },
+          
         ],
       },
     ],

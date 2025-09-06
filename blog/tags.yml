@@ -80,7 +80,7 @@ openconvai:
 
 hackathon:
   label: Hackathon
-  permalink: /hackathon
+  permalink: /blog/tags/hackathon
   description: Hackathon events and competitions
 
 winners:
@@ -118,4 +118,52 @@ community:
   permalink: /community
   description: Community-related content and events
 
+monthly-recap:
+  label: Monthly Recap
+  permalink: /monthly-recap
+  description: Monthly recap posts highlighting recent developments
 
+neuron:
+  label: Neuron
+  permalink: /neuron
+  description: Content related to Neuron and machine commerce
+
+ai-agents:
+  label: AI Agents
+  permalink: /ai-agents
+  description: AI agent development and applications
+
+machine-commerce:
+  label: Machine Commerce
+  permalink: /machine-commerce
+  description: Machine-to-machine commerce and transactions
+
+partnership:
+  label: Partnership
+  permalink: /partnership
+  description: Partnership announcements and collaborations
+
+moonscape:
+  label: Moonscape
+  permalink: /moonscape
+  description: Moonscape platform and features
+
+mit:
+  label: MIT
+  permalink: /mit
+  description: MIT Media Lab and research collaborations
+
+hcs-1:
+  label: HCS-1
+  permalink: /hcs-1
+  description: Information about the HCS-1 protocol
+
+inscribe-utilities:
+  label: Inscribe-Utilities
+  permalink: /inscribe-utilities
+  description: Incribe Utilities-related content
+
+hgrimoire:
+  label: hgrimoire
+  permalink: /hgrimoire
+  description: Hgrimoire-related content

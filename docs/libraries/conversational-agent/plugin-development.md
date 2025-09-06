@@ -300,6 +300,142 @@ protected getServiceBuilder(): BaseServiceBuilder {
 }
 ```
 
+### Adding Dynamic Forms (FormValidatable)
+
+Tools can request a UI form when required fields are missing by implementing the `FormValidatable` interface. The Conversational Agent detects this and wraps your tool with a form generator automatically (focused Zod schemas supported).
+
+```ts
+import { z } from 'zod';
+import { BaseHederaQueryTool, BaseHederaQueryToolParams } from 'hedera-agent-kit';
+import type { FormValidatable } from '@hashgraphonline/standards-agent-kit';
+
+const MetadataSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  creator: z.string().min(1),
+  attributes: z.array(z.object({ trait_type: z.string(), value: z.union([z.string(), z.number()]) })).optional(),
+});
+
+export class CollectMetadataTool
+  extends BaseHederaQueryTool<typeof MetadataSchema, string>
+  implements FormValidatable
+{
+  name = 'collect-metadata';
+  description = 'Collects NFT-style metadata from the user.';
+  specificInputSchema = MetadataSchema;
+
+  constructor(params: BaseHederaQueryToolParams) { super(params); }
+
+  shouldGenerateForm(input: unknown): boolean {
+    const v = (input || {}) as Record<string, unknown>;
+    const nonEmpty = (s: unknown) => typeof s === 'string' && s.trim().length > 0;
+    const complete = nonEmpty(v.name) && nonEmpty(v.description) && nonEmpty(v.creator);
+    return !complete && v['renderForm'] !== false; // allow bypass with renderForm=false
+  }
+
+  getFormSchema(): z.ZodSchema { return MetadataSchema; }
+  getEssentialFields(): string[] { return ['name', 'description', 'creator']; }
+  isFieldEmpty(_field: string, value: unknown): boolean {
+    if (Array.isArray(value)) return value.length === 0;
+    return !(typeof value === 'string' && value.trim().length > 0);
+  }
+
+  protected async executeQuery(args: z.infer<typeof MetadataSchema>): Promise<string> {
+    return JSON.stringify({ success: true, metadata: args });
+  }
+}
+```
+
+### Accepting Content References in Tools
+
+Use `contentRef` to accept large payloads by reference and resolve bytes via the shared resolver.
+
+```ts
+import { z } from 'zod';
+import { BaseHederaQueryTool, BaseHederaQueryToolParams } from 'hedera-agent-kit';
+import { ContentResolverRegistry } from '@hashgraphonline/standards-sdk';
+
+const SummarizeContentSchema = z.object({
+  url: z.string().url().optional(),
+  contentRef: z.string().optional(),
+  base64Data: z.string().optional(),
+});
+
+export class SummarizeContentTool extends BaseHederaQueryTool<
+  typeof SummarizeContentSchema,
+  string
+> {
+  name = 'summarize-content';
+  description = 'Fetches/resolves content (url/contentRef/base64) and summarizes it.';
+  specificInputSchema = SummarizeContentSchema;
+
+  constructor(params: BaseHederaQueryToolParams) { super(params); }
+
+  protected async executeQuery(args: z.infer<typeof SummarizeContentSchema>): Promise<string> {
+    let buffer: Buffer | null = null;
+    let mimeType: string | undefined;
+
+    if (args.contentRef) {
+      const resolver = ContentResolverRegistry.getResolver();
+      if (!resolver) throw new Error('No content resolver registered');
+      const res = await resolver.resolveReference(args.contentRef);
+      buffer = res.content;
+      mimeType = res.metadata?.mimeType;
+    } else if (args.base64Data) {
+      buffer = Buffer.from(args.base64Data, 'base64');
+    } else if (args.url) {
+      const r = await fetch(args.url);
+      buffer = Buffer.from(new Uint8Array(await r.arrayBuffer()));
+      mimeType = r.headers.get('content-type') || undefined;
+    } else {
+      throw new Error('Provide url, contentRef, or base64Data');
+    }
+
+    return JSON.stringify({ success: true, bytes: buffer!.length, mimeType });
+  }
+}
+```
+
+### Returning HashLink Blocks in Tool Output
+
+If your tool produces an artifact that should render as a HashLink block (HCS‑12), include a `hashLinkBlock` in the JSON string you return. The agent will surface it via `response.metadata.hashLinkBlock`.
+
+```ts
+function makeHashLinkBlock(blockId: string, attributes: Record<string, unknown>) {
+  return { blockId, hashLink: `hcs://12/${blockId}`, template: blockId, attributes };
+}
+
+// Example inside your tool
+const payload = {
+  success: true,
+  result: { /* domain data */ },
+  hashLinkBlock: makeHashLinkBlock('0.0.6617393', {
+    name: 'Sunset #42',
+    creator: '0.0.123456',
+    topicId: '0.0.999999',
+    hrl: 'hcs://1/0.0.999999',
+    network: 'testnet',
+  }),
+};
+return JSON.stringify(payload);
+```
+
+### Cooperating with Smart Memory
+
+Emit canonical IDs/HRLs so the agent can store entity associations. With hedera-agent-kit base tools, you can also call the optional callback when you create entities:
+
+```ts
+this.onEntityCreated?.({
+  entityId: '0.0.999999',
+  entityName: args.name || 'Unnamed',
+  entityType: 'topicId',
+  transactionId: result.txId,
+});
+
+// Or return JSON with IDs/HRLs so the agent’s extractor can persist them:
+return JSON.stringify({ success: true, topicId: '0.0.999999', hrl: 'hcs://1/0.0.999999', name: 'My Topic' });
+```
+
 ## State Management
 
 If your plugin needs to maintain state across tool executions, you can use the state manager:
@@ -602,5 +738,4 @@ export class QueryNFTTool extends BaseHederaQueryTool<
   }
 }
 ```
-
 

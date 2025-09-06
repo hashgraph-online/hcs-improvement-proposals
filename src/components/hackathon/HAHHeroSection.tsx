@@ -73,7 +73,7 @@ const HAHHeroSection: React.FC = () => {
           }}
         />
       </div>
-      
+
       {/* Floating particles */}
       <div className='absolute inset-0 pointer-events-none'>
         {[...Array(5)].map((_, i) => (
@@ -107,7 +107,7 @@ const HAHHeroSection: React.FC = () => {
               className='space-y-4'
             >
               <div className='space-y-2'>
-                <motion.div 
+                <motion.div
                   className='text-sm font-medium text-[#a679f0] dark:text-[#48df7b] uppercase tracking-wide'
                   animate={{
                     opacity: [0.6, 1, 0.6],
@@ -121,7 +121,7 @@ const HAHHeroSection: React.FC = () => {
                   Hedera Africa Hackathon
                 </motion.div>
                 <h1 className='text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight'>
-                  <motion.span 
+                  <motion.span
                     className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent inline-block'
                     animate={{
                       backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
@@ -200,6 +200,8 @@ const HAHHeroSection: React.FC = () => {
                 size='lg'
                 className='bg-[#a679f0] hover:bg-[#a679f0]/90 text-white border-0'
                 icon={<FaArrowRight />}
+                data-umami-event='hackathon-register-dorahacks-hero'
+                data-umami-event-category='hackathon'
               >
                 Register on DoraHacks
               </PrimaryButton>
@@ -211,6 +213,8 @@ const HAHHeroSection: React.FC = () => {
                 size='lg'
                 className='bg-gray-600 hover:bg-gray-700 text-white border-0'
                 icon={<FaGlobe />}
+                data-umami-event='hackathon-view-main-event-hero'
+                data-umami-event-category='hackathon'
               >
                 View Main Event
               </PrimaryButton>
@@ -284,10 +288,10 @@ const HAHHeroSection: React.FC = () => {
                             ? 'bg-[#a679f0]'
                             : 'bg-gray-300 dark:bg-gray-600'
                         }`}
-                        style={{ 
+                        style={{
                           border: 'none',
                           outline: 'none',
-                          boxShadow: 'none'
+                          boxShadow: 'none',
                         }}
                         aria-label={`View feature ${index + 1}`}
                       />
@@ -303,9 +307,31 @@ const HAHHeroSection: React.FC = () => {
                 className='mt-8'
               >
                 <p className='text-xs text-gray-500 dark:text-gray-400 mb-4 text-center'>
-                  In collaboration with
+                  Organized by THA & ESF, operated by DAR Blockchain, and AI
+                  Track sponsored by Hashgraph Online
                 </p>
-                <div className='flex flex-wrap items-center justify-center gap-4'>
+                <div className='flex flex-wrap items-center justify-center gap-6'>
+                  <div className='flex flex-wrap items-center justify-center gap-4'>
+                    <img
+                      src='/img/logos/THA.svg'
+                      alt='The Hashgraph Association - Organizer'
+                      className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
+                    />
+                    <img
+                      src='/img/logos/exponential-science.png'
+                      alt='Exponential Science - Organizer'
+                      className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
+                    />
+                    <img
+                      src='/img/dar-blockchain-light.png'
+                      alt='DAR Blockchain - Operator'
+                      className='h-6 block dark:hidden'
+                    />
+                    <img
+                      src='/img/logos/dark-blockchain-dark.jpg'
+                      alt='DAR Blockchain - Operator'
+                      className='h-6 hidden dark:block'
+                    />
                     <div className='flex items-center gap-0.5'>
                       <img
                         src='/img/logo.png'
@@ -316,16 +342,28 @@ const HAHHeroSection: React.FC = () => {
                         Hashgraph Online
                       </div>
                     </div>
-                    <img
-                      src='/img/logos/THA.svg'
-                      alt='The Hashgraph Association'
-                      className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
-                    />
-                    <img
-                      src='/img/logos/exponential-science.png'
-                      alt='Exponential Science'
-                      className='h-6 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none]'
-                    />
+                  </div>
+                  <div className='flex items-center gap-4 pl-6 border-l border-gray-300 dark:border-gray-600'>
+                    <div className='flex flex-col items-center gap-1'>
+                      <span className='text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500'>
+                        Media Partner
+                      </span>
+                      <a
+                        href='https://genfinity.io/'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='inline-block'
+                        data-umami-event='hackathon-genfinity-visit'
+                        data-umami-event-category='hackathon'
+                      >
+                        <img
+                          src='/img/hackathon/genfinity-logo.webp'
+                          alt='Genfinity - Media Partner'
+                          className='h-5 [filter:brightness(0)_saturate(100%)_invert(40%)_sepia(0%)_saturate(0%)_hue-rotate(0deg)_brightness(70%)_contrast(100%)] dark:[filter:none] hover:opacity-80 transition-opacity'
+                        />
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
 
@@ -352,7 +390,7 @@ const HAHHeroSection: React.FC = () => {
               </div>
             </div>
 
-            <motion.div 
+            <motion.div
               className='absolute -top-4 -right-4 w-32 h-32 bg-[#a679f0]/10 rounded-full blur-3xl'
               animate={{
                 scale: [1, 1.2, 1],
@@ -364,7 +402,7 @@ const HAHHeroSection: React.FC = () => {
                 ease: 'easeInOut',
               }}
             />
-            <motion.div 
+            <motion.div
               className='absolute -bottom-4 -left-4 w-32 h-32 bg-[#48df7b]/10 rounded-full blur-3xl'
               animate={{
                 scale: [1.2, 1, 1.2],
