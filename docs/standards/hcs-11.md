@@ -130,18 +130,19 @@ This approach ensures:
 
 All profiles share these common fields:
 
-| Field           | Type   | Required | Description                                                                                        |
-| --------------- | ------ | -------- | -------------------------------------------------------------------------------------------------- |
-| version         | string | Yes      | Standard version (e.g., "1.0")                                                                     |
-| type            | number | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)            |
-| display_name    | string | Yes      | Display name for the profile                                                                       |
-| alias           | string | No       | Alternative identifier                                                                             |
-| bio             | string | No       | Brief description or biography                                                                     |
-| socials         | array  | No       | Array of social media links                                                                        |
-| profileImage    | string | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
-| properties      | object | No       | Additional unstructured profile properties                                                         |
-| inboundTopicId  | string | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                       |
-| outboundTopicId | string | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                               |
+| Field           | Type   | Required | Description                                                                                          |
+| --------------- | ------ | -------- | ---------------------------------------------------------------------------------------------------- |
+| version         | string | Yes      | Standard version (e.g., "1.0")                                                                       |
+| type            | number | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)              |
+| display_name    | string | Yes      | Display name for the profile                                                                         |
+| did             | string | Yes      | W3C DID for the subject. did:uaid is recommended; other DIDs may also be linked via `alsoKnownAs`.   |
+| alias           | string | No       | Alternative identifier                                                                               |
+| bio             | string | No       | Brief description or biography                                                                       |
+| socials         | array  | No       | Array of social media links                                                                          |
+| profileImage    | string | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats   |
+| properties      | object | No       | Additional unstructured profile properties                                                           |
+| inboundTopicId  | string | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                         |
+| outboundTopicId | string | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                                 |
 
 ### Profile Types
 
@@ -243,11 +244,11 @@ Each verification method is designed to address common use cases while providing
 ##### DNS Verification
 For `type: "dns"`, the verification process follows these specific steps:
 
-1. **Record Format**: MCP server owner must add a DNS TXT record to their domain with:
+1. **Record Format**: MCP server owner shall add a DNS TXT record to their domain with:
    - Name: By default, `hedera` or a custom name specified in `dns_field` (prefixed with `_` automatically)
    - Value: Equal to their Hedera account ID (e.g., `0.0.12345678`)
 
-2. **Profile Format**: The verification object in the profile must be structured as:
+2. **Profile Format**: The verification object in the profile shall be structured as:
    ```json
    "verification": {
      "type": "dns",
@@ -289,14 +290,14 @@ For `type: "dns"`, the verification process follows these specific steps:
 ##### Signature Verification
 For `type: "signature"`, the verification process follows these specific steps:
 
-1. **Message Format**: The message to be signed must be the server URL exactly as it appears in the `mcpServer.connectionInfo.url` field, with no additional characters or formatting.
+1. **Message Format**: The message to be signed shall be the server URL exactly as it appears in the `mcpServer.connectionInfo.url` field, with no additional characters or formatting.
 
-2. **Signature Format**: The signature must be:
+2. **Signature Format**: The signature shall be:
    - Created using the ED25519 key associated with the Hedera account
    - Encoded as a hexadecimal string with no `0x` prefix
    - No additional formatting (no spaces, newlines, etc.)
 
-3. **Profile Format**: The verification object in the profile must be structured as:
+3. **Profile Format**: The verification object in the profile shall be structured as:
    ```json
    "verification": {
      "type": "signature",
@@ -319,7 +320,7 @@ For `type: "signature"`, the verification process follows these specific steps:
    // Get your private key (securely stored)
    const privateKey = Ed25519PrivateKey.fromString("302e020100300506032b657004220420YOUR_PRIVATE_KEY");
 
-   // URL to sign (must match exactly what's in your profile)
+   // URL to sign (shall match exactly what's in your profile)
    const url = "https://mcp.example.com";
 
    // Sign the URL (UTF-8 encoded)
@@ -335,13 +336,13 @@ For `type: "signature"`, the verification process follows these specific steps:
 For `type: "challenge"`, the verification process follows these specific steps:
 
 1. **Endpoint Format**:
-   - The MCP server must expose an endpoint that responds to HTTP GET requests
+   - The MCP server shall expose an endpoint that responds to HTTP GET requests
    - Default path: `/hedera-verification` relative to the server URL
    - Custom path can be specified in `challenge_path`
 
 2. **Challenge-Response Protocol**:
    - Client sends HTTP GET request to `{mcpServer.connectionInfo.url}/{challenge_path}`
-   - Server must respond with a JSON object containing:
+   - Server shall respond with a JSON object containing:
      ```json
      {
        "accountId": "0.0.12345678",
@@ -349,9 +350,9 @@ For `type: "challenge"`, the verification process follows these specific steps:
        "signature": "a1b2c3d4e5f6..."
      }
      ```
-   - The `signature` must be an ED25519 signature (hex-encoded) of the UTF-8 encoded string `{accountId}:{timestamp}` using the account's private key
+   - The `signature` shall be an ED25519 signature (hex-encoded) of the UTF-8 encoded string `{accountId}:{timestamp}` using the account's private key
 
-3. **Profile Format**: The verification object in the profile must be structured as:
+3. **Profile Format**: The verification object in the profile shall be structured as:
    ```json
    "verification": {
      "type": "challenge",
@@ -618,6 +619,10 @@ sequenceDiagram
 
 The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-10](/docs/standards/hcs-10) topics for bidirectional communication with AI agents.
 
+### DID Field
+
+Profiles shall include a top‑level `did` field containing a W3C DID for the subject. For agents and servers, `did:uaid` is recommended to enable cross‑protocol routing and correlation. Other DIDs (e.g., `did:pkh`, `did:ethr`, `did:web`) may be referenced from the DID Document using `alsoKnownAs`.
+
 ### Profile Update Flow
 
 Profiles can be updated according to the protocol used for reference:
@@ -749,11 +754,9 @@ _This predefined array lists supported social media platforms for the `socials[]
 | youtube  | YouTube channel               | @channel      |
 
 ### Example Profiles
+&
+  "did": "did:uaid:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;registry=hol;nativeId=0.0.2656337;uid=helper-bot",
 
-AI Agent Profile with HCS-10:
-
-```json
-{
   "version": "1.0",
   "type": 1,
   "display_name": "AI Assistant Bot",
@@ -783,11 +786,9 @@ AI Agent Profile with HCS-10:
   }
 }
 ```
+&
+  "did": "did:uaid:QmZ8kL4mN6vP2wQ9xR3tY7hB5jC1sA9eD;registry=olas;nativeId=eip155:1:0x742d35Cc6634C0532925a3b844Bc9e7595f41Bd;uid=hcs-mcp",
 
-MCP Server Profile:
-
-```json
-{
   "version": "1.0",
   "type": 2,
   "display_name": "Hedera Consensus MCP",
