@@ -91,21 +91,28 @@ The HCS-14 standard builds upon these opportunities by introducing universal, se
 
 ### Guiding Principles
 
-The HCS-14 standard is built on six foundational principles that ensure its universality and longevity:
+The HCS-14 standard defines two complementary DID methods: did:aid (deterministic) and did:uaid (sovereign). The following principles apply across methods; where method-specific behavior differs, it is stated explicitly.
 
-1. **Decentralized Generation**: No central registry, no governing body, no permission required. Anyone can generate valid HCS-14 IDs using only the agent's public data and the standard's algorithm. This follows the permissionless model used in both Web2 API development and Web3 smart contract deployment.
+1. **Decentralized Generation**: HCS‑14 introduces no central authority.
+   - AID: any party shall be able to derive the identifier from canonical public inputs without permission.
+   - UAID: the subject controls issuance via the underlying DID method; UAID adds no new central dependency beyond that DID method.
 
-2. **Self-Describing Structure**: The DID itself contains enough information to route messages to the agent without external lookups. By embedding registry and native ID information in the DID parameters (`did:{method}:{root};registry=...;nativeId=...`), we enable direct routing across protocol boundaries - a critical feature for true interoperability.
+2. **Self‑Describing Structure**: The DID shall contain sufficient routing metadata to reach the agent without external lookups. By embedding registry and native ID information in parameters (`did:{method}:{root};registry=...;nativeId=...`), cross‑protocol routing is enabled.
 
-3. **Cryptographic Verifiability**: Any party can verify that an HCS-14 ID correctly represents an agent by regenerating it from the agent's public data. This creates a trustless system where the ID itself is the proof of authenticity, eliminating the need for certificate authorities or attestation services.
+3. **Cryptographic Verifiability**:
+   - AID: verifiable by recomputing the hash from the canonical inputs.
+   - UAID: verifiable by resolving the underlying DID Document using the base method’s verification rules.
 
-4. **Collision-Resistant Design**: By using SHA-384 hashing with carefully structured canonical data, we achieve cryptographic assurance against ID collisions. The probability of two different agents generating the same ID is effectively zero (2^-384), ensuring global uniqueness without coordination.
+4. **Collision and Uniqueness**:
+   - AID: the SHA‑384 hash of canonical inputs provides strong collision resistance (≈2^‑384).
+   - UAID: uniqueness and security properties inherit from the underlying DID method.
 
-5. **Protocol-Agnostic Architecture**: Whether an agent operates through centralized API infrastructure, runs as a smart contract, or leverages consensus mechanisms, the HCS-14 ID works the same way. This universality creates bridges between Web2 and Web3, enabling agents to communicate across different infrastructures while respecting each protocol's unique strengths.
+5. **Protocol‑Agnostic Architecture**: Whether an agent operates via centralized APIs, smart contracts, or consensus networks, HCS‑14 identification works uniformly while respecting each protocol’s native identifiers.
 
-6. **Future-Proof Evolution**: The DID framework and parameter structure allow the standard to evolve without breaking existing implementations. New parameters can be added while maintaining backward compatibility, ensuring that early adopters aren't left behind as the ecosystem grows.
-
-7. **Traceability by Design**: AID identifiers shall be reproducible from canonical public inputs; any change to those inputs shall produce a new AID. UAID identifiers are self‑sovereign (derived from an existing DID) and remain stable unless the underlying DID changes. Implementations should preserve continuity by linking prior and successor identifiers (e.g., via DID Document `alsoKnownAs`) and may publish operational history via HCS‑11 profiles and HCS‑19 compliance topics.
+6. **Evolution & Traceability**: The DID format and parameter schema shall support additive evolution without breaking existing identifiers. In addition:
+   - AID: any change to the six canonical identity inputs shall produce a new AID.
+   - UAID: the identifier remains stable unless the underlying sovereign DID changes.
+   - Implementations should link prior and successor identifiers (for example via DID Document `alsoKnownAs`) and may publish operational history via HCS‑11 profiles and HCS‑19 topics.
 
 ### DID Structure
 
@@ -251,15 +258,15 @@ The hash is computed from a canonical JSON representation containing ONLY these 
 - All agents shall provide these six fields to generate a valid HCS-14 ID
 - For self-sovereign agents where no specific registry applies, the registry field shall be set to "self"
 
-**Communication Details**: While not part of the ID hash, agents should separately maintain:
+**Communication Details (Informative)**: While not part of the ID hash, agents should advertise live endpoints via their native discovery channels or profiles:
 
-- **A2A**: agent.json file at `/.well-known/agent.json` on the domain with service endpoint URL
-- **HCS-10**: Topic IDs (e.g., `0.0.789123`) - stored in the uid parameter
-- **MCP**: Server endpoints or stdio commands
-- **WebSocket**: Connection URLs (e.g., `wss://agent.example.com/ws`)
-- **NANDA**: Registry URLs and A2A endpoints
+- **A2A**: `/.well-known/agent.json` hosts the service endpoint URL. The agent name/ID may be carried in the `uid` parameter when applicable.
+- **HCS‑10**: Inbound/outbound topic IDs belong in the HCS‑11 profile (`inboundTopicId` / `outboundTopicId`). In the DID, set `nativeId` to the Hedera account ID and `uid=0`.
+- **MCP**: Advertise server endpoints (SSE/HTTP) or stdio transport either in the DID Document `service` section or in the HCS‑11 profile.
+- **WebSocket**: Publish connection URLs (e.g., `wss://agent.example.com/ws`) via DID Document `service` or HCS‑11 profile.
+- **NANDA**: Provide registry URLs and A2A endpoints according to NANDA’s discovery rules.
 
-These communication details should be discoverable through the protocol's native discovery mechanisms or stored in a registry that maps HCS-14 DIDs to current communication endpoints. For HCS-10 agents, the uid parameter contains the Hedera account ID.
+These details should be discoverable through each protocol's native mechanisms or via registries that map HCS‑14 DIDs to current endpoints.
 
 Field normalization rules:
 
@@ -274,7 +281,7 @@ Most protocols provide native unique identifiers that ensure global uniqueness:
 
 | Protocol       | Native ID Type               | Example                                  |
 | -------------- | ---------------------------- | ---------------------------------------- |
-| `hcs-10`       | Ed25519 or ECDSA Public Key  | `"e7d59d8bff3f9e1784cd4e7f340fb..."` (hex) |
+| `hcs-10`       | Hedera Account ID            | `"0.0.123456"`                           |
 | `a2a`          | Domain hosting agent.json    | `"microsoft.com"`                        |
 | `nanda`        | Agent ID (from AGENT_ID env) | `"pirate-bot"`                           |
 | `mcp`          | Server ID                    | `"mcp-filesystem"`                       |
@@ -283,8 +290,8 @@ Most protocols provide native unique identifiers that ensure global uniqueness:
 | `acp-ibm`      | Agent URI                    | `"https://api.example.com/agents/123"`   |
 
 Notes:
-1) For HCS‑10 agents, `nativeId` shall be the agent public key (Ed25519 or ECDSA) in hex format. 
-2) For A2A agents, `nativeId` is the domain hosting the agent.json file at `/.well-known/agent.json`, with the agent name/ID stored in the `uid` parameter.
+1) For HCS‑10 agents, `nativeId` shall be the Hedera account ID (e.g., `0.0.123456`). The account's public key may appear in the DID Document (`verificationMethod`) or in the HCS‑11 profile; it is not part of the DID parameters.
+2) For A2A agents, `nativeId` is the domain hosting the agent.json file at `/.well-known/agent.json`, with the agent name/ID stored in the `uid` parameter when applicable.
 3) For EVM‑based agents, `nativeId` should use CAIP‑10 format `eip155:<chainId>:<address>`.
 
 ### Agent Skills
@@ -356,22 +363,22 @@ Protocol identifiers shall use **string values** rather than enums to provide fl
 
 The ERC‑8004 effort proposes trustless, on‑chain agent discovery and reputation primitives in the EVM ecosystem. HCS‑14 aligns as follows:
 
-- UAID as DID: did:uaid identifiers are DID‑Core compatible and can represent on‑chain agents.
+- HCS‑14 DIDs: both did:aid and did:uaid are DID‑Core compatible and can represent on‑chain agents.
 - Native identifier: For EVM addresses, `nativeId` should use CAIP‑10 account identifiers `eip155:<chainId>:<address>` to ensure chain‑qualified uniqueness and tooling compatibility.
 - Registry namespace: Implementations may set `registry` to a stable namespace representing the ERC‑8004 registry or program (e.g., `olas`, `virtuals`, or a deployment‑specific label). Namespaces shall be documented by the operator.
 - DID Document linkage: Resolvers may include a `verificationMethod` derived from the EVM account and advertise `service` entries pointing to A2A/MCP endpoints for cross‑protocol interop.
 
-This mapping preserves determinism while allowing ERC‑8004 registries to act as authoritative sources for state, reputation, or discovery.
+This mapping preserves determinism (for AID) and sovereign identity (for UAID) while allowing ERC‑8004 registries to act as authoritative sources for state, reputation, or discovery.
 
 #### Trust Over IP (ToIP) Alignment
 
 ToIP profiles build upon W3C DID Core, DID Resolution, and verifiable credentials. UAID is compatible by design:
 
-- Resolution: A did:uaid shall resolve to a DID Document conforming to DID Core with optional `service` entries for supported protocols (e.g., `A2AService`, `MCPService`, `HCS10Service`).
+- Resolution: A did:aid or did:uaid shall resolve to a DID Document conforming to DID Core with optional `service` entries for supported protocols (e.g., `A2AService`, `MCPService`, `HCS10Service`).
 - Verification methods: DID Documents should expose keys or references suitable for ToIP trust frameworks (e.g., Ed25519 for HCS‑10, ECDSA for EVM identities) via `verificationMethod` and appropriate relationships (`authentication`, `assertionMethod`).
 - Correlation: Implementations may use `alsoKnownAs` to link did:uaid to protocol‑specific DIDs (e.g., `did:pkh:eip155:…`, `did:ethr:…`, `did:web:…`).
 
-These guidelines enable UAID subjects to participate in ToIP trust frameworks without altering the identifier.
+These guidelines enable HCS‑14 subjects to participate in ToIP trust frameworks without altering the identifier.
 
 ### Hash Generation
 
@@ -415,21 +422,11 @@ function generateAgentDID(agentData: AgentData): string {
   const base58Hash = bs58.encode(hash);
 
   // 4. Build DID with parameters
-  const params = [];
-
-  // Use registry or proto parameter
-  if (agentData.useProtocol) {
-    params.push(`proto=${agentData.protocol}`);
-  } else {
-    params.push(`registry=${agentData.registry}`);
-  }
-
+  const params: string[] = [];
+  params.push(`registry=${agentData.registry}`);
+  params.push(`proto=${agentData.protocol}`);
   params.push(`nativeId=${agentData.nativeId}`);
-
-  // Add uid if provided
-  if (agentData.uid) {
-    params.push(`uid=${agentData.uid}`);
-  }
+  params.push(`uid=${agentData.uid ?? '0'}`);
 
   // Deterministic AID: derived from canonical fields
   return `did:aid:${base58Hash};${params.join(';')}`;
@@ -539,7 +536,7 @@ Implementations shall:
   "name": "Support Agent",
   "version": "1.0.0",
   "protocol": "hcs-10",
-  "nativeId": "e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
+  "nativeId": "0.0.123456",
   "skills": [0, 17]
 }
 ```
@@ -550,14 +547,14 @@ Implementations shall:
 {
   "skills": [0, 17],
   "name": "Support Agent",
-  "nativeId": "e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
+  "nativeId": "0.0.123456",
   "protocol": "hcs-10",
   "registry": "hol",
   "version": "1.0.0"
 }
 ```
 
-**Expected DID Format (AID):** `did:aid:{base58hash};registry=hol;nativeId=302a300506032b6570032100e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04;uid=0.0.123456`
+**Expected DID Format (AID):** `did:aid:{base58hash};registry=hol;nativeId=0.0.123456;uid=0`
 
 #### Test Vector 2: A2A Agent
 
@@ -613,7 +610,7 @@ Change management and traceability: Any change to the six canonical fields shall
 
 Conformant resolvers shall return a DID Document satisfying the following minimal profile:
 
-- `id`: the did:uaid of the subject.
+- `id`: the DID of the subject (did:aid or did:uaid).
 - `verificationMethod`: zero or more entries binding the UAID to cryptographic material when available (e.g., Ed25519 public key for `hcs-10`, EVM account for CAIP‑10 identifiers), referenced from `authentication` and/or `assertionMethod`.
 - `service`: zero or more entries advertising routable endpoints derived from declared protocol(s); recommended types include `A2AService`, `MCPService`, and `HCS10Service` with HTTP(S), gRPC, WS, or DIDComm URIs as appropriate.
 
@@ -655,12 +652,12 @@ HCS‑14 separates immutable identification from mutable operational context to 
   "name": "Support Agent",
   "version": "1.0.0",
   "protocol": "hcs-10",
-  "nativeId": "e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04",
+  "nativeId": "0.0.123456",
   "skills": [0, 17]
 }
 ```
 
-**Generated DID (AID):** `did:aid:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;registry=hol;nativeId=302a300506032b6570032100e7d59d8bff3f9e1784cd4e7f340fb1a7333ee264fed4beb0b38fe7e4d29d04;uid=0.0.123456`
+**Generated DID (AID):** `did:aid:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;registry=hol;nativeId=0.0.123456;uid=0`
 
 ### Example 2: A2A Agent (Microsoft)
 
@@ -708,7 +705,7 @@ _Note: uid references the agent name from Microsoft's agent.json file hosted at 
 ```
 
 **Scenario:** Agent already has W3C DID: `did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK`
-**Generated DID (UAID):** `did:uaid:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK;proto=hcs-10;nativeId=302a300506032b65700321009f8d5e7c6b3a2f1e4d9c8b7a6e5f4e3d2c1b0a9e8d7c6b5a4f3e2d1c0b9a8e7d;uid=0.0.123456`
+**Generated DID (UAID):** `did:uaid:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK;proto=hcs-10;nativeId=0.0.123456;uid=0`
 
 _Note: Hash (z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK) extracted from agent's existing did:key DID_
 
