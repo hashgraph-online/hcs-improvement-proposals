@@ -145,6 +145,7 @@ did:uaid:{hash};{parameters}
 Where:
 
 - `did` = W3C DID prefix
+- `hash` = Base58-encoded identifier hash
 - `aid` = Agent Identifier method (system-generated)
 - `uaid` = Universal Agent Identifier method (self-sovereign)
 - `parameters` = Semicolon-separated key-value pairs for routing
