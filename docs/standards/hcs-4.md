@@ -10,7 +10,7 @@ sidebar_position: 3
 
 ### Version: 1.0
 
-Discussion: <URL to GitHub Discussion>
+Discussion: (URL to GitHub Discussion)
 
 ## Authors
 
@@ -100,7 +100,7 @@ Every HCS document moves through these states. State changes MUST be recorded in
 
    - Editors MAY merge a Draft into the main branch prior to publication for broader visibility and iteration. The document’s header MUST remain `Status: Draft` until ratified.
    - Post‑merge changes continue via normal PRs.
-   - A GitHub Discussion SHOULD be opened/linked for focused community feedback. Use a clear title such as “HCS-<number> Discussion: <short title>”.
+   - A GitHub Discussion SHOULD be opened/linked for focused community feedback. Use a clear title such as `HCS-<number> Discussion: <short title>`.
 
 5. **Last Call**
 
@@ -142,25 +142,23 @@ flowchart TB
   P --> Sup[Superseded]
 ```
 
-## Roles and Responsibilities
+## Roles and Responsibilities (Minimal)
 
-- **Author/Champion**: Writes and maintains the proposal through Draft and Review; addresses feedback; organizes reference implementations.
-- **Editors**: Curate scope, assign numbers, enforce this process, manage status transitions, and ensure quality and consistency across HCS documents.
-- **Reviewers**: Subject‑matter experts who provide technical and editorial feedback, including cross‑standard implications.
-- **Implementers**: Build independent implementations and test against conformance criteria and vectors.
-- **Maintainers**: Post‑publication caretakers who track errata and guard against unreviewed normative changes.
-- **DAO Governance**: Hashgraph Online DAO voters and facilitators conduct and record the governance vote required for publication.
+- **Author/Champion**: Drafts the spec, responds to feedback, opens/links a GitHub Discussion, and coordinates any reference/independent implementations (for Standard Track).
+- **Editors**: Guard process quality (numbering, format, links), manage status changes, schedule/announce Last Call, and move to Published only after a DAO vote PASS.
+- **Community Reviewers**: Provide technical/editorial feedback via PR comments and the linked Discussion; no formal approval power required.
+- **DAO Governance**: Runs the on‑chain governance vote and records/pass-fail outcome.
 
-Editors SHOULD be listed in the repository’s CODEOWNERS or documentation. At least two editors SHOULD approve a transition to Last Call; editors set `Status: Published` only after a DAO vote PASS is recorded.
+Editors SHOULD be listed in CODEOWNERS or documentation. At least two editors SHOULD approve the transition to Last Call; editors set `Status: Published` only after a DAO vote PASS is recorded.
 
 ## Submission and Review Workflow
 
-1. **Open an Idea**: Create a GitHub Issue titled “HCS Proposal: <Title>” with motivation, scope, and links to related HCS documents.
+1. **Open an Idea**: Create a GitHub Issue titled `HCS Proposal: <title>` with motivation, scope, and links to related HCS documents.
 2. **Draft the Document**: Fork/branch and add a specification following “Required Document Structure” and “Repository Conventions”. Set `Status: Draft`.
 3. **Pick a Number (Low‑Friction)**: The author selects an unused HCS number when opening the PR and names the file accordingly (`docs/standards/hcs-<number>.md` or `.../index.md`). If uncertain, authors MAY temporarily use `hcs-X` and update after a quick check.
 4. **Community Review**: Keep discussion in the PR. Substantive design changes SHOULD be captured as commits with rationale.
 5. **Test Vectors & Implementations** (Standard Track): Provide at least one reference implementation and one independent implementation (minimum two total) demonstrating interoperability on Testnet or Mainnet. Include test vectors.
-6. **Merged Draft (optional)**: Editors MAY merge the Draft prior to publication for wider review. The header stays `Status: Draft`. Open a GitHub Discussion titled “HCS-<number> Discussion: <short title>” and link it from the document (e.g., a short “Discussion” line near the top).
+6. **Merged Draft (optional)**: Editors MAY merge the Draft prior to publication for wider review. The header stays `Status: Draft`. Open a GitHub Discussion titled `HCS-<number> Discussion: <short title>` and link it from the document (e.g., a short “Discussion” line near the top).
 7. **Last Call (≥14 days)**: Editors announce Last Call on the PR and relevant channels. Gather final feedback and address issues. Breaking changes reset the Last Call clock.
 8. **DAO Governance Vote**: Submit the proposal to the Hashgraph Online DAO per its governance rules. If PASSED, proceed to Publish; if FAILED, return to Review with rationale.
 9. **Publish**: Editors set `Status: Published`, and optionally create a release/tag. The canonical location is the merged document path.
@@ -234,7 +232,7 @@ All changes MUST be via PR with clear summaries. Editors SHALL reject PRs that a
 - Frontmatter keys: `title`, `description`, `sidebar_position` (numeric ordering only).
 - Cross‑references: use relative links between HCS docs, e.g., `../hcs-2.md` or `../hcs-12/index.md`.
 - Examples and images SHOULD live near the spec (e.g., `docs/standards/hcs-<number>/assets/*`).
- - Discussions: When a draft is merged, create a GitHub Discussion for ongoing feedback and reference it in the spec. Suggested title format: `HCS-<number> Discussion: <short title>`.
+- Discussions: When a draft is merged, create a GitHub Discussion for ongoing feedback and reference it in the spec. Suggested title format: `HCS-<number> Discussion: <short title>`.
 
 ## Security, Privacy, and Interoperability Checks
 
@@ -338,7 +336,7 @@ This document is licensed under Apache-2.0.
 
 This template matches patterns used across HCS-1, HCS-2, HCS-10, and HCS-12.
 
-```md
+````md
 ---
 title: HCS-<number> — <short title>
 description: <one-sentence description>
@@ -525,7 +523,7 @@ HCS‑1 (file/memo), HCS‑2 (registries/indexing), HCS‑10 (memo/ops patterns)
 
 Apache-2.0
 
-```
+````
 
 ## HCS Conventions: Topic Memos and Operations (Normative)
 
