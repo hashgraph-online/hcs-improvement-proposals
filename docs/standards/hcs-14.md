@@ -9,6 +9,7 @@ sidebar_position: 14
 ### Status: Draft
 
 Discussion: https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135
+
 Discussions-To: https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135
 
 Last-Call-Ends: (TBD)
@@ -24,8 +25,8 @@ Last-Call-Ends: (TBD)
   - [Specification](#specification)
     - [Guiding Principles](#guiding-principles)
     - [DID Structure](#did-structure)
-      - [Registry-Generated Identifiers (AID Method)](#registry-generated-identifiers-aid-method)
-      - [Self-Sovereign Identifiers (UAID Method)](#self-sovereign-identifiers-uaid-method)
+      - [Registry-Generated Identifiers (AID Target)](#registry-generated-identifiers-aid-target)
+      - [Self-Sovereign Identifiers (UAID Targeting a DID)](#self-sovereign-identifiers-uaid-targeting-a-did)
     - [DID Parameter Structure](#did-parameter-structure)
       - [Reserved and Optional Parameters (Informative)](#reserved-and-optional-parameters-informative)
       - [Agent Purpose (Informative)](#agent-purpose-informative)
@@ -175,7 +176,9 @@ Parameter definitions:
 - `registry` = Registry namespace (e.g., "nanda", "hol", "olas")
 - `proto` = Protocol identifier (e.g., "hcs-10", "a2a", "mcp")
 - `nativeId` = Protocol's native unique identifier (use CAIP‑10 where applicable, e.g., `eip155:<chainId>:<address>` for EVM accounts, `hedera:<network>:<account>` for Hedera; domain for A2A/NANDA)
-- `uid` = Unique identifier within the registry (e.g., agent name for NANDA, account ID for HCS-10)
+- `uid` = Unique identifier within the registry. Examples:
+  - NANDA: agent name or registry-specific UID
+  - HCS‑10 (Hedera): the account’s operator_id when available, defined as `inboundTopicId@accountId`. If no HCS‑11 profile is registered yet (no topics), use the Hedera account ID until the operator_id is established.
 - `domain` = Domain identifier for an agent (e.g. domain.com / foo.hbar / bar.eth / alice.btc) 
 
 - `src` = Multibase base58btc (z…) of the full base DID (optional; included only when the UAID id was sanitized by removing method‑specific parameters, query, or fragment from the base DID).
@@ -281,7 +284,7 @@ The hash is computed from a canonical JSON representation containing ONLY these 
 **Communication Details (Informative)**: While not part of the ID hash, agents should advertise live endpoints via their native discovery channels or profiles:
 
 - **A2A**: `/.well-known/agent.json` hosts the service endpoint URL. The agent name/ID may be carried in the `uid` parameter when applicable.
-- **HCS‑10**: Inbound/outbound topic IDs belong in the HCS‑11 profile (`inboundTopicId` / `outboundTopicId`). In the UAID, set `nativeId` to the CAIP‑10 account for the operator and `uid=0`.
+- **HCS‑10**: Inbound/outbound topic IDs belong in the HCS‑11 profile (`inboundTopicId` / `outboundTopicId`). In the UAID, set `nativeId` to the CAIP‑10 account for the operator and set `uid` to the account’s operator_id when available, defined as `inboundTopicId@accountId`. If the account has not yet registered an HCS‑11 profile (no topics), implementations MAY temporarily set `uid` to the Hedera account ID and update it to the operator_id once available.
 - **MCP**: Advertise server endpoints (SSE/HTTP) or stdio transport either in the DID Document `service` section or in the HCS‑11 profile.
 - **WebSocket**: Publish connection URLs (e.g., `wss://agent.example.com/ws`) via DID Document `service` or HCS‑11 profile.
 - **NANDA**: Provide registry URLs and A2A endpoints according to NANDA’s discovery rules.
@@ -524,14 +527,14 @@ Notes:
 
 #### Example: HCS‑11 Profile with UAID (Informative)
 
-HCS‑11 profiles shall include a top‑level `did` field. For agents and servers, use `uaid:did` to enable cross‑protocol routing and correlation:
+HCS‑11 profiles shall include a top‑level `uaid` field. For agents and servers, use `uaid:did` to enable cross‑protocol routing and correlation:
 
 ```json
 {
   "version": "1.0",
   "type": 1,
   "display_name": "AI Assistant Bot",
-  "did": "did:uaid:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;registry=hol;nativeId=0.0.2656337;uid=helper-bot",
+  "uaid": "uaid:did:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;uid=helper-bot;registry=hol;nativeId=hedera:testnet:0.0.2656337",
   "inboundTopicId": "0.0.789101",
   "outboundTopicId": "0.0.789102"
 }

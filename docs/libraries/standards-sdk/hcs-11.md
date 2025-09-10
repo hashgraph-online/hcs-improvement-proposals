@@ -12,6 +12,7 @@ The HCS-11 module provides a comprehensive solution for decentralized identity a
 - **Stores on Hedera** - Inscribes profiles on the network
 - **Links to Accounts** - Associates profiles with Hedera accounts via memos
 - **Enables Discovery** - Makes agents and users discoverable through HCS-10 and other standards
+- **UAID Integration** - Automatically attaches an HCS‑14 UAID (`uaid:did:...`) to profiles when missing
 
 ## Getting Started
 
@@ -268,6 +269,7 @@ if (profileResult.success) {
   // Access topic information
   console.log(`Inbound Topic: ${profileResult.topicInfo.inboundTopic}`);
   console.log(`Outbound Topic: ${profileResult.topicInfo.outboundTopic}`);
+  console.log(`UAID: ${profile.uaid}`);
 } else {
   console.error('Error:', profileResult.error);
 }
@@ -293,7 +295,7 @@ if (!validationResult.valid) {
 
 ## Integration with HCS-10
 
-HCS-11 works seamlessly with HCS-10 for AI agent communication:
+HCS-11 works seamlessly with HCS-10 for AI agent communication. The HCS‑10 client can create inbound/outbound topics and inscribe the HCS‑11 profile in one flow, using the existing operator account, and the profile will include a UAID.
 
 ```typescript
 import { HCS10, HCS11 } from '@hashgraphonline/standards-sdk';
@@ -333,18 +335,34 @@ const hcs10Client = new HCS10.HCS10Client({
   network: 'testnet',
   operatorId: '0.0.123456',
   operatorPrivateKey: 'your-private-key',
-  logLevel: 'info',
 });
 
-// Now you can use the topics from the profile for messaging
-const inboundTopicId = agentProfile.inboundTopicId || '';
-const outboundTopicId = agentProfile.outboundTopicId || '';
+// Create topics + inscribe profile using existing account
+const builder = new HCS11.AgentBuilder()
+  .setName('Assistant Bot')
+  .setAlias('assistant-bot')
+  .setBio('AI assistant')
+  .setCapabilities([
+    HCS11.AIAgentCapability.TEXT_GENERATION,
+    HCS11.AIAgentCapability.DATA_INTEGRATION,
+  ])
+  .setType('autonomous')
+  .setModel('gpt-4o')
+  .setNetwork('testnet')
+  .setInboundTopicType(HCS11.InboundTopicType.PUBLIC)
+  .setExistingAccount('0.0.123456', 'your-private-key');
 
-// Connect to the messaging infrastructure
-console.log(`Using inbound topic: ${inboundTopicId}`);
-console.log(`Using outbound topic: ${outboundTopicId}`);
+const created = await hcs10Client.createAgent(builder);
+// created.profileTopicId, created.inboundTopicId, created.outboundTopicId
 
-// You can now send and receive messages using the HCS-10 client
+// Fetch the profile and read its UAID
+const hcs11Client = new HCS11.HCS11Client({
+  network: 'testnet',
+  auth: { operatorId: '0.0.123456', privateKey: 'your-private-key' },
+});
+const fetched = await hcs11Client.fetchProfileByAccountId('0.0.123456', 'testnet');
+const profile = fetched.profile;
+console.log('UAID:', profile.uaid); // uaid:did:...;uid=...;proto=hcs-10;nativeId=hedera:testnet:0.0.123456
 // For example: handling a connection request
 const operatorId = `${inboundTopicId}@${
   hcs10Client.getClient().operatorAccountId

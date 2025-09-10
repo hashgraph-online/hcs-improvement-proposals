@@ -14,7 +14,7 @@ HCS-14 provides SDK helpers and a small client facade to create and use agent id
 - Provides strict canonicalization for AID hashing inputs
 - Generates AID/UAID in Node and browser environments
 - Includes CAIP helpers (Hedera CAIP‑10, EVM CAIP‑10)
-- Integrates optional `did:hedera` resolution via Hiero (dynamic dependency)
+- Integrates `did:hedera` issuance/resolution via Hiero (built-in dependency)
 
 ## Getting Started
 
@@ -22,9 +22,6 @@ HCS-14 provides SDK helpers and a small client facade to create and use agent id
 
 ```bash
 pnpm add @hashgraphonline/standards-sdk
-
-# Optional: only if you need did:hedera resolution or want to issue a did:hedera in demos
-pnpm add -D @hiero-did-sdk/resolver @hiero-did-sdk/registrar
 ```
 
 ### Basic Setup (Node.js)
@@ -48,8 +45,9 @@ const aid = await hcs14.generateAidDid({
 });
 
 // DID target (uaid:did) wrapping an existing DID
+// For HCS-10 on Hedera, set uid to the operator_id (inboundTopicId@accountId) when available
 const uaid = hcs14.generateUaidDid('did:hedera:testnet:zK3Y_0.0.12345', {
-  uid: '0',
+  uid: '0.0.12345',
   proto: 'hcs-10',
   nativeId: 'hedera:testnet:0.0.12345',
 });
@@ -71,7 +69,7 @@ Notes:
 
 ### Resolving UAID to a DID (Hedera example)
 
-Resolving `uaid:did` is optional and requires the Hiero resolver package. The HCS14Client integrates it via the resolver registry; if the dependency is absent, resolution returns `null` and the SDK Logger emits an error (module: `hcs-14:hiero-resolver`).
+Resolving `uaid:did` uses the integrated Hiero resolver; register it on the client’s resolver registry when you need resolution.
 
 ```ts
 import { HCS14Client } from '@hashgraphonline/standards-sdk';
@@ -80,7 +78,7 @@ const hcs14 = new HCS14Client();
 hcs14.registerHederaResolver();
 
 const doc = await hcs14.getResolverRegistry().resolveUaid(
-  'uaid:did:zK3Y_0.0.12345;uid=0;proto=hcs-10;nativeId=hedera:testnet:0.0.12345',
+  'uaid:did:zK3Y_0.0.12345;uid=0.0.12345;proto=hcs-10;nativeId=hedera:testnet:0.0.12345',
 );
 // doc is { id: 'did:hedera:testnet:...' } or null
 ```
@@ -105,4 +103,91 @@ pnpm exec tsx demo/hcs-14/aid-generate.ts   # local AID generation (no network)
 pnpm exec tsx demo/hcs-14/resolve-did.ts    # resolve an existing DID (set HCS14_DID)
 ```
 
-If `@hiero-did-sdk/resolver` is not installed, the UAID resolver returns `null` and logs an error via the SDK Logger. AID/UAID generation remains fully functional in both Node and browser.
+Resolution uses the built-in Hiero resolver; AID/UAID generation remains fully functional in both Node and browser.
+
+## Other Networks and Web2 Agents
+
+HCS‑14 is protocol‑agnostic. Below are examples for EVM (EIP‑155 CAIP‑10) and Web2 A2A/REST agents.
+
+### EVM (EIP‑155 CAIP‑10) — AID target
+
+```ts
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+
+const hcs14 = new HCS14Client();
+
+// Build an EIP‑155 CAIP‑10 nativeId (e.g., chainId=1 for Ethereum mainnet)
+const nativeId = hcs14.toEip155Caip10(1, '0x742d35Cc6634C0532925a3b844Bc9e7595f41Bd');
+
+// Create a deterministic AID UAID for an EVM agent (e.g., Virtuals/OLAS)
+const uaidAid = await hcs14.generateAidDid({
+  registry: 'virtuals',
+  name: 'Commerce Bot',
+  version: '1.0.0',
+  protocol: 'acp-virtuals',
+  nativeId, // eip155:1:0x...
+  skills: [0, 33],
+});
+// uaid:aid:...;uid=0;registry=virtuals;nativeId=eip155:1:0x...
+```
+
+### Web2 A2A — AID target (domain + agent name)
+
+```ts
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+
+const hcs14 = new HCS14Client();
+
+// A2A agents use a domain as nativeId and the agent's name as uid
+const a2aUaid = await hcs14.generateAidDid(
+  {
+    registry: 'microsoft',
+    name: 'Customer Support Assistant',
+    version: '1.0.0',
+    protocol: 'a2a',
+    nativeId: 'microsoft.com',
+    skills: [0, 17, 19],
+  },
+  { uid: 'customer-support-assistant' }
+);
+// uaid:aid:...;uid=customer-support-assistant;registry=microsoft;nativeId=microsoft.com
+```
+
+### did:web — DID target (wrap an existing Web2 DID)
+
+```ts
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+
+const hcs14 = new HCS14Client();
+
+// If your Web2 agent already has a DID (did:web), wrap it as a UAID with routing
+const webDid = 'did:web:agent.example.com';
+const uaidDid = hcs14.generateUaidDid(webDid, {
+  uid: 'support-bot', // Web2 agent identifier
+  proto: 'a2a',
+  nativeId: 'agent.example.com',
+});
+// uaid:did:agent.example.com;uid=support-bot;proto=a2a;nativeId=agent.example.com
+```
+
+These examples show consistent UAID generation for non‑Hedera networks and Web2 agents:
+- Use CAIP‑10 for account‑based networks (e.g., EVM via EIP‑155).
+- Use domains for Web2/A2A/REST agents in nativeId, and carry the agent name in uid.
+
+### Hedera uid derivation (proto=hcs-10)
+
+For HCS‑10 on Hedera, `uid` should be the operator_id when available, defined as `inboundTopicId@accountId`. The SDK derives this automatically when you issue a DID and wrap it as a UAID.
+
+```ts
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+
+const hcs14 = new HCS14Client({
+  network: 'testnet',
+  operatorId: '0.0.12345',
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const { did, uaid, parsed } = await hcs14.createDidAndUaid({ proto: 'hcs-10' });
+// If your account already has an HCS‑11 profile with inbound topic, uid becomes inboundTopicId@accountId.
+// Otherwise, uid temporarily falls back to the accountId.
+```
