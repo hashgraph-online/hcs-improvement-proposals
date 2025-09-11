@@ -2843,6 +2843,23 @@ main .theme-doc-generated-index-item:hover::after,
   }
 }
 
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 4s ease infinite;
+}
+
 /* Category page styling for ALL generated index pages */
 /* Add background pattern to category pages */
 .theme-doc-category-generated-index,
