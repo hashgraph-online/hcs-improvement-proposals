@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 7
 ---
 
 # Examples
@@ -23,7 +23,7 @@ The CLI demo showcases a complete implementation of the Standards Agent Kit in a
 
 ```bash
 # Clone the repository
-git clone https://github.com/hashgraph/standards-agent-kit.git
+git clone https://github.com/hashgraph-online/standards-agent-kit.git
 
 # Navigate to the examples directory
 cd standards-agent-kit/examples
