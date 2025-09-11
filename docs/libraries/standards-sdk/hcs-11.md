@@ -6,6 +6,8 @@ sidebar_position: 5
 
 The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera Hashgraph. It enables AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
 
+Note: UAID (HCS‑14) is network‑agnostic and works for Web2/EVM as well. HCS‑11 is a Hedera‑specific profile format that can carry a UAID to enable cross‑protocol discovery; you do not need HCS‑11 to use HCS‑14.
+
 ## What HCS-11 Does
 
 - **Creates Digital Identities** - Define profiles with capabilities, metadata, and images
@@ -275,6 +277,44 @@ if (profileResult.success) {
 }
 ```
 
+### UAID Resolution (HCS-14)
+
+When a profile includes a UAID (HCS‑14), you can resolve it to a DID document via the HCS‑14 resolver registry. For Hedera, register the built‑in Hiero resolver.
+
+```typescript
+import { defaultResolverRegistry, HieroDidResolver } from '@hashgraphonline/standards-sdk/hcs-14';
+
+// Register did:hedera resolver (no-op if already registered)
+defaultResolverRegistry.register(new HieroDidResolver());
+
+// Resolve a UAID (from profile.uaid) to a DID document
+const doc = await defaultResolverRegistry.resolveUaid(profile.uaid!);
+console.log('Resolved DID Document:', doc);
+```
+
+### Sample Profile JSON (with UAID)
+
+Below is a minimal HCS‑11 AI Agent profile that includes a UAID (HCS‑14). Field values are illustrative.
+
+```json
+{
+  "version": "1.0.0",
+  "type": 1,
+  "display_name": "HCS-10 Demo Agent",
+  "alias": "hcs10-demo-agent",
+  "bio": "Demo created via HCS-10 createAgent (with UAID)",
+  "uaid": "uaid:did:zK3Y_0.0.12345;uid=0.0.12345;proto=hcs-10;nativeId=hedera:testnet:0.0.12345",
+  "inboundTopicId": "0.0.789012",
+  "outboundTopicId": "0.0.789013",
+  "aiAgent": {
+    "type": 1,
+    "capabilities": [0, 17],
+    "model": "demo-model",
+    "creator": "Hashgraph Online"
+  }
+}
+```
+
 ## Working with Profiles
 
 HCS-11 provides utility methods for manipulating profiles:
@@ -363,6 +403,11 @@ const hcs11Client = new HCS11.HCS11Client({
 const fetched = await hcs11Client.fetchProfileByAccountId('0.0.123456', 'testnet');
 const profile = fetched.profile;
 console.log('UAID:', profile.uaid); // uaid:did:...;uid=...;proto=hcs-10;nativeId=hedera:testnet:0.0.123456
+// Resolve UAID via HCS-14
+import { defaultResolverRegistry, HieroDidResolver } from '@hashgraphonline/standards-sdk/hcs-14';
+defaultResolverRegistry.register(new HieroDidResolver());
+const resolved = await defaultResolverRegistry.resolveUaid(profile.uaid!);
+console.log('Resolved DID:', resolved);
 // For example: handling a connection request
 const operatorId = `${inboundTopicId}@${
   hcs10Client.getClient().operatorAccountId

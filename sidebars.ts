@@ -241,6 +241,7 @@ const sidebars: SidebarsConfig = {
               ],
             },
             'libraries/standards-sdk/hcs-11',
+            'libraries/standards-sdk/hcs-14',
             {
               type: 'category',
               label: 'HCS-12',
