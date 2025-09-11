@@ -9,9 +9,15 @@ const agentKitData = [
     icon: '📖',
   },
   {
+    title: 'Builders',
+    href: '/docs/libraries/standards-agent-kit/builders',
+    description: 'HCS‑10/2/6 + Inscriber builders with wallet delegation',
+    icon: '🏗️',
+  },
+  {
     title: 'Core Client',
     href: '/docs/libraries/standards-agent-kit/core-client',
-    description: 'Core client functionality for building AI agents that interact with HCS standards',
+    description: 'Low‑level HCS‑10 client wrapper (SDK integration)',
     icon: '🤖',
   },
   {
@@ -25,6 +31,12 @@ const agentKitData = [
     href: '/docs/libraries/standards-agent-kit/langchain-tools',
     description: 'Integration tools for using the agent kit with LangChain framework',
     icon: '🔗',
+  },
+  {
+    title: 'Wallet Integration',
+    href: '/docs/libraries/standards-agent-kit/wallet-integration',
+    description: 'Configure dApp signers, transaction bytes, and wallet submit',
+    icon: '👛',
   },
   {
     title: 'Plugins',

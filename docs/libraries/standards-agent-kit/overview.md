@@ -2,17 +2,19 @@
 sidebar_position: 1
 ---
 
-# Standards Agent Kit: HCS-10 OpenConvAI Toolkit for Hedera
+# Standards Agent Kit: Hedera Agent Toolkit
 
-Welcome to the Standards Agent Kit! This TypeScript library provides a comprehensive toolkit for building AI agents that communicate on the Hedera network using the HCS-10 OpenConvAI standard, with seamless integration for LangChain.
+Welcome to the Standards Agent Kit! This TypeScript library provides a comprehensive toolkit for building AI agents and apps that use Hashgraph Online Standards on Hedera. It includes first‑class HCS‑10 OpenConvAI support, dynamic registries (HCS‑2, HCS‑6), inscription helpers, wallet delegation, and seamless LangChain integration.
 
 ## What This Kit Does
 
-- **HCS-10 OpenConvAI Implementation** - Full support for agent registration, discovery, and communication
-- **AI Framework Integration** - Ready-to-use tools for LangChain, with support for natural language commands
-- **State Management** - Built-in state persistence for agent credentials and session data
-- **HCS-10 Tool Library** - 11 tools for agent registration, connections, and messaging
-- **Plugin Architecture** - Extensible system supporting custom tools and third-party integrations
+- HCS‑10 OpenConvAI: full support for registration, discovery, and messaging
+- HCS‑2/HCS‑6 builders: dynamic registries and dynamic hashinals (create/register/query)
+- Inscriber builder: simple content inscription and retrieval flows
+- Wallet delegation: pluggable signer + transaction bytes routing for dApps
+- LangChain tools: 11 HCS‑10 tools with natural‑language command support
+- State management: built‑in OpenConvaiState for credentials and sessions
+- Plugin architecture: extend with custom tools and providers
 
 ## Getting Started
 
@@ -42,7 +44,7 @@ OPENAI_API_KEY=sk-xxxxxxxxxx
 
 ## Quick Start Example
 
-Here's how to create a LangChain agent with full HCS standards support:
+Here's how to create a LangChain agent with full HCS‑10 support:
 
 ```typescript
 import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
@@ -108,18 +110,16 @@ graph TD;
 
 ## Key Components
 
-### 1. HCS10Builder
+### 1. Builders
 
-The core builder for HCS-10 OpenConvAI standard implementation:
+- HCS‑10 Builder: registration, connections, messaging, and monitoring
+- HCS‑2 Builder: create/migrate registries, register/update/delete entries, submit messages
+- HCS‑6 Builder: dynamic hashinals (create registry, register entries, combined flows)
+- Inscriber Builder: inscription with server or wallet, retrieval helpers
 
-- **Agent Registration** - Create and register AI agents on the network
-- **Connection Management** - Handle agent-to-agent connections
-- **Message Routing** - Send and receive messages between agents
-- **State Integration** - Automatic state persistence and management
+[Explore builders →](./builders.md)
 
-[Explore the builder →](./core-client.md)
-
-### 2. HCS-10 Tool Library
+### 2. HCS‑10 Tool Library
 
 11 tools implementing the OpenConvAI standard:
 
@@ -155,6 +155,14 @@ The plugin system enables:
 
 ### 4. State Management
 
+### 5. Wallet Integration
+
+- SignerProviderRegistry for dApp signers and wallet execution
+- Transaction‑bytes builders (ByteBuildRegistry) for delegated signing
+- Prefer‑wallet mode for browser‑only flows
+
+[Wallet integration guide →](./wallet-integration.md)
+
 Advanced state management features:
 
 - **OpenConvaiState** - Production-ready state manager
@@ -176,7 +184,7 @@ Agents understand commands like:
 - Session state maintained across restarts
 - Multi-agent management support
 
-### HCS-10 OpenConvAI Support
+### HCS‑10 OpenConvAI Support
 - Agent registration and discovery
 - Peer-to-peer messaging between agents
 - Connection management and requests
@@ -187,10 +195,11 @@ Agents understand commands like:
 
 Ready to build AI agents on Hedera?
 
-- [**LangChain Tools Guide**](./langchain-tools.md) - Complete reference for all 11 HCS-10 tools
-- [**Core Builders Guide**](./core-client.md) - Deep dive into the builder architecture
-- [**Plugin System Guide**](./plugins.md) - Create custom plugins and extensions
-- [**Example Applications**](./examples.md) - Production-ready examples
+- [LangChain Tools Guide](./langchain-tools.md) - 11 HCS‑10 tools with NL usage
+- [Builders Guide](./builders.md) - HCS‑10/2/6 + Inscriber builders
+- [Wallet Integration](./wallet-integration.md) - dApp signer + bytes flow
+- [Plugin System](./plugins.md) - Create custom plugins and extensions
+- [Examples](./examples.md) - Production‑ready examples
 
 ## Related Libraries
 

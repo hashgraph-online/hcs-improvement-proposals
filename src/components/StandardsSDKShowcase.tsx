@@ -15,15 +15,21 @@ const standardsSDKData = [
     icon: '📋',
   },
   {
-    title: 'HCS-3 Integration',
+    title: 'HCS-3 SDK',
     href: '/docs/libraries/standards-sdk/hcs-3',
-    description: 'SDK implementation for HCS-3 Recursion standard',
+    description: 'Recursion standard (SDK implementation)',
     icon: '🔄',
   },
   {
-    title: 'HCS-7 Integration', 
+    title: 'HCS-6 SDK',
+    href: '/docs/libraries/standards-sdk/hcs-6',
+    description: 'Dynamic Hashinals standard (SDK implementation)',
+    icon: '🧬',
+  },
+  {
+    title: 'HCS-7 SDK', 
     href: '/docs/libraries/standards-sdk/hcs-7',
-    description: 'SDK implementation for HCS-7 Smart Hashinals standard',
+    description: 'Smart Hashinals standard (SDK implementation)',
     icon: '💎',
   },
   {
@@ -33,10 +39,22 @@ const standardsSDKData = [
     icon: '🤖',
   },
   {
-    title: 'HCS-11 Integration',
+    title: 'HCS-11 SDK',
     href: '/docs/libraries/standards-sdk/hcs-11',
-    description: 'SDK implementation for HCS-11 Profile Metadata standard',
+    description: 'Profile Metadata standard (SDK implementation)',
     icon: '👤',
+  },
+  {
+    title: 'HCS-12 SDK',
+    href: '/docs/libraries/standards-sdk/hcs-12',
+    description: 'HashLinks standard: actions, blocks, assembly (SDK implementation)',
+    icon: '🧩',
+  },
+  {
+    title: 'HCS-14 SDK',
+    href: '/docs/libraries/standards-sdk/hcs-14',
+    description: 'Universal Agent Identifier (UAID): AID + DID wrapper (SDK implementation)',
+    icon: '🆔',
   },
   {
     title: 'HCS-20 SDK',

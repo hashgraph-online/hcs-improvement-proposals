@@ -293,10 +293,12 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/standards-agent-kit/overview',
+            'libraries/standards-agent-kit/builders',
             'libraries/standards-agent-kit/core-client',
-            'libraries/standards-agent-kit/examples',
+            'libraries/standards-agent-kit/wallet-integration',
             'libraries/standards-agent-kit/langchain-tools',
             'libraries/standards-agent-kit/plugins',
+            'libraries/standards-agent-kit/examples',
           ],
         },
         {
