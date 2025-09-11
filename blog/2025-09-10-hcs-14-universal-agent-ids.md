@@ -62,12 +62,19 @@ Account memo → hcs-11:hcs://1/0.0.123456
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "1.0",
   "type": 1,
-  "display_name": "Demo Agent",
-  "uaid": "uaid:did:zK3Y_0.0.12345;uid=0.0.12345;proto=hcs-10;nativeId=hedera:testnet:0.0.12345",
-  "inboundTopicId": "0.0.789012",
-  "aiAgent": { "type": 1, "capabilities": [0, 17], "model": "demo" }
+  "display_name": "HCS-10 Demo Agent",
+  "alias": "hcs-10_demo_agent",
+  "bio": "Demo created via HCS-10 createAgent (with UAID attached)",
+  "inboundTopicId": "0.0.6809294",
+  "outboundTopicId": "0.0.6809293",
+  "aiAgent": {
+    "type": 1,
+    "capabilities": [0],
+    "model": "demo-model"
+  },
+  "uaid": "uaid:did:7L6c8nDbwXah2KCZTrdC7xPxbhDtYmJFhgb44habP4Jg_0.0.6809295;uid=0.0.6809294@0.0.2659396;proto=hcs-10;nativeId=hedera:testnet:0.0.2659396"
 }
 ```
 
@@ -78,7 +85,6 @@ The SDK can attach a UAID automatically when you create a profile for an HCS‑1
 ```ts
 const fetched = await hcs11.fetchProfileByAccountId(accountId, 'testnet');
 const uaid = fetched.profile?.uaid;
-hcs14.registerHederaResolver();
 const doc = uaid ? await hcs14.getResolverRegistry().resolveUaid(uaid) : null;
 ```
 
@@ -214,7 +220,6 @@ const { did, uaid: hederaUaid } = await hcs14.createDidWithUaid({
 Resolve a UAID (Hedera)
 
 ```ts
-hcs14.registerHederaResolver();
 const doc = await hcs14.getResolverRegistry().resolveUaid(hederaUaid);
 ```
 

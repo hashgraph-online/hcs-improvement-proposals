@@ -14,7 +14,22 @@ Note: UAID (HCS‑14) is network‑agnostic and works for Web2/EVM as well. HCS�
 - **Stores on Hedera** - Inscribes profiles on the network
 - **Links to Accounts** - Associates profiles with Hedera accounts via memos
 - **Enables Discovery** - Makes agents and users discoverable through HCS-10 and other standards
-- **UAID Integration** - Automatically attaches an HCS‑14 UAID (`uaid:did:...`) to profiles when missing
+- **UAID Integration** - On Hedera, automatically attaches an HCS‑14 UAID to profiles that are missing one. The client issues a `did:hedera` via Hiero and wraps it as `uaid:did:...` with `proto=hcs-10`, a CAIP‑10 `nativeId`, and a `uid` derived from `inboundTopicId@accountId` when available (else the accountId). If Hiero isn’t available or you’re not on Hedera, the client skips UAID attachment (you can set `profile.uaid` yourself beforehand).
+
+> No extra steps: on Hedera, `inscribeProfile` and `createAndInscribeProfile` automatically attach a UAID when it’s missing.
+
+### UAID Auto‑Attach (Hedera)
+
+When you inscribe a profile, `HCS11Client` checks `profile.uaid`. If it’s missing and you’re on Hedera, the client:
+
+1. Issues a `did:hedera` via the integrated Hiero registrar.
+2. Builds a UAID using HCS‑14 (`uaid:did:...`) with:
+   - `proto`: `hcs-10`
+   - `nativeId`: Hedera CAIP‑10 (`hedera:<network>:<account>`)
+   - `uid`: `inboundTopicId@accountId` (operator_id) if present, otherwise the accountId
+3. Writes the UAID into the profile JSON before inscription.
+
+This keeps identity details in the DID Document, while the UAID provides a stable handle for discovery and routing.
 
 ## Getting Started
 
@@ -158,7 +173,7 @@ console.log('Supported social platforms:', HCS11.SUPPORTED_SOCIAL_PLATFORMS);
 
 ### Inscribing to Hedera
 
-Store profiles on the Hedera Hashgraph:
+Store profiles on the Hedera Hashgraph. On Hedera, the client will attach a UAID automatically if the profile doesn’t already have one; you don’t need to do anything extra.
 
 ```typescript
 // Inscribe the profile with progress tracking
@@ -277,18 +292,17 @@ if (profileResult.success) {
 }
 ```
 
-### UAID Resolution (HCS-14)
+### UAID Resolution (HCS‑14)
 
-When a profile includes a UAID (HCS‑14), you can resolve it to a DID document via the HCS‑14 resolver registry. For Hedera, register the built‑in Hiero resolver.
+Optional: when a profile includes a UAID, you can resolve it to a DID Document via HCS‑14’s resolver registry. For Hedera, enable the built‑in Hiero resolver.
 
 ```typescript
-import { defaultResolverRegistry, HieroDidResolver } from '@hashgraphonline/standards-sdk/hcs-14';
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
 
-// Register did:hedera resolver (no-op if already registered)
-defaultResolverRegistry.register(new HieroDidResolver());
+const hcs14 = new HCS14Client();
 
-// Resolve a UAID (from profile.uaid) to a DID document
-const doc = await defaultResolverRegistry.resolveUaid(profile.uaid!);
+// Resolve a UAID (from profile.uaid) to a DID Document
+const doc = await hcs14.getResolverRegistry().resolveUaid(profile.uaid!);
 console.log('Resolved DID Document:', doc);
 ```
 
@@ -314,7 +328,6 @@ Below is a minimal HCS‑11 AI Agent profile that includes a UAID (HCS‑14). Fi
   }
 }
 ```
-
 ## Working with Profiles
 
 HCS-11 provides utility methods for manipulating profiles:
@@ -404,9 +417,9 @@ const fetched = await hcs11Client.fetchProfileByAccountId('0.0.123456', 'testnet
 const profile = fetched.profile;
 console.log('UAID:', profile.uaid); // uaid:did:...;uid=...;proto=hcs-10;nativeId=hedera:testnet:0.0.123456
 // Resolve UAID via HCS-14
-import { defaultResolverRegistry, HieroDidResolver } from '@hashgraphonline/standards-sdk/hcs-14';
-defaultResolverRegistry.register(new HieroDidResolver());
-const resolved = await defaultResolverRegistry.resolveUaid(profile.uaid!);
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+const hcs14 = new HCS14Client();
+const resolved = await hcs14.getResolverRegistry().resolveUaid(profile.uaid!);
 console.log('Resolved DID:', resolved);
 // For example: handling a connection request
 const operatorId = `${inboundTopicId}@${

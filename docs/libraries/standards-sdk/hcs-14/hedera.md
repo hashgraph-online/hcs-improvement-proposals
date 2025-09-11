@@ -33,10 +33,9 @@ const { did, uaid, parsed } = await hcs14.createDidWithUaid({
 
 ## Resolve UAID → DID
 
-```ts
-import { HieroDidResolver } from '@hashgraphonline/standards-sdk';
+The Hedera resolver is registered automatically by `HCS14Client`.
 
-hcs14.getResolverRegistry().register(new HieroDidResolver());
+```ts
 const doc = await hcs14.getResolverRegistry().resolveUaid('uaid:did:...');
 ```
 
@@ -56,4 +55,3 @@ Commands:
 pnpm run demo:hcs-14:issue-resolve
 pnpm exec tsx demo/hcs-14/resolve-did.ts
 ```
-
