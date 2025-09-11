@@ -38,6 +38,7 @@ Start with inscribing a simple text message:
 ```javascript
 // inscribe-text.js
 import { inscribe } from '@hashgraph-online/standards-sdk';
+import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -70,6 +71,9 @@ async function inscribeText() {
   console.log("✅ Inscription successful!");
   console.log(`Topic ID: ${result.result.topicId}`);
   console.log(`Transaction ID: ${result.result.transactionId}`);
+  
+  // Save transaction ID for later retrieval
+  fs.writeFileSync('inscription-tx-id.txt', result.result.transactionId);
   
   if (result.confirmed) {
     console.log("Content confirmed on network:");
@@ -125,9 +129,12 @@ async function inscribeImage() {
 
   console.log("✅ Image inscribed successfully!");
   console.log(`Topic ID: ${result.result.topicId}`);
+  console.log(`Transaction ID: ${result.result.transactionId}`);
   console.log(`View at: hcs://1/${result.result.topicId}`);
   
-  // Save the HRL for later retrieval
+  // Save the transaction ID for later retrieval
+  fs.writeFileSync('inscription-tx-id.txt', result.result.transactionId);
+  // Save the HRL for reference
   fs.writeFileSync('inscription-hrl.txt', `hcs://1/${result.result.topicId}`);
 }
 
@@ -193,12 +200,13 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 async function retrieveContent() {
-  const topicId = '0.0.123456'; // Replace with your topic ID
+  // Use the transaction ID from the inscription result
+  const transactionId = '0.0.123456@1234567890.123456789'; // Replace with your transaction ID
   
-  console.log(`🔍 Retrieving inscription from topic ${topicId}...`);
+  console.log(`🔍 Retrieving inscription with transaction ID ${transactionId}...`);
 
   const inscription = await retrieveInscription(
-    topicId,
+    transactionId,
     {
       network: 'testnet',
       apiKey: process.env.API_KEY // Optional: for faster retrieval
@@ -206,19 +214,18 @@ async function retrieveContent() {
   );
 
   console.log("✅ Inscription retrieved!");
-  console.log(`File Name: ${inscription.fileName}`);
-  console.log(`MIME Type: ${inscription.mimeType}`);
-  console.log(`Size: ${inscription.size} bytes`);
+  console.log(`Topic ID: ${inscription.topic_id}`);
+  console.log(`Content Type: ${inscription.content_type}`);
+  console.log(`Sequence Number: ${inscription.sequence_number}`);
 
   // Save retrieved content
-  if (inscription.mimeType.startsWith('text/')) {
+  if (inscription.content_type.startsWith('text/')) {
     // Text content
     console.log("Content:", inscription.content);
-  } else {
-    // Binary content (image, etc.)
-    const outputPath = `retrieved-${inscription.fileName}`;
-    fs.writeFileSync(outputPath, inscription.buffer);
-    console.log(`Saved to: ${outputPath}`);
+  } else if (inscription.url) {
+    // Binary content available via URL
+    console.log(`Content URL: ${inscription.url}`);
+    // You can fetch the content from the URL if needed
   }
 }
 

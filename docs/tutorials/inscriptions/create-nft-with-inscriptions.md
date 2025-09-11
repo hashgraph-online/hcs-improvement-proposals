@@ -67,8 +67,12 @@ async function inscribeNFTImage() {
 
   const imageHRL = `hcs://1/${imageInscription.result.topicId}`;
   console.log(`✅ Image inscribed: ${imageHRL}`);
+  console.log(`Transaction ID: ${imageInscription.result.transactionId}`);
   
-  return imageHRL;
+  // Save transaction ID for later retrieval
+  fs.writeFileSync('image-tx-id.txt', imageInscription.result.transactionId);
+  
+  return { imageHRL, transactionId: imageInscription.result.transactionId };
 }
 ```
 
@@ -131,8 +135,12 @@ async function inscribeMetadata(metadata, clientConfig) {
 
   const metadataHRL = `hcs://1/${metadataInscription.result.topicId}`;
   console.log(`✅ Metadata inscribed: ${metadataHRL}`);
+  console.log(`Transaction ID: ${metadataInscription.result.transactionId}`);
   
-  return metadataHRL;
+  // Save transaction ID for later retrieval
+  fs.writeFileSync('metadata-tx-id.txt', metadataInscription.result.transactionId);
+  
+  return { metadataHRL, transactionId: metadataInscription.result.transactionId };
 }
 ```
 
@@ -242,7 +250,9 @@ async function createCompleteHashinal() {
     );
     
     const imageHRL = `hcs://1/${imageResult.result.topicId}`;
+    const imageTransactionId = imageResult.result.transactionId;
     console.log(`Image HRL: ${imageHRL}`);
+    console.log(`Image Transaction ID: ${imageTransactionId}`);
 
     // 2. Create metadata with image HRL
     console.log("\nStep 2: Creating metadata...");
@@ -272,7 +282,9 @@ async function createCompleteHashinal() {
     );
     
     const metadataHRL = `hcs://1/${metadataResult.result.topicId}`;
+    const metadataTransactionId = metadataResult.result.transactionId;
     console.log(`Metadata HRL: ${metadataHRL}`);
+    console.log(`Metadata Transaction ID: ${metadataTransactionId}`);
 
     // 4. Create NFT with metadata HRL
     console.log("\nStep 4: Creating NFT...");
@@ -319,6 +331,8 @@ async function createCompleteHashinal() {
       serialNumber: mintReceipt.serials[0].toString(),
       metadataHRL,
       imageHRL,
+      metadataTransactionId,
+      imageTransactionId,
       timestamp: new Date().toISOString()
     };
     
@@ -340,24 +354,27 @@ createCompleteHashinal();
 ```javascript
 // view-hashinal.js
 import { retrieveInscription } from '@hashgraph-online/standards-sdk';
+import * as fs from 'fs';
 
-async function viewHashinal(metadataHRL) {
-  // Extract topic ID from HRL
-  const topicId = metadataHRL.replace('hcs://1/', '');
-  
-  // Retrieve metadata
-  const metadataInscription = await retrieveInscription(topicId, {
-    network: 'testnet'
-  });
+async function viewHashinal(metadataTransactionId, imageTransactionId) {
+  // Retrieve metadata using transaction ID
+  const metadataInscription = await retrieveInscription(
+    metadataTransactionId, // Use transaction ID, not topic ID
+    {
+      network: 'testnet'
+    }
+  );
   
   const metadata = JSON.parse(metadataInscription.content);
   console.log("NFT Metadata:", metadata);
   
-  // Retrieve image
-  const imageTopicId = metadata.image.replace('hcs://1/', '');
-  const imageInscription = await retrieveInscription(imageTopicId, {
-    network: 'testnet'
-  });
+  // Retrieve image using transaction ID
+  const imageInscription = await retrieveInscription(
+    imageTransactionId, // Use transaction ID, not topic ID
+    {
+      network: 'testnet'
+    }
+  );
   
   // Save image locally
   fs.writeFileSync('retrieved-nft.png', imageInscription.buffer);
@@ -401,10 +418,12 @@ async function batchMintHashinals(metadataHRLs, tokenId) {
 ### 3. Validate Inscriptions
 
 ```javascript
-async function validateHashinal(metadataHRL) {
+async function validateHashinal(metadataTransactionId, imageTransactionId) {
   try {
-    const topicId = metadataHRL.replace('hcs://1/', '');
-    const inscription = await retrieveInscription(topicId);
+    // Retrieve using transaction ID, not topic ID
+    const inscription = await retrieveInscription(metadataTransactionId, {
+      network: 'testnet'
+    });
     
     const metadata = JSON.parse(inscription.content);
     
@@ -413,9 +432,10 @@ async function validateHashinal(metadataHRL) {
       throw new Error("Invalid metadata structure");
     }
     
-    // Validate image inscription
-    const imageTopicId = metadata.image.replace('hcs://1/', '');
-    await retrieveInscription(imageTopicId);
+    // Validate image inscription using transaction ID
+    await retrieveInscription(imageTransactionId, {
+      network: 'testnet'
+    });
     
     console.log("✅ Hashinal validation passed");
     return true;
