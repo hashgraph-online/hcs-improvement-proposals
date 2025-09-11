@@ -15,7 +15,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@hashgraphonline/standards-sdk": "0.0.188",
+    "@hashgraphonline/standards-sdk": "^0.0.199",
     "@docusaurus/core": "^3.8.1",
     "@docusaurus/plugin-client-redirects": "^3.8.1",
     "@docusaurus/plugin-content-blog": "^3.8.1",
