@@ -58,6 +58,11 @@ ai:
   permalink: /ai
   description: Artificial Intelligence related content
 
+standards:
+  label: Standards
+  permalink: /standards
+  description: Standards and specifications
+
 agents:
   label: Agents
   permalink: /agents
@@ -132,6 +137,31 @@ ai-agents:
   label: AI Agents
   permalink: /ai-agents
   description: AI agent development and applications
+
+identity:
+  label: Identity
+  permalink: /identity
+  description: Digital identity, identifiers, and DIDs
+
+privacy:
+  label: Privacy
+  permalink: /privacy
+  description: Privacy topics for agents and applications
+
+compliance:
+  label: Compliance
+  permalink: /compliance
+  description: Regulatory compliance and related tooling
+
+hcs-19:
+  label: HCS-19
+  permalink: /hcs-19
+  description: HCS-19 AI Agent Privacy Compliance standard
+
+privacycheq:
+  label: PrivacyCheq
+  permalink: /privacycheq
+  description: PrivacyCheq and aiCheq integrations
 
 machine-commerce:
   label: Machine Commerce
