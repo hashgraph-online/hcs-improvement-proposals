@@ -73,6 +73,18 @@ export default function SidebarShowcase({
         }
       }
 
+      if (!meta) {
+        // Final fallback: if this is a category like "HCS-10", map to libraries/standards-sdk/hcs-10/index
+        const lbl: string | undefined = anyIt?.label as string | undefined;
+        if (lbl && /^HCS-\d+/i.test(lbl)) {
+          const num = lbl.match(/^HCS-(\d+)/i)?.[1];
+          if (num) {
+            const guessId = `libraries/standards-sdk/hcs-${num}/index`;
+            meta = versionDocs.find((d: any) => d && d.id === guessId);
+          }
+        }
+      }
+
       const href: string | undefined = directHref || (meta && meta.permalink) || undefined;
       if (!href) {
         return null;
