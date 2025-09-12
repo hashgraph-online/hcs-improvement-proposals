@@ -182,6 +182,7 @@ const sidebars: SidebarsConfig = {
             'libraries/standards-sdk/overview',
             'libraries/standards-sdk/hcs-2',
             'libraries/standards-sdk/hcs-3',
+            'libraries/standards-sdk/hcs-5',
             'libraries/standards-sdk/hcs-6',
             'libraries/standards-sdk/hcs-7',
             {

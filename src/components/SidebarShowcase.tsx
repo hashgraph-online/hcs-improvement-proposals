@@ -43,15 +43,69 @@ export default function SidebarShowcase({
 
   const items: ShowcaseItem[] = (category.items as any[])
     .map((it) => {
-      const href = (it && (it as any).href) || undefined;
-      if (!href) return null;
-      const docId = (it as any).docId as string | undefined;
-      const label = (it as any).label || docId || href;
-      const meta = docId
-        ? versionDocs.find((d: any) => d.id === docId)
-        : versionDocs.find((d: any) => d.permalink === href);
-      const title = (meta && (meta.title as string)) || label;
-      const description = (meta && (meta.description as string)) || '';
+      const anyIt = it as any;
+      const directHref: string | undefined = anyIt && anyIt.href ? anyIt.href : undefined;
+      const linkDocId: string | undefined = anyIt?.link?.id as string | undefined;
+      const docId: string | undefined = (anyIt?.docId as string | undefined) || linkDocId;
+
+      let meta: any | undefined;
+      if (docId) {
+        meta = versionDocs.find((d: any) => d.id === docId);
+      } else if (directHref) {
+        // Try exact permalink match
+        meta = versionDocs.find((d: any) => d && d.permalink === directHref);
+        if (!meta) {
+          // Try trailing-slash normalized match
+          const normalize = (p: string) => (p.endsWith('/') ? p : `${p}/`);
+          const hrefNorm = normalize(directHref);
+          meta = versionDocs.find(
+            (d: any) => d && typeof d.permalink === 'string' && normalize(d.permalink) === hrefNorm,
+          );
+        }
+        if (!meta) {
+          // Derive a potential doc id from href and try that
+          const fromHrefId = directHref
+            .replace(/^\/?docs\//, '')
+            .replace(/^\//, '')
+            .replace(/\/$/, '');
+          const idCandidates = [fromHrefId, `${fromHrefId}/index`];
+          meta = versionDocs.find((d: any) => d && idCandidates.includes(d.id));
+        }
+      }
+
+      if (!meta) {
+        // Final fallback: if this is a category like "HCS-10", map to libraries/standards-sdk/hcs-10/index
+        const lbl: string | undefined = anyIt?.label as string | undefined;
+        if (lbl && /^HCS-\d+/i.test(lbl)) {
+          const num = lbl.match(/^HCS-(\d+)/i)?.[1];
+          if (num) {
+            const guessId = `libraries/standards-sdk/hcs-${num}/index`;
+            meta = versionDocs.find((d: any) => d && d.id === guessId);
+            if (!meta) {
+              // As a last resort, synthesize from a known mapping to ensure good titles
+              const titleMapping: Record<string, { id: string; title: string }> = {
+                'HCS-10': { id: 'libraries/standards-sdk/hcs-10/index', title: 'HCS-10 OpenConvAI SDK' },
+                'HCS-12': { id: 'libraries/standards-sdk/hcs-12/index', title: 'HCS-12: HashLinks SDK' },
+                'HCS-14': { id: 'libraries/standards-sdk/hcs-14/index', title: 'HCS-14: Universal Agent Identifier (UAID)' },
+              };
+              const map = titleMapping[lbl];
+              if (map) {
+                meta = versionDocs.find((d: any) => d && d.id === map.id) || { id: map.id, title: map.title, permalink: `/docs/${map.id}` };
+              }
+            }
+          }
+        }
+      }
+
+      const href: string | undefined = directHref || (meta && meta.permalink) || undefined;
+      if (!href) {
+        return null;
+      }
+
+      const label: string = anyIt?.label || docId || href;
+      const title: string = (meta && (meta.title as string)) || label;
+      const description: string = (meta && (meta.description as string)) || '';
+
       return {
         title,
         href,
