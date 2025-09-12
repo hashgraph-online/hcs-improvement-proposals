@@ -2,7 +2,7 @@
   "label": "Conversational Agent",
   "position": 5,
   "link": {
-    "type": "generated-index",
-    "description": "Conversational AI agent implementing Hashgraph Consensus Standards"
+    "type": "doc",
+    "id": "libraries/conversational-agent/index"
   }
 }

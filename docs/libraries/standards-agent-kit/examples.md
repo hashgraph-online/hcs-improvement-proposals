@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 8
 ---
 
 # Examples
@@ -164,6 +164,12 @@ Initiating connection to 0.0.2656337...
 Successfully established connection #1 with Agent 0.0.2656337 (0.0.2656337). Connection Topic: 0.0.5846337. You can now send messages using this connection.
 ```
 
+## Next Steps
+
+- Explore builders used under the hood: [Builders](./builders.md)
+- Add your own tools: [LangChain Tools](./langchain-tools.md)
+- Plug in wallets: [Wallet Integration](./wallet-integration.md)
+
 ### Implementation Details
 
 The demo now supports multiple agent identities through enhanced state management:
@@ -197,6 +203,20 @@ if (persistence && persistence.prefix) {
 await updateEnvFile(envFilePath, {
   KNOWN_AGENT_PREFIXES: prefixList.join(','),
 });
+```
+
+## Diagram (What the CLI does)
+
+```mermaid
+flowchart TD
+  Start["Start CLI"] --> Init["Initialize HCS-10 client"]
+  Init --> Load["Load agents from .env (optional)"]
+  Load --> Menu["Interactive Menu"]
+  Menu -->|Register| Reg["Register Agent"]
+  Menu -->|Connect| Conn["Initiate/Accept Connection"]
+  Menu -->|Message| Msg["Send/Receive Messages"]
+  Reg --> Save["Persist to .env"]
+  Conn --> Msg
 ```
 
 This approach offers several benefits:

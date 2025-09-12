@@ -3,6 +3,11 @@ title: Entity Memory & Smart Memory
 description: Persist entities (topics, tokens, accounts) and keep searchable history the agent can use for follow‑ups
 ---
 
+Overview
+- See how the agent remembers IDs (topics, tokens, accounts) across turns
+- Learn how pruning works and how to search older context
+- Use the programmatic API to inspect what’s stored
+
 What this provides
 - A token‑bounded active window for the conversation, plus a searchable long‑term store for pruned messages.
 - Automatic entity capture: when tools create on‑chain entities (e.g., InscribeHashinalTool returns a topicId/HRL), the agent stores an association so users can refer to “that last topic” or “my token”.
@@ -80,3 +85,18 @@ Best practices
 - Respect privacy: Avoid persisting secrets/PII in prompts.
 - Tune `maxTokens`/`reserveTokens` for your model size and response lengths.
 - Prefer referring to prior artifacts via their names/IDs—the association store makes resolution reliable and cheap.
+
+Diagram
+```mermaid
+flowchart TD
+  A[Tool creates entity] --> B[Agent captures IDs/HRLs]
+  B --> C[Active window memory]
+  C --> D{Too many tokens?}
+  D -->|Yes| E[Prune -> Long-term store]
+  D -->|No| C
+  E --> F[Searchable history]
+  F --> G["User says 'use my last topic'"]
+  G --> H[Resolve to ID/HRL]
+```
+
+Up next: [Content References & HashLinks](./content-references-and-hashlinks) — keep messages small but powerful

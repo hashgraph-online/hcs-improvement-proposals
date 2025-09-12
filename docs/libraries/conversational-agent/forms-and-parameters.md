@@ -1,7 +1,12 @@
 ---
 title: Forms & Parameter Collection
-description: How the agent generates forms, what to render, and how to resume tool calls programmatically
+description: How the agent gathers missing details and how you submit them programmatically
 ---
+
+Overview
+- Understand why and when the agent asks for a form
+- See the shape of the message to render
+- Learn how to submit the form back to continue execution
 
 Why forms exist
 - Tools often need structured inputs. When details are missing or ambiguous, the agent returns a dynamic form so the user can supply required fields without guesswork.
@@ -111,3 +116,17 @@ Tips
 - Persist `formMessage.id` and echo it back in `formId`.
 - Prefer rendering `jsonSchema/uiSchema` where convenient; fall back to `formConfig.fields` for custom UIs.
 - Pre‑fill from Smart Memory (recent entities, prior values) to reduce user effort.
+
+Up next: [Entity Memory](./entity-memory) — how the agent remembers IDs and context
+
+Diagram
+```mermaid
+flowchart LR
+  A["User asks for action"] --> B{"Enough params?"}
+  B -->|Yes| C["Call tool directly"]
+  B -->|No| D["Agent returns formMessage"]
+  D --> E["Render form UI"]
+  E --> F["Submit form (processFormSubmission)"]
+  F --> C
+  C --> G["Response / bytes / receipt"]
+```

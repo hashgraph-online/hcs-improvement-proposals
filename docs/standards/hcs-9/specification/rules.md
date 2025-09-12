@@ -17,7 +17,7 @@ Rules are the simplest building block of the hcs-9 standard. They are used to to
 ![rule diagram](../../../../static/polls/rule.png)
 
 
-The definition of the schema as a JSON Schema file is here: [Rule Schema](../../../assets/schema/rule.json)
+The definition of the schema as a JSON Schema file is here: [Rule Schema](/assets/schema/rule.json)
 
 ## Fields
 
