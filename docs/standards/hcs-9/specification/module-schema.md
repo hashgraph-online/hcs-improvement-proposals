@@ -19,7 +19,7 @@ There are only two fields in the module schema:
 ![base module diagram](../../../../static/polls/base-module-chart.png)
 
 
-The definition of the schema as a JSON Schema file is here: [Base Module Schema](../../../assets/schema/base-module.json)
+The definition of the schema as a JSON Schema file is here: [Base Module Schema](/assets/schema/base-module.json)
 
 ## Fields
 
