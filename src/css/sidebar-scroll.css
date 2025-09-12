@@ -1,10 +1,13 @@
 /* Enhanced Docusaurus sidebar scrolling with overflow handling */
 
-/* Main sidebar container with proper scrolling */
+/* Main sidebar container with sticky positioning */
 .theme-doc-sidebar-container {
-  height: 100vh;
+  position: sticky !important;
+  top: var(--ifm-navbar-height) !important;
+  height: calc(100vh - var(--ifm-navbar-height)) !important;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* Scrollable sidebar content area */
