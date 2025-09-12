@@ -11,7 +11,22 @@ The Standards Agent Kit supports browser/dApp flows where transactions are built
 
 The InscriberBuilder uses a parallel delegate configuration for inscription flows.
 
+## Visual Primer
+
+```mermaid
+flowchart LR
+  B["Builder (HCS-10/2/6)"] --> R["ByteBuildRegistry
+  (construct base64 tx bytes)"]
+  R --> D["Wallet Executor
+  (submit bytes)"]
+  D --> H["Hedera"]
+  B -.fallback.- S["Server Submit via SDK"]
+  S --> H
+```
+
 ## SignerProviderRegistry
+
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/signing/signer-provider.ts
 
 ```ts
 import { SignerProviderRegistry } from '@hashgraphonline/standards-agent-kit';
@@ -52,7 +67,14 @@ How it works
 - If a `walletExecutor` is configured, builders return `transactionBytes` for you to submit.
 - In server contexts (with private key), builders can submit directly via Standards SDK.
 
+Beginner checklist
+- If you see `wallet_unavailable`, connect a wallet or disable preferWalletOnly
+- If you see `wallet_submit_failed`, log the error from your wallet SDK
+- For desktop/server scripts, skip wallet and use server submit directly
+
 ## ByteBuildRegistry
+
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/signing/bytes-registry.ts
 
 The kit includes a registry of byte builders for common HCS operations. You generally don’t call it directly — builders do — but you can extend it.
 
@@ -104,3 +126,13 @@ InscriberBuilder.setPreferWalletOnly(true);
 - In browser apps, set `preferWalletOnly` and rely on a wallet for all submits.
 - On servers, do not set `preferWalletOnly`; provide operator private key via HederaAgentKit.
 - Builders return helpful errors with code strings like `wallet_unavailable` or `wallet_submit_failed` when delegation is required.
+
+Pitfalls
+- Returning bytes doesn’t submit anything — your UI must call the wallet
+- Make sure the `network` you pass to the wallet matches testnet/mainnet
+
+## Next Steps
+
+- Use with builders: [HCS‑10/HCS‑2/HCS‑6/Inscriber](./builders.md)
+- Build form-driven tools: [Form-Driven Tools and HashLink Blocks](./tool-forms-and-hashlinks.md)
+- See end-to-end demos: [Examples](./examples.md)

@@ -6,7 +6,7 @@ keywords: [plugin, development, hedera, agent, tools, custom, extension]
 
 # Plugin Development Guide
 
-This guide explains how to create custom plugins for the Hashgraph Online Conversational Agent.
+This chapter walks you through building your own plugin. You’ll learn the lifecycle, add tools, return bytes or receipts, and ship forms when inputs are missing.
 
 ## Table of Contents
 
@@ -34,6 +34,21 @@ Plugins in the conversational agent extend the `BasePlugin` class from `hedera-a
 3. **Initialization**: `initialize()` is called when the agent starts
 4. **Tool Discovery**: Agent calls `getTools()` to discover available tools
 5. **Execution**: Tools are executed as needed during conversations
+
+Diagram
+```mermaid
+sequenceDiagram
+  participant App
+  participant Agent
+  participant Plugin
+  participant Tool
+  App->>Agent: new ConversationalAgent({ additionalPlugins: [Plugin] })
+  Agent->>Plugin: initialize(context)
+  Plugin->>Agent: getTools() → [Tool, Tool...]
+  Agent->>Tool: _call(...) when needed
+  Tool-->>Agent: JSON / bytes / receipt
+  Agent-->>App: response
+```
 
 ## Creating a Basic Plugin
 
@@ -738,4 +753,3 @@ export class QueryNFTTool extends BaseHederaQueryTool<
   }
 }
 ```
-

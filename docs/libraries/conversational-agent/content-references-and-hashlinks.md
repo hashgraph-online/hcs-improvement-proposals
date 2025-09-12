@@ -3,6 +3,11 @@ title: Content References & HashLinks
 description: Store big content once, pass lightweight references, and render rich HashLink blocks in responses
 ---
 
+Overview
+- Learn how to turn files and long text into tiny references
+- See how tools resolve those references to bytes
+- Return rich HashLink blocks for pretty UI rendering
+
 Why content references
 - Long text, files, and images quickly bloat context windows. The agent can store large payloads once and refer to them by ID, keeping prompts and chat history compact and deterministic.
 
@@ -86,3 +91,18 @@ Practical guidance
 - Prefer `contentRef` parameters over embedding long content in free‑text.
 - Keep the human message succinct; let the reference carry the payload.
 - Ask tools that support it (e.g., InscribeHashinalTool) to include `withHashLinkBlocks: true` when you want richer UI metadata.
+
+Diagram
+```mermaid
+flowchart LR
+  A[Attach file / big text] --> B[ContentStoreManager]
+  B -->|stores once| C[(content-ref:123)]
+  C --> D[Message augmented with reference]
+  D --> E[Tool resolves bytes via resolver]
+  E --> F[Executes inscription / processing]
+  F --> G{Returns}
+  G -->|metadata only| H[Lightweight response]
+  G -->|HashLink block| I[Renderer shows pretty card]
+```
+
+Up next: [Operational Modes & Transactions](./operational-modes-and-transactions) — who signs and how bytes flow

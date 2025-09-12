@@ -174,47 +174,8 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'category',
-          label: 'Recursion SDK',
-          link: {
-            type: 'doc',
-            id: 'libraries/recursion-sdk/index',
-          },
-          collapsible: true,
-          collapsed: true,
-          items: [
-            'libraries/recursion-sdk/what-is-recursion',
-            'libraries/recursion-sdk/usage',
-            'libraries/recursion-sdk/functions',
-            'libraries/recursion-sdk/advanced-examples',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Hashinal Wallet Connect',
-          link: {
-            type: 'doc',
-            id: 'libraries/hashinal-wc/index',
-          },
-          collapsible: true,
-          collapsed: true,
-          items: [
-            'libraries/hashinal-wc/overview',
-            'libraries/hashinal-wc/installation',
-            'libraries/hashinal-wc/methods',
-            'libraries/hashinal-wc/topics',
-            'libraries/hashinal-wc/usage-with-nextjs',
-            'libraries/hashinal-wc/usage-with-react',
-            'libraries/hashinal-wc/usage-with-recursion',
-            'libraries/hashinal-wc/usage-with-vite',
-          ],
-        },
-        {
-          type: 'category',
           label: 'Standards SDK',
-          link: {
-            type: 'doc',
-            id: 'libraries/standards-sdk/index',
-          },
+          link: { type: 'doc', id: 'libraries/standards-sdk/index' },
           collapsible: true,
           collapsed: true,
           items: [
@@ -226,10 +187,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'category',
               label: 'HCS-10',
-              link: {
-                type: 'doc',
-                id: 'libraries/standards-sdk/hcs-10/index',
-              },
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-10/index' },
               collapsible: true,
               collapsed: true,
               items: [
@@ -244,10 +202,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'category',
               label: 'HCS-12',
-              link: {
-                type: 'doc',
-                id: 'libraries/standards-sdk/hcs-12/index',
-              },
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-12/index' },
               collapsible: true,
               collapsed: true,
               items: [
@@ -284,33 +239,12 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Standards Agent Kit',
-          link: {
-            type: 'doc',
-            id: 'libraries/standards-agent-kit/index',
-          },
-          collapsible: true,
-          collapsed: true,
-          items: [
-            'libraries/standards-agent-kit/overview',
-            'libraries/standards-agent-kit/builders',
-            'libraries/standards-agent-kit/core-client',
-            'libraries/standards-agent-kit/wallet-integration',
-            'libraries/standards-agent-kit/langchain-tools',
-            'libraries/standards-agent-kit/plugins',
-            'libraries/standards-agent-kit/examples',
-          ],
-        },
-        {
-          type: 'category',
           label: 'Conversational Agent',
-          link: {
-            type: 'doc',
-            id: 'libraries/conversational-agent/index',
-          },
+          link: { type: 'doc', id: 'libraries/conversational-agent/index' },
           collapsible: true,
           collapsed: false,
           items: [
+            'libraries/conversational-agent/overview',
             'libraries/conversational-agent/getting-started',
             'libraries/conversational-agent/entity-memory',
             'libraries/conversational-agent/operational-modes-and-transactions',
@@ -321,6 +255,54 @@ const sidebars: SidebarsConfig = {
             'libraries/conversational-agent/mcp-servers',
             'libraries/conversational-agent/examples',
             'libraries/conversational-agent/plugin-development',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Standards Agent Kit',
+          link: { type: 'doc', id: 'libraries/standards-agent-kit/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/standards-agent-kit/overview',
+            'libraries/standards-agent-kit/langchain-tools',
+            'libraries/standards-agent-kit/builders',
+            'libraries/standards-agent-kit/wallet-integration',
+            'libraries/standards-agent-kit/tool-forms-and-hashlinks',
+            'libraries/standards-agent-kit/hashlink-blocks-authoring',
+            'libraries/standards-agent-kit/core-client',
+            'libraries/standards-agent-kit/plugins',
+            'libraries/standards-agent-kit/examples',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Hashinal Wallet Connect',
+          link: { type: 'doc', id: 'libraries/hashinal-wc/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/hashinal-wc/overview',
+            'libraries/hashinal-wc/installation',
+            'libraries/hashinal-wc/methods',
+            'libraries/hashinal-wc/topics',
+            'libraries/hashinal-wc/usage-with-nextjs',
+            'libraries/hashinal-wc/usage-with-react',
+            'libraries/hashinal-wc/usage-with-recursion',
+            'libraries/hashinal-wc/usage-with-vite',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Recursion SDK',
+          link: { type: 'doc', id: 'libraries/recursion-sdk/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/recursion-sdk/what-is-recursion',
+            'libraries/recursion-sdk/usage',
+            'libraries/recursion-sdk/functions',
+            'libraries/recursion-sdk/advanced-examples',
           ],
         },
       ],
