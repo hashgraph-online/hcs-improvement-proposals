@@ -424,6 +424,30 @@ textarea {
   background-clip: text !important;
 }
 
+/* Fix button text visibility - target buttons with specific background colors */
+a.bg-brand-blue,
+button.bg-brand-blue,
+a[class*="bg-brand-blue"],
+button[class*="bg-brand-blue"] {
+  color: white !important;
+}
+
+/* Dark mode specific button text fixes */
+[data-theme='dark'] a.bg-brand-blue,
+[data-theme='dark'] button.bg-brand-blue,
+html[data-theme='dark'] a.bg-brand-blue,
+html[data-theme='dark'] button.bg-brand-blue {
+  color: white !important;
+}
+
+/* Secondary button text visibility */
+a[style*="background-color: rgb(63, 65, 116)"],
+button[style*="background-color: rgb(63, 65, 116)"],
+a[class*="bg-\\[\\#3f4174\\]"],
+button[class*="bg-\\[\\#3f4174\\]"] {
+  color: white !important;
+}
+
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #3f4174;
