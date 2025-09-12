@@ -47,6 +47,8 @@ export default function SidebarShowcase({
       const directHref: string | undefined = anyIt && anyIt.href ? anyIt.href : undefined;
       const linkDocId: string | undefined = anyIt?.link?.id as string | undefined;
       const docId: string | undefined = (anyIt?.docId as string | undefined) || linkDocId;
+      const label: string = (anyIt?.label as string) || docId || directHref || '';
+      const isCategory = Array.isArray(anyIt?.items) || anyIt?.type === 'category';
 
       let meta: any | undefined;
       if (docId) {
@@ -97,13 +99,28 @@ export default function SidebarShowcase({
         }
       }
 
-      const href: string | undefined = directHref || (meta && meta.permalink) || undefined;
+      let href: string | undefined = directHref || (meta && meta.permalink) || undefined;
+      // Friendly title mapping for known category groups
+      let mappedTitle: string | undefined;
+      const hcsMatch = label.match(/^HCS[-‑—–](\d+)/i);
+      if (isCategory && hcsMatch) {
+        const num = hcsMatch[1];
+        const map: Record<string, string> = {
+          '10': 'HCS-10 OpenConvAI SDK',
+          '12': 'HCS-12: HashLinks SDK',
+          '14': 'HCS-14: Universal Agent Identifier (UAID)',
+        };
+        mappedTitle = map[num];
+        if (!href) {
+          href = `/docs/libraries/standards-sdk/hcs-${num}/`;
+        }
+      }
+
       if (!href) {
         return null;
       }
 
-      const label: string = anyIt?.label || docId || href;
-      const title: string = (meta && (meta.title as string)) || label;
+      const title: string = mappedTitle || (meta && (meta.title as string)) || label;
       const description: string = (meta && (meta.description as string)) || '';
 
       return {
