@@ -36,7 +36,7 @@ const tutorialCategories: TutorialCategory[] = [
   {
     title: 'Getting Started',
     description: 'Set up your development environment and learn HCS fundamentals',
-    icon: '🚀',
+    icon: '',
     tutorials: [
       {
         title: 'Setup Your Environment',
@@ -63,7 +63,7 @@ const tutorialCategories: TutorialCategory[] = [
   {
     title: 'Inscriptions & Storage',
     description: 'Store data permanently on Hedera using HCS inscriptions',
-    icon: '💾',
+    icon: '',
     tutorials: [
       {
         title: 'Inscribe Your First File',
@@ -89,7 +89,7 @@ const tutorialCategories: TutorialCategory[] = [
   {
     title: 'Registries & Discovery',
     description: 'Build decentralized registries for data organization',
-    icon: '🔍',
+    icon: '',
     tutorials: [
       {
         title: 'Create Your First Registry',
@@ -114,7 +114,7 @@ const tutorialCategories: TutorialCategory[] = [
   {
     title: 'AI Agents',
     description: 'Deploy autonomous agents on the Hedera network',
-    icon: '🤖',
+    icon: '',
     tutorials: [
       {
         title: 'Deploy Your First Agent',
@@ -139,7 +139,7 @@ const tutorialCategories: TutorialCategory[] = [
   {
     title: 'Points & Rewards',
     description: 'Implement auditable points and reward systems',
-    icon: '🏆',
+    icon: '',
     tutorials: [
       {
         title: 'Deploy Points System',
@@ -344,7 +344,7 @@ const InteractiveLearningPath: React.FC = () => {
       subtitle: 'Configure your dev environment',
       time: '10 min',
       href: '/docs/tutorials/getting-started/setup-environment',
-      icon: '⚙️',
+      icon: '',
     },
     {
       number: 2,
@@ -352,7 +352,7 @@ const InteractiveLearningPath: React.FC = () => {
       subtitle: 'Send your first message',
       time: '15 min',
       href: '/docs/tutorials/getting-started/submit-your-first-hcs-message',
-      icon: '📨',
+      icon: '',
     },
     {
       number: 3,
@@ -360,7 +360,7 @@ const InteractiveLearningPath: React.FC = () => {
       subtitle: 'Store data on-chain',
       time: '20 min',
       href: '/docs/tutorials/inscriptions/inscribe-your-first-file',
-      icon: '💾',
+      icon: '',
     },
   ];
 
