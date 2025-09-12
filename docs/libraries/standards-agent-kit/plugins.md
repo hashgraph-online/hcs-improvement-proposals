@@ -1,10 +1,22 @@
 ---
-sidebar_position: 6
+sidebar_position: 7
 ---
 
 # Plugin System
 
 The Standards Agent Kit includes a flexible plugin system that allows you to extend its functionality with custom tools and integrations. This guide explains how to create, load, and use plugins with the Standards Agent Kit.
+
+## Diagram (How it fits)
+
+```mermaid
+flowchart LR
+  A["Your App"] --> R["PluginRegistry"]
+  R --> P1["Plugin A"]
+  R --> P2["Plugin B"]
+  P1 --> T1["Tools"]
+  P2 --> T2["Tools"]
+  T1 & T2 --> L["LangChain Agent"]
+```
 
 ## Overview
 
@@ -708,6 +720,11 @@ async function main() {
 main().catch(console.error);
 ```
 
+## Beginner checklist
+- Keep plugin ids unique (e.g., `vendor-name/plugin-name`)
+- Validate inputs with Zod in each tool; return clear messages
+- Prefer small, focused plugins you can test in isolation
+
 ### Combining with Core Functionality
 
 You can combine plugins with the core HCS-10 functionality:
@@ -844,3 +861,12 @@ For debugging:
 - Use the logger provided in the plugin context to log debugging information
 - Enable verbose mode in your LangChain agent to see detailed execution steps
 - Test each component of your plugin separately to isolate issues
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/plugins/PluginInterface.ts
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/plugins/PluginRegistry.ts
+
+## Next Steps
+
+- Build core HCS workflows: [Builders](./builders.md)
+- Add tool UIs and blocks: [Form-Driven Tools and HashLink Blocks](./tool-forms-and-hashlinks.md)
+- Wire wallets: [Wallet Integration](./wallet-integration.md)
+- Experiment quickly: [Examples](./examples.md)

@@ -7,6 +7,17 @@ Overview
 - Use static helpers to spin up an agent with a focused set of tools.
 - Combine with `toolFilter` and `enabledPlugins` for precise control.
 
+Diagram
+```mermaid
+flowchart TD
+  A[ConversationalAgent] -->|withHCS10| B[hcs-10 only]
+  A -->|withHCS2| C[hcs-2 only]
+  A -->|withInscribe| D[inscribe only]
+  A -->|withAllStandards| E[hcs-10 + hcs-2 + inscribe]
+  A -->|minimal| F[core Hedera only]
+  E --> G[+ optional toolFilter / enabledPlugins]
+```
+
 Helpers
 ```typescript
 import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
@@ -46,3 +57,4 @@ Notes
 - Prefer helpers for clean intent; fall back to `enabledPlugins` for advanced mixes.
 - Use `toolFilter` to exclude sensitive operations in production.
 
+Up next: [MCP Servers](./mcp-servers) — connect files, GitHub, and databases

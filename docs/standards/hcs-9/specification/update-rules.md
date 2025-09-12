@@ -18,7 +18,7 @@ The update-rules module defines the rules around the update action. The [update 
 
 ![update-rules diagram](../../../../static/polls/update-rules.png)
 
-The JSON Schema file can be found on here: [update-rules.json](../../../assets/schema/update-rules.json)
+The JSON Schema file can be found on here: [update-rules.json](/assets/schema/update-rules.json)
 
 ## Fields
 

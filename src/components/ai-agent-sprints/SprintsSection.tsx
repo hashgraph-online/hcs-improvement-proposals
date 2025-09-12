@@ -218,7 +218,7 @@ const SprintsSection: React.FC = () => {
       description:
         'Build an AI agent that helps users interact with Bonzo Finance for portfolio management, yield farming, and DeFi operations on Hedera.',
       icon: <FaRobot />,
-      link: '/call-for-bonzo-agents',
+      link: '/sprint#sprints',
       status: 'active' as SprintStatus,
       reward: '15,000 BONZO tokens',
       index: 0,

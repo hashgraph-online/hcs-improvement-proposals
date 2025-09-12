@@ -9,32 +9,32 @@ This section provides links to the JSON Schema definitions of all the modules de
 
 ## Base Schema
 
-- [Base Poll Schema](../assets/schema/base-poll-schema.json)
-- [Base Module Schema](../assets/schema/base-module.json)
-- [Option Module Schema](../assets/schema/option-module.json)
+- [Base Poll Schema](/assets/schema/base-poll-schema.json)
+- [Base Module Schema](/assets/schema/base-module.json)
+- [Option Module Schema](/assets/schema/option-module.json)
 
 ### Root Level Modules
 
-- [Information Rules Module](../assets/schema/information-rules.json)
-- [Vote Rules Module](../assets/schema/vote-rules.json)
-- [Permissions Rules](../assets/schema/permissions-rules.json)
-- [Manage Rules](../assets/schema/manage-rules.json)
-- [Update Rules](../assets/schema/update-rules.json)
-- [End Condition Rules](../assets/schema/end-condition-rules.json)
+- [Information Rules Module](/assets/schema/information-rules.json)
+- [Vote Rules Module](/assets/schema/vote-rules.json)
+- [Permissions Rules](/assets/schema/permissions-rules.json)
+- [Manage Rules](/assets/schema/manage-rules.json)
+- [Update Rules](/assets/schema/update-rules.json)
+- [End Condition Rules](/assets/schema/end-condition-rules.json)
 
 ### Permissions Modules
 
-- [Permissions Module](../assets/schema/permissions-module.json)
+- [Permissions Module](/assets/schema/permissions-module.json)
 
 ### Token Gate Modules
 
-- [Token Gate Module](../assets/schema/token-gate.json)
-- [Token Data Object](../assets/schema/token-data.json)
+- [Token Gate Module](/assets/schema/token-gate.json)
+- [Token Data Object](/assets/schema/token-data.json)
 
 ### Update Modules
 
-- [Update Rules - Update Settings](../assets/schema/update-settings.json)
+- [Update Rules - Update Settings](/assets/schema/update-settings.json)
 
 ## Vote Schema
 
-- [Vote Schema](../assets/schema/vote-schema.json)
+- [Vote Schema](/assets/schema/vote-schema.json)

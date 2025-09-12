@@ -5,11 +5,25 @@ description: Complete list of tools provided by the Conversational Agent
 
 # Available Tools
 
-The Conversational Agent provides a comprehensive set of 22 tools across three built-in plugins, plus all the standard tools from hedera-agent-kit. Additionally, when MCP servers are configured, you gain access to their respective tools for file operations, databases, and external services.
+This chapter shows what the agent can do. Think of tools as “abilities” the agent can pick up based on plugins. You’ll see the built‑ins (HCS‑10, HCS‑2, Inscribe), the core Hedera tools, and how MCP can add external abilities like files and databases.
 
 ## Tool Categories
 
 The Conversational Agent includes:
+
+Diagram
+```mermaid
+flowchart TD
+  A["Agent Tools"] --> B["HCS-10 tools"]
+  A --> C["HCS-2 tools"]
+  A --> D["Inscribe tools"]
+  A --> E["Core Hedera (HAK)"]
+  E --> E1["Accounts"]
+  E --> E2["HTS"]
+  E --> E3["HCS"]
+  E --> E4["File Service"]
+  E --> E5["Smart Contracts"]
+```
 
 ### From hedera-agent-kit
 - **Account Management**: Create accounts, transfer HBAR, manage allowances
@@ -202,6 +216,7 @@ For detailed MCP configuration and usage, see the [MCP Servers Guide](./mcp-serv
 
 ## See Also
 
+- Up next: [Forms & Parameters](./forms-and-parameters) — when the agent asks for details
 - [Getting Started](./getting-started) - Quick start guide
 - [Examples](./examples) - Practical usage examples
 - [Plugin Development Guide](./plugin-development) - Create custom tools

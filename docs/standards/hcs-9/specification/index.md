@@ -20,7 +20,7 @@ This standard adopts JSON Schema principles. JSON Schema provides a human-readab
 
 The intent is to provide robust, clear and developer-friendly approaches to these data structures. This will lead to more reliable implementations, reduced development time, and improved overall quality of systems developed on the standard.
 
-The JSON Schema files are all provided here: [Schema Definitions](schema-definitions)
+The JSON Schema files are all provided here: [Schema Definitions](/docs/standards/hcs-9/schema-definitions)
 
 ## Base Schema, Vote Schema and Module Schema
 

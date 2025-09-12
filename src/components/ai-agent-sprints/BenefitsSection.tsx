@@ -149,7 +149,7 @@ const BenefitsSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.6 }}
           className='mt-16 text-center'
         >
-          <PrimaryButton href='/call-for-bonzo-agents' variant='primary'>
+          <PrimaryButton href='/sprint#sprints' variant='primary'>
             Join Current Challenge
           </PrimaryButton>
         </motion.div>

@@ -17,7 +17,7 @@ The end-condition-rules module defines the rules around how the poll end is dete
 
 ![end-condition-rules diagram](../../../../static/polls/end-condition-rules.png)
 
-The JSON Schema file can be found on here: [update-rules.json](../../../assets/schema/update-rules.json)
+The JSON Schema file can be found on here: [update-rules.json](/assets/schema/update-rules.json)
 
 ## Fields
 

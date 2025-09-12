@@ -164,7 +164,7 @@ const HeroSection: React.FC = () => {
                 View Sprint Challenges
               </PrimaryButton>
               <PrimaryButton
-                href='/call-for-bonzo-agents'
+                href='/sprint#sprints'
                 variant='secondary'
                 icon={<FaArrowRight className='ml-2' />}
               >
