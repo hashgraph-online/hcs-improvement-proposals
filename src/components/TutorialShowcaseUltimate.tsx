@@ -439,7 +439,7 @@ const TutorialCard: React.FC<{ tutorial: Tutorial }> = ({ tutorial }) => {
     >
       <Link 
         to={isAvailable ? tutorial.href : '#'} 
-        className={`block ${!isAvailable ? 'opacity-60 cursor-not-allowed' : ''}`}
+        className={`block h-full ${!isAvailable ? 'opacity-60 cursor-not-allowed' : ''}`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -449,54 +449,58 @@ const TutorialCard: React.FC<{ tutorial: Tutorial }> = ({ tutorial }) => {
           border='border border-gray-200 dark:border-gray-700'
           shadow='md'
           rounded='xl'
-          className='p-6 h-full hover:shadow-xl transition-all duration-300'
+          className='p-6 h-full hover:shadow-xl transition-all duration-300 min-h-[320px]'
         >
-          <div className='flex flex-col h-full'>
-            <div className='flex justify-between items-start mb-4'>
-              <Typography variant='h4' className='text-lg font-bold flex-1'>
-                {tutorial.title}
-              </Typography>
-              <StatusBadge variant='primary' className='ml-2 text-xs'>
-                {tutorial.standard}
-              </StatusBadge>
-            </div>
-            
-            <Typography color='muted' className='text-sm mb-4 flex-1'>
-              {tutorial.description}
-            </Typography>
-            
-            <div className='flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700'>
-              <StatusBadge variant={variants[tutorial.difficulty]} className='font-bold'>
-                {tutorial.difficulty}
-              </StatusBadge>
-              <div className='flex items-center gap-1 text-gray-500 dark:text-gray-400'>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 6v6l4 2" />
-                </svg>
-                <Typography color='muted' className='text-sm'>
-                  {tutorial.duration}
+          <div className='flex flex-col h-full justify-between'>
+            <div>
+              <div className='flex justify-between items-start mb-4'>
+                <Typography variant='h4' className='text-lg font-bold flex-1'>
+                  {tutorial.title}
                 </Typography>
-              </div>
-            </div>
-            
-            {isAvailable ? (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                className='mt-4'
-              >
-                <SecondaryButton href={tutorial.href} size='small' className='w-full'>
-                  Start Tutorial →
-                </SecondaryButton>
-              </motion.div>
-            ) : (
-              <div className='mt-4 text-center'>
-                <StatusBadge variant='warning'>
-                  Coming Soon
+                <StatusBadge variant='primary' className='ml-2 text-xs flex-shrink-0'>
+                  {tutorial.standard}
                 </StatusBadge>
               </div>
-            )}
+              
+              <Typography color='muted' className='text-sm mb-4 line-clamp-3'>
+                {tutorial.description}
+              </Typography>
+            </div>
+            
+            <div className='mt-auto'>
+              <div className='flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700'>
+                <StatusBadge variant={variants[tutorial.difficulty]} className='font-bold'>
+                  {tutorial.difficulty}
+                </StatusBadge>
+                <div className='flex items-center gap-1 text-gray-500 dark:text-gray-400'>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6v6l4 2" />
+                  </svg>
+                  <Typography color='muted' className='text-sm'>
+                    {tutorial.duration}
+                  </Typography>
+                </div>
+              </div>
+              
+              {isAvailable ? (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: isHovered ? 1 : 0 }}
+                  className='mt-4'
+                >
+                  <SecondaryButton href={tutorial.href} size='small' className='w-full'>
+                    Start Tutorial →
+                  </SecondaryButton>
+                </motion.div>
+              ) : (
+                <div className='mt-4 text-center'>
+                  <StatusBadge variant='warning'>
+                    Coming Soon
+                  </StatusBadge>
+                </div>
+              )}
+            </div>
           </div>
         </TransformCard>
       </Link>
