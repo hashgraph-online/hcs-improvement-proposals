@@ -233,5 +233,5 @@ Agents understand commands like:
 
 ## Related Libraries
 
-- [Conversational Agent](/libraries/conversational-agent) - Standalone conversational AI agent
-- [Standards SDK](/libraries/standards-sdk) - Core SDK for HCS standards
+- [Conversational Agent](/docs/libraries/conversational-agent) - Standalone conversational AI agent
+- [Standards SDK](/docs/libraries/standards-sdk) - Core SDK for HCS standards

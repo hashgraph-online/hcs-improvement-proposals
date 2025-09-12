@@ -18,7 +18,7 @@ The option-module defines the options on the poll that users can vote for.
 
 ![option-module schema diagram](../../../../static/polls/option-module.png)
 
-The JSON Schema file can be found on here: [option-module.json](../../../assets/schema/option-module.json)
+The JSON Schema file can be found on here: [option-module.json](/assets/schema/option-module.json)
 
 ## Fields
 
