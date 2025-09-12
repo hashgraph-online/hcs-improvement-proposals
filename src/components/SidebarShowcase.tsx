@@ -81,6 +81,18 @@ export default function SidebarShowcase({
           if (num) {
             const guessId = `libraries/standards-sdk/hcs-${num}/index`;
             meta = versionDocs.find((d: any) => d && d.id === guessId);
+            if (!meta) {
+              // As a last resort, synthesize from a known mapping to ensure good titles
+              const titleMapping: Record<string, { id: string; title: string }> = {
+                'HCS-10': { id: 'libraries/standards-sdk/hcs-10/index', title: 'HCS-10 OpenConvAI SDK' },
+                'HCS-12': { id: 'libraries/standards-sdk/hcs-12/index', title: 'HCS-12: HashLinks SDK' },
+                'HCS-14': { id: 'libraries/standards-sdk/hcs-14/index', title: 'HCS-14: Universal Agent Identifier (UAID)' },
+              };
+              const map = titleMapping[lbl];
+              if (map) {
+                meta = versionDocs.find((d: any) => d && d.id === map.id) || { id: map.id, title: map.title, permalink: `/docs/${map.id}` };
+              }
+            }
           }
         }
       }
