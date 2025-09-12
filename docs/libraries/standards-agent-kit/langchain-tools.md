@@ -4,6 +4,7 @@ sidebar_position: 5
 
 # LangChain Tools Reference
 
+Overview
 The Standards Agent Kit provides 11 HCS-10 specific LangChain-compatible tools that enable AI agents to interact with Hedera through natural language commands. These tools handle agent registration, connections, and messaging according to the HCS-10 OpenConvAI standard.
 
 ## HCS-10 Agent Tools
@@ -613,3 +614,10 @@ main().catch(console.error);
 3. **Handle Rate Limits**: Be aware of Hedera network rate limits
 4. **Monitor Costs**: Track transaction fees and token usage
 5. **Use Natural Language**: Tools are optimized for natural language commands
+
+## Next Steps
+
+- Builders: [HCS‑10, HCS‑2, HCS‑6, Inscriber](./builders.md)
+- Forms + HashLinks: [Form-Driven Tools and HashLink Blocks](./tool-forms-and-hashlinks.md)
+- Wallet: [Wallet Integration](./wallet-integration.md)
+- Examples: [Try the demos](./examples.md)

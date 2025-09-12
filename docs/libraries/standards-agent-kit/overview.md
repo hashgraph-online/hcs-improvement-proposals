@@ -18,13 +18,13 @@ Welcome to the Standards Agent Kit! This TypeScript library provides a comprehen
 
 ## Getting Started
 
-### Installation
+### 1) Installation
 
 ```bash
 npm install @hashgraphonline/standards-agent-kit @hashgraphonline/conversational-agent
 ```
 
-### Environment Setup
+### 2) Environment Setup
 
 Create a `.env` file in your project root:
 
@@ -42,9 +42,9 @@ HEDERA_PRIVATE_KEY=302e0201...
 OPENAI_API_KEY=sk-xxxxxxxxxx
 ```
 
-## Quick Start Example
+### 3) 5‑Minute Quickstart (HCS‑10)
 
-Here's how to create a LangChain agent with full HCS‑10 support:
+Create a simple agent and send a message.
 
 ```typescript
 import { ConversationalAgent } from '@hashgraphonline/conversational-agent';
@@ -83,6 +83,27 @@ async function main() {
 
 main().catch(console.error);
 ```
+
+Source references
+- ConversationalAgent: https://github.com/hashgraph-online/conversational-agent/blob/main/src/conversational-agent.ts
+- HCS‑10 builder (used internally by kit/tools): https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/builders/hcs10/hcs10-builder.ts
+
+### 4) What’s Happening (Diagram)
+
+```mermaid
+flowchart LR
+  U["You"] --> A["ConversationalAgent"]
+  A --> K["Standards Agent Kit"]
+  K --> B["HCS-10 Builder"]
+  B --> S["Standards SDK"]
+  S --> H["Hedera Network"]
+```
+
+### 5) Beginner Tips
+- Start on testnet and watch HashScan while you test
+- Keep agent names short and use random aliases to avoid collisions
+- If a tool asks to “render a form”, provide the missing fields (name, bio, etc.)
+- Errors often mention the exact missing field; copy/paste it into your command
 
 ## How It Works
 
@@ -177,6 +198,14 @@ Agents understand commands like:
 - "Register me as an AI assistant"
 - "Send 10 HBAR to account 0.0.123456"
 - "Create a new token called TestCoin"
+
+## Next Steps
+
+- Builders: [HCS‑10, HCS‑2, HCS‑6, Inscriber](./builders.md)
+- Tools reference: [LangChain Tools](./langchain-tools.md)
+- Plugins: [Plugin System](./plugins.md)
+- Wallet integration: [SignerProviderRegistry & Bytes](./wallet-integration.md)
+- Examples: [Try ready-made demos](./examples.md)
 - "What's my current balance?"
 
 ### Automatic State Persistence
@@ -191,15 +220,16 @@ Agents understand commands like:
 - Profile management and updates
 - Natural language command processing
 
-## Next Steps
+## Next Steps (Follow this path)
 
-Ready to build AI agents on Hedera?
-
-- [LangChain Tools Guide](./langchain-tools.md) - 11 HCS‑10 tools with NL usage
-- [Builders Guide](./builders.md) - HCS‑10/2/6 + Inscriber builders
-- [Wallet Integration](./wallet-integration.md) - dApp signer + bytes flow
-- [Plugin System](./plugins.md) - Create custom plugins and extensions
-- [Examples](./examples.md) - Production‑ready examples
+- [LangChain Tools](./langchain-tools.md): use ready‑made tools to register, connect, and message
+- [Builders](./builders.md): one level deeper — HCS‑10/2/6 + Inscriber
+- [Wallet Integration](./wallet-integration.md): dApp bytes vs server submit
+- [Form Tools + HashLinks](./tool-forms-and-hashlinks.md): collect inputs and show rich previews
+- [Author HashLink Blocks](./hashlink-blocks-authoring.md): publish reusable on‑chain UI
+- [Core Client](./core-client.md): low‑level wrapper; optional
+- [Plugins](./plugins.md): extend functionality
+- [Examples](./examples.md): CLI demo and real‑world flows
 
 ## Related Libraries
 

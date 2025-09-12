@@ -1,5 +1,6 @@
 ---
 sidebar_position: 1
+description: Universal Agent Identifier (UAID) for cross‑network agents with optional Hedera DID issuance
 ---
 
 # HCS‑14: Universal Agent Identifier (UAID)
@@ -79,4 +80,3 @@ flowchart LR
 - Hedera (optional): issue and resolve `did:hedera`
 - Recipes: copy‑paste examples for Web2, EVM, and HCS‑11
 - API reference and troubleshooting
-

@@ -13,7 +13,34 @@ This guide covers the higher‑level builders exposed by `@hashgraphonline/stand
 
 All builders are designed to work with HederaAgentKit and optionally support wallet delegation in browser apps.
 
+## Diagram
+
+```mermaid
+flowchart LR
+  subgraph HCS-10
+    A10["Register / Connect / Message"] --> C10["Standards SDK"]
+  end
+  subgraph HCS-2
+    A2["Create Registry / Entries"] --> C2["Standards SDK"]
+  end
+  subgraph HCS-6
+    A6["Dynamic Hashinals"] --> C6["Standards SDK"]
+  end
+  subgraph Inscriber
+    AI["file/url/buffer → inscription"] --> CI["Standards SDK"]
+  end
+  C10 & C2 & C6 & CI --> H["Hedera Network"]
+```
+
+```mermaid
+flowchart TD
+  Q{"Wallet available?"} -->|Yes| W["Return transactionBytes → walletExecutor"]
+  Q -->|No| S["Submit via SDK (server)"]
+```
+
 ## HCS‑10 Builder
+
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/builders/hcs10/hcs10-builder.ts
 
 Keywords: registration, connections, messaging, monitoring, fees
 
@@ -64,7 +91,14 @@ Notes
 - Supports fee‑based inbound topics and connection topics via fee config.
 - For LangChain, prefer the HCS‑10 tools — they call the builder for you.
 
+Beginner checklist
+- Keep `name` < 50 chars; use `alias: 'random'` to avoid duplicates
+- Use `disableMonitoring: true` if you only want to send (no wait)
+- If a connection fails, check the other agent has a valid HCS‑11 profile
+
 ## HCS‑2 Builder
+
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/builders/hcs2/hcs2-builder.ts
 
 Keywords: dynamic registry, register/update/delete entries, migrate
 
@@ -107,7 +141,13 @@ Wallet delegation
 - When configured (see Wallet Integration), the builder can return `transactionBytes` for dApps to execute via wallet.
 - In `preferWalletOnly` mode, server fallback is disabled; use a wallet or provide a private key.
 
+Beginner checklist
+- Indexed registries support `update/delete` by `uid`; non‑indexed do not
+- Save your registry topic id; you’ll use it for all future operations
+
 ## HCS‑6 Builder
+
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/builders/hcs6/hcs6-builder.ts
 
 Keywords: dynamic hashinals (combined inscription + registry flows)
 
@@ -132,7 +172,13 @@ await hcs6.createHashinal({
 });
 ```
 
+Beginner checklist
+- Dynamic = you can update later (requires submitKey if configured)
+- Use short, descriptive `metadata.name` so UIs can label entries
+
 ## Inscriber Builder
+
+Source: https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/builders/inscriber/inscriber-builder.ts
 
 Keywords: inscription via server private key, dApp signer, or wallet handoff
 
@@ -171,3 +217,12 @@ Notes
 - InscriberBuilder has its own wallet delegates (see Wallet Integration)
 - Supports `quoteOnly` and confirmation polling
 
+Beginner checklist
+- Use `inscribeFromBuffer` tool when you already have content in memory
+- Use `quoteOnly: true` to estimate costs before posting
+
+## Next Steps
+
+- Tools reference: [LangChain Tools](./langchain-tools.md)
+- Wallet integration: [SignerProviderRegistry & Bytes](./wallet-integration.md)
+- Examples: [Try the demos](./examples.md)

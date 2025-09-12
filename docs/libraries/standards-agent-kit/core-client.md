@@ -8,6 +8,15 @@ sidebar_position: 3
 
 The `HCS10Client` within the `@hashgraphonline/standards-agent-kit` serves as a **developer-friendly wrapper and initializer** for the underlying HCS‑10 client provided by the core `@hashgraphonline/standards-sdk` library. For higher‑level workflows (registration, connections, monitoring, fee configuration, wallet delegation), see the [HCS‑10 Builder](./builders.md).
 
+## Diagram (Where it sits)
+
+```mermaid
+flowchart LR
+  App["Your App"] --> Kit["HCS10Client (Wrapper)"]
+  Kit --> SDK["Standards SDK HCS-10"]
+  SDK --> Hedera["Hedera Network"]
+```
+
 **Primary Functions:**
 
 1.  **Simplified Setup:** Streamlines the instantiation and configuration of the standard SDK client using environment variables or direct parameters.
@@ -684,5 +693,12 @@ try {
 ---
 
 **Source Code:** The core tools implementation can be found on GitHub: [`standards-agent-kit/src/tools/`](https://github.com/hashgraph-online/standards-agent-kit/tree/main/src/tools/).
+
+## Next Steps
+
+- Prefer higher-level workflows: [HCS‑10, HCS‑2, HCS‑6, Inscriber Builders](./builders.md)
+- Build agent tools: [LangChain Tools](./langchain-tools.md)
+- Extend via plugins: [Plugin System](./plugins.md)
+- See it running: [Examples](./examples.md)
 
 ## Prerequisites
