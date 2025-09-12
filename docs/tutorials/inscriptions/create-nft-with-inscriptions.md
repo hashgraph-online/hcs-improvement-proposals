@@ -25,19 +25,19 @@ Hashinals are NFTs that store their complete data on-chain using HCS inscription
 - [Basic inscription knowledge](./inscribe-your-first-file.md)
 - Hedera testnet account with HBAR
 
-## Step 1: Inscribe the NFT Image
+## Step 1: Inscribe NFT with Image and Metadata
 
-First, inscribe your NFT artwork to HCS:
+Using the `hashinal` mode, you can inscribe both the image and metadata in a single operation:
 
 ```javascript
-// inscribe-nft-image.js
+// inscribe-nft.js
 import { inscribe } from '@hashgraph-online/standards-sdk';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-async function inscribeNFTImage() {
+async function inscribeNFT() {
   const clientConfig = {
     accountId: process.env.HEDERA_ACCOUNT_ID,
     privateKey: process.env.HEDERA_PRIVATE_KEY,
@@ -47,48 +47,11 @@ async function inscribeNFTImage() {
   // Read your NFT image
   const imageBuffer = fs.readFileSync('./nft-artwork.png');
   
-  console.log("🎨 Inscribing NFT artwork...");
-
-  const imageInscription = await inscribe(
-    {
-      type: 'buffer',
-      buffer: imageBuffer,
-      fileName: 'nft-artwork.png',
-      mimeType: 'image/png'
-    },
-    clientConfig,
-    {
-      waitForConfirmation: true,
-      progressCallback: (data) => {
-        console.log(`Progress: ${data.percentage}%`);
-      }
-    }
-  );
-
-  const imageHRL = `hcs://1/${imageInscription.result.topicId}`;
-  console.log(`✅ Image inscribed: ${imageHRL}`);
-  console.log(`Transaction ID: ${imageInscription.result.transactionId}`);
-  
-  // Save transaction ID for later retrieval
-  fs.writeFileSync('image-tx-id.txt', imageInscription.result.transactionId);
-  
-  return { imageHRL, transactionId: imageInscription.result.transactionId };
-}
-```
-
-## Step 2: Create NFT Metadata
-
-Create metadata following HIP-412 standard with HCS references:
-
-```javascript
-// create-nft-metadata.js
-async function createNFTMetadata(imageHRL) {
+  // Define metadata that will be inscribed alongside the image
   const metadata = {
     name: "Hashinal #001",
     creator: "Artist Name",
     description: "First fully on-chain NFT using Hashinals",
-    image: imageHRL,  // HCS reference to image
-    type: "image/png",
     attributes: [
       {
         trait_type: "Background",
@@ -108,43 +71,51 @@ async function createNFTMetadata(imageHRL) {
       collection: "Genesis Hashinals"
     }
   };
+  
+  console.log("🎨 Inscribing NFT artwork with metadata...");
 
-  return metadata;
-}
-```
-
-## Step 3: Inscribe the Metadata
-
-```javascript
-// inscribe-metadata.js
-async function inscribeMetadata(metadata, clientConfig) {
-  console.log("📋 Inscribing NFT metadata...");
-
-  const metadataInscription = await inscribe(
+  // Single inscription for both image AND metadata
+  const nftInscription = await inscribe(
     {
       type: 'buffer',
-      buffer: Buffer.from(JSON.stringify(metadata, null, 2)),
-      fileName: 'metadata.json',
-      mimeType: 'application/json'
+      buffer: imageBuffer,
+      fileName: 'nft-artwork.png',
+      mimeType: 'image/png'
     },
     clientConfig,
     {
-      waitForConfirmation: true
+      mode: 'hashinal',  // This mode handles both image and metadata
+      metadata: metadata, // Metadata is inscribed alongside the image
+      waitForConfirmation: true,
+      progressCallback: (data) => {
+        console.log(`Progress: ${data.progressPercent}%`);
+      }
     }
   );
 
-  const metadataHRL = `hcs://1/${metadataInscription.result.topicId}`;
-  console.log(`✅ Metadata inscribed: ${metadataHRL}`);
-  console.log(`Transaction ID: ${metadataInscription.result.transactionId}`);
+  const imageHRL = `hcs://1/${nftInscription.inscription.topic_id}`;
+  const metadataHRL = `hcs://1/${nftInscription.inscription.jsonTopicId}`;
   
-  // Save transaction ID for later retrieval
-  fs.writeFileSync('metadata-tx-id.txt', metadataInscription.result.transactionId);
+  console.log(`✅ NFT inscribed successfully!`);
+  console.log(`📍 Image Topic ID: ${nftInscription.inscription.topic_id}`);
+  console.log(`📍 Metadata Topic ID: ${nftInscription.inscription.jsonTopicId}`);
+  console.log(`Transaction ID: ${nftInscription.result.transactionId}`);
   
-  return { metadataHRL, transactionId: metadataInscription.result.transactionId };
+  // Save transaction IDs for later retrieval
+  fs.writeFileSync('image-tx-id.txt', nftInscription.result.transactionId);
+  fs.writeFileSync('metadata-tx-id.txt', nftInscription.inscription.jsonTopicId);
+  
+  return { 
+    imageHRL, 
+    metadataHRL,
+    transactionId: nftInscription.result.transactionId 
+  };
 }
+
+inscribeNFT();
 ```
 
-## Step 4: Create the NFT Token
+## Step 2: Create the NFT Token
 
 Create an NFT collection and mint with the inscribed metadata:
 
@@ -159,7 +130,10 @@ import {
   PrivateKey
 } from "@hashgraph/sdk";
 
-async function createHashinalNFT(metadataHRL) {
+async function createHashinalNFT() {
+  // First inscribe the NFT
+  const { metadataHRL } = await inscribeNFT();
+  
   const client = Client.forTestnet();
   client.setOperator(
     process.env.HEDERA_ACCOUNT_ID,
@@ -204,9 +178,11 @@ async function createHashinalNFT(metadataHRL) {
   
   return { tokenId, serialNumber, metadataHRL };
 }
+
+createHashinalNFT();
 ```
 
-## Step 5: Complete Hashinal Creation Flow
+## Step 3: Complete Hashinal Creation Flow
 
 Put it all together:
 
@@ -234,11 +210,21 @@ async function createCompleteHashinal() {
   };
 
   try {
-    // 1. Inscribe the image
-    console.log("Step 1: Inscribing artwork...");
+    // 1. Inscribe NFT with image and metadata together
+    console.log("Step 1: Inscribing NFT artwork with metadata...");
     const imageBuffer = fs.readFileSync('./nft-artwork.png');
     
-    const imageResult = await inscribe(
+    const metadata = {
+      name: "Hashinal #001",
+      creator: "Demo Artist",
+      description: "Fully on-chain NFT demonstration",
+      attributes: [
+        { trait_type: "Type", value: "Hashinal" },
+        { trait_type: "Standard", value: "HCS-5" }
+      ]
+    };
+    
+    const nftResult = await inscribe(
       {
         type: 'buffer',
         buffer: imageBuffer,
@@ -246,48 +232,24 @@ async function createCompleteHashinal() {
         mimeType: 'image/png'
       },
       clientConfig,
-      { waitForConfirmation: true }
+      { 
+        mode: 'hashinal',
+        metadata: metadata,
+        waitForConfirmation: true 
+      }
     );
     
-    const imageHRL = `hcs://1/${imageResult.result.topicId}`;
-    const imageTransactionId = imageResult.result.transactionId;
+    const imageHRL = `hcs://1/${nftResult.inscription.topic_id}`;
+    const metadataHRL = `hcs://1/${nftResult.inscription.jsonTopicId}`;
+    const imageTransactionId = nftResult.result.transactionId;
+    const metadataTransactionId = nftResult.inscription.jsonTopicId;
+    
     console.log(`Image HRL: ${imageHRL}`);
-    console.log(`Image Transaction ID: ${imageTransactionId}`);
-
-    // 2. Create metadata with image HRL
-    console.log("\nStep 2: Creating metadata...");
-    const metadata = {
-      name: "Hashinal #001",
-      creator: "Demo Artist",
-      description: "Fully on-chain NFT demonstration",
-      image: imageHRL,
-      type: "image/png",
-      attributes: [
-        { trait_type: "Type", value: "Hashinal" },
-        { trait_type: "Standard", value: "HCS-5" }
-      ]
-    };
-
-    // 3. Inscribe metadata
-    console.log("\nStep 3: Inscribing metadata...");
-    const metadataResult = await inscribe(
-      {
-        type: 'buffer',
-        buffer: Buffer.from(JSON.stringify(metadata, null, 2)),
-        fileName: 'metadata.json',
-        mimeType: 'application/json'
-      },
-      clientConfig,
-      { waitForConfirmation: true }
-    );
-    
-    const metadataHRL = `hcs://1/${metadataResult.result.topicId}`;
-    const metadataTransactionId = metadataResult.result.transactionId;
     console.log(`Metadata HRL: ${metadataHRL}`);
-    console.log(`Metadata Transaction ID: ${metadataTransactionId}`);
+    console.log(`Transaction ID: ${imageTransactionId}`);
 
-    // 4. Create NFT with metadata HRL
-    console.log("\nStep 4: Creating NFT...");
+    // 2. Create NFT with metadata HRL
+    console.log("\nStep 2: Creating NFT...");
     const client = Client.forTestnet();
     client.setOperator(
       process.env.HEDERA_ACCOUNT_ID,
