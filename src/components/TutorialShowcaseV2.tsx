@@ -286,7 +286,7 @@ const TutorialMainContent: React.FC<TutorialMainContentProps> = ({ item: tutoria
           {/* CTA */}
           <div className='pt-4'>
             {isAvailable ? (
-              <PrimaryButton href={tutorial.href} size='small' className='w-full'>
+              <PrimaryButton href={tutorial.href} size='small' className='w-full !text-white'>
                 Start Tutorial →
               </PrimaryButton>
             ) : (
@@ -567,13 +567,13 @@ const TutorialShowcaseV2: React.FC = () => {
                   <div className='flex flex-col sm:flex-row gap-4 justify-center'>
                     <PrimaryButton 
                       href='/docs/tutorials/getting-started/setup-environment'
-                      className='text-lg py-4 px-8 font-black'
+                      className='text-lg py-4 px-8 font-black !text-white'
                     >
                       Start Learning →
                     </PrimaryButton>
                     <SecondaryButton 
                       href='/docs/tutorials'
-                      className='text-lg py-4 px-8 font-bold'
+                      className='text-lg py-4 px-8 font-bold !text-brand-blue dark:!text-brand-blue'
                     >
                       View All Tutorials
                     </SecondaryButton>

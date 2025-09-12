@@ -283,7 +283,7 @@ const FeaturedCarousel: React.FC = () => {
                           </Typography>
                         </div>
                         
-                        <PrimaryButton href={featuredTutorials[currentIndex].href} size='small'>
+                        <PrimaryButton href={featuredTutorials[currentIndex].href} size='small' className='!text-white'>
                           Start Tutorial →
                         </PrimaryButton>
                       </div>
@@ -463,7 +463,7 @@ const InteractiveLearningPath: React.FC = () => {
             }}
             className='text-center mt-8'
           >
-            <PrimaryButton href='/docs/tutorials/getting-started/setup-environment'>
+            <PrimaryButton href='/docs/tutorials/getting-started/setup-environment' className='!text-white'>
               Begin Your Journey →
             </PrimaryButton>
           </motion.div>
@@ -529,7 +529,7 @@ const TutorialCard: React.FC<{ tutorial: Tutorial; categoryIcon?: string }> = ({
                 animate={{ opacity: isHovered ? 1 : 0 }}
                 className='mt-4'
               >
-                <SecondaryButton href={tutorial.href} size='small' className='w-full'>
+                <SecondaryButton href={tutorial.href} size='small' className='w-full text-brand-blue dark:text-brand-blue font-bold'>
                   Start Tutorial →
                 </SecondaryButton>
               </motion.div>

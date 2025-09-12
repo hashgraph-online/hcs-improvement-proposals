@@ -346,7 +346,7 @@ const TutorialMainContent: React.FC<{ item: TutorialItem; index: number }> = ({ 
 
           <div className='pt-4'>
             {isAvailable ? (
-              <PrimaryButton href={tutorial.href} size='small' className='w-full'>
+              <PrimaryButton href={tutorial.href} size='small' className='w-full text-white dark:text-white font-bold'>
                 Start Tutorial →
               </PrimaryButton>
             ) : (
@@ -486,7 +486,7 @@ const TutorialCard: React.FC<{ tutorial: Tutorial }> = ({ tutorial }) => {
                 animate={{ opacity: isHovered ? 1 : 0 }}
                 className='mt-4'
               >
-                <SecondaryButton href={tutorial.href} size='small' className='w-full'>
+                <SecondaryButton href={tutorial.href} size='small' className='w-full text-brand-blue dark:text-brand-blue font-bold'>
                   Start Tutorial →
                 </SecondaryButton>
               </motion.div>
@@ -791,13 +791,13 @@ const TutorialShowcaseUltimate: React.FC = () => {
                   <div className='flex flex-col sm:flex-row gap-4 justify-center'>
                     <PrimaryButton 
                       href='/docs/tutorials/getting-started/setup-environment'
-                      className='text-lg py-4 px-8 font-black'
+                      className='text-lg py-4 px-8 font-black !text-white'
                     >
                       Start First Tutorial →
                     </PrimaryButton>
                     <SecondaryButton 
                       href='https://github.com/hashgraph-online/standards-sdk'
-                      className='text-lg py-4 px-8 font-bold'
+                      className='text-lg py-4 px-8 font-bold !text-brand-blue dark:!text-brand-blue'
                     >
                       View on GitHub ↗
                     </SecondaryButton>
