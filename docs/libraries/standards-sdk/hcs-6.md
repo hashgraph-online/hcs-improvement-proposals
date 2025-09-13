@@ -72,6 +72,12 @@ const client = new HCS6Client({
 });
 ```
 
+### Key Handling (No Guesswork)
+
+- The client resolves operator key type (ECDSA vs ED25519) via Mirror Node account `key._type` and configures the SDK accordingly.
+- If you provide a `supplyKey` as a string when minting, the client fetches token info (`supply_key._type`) and parses the key with the correct algorithm.
+- You may also pass a `PrivateKey` instance; it will be used directly.
+
 ### Basic Setup (Browser)
 
 For client-side applications, use `HCS6BrowserClient`:

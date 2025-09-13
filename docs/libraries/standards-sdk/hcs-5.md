@@ -25,7 +25,7 @@ const svg = Buffer.from(
   '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#0d9488"/><text x="50%" y="56%" text-anchor="middle" dominant-baseline="middle" font-size="320" font-weight="700" fill="#fff">S</text></svg>'
 );
 
-const minted = await client.inscribeAndMint({
+const minted = await client.createHashinal({
   tokenId: '0.0.123456',
   inscriptionInput: { type: 'buffer', buffer: svg, fileName: 'hashinal.svg', mimeType: 'image/svg+xml' },
   inscriptionOptions: {
@@ -67,7 +67,7 @@ What this gives you
 2. Take the returned `topicId`
 3. Mint an HTS NFT whose metadata is `hcs://1/<topicId>`
 
-The SDK does steps 1–3 for you in one call (`inscribeAndMint`).
+The SDK does steps 1–3 for you in one call (`createHashinal`).
 
 ## Node Usage
 
@@ -84,7 +84,7 @@ await client.mint({
 Or inscribe and mint in one step (recommended):
 
 ```ts
-await client.inscribeAndMint({
+await client.createHashinal({
   tokenId: '0.0.123456',
   inscriptionInput: { type: 'buffer', buffer: svg, fileName: 'hashinal.svg', mimeType: 'image/svg+xml' },
   inscriptionOptions: {
@@ -113,7 +113,7 @@ import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 const hwc = HashinalsWalletConnectSDK.getInstance();
 const client = new HCS5BrowserClient({ network: 'testnet', hwc });
 
-const res = await client.inscribeAndMint({
+const res = await client.createHashinal({
   tokenId: '0.0.123456',
   inscriptionInput: { type: 'buffer', buffer: svg, fileName: 'hashinal.svg', mimeType: 'image/svg+xml' },
   inscriptionOptions: {
