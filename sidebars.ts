@@ -36,8 +36,18 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'standards/hcs-4',
+          label: 'HCS-4: Standards Process',
+        },
+        {
+          type: 'doc',
           id: 'standards/hcs-3',
           label: 'HCS-3: Recursion',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-4',
+          label: 'HCS-4: Governance & Process',
         },
         {
           type: 'doc',
