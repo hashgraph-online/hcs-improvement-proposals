@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Hashgraph Online',
   tagline: 'Building the future of the internet, on-graph.',
-  favicon: 'img/favicon.png',
+  favicon: 'img/favicon.ico',
 
   markdown: {
     mermaid: true,
@@ -89,6 +89,12 @@ const config: Config = {
   themeConfig: {
     // Replace with your project's social card
     image: 'img/og-card.png',
+    algolia: {
+      appId: 'INUYES5FGM',
+      apiKey: '2b3fe9b2882e46e19fa5fce6272efe4f',
+      indexName: 'Docs',
+      contextualSearch: true,
+    },
     blog: {
       sidebar: {
         groupByYear: true,
@@ -107,7 +113,7 @@ const config: Config = {
       title: 'Hashgraph Online',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'img/logo.png',
+        src: 'Logo_Icon.png',
       },
       items: [
         { to: '/docs/standards/', label: 'Standards', position: 'left' },
@@ -116,25 +122,20 @@ const config: Config = {
           type: 'dropdown',
           label: 'Hackathons',
           position: 'left',
-          to: '/hackathon',
           items: [
-            { 
-              to: '/hackathon', 
+            {
+              to: '/hackathon',
               label: 'AI Track - Africa Hackathon',
-              className: 'dropdown__link--parent'
+              className: 'dropdown__link--parent',
             },
-            { to: '/hackathon#requirements', label: '→ Submission Requirements', className: 'dropdown__link--sub' },
-            { to: '/hackathon#tools', label: '→ Developer Tools', className: 'dropdown__link--sub' },
-            { to: '/hackathon#examples', label: '→ Code Examples', className: 'dropdown__link--sub' },
-            { to: '/hackathon#judges', label: '→ Experts', className: 'dropdown__link--sub' },
-            { to: '/hackathon#faq', label: '→ FAQ', className: 'dropdown__link--sub' },
-            { to: '/hackathon#register', label: '→ Register', className: 'dropdown__link--sub' },
-            { type: 'html', value: '<hr style="margin: 8px 0; opacity: 0.2;">' },
-            { to: '/hedera-ai-agents-hackathon', label: 'OpenConvAI Hackathon (Ended)' },
+            {
+              to: '/hedera-ai-agents-hackathon',
+              label: 'OpenConvAI Hackathon (Ended)',
+            },
             { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
           ],
         },
-        { to: '/openconvai', label: 'OpenConvAI', position: 'left' },
+        { to: '/desktop', label: 'HOL Desktop', position: 'left' },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
@@ -149,6 +150,10 @@ const config: Config = {
             {
               label: 'Standards',
               to: '/docs/standards/hcs-1',
+            },
+            {
+              label: 'Brand Kit',
+              to: '/brand',
             },
           ],
         },
@@ -214,17 +219,10 @@ const config: Config = {
         },
       ],
     },
-    scripts: [
-      {
-        src: 'https://stats.tier.bot/script.js',
-        async: true,
-        'data-website-id': '09a60445-7371-492c-9d75-c17be79fa569',
-      },
-    ],
+    scripts: [],
   } satisfies Preset.ThemeConfig,
 
   plugins: [
-    '@docusaurus/plugin-ideal-image',
     async function myPlugin(context, options) {
       return {
         name: 'docusaurus-tailwindcss',

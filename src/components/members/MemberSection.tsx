@@ -799,7 +799,7 @@ export const MemberSection: React.FC = () => {
           </Typography>
           <Typography
             variant='lead'
-            className='text-lg lg:text-xl text-gray-200 max-w-3xl mx-auto'
+            className='text-lg lg:text-xl text-white font-bold max-w-3xl mx-auto'
           >
             10 pioneering organizations building the core infrastructure, tools, and applications that power the Hashgraph Online ecosystem.
           </Typography>

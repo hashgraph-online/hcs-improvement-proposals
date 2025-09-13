@@ -58,6 +58,11 @@ ai:
   permalink: /ai
   description: Artificial Intelligence related content
 
+standards:
+  label: Standards
+  permalink: /standards
+  description: Standards and specifications
+
 agents:
   label: Agents
   permalink: /agents
@@ -80,7 +85,7 @@ openconvai:
 
 hackathon:
   label: Hackathon
-  permalink: /hackathon
+  permalink: /blog/tags/hackathon
   description: Hackathon events and competitions
 
 winners:
@@ -133,6 +138,31 @@ ai-agents:
   permalink: /ai-agents
   description: AI agent development and applications
 
+identity:
+  label: Identity
+  permalink: /identity
+  description: Digital identity, identifiers, and DIDs
+
+privacy:
+  label: Privacy
+  permalink: /privacy
+  description: Privacy topics for agents and applications
+
+compliance:
+  label: Compliance
+  permalink: /compliance
+  description: Regulatory compliance and related tooling
+
+hcs-19:
+  label: HCS-19
+  permalink: /hcs-19
+  description: HCS-19 AI Agent Privacy Compliance standard
+
+privacycheq:
+  label: PrivacyCheq
+  permalink: /privacycheq
+  description: PrivacyCheq and aiCheq integrations
+
 machine-commerce:
   label: Machine Commerce
   permalink: /machine-commerce
@@ -153,4 +183,17 @@ mit:
   permalink: /mit
   description: MIT Media Lab and research collaborations
 
+hcs-1:
+  label: HCS-1
+  permalink: /hcs-1
+  description: Information about the HCS-1 protocol
 
+inscribe-utilities:
+  label: Inscribe-Utilities
+  permalink: /inscribe-utilities
+  description: Incribe Utilities-related content
+
+hgrimoire:
+  label: hgrimoire
+  permalink: /hgrimoire
+  description: Hgrimoire-related content

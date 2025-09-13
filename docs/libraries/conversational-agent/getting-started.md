@@ -5,13 +5,19 @@ description: Quick start guide for Hashgraph Online Conversational Agent
 
 # Getting Started with Conversational Agent
 
-This guide will help you get up and running with the Hashgraph Online Conversational Agent quickly.
+This chapter gets you from zero to a working agent in minutes. You’ll install the library, set three environment variables, run one snippet, and send your first message.
+
+> TL;DR
+> - Install the package, set 3 env vars, and run one snippet.
+> - Defaults: `network=testnet`, `llmProvider=openai`, `openAIModelName=gpt-4o`.
+> - Two modes: `autonomous` (executes) vs `returnBytes` (you sign & submit).
+> - Optional MCP servers add filesystem/github/database tools.
 
 ## Prerequisites
 
 - Node.js 18+ and npm/pnpm
 - Hedera testnet account credentials
-- OpenAI API key
+- OpenAI API key (or Anthropic/OpenRouter — use `openAIApiKey` for all)
 - Optional: Terminal for CLI interface
 
 ## Installation
@@ -29,6 +35,22 @@ npm install @hashgraph/sdk @hashgraphonline/standards-sdk
 
 ## Basic Setup
 
+### Diagram: What happens when I send a message?
+
+```mermaid
+flowchart LR
+    A[You type plain English] --> B(ConversationalAgent)
+    B --> C{Picks a Tool}
+    C -->|HCS-10| D[Register/connect/message agents]
+    C -->|HCS-2| E[Manage registry entries]
+    C -->|Inscribe| F[Create Hashinals / store content]
+    C -->|Core HTS/Accounts/...| G[HBAR, tokens, topics, files, contracts]
+    D --> H[Hedera Network]
+    E --> H
+    F --> H
+    G --> H
+```
+
 ### 1. Environment Configuration
 
 Create a `.env` file with your credentials:
@@ -39,8 +61,9 @@ HEDERA_NETWORK=testnet
 HEDERA_ACCOUNT_ID=0.0.YOUR_ACCOUNT_ID
 HEDERA_PRIVATE_KEY=YOUR_PRIVATE_KEY
 
-# OpenAI Configuration
-OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+# OpenAI/Anthropic/OpenRouter Configuration
+# Use this key for all providers; the code option is `openAIApiKey`.
+OPENAI_API_KEY=YOUR_PROVIDER_API_KEY
 ```
 
 ### 2. Initialize the Agent
@@ -57,12 +80,34 @@ const agent = new ConversationalAgent({
   privateKey: process.env.HEDERA_PRIVATE_KEY!,
   network: 'testnet',
   openAIApiKey: process.env.OPENAI_API_KEY!,
+  // LLM provider and model (OpenAI or Anthropic)
+  llmProvider: 'openai', // or 'anthropic'
   openAIModelName: 'gpt-4o',
+  // Optional: enable entity memory and configure limits
+  entityMemoryEnabled: true,
+  entityMemoryConfig: { maxTokens: 6000, reserveTokens: 1000 },
+  // Optional: dedicated provider/model for entity extraction/resolution
+  entityMemoryProvider: 'openai', // or 'anthropic'
+  entityMemoryModelName: 'gpt-4o-mini',
   verbose: true
 });
 
 // Initialize the agent
 await agent.initialize();
+
+// Using OpenRouter instead of OpenAI/Anthropic
+const openRouterAgent = new ConversationalAgent({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+  // Either set `openRouterApiKey` or reuse OPENAI_API_KEY via `openAIApiKey`
+  openAIApiKey: process.env.OPENROUTER_API_KEY!,
+  openRouterApiKey: process.env.OPENROUTER_API_KEY!,
+  llmProvider: 'openrouter',
+  // Prefer vendor-prefixed models for routing (avoids candidates requirement)
+  openAIModelName: 'openai/gpt-4o-mini',
+});
+await openRouterAgent.initialize();
 ```
 
 ## Using the CLI
@@ -92,6 +137,14 @@ The CLI provides:
 - 🔐 Secure credential input
 - 📊 Real-time transaction feedback
 - 🔌 MCP server configuration and management
+
+Where the CLI stores MCP config
+- Set `CONVERSATIONAL_AGENT_ROOT` to control where the CLI writes `mcp-config.json`.
+- If not set, the CLI computes a project root relative to the CLI package; to avoid surprises, export `CONVERSATIONAL_AGENT_ROOT` to your repo path. Example from this repo root:
+  ```bash
+  export CONVERSATIONAL_AGENT_ROOT="$(pwd)/conversational-agent"
+  ```
+  The file will then be written to `conversational-agent/mcp-config.json`.
 
 ## Your First Agent Operations
 
@@ -269,7 +322,20 @@ const agent = new ConversationalAgent({
 const response = await agent.processMessage(
   "Create a topic"
 );
-// response contains transaction bytes for external signing
+// If the underlying tool supports bytes, `response.transactionBytes` will be present.
+// Some operations may execute directly even in bytes mode (see tool docs).
+```
+
+### Diagram: Mode selection
+
+```mermaid
+flowchart TD
+    A["Your request"] --> B{"Mode?"}
+    B -->|autonomous| C["Agent signs & executes"]
+    B -->|returnBytes| D["Agent returns base64 tx bytes"]
+    D --> E["You sign (wallet/SDK)"]
+    E --> F["Submit to Hedera"]
+    C --> F
 ```
 
 ## Custom Plugins
@@ -324,7 +390,7 @@ The CLI allows you to configure MCP servers interactively:
 3. Enable the filesystem server and set the path
 4. Add custom MCP servers as needed
 
-Your MCP configuration is saved in `~/.hashgraphonline/mcp-config.json` and automatically loaded on startup.
+Your MCP configuration is saved to the directory set by `CONVERSATIONAL_AGENT_ROOT` (recommended). If unset, the CLI computes a project root relative to itself; set the env var to avoid surprises.
 
 ### Common MCP Use Cases
 
@@ -344,7 +410,7 @@ Your MCP configuration is saved in `~/.hashgraphonline/mcp-config.json` and auto
 
 ## Next Steps
 
-- Explore [available tools](./tools) - Complete list of all 22 tools
+- Up next: [Available Tools](./tools) — what you can ask the agent to do
 - Try [example scripts](./examples) - Real-world usage examples
 - Read about [HCS-10 Standard](/docs/standards/hcs-10) - Agent communication protocol
 - Learn about [HCS-2 Standard](/docs/standards/hcs-2) - Registry management

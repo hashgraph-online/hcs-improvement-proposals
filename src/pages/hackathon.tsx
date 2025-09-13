@@ -1,58 +1,53 @@
-import React, { useState } from 'react';
-import Layout from '@theme/Layout';
-import HAHHeroSection from '../components/hackathon/HAHHeroSection';
-import RequirementsSection from '../components/hackathon/RequirementsSection';
-import JudgesSection from '../components/hackathon/JudgesSection';
-import HAHToolsTimelineSection from '../components/hackathon/HAHToolsTimelineSection';
-import HAHRegisterSection from '../components/hackathon/HAHRegisterSection';
-import HAHFAQSection from '../components/hackathon/HAHFAQSection';
-import HAHCodeExamplesSection from '../components/hackathon/HAHCodeExamplesSection';
-import HAHNewsletterModal from '../components/hackathon/HAHNewsletterModal';
-import HAHNewsletterSection from '../components/hackathon/HAHNewsletterSection';
-import HAHSponsorsSection from '../components/hackathon/HAHSponsorsSection';
-import '../css/hackathon-fonts.css';
-import './hackathon-styles.css';
+import React, { useEffect } from 'react';
+import Head from '@docusaurus/Head';
 
-const HAHPage: React.FC = () => {
-  const [showNewsletterModal, setShowNewsletterModal] = useState(false);
+type TrackFn = (name: string, data?: Record<string, unknown>) => void;
+type TrackViewFn = (url: string, referrer?: string) => void;
+type UmamiObject = { track?: TrackFn; trackView?: TrackViewFn };
+type UmamiLike = UmamiObject | TrackFn | undefined;
+
+const target = 'https://link.hashgraphonline.com/hederahacks';
+
+function getUmami(): UmamiLike {
+  const w = window as unknown as { umami?: unknown };
+  if (typeof w.umami === 'function') return w.umami as TrackFn;
+  if (typeof w.umami === 'object' && w.umami !== null) return w.umami as UmamiObject;
+  return undefined;
+}
+
+export default function HackathonRedirect(): JSX.Element {
+  useEffect(() => {
+    try {
+      const umami = getUmami();
+      const ref = document.referrer || undefined;
+      if (umami && typeof (umami as UmamiObject).trackView === 'function') {
+        (umami as UmamiObject).trackView?.('/hackathon', ref);
+      }
+      if (typeof umami === 'function') {
+        umami('hackathon-redirect', { source: ref ? 'internal' : 'direct', path: '/hackathon' });
+      } else if (umami && typeof umami.track === 'function') {
+        umami.track('hackathon-redirect', { source: ref ? 'internal' : 'direct', path: '/hackathon' });
+      }
+    } catch {}
+    const t = setTimeout(() => {
+      window.location.replace(target);
+    }, 200);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
-    <Layout
-      title='AI Track - Hedera Africa Hackathon | Hashgraph Online'
-      description='Join the AI Track at Hedera Africa Hackathon. Build innovative AI solutions on Hedera in collaboration with The Hashgraph Association and Exponential Science.'
-    >
-      <HAHNewsletterModal
-        isOpen={showNewsletterModal}
-        onClose={() => setShowNewsletterModal(false)}
-      />
-      <div className='min-h-screen bg-white dark:bg-gray-900 hackathon-container'>
-        <div id='hero'>
-          <HAHHeroSection />
-        </div>
-        <div id='newsletter'>
-          <HAHNewsletterSection onNewsletterClick={() => setShowNewsletterModal(true)} />
-        </div>
-        <div id='tools'>
-          <HAHToolsTimelineSection />
-        </div>
-        <div id='examples'>
-          <HAHCodeExamplesSection />
-        </div>
-        <div id='judges'>
-          <JudgesSection event='africa-hackathon' showTBA={true} />
-        </div>
-        <div id='sponsors'>
-          <HAHSponsorsSection />
-        </div>
-        <div id='faq'>
-          <HAHFAQSection onNewsletterClick={() => setShowNewsletterModal(true)} />
-        </div>
-        <div id='register'>
-          <HAHRegisterSection />
-        </div>
-      </div>
-    </Layout>
+    <>
+      <Head>
+        <meta httpEquiv="refresh" content={`1; url=${target}`} />
+        <link rel="canonical" href={target} />
+      </Head>
+      <main className="container margin-vert--xl">
+        <h1>Redirecting to Hedera Africa Hackathon…</h1>
+        <p>
+          If you are not redirected, <a href={target}>click here</a>.
+        </p>
+      </main>
+    </>
   );
-};
+}
 
-export default HAHPage;

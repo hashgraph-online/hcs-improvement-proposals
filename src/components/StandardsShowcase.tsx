@@ -119,6 +119,16 @@ const standardsData = [
     icon: 'HCS-11',
   },
   {
+    title: 'HCS-12: HashLinks',
+    category: 'Application Composition',
+    status: 'draft' as const,
+    description:
+      'Composes WASM actions, Gutenberg UI blocks, and assemblies into interactive on-chain experiences registered via HCS topics.',
+    features: ['WASM actions', 'Gutenberg blocks', 'Assembly composition'],
+    href: '/docs/standards/hcs-12',
+    icon: 'HCS-12',
+  },
+  {
     title: 'HCS-13: Schema Registry',
     category: 'Infrastructure',
     status: 'draft' as const,
@@ -171,6 +181,33 @@ const standardsData = [
     ],
     href: '/docs/standards/hcs-18',
     icon: 'HCS-18',
+    title: 'HCS-14: Universal Agent ID Standard',
+    category: 'AI & Communication',
+    status: 'draft' as const,
+    description:
+      'W3C DID-based standard for deterministic, globally unique AI agent identifiers. Enables cross-protocol agent discovery and communication.',
+    features: [
+      'Agent identification',
+      'Cross-protocol routing',
+      'DID compatibility',
+    ],
+    href: '/docs/standards/hcs-14',
+    icon: 'HCS-14',
+  },
+  {
+    title: 'HCS-19: AI Agent Privacy Compliance',
+    category: 'AI & Communication',
+    status: 'draft' as const,
+    description:
+      'The HCS-19 standard defines a comprehensive, ISO/IEC TS 27560-aligned framework for AI agents to document and manage privacy compliance on Hedera through HCS topics.',
+    features: [
+      'Privacy compliance',
+      'Consent management',
+      'Data processing records',
+      'GDPR/CCPA support',
+    ],
+    href: '/docs/standards/hcs-19',
+    icon: 'HCS-19',
   },
   {
     title: 'HCS-20: Auditable Points Standard',
@@ -188,7 +225,7 @@ export default function StandardsShowcase(): React.ReactElement {
   return (
     <CategoryShowcase
       title='HCS Standards'
-      subtitle='Discover the comprehensive collection of Hedera Consensus Service standards that enable powerful decentralized applications and data management on the Hedera network.'
+      subtitle='Discover the comprehensive collection of Hashgraph Consensus Standards (HCS) authored by Hashgraph Online — enabling interoperable agent communication, registries, content inscription, and application composition.'
       items={standardsData}
       showSearch={true}
       showCategoryFilter={true}

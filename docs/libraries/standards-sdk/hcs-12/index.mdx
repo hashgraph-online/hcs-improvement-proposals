@@ -1,0 +1,573 @@
+---
+title: "HCS-12: HashLinks SDK"
+description: Build on-chain UI blocks and WebAssembly actions with HCS‑12 HashLinks
+sidebar_position: 12
+---
+
+# HCS-12: HashLinks SDK
+
+Build interactive, decentralized experiences on Hedera without smart contracts. HashLinks combines WebAssembly logic, Gutenberg UI blocks, and a composition layer to create powerful applications with minimal fees.
+
+---
+
+## What HashLinks Does
+
+**HashLinks** enables you to:
+
+- **Execute business logic** deterministically through WebAssembly modules
+- **Create rich UI components** using WordPress Gutenberg blocks
+- **Compose applications** by binding actions to blocks via assemblies
+- **Store everything on-chain** using Hedera Consensus Service topics
+- **Run anywhere** with both server-side and browser-based clients
+
+---
+
+## Quick Start
+
+### Installation
+
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+
+### Basic Setup
+
+```typescript
+import { HCS12Client, NetworkType, Logger } from '@hashgraphonline/standards-sdk';
+
+// Server-side client with private key
+const client = new HCS12Client({
+  network: NetworkType.TESTNET,
+  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  logger: new Logger({ module: 'HCS12' }),
+  hcs12: {
+    operatorId: '0.0.123456',
+    operatorPrivateKey: 'your-private-key'
+  }
+});
+
+// Initialize all registries
+await client.initializeRegistries();
+```
+
+### Browser Setup
+
+```typescript
+import { HCS12BrowserClient, NetworkType } from '@hashgraphonline/standards-sdk';
+
+// Browser client with HashConnect wallet
+const browserClient = new HCS12BrowserClient({
+  network: NetworkType.TESTNET,
+  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  hwc: hashinalsWalletConnectSDK, // Your HashConnect instance
+});
+```
+
+---
+
+## API Surface & Modules
+
+The HCS-12 SDK module exports the following:
+
+- Clients
+  - `HCS12BaseClient` (low-level core), `HCS12Client` (server), `HCS12BrowserClient` (browser)
+- Composition & UI
+  - `builders` (ActionBuilder, BlockBuilder, AssemblyBuilder)
+  - `rendering` (template engine, block renderer, state/resource managers)
+- Registries & Types
+  - `registries` (discovery/catalogue helpers)
+  - `types` (canonical type definitions)
+- Validation & WASM
+  - `validation` (zod schemas + helpers, WasmValidator)
+  - `wasm` (utilities for working with WASM content)
+- `constants`
+
+See the dedicated pages in this section for deeper coverage (actions, blocks, assembly, rendering, registries, wasm, security). The validation page documents schemas and the WasmValidator contract.
+
+---
+
+## Core Architecture
+
+HashLinks consists of three main components that work together:
+
+### 1. Actions (WebAssembly Logic)
+
+**What they do:**
+- Execute deterministic business logic
+- Process transactions without smart contract fees
+- Validate parameters and return results
+- Run in sandboxed environments for security
+
+```typescript
+// Action module interface
+interface WasmInterface {
+  INFO(): string;        // Module metadata
+  POST(...): Promise<string>;  // State-changing operations
+  GET(...): Promise<string>;   // Read-only operations
+}
+```
+
+### 2. Blocks (UI Components)
+
+**What they do:**
+- Define user interface elements
+- Store templates separately for flexibility
+- Support nested composition
+- Bind to actions for interactivity
+
+```typescript
+// Block structure
+const block = {
+  name: 'hashlink/counter',
+  template_t_id: '0.0.789',  // Template stored via HCS-1
+  attributes: {
+    count: { type: 'number', default: 0 }
+  }
+};
+```
+
+### 3. Assemblies (Composition Layer)
+
+**What they do:**
+- Combine blocks and actions into applications
+- Map action aliases to topic IDs
+- Configure block attributes
+- Enable complex layouts through composition
+
+```typescript
+// Assembly composition
+const assembly = {
+  blocks: [blockId],
+  actions: { increment: actionId },
+  attributes: { count: 10 }
+};
+```
+
+---
+
+## Validation & WASM Contract
+
+Use the validation helpers to verify registrations and messages before submission:
+
+```ts
+import {
+  validateActionRegistration,
+  validateBlockRegistration,
+  validateAssemblyMessage,
+  validateAssemblyRegistration,
+  validateHashLinksRegistration,
+  safeValidate,
+} from '@hashgraphonline/standards-sdk/hcs-12';
+
+const { valid, errors } = validateBlockRegistration(blockDef);
+```
+
+To ensure compatibility, WASM modules must export at least:
+
+- `INFO()` → string with module metadata (name/version/capabilities)
+- `POST(...)` → state-changing entrypoint
+- `GET(...)` → read-only entrypoint
+
+The `WasmValidator` introspects the module and checks required exports and signatures. See the “WASM” and “Validation” pages for details.
+
+---
+
+## Building Your First HashLink
+
+Let's create a simple counter application step by step:
+
+### Step 1: Create the Action Module
+
+```typescript
+import { ActionBuilder } from '@hashgraphonline/standards-sdk';
+
+// First, inscribe your WASM module
+const wasmBuffer = await fs.readFile('./counter.wasm');
+const wasmTopicId = await client.inscribeFile(
+  wasmBuffer,
+  'counter.wasm',
+  { compress: true }
+);
+
+// Build action registration
+const actionBuilder = new ActionBuilder(logger)
+  .setWasmTopicId(wasmTopicId)
+  .setModuleInfo({
+    name: 'counter-actions',
+    version: '1.0.0',
+    hashlinks_version: '1.0.0',
+    actions: [
+      { name: 'increment', input: 'CounterInput', output: 'CounterOutput' },
+      { name: 'decrement', input: 'CounterInput', output: 'CounterOutput' },
+      { name: 'reset', input: 'Empty', output: 'CounterOutput' }
+    ],
+    capabilities: []
+  });
+
+// Register the action
+const actionRegistration = await client.registerAction(actionBuilder);
+console.log('Action registered:', actionRegistration.topicId);
+```
+
+### Step 2: Create the Block
+
+```typescript
+import { BlockBuilder } from '@hashgraphonline/standards-sdk';
+
+// Define the block template
+const template = `
+<div class="counter-block" data-block-id="{{blockId}}">
+  <h3>{{attributes.label}}</h3>
+  <div class="counter-display">
+    <span class="count">{{attributes.count}}</span>
+  </div>
+  <div class="counter-controls">
+    <button data-action-click="{{actions.increment}}">+</button>
+    <button data-action-click="{{actions.decrement}}">-</button>
+    <button data-action-click="{{actions.reset}}">Reset</button>
+  </div>
+</div>
+`;
+
+// Build block definition
+const blockBuilder = new BlockBuilder()
+  .setName('hashlink/counter')
+  .setTitle('Counter Block')
+  .setCategory('interactive')
+  .addAttribute('count', 'number', 0)
+  .addAttribute('step', 'number', 1)
+  .addAttribute('label', 'string', 'Counter')
+  .setTemplate(Buffer.from(template))
+  .addAction('increment', actionRegistration.topicId)
+  .addAction('decrement', actionRegistration.topicId)
+  .addAction('reset', actionRegistration.topicId);
+
+// Register the block
+const blockRegistration = await client.registerBlock(blockBuilder);
+console.log('Block registered:', blockRegistration.topicId);
+```
+
+### Step 3: Create the Assembly
+
+```typescript
+import { AssemblyBuilder } from '@hashgraphonline/standards-sdk';
+
+// Create assembly that combines block and actions
+const assemblyBuilder = new AssemblyBuilder(logger)
+  .setName('counter-app')
+  .setVersion('1.0.0')
+  .setDescription('Simple counter application')
+  .addBlock(blockRegistration.topicId, {
+    attributes: {
+      count: 0,
+      step: 1,
+      label: 'My Counter'
+    },
+    actions: {
+      increment: actionRegistration.topicId,
+      decrement: actionRegistration.topicId,
+      reset: actionRegistration.topicId
+    }
+  });
+
+// Create the assembly
+const assemblyTopicId = await client.createAssembly(assemblyBuilder);
+console.log('Assembly created:', assemblyTopicId);
+```
+
+### Step 4: Render the HashLink
+
+```typescript
+// Load and render the assembly
+const assembly = await client.loadAssembly(assemblyTopicId);
+const renderer = new BlockRenderer(
+  logger,
+  client.gutenbergBridge,
+  client.assemblyEngine,
+  client.blockStateManager
+);
+
+// Render to DOM element
+const container = document.getElementById('app');
+const result = await renderer.render(assembly.blocks[0], {
+  container,
+  assembly,
+  network: NetworkType.TESTNET
+});
+
+// The counter is now live and interactive!
+```
+
+---
+
+## Key Concepts
+
+### Registry System
+
+**What it does:**
+- Maintains discoverable directories of components
+- Enables searching and filtering
+- Tracks versions and updates
+- Provides public access to HashLinks
+
+```typescript
+// Create a registry topic
+const registryTopicId = await client.createRegistryTopic(
+  'action',     // Registry type: 'action', 'block', 'assembly', or 'hashlinks'
+  adminKey,     // Optional admin key for updates
+  submitKey     // Optional submit key for submissions
+);
+```
+
+### HashLink URLs
+
+**Format:** `hcs://[protocol]/[topic-id]`
+
+```typescript
+// Examples of HashLink URLs
+'hcs://1/0.0.123456'    // HCS-1 inscription
+'hcs://12/0.0.789012'   // HCS-12 assembly
+'hcs://20/0.0.345678'   // HCS-20 token
+```
+
+### Security Model
+
+**Built-in protections:**
+- **WASM Sandboxing** - Isolated execution environment
+- **Capability System** - Explicit permission requirements
+- **Signature Verification** - Cryptographic validation
+- **Template Sanitization** - XSS prevention
+- **Validation Rules** - Parameter checking
+
+---
+
+## Client Types
+
+### HCS12Client (Server-side)
+
+**Use when you:**
+- Have access to private keys
+- Need full transaction capabilities
+- Run backend services or CLI tools
+- Require admin operations
+
+### HCS12BrowserClient (Browser)
+
+**Use when you:**
+- Build web applications
+- Integrate with wallets via HashConnect
+- Need user transaction signing
+- Create interactive DApps
+
+### HCS12BaseClient (Abstract)
+
+**Shared functionality:**
+- Registry management
+- Mirror node queries
+- Template rendering
+- Block state management
+
+---
+
+## Factory Methods
+
+The SDK provides convenient factory methods for common patterns:
+
+### Display Blocks
+
+```typescript
+const displayBlock = BlockBuilder.createDisplayBlock(
+  'hashlink/stats',
+  'Statistics Display'
+)
+  .addAttribute('title', 'string', 'Stats')
+  .addAttribute('data', 'array', [])
+  .setTemplate(statsTemplate)
+  .build();
+```
+
+### Interactive Blocks
+
+```typescript
+const interactiveBlock = BlockBuilder.createInteractiveBlock(
+  'hashlink/form',
+  'Contact Form'
+)
+  .addAttribute('submitUrl', 'string', '')
+  .addAction('submit', submitActionId)
+  .setTemplate(formTemplate)
+  .build();
+```
+
+### Container Blocks
+
+```typescript
+const containerBlock = BlockBuilder.createContainerBlock(
+  'hashlink/layout',
+  'Grid Layout'
+)
+  .addAttribute('columns', 'number', 2)
+  .addAttribute('gap', 'string', '1rem')
+  .setTemplate(gridTemplate)
+  .build();
+```
+
+---
+
+## Advanced Features
+
+### Nested Composition
+
+Blocks can contain other blocks through HashLink references:
+
+```html
+<!-- Container template with nested blocks -->
+<div class="container">
+  <div data-hashlink="hcs://12/0.0.123456"></div>
+  <div data-hashlink="hcs://12/0.0.789012"></div>
+</div>
+```
+
+### State Management
+
+The SDK includes a built-in state manager:
+
+```typescript
+const stateManager = client.blockStateManager;
+
+// Subscribe to state changes
+stateManager.subscribe('counter-1', (state) => {
+  console.log('Counter updated:', state.count);
+});
+
+// Update state after action execution
+stateManager.updateState('counter-1', { count: 42 });
+```
+
+### Performance Optimization
+
+**Caching strategies:**
+- Assembly definitions cached in memory
+- WASM modules cached after first load
+- Templates precompiled for faster rendering
+- Mirror node responses cached with TTL
+
+---
+
+## Error Handling
+
+The SDK provides comprehensive error handling:
+
+```typescript
+try {
+  const result = await client.executeAction({
+    topicId: '0.0.123456',
+    action: 'transfer',
+    params: { amount: 100, to: '0.0.789' }
+  });
+  
+  if (result.success) {
+    console.log('Success:', result.data);
+  } else {
+    console.error('Action failed:', result.error);
+  }
+} catch (error) {
+  if (error.code === 'VALIDATION_ERROR') {
+    console.error('Invalid parameters:', error.details);
+  } else if (error.code === 'NETWORK_ERROR') {
+    console.error('Network issue:', error.message);
+  } else {
+    console.error('Unexpected error:', error);
+  }
+}
+```
+
+---
+
+## Best Practices
+
+### Development
+
+- Use builders for all component creation
+- Validate early with schema validation
+- Handle errors with explicit fallbacks
+- Test locally before mainnet deployment
+- Version modules to enable upgradability
+
+### Production
+
+- Cache to reduce network calls
+- Validate WASM modules before execution
+- Monitor performance with metrics
+- Implement rate limiting for actions
+- Use compression for large templates
+
+### Security
+
+- Sanitize templates to prevent XSS
+- Validate parameters with schemas
+- Check capabilities before execution
+- Verify signatures for authentication
+- Audit actions for compliance
+
+---
+
+## Common Issues
+
+### Issue: "Module not found: fs"
+
+Solution: Use the browser client in web environments:
+```typescript
+// Wrong: Server client in browser
+import { HCS12Client } from '@hashgraphonline/standards-sdk';
+
+// Correct: Browser client for web
+import { HCS12BrowserClient } from '@hashgraphonline/standards-sdk';
+```
+
+### Issue: "WASM execution failed"
+
+Solution: Ensure the module implements the required interface:
+```typescript
+// Check module exports
+const validator = new WasmValidator();
+const report = await validator.validate(wasmBuffer);
+if (!report.valid) {
+  console.error('Missing exports:', report.missingExports);
+}
+```
+
+### Issue: "Template rendering error"
+
+Solution: Validate template syntax:
+```typescript
+// Precompile to catch errors early
+try {
+  await templateEngine.precompile('my-template', templateHtml);
+} catch (error) {
+  console.error('Template syntax error:', error.message);
+}
+```
+
+---
+
+## Next Steps
+
+Explore the complete SDK documentation:
+
+- **[Actions](./actions.md)** - Deep dive into WebAssembly modules
+- **[Blocks](./blocks.md)** - Master UI component creation
+- **[Assembly](./assembly.md)** - Learn composition patterns
+- **[Registries](./registries.md)** - Understand discovery systems
+- **[Rendering](./rendering.md)** - Explore the rendering pipeline
+- **[Security](./security.md)** - Implement secure HashLinks
+- **[WASM](./wasm.md)** - WebAssembly execution details
+
+---
+
+## Resources
+
+- **[HCS-12 Standard](/docs/standards/hcs-12/)** - Technical specification
+- **[GitHub Repository](https://github.com/hashgraphonline/standards-sdk)** - Source code
+- **[Examples](https://github.com/hashgraphonline/standards-sdk/tree/main/demo/hcs-12)** - Sample applications
+- **[Telegram Community](https://t.me/hashinals)** - Get help and share ideas

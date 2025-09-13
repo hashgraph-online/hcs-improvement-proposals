@@ -144,7 +144,7 @@ const AboutSection: React.FC = () => {
               <div className='flex items-center gap-4 mb-8'>
                 <div className='h-0.5 w-12 bg-blue-500'></div>
                 <a
-                  href='/call-for-bonzo-agents'
+                  href='/sprint#sprints'
                   className='text-blue-600 dark:text-blue-400 font-medium hover:underline'
                 >
                   View Current Challenge

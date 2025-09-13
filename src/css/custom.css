@@ -171,9 +171,59 @@ ul.tags.expanded::after {
   color: white !important;
 }
 
-.navbar__items--right button {
-  opacity: 1 !important;
-  color: white !important;
+/* Do not force all right-side navbar buttons to white; it breaks DocSearch */
+/* Style the color mode toggle explicitly above; leave other buttons default */
+
+/* DocSearch styles: ensure contrast on light navbar */
+.DocSearch-Button {
+  background: #ffffff !important;
+  color: var(--ifm-color-emphasis-700) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  margin-right: 0.5rem;
+}
+.DocSearch-Button-Placeholder,
+.DocSearch-Input::placeholder {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+.DocSearch-Search-Icon {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+.DocSearch-Input {
+  color: var(--ifm-color-emphasis-900) !important;
+}
+
+/* Dark mode: navbar stays light; keep docsearch readable */
+[data-theme='dark'] .DocSearch-Button {
+  background: #ffffff !important;
+  color: var(--ifm-color-emphasis-700) !important;
+  border: 1px solid var(--ifm-color-emphasis-200) !important;
+  margin-right: 0.5rem;
+}
+[data-theme='dark'] .DocSearch-Button-Placeholder,
+[data-theme='dark'] .DocSearch-Input::placeholder {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+[data-theme='dark'] .DocSearch-Search-Icon {
+  color: var(--ifm-color-emphasis-600) !important;
+}
+[data-theme='dark'] .DocSearch-Input {
+  color: var(--ifm-color-emphasis-900) !important;
+}
+
+/* Hide the Cmd/Ctrl+K keycaps inside the DocSearch button */
+.DocSearch-Button-Keys {
+  display: none !important;
+}
+
+/* Place the search before the theme toggle via Docusaurus CSS var */
+.navbar__items--right {
+  --docusaurus-navbar-search-input-order: 10;
+}
+
+/* Ensure the theme toggle remains clickable above search button */
+.navbar__items--right [class*='toggleButton'] {
+  position: relative;
+  z-index: 1;
 }
 
 /* Keep navbar background light in both themes */
@@ -259,7 +309,7 @@ html[data-theme='dark'] body {
 [data-theme='dark'] aside .text-brand-blue,
 [data-theme='dark'] aside [class*='isActive'],
 [data-theme='dark'] aside [class*='active'] {
-  color: #60a5fa !important; /* Bright blue for active items */
+  color: #7c85d3 !important; /* Light purple for active items */
 }
 
 /* Blog sidebar selected post styling */
@@ -563,10 +613,14 @@ textarea {
   color: #e0e7ff !important;
 }
 
-[data-theme='dark'] .navbar__link:hover,
-[data-theme='dark'] .navbar__link--active {
+[data-theme='dark'] .navbar__link:hover {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme='dark'] .navbar__link--active {
+  color: #7c85d3 !important;
+  background-color: rgba(124, 133, 211, 0.1) !important;
 }
 
 [data-theme='dark'] .footer {
@@ -623,10 +677,14 @@ textarea {
   font-weight: 500;
 }
 
-.navbar-sidebar .menu__link:hover,
-.navbar-sidebar .menu__link--active {
+.navbar-sidebar .menu__link:hover {
   color: #ffffff !important;
   background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-sidebar .menu__link--active {
+  color: #7c85d3 !important;
+  background-color: rgba(124, 133, 211, 0.1) !important;
 }
 
 /* Mobile menu dropdown arrow - use filter to make it white in both themes */
@@ -668,6 +726,158 @@ textarea {
   filter: brightness(0) invert(1) !important;
 }
 
+/* Fix mobile sidebar content visibility issues */
+.navbar-sidebar .navbar-sidebar__items {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.navbar-sidebar .menu__list {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.navbar-sidebar .menu__list-item {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Ensure collapsible sidebar content shows properly on mobile */
+@media (max-width: 996px) {
+  .navbar-sidebar .menu__list-item-collapsible .menu__list {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .navbar-sidebar
+    .menu__list-item-collapsible.menu__list-item--collapsed
+    .menu__list {
+    display: none !important;
+  }
+
+  /* Force mobile sidebar categories to show content when expanded */
+  .navbar-sidebar
+    .menu__list-item-collapsible[aria-expanded='true']
+    .menu__list {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure mobile sidebar has proper height and scrolling */
+  .navbar-sidebar {
+    height: 100vh !important;
+    overflow-y: auto !important;
+  }
+
+  .navbar-sidebar .navbar-sidebar__items {
+    height: auto !important;
+    overflow-y: visible !important;
+    max-height: none !important;
+  }
+
+  /* Force navbar menu items to show in mobile sidebar */
+  .navbar-sidebar .navbar__items {
+    display: flex !important;
+    flex-direction: column !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .navbar-sidebar .navbar__item {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+  }
+
+  .navbar-sidebar .navbar__link {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Ensure dropdowns work in mobile sidebar */
+  .navbar-sidebar .dropdown__menu {
+    display: block !important;
+    position: static !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Disable secondary panel entirely on mobile */
+@media (max-width: 996px) {
+  .navbar-sidebar__items--show-secondary {
+    display: block !important;
+  }
+  .navbar-sidebar__secondary {
+    display: none !important;
+  }
+}
+
+/* On mobile, ensure primary nav items render; override secondary toggle */
+@media (max-width: 996px) {
+  .navbar-sidebar .navbar-sidebar__items {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  .navbar-sidebar.navbar-sidebar--show-secondary .navbar-sidebar__items {
+    display: block !important;
+  }
+  .navbar-sidebar.navbar-sidebar--show-secondary .navbar-sidebar__secondary {
+    display: none !important;
+  }
+}
+
+/* Keep good contrast for mobile drawer links without affecting layout */
+.navbar-sidebar .navbar__link {
+  color: #ffffff !important;
+}
+.navbar-sidebar .navbar__link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* High-contrast active state in mobile drawer */
+@media (max-width: 996px) {
+  .navbar-sidebar .menu__link--active,
+  .navbar-sidebar .navbar__link--active,
+  .navbar-sidebar .dropdown__link--active,
+  .navbar-sidebar a[aria-current='page'] {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.16) !important;
+  }
+}
+
+/* Ensure drawer panels are not slid off-screen on mobile */
+@media (max-width: 996px) {
+  .navbar-sidebar__items {
+    transform: none !important;
+  }
+  .navbar-sidebar__items .navbar-sidebar__item {
+    transform: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    z-index: 1 !important;
+  }
+}
+
+/* Hide "Back to main menu" label but keep the back button icon tappable */
+.navbar-sidebar__back .navbar-sidebar__back-title {
+  display: none !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 996px) {
   .navbar__title {
@@ -682,15 +892,16 @@ textarea {
 
 /* Hackathons dropdown styling with consistent blue color */
 .navbar__item.dropdown > .navbar__link:hover,
-.navbar__item.dropdown > .navbar__link[aria-expanded="true"],
-.navbar__item.dropdown > .navbar__link.navbar__link--active[aria-expanded="true"] {
+.navbar__item.dropdown > .navbar__link[aria-expanded='true'],
+.navbar__item.dropdown
+  > .navbar__link.navbar__link--active[aria-expanded='true'] {
   background-color: #6289d5 !important;
   color: #ffffff !important;
   border-radius: 0.25rem !important;
 }
 
 /* Remove bottom border radius when dropdown is open for seamless look */
-.navbar__item.dropdown > .navbar__link[aria-expanded="true"] {
+.navbar__item.dropdown > .navbar__link[aria-expanded='true'] {
   border-radius: 0.25rem 0.25rem 0 0 !important;
 }
 
@@ -706,7 +917,7 @@ textarea {
 .navbar__item.dropdown .dropdown__menu {
   /* Use solid blue color to match highlighted Hackathons */
   background: #6289d5;
-  
+
   /* Simple positioning */
   margin-top: -1px;
   border: none;
@@ -714,10 +925,10 @@ textarea {
   padding: 0.75rem 0;
   min-width: 280px;
   box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
-  
+
   /* Shift dropdown to the right */
   transform: translateX(12px) !important;
-  
+
   /* Animation */
   animation: dropdownSlideDown 0.3s ease-out;
   transform-origin: top;
@@ -939,6 +1150,18 @@ textarea {
 
 [data-theme='dark'] .markdown table td {
   border-bottom-color: rgba(255, 255, 255, 0.05);
+  color: #7c85d3;
+}
+
+[data-theme='dark'] .markdown table th {
+  background-color: rgba(30, 41, 59, 0.9);
+  border-bottom-color: rgba(85, 153, 254, 0.3);
+  color: #7c85d3;
+}
+
+/* TOC active link highlighting in dark mode */
+[data-theme='dark'] {
+  --ifm-toc-link-color: #7c85d3;
 }
 
 /* Section dividers */
@@ -2618,6 +2841,23 @@ main .theme-doc-generated-index-item:hover::after,
   .standards-grid .standard-card {
     max-width: none;
   }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient 4s ease infinite;
 }
 
 /* Category page styling for ALL generated index pages */
@@ -4391,7 +4631,12 @@ main .theme-doc-generated-index-item:hover::after,
 
 /* Bouncing dots animation - sequential bounce */
 @keyframes bounce-dot-1 {
-  0%, 20%, 40%, 60%, 80%, 100% {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   10% {
@@ -4400,7 +4645,12 @@ main .theme-doc-generated-index-item:hover::after,
 }
 
 @keyframes bounce-dot-2 {
-  0%, 20%, 40%, 60%, 80%, 100% {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   30% {
@@ -4409,7 +4659,12 @@ main .theme-doc-generated-index-item:hover::after,
 }
 
 @keyframes bounce-dot-3 {
-  0%, 20%, 40%, 60%, 80%, 100% {
+  0%,
+  20%,
+  40%,
+  60%,
+  80%,
+  100% {
     transform: translateY(0);
   }
   50% {

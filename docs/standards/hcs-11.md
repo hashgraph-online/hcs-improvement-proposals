@@ -36,6 +36,7 @@ sidebar_position: 11
         - [Complete Verification Example](#complete-verification-example)
         - [Complete Client Verification Implementation](#complete-client-verification-implementation)
     - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
+    - [HCS-19 Integration for Privacy Compliance](#hcs-19-integration-for-privacy-compliance)
     - [Profile Update Flow](#profile-update-flow)
     - [Enums and Constants](#enums-and-constants)
       - [Profile Types](#profile-types-1)
@@ -130,18 +131,20 @@ This approach ensures:
 
 All profiles share these common fields:
 
-| Field           | Type   | Required | Description                                                                                        |
-| --------------- | ------ | -------- | -------------------------------------------------------------------------------------------------- |
-| version         | string | Yes      | Standard version (e.g., "1.0")                                                                     |
-| type            | number | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)            |
-| display_name    | string | Yes      | Display name for the profile                                                                       |
-| alias           | string | No       | Alternative identifier                                                                             |
-| bio             | string | No       | Brief description or biography                                                                     |
-| socials         | array  | No       | Array of social media links                                                                        |
-| profileImage    | string | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
-| properties      | object | No       | Additional unstructured profile properties                                                         |
-| inboundTopicId  | string | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                       |
-| outboundTopicId | string | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                               |
+| Field              | Type    | Required | Description                                                                                          |
+| ------------------ | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| version            | string  | Yes      | Standard version (e.g., "1.0")                                                                       |
+| type               | number  | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)              |
+| display_name       | string  | Yes      | Display name for the profile                                                                         |
+| uaid               | string  | Yes      | UAID (uaid:did:...) for the subject. Other DIDs may be linked via DID Document `alsoKnownAs`.        |
+| alias              | string  | No       | Alternative identifier                                                                               |
+| bio                | string  | No       | Brief description or biography                                                                       |
+| socials            | array   | No       | Array of social media links                                                                          |
+| profileImage       | string  | No       | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats   |
+| properties         | object  | No       | Additional unstructured profile properties                                                           |
+| inboundTopicId     | string  | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                         |
+| outboundTopicId    | string  | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                                 |
+| privacy_compliance | object  | No       | Optional [HCS-19](/docs/standards/hcs-19) compliance metadata and topic references                   |
 
 ### Profile Types
 
@@ -243,11 +246,11 @@ Each verification method is designed to address common use cases while providing
 ##### DNS Verification
 For `type: "dns"`, the verification process follows these specific steps:
 
-1. **Record Format**: MCP server owner must add a DNS TXT record to their domain with:
+1. **Record Format**: MCP server owner shall add a DNS TXT record to their domain with:
    - Name: By default, `hedera` or a custom name specified in `dns_field` (prefixed with `_` automatically)
    - Value: Equal to their Hedera account ID (e.g., `0.0.12345678`)
 
-2. **Profile Format**: The verification object in the profile must be structured as:
+2. **Profile Format**: The verification object in the profile shall be structured as:
    ```json
    "verification": {
      "type": "dns",
@@ -289,14 +292,14 @@ For `type: "dns"`, the verification process follows these specific steps:
 ##### Signature Verification
 For `type: "signature"`, the verification process follows these specific steps:
 
-1. **Message Format**: The message to be signed must be the server URL exactly as it appears in the `mcpServer.connectionInfo.url` field, with no additional characters or formatting.
+1. **Message Format**: The message to be signed shall be the server URL exactly as it appears in the `mcpServer.connectionInfo.url` field, with no additional characters or formatting.
 
-2. **Signature Format**: The signature must be:
+2. **Signature Format**: The signature shall be:
    - Created using the ED25519 key associated with the Hedera account
    - Encoded as a hexadecimal string with no `0x` prefix
    - No additional formatting (no spaces, newlines, etc.)
 
-3. **Profile Format**: The verification object in the profile must be structured as:
+3. **Profile Format**: The verification object in the profile shall be structured as:
    ```json
    "verification": {
      "type": "signature",
@@ -319,7 +322,7 @@ For `type: "signature"`, the verification process follows these specific steps:
    // Get your private key (securely stored)
    const privateKey = Ed25519PrivateKey.fromString("302e020100300506032b657004220420YOUR_PRIVATE_KEY");
 
-   // URL to sign (must match exactly what's in your profile)
+   // URL to sign (shall match exactly what's in your profile)
    const url = "https://mcp.example.com";
 
    // Sign the URL (UTF-8 encoded)
@@ -335,13 +338,13 @@ For `type: "signature"`, the verification process follows these specific steps:
 For `type: "challenge"`, the verification process follows these specific steps:
 
 1. **Endpoint Format**:
-   - The MCP server must expose an endpoint that responds to HTTP GET requests
+   - The MCP server shall expose an endpoint that responds to HTTP GET requests
    - Default path: `/hedera-verification` relative to the server URL
    - Custom path can be specified in `challenge_path`
 
 2. **Challenge-Response Protocol**:
    - Client sends HTTP GET request to `{mcpServer.connectionInfo.url}/{challenge_path}`
-   - Server must respond with a JSON object containing:
+   - Server shall respond with a JSON object containing:
      ```json
      {
        "accountId": "0.0.12345678",
@@ -349,9 +352,9 @@ For `type: "challenge"`, the verification process follows these specific steps:
        "signature": "a1b2c3d4e5f6..."
      }
      ```
-   - The `signature` must be an ED25519 signature (hex-encoded) of the UTF-8 encoded string `{accountId}:{timestamp}` using the account's private key
+   - The `signature` shall be an ED25519 signature (hex-encoded) of the UTF-8 encoded string `{accountId}:{timestamp}` using the account's private key
 
-3. **Profile Format**: The verification object in the profile must be structured as:
+3. **Profile Format**: The verification object in the profile shall be structured as:
    ```json
    "verification": {
      "type": "challenge",
@@ -618,6 +621,30 @@ sequenceDiagram
 
 The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-10](/docs/standards/hcs-10) topics for bidirectional communication with AI agents.
 
+### DID Field
+
+Profiles shall include a top‑level `uaid` field containing an HCS‑14 UAID for the subject (uaid:did:...). Other DIDs (e.g., `did:pkh`, `did:ethr`, `did:web`) may be referenced from the DID Document using `alsoKnownAs`.
+
+### HCS-19 Integration for Privacy Compliance
+
+HCS-19 defines a privacy‑compliance framework for recording consent, processing, rights, and audit logs on HCS. When an AI agent processes personal data, HCS‑11 profiles should include a `privacy_compliance` object to declare compliance posture and reference the relevant HCS‑19 topics.
+
+| Field                                   | Type     | Required | Description                                                |
+| --------------------------------------- | -------- | -------- | ---------------------------------------------------------- |
+| privacy_compliance.standards            | string[] | No       | Applicable legal frameworks (e.g., "gdpr", "ccpa", "ddp") |
+| privacy_compliance.jurisdictions        | string[] | No       | ISO‑3166 style region codes (e.g., "EU", "US‑CA")          |
+| privacy_compliance.consent_topic_id     | string   | No       | HCS topic ID for Consent Management (HCS‑19 Type 0)        |
+| privacy_compliance.processing_topic_id  | string   | No       | HCS topic ID for Processing Registry (HCS‑19 Type 1)       |
+| privacy_compliance.rights_topic_id      | string   | No       | HCS topic ID for Rights Registry (HCS‑19 Type 2)           |
+| privacy_compliance.audit_topic_id       | string   | No       | HCS topic ID for Compliance Audit (HCS‑19 Type 3)          |
+| privacy_compliance.dpo_contact          | string   | No       | Data Protection Officer contact                             |
+| privacy_compliance.privacy_policy_url   | string   | No       | Public URL of privacy policy/notice                         |
+| privacy_compliance.retention_policy     | string   | No       | Default retention policy description                         |
+
+Notes:
+- See [HCS‑19](/docs/standards/hcs-19) for topic types, message schemas, and consent receipt guidance.
+- Profiles that include `privacy_compliance` enable clients to discover and verify HCS‑19 topics for consent and compliance workflows.
+
 ### Profile Update Flow
 
 Profiles can be updated according to the protocol used for reference:
@@ -750,18 +777,30 @@ _This predefined array lists supported social media platforms for the `socials[]
 
 ### Example Profiles
 
-AI Agent Profile with HCS-10:
+AI Agent Profile with HCS‑10 and privacy compliance (optional):
 
 ```json
 {
   "version": "1.0",
   "type": 1,
   "display_name": "AI Assistant Bot",
+  "uaid": "uaid:did:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;uid=helper-bot;registry=hol;nativeId=hedera:testnet:0.0.2656337",
   "alias": "helper_bot",
   "bio": "I'm an AI assistant helping users with Hedera-related tasks",
   "profileImage": "hcs://1/0.0.12345",
   "inboundTopicId": "0.0.789101",
   "outboundTopicId": "0.0.789102",
+  "privacy_compliance": {
+    "standards": ["gdpr", "ccpa", "ddp"],
+    "jurisdictions": ["EU", "US-CA", "US"],
+    "consent_topic_id": "0.0.789101",
+    "processing_topic_id": "0.0.789102",
+    "rights_topic_id": "0.0.789103",
+    "audit_topic_id": "0.0.789104",
+    "dpo_contact": "dpo@example.com",
+    "privacy_policy_url": "https://example.com/privacy",
+    "retention_policy": "2_years_default"
+  },
   "properties": {
     "description": "General-purpose Hedera assistant",
     "version": "1.0.0",
@@ -784,13 +823,14 @@ AI Agent Profile with HCS-10:
 }
 ```
 
-MCP Server Profile:
+MCP Server Profile with UAID:
 
 ```json
 {
   "version": "1.0",
   "type": 2,
   "display_name": "Hedera Consensus MCP",
+  "uaid": "uaid:did:QmZ8kL4mN6vP2wQ9xR3tY7hB5jC1sA9eD;uid=hcs-mcp;registry=olas;nativeId=eip155:1:0x742d35Cc6634C0532925a3b844Bc9e7595f41Bd",
   "alias": "hedera_consensus",
   "bio": "MCP server for interacting with Hedera Consensus Service (HCS)",
   "profileImage": "hcs://1/0.0.54321",

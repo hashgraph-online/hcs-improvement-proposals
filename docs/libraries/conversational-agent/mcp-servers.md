@@ -7,6 +7,11 @@ description: Extend your Conversational Agent with Model Context Protocol server
 
 MCP servers enable your Conversational Agent to interact with external tools, services, and data sources. This guide covers everything you need to know about using MCP with your agent.
 
+Overview
+- Understand what MCP adds on top of Hedera tools
+- Add filesystem/GitHub/database servers quickly
+- Control where CLI saves MCP config
+
 ## What is MCP?
 
 Model Context Protocol (MCP) is a standardized protocol for connecting AI models to various services and APIs. It allows your agent to:
@@ -18,6 +23,22 @@ Model Context Protocol (MCP) is a standardized protocol for connecting AI models
 - Extend capabilities without modifying core agent code
 
 ## Quick Start
+
+Diagram
+```mermaid
+flowchart LR
+  A[ConversationalAgent] -- connects --> B[(MCP Server: filesystem)]
+  A -- connects --> C[(MCP Server: github)]
+  A -- connects --> D[(MCP Server: database)]
+  subgraph Tools exposed
+    T1[read_file/write_file]
+    T2[create_issue/list_issues]
+    T3[execute_query/list_tables]
+  end
+  B --> T1
+  C --> T2
+  D --> T3
+```
 
 ### Using Pre-configured Servers
 
@@ -55,6 +76,11 @@ const agent = new ConversationalAgent({
       args: ['-y', '@modelcontextprotocol/server-filesystem', '/tmp'],
       transport: 'stdio',
       autoConnect: true,
+      // Optional metadata for better tool selection
+      additionalContext: 'Use for reading/writing local project files',
+      toolDescriptions: {
+        'read_file': 'Read UTF-8 text files from the specified directory',
+      },
     }
   ],
 });
@@ -195,11 +221,14 @@ The Conversational Agent CLI provides an interactive interface for configuring M
 
 ### Configuration Storage
 
-MCP configurations are stored in:
-- `~/.hashgraphonline/mcp-config.json` (macOS/Linux)
-- `%USERPROFILE%\.hashgraphonline\mcp-config.json` (Windows)
+- Set `CONVERSATIONAL_AGENT_ROOT` to control where the CLI writes `mcp-config.json`.
+- If not set, the CLI computes a project root relative to the CLI package; to avoid surprises, export `CONVERSATIONAL_AGENT_ROOT` to your repo path. Example from this repo root:
+  ```bash
+  export CONVERSATIONAL_AGENT_ROOT="$(pwd)/conversational-agent"
+  ```
+  The file will then be written to `conversational-agent/mcp-config.json`.
 
-Example configuration:
+Example configuration (supports `stdio`, `http`, or `websocket` transports, plus optional `additionalContext` and `toolDescriptions`):
 ```json
 {
   "servers": [
@@ -208,7 +237,11 @@ Example configuration:
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/docs"],
       "transport": "stdio",
-      "autoConnect": true
+      "autoConnect": true,
+      "additionalContext": "Use for reading and writing local docs",
+      "toolDescriptions": {
+        "read_file": "Read UTF-8 text files from the documents directory"
+      }
     },
     {
       "name": "github",
@@ -240,7 +273,12 @@ const customServer: MCPServerConfig = {
     DEBUG: 'true',
   },
   transport: 'http',
-  autoConnect: true
+  autoConnect: true,
+  additionalContext: 'Use for retrieving product data and posting updates',
+  toolDescriptions: {
+    'get_product': 'Fetch product details by SKU',
+    'update_price': 'Update product price with proper currency handling'
+  }
 };
 
 const agent = new ConversationalAgent({
@@ -440,6 +478,7 @@ await dataAgent.processMessage(
 
 ## Next Steps
 
+- Up next: [Examples](./examples) — end‑to‑end flows to copy/paste
 - Explore [available tools](./tools) including MCP-provided tools
 - See [practical examples](./examples) using MCP servers
 - Read the [MCP Integration Guide](https://github.com/hashgraph-online/conversational-agent/blob/main/docs/MCP_INTEGRATION.md)

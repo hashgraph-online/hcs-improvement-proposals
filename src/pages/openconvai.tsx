@@ -252,12 +252,16 @@ const ConvAIWaitlist: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5 }}
             >
-              <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white leading-tight mb-4'>
-                Decentralized
-                <span className='text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-brand-purple block'>
+              <h1 className='text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4'>
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] block'>
+                  Decentralized
+                </span>
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] to-[#48df7b] block'>
                   AI Communication
                 </span>
-                Standard
+                <span className='text-transparent bg-clip-text bg-gradient-to-r from-[#48df7b] to-[#a679f0] block'>
+                  Standard
+                </span>
               </h1>
               <p className='text-base text-gray-600 dark:text-gray-400 mb-6 max-w-xl mx-auto lg:mx-0'>
                 HCS-10 OpenConvAI enables AI agents to autonomously discover and

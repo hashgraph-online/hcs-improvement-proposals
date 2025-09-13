@@ -237,8 +237,8 @@ const HeroSection: React.FC = () => {
                   Standards SDK Docs →
                 </PrimaryButton>
 
-                <SecondaryButton onClick={() => setShowNewsletter(true)}>
-                  Join Newsletter ↗
+                <SecondaryButton href='/start'>
+                  Get Started →
                 </SecondaryButton>
               </div>
             </div>

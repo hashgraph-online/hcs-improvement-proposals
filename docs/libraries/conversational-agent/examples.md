@@ -5,7 +5,7 @@ description: Example usage of the Conversational Agent
 
 # Conversational Agent Examples
 
-This page provides practical examples of using the Conversational Agent for HCS-10 communication, HCS-2 registries, and content inscription.
+This chapter gives you complete, runnable examples you can copy/paste. Each example assumes you’ve followed Getting Started and set the required env vars.
 
 ## Basic Agent Registration and Communication
 
@@ -664,6 +664,7 @@ async function combinedOperations() {
 
 ## See Also
 
+- Up next: [Plugin Development Guide](./plugin-development) — create your own tools
 - [Getting Started](./getting-started) - Quick start guide
 - [Available Tools](./tools) - Complete tool documentation
 - [MCP Servers](./mcp-servers) - External tool integration guide

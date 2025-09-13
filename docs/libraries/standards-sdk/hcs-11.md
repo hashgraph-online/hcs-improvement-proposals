@@ -6,12 +6,30 @@ sidebar_position: 5
 
 The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera Hashgraph. It enables AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
 
+Note: UAID (HCS‑14) is network‑agnostic and works for Web2/EVM as well. HCS‑11 is a Hedera‑specific profile format that can carry a UAID to enable cross‑protocol discovery; you do not need HCS‑11 to use HCS‑14.
+
 ## What HCS-11 Does
 
 - **Creates Digital Identities** - Define profiles with capabilities, metadata, and images
 - **Stores on Hedera** - Inscribes profiles on the network
 - **Links to Accounts** - Associates profiles with Hedera accounts via memos
 - **Enables Discovery** - Makes agents and users discoverable through HCS-10 and other standards
+- **UAID Integration** - On Hedera, automatically attaches an HCS‑14 UAID to profiles that are missing one. The client issues a `did:hedera` via Hiero and wraps it as `uaid:did:...` with `proto=hcs-10`, a CAIP‑10 `nativeId`, and a `uid` derived from `inboundTopicId@accountId` when available (else the accountId). If Hiero isn’t available or you’re not on Hedera, the client skips UAID attachment (you can set `profile.uaid` yourself beforehand).
+
+> No extra steps: on Hedera, `inscribeProfile` and `createAndInscribeProfile` automatically attach a UAID when it’s missing.
+
+### UAID Auto‑Attach (Hedera)
+
+When you inscribe a profile, `HCS11Client` checks `profile.uaid`. If it’s missing and you’re on Hedera, the client:
+
+1. Issues a `did:hedera` via the integrated Hiero registrar.
+2. Builds a UAID using HCS‑14 (`uaid:did:...`) with:
+   - `proto`: `hcs-10`
+   - `nativeId`: Hedera CAIP‑10 (`hedera:<network>:<account>`)
+   - `uid`: `inboundTopicId@accountId` (operator_id) if present, otherwise the accountId
+3. Writes the UAID into the profile JSON before inscription.
+
+This keeps identity details in the DID Document, while the UAID provides a stable handle for discovery and routing.
 
 ## Getting Started
 
@@ -155,7 +173,7 @@ console.log('Supported social platforms:', HCS11.SUPPORTED_SOCIAL_PLATFORMS);
 
 ### Inscribing to Hedera
 
-Store profiles on the Hedera Hashgraph:
+Store profiles on the Hedera Hashgraph. On Hedera, the client will attach a UAID automatically if the profile doesn’t already have one; you don’t need to do anything extra.
 
 ```typescript
 // Inscribe the profile with progress tracking
@@ -268,11 +286,48 @@ if (profileResult.success) {
   // Access topic information
   console.log(`Inbound Topic: ${profileResult.topicInfo.inboundTopic}`);
   console.log(`Outbound Topic: ${profileResult.topicInfo.outboundTopic}`);
+  console.log(`UAID: ${profile.uaid}`);
 } else {
   console.error('Error:', profileResult.error);
 }
 ```
 
+### UAID Resolution (HCS‑14)
+
+Optional: when a profile includes a UAID, you can resolve it to a DID Document via HCS‑14’s resolver registry. For Hedera, enable the built‑in Hiero resolver.
+
+```typescript
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+
+const hcs14 = new HCS14Client();
+
+// Resolve a UAID (from profile.uaid) to a DID Document
+const doc = await hcs14.getResolverRegistry().resolveUaid(profile.uaid!);
+console.log('Resolved DID Document:', doc);
+```
+
+### Sample Profile JSON (with UAID)
+
+Below is a minimal HCS‑11 AI Agent profile that includes a UAID (HCS‑14). Field values are illustrative.
+
+```json
+{
+  "version": "1.0.0",
+  "type": 1,
+  "display_name": "HCS-10 Demo Agent",
+  "alias": "hcs10-demo-agent",
+  "bio": "Demo created via HCS-10 createAgent (with UAID)",
+  "uaid": "uaid:did:zK3Y_0.0.12345;uid=0.0.12345;proto=hcs-10;nativeId=hedera:testnet:0.0.12345",
+  "inboundTopicId": "0.0.789012",
+  "outboundTopicId": "0.0.789013",
+  "aiAgent": {
+    "type": 1,
+    "capabilities": [0, 17],
+    "model": "demo-model",
+    "creator": "Hashgraph Online"
+  }
+}
+```
 ## Working with Profiles
 
 HCS-11 provides utility methods for manipulating profiles:
@@ -293,7 +348,7 @@ if (!validationResult.valid) {
 
 ## Integration with HCS-10
 
-HCS-11 works seamlessly with HCS-10 for AI agent communication:
+HCS-11 works seamlessly with HCS-10 for AI agent communication. The HCS‑10 client can create inbound/outbound topics and inscribe the HCS‑11 profile in one flow, using the existing operator account, and the profile will include a UAID.
 
 ```typescript
 import { HCS10, HCS11 } from '@hashgraphonline/standards-sdk';
@@ -333,18 +388,39 @@ const hcs10Client = new HCS10.HCS10Client({
   network: 'testnet',
   operatorId: '0.0.123456',
   operatorPrivateKey: 'your-private-key',
-  logLevel: 'info',
 });
 
-// Now you can use the topics from the profile for messaging
-const inboundTopicId = agentProfile.inboundTopicId || '';
-const outboundTopicId = agentProfile.outboundTopicId || '';
+// Create topics + inscribe profile using existing account
+const builder = new HCS11.AgentBuilder()
+  .setName('Assistant Bot')
+  .setAlias('assistant-bot')
+  .setBio('AI assistant')
+  .setCapabilities([
+    HCS11.AIAgentCapability.TEXT_GENERATION,
+    HCS11.AIAgentCapability.DATA_INTEGRATION,
+  ])
+  .setType('autonomous')
+  .setModel('gpt-4o')
+  .setNetwork('testnet')
+  .setInboundTopicType(HCS11.InboundTopicType.PUBLIC)
+  .setExistingAccount('0.0.123456', 'your-private-key');
 
-// Connect to the messaging infrastructure
-console.log(`Using inbound topic: ${inboundTopicId}`);
-console.log(`Using outbound topic: ${outboundTopicId}`);
+const created = await hcs10Client.createAgent(builder);
+// created.profileTopicId, created.inboundTopicId, created.outboundTopicId
 
-// You can now send and receive messages using the HCS-10 client
+// Fetch the profile and read its UAID
+const hcs11Client = new HCS11.HCS11Client({
+  network: 'testnet',
+  auth: { operatorId: '0.0.123456', privateKey: 'your-private-key' },
+});
+const fetched = await hcs11Client.fetchProfileByAccountId('0.0.123456', 'testnet');
+const profile = fetched.profile;
+console.log('UAID:', profile.uaid); // uaid:did:...;uid=...;proto=hcs-10;nativeId=hedera:testnet:0.0.123456
+// Resolve UAID via HCS-14
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
+const hcs14 = new HCS14Client();
+const resolved = await hcs14.getResolverRegistry().resolveUaid(profile.uaid!);
+console.log('Resolved DID:', resolved);
 // For example: handling a connection request
 const operatorId = `${inboundTopicId}@${
   hcs10Client.getClient().operatorAccountId

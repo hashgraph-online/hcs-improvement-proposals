@@ -18,7 +18,7 @@ The information-rules module defines the rules around the update action. The [in
 
 ![information-rules diagram](../../../../static/polls/information-rules.png)
 
-The JSON Schema file can be found on here: [information-rules.json](../../../assets/schema/information-rules.json)
+The JSON Schema file can be found on here: [information-rules.json](/assets/schema/information-rules.json)
 
 ## Fields
 
