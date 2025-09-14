@@ -1,6 +1,6 @@
 ---
 title: HCS‑20 API Reference
-description: 1:1 mapping of @hashgraphonline/standards-sdk/hcs-20 exports
+description: "1:1 mapping of @hashgraphonline/standards-sdk/hcs-20 exports"
 sidebar_position: 99
 ---
 

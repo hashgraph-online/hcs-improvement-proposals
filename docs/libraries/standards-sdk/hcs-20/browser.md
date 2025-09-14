@@ -1,6 +1,6 @@
 ---
-title: Browser — HCS‑20BrowserClient
-description: Build wallet‑first points experiences: deploy, mint, transfer, burn, and register topics in directories — all from the browser.
+title: "Browser — HCS‑20BrowserClient"
+description: "Build wallet‑first points experiences: deploy, mint, transfer, burn, and register topics in directories — all from the browser."
 sidebar_position: 3
 ---
 
