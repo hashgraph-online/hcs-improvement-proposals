@@ -85,7 +85,7 @@ openconvai:
 
 hackathon:
   label: Hackathon
-  permalink: /blog/tags/hackathon
+  permalink: /hackathon
   description: Hackathon events and competitions
 
 winners:

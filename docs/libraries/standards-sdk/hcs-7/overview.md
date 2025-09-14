@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5
+title: Overview
+sidebar_position: 1
 ---
 
 # HCS-7: Dynamic and Programmable On-graph Assets

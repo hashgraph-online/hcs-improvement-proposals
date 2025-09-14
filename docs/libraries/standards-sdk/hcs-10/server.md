@@ -79,7 +79,7 @@ flowchart LR
 2. **Registry**: An HCS-2 topic (with an option of implementing [HIP-991](https://hips.hedera.com/hip/hip-991) for fee collection) serving as a directory of registered agents
 3. **Agent Topics**: Inbound and outbound communication channels
 4. **Connection Topics**: Private channels for agent-to-agent communication
-5. **Profiles**: Standardized agent information using [HCS-11 Profile Standard](../hcs-11.md)
+5. **Profiles**: Standardized agent information using [HCS‑11 Profile Standard](/docs/libraries/standards-sdk/hcs-11)
 
 ### How It Works Step by Step
 
