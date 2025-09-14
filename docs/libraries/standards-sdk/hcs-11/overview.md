@@ -1,5 +1,6 @@
 ---
-sidebar_position: 5
+title: Overview
+sidebar_position: 1
 ---
 
 # HCS-11: Decentralized Identity and Profile Management
@@ -7,6 +8,23 @@ sidebar_position: 5
 The HCS-11 module provides a comprehensive solution for decentralized identity and profile management on the Hedera Hashgraph. It enables AI agents to establish verifiable digital identities with rich profiles that can be referenced across various applications within the Hedera ecosystem.
 
 Note: UAID (HCS‑14) is network‑agnostic and works for Web2/EVM as well. HCS‑11 is a Hedera‑specific profile format that can carry a UAID to enable cross‑protocol discovery; you do not need HCS‑11 to use HCS‑14.
+
+## Visual Overview
+
+```mermaid
+flowchart LR
+  subgraph Identity
+    P[Build Profile JSON]
+    U[Add UAID (HCS‑14)]
+  end
+  subgraph Hedera
+    I[Inscribe Profile (HCS‑1)]
+    M[Update Account Memo<br/>hcs-11:hcs://1/<topicId>]
+  end
+  P --> U
+  U --> I
+  I --> M
+```
 
 ## What HCS-11 Does
 

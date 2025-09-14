@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2
+title: Overview
+sidebar_position: 1
 ---
 
 # HCS-3: Resource Recursion
@@ -11,6 +12,20 @@ The HCS-3 module enables applications to reference and load resources directly f
 - **Resolves Resource References** - Loads content directly from `hcs://` URIs
 - **Handles Recursive Content** - Automatically processes nested references
 - **Simplifies Media Integration** - Specialized functions for different content types
+
+## Visual Overview
+
+```mermaid
+flowchart LR
+  A[Your App] --> B[Resolve HRL<br/>hcs://1/<topicId>]
+  B -->|fetch via CDN/Mirror| C[Blob/Text]
+  C --> D{Content Type?}
+  D -->|image| Img[loadImage]
+  D -->|video| Vid[loadVideo]
+  D -->|audio| Aud[loadAudio]
+  D -->|script| Scr[loadScript]
+  D -->|glb| Glb[loadGLB]
+```
 
 ## Getting Started
 
