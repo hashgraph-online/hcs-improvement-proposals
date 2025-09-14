@@ -171,11 +171,22 @@ The result of these steps will give you a fingerprint of the threshold key accou
 
 HCS-17 provides a robust, transparent, and standardized methodology for calculating state hashes within decentralized AI clusters, enhancing reliability and facilitating scalable synchronization across Hedera-based AI ecosystems.
 
+Topic memo format (numeric, no strings):
+
+- HCS-17 topics MUST encode memo as `hcs-17:<type>:<ttl>`
+- `<type>` is a numeric enum; currently defined values:
+  - `0` → State Hash Topic (non-indexed)
+- `<ttl>` is the time-to-live in seconds for retention guidance (e.g., `86400`)
+
+Examples:
+
+- `hcs-17:0:86400` → State hash topic with 24h TTL
+
 Message format of state change to topics:
 
 ```json
 {
-  "p": "hcs-23",
+  "p": "hcs-17",
   "op": "state_hash",
   "state_hash": "<hex-string>",
   "topics": ["0.0.topic1", "0.0.topic2"],
@@ -188,7 +199,7 @@ Message format of state change to topics:
 
 ```json
 {
-  "p": "hcs-23",
+  "p": "hcs-17",
   "op": "state_hash",
   "state_hash": "<hex-string>",
   "topics": ["0.0.topic1", "0.0.topic2"],
