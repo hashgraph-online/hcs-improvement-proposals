@@ -35,38 +35,17 @@ Each Petal account contains the following attributes:
 
 - (required) The same key as the base account
 - (required) A HCS-11 profile memo (HCS-11 profile petal extension version) with valid inbound and outbound topic ids and base account reference defined
-- (optional) A state topic for internal state consensus (defined in HCS-25)
+- (optional) A state topic for internal state consensus (see [HCS‑17](/docs/standards/hcs-17))
 
 Petals may optionally contain and reference topics of information like state hashes.
-Reference HCS-25 if intereted in more topic functionality for petal creation.
+Refer to [HCS‑17](/docs/standards/hcs-17) for state hashing on topics if additional topic functionality is needed for Petal accounts.
 
 ### Account Memo Structure
 
-The account memo follows a standardized format to indicate where the profile data is stored:
+Petal accounts use the HCS‑11 memo convention to reference their profile document. Do not duplicate that standard here; instead, see [HCS‑11](/docs/standards/hcs-11) for the canonical grammar and examples.
 
-```
-hcs-11:<protocol_reference>
-```
-
-Where:
-
-- `hcs-11` is the protocol identifier
-- `<protocol_reference>` can be either:
-  - A [Hashgraph Resource Locator (HRL)](../definitions.md#hashgraph-resource-locator) for HCS protocols
-  - Other URI formats for non-HCS protocols (IPFS, Arweave, HTTPS)
-
-Examples of valid hcs-21 memo formats:
-
-```
-# HRL references (HCS protocols)
-hcs-11:hcs://1/0.0.8768762
-hcs-11:hcs://2/0.0.8768762
-hcs-11:hcs://7/0.0.8768762
-
-# Non-HCS protocol references
-hcs-11:ipfs://QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX
-hcs-11:ar://TQGxHPLpUcH7NG6rUYkzEnwD8_WqYQNPIoX5-0OoRXA
-```
+- Memo format (delegated to HCS‑11): `hcs-11:<resource>`
+- `<resource>` may be an HCS HRL (`hcs://<standard>/<topicId>`) or another supported URI (IPFS/Arweave/HTTPS) as defined by HCS‑11.
 
 ### HCS-15 Root Profile Schema
 

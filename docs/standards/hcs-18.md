@@ -40,9 +40,11 @@ sidebar_position: 18
 
 ## Abstract
 
-HCS-18 extends the HCS-2 topic registry standard to enable decentralized discovery and formation of Floras. It establishes a permissionless broadcast mechanism where Petal accounts can advertise their availability, discover compatible partners, and coordinate Flora formation.
+HCS-18 extends the HCS-2 topic registry standard to enable decentralized discovery of Petals and pre‑formation coordination for Floras. It establishes a permissionless broadcast mechanism where Petal accounts can advertise their availability, discover compatible partners, and coordinate initial acceptance.
 
-The standard provides a simple discovery layer that allows Petals to find each other and form Floras without prior coordination.
+Scope
+- Discovery‑layer only: `announce`/`propose`/`respond`/`withdraw` happen on a public discovery topic.
+- Formation and ongoing governance are defined by [HCS‑16](/docs/standards/hcs-16). The `complete` event here is a discovery‑layer closure that references the formed Flora.
 
 ---
 
@@ -71,14 +73,14 @@ Without a standardized discovery mechanism, Flora formation requires out-of-band
 
 ### Discovery Topic
 
-Each Hedera network SHALL maintain a canonical Discovery Topic:
+Implementations MAY use a canonical Discovery Topic per network, listed in an [HCS‑2](/docs/standards/hcs-2) registry; otherwise, application‑specific discovery topics can be used for testing or private deployments.
 
 | Network | Topic ID    | Status             |
 | ------- | ----------- | ------------------ |
 | Mainnet | `0.0.XXXXX` | Pending DAO vote   |
 | Testnet | `0.0.XXXXX` | Pending deployment |
 
-**Topic Configuration:**
+**Topic Configuration (recommended):**
 
 - **Submit Key**: None (open submission)
 - **Admin Key**: DAO multisig (for emergency suspension only)
@@ -110,6 +112,119 @@ The following operations are available for discovery:
 | `complete` | Announces successful Flora formation           | `proposal_seq`, `flora_account` |
 | `withdraw` | Petal withdraws from discovery                 | `announce_seq`                  |
 
+#### Operation Methods
+
+##### announce
+
+```json
+{
+  "p": "hcs-18",
+  "op": "announce",
+  "data": {}
+}
+```
+
+Fields
+
+| Field    | Description                              | Type   | Required |
+| -------- | ---------------------------------------- | ------ | -------- |
+| `data`   | See full field breakdown for `announce`  | object | Yes      |
+
+Transaction Memo: `hcs-18:op:0`
+
+##### propose
+
+```json
+{
+  "p": "hcs-18",
+  "op": "propose",
+  "data": {
+    "members": [],
+    "config": {},
+    "existing_flora": "0.0.x"
+  }
+}
+```
+
+Fields
+
+| Field              | Description                                      | Type   | Required |
+| ------------------ | ------------------------------------------------ | ------ | -------- |
+| `members`          | Proposed members list (see field breakdown)      | array  | Yes      |
+| `config`           | Proposed configuration parameters                | object | Yes      |
+| `existing_flora`   | Existing Flora account (for replacement flows)   | string | No       |
+
+Transaction Memo: `hcs-18:op:1`
+
+##### respond
+
+```json
+{
+  "p": "hcs-18",
+  "op": "respond",
+  "data": {
+    "proposal_seq": 12345,
+    "decision": "accept|reject",
+    "reason": "...",
+    "accepted_seq": 12340
+  }
+}
+```
+
+Fields
+
+| Field           | Description                                               | Type    | Required |
+| --------------- | --------------------------------------------------------- | ------- | -------- |
+| `proposal_seq`  | HCS sequence number of the proposal                       | number  | Yes      |
+| `decision`      | "accept" or "reject"                                      | string  | Yes      |
+| `reason`        | Explanation (recommended when rejecting)                  | string  | No       |
+| `accepted_seq`  | Sequence of accepted proposal (when rejecting due to conflict) | number  | No   |
+
+Transaction Memo: `hcs-18:op:2`
+
+##### complete
+
+```json
+{
+  "p": "hcs-18",
+  "op": "complete",
+  "data": {
+    "proposal_seq": 12345,
+    "flora_account": "0.0.x",
+    "topics": {
+      "communication": "0.0.a",
+      "transaction": "0.0.b",
+      "state": "0.0.c"
+    }
+  }
+}
+```
+
+Fields
+
+| Field                  | Description                              | Type   | Required |
+| ---------------------- | ---------------------------------------- | ------ | -------- |
+| `proposal_seq`         | Sequence number of the original proposal | number | Yes      |
+| `flora_account`        | Newly created Flora account ID           | string | Yes      |
+| `topics.communication` | Communication topic ID                   | string | Yes      |
+| `topics.transaction`   | Transaction topic ID                     | string | Yes      |
+| `topics.state`         | State topic ID                           | string | Yes      |
+
+Transaction Memo: `hcs-18:op:3`
+
+##### withdraw
+
+```json
+{
+  "p": "hcs-18",
+  "op": "withdraw",
+  "data": {
+    "announce_seq": 12340,
+    "reason": "..."
+  }
+}
+```
+
 ### Message Protocol
 
 All messages SHALL be valid UTF-8 JSON with the following structure:
@@ -124,6 +239,22 @@ All messages SHALL be valid UTF-8 JSON with the following structure:
 }
 ```
 
+Transaction memo (recommended analytics):
+
+```
+hcs-18:op:<operationEnum>
+
+Operation enum values
+
+| Operation  | Enum |
+| ---------- | ----:|
+| `announce` |    0 |
+| `propose`  |    1 |
+| `respond`  |    2 |
+| `complete` |    3 |
+| `withdraw` |    4 |
+```
+
 #### Operation: `announce`
 
 Petal advertises its availability and capabilities.
@@ -135,6 +266,7 @@ Petal advertises its availability and capabilities.
 | `petal`                                           | object | Yes      | Petal identification and metadata                                       |
 | `petal.name`                                      | string | Yes      | Human-readable name for the Petal                                       |
 | `petal.priority`                                  | number | Yes      | Priority value (0-1000) for Flora coordination preference               |
+| `petal.uaid`                                      | string | No       | Optional UAID (HCS‑14) for resolvable identity                          |
 | `capabilities`                                    | object | Yes      | Technical and operational capabilities                                  |
 | `capabilities.protocols`                          | array  | Yes      | List of supported protocols for Flora operations                        |
 | `capabilities.resources`                          | object | No       | Available computational resources                                       |
@@ -157,6 +289,7 @@ Petal advertises its availability and capabilities.
       "name": "Node-Alpha-1",
       "priority": 750 // 0-1000, higher = preferred for Flora coordination
     },
+    "uaid": "uaid:aid:z...", // Optional: HCS‑14 universal agent id
     "capabilities": {
       "protocols": ["hcs-11", "custom-consensus-v1"], // Any protocols the participant supports
       "resources": {
@@ -357,7 +490,7 @@ sequenceDiagram
     P2->>DT: respond {proposal_seq: 12345, accept}
     P3->>DT: respond {proposal_seq: 12345, accept}
 
-    Note over P1,HN: Flora Creation
+    Note over P1,HN: Flora Creation ([HCS‑16](/docs/standards/hcs-16))
     P1->>HN: Create Flora Account
     P1->>HN: Create Communication Topic (0.0.890123)
     P1->>HN: Create Transaction Topic (0.0.901234)
@@ -365,6 +498,7 @@ sequenceDiagram
     HN-->>P1: Flora + Topics created
 
     P1->>DT: complete {proposal_seq: 12345, flora_account: "0.0.789012", topics: {...}}
+    Note over DT: Discovery closure — further operations proceed via [HCS‑16](/docs/standards/hcs-16) on the Flora topics
 ```
 
 ### Member Replacement Flow
@@ -389,7 +523,7 @@ sequenceDiagram
     P4->>DT: respond {proposal_seq: 12455, accept}
     P5->>DT: respond {proposal_seq: 12455, reject}
 
-    Note over F,P4: Follow Flora member addition protocol
+    Note over F,P4: Execute membership change via [HCS‑16](/docs/standards/hcs-16) join flows (flora_join_request/vote/accepted)
 ```
 
 ### Conflict Resolution
@@ -415,8 +549,8 @@ When a Petal receives multiple Flora proposals:
 
 Flora discovery is inherently public on HCS. Implementations SHOULD:
 
-1. **Minimize Public Data**: Only publish essential capabilities in announcements
-2. **Use HCS-10 for Details**: Negotiate sensitive terms via private inbound topics after initial discovery
+1. **Minimize Public Data**: Only publish essential capabilities in announcements; include pointers rather than full identity (e.g., UAID (HCS‑14) or HCS‑11 profile topic)
+2. **Use HCS‑10 for Details**: Negotiate sensitive terms via private inbound topics after initial discovery ([HCS‑10](/docs/standards/hcs-10))
 3. **Separate Concerns**: Detailed configurations belong in the Flora's operational layer, not discovery messages
 
 ---
@@ -613,6 +747,16 @@ HCS-18 provides a permissionless discovery mechanism for Petals to find each oth
 
 ## References
 
-- **HCS-2**: Topic Registries for topic-based discovery
-- **HCS-10**: Agent Communication Protocol for private negotiation channels
-- **HCS-11**: Profile standard with inbound topics for post-discovery communication
+- [HCS‑2](/docs/standards/hcs-2): Topic registries for topic-based discovery
+- [HCS‑10](/docs/standards/hcs-10): Agent communication protocol for private negotiation channels
+- [HCS‑11](/docs/standards/hcs-11): Profile standard with inbound topics for post-discovery communication
+- [HCS‑16](/docs/standards/hcs-16): Formation and governance of Floras
+- [HCS‑17](/docs/standards/hcs-17): State hash format used on Flora state topics
+Fields
+
+| Field           | Description                                    | Type   | Required |
+| --------------- | ---------------------------------------------- | ------ | -------- |
+| `announce_seq`  | Sequence number of the announcement to withdraw | number | Yes      |
+| `reason`        | Reason for withdrawal                          | string | No       |
+
+Transaction Memo: `hcs-18:op:4`

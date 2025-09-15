@@ -35,6 +35,7 @@ sidebar_position: 16
 ## Authors
 
 - **Patches** https://twitter.com/tmcc_patches
+- **Kantorcodes** https://twitter.com/kantorcodes
 
 ---
 
@@ -50,7 +51,7 @@ Flora accounts extend the **HCS‑15 Petal account** concept to groups of two or
 
 ## Motivation
 
-Modern autonomous agents and decentralized applications increasingly require **temporary, permissioned syndicates**: escrow wallets, joint ventures, working groups, or federated AI tasks. Manually deploying custom multisig contracts or ad‑hoc shared keys is error‑prone, expensive, and lacks discoverability. HCS‑22 solves this by:
+Modern autonomous agents and decentralized applications increasingly require **temporary, permissioned syndicates**: escrow wallets, joint ventures, working groups, or federated AI tasks. Manually deploying custom multisig contracts or ad‑hoc shared keys is error‑prone, expensive, and lacks discoverability. HCS‑16 solves this by:
 
 1. **Discoverability & Negotiation** – Flora requests travel over existing HCS‑10 channels, leveraging the addressing and routing primitives agents already use.
 2. **Native Multisig** – Hedera’s ThresholdKey is used directly; no Solidity bridges or custom bytecode are needed, reducing gas and audit surface.
@@ -65,7 +66,7 @@ Modern autonomous agents and decentralized applications increasingly require **t
 | ---------------------------- | ---------------------------------------------------------------------------- |
 | **Petal**                    | An HCS‑15 account that shares a private key with its Base account.           |
 | **Member**                   | A Petal account that participates in a Flora.                                |
-| **Flora**                    | The multisig account created under HCS‑22.                                   |
+| **Flora**                    | The multisig account created under HCS‑16.                                   |
 | **Threshold Key `T/M`**      | A key that requires `T` valid signatures out of `M` total keys.              |
 | **CTopic / TTopic / STopic** | Shorthand for the Communication, Transaction, and State topics respectively. |
 
@@ -77,15 +78,12 @@ Modern autonomous agents and decentralized applications increasingly require **t
 
 A Flora **MUST** be composed of ≥ 2 Petal accounts that:
 
-- Expose a valid **HCS‑11** Petal profile with an `inboundTopicId`.
-- Are able to sign Hedera transactions with a **ECDSA/secp256k1** key (This is required for future encryption, as ED25519 keys cannot encrypt data)
+- Expose a valid [HCS‑11](/docs/standards/hcs-11) Petal profile with an `inboundTopicId`.
+- Are able to sign Hedera transactions with an **ECDSA/secp256k1** key (required for future encryption; ED25519 keys cannot encrypt data).
 
 ### Flora Account Creation
 
-1. **Discovery** ‑ Members negotiate over HCS‑10 using the message protocol to agree on:
-   - `memberAccounts` – list of Account IDs.
-   - `threshold` – `T` out of `M` signature requirement.
-   - Initial funding **ℏ** & (optional) fungible tokens funding amount.
+1. **Discovery ([HCS‑18](/docs/standards/hcs-18))** ‑ Pre‑formation negotiation occurs via the public HCS‑18 discovery topic using `announce`/`propose`/`respond`. The proposer references candidate announcements; candidates accept or reject. After initial acceptance, sensitive terms MAY move to [HCS‑10](/docs/standards/hcs-10) inbound topics for private negotiation. Output of discovery: agreed `memberAccounts`, `threshold` (`T` of `M`), and any funding expectations.
 2. **Key Assembly** – A `KeyList` **MUST** be constructed containing each member’s **public key** with the agreed‐upon threshold.
 3. **Account Create Tx** – Any member submits `AccountCreateTransaction` with:
    - `key = KeyList(threshold, keys[])`
@@ -94,7 +92,7 @@ A Flora **MUST** be composed of ≥ 2 Petal accounts that:
 4. **Topic Creation** – Immediately after account creation, three `ConsensusCreateTopicTransaction`s are created for the Flora account with:
    - `adminKey = KeyList with T/M threshold`
    - `submitKey = KeyList with 1/M threshold` (submitKeys should always be 1/M to allow all members to post to inter-flora communication channels)
-   - `memo = "hcs-22:<flora account id>:<type enum>"` where `<type>` = `{0:communication,1:transaction,2:state}`
+   - `memo = "hcs-16:<flora account id>:<type enum>"` where `<type>` = `{0:communication,1:transaction,2:state}`
 5. **Profile Publication** – A Flora **profile object** is uploaded to an HCS topic _or_ IPFS/Arweave, and the Flora account memo is set to:
    ```
    hcs-11:<resourceLocator>
@@ -107,41 +105,28 @@ A Flora **MUST** be composed of ≥ 2 Petal accounts that:
 
 | Topic                            | Purpose                                                                                                                                                                                                                                 | Required | Memo Prefix           |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------- |
-| **Communication Topic (CTopic)** | Human / agent chat, off‑chain URL exchange, policy proposals, general communications. Future standards are planned to define task coordination.                                                                                         | ✅       | `hcs-22:${floraId}:0` |
-| **Transaction Topic (TTopic)**   | Broadcast of pre‑signed ScheduledTxn IDs, token association proposals, contract calls.                                                                                                                                                  | ✅       | `hcs-22:${floraId}:1` |
-| **State Topic (STopic)**         | Flora shared state that is needed for the Flora's purpose. Example: Periodic SHA‑256 hashes of shared state, vector clocks, membership attestations. This Topic is required for valid Floras even if not utilized intiially by members. | ✅       | `hcs-22:${floraId}:2` |
+| **Communication Topic (CTopic)** | Human / agent chat, off‑chain URL exchange, policy proposals, general communications. Future standards are planned to define task coordination.                                                                                         | ✅       | `hcs-16:${floraId}:0` |
+| **Transaction Topic (TTopic)**   | Broadcast of pre‑signed ScheduledTxn IDs, token association proposals, contract calls.                                                                                                                                                  | ✅       | `hcs-16:${floraId}:1` |
+| **State Topic (STopic)**         | Flora shared state that is needed for the Flora's purpose. Example: Periodic SHA‑256 hashes of shared state, vector clocks, membership attestations. This Topic is required for valid Floras even if not utilized intiially by members. | ✅       | `hcs-16:${floraId}:2` |
 
-All three topics **SHOULD** share the exact same `adminKey` that is the same as the Flora's account key. `submitKey` **SHOULD** always be 1/M keylist threshold to allow each member to submit indepently.
+All three topics **SHOULD** share the exact same `adminKey` that is the same as the Flora's account key. `submitKey` **SHOULD** always be 1/M keylist threshold to allow each member to submit independently.
 
 > **NOTE** HIP-991 custom fees can be added to require HBAR or a custom fungible token / NFT to submit messages on these topics. This should be agreed upon before Flora creation by member petals.
 
+#### Topic Memo Format (canonical)
+
+```
+hcs-16:<flora_account_id>:<type>
+```
+
+- `<type>` is `0` = Communication, `1` = Transaction, `2` = State.
+
 ### Flora Memo Structure
 
-The flora account memo follows a standardized format to indicate where the profile data is stored:
+Flora accounts use the HCS‑11 memo convention to reference their profile document. Do not duplicate that standard here; instead, see [HCS‑11](/docs/standards/hcs-11) for the canonical grammar and examples.
 
-```
-hcs-11:<protocol_reference>
-```
-
-Where:
-
-- `hcs-11` is the protocol identifier
-- `<protocol_reference>` can be either:
-  - A [Hashgraph Resource Locator (HRL)](../definitions.md#hashgraph-resource-locator) for HCS protocols
-  - Other URI formats for non-HCS protocols (IPFS, Arweave, HTTPS)
-
-Examples of valid hcs-22 account memo formats:
-
-```
-# HRL references (HCS protocols)
-hcs-11:hcs://1/0.0.8768762
-hcs-11:hcs://2/0.0.8768762
-hcs-11:hcs://7/0.0.8768762
-
-# Non-HCS protocol references
-hcs-11:ipfs://QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX
-hcs-11:ar://TQGxHPLpUcH7NG6rUYkzEnwD8_WqYQNPIoX5-0OoRXA
-```
+- Memo format (delegated to HCS‑11): `hcs-11:<resource>`
+- `<resource>` may be an HCS HRL (`hcs://<standard>/<topicId>`) or another supported URI (IPFS/Arweave/HTTPS) as defined by HCS‑11.
 
 ### HCS-11 extended for HCS-16 Root Profile Schema
 
@@ -172,11 +157,11 @@ The **Flora** object is an extension of HCS-11 and a HRL is stored inside the Fl
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "HCS-16 Flora Profile",
-  "type": "number",
+  "type": "object",
   "required": ["version", "display_name", "members", "threshold", "topics"],
   "properties": {
-    "version": {"type": "string", "pattern": "^1\\.0$"},
-    "display_name": {"type": "string", "maxLength": 64},
+    "version": { "type": "string", "pattern": "^1\\.0$" },
+    "display_name": { "type": "string", "maxLength": 64 },
     "members": {
       "type": "array",
       "minItems": 2,
@@ -184,25 +169,34 @@ The **Flora** object is an extension of HCS-11 and a HRL is stored inside the Fl
         "type": "object",
         "required": ["accountId"],
         "properties": {
-          "accountId": {"type": "string", "pattern": "^0\\.0\\.[0-9]+$"},
+          "accountId": { "type": "string", "pattern": "^0\\.0\\.[0-9]+$" }
         }
       }
     },
+    "threshold": { "type": "integer", "minimum": 1 },
     "topics": {
-      "type": "array",
+      "type": "object",
       "required": ["communication", "transaction", "state"],
       "properties": {
-        "communication": {"type": "string"}, // communication topic id
-        "transaction": {"type": "string"}, // transaction topic id
-        "state": {"type": "string"}, // state topic id
-        "custom": {"type", "array"} // Any additional topic ids the Flora utilizes for it's purpose
+        "communication": { "type": "string" },
+        "transaction": { "type": "string" },
+        "state": { "type": "string" },
+        "custom": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "topicId"],
+            "properties": {
+              "name": { "type": "string" },
+              "topicId": { "type": "string", "pattern": "^0\\.0\\.[0-9]+$" },
+              "description": { "type": "string" }
+            }
+          }
+        }
       }
     },
-    "policies": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "properties": {"type": "object"}
+    "policies": { "type": "object", "additionalProperties": true },
+    "properties": { "type": "object" }
   }
 }
 ```
@@ -243,57 +237,278 @@ TODO: Talk to Kantor about this format
 
 ### Message Protocol
 
-All protocol messages **MUST** include property `"p":"hcs-22"` and **SHOULD** follow the envelope defined in HCS‑10 (`operator_id`, `m`, etc.).
+All protocol messages **MUST** include property `"p":"hcs-16"` and **SHOULD** follow the envelope defined in HCS‑10 (`operator_id`, `m`, etc.). Pre‑formation negotiation is standardized in HCS‑18 and is out of scope for HCS‑16.
 
-| `op`                    | Direction               | Purpose                                                | Required Keys                             |
-| ----------------------- | ----------------------- | ------------------------------------------------------ | ----------------------------------------- |
-| `flora_create_request`  | → prospective member(s) | Propose a Flora with `members[]`, `threshold`, seed ℏ. | `operator_id`, `members`, `threshold`     |
-| `flora_create_accepted` | → proposer              | Acknowledge willingness to join.                       | `operator_id`, `topic_id:sequence_number` |
-| `flora_created`         | ← proposer              | Publish final Flora account & topic IDs.               | `flora_account_id`, `topics`              |
-| `tx_proposal`           | ↔ all                   | Share ScheduledTx ID + description for signing.        | `scheduled_tx_id`, `description`          |
-| `state_update`          | ↔ all                   | Commit new state to STopic.                            | `hash`, `epoch`                           |
-| `flora_join_request`    | → CTopic                | External Petal asks to join.                           | `candidate_account_id`                    |
-| `flora_join_vote`       | ↔ CTopic                | Member vote on a join request.                         | `candidate_account_id`, `approve`         |
-| `flora_join_accepted`   | ↔ STopic                | Confirmed membership change.                           | `members`, `epoch`                        |
+| `op`                  | Direction | Purpose                                       | Required Keys                               |
+| --------------------- | --------- | --------------------------------------------- | ------------------------------------------- |
+| `flora_created`       | CTopic    | Publish final Flora account & topic IDs.      | `flora_account_id`, `topics`                |
+| `transaction`         | TTopic    | Propose a Scheduled Transaction for approval. | `operator_id`, `schedule_id`, `data?`, `m?` |
+| `state_update`        | STopic    | Commit new state to STopic.                   | `hash`, `epoch`                             |
+| `flora_join_request`  | CTopic    | External Petal asks to join.                  | `candidate_account_id`                      |
+| `flora_join_vote`     | CTopic    | Member vote on a join request.                | `candidate_account_id`, `approve`           |
+| `flora_join_accepted` | STopic    | Confirmed membership change.                  | `members`, `epoch`                          |
 
-All messages **SHOULD** be UTF‑8 JSON.
+Notes
 
-#### **Protocol Message Examples**
+- For state attestation, implementations SHOULD prefer the [HCS‑17](/docs/standards/hcs-17) `state_hash` format posted to the STopic. If `state_update` is used, it MUST mirror the HCS‑17 fields.
 
-| Scenario                 | Topic                                      | Example                                                                                                                                                                                   |
-| ------------------------ | ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Initiator proposes Flora | _Each candidate’s HCS‑10 `inboundTopicId`_ | `json { "p":"hcs-22", "op":"flora_create_request", "operator_id":"0.0.111@0.0.222", "members":["0.0.111","0.0.333","0.0.444"], "threshold":2, "initial_hbar":20, "m":"Research escrow"} ` |
-| Candidate accepts        | Same topic as request                      | `json { "p":"hcs-22", "op":"flora_create_accepted", "operator_id":"0.0.333@0.0.222", "topic_seq":"0.0.555:42" } `                                                                         |
-| Flora activated          | **CTopic**                                 | `json { "p":"hcs-22", "op":"flora_created", "flora_account_id":"0.0.777", "topics":{"communication":"0.0.888","transaction":"0.0.889","state":"0.0.890"} } `                              |
-| Share a scheduled swap   | **TTopic**                                 | `json { "p":"hcs-22", "op":"tx_proposal", "scheduled_tx_id":"0.0.777@1710101010.000000001", "description":"Swap 1 HBAR for 10 XYZ"} `                                                     |
-| Commit state hash        | **STopic**                                 | `json { "p":"hcs-22", "op":"state_update", "hash":"0x9a1cfb…" } `                                                                                                                         |
-| External Petal join      | **CTopic**                                 | `json { "p":"hcs-22", "op":"flora_join_request", "candidate_account_id":"0.0.999", "message":"Would like to co‑fund 400 hbar to join"} `                                                  |
+#### Envelope & Memos
+
+Envelope (canonical):
+
+```json
+{ "p": "hcs-16", "op": "…", "operator_id": "<signerAccountId>@<floraAccountId>", "m": "optional" }
+```
+
+Analytics transaction memo (recommended):
+
+```
+hcs-16:op:<operationEnum>[:<topicType>]
+```
+
+- `<topicType>` is optional and, when used, should be `0|1|2` to indicate Communication/Transaction/State.
+
+Operation enum values
+
+| Operation              | Enum |
+| ---------------------- | ----:|
+| `flora_created`        |    0 |
+| `transaction`          |    1 |
+| `state_update`         |    2 |
+| `flora_join_request`   |    3 |
+| `flora_join_vote`      |    4 |
+| `flora_join_accepted`  |    5 |
+
+#### Operation Methods
+
+##### Transaction (TTopic)
+
+Message shape
+
+```json
+{
+  "p": "hcs-16",
+  "op": "transaction",
+  "operator_id": "0.0.123@0.0.777",
+  "schedule_id": "0.0.777",
+  "data": "Swap 1 HBAR for 10 XYZ",
+  "m": "optional"
+}
+```
+
+Fields
+
+| Field         | Description                                              | Type    | Required |
+| ------------- | -------------------------------------------------------- | ------- | -------- |
+| `operator_id` | Signer account id with `@<floraAccountId>` suffix       | string  | Yes      |
+| `schedule_id` | Hedera ScheduleId entity ID (e.g., `0.0.12345`)         | string  | Yes      |
+| `data`        | Human description or reference (HRL/URL)                | string  | No       |
+| `m`           | Optional memo for analytics/traceability                | string  | No       |
+
+Transaction Memo: `hcs-16:op:1:1`
+
+##### Flora Created (CTopic)
+
+Message shape
+
+```json
+{
+  "p": "hcs-16",
+  "op": "flora_created",
+  "flora_account_id": "0.0.777",
+  "topics": {
+    "communication": "0.0.888",
+    "transaction": "0.0.889",
+    "state": "0.0.890"
+  },
+  "m": "optional"
+}
+```
+
+Fields
+
+| Field               | Description                       | Type   | Required |
+| ------------------- | --------------------------------- | ------ | -------- |
+| `flora_account_id`  | Newly created Flora account id    | string | Yes      |
+| `topics`            | The three Flora topics            | object | Yes      |
+| `m`                 | Optional memo                     | string | No       |
+
+Transaction Memo: `hcs-16:op:0:0`
+
+##### State Update (STopic)
+
+Message shape (if not using HCS‑17 directly)
+
+```json
+{
+  "p": "hcs-16",
+  "op": "state_update",
+  "hash": "<stateHash>",
+  "epoch": 12,
+  "timestamp": "2025-09-15T12:00:00.000Z",
+  "m": "optional"
+}
+```
+
+Fields
+
+| Field       | Description                                           | Type    | Required |
+| ----------- | ----------------------------------------------------- | ------- | -------- |
+| `hash`      | Canonical state hash (prefer HCS‑17 rules)            | string  | Yes      |
+| `epoch`     | Monotonically increasing counter for state            | number  | No       |
+| `timestamp` | ISO‑8601 timestamp                                    | string  | No       |
+| `m`         | Optional memo                                         | string  | No       |
+
+Transaction Memo: `hcs-16:op:2:2`
+
+##### Join Request (CTopic)
+
+Message shape
+
+```json
+{
+  "p": "hcs-16",
+  "op": "flora_join_request",
+  "candidate_account_id": "0.0.999",
+  "m": "Request to join"
+}
+```
+
+Fields
+
+| Field                  | Description                    | Type   | Required |
+| ---------------------- | ------------------------------ | ------ | -------- |
+| `candidate_account_id` | Account requesting admission   | string | Yes      |
+| `m`                    | Optional purpose/memo          | string | No       |
+
+Transaction Memo: `hcs-16:op:3:0`
+
+##### Join Vote (CTopic)
+
+Message shape
+
+```json
+{
+  "p": "hcs-16",
+  "op": "flora_join_vote",
+  "candidate_account_id": "0.0.999",
+  "approve": true,
+  "operator_id": "0.0.123@0.0.777",
+  "m": "optional"
+}
+```
+
+Fields
+
+| Field                  | Description                                | Type    | Required |
+| ---------------------- | ------------------------------------------ | ------- | -------- |
+| `candidate_account_id` | Candidate under vote                       | string  | Yes      |
+| `approve`              | Boolean decision                            | boolean | Yes      |
+| `operator_id`          | Voting member (`<memberId>@<floraId>`)     | string  | Yes      |
+| `m`                    | Optional memo                              | string  | No       |
+
+Transaction Memo: `hcs-16:op:4:0`
+
+##### Join Accepted (STopic)
+
+Message shape
+
+```json
+{
+  "p": "hcs-16",
+  "op": "flora_join_accepted",
+  "members": [
+    "0.0.123",
+    "0.0.456",
+    "0.0.999"
+  ],
+  "epoch": 13,
+  "m": "optional"
+}
+```
+
+Fields
+
+| Field      | Description                        | Type     | Required |
+| ---------- | ---------------------------------- | -------- | -------- |
+| `members`  | Full updated members list          | string[] | Yes      |
+| `epoch`    | Incremented state counter          | number   | Yes      |
+| `m`        | Optional memo                      | string   | No       |
+
+Transaction Memo: `hcs-16:op:5:2`
+
+#### Protocol Message Examples
+
+- Flora activated — CTopic
+
+```json
+{
+  "p": "hcs-16",
+  "op": "flora_created",
+  "flora_account_id": "0.0.777",
+  "topics": {
+    "communication": "0.0.888",
+    "transaction": "0.0.889",
+    "state": "0.0.890"
+  }
+}
+```
+
+- Share a scheduled swap — TTopic
+
+```json
+{
+  "p": "hcs-16",
+  "op": "transaction",
+  "operator_id": "0.0.123@0.0.777",
+  "schedule_id": "0.0.777",
+  "data": "Swap 1 HBAR for 10 XYZ"
+}
+```
+
+- Commit state hash — STopic
+
+```json
+{
+  "p": "hcs-16",
+  "op": "state_update",
+  "hash": "0x9a1cfb…",
+  "epoch": 12
+}
+```
+
+- External Petal join — CTopic
+
+```json
+{
+  "p": "hcs-16",
+  "op": "flora_join_request",
+  "candidate_account_id": "0.0.999",
+  "m": "Would like to co‑fund 400 hbar to join"
+}
+```
 
 #### **Flora Creation — Sequence Diagram**
 
 ```mermaid
 sequenceDiagram
+    participant DT as Discovery Topic (HCS‑18)
     participant I as Initiator (Petal A)
     participant B as Petal B
     participant C as Petal C
     participant Net as Hedera Network
 
-    I->>B: flora_create_request (HCS‑10 inbound)
-    I->>C: flora_create_request
-    B-->>I: flora_create_accepted
-    C-->>I: flora_create_accepted
+    I->>DT: propose { members, threshold }
+    B-->>DT: respond { proposal_seq, accept }
+    C-->>DT: respond { proposal_seq, accept }
 
+    Note over I,Net: Formation (HCS‑16)
     I->>Net: AccountCreateTransaction
     Net-->>I: Flora account 0.0.777
+    I->>Net: Create CTopic / TTopic / STopic
+    Net-->>I: Topic IDs returned
 
-    I->>Net: Create CTopic / TTopic / STopic
-    Net-->>I: Topic IDs returned
-
-    I->>B: flora_created (CTopic)
-    I->>C: flora_created (CTopic)
-
-    B->>CTopic: flora_created ack
-    C->>CTopic: flora_created ack
+    I->>CTopic: flora_created { flora_account_id, topics }
 ```
 
 ---
@@ -304,36 +519,24 @@ sequenceDiagram
 
 Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 
-- `p:"hcs-22"` — protocol ID.
+- `p:"hcs-16"` — protocol ID.
 - `op` — operation type (see table above).
 - `operator_id` — `<signatureKeyAccountId>@<floralAccountId>` when the signer is also a Flora member; or `<callerAccountId>` for external join requests.
 - Optional human‑readable memo `m`.
 
 #### Creation (Happy Path)
 
-1. **flora_create_request** (HCS‑10 inbound)
-2. **flora_create_accepted** (HCS‑10 inbound)
-3. Account & topic creation (on‑chain).
-4. **flora_created** broadcast to CTopic.
-5. First **state_update** of membership list to STopic.
+1. Discovery (HCS‑18): `propose` + `respond` on the Discovery Topic.
+2. Account & topic creation (on‑chain) per HCS‑16.
+3. **flora_created** broadcast to CTopic.
+4. First state publish on STopic (prefer HCS‑17 `state_hash`).
 
 ##### Example lifecycle messages
 
 ```json
-// Step 1
-{
-  "p": "hcs-22",
-  "op": "flora_create_request",
-  "members": ["0.0.1", "0.0.2"],
-  "threshold": 2,
-  "operator_id": "0.0.1@0.0.0"
-}
-```
-
-```json
 // Step 4
 {
-  "p": "hcs-22",
+  "p": "hcs-16",
   "op": "flora_created",
   "flora_account_id": "0.0.777",
   "topics": {
@@ -347,7 +550,7 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 ```json
 // Step 5
 {
-  "p": "hcs-22",
+  "p": "hcs-16",
   "op": "state_update",
   "hash": "0x48b6…"
 }
@@ -355,17 +558,16 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 
 #### Creation (Happy Path)
 
-1. **Initiator** sends `flora_create_request` to each petal candidate’s `inboundTopicId`.
-2. Each **candidate** verifies the member list & threshold, then replies `flora_create_accepted`.
-3. When `≥T` accepts collected, **initiator** executes the account & topic creation transactions.
-4. **Initiator** publishes `flora_created` to each candidate Petal's inbound or connection topic id. This message **MUST** include the newly created Flora account Id and the Flora's topic ids.
-5. Members push a new **state update** to STopic. (If no shared state / consensus in Flora, members should instead post `flora_created` messages to STopic)
+1. Discovery ([HCS‑18](/docs/standards/hcs-18)): `propose` + `respond` on the Discovery Topic until acceptance is reached.
+2. Formation (HCS‑16): Execute account & topic creation transactions on‑chain.
+3. Publish `flora_created` to CTopic (includes Flora account ID and topic IDs).
+4. Publish initial state on STopic (prefer HCS‑17 `state_hash`; otherwise `state_update`).
 
 #### **Petal‑Initiated Join Request**
 
 1. **Candidate** posts `flora_join_request` to the Flora’s **CTopic** (or any member’s HCS‑10 inbound topic if CTopic is unknown).
 2. Existing members discuss and optionally cast `flora_join_vote` messages to CTopic.
-3. On ≥ T approvals, any member posts a `tx_proposal` (TTopic) containing a `ScheduledAccountUpdateTransaction` that appends the candidate key.
+3. On ≥ T approvals, any member posts a `transaction` (TTopic) containing a `ScheduleCreateTransaction` ID that appends the candidate key.
 4. Members sign; when threshold met, transaction executes.
 5. Updated member list is committed via `flora_join_accepted` (STopic) and a new profile HRL is published.
 
@@ -374,7 +576,7 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 ```json
 // Request
 {
-  "p": "hcs-22",
+  "p": "hcs-16",
   "op": "flora_join_request",
   "candidate_account_id": "0.0.999",
   "operator_id": "0.0.999",
@@ -385,7 +587,7 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 ```json
 // Vote
 {
-  "p": "hcs-22",
+  "p": "hcs-16",
   "op": "flora_join_vote",
   "candidate_account_id": "0.0.999",
   "approve": true,
@@ -396,9 +598,11 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 ```json
 // Scheduled account‑update proposal
 {
-  "p": "hcs-22",
-  "op": "tx_proposal",
-  "scheduled_tx_id": "0.0.777@1711111111.000000007",
+  "p": "hcs-16",
+  "op": "transaction",
+  "operator_id": "0.0.123@0.0.777",
+  "schedule_id": "0.0.777@1711111111.000000007",
+  "data": "Add 0.0.999 to KeyList (2/3)"
   "m": "Add 0.0.999; retain threshold 2"
 }
 ```
@@ -406,7 +610,7 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 ```json
 // Post‑execution acknowledgement
 {
-  "p": "hcs-22",
+  "p": "hcs-16",
   "op": "flora_join_accepted",
   "members": ["0.0.123", "0.0.456", "0.0.999"]
 }
@@ -414,12 +618,12 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 
 #### Membership Change
 
-- **Add Member** – Proposer submits `tx_proposal` that encodes an `ScheduleAccountUpdateTransaction` with an updated KeyList and description of account to be added and why. The transaction is executed when it collects `≥T` signatures.
+- **Add Member** – Proposer submits a `transaction` message with `schedule_id` for a `ScheduleCreateTransaction` that updates the Flora KeyList and includes a human‑readable `data` rationale. Execution occurs when it collects `≥T` signatures.
 - **Remove Member** – Same as _add_. **SHOULD** be accompanied by a `state_update` marking the member as _removed_ if successful.
 
 #### Dissolution
 
-- **Delete Flora** – Proposer submits `tx_proposal` that encodes an `ScheduleAccountDeleteTransaction`. The transaction is executed when it collects `≥T` signatures.
+- **Delete Flora** – Proposer submits a `transaction` message with `schedule_id` for a `ScheduleCreateTransaction` that deletes the Flora account. Execution occurs when it collects `≥T` signatures.
 
 Members can decide that the Flora is no longer needed or useful. Utilizing the CTopic, members can agree upon where remaining assets are being moved from the Flora account and share transactions to remove assets on the TTopic. Once the Flora account is empty, a final transaction posted to TTopic to delete the account can be posted and signed.
 
@@ -431,25 +635,55 @@ If at any time the number of active members `< T`, the Flora enters **Read‑Onl
 
 _This flow enables an external Petal account to request admission to an already‑active Flora while preserving the threshold‑key security model._
 
-##### Message Sequence
+##### Sequence Diagram
 
-| #   | Actor          | Message (`op`)        | Purpose                                                                                                                                                                                                                                                                                      |
-| --- | -------------- | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| 1   | **Candidate**  | `flora_join_request`  | Announces intent to join. Includes `candidate_account_id` and flexible properties to convey intent, policies, etc for the Flora.                                                                                                                                                             |
-| 2   | **Members**    | `flora_join_vote`     | Each existing member casts `{candidate_account_id, approve: true                                                                                                                                                                                                                             | false}`. |
-| 3   | **Initiator**  | `tx_proposal`         | On `≥ T` approvals, a `ScheduledAccountUpdateTransaction` is created that appends the candidate key to the Flora KeyList (and, optionally, updates `threshold`). The transaction ID is published to TTopic for the member Petal's to sign.                                                   |
-| 4   | **Members**    | -                     | Members sign the scheduled transaction until it meets the needed threshold. Members sign by looking up the transaction by schedule ID and signing with their key natively                                                                                                                    |
-| 5a  | **Network**    | —                     | Transaction executes; Flora account now reference the updated KeyList. Repeat these steps for **all three topics**, unless otherwise specified in the update agreement.                                                                                                                      |
-| 5b  | **Any Member** | `flora_join_accepted` | (optional) If this Flora requires state hashes, each member broadcast confirmation with refreshed `members` array and incremented `epoch` in STopic.                                                                                                                                         |
-| 6   | **Members**    | -                     | A new Flora profile JSON needs to be uploaded to a new HCS-1 file (or other decentralized storage), and a new `ScheduledAccountUpdateTransaction` updating the HRL to point to the new file that contains the new members account id in the members field, and any other neccessary changes. |
+```mermaid
+sequenceDiagram
+    participant C as Candidate Petal
+    participant CT as Flora CTopic
+    participant I as Initiator (Member)
+    participant M as Members
+    participant TT as Flora TTopic
+    participant N as Hedera Network
+    participant ST as Flora STopic
 
-> **NOTE:** Members lists in the JSON need to be updated and stay current. Because Petal accounts share teh same public key as their base accounts, account ids are required for decentralized lookup of the exact account utilizing that public key inside of this Flora.
+    C->>CT: flora_join_request { candidate_account_id }
+    M->>CT: flora_join_vote { approve: true/false }
+
+    alt >= T approvals
+      I->>TT: transaction { operator_id, schedule_id, data? }
+      M->>N: ScheduleSign
+      N-->>M: Schedule executed (KeyList updated)
+      M->>ST: flora_join_accepted { members, epoch }
+    else Insufficient approvals
+      CT-->>C: join rejected or retried later
+    end
+```
+
+##### Message Sequence (numbered)
+
+1. Candidate → CTopic: `flora_join_request`
+   - Announces intent to join; includes `candidate_account_id` and optional purpose/policies for evaluation.
+2. Members → CTopic: `flora_join_vote`
+   - Each existing member casts `{ candidate_account_id, approve: true/false }` to signal acceptance.
+3. Initiator → TTopic: `transaction`
+   - On ≥ T approvals, publishes `{ operator_id, schedule_id, data? }` for a `ScheduleCreateTransaction` that appends the candidate key (and optionally adjusts `threshold`).
+4. Members → Network: `ScheduleSign`
+   - Members locate the schedule by `schedule_id` and sign until the threshold is met.
+5a. Network executes schedule
+   - KeyList on the Flora account is updated; repeat for additional topics if required by the update agreement.
+5b. Any member → STopic: `flora_join_accepted` (optional)
+   - Confirms the new membership set and bumps `epoch` when a state feed is required.
+6. Members update the Flora profile reference
+   - Publish revised profile JSON (e.g., HCS‑1/other storage) and update the HRL/memo to reference the new members list.
+
+> **NOTE:** Members lists in the JSON need to be updated and stay current. Because Petal accounts share the same public key as their base accounts, account ids are required for decentralized lookup of the exact account utilizing that public key inside this Flora.
 
 ##### Operational Rules
 
 - The candidate **cannot** participate in multisig signing _until_ step 5a completes.
-- Existing threshold `T` **SHOULD** be retained; if it changes, that new value must be encoded inside the `tx_proposal` and acknowledged by `flora_join_vote` messages.
-- A join request is uniquely identified by its sequence number on the Flora's Inbound topic.
+- Existing threshold `T` **SHOULD** be retained; if it changes, that new value must be encoded in the scheduled update referenced by the `transaction` message and acknowledged by `flora_join_vote` messages.
+- A join request is uniquely identified by its sequence number on the Flora's Communication Topic (CTopic).
 - All inter-flora new member join related messages **SHOULD** be published to the **Communication Topic (CTopic)**. The resulting transaction should be posted to the **Transaction Topic (TTopic)**.
 - Members can skip `flora_join_vote` process and instead post a scheduled transaction of the new petal join / account key update, using signing as voting. The expiry date of the transaction can be used as the timetable for when voting must be completed.
 
@@ -491,9 +725,9 @@ const floraId = floraReceipt.accountId!;
 
 // 3. Create the three topics
 await Promise.all([
-  createTopic(`hcs-22:${floraId}:0`, keyList, submitKeyList), // comms
-  createTopic(`hcs-22:${floraId}:1`, keyList, submitKeyList), // transactions
-  createTopic(`hcs-22:${floraId}:2`, keyList, submitKeyList), // state
+  createTopic(`hcs-16:${floraId}:0`, keyList, submitKeyList), // comms
+  createTopic(`hcs-16:${floraId}:1`, keyList, submitKeyList), // transactions
+  createTopic(`hcs-16:${floraId}:2`, keyList, submitKeyList), // state
 ]);
 
 // Helper
@@ -519,10 +753,13 @@ async function createTopic(
 1. **Key Reuse Risk** – Because members usually reuse their Petal key inside Flora, compromise of that private key still spans all Petal & Flora accounts. **USE CAUTION** and utilize hardware wallets where possible.
 2. **Threshold Selection** – For ≤ 4 members, `T = M − 1` is RECOMMENDED. For 5 + members, `T ≈ ⅔ M` balances liveness with safety.
 3. **Membership Revocation** – Removing a malicious member is itself a multisig txn; set `membershipChange` policy to require `T+1` where feasible.
-4. **Data Availability** – Off‑chain IPFS pointers MAY vanish; Utilize HCS-1 where possible.
+4. **Data Availability** – Off‑chain IPFS pointers MAY vanish; utilize [HCS‑1](/docs/standards/hcs-1) where possible.
 
 ## References
 
-- [HCS‑10] – Message Envelope & Routing
-- [HCS‑11] – Root Profile Schema
-- [HCS‑15] – Petal Accounts
+- [HCS‑2](/docs/standards/hcs-2) – Topic registries
+- [HCS‑10](/docs/standards/hcs-10) – Message envelope & private routing
+- [HCS‑11](/docs/standards/hcs-11) – Root profile schema
+- [HCS‑15](/docs/standards/hcs-15) – Petal accounts
+- [HCS‑17](/docs/standards/hcs-17) – State hash attestation
+- [HCS‑18](/docs/standards/hcs-18) – Petal discovery and pre‑formation
