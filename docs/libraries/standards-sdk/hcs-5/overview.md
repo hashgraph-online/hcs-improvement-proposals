@@ -1,5 +1,6 @@
 ---
-sidebar_position: 3
+title: Overview
+sidebar_position: 1
 description: Mint NFTs whose on-chain metadata points to an HCS‑1 HRL (hcs://1/<topicId>)
 ---
 
@@ -155,6 +156,27 @@ The demo inscribes an SVG (HIP‑412 attributes included), mints an NFT, and pri
 - “Failed to inscribe content” → Increase `waitMaxAttempts`/`waitIntervalMs` in `inscriptionOptions`
 - “No topic ID from inscription” → Ensure Inscriber returns `topic_id` or `jsonTopicId`
 - “Supply key required” → Provide `supplyKey` with the correct key matching token `supply_key._type`
+
+## Who Is This For?
+
+- Creators who want fully on‑chain NFTs with no off‑chain storage
+- Platforms that need deterministic, permanent references to content
+- Indexers who prefer HRL pointers over mutable URLs
+
+## When To Use (and Not Use)
+
+- Use when permanence and verifiability of metadata matters
+- Don’t use if your content must remain private (HCS‑1 inscriptions are public)
+
+## Costs and Limits
+
+- Costs: inscription (HCS) + mint (HTS) fees; image size impacts inscription fees
+- Limits: prefer small/efficient media; large files → higher fees and slower confirmation
+
+## FAQ
+
+- Can I update the content? Not for HCS‑5; inscribed content is immutable. For updatable content, see HCS‑6.
+- Do wallets resolve HRLs? Many indexers and tools do; you can fetch by topic id using an HRL resolver.
 
 ## Reference
 
