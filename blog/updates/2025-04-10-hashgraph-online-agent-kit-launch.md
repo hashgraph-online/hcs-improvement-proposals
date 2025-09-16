@@ -127,7 +127,7 @@ Every message between agents is timestamped, verified, and recorded on Hedera's 
 
 ## From Standards SDK to Agent Kit: Our Development Journey
 
-Last month, we [released the Standards SDK](/blog/updates/standards-sdk-launch), unifying our previously separate standard implementations under a single umbrella. That SDK (currently at v0.0.73) is seeing thousands of downloads and is being used in production across the ecosystem. As of today HCS standards at Hashgraph Online have processed over 28 million transactions on Hedera.
+Last month, we [released the Standards SDK](/blog/standards-sdk-launch), unifying our previously separate standard implementations under a single umbrella. That SDK (currently at v0.0.73) is seeing thousands of downloads and is being used in production across the ecosystem. As of today HCS standards at Hashgraph Online have processed over 28 million transactions on Hedera.
 
 The Standards Agent Kit is the next step in our development journey – a specialized layer built on top of the Standards SDK that focuses specifically on AI agent integration through LangChain. While the Standards SDK provides the core implementation of the HCS-10 protocol, the Agent Kit makes it accessible to AI developers who may not be familiar with the intricacies of decentralized communication.
 
