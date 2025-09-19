@@ -329,7 +329,33 @@ Now that you understand HCS basics, continue with:
 
 ***
 
+## View Your Topic on HashScan
+
+import { ViewOnHashScan, HashScanViewer } from '@site/src/components/MDXComponents';
+
+After creating your topic, you can view it on HashScan. If you know your topic ID:
+
+<HashScanViewer 
+  topicId="0.0.YOUR_TOPIC_ID"
+  network="testnet"
+/>
+
+Or use the quick link component:
+
+<ViewOnHashScan topicId="0.0.YOUR_TOPIC_ID" network="testnet" />
+
 ## Additional Resources
+
+import { DocsLink, ExternalLink } from '@site/src/components/MDXComponents';
+
+<div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
+  <DocsLink href="https://docs.hedera.com/guides/docs/sdks/consensus">
+    HCS Documentation
+  </DocsLink>
+  <ExternalLink href="https://hashscan.io/testnet">
+    Topic Explorer
+  </ExternalLink>
+</div>
 
 - [HCS Documentation](https://docs.hedera.com/guides/docs/sdks/consensus) - Official Hedera documentation
 - [Topic Explorer](https://hashscan.io/testnet) - View topics on HashScan

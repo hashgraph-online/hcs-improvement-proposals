@@ -309,9 +309,135 @@ async function createCompleteHashinal() {
 createCompleteHashinal();
 ```
 
-## Viewing Your Hashinal
+## Viewing Your Hashinal on HashScan
 
-### Retrieve and Display
+After creating your Hashinal NFT, you can verify that everything is stored on-chain using HashScan, Hedera's blockchain explorer.
+
+### Step 1: View Your NFT Collection
+
+Once your NFT is minted, navigate to your token on HashScan:
+
+```
+https://hashscan.io/testnet/token/{tokenId}
+```
+
+Replace `{tokenId}` with your actual token ID (e.g., `0.0.123456`).
+
+On this page, you'll see:
+- **Token Name & Symbol**: Your collection details
+- **Token Type**: Should show as "NON_FUNGIBLE_UNIQUE"
+- **Total Supply**: Number of NFTs minted
+- **Created Timestamp**: When the collection was created
+
+### Step 2: View Individual NFT Details
+
+1. Click on the **"NFT Info"** tab on the token page
+2. You'll see a list of all minted NFTs with their serial numbers
+3. Click on a specific **serial number** to view that NFT's details
+
+### Step 3: Find Your Inscribed Data
+
+On the NFT detail page, look for the **metadata field**. You'll see something like:
+
+```
+hcs://1/0.0.999999
+```
+
+This is your Hashinal Reference Locator (HRL) that points to your inscribed data. The format breaks down as:
+- `hcs://` - Protocol identifier
+- `1` - HCS topic version
+- `0.0.999999` - The topic ID where your data is inscribed
+
+### Step 4: View the Actual Inscribed Files
+
+To see your inscribed image and metadata on-chain:
+
+1. Extract the topic ID from the HRL (e.g., `0.0.999999`)
+2. Navigate to the topic page:
+   ```
+   https://hashscan.io/testnet/topic/{topicId}
+   ```
+
+3. On the topic page, you'll see **all the messages** containing your inscribed data:
+   - **Image messages**: Your NFT artwork split into chunks
+   - **Metadata message**: Your NFT's JSON metadata
+
+4. Click on any message to view:
+   - The raw data content
+   - Transaction ID
+   - Consensus timestamp
+   - Proof of permanent storage on Hedera
+
+### Step 5: Verify Everything is On-Chain
+
+Use this checklist to confirm your Hashinal is fully on-chain:
+
+| Component | Where to Find | What to Look For |
+|-----------|--------------|-------------------|
+| **NFT Token** | `hashscan.io/testnet/token/{tokenId}` | Token exists with correct name/symbol |
+| **NFT Serial** | Token page → NFT Info tab | Your NFT's serial number |
+| **Metadata HRL** | NFT detail page → Metadata field | `hcs://1/{topicId}` format |
+| **Image Data** | `hashscan.io/testnet/topic/{topicId}` | Multiple messages with image chunks |
+| **Metadata JSON** | Same topic page | Message with your NFT metadata |
+
+### Understanding the Data Structure
+
+When viewing your topic messages, you'll notice:
+
+1. **Image inscription**: Usually multiple messages containing base64-encoded chunks of your image
+2. **Metadata inscription**: A single message with JSON containing:
+   - NFT name and description
+   - Attributes and properties
+   - Reference to the image HRL
+
+### Quick Links Generator
+
+Save these URLs for easy access (replace with your actual IDs):
+
+```javascript
+const tokenId = "0.0.123456";     // Your token ID
+const topicId = "0.0.999999";     // Your topic ID from HRL
+const serialNum = "1";             // Your NFT serial number
+
+console.log("NFT Collection:", `https://hashscan.io/testnet/token/${tokenId}`);
+console.log("NFT Details:", `https://hashscan.io/testnet/token/${tokenId}/${serialNum}`);
+console.log("Inscribed Data:", `https://hashscan.io/testnet/topic/${topicId}`);
+```
+
+### Interactive HashScan Explorer
+
+For a better experience, you can use our interactive components in your applications:
+
+```jsx
+import { HashScanViewer } from '@/components/HashScanViewer';
+import { HashScanLink } from '@/components/HashScanLink';
+
+// Display all relevant HashScan links for your Hashinal
+<HashScanViewer 
+  tokenId="0.0.123456"
+  topicId="0.0.999999"
+  serialNumber="1"
+  network="testnet"
+/>
+
+// Or create individual links
+<HashScanLink 
+  type="token" 
+  id="0.0.123456" 
+  network="testnet"
+  variant="primary"
+/>
+```
+
+These components provide:
+- One-click navigation to HashScan pages
+- Copy-to-clipboard functionality for IDs
+- Visual verification checklist
+- Responsive design for all devices
+
+## Programmatic Retrieval
+
+### Retrieve and Display Your Hashinal
 
 ```javascript
 // view-hashinal.js
@@ -449,7 +575,6 @@ const registry = {
 
 ## Next Steps
 
-- [Update Dynamic NFT](./update-dynamic-nft.md) - Create evolving NFTs
 - [HCS-5 Standard](../../standards/hcs-5.md) - Deep dive into Hashinals
 - [HCS-6 Standard](../../standards/hcs-6.md) - Dynamic NFTs
 

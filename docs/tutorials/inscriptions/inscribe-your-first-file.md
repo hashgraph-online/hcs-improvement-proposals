@@ -365,7 +365,6 @@ async function batchInscribe(files) {
 ## Next Steps
 
 - [Create NFT with Inscriptions](./create-nft-with-inscriptions.md) - Use inscriptions for NFT metadata
-- [Update Dynamic NFT](./update-dynamic-nft.md) - Create evolving NFTs
 - [HCS-5 Hashinals](../../standards/hcs-5.md) - Learn about the inscription standard
 
 ## Troubleshooting
