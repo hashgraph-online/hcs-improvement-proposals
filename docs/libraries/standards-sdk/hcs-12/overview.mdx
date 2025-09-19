@@ -1,0 +1,97 @@
+---
+title: Overview
+sidebar_position: 1
+---
+
+# HCS-12: HashLinks SDK
+
+Build interactive, decentralized experiences on Hedera without smart contracts. HashLinks combines WebAssembly logic, Gutenberg UI blocks, and a composition layer to create powerful applications with minimal fees.
+
+## What HashLinks Does
+
+HashLinks enables you to:
+
+- Execute business logic deterministically through WebAssembly modules
+- Create rich UI components using WordPress Gutenberg blocks
+- Compose applications by binding actions to blocks via assemblies
+- Store everything on-chain using Hedera Consensus Service topics
+- Run anywhere with both server-side and browser-based clients
+
+## Quick Start
+
+### Installation
+
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+
+### Basic Setup
+
+```ts
+import { HCS12Client, NetworkType, Logger } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS12Client({
+  network: NetworkType.TESTNET,
+  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  logger: new Logger({ module: 'HCS12' }),
+  hcs12: { operatorId: '0.0.123456', operatorPrivateKey: 'your-private-key' },
+});
+
+await client.initializeRegistries();
+```
+
+### Browser Setup
+
+```ts
+import { HCS12BrowserClient, NetworkType } from '@hashgraphonline/standards-sdk';
+
+const browserClient = new HCS12BrowserClient({
+  network: NetworkType.TESTNET,
+  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  hwc: hashinalsWalletConnectSDK,
+});
+```
+
+## API Surface & Modules
+
+The HCS-12 SDK exports:
+
+- Clients: `HCS12BaseClient`, `HCS12Client`, `HCS12BrowserClient`
+- Composition & UI: builders (Action/Block/Assembly), rendering
+- Registries & Types: discovery/catalogue helpers, canonical types
+- Validation & WASM: zod schemas, WasmValidator, wasm utilities
+
+See dedicated pages for actions, blocks, assembly, rendering, registries, wasm and security.
+
+## Core Architecture
+
+### Actions (WebAssembly Logic)
+
+```ts
+interface WasmInterface {
+  INFO(): string;
+  POST(...): Promise<string>;
+  GET(...): Promise<string>;
+}
+```
+
+### Blocks (UI Components)
+
+```ts
+const block = {
+  name: 'hashlink/counter',
+  template_t_id: '0.0.789',
+  attributes: { count: { type: 'number', default: 0 } },
+};
+```
+
+### Assemblies (Composition Layer)
+
+```ts
+const assembly = {
+  blocks: [blockId],
+  actions: { increment: actionId },
+  attributes: { count: 10 },
+};
+```
+

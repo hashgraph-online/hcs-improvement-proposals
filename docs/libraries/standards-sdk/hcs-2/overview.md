@@ -1,5 +1,6 @@
 ---
-sidebar_position: 2
+title: Overview
+sidebar_position: 1
 ---
 
 # HCS-2: Decentralized Topic Registry
@@ -8,10 +9,10 @@ The HCS-2 module provides a decentralized registry for Hedera Consensus Service 
 
 ## What HCS-2 Does
 
-- **Creates Registries** - Establishes new HCS topics to act as registries.
-- **Manages Entries** - Supports registering, updating, deleting, and migrating topic entries.
-- **Standardized Memos** - Uses a specific memo format for identifying HCS-2 registries.
-- **Flexible Queries** - Allows for fetching and parsing registry entries.
+- Creates Registries - Establishes new HCS topics to act as registries.
+- Manages Entries - Supports registering, updating, deleting, and migrating topic entries.
+- Standardized Memos - Uses a specific memo format for identifying HCS-2 registries.
+- Flexible Queries - Allows for fetching and parsing registry entries.
 
 ## Architecture Overview
 
@@ -71,13 +72,13 @@ graph TB
 
 ### When to Use Each Type
 
-- **Use Indexed Registries** when:
+- Use Indexed Registries when:
   - You need to maintain a history of all entries
   - Entries need to be updated or deleted over time
   - Audit trails are important for your application
   - Example: Service registries that need change tracking, governance systems
 
-- **Use Non-Indexed Registries** when:
+- Use Non-Indexed Registries when:
   - Only the latest state matters for your application
   - Storage efficiency is important
   - You have high-volume, simple registrations
@@ -87,9 +88,9 @@ graph TB
 
 The SDK validates operations based on registry type:
 
-- **Update and Delete operations** will throw an error if attempted on a non-indexed registry
-- **GetRegistry operation** for non-indexed registries returns only the latest entry per topic
-- **Creation** allows you to specify which type you need (defaults to indexed):
+- Update and Delete operations will throw an error if attempted on a non-indexed registry
+- GetRegistry operation for non-indexed registries returns only the latest entry per topic
+- Creation allows you to specify which type you need (defaults to indexed):
 
 ```typescript
 // Create an indexed registry (default)
@@ -326,21 +327,24 @@ sequenceDiagram
 Example code:
 
 ```typescript
-const migrateResponse = await client.migrateRegistry(registryTopicId, {
-  targetTopicId: '0.0.54321', // The new registry topic
-  memo: 'Migrating to new registry',
+const oldRegistryTopicId = '0.0.12345';
+const newRegistryTopicId = '0.0.67890';
+
+const migrateResponse = await client.migrateRegistry(oldRegistryTopicId, {
+  newTopicId: newRegistryTopicId,
+  memo: 'Migrating to new registry topic',
 });
 
 if (migrateResponse.success) {
-  console.log(`Registry migrated. Sequence number: ${migrateResponse.sequenceNumber}`);
+  console.log(`Registry migrated to: ${newRegistryTopicId}`);
 } else {
   console.error(`Error: ${migrateResponse.error}`);
 }
 ```
 
-### 6. Querying a Registry
+## Querying Registries
 
-Fetch and process entries from a registry:
+Retrieve entries from a registry and process them:
 
 ```mermaid
 sequenceDiagram
@@ -348,45 +352,26 @@ sequenceDiagram
     participant Client as HCS2Client
     participant HCS as Hedera Consensus Service
     participant Registry as Registry Topic
-
-    App->>Client: getRegistry(registryTopicId, options)
+    
+    App->>Client: getRegistry(topicId)
     activate Client
-    Client->>HCS: Query messages
-    HCS->>Client: Return messages
-    Client->>Client: Process messages
-    Client->>App: Return parsed registry data
+    Client->>HCS: Query messages from topic
+    HCS-->>Client: Return messages
+    Client->>Client: Process registry state
+    Client-->>App: Return registry structure
     deactivate Client
 ```
 
 Example code:
 
 ```typescript
-const registryData = await client.getRegistry(registryTopicId, {
-  limit: 100,
-  order: 'asc',
-});
-
-console.log(`Registry Type: ${registryData.registryType === 0 ? 'Indexed' : 'Non-indexed'}`);
-console.log(`TTL: ${registryData.ttl}`);
-
-// For indexed registries, this will have the full history
-// For non-indexed registries, this will only have the latest entry
-for (const entry of registryData.entries) {
-  console.log(`- Sequence: ${entry.sequence}`);
-  console.log(`  Timestamp: ${entry.timestamp}`);
-  console.log(`  Payer: ${entry.payer}`);
-  console.log(`  Message:`, entry.message);
-}
-
-// Both registry types provide the latestEntry for convenience
-if (registryData.latestEntry) {
-    console.log(`Latest entry: `, registryData.latestEntry.message);
-}
+const registry = await client.getRegistry(registryTopicId);
+console.log('Registry entries:', registry.entries);
 ```
 
-## Complete HCS-2 Registry Workflow
+For non-indexed registries, only the latest entry per topic is returned.
 
-This diagram illustrates a complete lifecycle of an HCS-2 Registry:
+## Full Lifecycle Example
 
 ```mermaid
 sequenceDiagram
@@ -517,8 +502,6 @@ interface RegisterEntryOptions {
 interface UpdateEntryOptions {
   targetTopicId: string;
   uid: string;
-  metadata?: string;
-  memo?: string;
 }
 
 interface DeleteEntryOptions {
@@ -527,15 +510,8 @@ interface DeleteEntryOptions {
 }
 
 interface MigrateTopicOptions {
-  targetTopicId: string;
-  metadata?: string;
+  newTopicId: string;
   memo?: string;
-}
-
-interface QueryRegistryOptions {
-  limit?: number;
-  order?: 'asc' | 'desc';
-  skip?: number;
 }
 ```
 

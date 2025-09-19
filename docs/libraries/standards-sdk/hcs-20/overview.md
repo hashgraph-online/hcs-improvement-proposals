@@ -1,5 +1,6 @@
 ---
-sidebar_position: 7
+title: Overview
+sidebar_position: 1
 ---
 
 # HCS-20: Auditable Points Standard
@@ -39,54 +40,12 @@ graph TB
     end
 ```
 
-## Getting Started
+## Where to Next
 
-### Installation
-
-```bash
-npm install @hashgraphonline/standards-sdk
-```
-
-### Basic Setup (Node.js)
-
-For server-side applications, use `HCS20Client`.
-
-```typescript
-import { HCS20Client } from '@hashgraphonline/standards-sdk';
-// or import from specific path
-// import { HCS20Client } from '@hashgraphonline/standards-sdk/hcs-20';
-
-// Initialize the HCS-20 client
-const client = new HCS20Client({
-  network: 'testnet',
-  operatorId: 'your-operator-id',
-  operatorKey: 'your-operator-private-key',
-  logLevel: 'info',
-});
-```
-
-### Basic Setup (Browser)
-
-For client-side applications, use `BrowserHCS20Client` with a wallet connection.
-
-```typescript
-import { BrowserHCS20Client } from '@hashgraphonline/standards-sdk';
-// or import from specific path
-// import { BrowserHCS20Client } from '@hashgraphonline/standards-sdk/hcs-20';
-import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
-
-// Initialize Hashinals WalletConnect
-const hwc = new HashinalsWalletConnectSDK();
-await hwc.init(/** wallet connect options */);
-await hwc.connect(/** connection options */);
-
-// Initialize the HCS-20 browser client
-const browserClient = new BrowserHCS20Client({
-  network: 'testnet',
-  hwc: hwc,
-  logLevel: 'info',
-});
-```
+- Node SDK (server): /docs/libraries/standards-sdk/hcs-20/server
+- Browser SDK: /docs/libraries/standards-sdk/hcs-20/browser
+- Transactions: /docs/libraries/standards-sdk/hcs-20/tx
+- API Reference: /docs/libraries/standards-sdk/hcs-20/api
 
 ## Implementation Workflow
 
@@ -411,4 +370,3 @@ interface PointsState {
   lastProcessedTimestamp: string;
 }
 ```
-

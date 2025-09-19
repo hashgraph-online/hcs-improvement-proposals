@@ -1,5 +1,6 @@
 ---
-sidebar_position: 3
+title: Overview
+sidebar_position: 1
 description: Mint NFTs whose on-chain metadata points to an HCS‑1 HRL (hcs://1/<topicId>)
 ---
 
@@ -25,7 +26,7 @@ const svg = Buffer.from(
   '<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"><rect width="512" height="512" fill="#0d9488"/><text x="50%" y="56%" text-anchor="middle" dominant-baseline="middle" font-size="320" font-weight="700" fill="#fff">S</text></svg>'
 );
 
-const minted = await client.inscribeAndMint({
+const minted = await client.createHashinal({
   tokenId: '0.0.123456',
   inscriptionInput: { type: 'buffer', buffer: svg, fileName: 'hashinal.svg', mimeType: 'image/svg+xml' },
   inscriptionOptions: {
@@ -67,7 +68,7 @@ What this gives you
 2. Take the returned `topicId`
 3. Mint an HTS NFT whose metadata is `hcs://1/<topicId>`
 
-The SDK does steps 1–3 for you in one call (`inscribeAndMint`).
+The SDK does steps 1–3 for you in one call (`createHashinal`).
 
 ## Node Usage
 
@@ -84,7 +85,7 @@ await client.mint({
 Or inscribe and mint in one step (recommended):
 
 ```ts
-await client.inscribeAndMint({
+await client.createHashinal({
   tokenId: '0.0.123456',
   inscriptionInput: { type: 'buffer', buffer: svg, fileName: 'hashinal.svg', mimeType: 'image/svg+xml' },
   inscriptionOptions: {
@@ -113,7 +114,7 @@ import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 const hwc = HashinalsWalletConnectSDK.getInstance();
 const client = new HCS5BrowserClient({ network: 'testnet', hwc });
 
-const res = await client.inscribeAndMint({
+const res = await client.createHashinal({
   tokenId: '0.0.123456',
   inscriptionInput: { type: 'buffer', buffer: svg, fileName: 'hashinal.svg', mimeType: 'image/svg+xml' },
   inscriptionOptions: {
@@ -155,6 +156,27 @@ The demo inscribes an SVG (HIP‑412 attributes included), mints an NFT, and pri
 - “Failed to inscribe content” → Increase `waitMaxAttempts`/`waitIntervalMs` in `inscriptionOptions`
 - “No topic ID from inscription” → Ensure Inscriber returns `topic_id` or `jsonTopicId`
 - “Supply key required” → Provide `supplyKey` with the correct key matching token `supply_key._type`
+
+## Who Is This For?
+
+- Creators who want fully on‑chain NFTs with no off‑chain storage
+- Platforms that need deterministic, permanent references to content
+- Indexers who prefer HRL pointers over mutable URLs
+
+## When To Use (and Not Use)
+
+- Use when permanence and verifiability of metadata matters
+- Don’t use if your content must remain private (HCS‑1 inscriptions are public)
+
+## Costs and Limits
+
+- Costs: inscription (HCS) + mint (HTS) fees; image size impacts inscription fees
+- Limits: prefer small/efficient media; large files → higher fees and slower confirmation
+
+## FAQ
+
+- Can I update the content? Not for HCS‑5; inscribed content is immutable. For updatable content, see HCS‑6.
+- Do wallets resolve HRLs? Many indexers and tools do; you can fetch by topic id using an HRL resolver.
 
 ## Reference
 

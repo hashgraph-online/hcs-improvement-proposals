@@ -1,5 +1,6 @@
 ---
-sidebar_position: 4
+title: Overview
+sidebar_position: 1
 ---
 
 # HCS-6: Dynamic Hashinals
@@ -72,6 +73,12 @@ const client = new HCS6Client({
 });
 ```
 
+### Key Handling (No Guesswork)
+
+- The client resolves operator key type (ECDSA vs ED25519) via Mirror Node account `key._type` and configures the SDK accordingly.
+- If you provide a `supplyKey` as a string when minting, the client fetches token info (`supply_key._type`) and parses the key with the correct algorithm.
+- You may also pass a `PrivateKey` instance; it will be used directly.
+
 ### Basic Setup (Browser)
 
 For client-side applications, use `HCS6BrowserClient`:
@@ -84,9 +91,25 @@ const browserClient = new HCS6BrowserClient({
   network: 'testnet',
   logLevel: 'info',
 });
-
-// Note: Browser client requires wallet integration for write operations
 ```
+
+Note: Browser client requires wallet integration for write operations.
+
+## Who Is This For?
+
+- Projects that need NFTs or content that can evolve (badges, game assets, profiles)
+- Builders who only care about the latest state, not the entire history
+- Indexers that want a single place to ask, “what’s current?”
+
+## When To Use (and Not Use)
+
+- Use when content must change over time and consumers only need the latest version
+- Don’t use if you need a tamper‑evident full change log (use an indexed HCS‑2 registry instead)
+
+## Costs and Limits
+
+- Costs: one inscription (HCS‑1) per update + one registry message per update
+- Limits: TTL must be ≥ 3600 seconds; registry is non‑indexed (latest pointer only)
 
 ## Implementation Workflow
 
