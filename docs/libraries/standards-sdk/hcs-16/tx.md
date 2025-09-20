@@ -97,11 +97,14 @@ const tx = buildHcs16MessageTx({ topicId: '0.0.600', operatorId: '0.0.123', op: 
 buildHcs16FloraCreatedTx({ topicId, operatorId, floraAccountId, analyticsMemo? }): TopicMessageSubmitTransaction
 ```
 
-## Tx Proposal — buildHcs16TxProposalTx
+## Transaction — buildHcs16TransactionTx (preferred)
 
 ```ts
-buildHcs16TxProposalTx({ topicId, operatorId, scheduledTxId, memo?, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16TransactionTx({ topicId, operatorId, scheduleId, data?, analyticsMemo? }): TopicMessageSubmitTransaction
 ```
+
+Notes
+- `scheduleId` is the ScheduleId entity (e.g., `0.0.12345`).
 
 ## State Update — buildHcs16StateUpdateTx
 

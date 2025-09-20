@@ -6,6 +6,21 @@ module.exports = function (context, options) {
         headTags: [
           {
             tagName: 'script',
+            innerHTML: `
+              (function(w,d,s,l,i){
+                w[l]=w[l]||[];
+                w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+                var f=d.getElementsByTagName(s)[0];
+                var j=d.createElement(s);
+                var dl=l!=='dataLayer' ? '&l='+l : '';
+                j.async=true;
+                j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+                f.parentNode.insertBefore(j,f);
+              })(window, document, 'script', 'dataLayer', 'GTM-P83WH82S');
+            `,
+          },
+          {
+            tagName: 'script',
             attributes: {
               async: true,
               src: 'https://stats.tier.bot/script.js',
@@ -13,22 +28,12 @@ module.exports = function (context, options) {
               'data-domains': 'hashgraphonline.com',
             },
           },
-          // Google Ads tag (gtag.js)
+        ],
+        preBodyTags: [
           {
-            tagName: 'script',
-            attributes: {
-              async: true,
-              src: 'https://www.googletagmanager.com/gtag/js?id=AW-10841395521',
-            },
-          },
-          {
-            tagName: 'script',
-            innerHTML: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'AW-17512816237');
-            `,
+            tagName: 'noscript',
+            innerHTML:
+              '<iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P83WH82S" height="0" width="0" style="display:none;visibility:hidden"></iframe>',
           },
         ],
       };
