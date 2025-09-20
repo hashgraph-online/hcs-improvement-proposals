@@ -1,5 +1,7 @@
 import React from 'react';
-import classNames from 'classnames';
+import Link from '@docusaurus/Link';
+import { Button } from './ui/button';
+import { cn } from '../lib/utils';
 
 interface SecondaryButtonProps {
   children: React.ReactNode;
@@ -17,33 +19,35 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   size = 'medium',
   ...props
 }) => {
-  const classes = classNames(
-    'inline-block font-mono font-semibold !text-white dark:!text-white hover:!text-white dark:hover:!text-white rounded-lg transition-all duration-300 transform',
-    'bg-[#3f4174] hover:bg-[#1f2142] hover:scale-105 hover:-translate-y-1',
-    'border border-[#3f4174] shadow-md hover:shadow-xl active:scale-95',
-    'focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-opacity-50',
-    'no-underline hover:no-underline text-center',
-    {
-      'text-sm py-2 px-4': size === 'small',
-      'text-base py-3 px-6': size === 'medium',
-      'text-lg py-4 px-8': size === 'large',
-    },
-    className
+  const sizeMap = {
+    small: 'sm' as const,
+    medium: 'default' as const,
+    large: 'lg' as const,
+  };
+
+  const buttonContent = (
+    <Button
+      variant="secondary"
+      size={sizeMap[size]}
+      onClick={href ? undefined : onClick}
+      className={cn(
+        'font-mono font-semibold hover:scale-105 hover:-translate-y-1 shadow-md hover:shadow-xl',
+        className
+      )}
+      asChild={!!href}
+      {...props}
+    >
+      {href ? (
+        <Link href={href} className="no-underline hover:no-underline">
+          {children}
+        </Link>
+      ) : (
+        children
+      )}
+    </Button>
   );
 
-  if (href) {
-    return (
-      <a href={href} className={classes} {...props}>
-        {children}
-      </a>
-    );
-  }
-
-  return (
-    <button className={classes} onClick={onClick} {...props}>
-      {children}
-    </button>
-  );
+  return buttonContent;
 };
 
 export default SecondaryButton;
