@@ -219,7 +219,20 @@ const config: Config = {
         },
       ],
     },
-    scripts: [],
+    scripts: [
+      {
+        src: 'https://www.googletagmanager.com/gtag/js?id=AW-17512816237',
+        async: true,
+      },
+      {
+        content: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'AW-17512816237');
+        `,
+      },
+    ],
   } satisfies Preset.ThemeConfig,
 
   plugins: [
