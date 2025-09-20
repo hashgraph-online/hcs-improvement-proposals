@@ -792,16 +792,18 @@ const TutorialShowcaseUltimate: React.FC = () => {
                     with our comprehensive tutorials
                   </p>
 
-                  <div className='flex flex-col sm:flex-row gap-4 justify-center'>
+                  <div className='flex flex-col sm:flex-row gap-4 justify-center items-center'>
                     <PrimaryButton 
                       href='/docs/tutorials/getting-started/setup-environment'
-                      className='text-lg py-4 px-8 font-black'
+                      className='w-full sm:w-auto min-w-[200px] sm:min-w-[220px] text-center'
+                      size='large'
                     >
                       Start First Tutorial →
                     </PrimaryButton>
                     <SecondaryButton 
                       href='https://github.com/hashgraph-online/standards-sdk'
-                      className='text-lg py-4 px-8 font-bold'
+                      className='w-full sm:w-auto min-w-[200px] sm:min-w-[220px] text-center'
+                      size='large'
                     >
                       View on GitHub ↗
                     </SecondaryButton>
