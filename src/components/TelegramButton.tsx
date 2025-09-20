@@ -16,7 +16,7 @@ const TelegramButton: React.FC<TelegramButtonProps> = ({
     // Fire Google Ads conversion event
     if (typeof window !== 'undefined' && typeof (window as any).gtag === 'function') {
       (window as any).gtag('event', 'conversion', {
-        'send_to': 'AW-17512816237/LaqRCOLUzp4bEO284Z5B (HAH Telegram)',
+        'send_to': 'AW-17512816237/LaqRCOLUzp4bEO284Z5B',
         'event_callback': () => {
           // Open Telegram after conversion is tracked
           window.open('https://t.me/hashinals', '_blank');
