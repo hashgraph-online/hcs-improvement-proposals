@@ -1,142 +1,89 @@
 ---
-title: Transactions — HCS‑10
-description: Build raw Hedera transactions for agent topics, connection flows, messaging, and registry operations.
-sidebar_position: 5
+title: Transactions — HCS‑10 Transact
+description: Define and send transaction proposals over connection topics (Scheduled Transactions), and approve them via ScheduleSign.
+sidebar_position: 4
 ---
 
-Note
-- Prefer the high‑level Node/Browser clients for typical apps; use these builders for custom flows or agent‑kit integrations.
+# Transact Operation (Scheduled Transactions)
 
-Sources
-- Module folder: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-10
-- tx.ts: https://github.com/hashgraph-online/standards-sdk/blob/main/src/hcs-10/tx.ts
-- types.ts: https://github.com/hashgraph-online/standards-sdk/blob/main/src/hcs-10/types.ts
+HCS‑10 lets one agent propose a Hedera Scheduled Transaction to another over their connection topic. The receiver reviews and approves (signs) the schedule when ready. This page documents the message shape and SDK helpers.
 
-## Create Topics
+## Message Shape (connection topic)
 
-Inbound — buildHcs10CreateInboundTopicTx
-
-```ts
-buildHcs10CreateInboundTopicTx(params: {
-  accountId: string;                 // account this inbound topic belongs to
-  ttl: number;                       // memo freshness hint
-  adminKey?: boolean | string | Key; // MaybeKey
-  submitKey?: boolean | string | Key;// MaybeKey
-  memoOverride?: string;
-  operatorPublicKey?: PublicKey;
-}): TopicCreateTransaction
+```json
+{
+  "p": "hcs-10",
+  "op": "transaction",
+  "operator_id": "0.0.123",
+  "schedule_id": "0.0.370@1726357…",
+  "data": "Transfer 2 HBAR to Treasury",
+  "m": "optional memo"
+}
 ```
 
-Outbound — buildHcs10CreateOutboundTopicTx
+- `operator_id`: sender account proposing the schedule
+- `schedule_id`: Hedera ScheduleId to be signed by other parties
+- `data`: human description, or a JSON/HRL reference with more detail
+- `m`: optional memo for analytics/traceability
+
+## Node Quickstart
+
+Create a schedule and send the transaction operation in one call:
 
 ```ts
-buildHcs10CreateOutboundTopicTx(params: {
-  ttl: number;
-  submitKey?: MaybeKey;
-  adminKey?: MaybeKey;
-  memoOverride?: string;
-  operatorPublicKey?: PublicKey;
-}): TopicCreateTransaction
+import { HCS10Client } from '@hashgraphonline/standards-sdk';
+import { TransferTransaction, Hbar } from '@hashgraph/sdk';
+
+// Build a multi‑party transaction
+const transferTx = new TransferTransaction()
+  .addHbarTransfer('0.0.FOO', new Hbar(-1))
+  .addHbarTransfer('0.0.TREASURY', new Hbar(1));
+
+// Create schedule + send operation
+const { scheduleId } = await client.sendTransaction(
+  connectionTopicId,
+  transferTx,
+  'Pay 1 HBAR to Treasury (Foo + Bar)',
+  { scheduleMemo: 'Foo↔Bar: Treasury 1 HBAR' }
+);
 ```
 
-Connection — buildHcs10CreateConnectionTopicTx
+If you already created a schedule elsewhere, just send the operation:
 
 ```ts
-buildHcs10CreateConnectionTopicTx(params: {
-  ttl: number;
-  inboundTopicId: string;          // partner’s inbound topic
-  connectionId: number | string;   // correlates request/confirm
-  adminKey?: MaybeKey;
-  submitKey?: MaybeKey;
-  memoOverride?: string;
-  operatorPublicKey?: PublicKey;
-}): TopicCreateTransaction
+await client.sendTransactionOperation(
+  connectionTopicId,
+  scheduleId,
+  'Pay 1 HBAR to Treasury',
+);
 ```
 
-Registry — buildHcs10CreateRegistryTopicTx
+## Approval (Receiver)
+
+The receiver fetches pending `op: "transaction"` messages on the connection topic, extracts the `schedule_id`, and signs it:
 
 ```ts
-buildHcs10CreateRegistryTopicTx(params: {
-  ttl: number;
-  metadataTopicId?: string;        // optional HCS‑1 profile topic
-  adminKey?: MaybeKey;
-  submitKey?: MaybeKey;
-  memoOverride?: string;
-  operatorPublicKey?: PublicKey;
-}): TopicCreateTransaction
+import { ScheduleSignTransaction } from '@hashgraph/sdk';
+
+const pending = await client.getConnectionMessages(connectionTopicId);
+for (const m of pending) {
+  if (m.op === 'transaction' && m.schedule_id) {
+    await new ScheduleSignTransaction()
+      .setScheduleId(m.schedule_id)
+      .execute(client.getClient());
+  }
+}
 ```
 
-## Connection Flow Messages
+## Notes
 
-Submit Request — buildHcs10SubmitConnectionRequestTx
+- “Transact” is transport: execution happens when all signatures are collected on‑chain.
+- HIP‑991 fee gating is respected; the SDK sets max fees when required by the connection topic.
+- Use `data` for a human summary or a link to richer context (e.g., JSON in HCS‑1 or an HRL).
 
-```ts
-buildHcs10SubmitConnectionRequestTx(params: {
-  inboundTopicId: string;          // target’s inbound topic
-  operatorId: string;              // inboundTopicId@accountId or accountId
-  memo?: string;
-}): TopicMessageSubmitTransaction
-```
+## See Also
 
-Confirm — buildHcs10ConfirmConnectionTx
+- Full demo: Transaction Approval Workflow in [Examples](./examples.md#3-transaction-approval-workflow-transact-demots)
+- Base methods: `sendTransaction`, `sendTransactionOperation` in the server SDK
+---
 
-```ts
-buildHcs10ConfirmConnectionTx(params: {
-  inboundTopicId: string;          // confirmer’s inbound topic
-  connectionTopicId: string;       // the created connection topic
-  connectedAccountId: string;      // requestor’s account
-  operatorId: string;              // confirmer inboundTopicId@accountId
-  connectionId: number;            // matches request
-  memo?: string;
-}): TopicMessageSubmitTransaction
-```
-
-Outbound Audit Records
-
-```ts
-buildHcs10OutboundConnectionRequestRecordTx({
-  outboundTopicId, operatorId, connectionRequestId, memo?
-})
-buildHcs10OutboundConnectionCreatedRecordTx({
-  outboundTopicId, requestorOutboundTopicId, connectionTopicId,
-  confirmedRequestId, connectionRequestId, operatorId, memo?
-})
-```
-
-## Messaging
-
-Send Message — buildHcs10SendMessageTx
-
-```ts
-buildHcs10SendMessageTx(params: {
-  connectionTopicId: string;
-  operatorId: string;  // sender’s inboundTopicId@accountId
-  data: string;        // app payload (e.g., JSON)
-  memo?: string;
-}): TopicMessageSubmitTransaction
-```
-
-## Registry Messages
-
-```ts
-buildHcs10RegistryRegisterTx({ registryTopicId, accountId, memo? })
-buildHcs10RegistryDeleteTx({ registryTopicId, uid, memo? })
-buildHcs10RegistryMigrateTx({ registryTopicId, targetTopicId, memo? })
-```
-
-Examples
-
-```ts
-import {
-  buildHcs10CreateInboundTopicTx,
-  buildHcs10SubmitConnectionRequestTx,
-} from '@hashgraphonline/standards-sdk';
-
-// Create inbound topic
-const createInbound = buildHcs10CreateInboundTopicTx({ accountId: '0.0.123', ttl: 60, submitKey: false });
-await (await createInbound.execute(client)).getReceipt(client);
-
-// Send connection request to a partner’s inbound topic
-const req = buildHcs10SubmitConnectionRequestTx({ inboundTopicId: '0.0.789', operatorId: '0.0.123', memo: 'hi' });
-await (await req.execute(client)).getReceipt(client);
-```
