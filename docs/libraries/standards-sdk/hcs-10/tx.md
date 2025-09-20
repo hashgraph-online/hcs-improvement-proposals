@@ -1,6 +1,6 @@
 ---
 title: Transactions — HCS‑10 Transact
-description: Define and send transaction proposals over connection topics (Scheduled Transactions), and approve them via ScheduleSign.
+description: Build raw Hedera transactions for agent topics, connection flows, messaging, and registry operations.
 sidebar_position: 4
 ---
 
