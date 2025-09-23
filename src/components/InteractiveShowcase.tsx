@@ -208,7 +208,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
           </div>
 
           {/* Desktop: Original layout */}
-          <div className='hidden lg:block bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden'>
+          <div className='hidden lg:block bg-white dark:bg-gray-900 rounded-3xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden lg:sticky lg:top-20' style={{ maxHeight: 'calc(100vh - 6rem)' }}>
             <div className='bg-gray-100 dark:bg-gray-800 px-6 py-4 border-b border-gray-200 dark:border-gray-700'>
               <div className='flex items-center justify-between'>
                 <div className='flex items-center gap-4'>
@@ -241,8 +241,8 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
               </div>
             </div>
 
-            <div className='flex' style={{ minHeight: '640px' }}>
-              <div className='w-80 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full relative'>
+            <div className='flex relative' style={{ height: 'calc(100vh - 12rem)', maxHeight: '640px' }}>
+              <div className='w-80 xl:w-96 bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col h-full'>
                 <div className='px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex-shrink-0'>
                   <div className='flex items-center gap-2 text-sm font-mono text-gray-700 dark:text-gray-300'>
                     <FiGitBranch className='w-4 h-4' />
@@ -253,8 +253,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
 
                 <div
                   ref={scrollRef}
-                  className='flex-1 px-2 py-3 space-y-1 overflow-y-auto overflow-x-visible'
-                  style={{ maxHeight: '560px' }}
+                  className='flex-1 px-2 py-3 space-y-1 overflow-y-auto overflow-x-visible scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent'
                 >
                   {items.map((item, index) => (
                     <SidebarItem
@@ -285,7 +284,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                 )}
               </div>
 
-              <div className='flex-1 p-8'>
+              <div className='flex-1 p-8 overflow-y-auto'>
                 <AnimatePresence mode='wait'>
                   <motion.div
                     key={activeIndex}
