@@ -3,7 +3,7 @@ description: The HCS-15 standard provides a dynamic ability for account holders 
 sidebar_position: 15
 ---
 
-# HCS-15 Standard: Creation of Petal (shadow) Accounts
+# HCS-15 Standard: Creation of Petal (profile) Accounts
 
 ### Status: Draft
 
@@ -17,11 +17,13 @@ sidebar_position: 15
 
 ### Abstract:
 
-The HCS-15 standard provides a dynamic ability for account holders to create multiple instances of their accounts that use the same private key. This account dynamic enables multiple profiles, unique account ids, and asset holdings to be isolated in separate accounts on chain. The base account has the ability to orchestrate and execute transactions from each petal account as they are all utilizing the same private key.
+The HCS-15 standard provides a dynamic ability for account holders to create multiple instances of their accounts that use the same private key. This account dynamic enables multiple profiles, unique account ids, and asset holdings to be isolated in separate accounts on chain. 
+
+The base account has the ability to orchestrate and execute transactions from each petal account as they are all utilizing the same private key.
 
 ### Motivation:
 
-When utilizing HCS-11, the main memo of the account is restricted to one profile and one unique account id for that user or agent. Having the ability to have multiple profiles of HCS-11, tied to different unique identifiers, while also utilizing the same public/private key pair allows users and AI to dynamically create new identities and facilitate isolated escrows / commerce while maintaining the same signature.
+When utilizing HCS-11, the main memo of the account is restricted to one profile and one unique account id for that user or agent. Having the ability to have multiple profiles of HCS-11, tied to different unique identifiers, while also utilizing the same public/private key pair allows users and AI agents to dynamically create new identities and facilitate isolated escrows / commerce while maintaining the same signature.
 
 ## Specification
 
@@ -98,7 +100,7 @@ console.log(
 
 - Re‑using a key across multiple accounts provides diverse functionality but increases blast‑radius risk: compromise of one private key endangers every account that uses it: _plan your key‑management accordingly_.
 
-- It is highly recommended to not rotate the keys of these accounts. If you must make update the keys, be sure to rotate the petal account keys first, then the base account.
+- It is highly recommended to not rotate the keys of these accounts. If you must update the keys, be sure to rotate the petal account keys first, then the base account.
 
 ## Conclusion
 
