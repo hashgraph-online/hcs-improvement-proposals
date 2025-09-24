@@ -181,6 +181,8 @@ const standardsData = [
     ],
     href: '/docs/standards/hcs-18',
     icon: 'HCS-18',
+  },
+  {
     title: 'HCS-14: Universal Agent ID Standard',
     category: 'AI & Communication',
     status: 'draft' as const,
