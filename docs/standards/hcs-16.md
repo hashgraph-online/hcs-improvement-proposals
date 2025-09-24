@@ -41,7 +41,9 @@ sidebar_position: 16
 
 ## Abstract
 
-Flora accounts extend the **HCS‑15 Petal account** concept to groups of two or more independent accounts that wish to transact and maintain shared state under a single on‑chain entity. A Flora account is controlled by a **threshold key** (or key list) composed of the public keys of its member Petal accounts, and is accompanied by three mandatory Hedera Consensus Service (HCS) topics: **communication**, **transaction**, and **state**, each protected by the same keylist (with varying thresholds). This standard defines:
+Flora accounts extend the **HCS‑15 Petal / Profile account** concept to groups of two or more independent accounts that wish to transact and maintain shared state under a single on‑chain entity. 
+
+A Flora account is controlled by a **threshold key** (or key list) composed of the public keys of its member Petal accounts, and is accompanied by three mandatory Hedera Consensus Service (HCS) topics: **communication**, **transaction**, and **state**, each protected by the same keylist (with varying thresholds). This standard defines:
 
 - The canonical JSON schema for Flora metadata stored in account memos and HCS messages.
 - The on‑chain and off‑chain message flows required to create, operate, and dissolve a Flora.
@@ -51,11 +53,14 @@ Flora accounts extend the **HCS‑15 Petal account** concept to groups of two or
 
 ## Motivation
 
-Modern autonomous agents and decentralized applications increasingly require **temporary, permissioned syndicates**: escrow wallets, joint ventures, working groups, or federated AI tasks. Manually deploying custom multisig contracts or ad‑hoc shared keys is error‑prone, expensive, and lacks discoverability. HCS‑16 solves this by:
+Modern autonomous agents and decentralized applications increasingly require **temporary, permissioned syndicates**: escrow wallets, joint ventures, working groups, or federated AI tasks. 
 
+Manually deploying custom multisig contracts or ad‑hoc shared keys is error‑prone, expensive, and lacks discoverability. 
+
+HCS‑16 solves this by:
 1. **Discoverability & Negotiation** – Flora requests travel over existing HCS‑10 channels, leveraging the addressing and routing primitives agents already use.
 2. **Native Multisig** – Hedera’s ThresholdKey is used directly; no Solidity bridges or custom bytecode are needed, reducing gas and audit surface.
-3. **Topic‑Scoped State** – Flora’s dedicated topics isolate chat, scheduled transactions, and state attestations, preserving privacy and concurrency.
+3. **Topic‑Scoped State** – Flora’s dedicated topics isolate chat, scheduled transactions, and state attestations, preserving communication and concurrency.
 4. **Composability** – Because each member is itself a Petal account, existing HCS‑15 tooling (profile resolution, escrow partitioning, etc.) works unchanged inside a Flora.
 
 ---
@@ -77,9 +82,8 @@ Modern autonomous agents and decentralized applications increasingly require **t
 ### Prerequisites
 
 A Flora **MUST** be composed of ≥ 2 Petal accounts that:
-
-- Expose a valid [HCS‑11](/docs/standards/hcs-11) Petal profile with an `inboundTopicId`.
-- Are able to sign Hedera transactions with an **ECDSA/secp256k1** key (required for future encryption; ED25519 keys cannot encrypt data).
+- Has a valid [HCS‑11](/docs/standards/hcs-11) Petal profile with an `inboundTopicId`.
+- Is able to sign Hedera transactions with an **ECDSA/secp256k1** key (required for future encryption; ED25519 keys cannot encrypt data).
 
 ### Flora Account Creation
 
@@ -203,7 +207,7 @@ The **Flora** object is an extension of HCS-11 and a HRL is stored inside the Fl
 
 #### Example Profile Snippet
 
-TODO: Talk to Kantor about this format
+TODO: Confirm this format with team
 
 ```json
 {
@@ -290,7 +294,7 @@ Message shape
   "p": "hcs-16",
   "op": "transaction",
   "operator_id": "0.0.123@0.0.777",
-  "schedule_id": "0.0.777",
+  "schedule_id": "0.0.999",
   "data": "Swap 1 HBAR for 10 XYZ",
   "m": "optional"
 }
@@ -363,6 +367,8 @@ Transaction Memo: `hcs-16:op:2:2`
 
 ##### Join Request (CTopic)
 
+Join requests are posted to the CTopic by a Flora member to get consensus from the Flora members on the new account requesting to join the Flora.
+
 Message shape
 
 ```json
@@ -370,7 +376,7 @@ Message shape
   "p": "hcs-16",
   "op": "flora_join_request",
   "candidate_account_id": "0.0.999",
-  "m": "Request to join"
+  "m": "This account reached out and requested to join"
 }
 ```
 
@@ -461,7 +467,7 @@ Transaction Memo: `hcs-16:op:5:2`
   "p": "hcs-16",
   "op": "transaction",
   "operator_id": "0.0.123@0.0.777",
-  "schedule_id": "0.0.777",
+  "schedule_id": "0.0.999",
   "data": "Swap 1 HBAR for 10 XYZ"
 }
 ```
@@ -524,13 +530,6 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 - `operator_id` — `<signatureKeyAccountId>@<floralAccountId>` when the signer is also a Flora member; or `<callerAccountId>` for external join requests.
 - Optional human‑readable memo `m`.
 
-#### Creation (Happy Path)
-
-1. Discovery (HCS‑18): `propose` + `respond` on the Discovery Topic.
-2. Account & topic creation (on‑chain) per HCS‑16.
-3. **flora_created** broadcast to CTopic.
-4. First state publish on STopic (prefer HCS‑17 `state_hash`).
-
 ##### Example lifecycle messages
 
 ```json
@@ -565,11 +564,12 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 
 #### **Petal‑Initiated Join Request**
 
-1. **Candidate** posts `flora_join_request` to the Flora’s **CTopic** (or any member’s HCS‑10 inbound topic if CTopic is unknown).
+1. **Candidate** posts `flora_join_request` to the Flora’s **CTopic** (or any member’s HCS‑10 inbound topic if CTopic is private as recommended).
 2. Existing members discuss and optionally cast `flora_join_vote` messages to CTopic.
 3. On ≥ T approvals, any member posts a `transaction` (TTopic) containing a `ScheduleCreateTransaction` ID that appends the candidate key.
 4. Members sign; when threshold met, transaction executes.
 5. Updated member list is committed via `flora_join_accepted` (STopic) and a new profile HRL is published.
+6. All internal topics Stopic, CTopic, TTopic should be updated with the new pub key of the new petal member. 
 
 ##### Example join sequence (JSON)
 
@@ -661,6 +661,9 @@ sequenceDiagram
 ```
 
 ##### Message Sequence (numbered)
+TODO: Discuss: CTopics are explicitly only for flora communications. Either a HCS-10 for the main flora account, or HCS-10 messages to individual petal accounts should be used. 
+
+Open to discuss a request topic for flora membership that’s public or HIP-991 fee usage to reduce spam of join requests 
 
 1. Candidate → CTopic: `flora_join_request`
    - Announces intent to join; includes `candidate_account_id` and optional purpose/policies for evaluation.
@@ -694,6 +697,7 @@ sequenceDiagram
 - **Sybil Resistance** – Applications may impose an allow‑list, proof‑of‑work, required payments like fungible tokens or HBAR for the `flora_join_request` to resist spam.
 
 ---
+
 
 ### Reference Implementation
 

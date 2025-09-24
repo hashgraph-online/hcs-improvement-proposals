@@ -50,13 +50,13 @@ The state hash for a account is calculated using the following methodology:
 
 1. Retrieve the latest running hash from each relevant HCS topic the account participates in or monitors.
 2. Concatenate each topic ID directly followed by its corresponding latest running hash in ascending order of the topic IDs.
-3. Append the public key of the account at the end of the concatenated topic id string
+3. Append the account id and public key of the account at the end of the concatenated topic id string
 4. Apply the SHA384 cryptographic hash function to the concatenated string.
 
 Formally:
 
 ```
-StateHash = SHA384(topicId_1 || latestRunningHash_1 || topicId_2 || latestRunningHash_2 || ... || topicId_n || latestRunningHash_n || account_publicKey)
+StateHash = SHA384(topicId_1 || latestRunningHash_1 || topicId_2 || latestRunningHash_2 || ... || topicId_n || latestRunningHash_n || account_id || account_publicKey)
 ```
 
 Example State Hash Calculation
@@ -65,33 +65,33 @@ For clarity, assume a account monitors two topics:
 
 - Topic ID: 0.0.12345 with latest running hash abcd1234
 - Topic ID: 0.0.67890 with latest running hash efgh5678
-- Account public key FGHKLJHDGK
+- Account ID: 0.0.9988 and  public key FGHKLJHDGK
 
 Concatenate topic IDs and hashes, then add public key on the end:
 
 ```
-0.0.12345abcd12340.0.67890efgh5678FGHKLJHDGK
+0.0.12345abcd1234_0.0.67890efgh5678_0.0.9988FGHKLJHDGK
 ```
 
 Apply SHA384 hashing:
 
 ```
-StateHash = SHA384("0.0.12345abcd12340.0.67890efgh5678FGHKLJHDGK")
+StateHash = SHA384("0.0.12345abcd1234||0.0.67890efgh5678||0.0.9988FGHKLJHDGK")
 ```
 
 ## Composite State Hash Calculation for Floras & Blooms
 
 Floras and Blooms are composite Hedera accounts whose validity derives from the coordinated behaviour of a set of underlying member accounts (their Petals for Floras, and Floras/Petals for Blooms).
 
-To provide a single, tamper‑evident view of the composite, HCS‑26 extends the base procedure so that a Flora or Bloom publishes a CompositeStateHash that is deterministically derived from:
+To provide a single, tamper‑evident view of the composite, HCS‑17 extends the base procedure so that a Flora or Bloom publishes a CompositeStateHash that is deterministically derived from:
 
 - **Member account state**: The latest StateHash of every direct child account (Petal, Flora, etc).
-- **Composite interaction topics**: The latest running hash of every HCS topic that was created by or for the composite (e.g., escrow, governance, and inter‑composite communication topics defined in HCS‑22).
+- **Composite interaction topics**: The latest running hash of every HCS topic that was created by or for the composite (e.g., escrow, governance, and inter‑composite communication topics defined in HCS‑16).
 - **Composite public‑key fingerprint**:: The deterministic fingerprint of the composite’s threshold key
 
 The procedure MUST be applied recursively: a Bloom aggregates the CompositeStateHash values of the Floras it contains; a Flora aggregates the StateHash values of its Petals.
 
-**TODO** Determine if smart contract addresses tht were deployed by the account or composite should be includeded in the same manner as topic ids.
+**TODO** Determine if smart contract addresses that were deployed by the account or composite should be includeded in the same manner as topic ids.
 
 ## Algorithm
 
@@ -136,7 +136,7 @@ CompositeStateHash = SHA384("0.0.1110xaaa0.0.2220xbbb0.0.3330xccc0.0.4440xddd0xf
 
 Implementation Notes
 
-- **Frequency** – Re‑compute immediately after detecting any child StateHash or composite topic runningHash update, or at the synchronization interval specified by HCS‑22, whichever occurs first.
+- **Frequency** – Re‑compute immediately after detecting any child StateHash or composite topic runningHash update, or at the synchronization interval specified by HCS‑16.
 - **Bridging layers** – Applications SHOULD store the most recent CompositeStateHash in a HCS-2 topic with indexed:false. The newest hash state of the composite account will always be the latest message. The Flora / Bloom, can add the topic id for this state in it's metadata so other agents can verify composite integrity offline.
 - **Versioning** – Future extensions (e.g., Meadow‑level aggregation) MUST follow the same recursive pattern, guaranteeing O(log N) recalculation time when a single leaf changes.
 
@@ -145,14 +145,14 @@ Implementation Workflow
 1. Identify all relevant topics.
 2. Regularly fetch the latest running hash for each topic.
 3. Append the current public key of the account
-4. Compute and broadcast the state hash periodically according to HCS-22’s synchronization interval.
+4. Compute and broadcast the state hash periodically according to HCS-16’s synchronization interval.
 
 Integration with Existing Standards
 
-- Complements HCS-22 by providing a precise method for state synchronization.
-- Easily integrated with HCS-15 for consistent state verification across cluster members.
+- Complements HCS-16 by providing a precise method for state synchronization.
+- Easily integrated with HCS-15 for consistent state verification across Flora members.
 
-## Deterministic, application-level public key for Keylist + Threshold Keys (Floras, Blooms, Meadows, etc)
+## Deterministic, application-level public key for Keylist + Threshold Keys (Floras, Blooms, etc)
 
 When calculating state for a Flora, Bloom, or any account that is comprised of a threshold of other keys for a valid signature, this method of public key fingerprint calculation should be utilized and replace public key in the state creation above.
 
@@ -165,7 +165,7 @@ The result of these steps will give you a fingerprint of the threshold key accou
 
 ## Security Considerations
 
-- An auditing of state and truthfulness should be done periodically inside any coordinating group of accounts that are sharing state to ensure all accounts in the group are conveying thir state correctly.
+- An auditing of state and truthfulness should be done periodically inside any coordinating group of accounts that are sharing state to ensure all accounts in the group are conveying their state correctly.
 
 ## Conclusion
 
@@ -207,3 +207,8 @@ Message format of state change to topics:
   "m": "Change of state synchronization."
 }
 ```
+
+## References
+
+- [HCS‑15](/docs/standards/hcs-11): Profile standard with inbound topics for post-discovery communication
+- [HCS‑16](/docs/standards/hcs-16): Formation and governance of Floras
