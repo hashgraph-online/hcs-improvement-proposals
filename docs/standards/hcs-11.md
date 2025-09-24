@@ -136,6 +136,7 @@ All profiles share these common fields:
 | version            | string  | Yes      | Standard version (e.g., "1.0")                                                                       |
 | type               | number  | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)              |
 | display_name       | string  | Yes      | Display name for the profile                                                                         |
+| base_account       | string  | No       | Hedera account ID of the controlling base account when profiles reuse key material; required for [HCS-15](/docs/standards/hcs-15) petal accounts |
 | uaid               | string  | Yes      | UAID (uaid:did:...) for the subject. Other DIDs may be linked via DID Document `alsoKnownAs`.        |
 | alias              | string  | No       | Alternative identifier                                                                               |
 | bio                | string  | No       | Brief description or biography                                                                       |
@@ -145,6 +146,8 @@ All profiles share these common fields:
 | inboundTopicId     | string  | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                         |
 | outboundTopicId    | string  | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                                 |
 | privacy_compliance | object  | No       | Optional [HCS-19](/docs/standards/hcs-19) compliance metadata and topic references                   |
+
+Profiles that implement the [HCS-15](/docs/standards/hcs-15) petal account pattern shall populate the `base_account` field with the Hedera account ID of the base account that shares the private key.
 
 ### Profile Types
 

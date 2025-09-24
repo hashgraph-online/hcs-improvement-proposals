@@ -47,23 +47,11 @@ Petal accounts use the HCS‑11 memo convention to reference their profile docum
 - Memo format (delegated to HCS‑11): `hcs-11:<resource>`
 - `<resource>` may be an HCS HRL (`hcs://<standard>/<topicId>`) or another supported URI (IPFS/Arweave/HTTPS) as defined by HCS‑11.
 
-### HCS-15 Root Profile Schema
+### Profile Schema Requirements
 
-All profiles share these common fields:
+Petal accounts reuse the canonical [HCS‑11](/docs/standards/hcs-11) base profile schema. Refer to that standard for the authoritative field definitions.
 
-| Field              | Type   | Required  | Description                                                                                        |
-| ------------------ | ------ | --------- | -------------------------------------------------------------------------------------------------- |
-| version            | string | Yes       | Standard version (e.g., "1.0")                                                                     |
-| type               | number | Yes       | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)                |
-| display_name       | string | Yes       | Display name for the profile                                                                       |
-| **_base_account_** | string | **_Yes_** | **_Account Id of the base account for this petal's PK_**                                           |
-| alias              | string | No        | Alternative identifier                                                                             |
-| bio                | string | No        | Brief description or biography                                                                     |
-| socials            | array  | No        | Array of social media links                                                                        |
-| profileImage       | string | No        | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats |
-| properties         | object | No        | Additional unstructured profile properties                                                         |
-| inboundTopicId     | string | No        | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                       |
-| outboundTopicId    | string | No        | [HCS-10](/docs/standards/hcs-10) action record topic                                               |
+Petal profiles shall populate the `base_account` field defined in HCS‑11 with the Hedera account ID of their controlling base account so integrators can link the shared private key lineage.
 
 Below is a sample snippet of how this could be done with the JS SDK from hedera:
 
