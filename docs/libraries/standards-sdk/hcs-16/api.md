@@ -22,7 +22,7 @@ import {
   FloraOperation,
   buildHcs16CreateFloraTopicTx,
   buildHcs16FloraCreatedTx,
-  buildHcs16TxProposalTx,
+  buildHcs16TransactionTx,
   buildHcs16StateUpdateTx,
   buildHcs16FloraCreateRequestTx,
   buildHcs16FloraCreateAcceptedTx,
@@ -36,7 +36,7 @@ import {
 
 ```ts
 enum FloraTopicType { COMMUNICATION=0, TRANSACTION=1, STATE=2 }
-enum FloraOperation { FLORA_CREATE_REQUEST, FLORA_CREATE_ACCEPTED, FLORA_CREATED, TX_PROPOSAL, STATE_UPDATE, FLORA_JOIN_REQUEST, FLORA_JOIN_VOTE, FLORA_JOIN_ACCEPTED }
+enum FloraOperation { FLORA_CREATE_REQUEST, FLORA_CREATE_ACCEPTED, FLORA_CREATED, TRANSACTION, STATE_UPDATE, FLORA_JOIN_REQUEST, FLORA_JOIN_VOTE, FLORA_JOIN_ACCEPTED }
 ```
 
 ## Message Schema (canonical)
@@ -64,7 +64,7 @@ Wallet‑signed equivalents for creating topics and sending messages:
 
 ```ts
 sendFloraCreated({ topicId, floraAccountId }): Promise<void>
-sendTxProposal({ topicId, scheduledTxId, memo? }): Promise<void>
+sendTransaction({ topicId, scheduleId, data? }): Promise<void>
 sendStateUpdate({ topicId, stateHash, epoch, memo? }): Promise<void>
 ```
 
@@ -76,7 +76,7 @@ Source
 ```ts
 function buildHcs16CreateFloraTopicTx(params: { floraAccountId: string; topicType: FloraTopicType; adminKey?: any; submitKey?: any; operatorPublicKey?: import('@hashgraph/sdk').PublicKey }): import('@hashgraph/sdk').TopicCreateTransaction;
 function buildHcs16FloraCreatedTx(params: { topicId: string; floraAccountId: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16TxProposalTx(params: { topicId: string; scheduledTxId: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16TransactionTx(params: { topicId: string; scheduleId: string; data?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 function buildHcs16StateUpdateTx(params: { topicId: string; stateHash: string; epoch: number; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 function buildHcs16FloraCreateRequestTx(params: { topicId: string; members: string[]; threshold: number; seedHbar?: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 function buildHcs16FloraCreateAcceptedTx(params: { topicId: string; proposalSeq: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;

@@ -487,6 +487,54 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: 'category',
+      label: 'Tutorials',
+      link: {
+        type: 'doc',
+        id: 'tutorials/index',
+      },
+      collapsible: true,
+      collapsed: true,
+      items: [
+        {
+          type: 'category',
+          label: 'Getting Started',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/getting-started/setup-environment',
+              label: 'Setup Your Environment',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/getting-started/submit-your-first-hcs-message',
+              label: 'Submit Your First HCS Message',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Inscriptions & Storage',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/inscriptions/inscribe-your-first-file',
+              label: 'Inscribe Your First File',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/inscriptions/create-nft-with-inscriptions',
+              label: 'Create NFT with Inscriptions',
+            },
+          ],
+        },
+      ],
+    },
     'tooling',
   ],
 };
