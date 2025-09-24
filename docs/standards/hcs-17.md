@@ -195,19 +195,6 @@ Message format of state change to topics:
 }
 ```
 
-Message format of state change to topics:
-
-```json
-{
-  "p": "hcs-17",
-  "op": "state_hash",
-  "state_hash": "<hex-string>",
-  "topics": ["0.0.topic1", "0.0.topic2"],
-  "account_id": "0.0.123456",
-  "m": "Change of state synchronization."
-}
-```
-
 ## References
 
 - [HCS‑15](/docs/standards/hcs-11): Profile standard with inbound topics for post-discovery communication

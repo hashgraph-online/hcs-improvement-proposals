@@ -132,27 +132,9 @@ Flora accounts use the HCS‑11 memo convention to reference their profile docum
 - Memo format (delegated to HCS‑11): `hcs-11:<resource>`
 - `<resource>` may be an HCS HRL (`hcs://<standard>/<topicId>`) or another supported URI (IPFS/Arweave/HTTPS) as defined by HCS‑11.
 
-### HCS-11 extended for HCS-16 Root Profile Schema
-
-All profiles share these common fields:
-
-| Field              | Type   | Required  | Description                                                                                                     |
-| ------------------ | ------ | --------- | --------------------------------------------------------------------------------------------------------------- |
-| version            | string | Yes       | Standard version (e.g., "1.0")                                                                                  |
-| type               | number | Yes       | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=server, 3=flora, 4=bloom, 5=meadow) |
-| display_name       | string | Yes       | Display name for the profile                                                                                    |
-| **_members_**      | array  | **_Yes_** | **_Array of objects containing member petal account ids_**                                                      |
-| **_threshold_**    | number | **_Yes_** | **_The number of private key signatures to sign valid transactions from the flora account_**                    |
-| **_flora_topics_** | object | **_Yes_** | **_Object containing flora topic ids._**                                                                        |
-| alias              | string | No        | Alternative identifier                                                                                          |
-| bio                | string | No        | Brief description or biography                                                                                  |
-| socials            | array  | No        | Array of social media links                                                                                     |
-| profileImage       | string | No        | Protocol reference - either HRL for HCS protocols (e.g., "hcs://1/0.0.12345") or other URI formats              |
-| properties         | object | No        | Additional unstructured profile properties                                                                      |
-| inboundTopicId     | string | Yes       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                                    |
-| outboundTopicId    | string | Yes       | [HCS-10](/docs/standards/hcs-10) action record topic                                                            |
-
 ### Profile Schema
+
+Flora accounts extend the canonical [HCS‑11](/docs/standards/hcs-11) profile schema. Refer to the Flora profile fields defined in HCS‑11 for the authoritative description of required keys such as `members`, `threshold`, and `topics` along with their validation rules.
 
 The **Flora** object is an extension of HCS-11 and a HRL is stored inside the Flora memo that points to the location of the JSON:
 **The Flora account requires valid HCS-10 Inbound and Outbound topics**
