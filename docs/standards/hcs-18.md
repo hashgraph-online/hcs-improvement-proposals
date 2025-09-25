@@ -112,119 +112,6 @@ The following operations are available for discovery:
 | `complete` | Announces successful Flora formation           | `proposal_seq`, `flora_account` |
 | `withdraw` | Petal withdraws from discovery                 | `announce_seq`                  |
 
-#### Operation Methods
-
-##### announce
-
-```json
-{
-  "p": "hcs-18",
-  "op": "announce",
-  "data": {}
-}
-```
-
-Fields
-
-| Field    | Description                              | Type   | Required |
-| -------- | ---------------------------------------- | ------ | -------- |
-| `data`   | See full field breakdown for `announce`  | object | Yes      |
-
-Transaction Memo: `hcs-18:op:0`
-
-##### propose
-
-```json
-{
-  "p": "hcs-18",
-  "op": "propose",
-  "data": {
-    "members": [],
-    "config": {},
-    "existing_flora": "0.0.x"
-  }
-}
-```
-
-Fields
-
-| Field              | Description                                      | Type   | Required |
-| ------------------ | ------------------------------------------------ | ------ | -------- |
-| `members`          | Proposed members list (see field breakdown)      | array  | Yes      |
-| `config`           | Proposed configuration parameters                | object | Yes      |
-| `existing_flora`   | Existing Flora account (for replacement flows)   | string | No       |
-
-Transaction Memo: `hcs-18:op:1`
-
-##### respond
-
-```json
-{
-  "p": "hcs-18",
-  "op": "respond",
-  "data": {
-    "proposal_seq": 12345,
-    "decision": "accept|reject",
-    "reason": "...",
-    "accepted_seq": 12340
-  }
-}
-```
-
-Fields
-
-| Field           | Description                                               | Type    | Required |
-| --------------- | --------------------------------------------------------- | ------- | -------- |
-| `proposal_seq`  | HCS sequence number of the proposal                       | number  | Yes      |
-| `decision`      | "accept" or "reject"                                      | string  | Yes      |
-| `reason`        | Explanation (recommended when rejecting)                  | string  | No       |
-| `accepted_seq`  | Sequence of accepted proposal (when rejecting due to conflict) | number  | No   |
-
-Transaction Memo: `hcs-18:op:2`
-
-##### complete
-
-```json
-{
-  "p": "hcs-18",
-  "op": "complete",
-  "data": {
-    "proposal_seq": 12345,
-    "flora_account": "0.0.x",
-    "topics": {
-      "communication": "0.0.a",
-      "transaction": "0.0.b",
-      "state": "0.0.c"
-    }
-  }
-}
-```
-
-Fields
-
-| Field                  | Description                              | Type   | Required |
-| ---------------------- | ---------------------------------------- | ------ | -------- |
-| `proposal_seq`         | Sequence number of the original proposal | number | Yes      |
-| `flora_account`        | Newly created Flora account ID           | string | Yes      |
-| `topics.communication` | Communication topic ID                   | string | Yes      |
-| `topics.transaction`   | Transaction topic ID                     | string | Yes      |
-| `topics.state`         | State topic ID                           | string | Yes      |
-
-Transaction Memo: `hcs-18:op:3`
-
-##### withdraw
-
-```json
-{
-  "p": "hcs-18",
-  "op": "withdraw",
-  "data": {
-    "announce_seq": 12340,
-    "reason": "..."
-  }
-}
-```
-
 ### Message Protocol
 
 All messages SHALL be valid UTF-8 JSON with the following structure:
@@ -243,6 +130,7 @@ Transaction memo (recommended analytics):
 
 ```
 hcs-18:op:<operationEnum>
+```
 
 Operation enum values
 
@@ -253,7 +141,6 @@ Operation enum values
 | `respond`  |    2 |
 | `complete` |    3 |
 | `withdraw` |    4 |
-```
 
 #### Operation: `announce`
 
@@ -264,9 +151,10 @@ Petal advertises its availability and capabilities.
 | Field                                             | Type   | Required | Description                                                             |
 | ------------------------------------------------- | ------ | -------- | ----------------------------------------------------------------------- |
 | `petal`                                           | object | Yes      | Petal identification and metadata                                       |
+| `petal.account`                                   | string | Yes      | Hedera account ID of the Petal                                          |
 | `petal.name`                                      | string | Yes      | Human-readable name for the Petal                                       |
 | `petal.priority`                                  | number | Yes      | Priority value (0-1000) for Flora coordination preference               |
-| `petal.uaid`                                      | string | No       | Optional UAID (HCS‑14) for resolvable identity                          |
+| `uaid`                                            | string | No       | Optional UAID (HCS‑14) for resolvable identity                          |
 | `capabilities`                                    | object | Yes      | Technical and operational capabilities                                  |
 | `capabilities.protocols`                          | array  | Yes      | List of supported protocols for Flora operations                        |
 | `capabilities.resources`                          | object | No       | Available computational resources                                       |
@@ -286,6 +174,7 @@ Petal advertises its availability and capabilities.
   "op": "announce",
   "data": {
     "petal": {
+      "account": "0.0.123456",
       "name": "Node-Alpha-1",
       "priority": 750 // 0-1000, higher = preferred for Flora coordination
     },
@@ -306,6 +195,8 @@ Petal advertises its availability and capabilities.
   }
 }
 ```
+
+Transaction Memo: `hcs-18:op:0`
 
 #### Operation: `propose`
 
@@ -349,6 +240,8 @@ Proposes Flora formation to specific Petals. The HCS sequence number of this mes
 ```
 
 // This message gets sequence number 12345, which becomes the proposal ID
+
+Transaction Memo: `hcs-18:op:1`
 
 **Example (Member Replacement)**:
 
@@ -402,6 +295,8 @@ Response to a Flora proposal, referencing it by HCS sequence number.
 }
 ```
 
+Transaction Memo: `hcs-18:op:2`
+
 #### Operation: `complete`
 
 Announces successful Flora formation, referencing the original proposal.
@@ -435,6 +330,8 @@ Announces successful Flora formation, referencing the original proposal.
 }
 ```
 
+Transaction Memo: `hcs-18:op:3`
+
 #### Operation: `withdraw`
 
 Participant withdraws from discovery, invalidating their announcement.
@@ -458,6 +355,8 @@ Participant withdraws from discovery, invalidating their announcement.
   }
 }
 ```
+
+Transaction Memo: `hcs-18:op:4`
 
 ### Discovery Lifecycle
 
@@ -752,11 +651,3 @@ HCS-18 provides a permissionless discovery mechanism for Petals to find each oth
 - [HCS‑11](/docs/standards/hcs-11): Profile standard with inbound topics for post-discovery communication
 - [HCS‑16](/docs/standards/hcs-16): Formation and governance of Floras
 - [HCS‑17](/docs/standards/hcs-17): State hash format used on Flora state topics
-Fields
-
-| Field           | Description                                    | Type   | Required |
-| --------------- | ---------------------------------------------- | ------ | -------- |
-| `announce_seq`  | Sequence number of the announcement to withdraw | number | Yes      |
-| `reason`        | Reason for withdrawal                          | string | No       |
-
-Transaction Memo: `hcs-18:op:4`
