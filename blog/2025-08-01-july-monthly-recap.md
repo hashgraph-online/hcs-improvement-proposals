@@ -1,6 +1,6 @@
 ---
 slug: july-2025-monthly-recap
-title: "Hashgraph Online: July Monthly Recap"
+title: "July Recap: Neuron Joins DAO & $1M Hackathon"
 authors: [michelle-baez]
 tags: [monthly-recap, ai-agents, hackathon, openconvai]
 ---
