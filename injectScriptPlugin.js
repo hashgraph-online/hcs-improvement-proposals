@@ -23,6 +23,35 @@ module.exports = function (context, options) {
             tagName: 'script',
             attributes: {
               async: true,
+              src: 'https://www.googletagmanager.com/gtag/js?id=AW-17512816237',
+            },
+          },
+          {
+            tagName: 'script',
+            innerHTML: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'AW-17512816237');
+              
+              window.gtag_report_conversion = function(url) {
+                var callback = function () {
+                  if (typeof(url) != 'undefined') {
+                    window.location = url;
+                  }
+                };
+                gtag('event', 'conversion', {
+                  'send_to': 'AW-17512816237/LaqRCOLUzp4bEO284Z5B',
+                  'event_callback': callback
+                });
+                return false;
+              }
+            `,
+          },
+          {
+            tagName: 'script',
+            attributes: {
+              async: true,
               src: 'https://stats.tier.bot/script.js',
               'data-website-id': '09a60445-7371-492c-9d75-c17be79fa569',
               'data-domains': 'hashgraphonline.com',

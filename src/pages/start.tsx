@@ -191,7 +191,15 @@ const StartPage: React.FC = () => {
                   whileTap={{ scale: 0.98 }}
                   className='group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#48df7b] to-[#3aca6c] hover:from-[#3aca6c] hover:to-[#2fb35c] text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300 w-full sm:w-auto sm:min-w-[220px]' 
                   data-umami-event='start-hero-telegram' 
-                  onClick={() => { if (typeof window !== 'undefined') window.open('https://t.me/hashinals', '_blank'); }}
+                  onClick={() => { 
+                    if (typeof window !== 'undefined') {
+                      if (typeof (window as any).gtag_report_conversion === 'function') {
+                        (window as any).gtag_report_conversion('https://t.me/hashinals');
+                      } else {
+                        window.open('https://t.me/hashinals', '_blank');
+                      }
+                    }
+                  }}
                 >
                   <FaTelegram className='text-xl' />
                   Get Details on Telegram
