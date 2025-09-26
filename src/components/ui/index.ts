@@ -8,7 +8,7 @@ export { default as Terminal, TerminalLine } from './Terminal';
 export { default as ToolCard } from './ToolCard';
 export { default as SidebarNavButton } from './SidebarNavButton';
 export { PrimaryButton } from './primary-button';
-export { Button, buttonVariants } from './button';
+export { Button, buttonVariants } from './Button';
 export {
   Card,
   CardHeader,

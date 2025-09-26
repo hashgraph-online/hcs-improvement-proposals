@@ -2,11 +2,20 @@
 sidebar_position: 3
 ---
 
-# Core Client: HCS10Client
+# Core Client: HCS10Client (and HCS‑10 Builder)
 
 **Source Code:** [`HCS10Client.ts`](https://github.com/hashgraph-online/standards-agent-kit/blob/main/src/hcs10/HCS10Client.ts).
 
-The `HCS10Client` within the `@hashgraphonline/standards-agent-kit` serves as a **developer-friendly wrapper and initializer** for the underlying HCS-10 client provided by the core `@hashgraphonline/standards-sdk` library.
+The `HCS10Client` within the `@hashgraphonline/standards-agent-kit` serves as a **developer-friendly wrapper and initializer** for the underlying HCS‑10 client provided by the core `@hashgraphonline/standards-sdk` library. For higher‑level workflows (registration, connections, monitoring, fee configuration, wallet delegation), see the [HCS‑10 Builder](./builders.md).
+
+## Diagram (Where it sits)
+
+```mermaid
+flowchart LR
+  App["Your App"] --> Kit["HCS10Client (Wrapper)"]
+  Kit --> SDK["Standards SDK HCS-10"]
+  SDK --> Hedera["Hedera Network"]
+```
 
 **Primary Functions:**
 
@@ -21,7 +30,7 @@ You'll interact with this `HCS10Client` instance directly when you need:
 - **Low-Level Control:** Programmatically managing agent registration (`createAndRegisterAgent`).
 - **Specific SDK Access:** Calling functions like `retrieveProfile` or `handleConnectionRequest` as part of custom application logic.
 - **Basic HCS Interaction:** Using utilities like `sendMessage` or `getMessages` for interacting with arbitrary HCS topics, potentially outside the HCS-10 connection protocol.
-- **Foundation for Tools:** Providing the initialized client instance as a dependency for higher-level abstractions like the [LangChain Tools](./langchain-tools.md).
+- **Foundation for Tools:** Providing the initialized client instance as a dependency for higher-level abstractions like the [LangChain Tools](./langchain-tools.md) or as the internal engine used by the HCS‑10 Builder.
 
 **Important Limitations:**
 
@@ -684,5 +693,12 @@ try {
 ---
 
 **Source Code:** The core tools implementation can be found on GitHub: [`standards-agent-kit/src/tools/`](https://github.com/hashgraph-online/standards-agent-kit/tree/main/src/tools/).
+
+## Next Steps
+
+- Prefer higher-level workflows: [HCS‑10, HCS‑2, HCS‑6, Inscriber Builders](./builders.md)
+- Build agent tools: [LangChain Tools](./langchain-tools.md)
+- Extend via plugins: [Plugin System](./plugins.md)
+- See it running: [Examples](./examples.md)
 
 ## Prerequisites

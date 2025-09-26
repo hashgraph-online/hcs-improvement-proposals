@@ -20,7 +20,7 @@ If no manage-rules module is included in a poll, the default behaviour is only t
 
 ![manage-rules diagram](../../../../static/polls/manage-rules.png)
 
-The JSON Schema file can be found on here: [manage-rules.json](../../../assets/schema/manage-rules.json)
+The JSON Schema file can be found on here: [manage-rules.json](/assets/schema/manage-rules.json)
 
 ## Fields
 

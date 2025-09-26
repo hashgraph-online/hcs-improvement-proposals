@@ -11,7 +11,7 @@ sidebar_position: 2
 
 The base schema contains all the data that describes the poll. Broadly speaking it can be broken down into a number of descriptive fields and scope-specific modules. This section goes into detail on each piece.
 
-The definition of the schema as a JSON Schema file is here: [JSON Schema](../../../assets/schema/base-poll-schema.json)
+The definition of the schema as a JSON Schema file is here: [JSON Schema](/assets/schema/base-poll-schema.json)
 
 Below is a summary of each of the fields in the schema:
 

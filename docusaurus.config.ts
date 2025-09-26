@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Hashgraph Online',
   tagline: 'Building the future of the internet, on-graph.',
-  favicon: 'img/favicon.png',
+  favicon: 'img/favicon.ico',
 
   markdown: {
     mermaid: true,
@@ -113,7 +113,7 @@ const config: Config = {
       title: 'Hashgraph Online',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'img/logo.png',
+        src: 'Logo_Icon.png',
       },
       items: [
         { to: '/docs/standards/', label: 'Standards', position: 'left' },
@@ -246,7 +246,6 @@ const config: Config = {
             from: '/hedera-ai',
             to: '/hederaai',
           },
-          
         ],
       },
     ],

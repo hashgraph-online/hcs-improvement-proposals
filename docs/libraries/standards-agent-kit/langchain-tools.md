@@ -1,9 +1,10 @@
 ---
-sidebar_position: 2
+sidebar_position: 5
 ---
 
 # LangChain Tools Reference
 
+Overview
 The Standards Agent Kit provides 11 HCS-10 specific LangChain-compatible tools that enable AI agents to interact with Hedera through natural language commands. These tools handle agent registration, connections, and messaging according to the HCS-10 OpenConvAI standard.
 
 ## HCS-10 Agent Tools
@@ -94,14 +95,15 @@ The Standards Agent Kit provides 11 HCS-10 specific LangChain-compatible tools t
 ```typescript
 {
   targetAccountId: string;  // Account ID to connect with
-  message?: string;         // Optional connection message
+  memo?: string;            // Optional connection memo
+  disableMonitor?: boolean; // If true, do not wait for confirmation
 }
 ```
 
 **Natural Language Examples:**
 ```typescript
 "Connect with agent 0.0.123456"
-"Initiate connection to HelperBot with message 'Let's collaborate'"
+"Initiate connection to HelperBot with memo 'Let's collaborate'"
 "Start a connection with agent at account 0.0.789012"
 ```
 
@@ -163,7 +165,9 @@ None required
 **Parameters:**
 ```typescript
 {
-  requestId: number; // ID of the connection request
+  requestKey: string;        // Key from manage_connection_requests (e.g., inbound@requester#seq)
+  hbarFee?: number;          // Optional per-message HBAR fee on the new connection topic
+  exemptAccountIds?: string[]; // Optional list of fee-exempt accounts
 }
 ```
 
@@ -226,6 +230,203 @@ None required
 "Check my messages"
 "Any new messages from my connections?"
 "Check messages from agent 0.0.123456"
+```
+
+## HCS-2 Tools
+
+Standard dynamic registry operations for HCS‑2.
+
+### CreateRegistryTool (`createHCS2Registry`)
+
+Purpose: Create an HCS‑2 registry topic.
+
+Parameters:
+```typescript
+{
+  registryType?: 0 | 1; // 0=indexed (default), 1=non-indexed
+  ttl?: number;         // seconds (default 86400)
+  adminKey?: string|boolean;  // public key or true for operator key
+  submitKey?: string|boolean; // public key or true for operator key
+}
+```
+
+Examples:
+```text
+"Create an HCS-2 registry with 24h TTL"
+"New indexed HCS-2 registry that I control"
+```
+
+### RegisterEntryTool (`registerHCS2Entry`)
+
+Purpose: Add a target topic to a registry.
+
+Parameters:
+```typescript
+{ registryTopicId: string; targetTopicId: string; metadata?: string; memo?: string }
+```
+
+Examples:
+```text
+"Register topic 0.0.777 in registry 0.0.555 with memo 'primary feed'"
+```
+
+### UpdateEntryTool (`updateHCS2Entry`)
+
+Purpose: Update a registry entry (indexed registries).
+
+Parameters:
+```typescript
+{ registryTopicId: string; uid: string; targetTopicId: string; metadata?: string; memo?: string }
+```
+
+Examples:
+```text
+"Update entry uid abcd in 0.0.555 to point at 0.0.888"
+```
+
+### DeleteEntryTool (`deleteHCS2Entry`)
+
+Purpose: Remove an entry by uid.
+
+Parameters:
+```typescript
+{ registryTopicId: string; uid: string; memo?: string }
+```
+
+### MigrateRegistryTool (`migrateHCS2Registry`)
+
+Purpose: Migrate registry state to a new topic.
+
+Parameters:
+```typescript
+{ registryTopicId: string; targetTopicId: string; metadata?: string; memo?: string }
+```
+
+### QueryRegistryTool (`queryHCS2Registry`)
+
+Purpose: Read registry entries with paging/sort.
+
+Parameters:
+```typescript
+{ topicId: string; limit?: number; order?: 'asc'|'desc'; skip?: number }
+```
+
+Examples:
+```text
+"List latest 10 entries from 0.0.555"
+```
+
+## HCS-6 Tools
+
+Dynamic hashinals and registries for evolving content.
+
+### CreateDynamicRegistryTool (`createDynamicRegistry`)
+
+Purpose: Create a non‑indexed HCS‑6 registry.
+
+Parameters:
+```typescript
+{ ttl?: number; submitKey?: boolean|string }
+```
+
+### RegisterDynamicHashinalTool (`registerDynamicHashinal`)
+
+Purpose: Create and register a new dynamic hashinal (optionally creates the registry).
+
+Parameters:
+```typescript
+{
+  metadata: Record<string, unknown>;
+  data?: { base64?: string; url?: string; mimeType?: string };
+  memo?: string;
+  ttl?: number;
+  registryTopicId?: string;
+  submitKey?: string;
+}
+```
+
+Examples:
+```text
+"Create a dynamic hashinal named Demo with description 'hello world'"
+```
+
+### UpdateDynamicHashinalTool (`updateDynamicHashinal`)
+
+Purpose: Update an existing dynamic hashinal via its registry.
+
+Parameters:
+```typescript
+{
+  registryTopicId: string;
+  metadata: Record<string, unknown>;
+  data?: { base64?: string; url?: string; mimeType?: string };
+  memo?: string;
+  submitKey: string;
+}
+```
+
+### QueryDynamicRegistryTool (`queryDynamicRegistry`)
+
+Purpose: Read entries from a dynamic registry.
+
+Parameters:
+```typescript
+{ topicId: string; limit?: number; order?: 'asc'|'desc'; skip?: number }
+```
+
+## Inscriber Tools
+
+Content inscription helpers with quote support and confirmation polling.
+
+### InscribeFromUrlTool (`inscribeFromUrl`)
+
+Purpose: Inscribe from a direct file download URL (never HTML pages).
+
+Parameters:
+```typescript
+{ url: string; mode?: 'file'|'hashinal'; metadata?: Record<string,unknown>; tags?: string[]; chunkSize?: number; waitForConfirmation?: boolean; timeoutMs?: number; apiKey?: string; quoteOnly?: boolean }
+```
+
+Examples:
+```text
+"Inscribe this image URL as a file and wait for confirmation"
+"Quote cost to inscribe this zip URL"
+```
+
+### InscribeFromFileTool (`inscribeFromFile`)
+
+Purpose: Inscribe from a local file path.
+
+Parameters:
+```typescript
+{ filePath: string; mode?: 'file'|'hashinal'; metadata?: Record<string,unknown>; tags?: string[]; chunkSize?: number; waitForConfirmation?: boolean; timeoutMs?: number; apiKey?: string; quoteOnly?: boolean }
+```
+
+### InscribeFromBufferTool (`inscribeFromBuffer`)
+
+Purpose: Inscribe content you already have (text/base64/content‑ref); not for NFTs.
+
+Parameters:
+```typescript
+{ base64Data: string|contentRef; fileName: string; mimeType?: string; metadata?: Record<string,unknown>; tags?: string[]; chunkSize?: number; waitForConfirmation?: boolean; timeoutMs?: number; apiKey?: string; quoteOnly?: boolean }
+```
+
+### InscribeHashinalTool (`inscribeHashinal`)
+
+Purpose: Create a Hashinal inscription suitable for NFT minting; optional HashLink blocks.
+
+Parameters (common):
+```typescript
+{ url?: string; contentRef?: string; base64Data?: string; fileName?: string; mimeType?: string; name?: string; creator?: string; description?: string; type?: string; attributes?: Array<{trait_type:string; value:string|number}>; properties?: Record<string,unknown>; jsonFileURL?: string; fileStandard?: '1'|'6'; tags?: string[]; chunkSize?: number; waitForConfirmation?: boolean; timeoutMs?: number; quoteOnly?: boolean; withHashLinkBlocks?: boolean; renderForm?: boolean }
+```
+
+### RetrieveInscriptionTool (`retrieveInscription`)
+
+Purpose: Retrieve inscription status/content by transaction ID.
+
+Parameters:
+```typescript
+{ transactionId: string; mode?: 'file'|'hashinal' }
 ```
 
 ## State Management
@@ -413,3 +614,10 @@ main().catch(console.error);
 3. **Handle Rate Limits**: Be aware of Hedera network rate limits
 4. **Monitor Costs**: Track transaction fees and token usage
 5. **Use Natural Language**: Tools are optimized for natural language commands
+
+## Next Steps
+
+- Builders: [HCS‑10, HCS‑2, HCS‑6, Inscriber](./builders.md)
+- Forms + HashLinks: [Form-Driven Tools and HashLink Blocks](./tool-forms-and-hashlinks.md)
+- Wallet: [Wallet Integration](./wallet-integration.md)
+- Examples: [Try the demos](./examples.md)

@@ -136,7 +136,7 @@ All profiles share these common fields:
 | version            | string  | Yes      | Standard version (e.g., "1.0")                                                                       |
 | type               | number  | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)              |
 | display_name       | string  | Yes      | Display name for the profile                                                                         |
-| did                | string  | Yes      | W3C DID for the subject. did:uaid is recommended; other DIDs may also be linked via `alsoKnownAs`.   |
+| uaid               | string  | Yes      | UAID (uaid:did:...) for the subject. Other DIDs may be linked via DID Document `alsoKnownAs`.        |
 | alias              | string  | No       | Alternative identifier                                                                               |
 | bio                | string  | No       | Brief description or biography                                                                       |
 | socials            | array   | No       | Array of social media links                                                                          |
@@ -623,7 +623,7 @@ The `inboundTopicId` and `outboundTopicId` fields in the profile reference [HCS-
 
 ### DID Field
 
-Profiles shall include a top‑level `did` field containing a W3C DID for the subject. For agents and servers, `did:uaid` is recommended to enable cross‑protocol routing and correlation. Other DIDs (e.g., `did:pkh`, `did:ethr`, `did:web`) may be referenced from the DID Document using `alsoKnownAs`.
+Profiles shall include a top‑level `uaid` field containing an HCS‑14 UAID for the subject (uaid:did:...). Other DIDs (e.g., `did:pkh`, `did:ethr`, `did:web`) may be referenced from the DID Document using `alsoKnownAs`.
 
 ### HCS-19 Integration for Privacy Compliance
 
@@ -784,7 +784,7 @@ AI Agent Profile with HCS‑10 and privacy compliance (optional):
   "version": "1.0",
   "type": 1,
   "display_name": "AI Assistant Bot",
-  "did": "did:uaid:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;registry=hol;nativeId=0.0.2656337;uid=helper-bot",
+  "uaid": "uaid:did:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz;uid=helper-bot;registry=hol;nativeId=hedera:testnet:0.0.2656337",
   "alias": "helper_bot",
   "bio": "I'm an AI assistant helping users with Hedera-related tasks",
   "profileImage": "hcs://1/0.0.12345",
@@ -830,7 +830,7 @@ MCP Server Profile with UAID:
   "version": "1.0",
   "type": 2,
   "display_name": "Hedera Consensus MCP",
-  "did": "did:uaid:QmZ8kL4mN6vP2wQ9xR3tY7hB5jC1sA9eD;registry=olas;nativeId=eip155:1:0x742d35Cc6634C0532925a3b844Bc9e7595f41Bd;uid=hcs-mcp",
+  "uaid": "uaid:did:QmZ8kL4mN6vP2wQ9xR3tY7hB5jC1sA9eD;uid=hcs-mcp;registry=olas;nativeId=eip155:1:0x742d35Cc6634C0532925a3b844Bc9e7595f41Bd",
   "alias": "hedera_consensus",
   "bio": "MCP server for interacting with Hedera Consensus Service (HCS)",
   "profileImage": "hcs://1/0.0.54321",

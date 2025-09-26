@@ -18,7 +18,7 @@ The vote-rules module defines the rules around the vote action.
 
 ![vote-rules diagram](../../../../static/polls/vote-rules.png)
 
-The JSON Schema file can be found on here: [vote-rules.json](../../../assets/schema/vote-rules.json)
+The JSON Schema file can be found on here: [vote-rules.json](/assets/schema/vote-rules.json)
 
 ## Fields
 
