@@ -222,6 +222,7 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 
 | Field                 | Type   | Required | Description                                                                                                     |
 | --------------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------- |
+| type                  | number | Yes      | Profile type enum; Flora profiles MUST set this to `3`                                                          |
 | members               | array  | Yes      | Array of member descriptors referencing [HCS-15](/docs/standards/hcs-15) petal accounts                          |
 | members[].accountId   | string | Yes      | Hedera account ID for the member petal account (format: `0.0.x`)                                               |
 | threshold             | number | Yes      | Number of member signatures required for Flora-controlled transactions                                         |
@@ -233,6 +234,38 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 | policies              | object | No       | Optional governance or automation policies expressed as implementation-defined key/value pairs                 |
 
 Flora profiles **shall** set their `type` field to `3` and reference the Flora account’s dedicated HCS topics in `inboundTopicId` and `outboundTopicId`. Additional nested fields may be introduced by future Flora revisions but must not violate this base contract.
+
+**Example Flora Profile JSON**
+
+```json
+{
+  "version": "1.0",
+  "display_name": "🪷 Lotus‑Research Escrow #3",
+  "type": 3,
+  "members": [
+    { "accountId": "0.0.1234" },
+    { "accountId": "0.0.2345" },
+    { "accountId": "0.0.3456" }
+  ],
+  "threshold": 2,
+  "topics": {
+    "communication": "0.0.481516",
+    "transaction": "0.0.481517",
+    "state": "0.0.481518",
+    "custom": [
+      {
+        "name": "offChainHashes",
+        "topicId": "0.0.792894",
+        "description": "Used for attestation of offchain software"
+      }
+    ]
+  },
+  "policies": {
+    "membershipChange": "2/3",
+    "scheduleTxApproval": "all"
+  }
+}
+```
 
 #### MCP Server Profile Fields
 

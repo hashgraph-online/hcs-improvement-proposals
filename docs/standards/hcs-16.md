@@ -134,58 +134,7 @@ Flora accounts use the HCS‑11 memo convention to reference their profile docum
 
 ### Profile Schema
 
-Flora accounts extend the canonical [HCS‑11](/docs/standards/hcs-11) profile schema. Refer to the Flora profile fields defined in HCS‑11 for the authoritative description of required keys such as `members`, `threshold`, and `topics` along with their validation rules.
-
-The **Flora** object is an extension of HCS-11 and a HRL is stored inside the Flora memo that points to the location of the JSON:
-**The Flora account requires valid HCS-10 Inbound and Outbound topics**
-
-```json
-{
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "HCS-16 Flora Profile",
-  "type": "object",
-  "required": ["version", "display_name", "members", "threshold", "topics"],
-  "properties": {
-    "version": { "type": "string", "pattern": "^1\\.0$" },
-    "display_name": { "type": "string", "maxLength": 64 },
-    "members": {
-      "type": "array",
-      "minItems": 2,
-      "items": {
-        "type": "object",
-        "required": ["accountId"],
-        "properties": {
-          "accountId": { "type": "string", "pattern": "^0\\.0\\.[0-9]+$" }
-        }
-      }
-    },
-    "threshold": { "type": "integer", "minimum": 1 },
-    "topics": {
-      "type": "object",
-      "required": ["communication", "transaction", "state"],
-      "properties": {
-        "communication": { "type": "string" },
-        "transaction": { "type": "string" },
-        "state": { "type": "string" },
-        "custom": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["name", "topicId"],
-            "properties": {
-              "name": { "type": "string" },
-              "topicId": { "type": "string", "pattern": "^0\\.0\\.[0-9]+$" },
-              "description": { "type": "string" }
-            }
-          }
-        }
-      }
-    },
-    "policies": { "type": "object", "additionalProperties": true },
-    "properties": { "type": "object" }
-  }
-}
-```
+Flora accounts extend the canonical [HCS‑11](/docs/standards/hcs-11) profile schema. Refer to that section for the authoritative definition of required fields such as `type`, `members`, `threshold`, and `topics`, as well as storage guidance. Flora memos must reference an HCS‑11-compliant profile document and the Flora account shall expose valid HCS‑10 inbound and outbound topics for coordination.
 
 #### Example Profile Snippet
 
