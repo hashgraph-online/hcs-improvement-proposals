@@ -136,6 +136,7 @@ All profiles share these common fields:
 | version            | string  | Yes      | Standard version (e.g., "1.0")                                                                       |
 | type               | number  | Yes      | Profile type enum (0=personal [not officially supported yet], 1=ai_agent, 2=mcp_server)              |
 | display_name       | string  | Yes      | Display name for the profile                                                                         |
+| base_account       | string  | No       | Hedera account ID of the controlling base account when profiles reuse key material; required for [HCS-15](/docs/standards/hcs-15) petal accounts |
 | uaid               | string  | Yes      | UAID (uaid:did:...) for the subject. Other DIDs may be linked via DID Document `alsoKnownAs`.        |
 | alias              | string  | No       | Alternative identifier                                                                               |
 | bio                | string  | No       | Brief description or biography                                                                       |
@@ -145,6 +146,8 @@ All profiles share these common fields:
 | inboundTopicId     | string  | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                         |
 | outboundTopicId    | string  | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                                 |
 | privacy_compliance | object  | No       | Optional [HCS-19](/docs/standards/hcs-19) compliance metadata and topic references                   |
+
+Profiles that implement the [HCS-15](/docs/standards/hcs-15) petal account pattern shall populate the `base_account` field with the Hedera account ID of the base account that shares the private key. Profiles that implement the [HCS-16](/docs/standards/hcs-16) Flora pattern shall provide `inboundTopicId` and `outboundTopicId` values that reference the Flora communication and transaction topics.
 
 ### Profile Types
 
@@ -180,9 +183,16 @@ classDiagram
         mcpServer: object
     }
 
+    class FloraProfile {
+        members: array
+        threshold: number
+        topics: object
+    }
+
     BaseProfile <|-- PersonalProfile
     BaseProfile <|-- AIAgentProfile
     BaseProfile <|-- MCPServerProfile
+    BaseProfile <|-- FloraProfile
 ```
 
 #### Common Fields for All Types
@@ -207,6 +217,55 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 | aiAgent.capabilities | number[] | Yes      | List of capability enums (see Capabilities section) |
 | aiAgent.model        | string   | Yes      | AI model identifier                                 |
 | aiAgent.creator      | string   | No       | Creator of this Agent                               |
+
+#### Flora Profile Fields
+
+| Field                 | Type   | Required | Description                                                                                                     |
+| --------------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------- |
+| type                  | number | Yes      | Profile type enum; Flora profiles MUST set this to `3`                                                          |
+| members               | array  | Yes      | Array of member descriptors referencing [HCS-15](/docs/standards/hcs-15) petal accounts                          |
+| members[].accountId   | string | Yes      | Hedera account ID for the member petal account (format: `0.0.x`)                                               |
+| threshold             | number | Yes      | Number of member signatures required for Flora-controlled transactions                                         |
+| topics                | object | Yes      | Object describing the Flora consensus topics                                                                   |
+| topics.communication  | string | Yes      | Topic ID used for intra-Flora coordination messages                                                             |
+| topics.transaction    | string | Yes      | Topic ID that carries scheduled-transaction proposals and voting                                               |
+| topics.state          | string | Yes      | Topic ID that records Flora state commitments (see [HCS-17](/docs/standards/hcs-17) for hash formatting)        |
+| topics.custom         | array  | No       | Optional array of additional topic descriptors including `name`, `topicId`, and optional `description` fields   |
+| policies              | object | No       | Optional governance or automation policies expressed as implementation-defined key/value pairs                 |
+
+Flora profiles **shall** set their `type` field to `3` and reference the Flora account’s dedicated HCS topics in `inboundTopicId` and `outboundTopicId`. Additional nested fields may be introduced by future Flora revisions but must not violate this base contract.
+
+**Example Flora Profile JSON**
+
+```json
+{
+  "version": "1.0",
+  "display_name": "🪷 Lotus‑Research Escrow #3",
+  "type": 3,
+  "members": [
+    { "accountId": "0.0.1234" },
+    { "accountId": "0.0.2345" },
+    { "accountId": "0.0.3456" }
+  ],
+  "threshold": 2,
+  "topics": {
+    "communication": "0.0.481516",
+    "transaction": "0.0.481517",
+    "state": "0.0.481518",
+    "custom": [
+      {
+        "name": "offChainHashes",
+        "topicId": "0.0.792894",
+        "description": "Used for attestation of offchain software"
+      }
+    ]
+  },
+  "policies": {
+    "membershipChange": "2/3",
+    "scheduleTxApproval": "all"
+  }
+}
+```
 
 #### MCP Server Profile Fields
 
@@ -682,6 +741,7 @@ _This enum categorizes the primary profile classifications supported by HCS-11. 
 | 0     | Individual user profile (not officially supported yet) |
 | 1     | AI agent profile                                       |
 | 2     | MCP server profile                                     |
+| 3     | Flora profile (coordinated multi-member account)       |
 
 #### AI Agent Types
 
