@@ -176,9 +176,9 @@ All protocol messages **MUST** include property `"p":"hcs-16"` and **SHOULD** fo
 | --------------------- | --------- | --------------------------------------------- | ------------------------------------------- |
 | `flora_created`       | CTopic    | Publish final Flora account & topic IDs.      | `flora_account_id`, `topics`                |
 | `transaction`         | TTopic    | Propose a Scheduled Transaction for approval. | `operator_id`, `schedule_id`, `data?`, `m?` |
-| `state_update`        | STopic    | Commit new state to STopic.                   | `hash`, `epoch`                             |
-| `flora_join_request`  | CTopic    | External Petal asks to join.                  | `candidate_account_id`                      |
-| `flora_join_vote`     | CTopic    | Member vote on a join request.                | `candidate_account_id`, `approve`           |
+| `state_update`        | STopic    | Commit new state to STopic.                   | `hash`, `epoch?`                            |
+| `flora_join_request`  | CTopic    | Post proxy of an external join request.       | `account_id`, `connection_request_id`, `connection_topic_id`, `connection_seq` |
+| `flora_join_vote`     | CTopic    | Member vote on a join request.                | `account_id`, `approve`, `operator_id`, `connection_request_id`, `connection_seq` |
 | `flora_join_accepted` | STopic    | Confirmed membership change.                  | `members`, `epoch`                          |
 
 Notes
@@ -296,7 +296,7 @@ Transaction Memo: `hcs-16:op:2:2`
 
 ##### Join Request (CTopic)
 
-Join requests are posted to the CTopic by a Flora member to get consensus from the Flora members on the new account requesting to join the Flora.
+A `flora_join_request` is a proxy message for an external Petal's request to join, posted to the CTopic by a Flora's intake automation or a member. It provides pointers to the full context of the join request, which members can use to verify the candidate and their proposal.
 
 Message shape
 
@@ -304,21 +304,29 @@ Message shape
 {
   "p": "hcs-16",
   "op": "flora_join_request",
-  "candidate_account_id": "0.0.999",
+  "account_id": "0.0.999",
+  "connection_request_id": 51234,
+  "connection_topic_id": "0.0.912345",
+  "connection_seq": 27,
   "m": "This account reached out and requested to join"
 }
 ```
 
 Fields
 
-| Field                  | Description                    | Type   | Required |
-| ---------------------- | ------------------------------ | ------ | -------- |
-| `candidate_account_id` | Account requesting admission   | string | Yes      |
-| `m`                    | Optional purpose/memo          | string | No       |
+| Field                  | Description                                                                                      | Type   | Required |
+| ---------------------- | ------------------------------------------------------------------------------------------------ | ------ | -------- |
+| `account_id` | The account requesting admission. Members use this to look up the candidate's HCS-11 profile. | string | Yes      |
+| `connection_request_id`    | Sequence number of the HCS-10 `connection_request` on the Flora's inbound topic.                 | number | Yes      |
+| `connection_topic_id`  | The HCS-10 connection topic ID for this join request.                                            | string | Yes      |
+| `connection_seq`       | Sequence number of the HCS-10 `message` on the connection topic containing the full join proposal. | number | Yes      |
+| `m`                    | Optional purpose/memo.                                                                           | string | No       |
 
 Transaction Memo: `hcs-16:op:3:0`
 
 ##### Join Vote (CTopic)
+
+Members cast votes on a `flora_join_request`. The vote must reference the specific request via HCS-10 sequence numbers to avoid ambiguity.
 
 Message shape
 
@@ -326,21 +334,25 @@ Message shape
 {
   "p": "hcs-16",
   "op": "flora_join_vote",
-  "candidate_account_id": "0.0.999",
+  "account_id": "0.0.999",
   "approve": true,
   "operator_id": "0.0.123@0.0.777",
+  "connection_request_id": 51234,
+  "connection_seq": 27,
   "m": "optional"
 }
 ```
 
 Fields
 
-| Field                  | Description                                | Type    | Required |
-| ---------------------- | ------------------------------------------ | ------- | -------- |
-| `candidate_account_id` | Candidate under vote                       | string  | Yes      |
-| `approve`              | Boolean decision                            | boolean | Yes      |
-| `operator_id`          | Voting member (`<memberId>@<floraId>`)     | string  | Yes      |
-| `m`                    | Optional memo                              | string  | No       |
+| Field                  | Description                                                                  | Type    | Required |
+| ---------------------- | ---------------------------------------------------------------------------- | ------- | -------- |
+| `account_id` | Candidate under vote.                                                        | string  | Yes      |
+| `approve`              | Boolean decision.                                                            | boolean | Yes      |
+| `operator_id`          | Voting member (`<memberId>@<floraId>`).                                      | string  | Yes      |
+| `connection_request_id`    | The `connection_request_id` from the corresponding `flora_join_request`.         | number  | Yes      |
+| `connection_seq`       | The `connection_seq` from the corresponding `flora_join_request`.            | number  | Yes      |
+| `m`                    | Optional memo.                                                               | string  | No       |
 
 Transaction Memo: `hcs-16:op:4:0`
 
@@ -418,7 +430,10 @@ Transaction Memo: `hcs-16:op:5:2`
 {
   "p": "hcs-16",
   "op": "flora_join_request",
-  "candidate_account_id": "0.0.999",
+  "account_id": "0.0.999",
+  "connection_request_id": 51234,
+  "connection_topic_id": "0.0.912345",
+  "connection_seq": 27,
   "m": "Would like to co‑fund 400 hbar to join"
 }
 ```
@@ -513,8 +528,8 @@ sequenceDiagram
     HT-->>IA: deliver request (sequence ref)
     IA->>HT: connection_created { connection_topic_id }
     C->>CTX: message { data: 'join_request payload' }
-    IA->>CT: flora_join_request { candidate_account_id, hcs10_seq }
-    M->>CT: flora_join_vote { approve: true/false }
+    IA->>CT: flora_join_request { account_id, connection_request_id, connection_seq }
+    M->>CT: flora_join_vote { account_id, approve, connection_request_id, connection_seq }
 
     alt >= T approvals
       M->>TT: transaction { operator_id, schedule_id, data? }
@@ -536,9 +551,9 @@ sequenceDiagram
 3. Candidate ↔ Connection Topic: `message`
    - The candidate submits an HCS-10 `message` operation whose `data` field is a JSON string describing the join proposal. Members may reply on the same connection topic for clarifications. Record the message sequence numbers (`connection_seq`) for provenance.
 4. Intake automation → CTopic: `flora_join_request`
-   - After parsing the connection-topic payload, the automation posts a summary to the CTopic referencing the inbound `connection_request` sequence (`hcs10_seq`) and the latest connection-topic message sequence (`connection_seq`) so other members can retrieve the raw payloads.
+   - After parsing the connection-topic payload, the automation posts a summary to the CTopic referencing the inbound `connection_request` sequence (`connection_request_id`) and the latest connection-topic message sequence (`connection_seq`) so other members can retrieve the raw payloads.
 5. Members → CTopic: `flora_join_vote`
-   - Each existing member casts `{ candidate_account_id, approve: true/false, hcs10_seq, connection_seq }` to record their decision on the Flora-only channel.
+   - Each existing member casts `{ account_id, approve: true/false, connection_request_id, connection_seq }` to record their decision on the Flora-only channel.
 6. Any member → TTopic: `transaction`
    - On ≥ T approvals, publishes `{ operator_id, schedule_id, data? }` for a `ScheduleCreateTransaction` that appends the candidate key (and optionally adjusts `threshold`).
 7. Members → Network: `ScheduleSign`
@@ -552,21 +567,17 @@ sequenceDiagram
 
 > **NOTE:** Members lists in the JSON need to be updated and stay current. Because Petal accounts share the same public key as their base accounts, account ids are required for decentralized lookup of the exact account utilizing that public key inside this Flora.
 
-##### CTopic proxy summary example
+##### CTopic proxy request example
 
 ```json
 {
   "p": "hcs-16",
   "op": "flora_join_request",
-  "candidate_account_id": "0.0.999",
-  "hcs10_inbound_seq": 51234,
+  "account_id": "0.0.999",
+  "connection_request_id": 51234,
   "connection_topic_id": "0.0.912345",
   "connection_seq": 27,
-  "summary": {
-    "capabilities": ["escrow", "state-sync"],
-    "profile_hrl": "hcs://1/0.0.777001",
-    "hip991_fee_paid": true
-  }
+  "m": "Proxy for join request from account 0.0.999"
 }
 ```
 
@@ -575,19 +586,21 @@ sequenceDiagram
 > {
 >   "type": "join_request",
 >   "data": {
->     "candidate_account_id": "0.0.x",
->     "petal_profile_hrl": "hcs://…",
+>     "account_id": "0.0.x",
+>     "petal_profile_ref": "hcs://…",
 >     "capabilities": ["escrow", "state-sync"],
 >     "proof": { "type": "pow", "nonce": "…" },
 >   }
 > }
 > ```
+> The `petal_profile_ref` field is an agnostic pointer (e.g., HRL, IPFS URI) to the candidate's HCS-11 profile.
+>
 > Additional fields may be added inside `data` if they are documented in the Flora profile. Every follow-up `message` operation involved in the join workflow **MUST** echo the same structure (with updated context when necessary) so downstream tooling can parse join intents consistently.
 
 ##### Member Awareness Pattern
 
 - **Automated Intake Proxy** – Floras SHOULD run an intake agent that monitors the inbound topic, issues `connection_created`, and mirrors approved join requests onto the CTopic. This prevents every member from scanning inbound traffic while still keeping the workflow responsive.
-- **Join Summary Broadcast** – The intake agent MUST translate each validated request into a lightweight `flora_join_request` summary on the CTopic (step 4). The summary SHOULD include: candidate account ID, referenced HCS-10 sequence numbers, proposed capabilities, any escrow HRLs, and whether HIP-991 fees were satisfied. Downstream voters can trust the summary and only open the connection topic if they need the full payload.
+- **Join Request Proxy** – The intake agent MUST translate each validated request into a `flora_join_request` proxy message on the CTopic (step 4). This message provides pointers (`account_id`, `connection_request_id`, etc.) allowing members to look up the candidate's HCS-11 profile and the full proposal context directly. This avoids stale data and ensures members vote based on the most current on-chain information.
 - **Optional Digest Messages** – To aid discovery when many requests arrive, the intake agent MAY batch multiple candidates into periodic digest posts on the CTopic (e.g., hourly) while still linking to each individual connection-topic message. Digest posts SHOULD include a hash of each payload so independent tooling can verify integrity without re-reading the connection topic immediately.
 - **Spam Mitigation** – Floras SHOULD enforce HIP-991 fees on both the inbound topic and the connection topic. This keeps the public intake path open while making denial-of-service attacks expensive. If the Flora also publishes a public HCS-18 discovery policy, it SHOULD disclose the current fee schedule so candidates can prepare the required payment.
 
@@ -608,7 +621,7 @@ sequenceDiagram
 #### Membership Change
 
 - **Add Member** – Post a `transaction` message with a `ScheduleCreateTransaction` that updates the Flora KeyList and includes a clear rationale in the `data` field. Execution occurs when it collects `≥ T` signatures.
-- **Remove Member** – Same as add. SHOULD be accompanied by a `state_update` marking the member as removed if successful.
+- **Remove Member** – Same. SHOULD be accompanied by a `state_update` marking the member as removed if successful.
 
 #### Dissolution
 
