@@ -60,10 +60,10 @@ npm install @hashgraphonline/standards-sdk
 ### Basic Setup
 
 ```typescript
-import { HCS11 } from '@hashgraphonline/standards-sdk';
+import { HCS11Client, ProfileType, SUPPORTED_SOCIAL_PLATFORMS } from '@hashgraphonline/standards-sdk';
 
 // Initialize the HCS-11 client
-const client = new HCS11.HCS11Client({
+const client = new HCS11Client({
   network: 'testnet',
   auth: {
     operatorId: '0.0.123456',
@@ -183,7 +183,7 @@ const profileWithSocials = client.createAIAgentProfile(
 );
 
 // Supported platforms
-console.log('Supported social platforms:', HCS11.SUPPORTED_SOCIAL_PLATFORMS);
+console.log('Supported social platforms:', SUPPORTED_SOCIAL_PLATFORMS);
 // Outputs: ['twitter', 'github', 'discord', 'telegram', 'linkedin', 'youtube']
 ```
 
@@ -293,7 +293,7 @@ if (profileResult.success) {
   console.log(`Name: ${profile.display_name}`);
 
   // For AI agent profiles
-  if (profile.type === HCS11.ProfileType.AI_AGENT) {
+  if (profile.type === ProfileType.AI_AGENT) {
     console.log(
       `Agent type: ${profile.aiAgent.type === 0 ? 'Autonomous' : 'Manual'}`
     );
@@ -369,10 +369,10 @@ if (!validationResult.valid) {
 HCS-11 works seamlessly with HCS-10 for AI agent communication. The HCS‑10 client can create inbound/outbound topics and inscribe the HCS‑11 profile in one flow, using the existing operator account, and the profile will include a UAID.
 
 ```typescript
-import { HCS10, HCS11 } from '@hashgraphonline/standards-sdk';
+import { HCS10Client, HCS11Client, AIAgentType, AIAgentCapability, AgentBuilder, InboundTopicType } from '@hashgraphonline/standards-sdk';
 
 // Create an HCS-11 client for profile management
-const hcs11Client = new HCS11.HCS11Client({
+const hcs11Client = new HCS11Client({
   network: 'testnet',
   auth: {
     operatorId: '0.0.123456',
@@ -383,10 +383,10 @@ const hcs11Client = new HCS11.HCS11Client({
 // Create an AI agent profile with topic IDs for HCS-10 communication
 const agentProfile = hcs11Client.createAIAgentProfile(
   'Assistant Bot',
-  HCS11.AIAgentType.AUTONOMOUS,
+  AIAgentType.AUTONOMOUS,
   [
-    HCS11.AIAgentCapability.TEXT_GENERATION,
-    HCS11.AIAgentCapability.DATA_ANALYSIS,
+    AIAgentCapability.TEXT_GENERATION,
+    AIAgentCapability.DATA_ANALYSIS,
   ],
   'GPT-4-turbo',
   {
@@ -402,32 +402,32 @@ const profileResult = await hcs11Client.createAndInscribeProfile(
 );
 
 // Initialize HCS-10 client with the same credentials
-const hcs10Client = new HCS10.HCS10Client({
+const hcs10Client = new HCS10Client({
   network: 'testnet',
   operatorId: '0.0.123456',
   operatorPrivateKey: 'your-private-key',
 });
 
 // Create topics + inscribe profile using existing account
-const builder = new HCS11.AgentBuilder()
+const builder = new AgentBuilder()
   .setName('Assistant Bot')
   .setAlias('assistant-bot')
   .setBio('AI assistant')
   .setCapabilities([
-    HCS11.AIAgentCapability.TEXT_GENERATION,
-    HCS11.AIAgentCapability.DATA_INTEGRATION,
+    AIAgentCapability.TEXT_GENERATION,
+    AIAgentCapability.DATA_INTEGRATION,
   ])
   .setType('autonomous')
   .setModel('gpt-4o')
   .setNetwork('testnet')
-  .setInboundTopicType(HCS11.InboundTopicType.PUBLIC)
+  .setInboundTopicType(InboundTopicType.PUBLIC)
   .setExistingAccount('0.0.123456', 'your-private-key');
 
 const created = await hcs10Client.createAgent(builder);
 // created.profileTopicId, created.inboundTopicId, created.outboundTopicId
 
 // Fetch the profile and read its UAID
-const hcs11Client = new HCS11.HCS11Client({
+const hcs11Client = new HCS11Client({
   network: 'testnet',
   auth: { operatorId: '0.0.123456', privateKey: 'your-private-key' },
 });
