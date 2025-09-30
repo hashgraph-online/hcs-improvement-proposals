@@ -91,14 +91,15 @@ Implementations MAY use a canonical Discovery Topic per network, listed in an [H
 
 The discovery topic uses a standardized memo format:
 
-`hcs-18:0`
+`hcs-18:<indexed>[:ttl]`
 
 | Field               | Description                                    | Example Value |
 | ------------------- | ---------------------------------------------- | ------------- |
 | `protocol_standard` | Protocol identifier for this standard          | `hcs-18`      |
 | `indexed`           | Topic is indexed - all messages should be read | `0`           |
+| `ttl`               | Optional time-to-live in seconds for caching   | `300`         |
 
-**Example Topic Memo**: `hcs-18:0`
+**Example Topic Memo**: `hcs-18:0:300`
 
 ### Operations
 
@@ -109,7 +110,7 @@ The following operations are available for discovery:
 | `announce` | Petal advertises availability and capabilities | `petal`, `capabilities`         |
 | `propose`  | Proposes Flora formation to specific Petals    | `members`, `config`             |
 | `respond`  | Response to a Flora proposal                   | `proposal_seq`, `decision`      |
-| `complete` | Announces successful Flora formation           | `proposal_seq`, `flora_account` |
+| `complete` | Announces successful Flora formation           | `proposal_seq`, `flora_account_id` |
 | `withdraw` | Petal withdraws from discovery                 | `announce_seq`                  |
 
 ### Message Protocol
@@ -306,7 +307,7 @@ Announces successful Flora formation, referencing the original proposal.
 | Field                  | Type   | Required | Description                                  |
 | ---------------------- | ------ | -------- | -------------------------------------------- |
 | `proposal_seq`         | number | Yes      | HCS sequence number of the original proposal |
-| `flora_account`        | string | Yes      | Newly created Flora account ID               |
+| `flora_account_id`     | string | Yes      | Newly created Flora account ID               |
 | `topics`               | object | Yes      | HCS topic IDs for Flora operations           |
 | `topics.communication` | string | Yes      | Communication topic ID for the Flora         |
 | `topics.transaction`   | string | Yes      | Transaction coordination topic ID            |
@@ -320,7 +321,7 @@ Announces successful Flora formation, referencing the original proposal.
   "op": "complete",
   "data": {
     "proposal_seq": 12345, // Original proposal sequence number
-    "flora_account": "0.0.789012",
+    "flora_account_id": "0.0.789012",
     "topics": {
       "communication": "0.0.890123",
       "transaction": "0.0.901234",
@@ -396,7 +397,7 @@ sequenceDiagram
     P1->>HN: Create State Topic (0.0.912345)
     HN-->>P1: Flora + Topics created
 
-    P1->>DT: complete {proposal_seq: 12345, flora_account: "0.0.789012", topics: {...}}
+    P1->>DT: complete {proposal_seq: 12345, flora_account_id: "0.0.789012", topics: {...}}
     Note over DT: Discovery closure — further operations proceed via [HCS‑16](/docs/standards/hcs-16) on the Flora topics
 ```
 
