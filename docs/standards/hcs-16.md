@@ -285,11 +285,11 @@ Each member confirms Flora activation by posting to CTopic:
 
 Flora accounts utilize three mandatory HCS topics for structured coordination:
 
-| Topic                            | Purpose                                                                                                                                                                                                                                 | Required | Topic Memo           | Topic Type Enum |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------- | --------------- |
-| **Communication Topic (CTopic)** | Human / agent chat, off‑chain URL exchange, policy proposals, general communications. Future standards are planned to define task coordination.                                                                                         | ✅       | `hcs-16:${floraId}:0` | 0               |
-| **Transaction Topic (TTopic)**   | Broadcast of pre‑signed ScheduledTxn IDs, token association proposals, contract calls.                                                                                                                                                  | ✅       | `hcs-16:${floraId}:1` | 1               |
-| **State Topic (STopic)**         | Flora shared state that is needed for the Flora's purpose. Example: Periodic SHA‑256 hashes of shared state, vector clocks, membership attestations. This Topic is required for valid Floras even if not utilized initially by members. | ✅       | `hcs-16:${floraId}:2` | 2               |
+| Topic                            | Purpose                                                                                                                                                                                                                                 | Required | Topic Memo           | Topic Type Enum | Message Protocol |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- | --------------------- | --------------- | ---------------- |
+| **Communication Topic (CTopic)** | Human / agent chat, off‑chain URL exchange, policy proposals, general communications. Future standards are planned to define task coordination.                                                                                         | ✅       | `hcs-16:${floraId}:0` | 0               | HCS-16           |
+| **Transaction Topic (TTopic)**   | Broadcast of pre‑signed ScheduledTxn IDs, token association proposals, contract calls.                                                                                                                                                  | ✅       | `hcs-16:${floraId}:1` | 1               | HCS-16           |
+| **State Topic (STopic)**         | Flora shared state that is needed for the Flora's purpose. State hash publications per [HCS-17](/docs/standards/hcs-17), membership attestations, epoch transitions. Required for valid Floras even if not utilized initially.          | ✅       | `hcs-16:${floraId}:2` | 2               | HCS-17           |
 
 #### Topic Configuration Rules
 
@@ -402,19 +402,21 @@ All Flora protocol messages follow a standardized envelope format and operation 
 
 #### Protocol Operations
 
-| Enum | `op` (operation)      | Direction | Purpose                                       | Required Keys                                                                       |
-| ---- | --------------------- | --------- | --------------------------------------------- | ----------------------------------------------------------------------------------- |
-| 0    | `flora_created`       | CTopic    | Publish final Flora account & topic IDs.      | `flora_account_id`, `topics`                                                        |
-| 1    | `transaction`         | TTopic    | Propose a Scheduled Transaction for approval. | `operator_id`, `schedule_id`, `data?`, `m?`                                         |
-| 2    | `state_update`        | STopic    | Commit new state to STopic.                   | `hash`, `epoch?`                                                                    |
-| 3    | `flora_join_request`  | CTopic    | Post proxy of an external join request.       | `account_id`, `connection_request_id`, `connection_topic_id`, `connection_seq`      |
-| 4    | `flora_join_vote`     | CTopic    | Member vote on a join request.                | `account_id`, `approve`, `operator_id`, `connection_request_id`, `connection_seq`   |
-| 5    | `flora_join_accepted` | STopic    | Confirmed membership change.                  | `members`, `epoch`                                                                  |
+| Enum | `op` (operation)      | Direction | Purpose                                       | Protocol | Required Keys                                                                       |
+| ---- | --------------------- | --------- | --------------------------------------------- | -------- | ----------------------------------------------------------------------------------- |
+| 0    | `flora_created`       | CTopic    | Publish final Flora account & topic IDs.      | HCS-16   | `flora_account_id`, `topics`                                                        |
+| 1    | `transaction`         | TTopic    | Propose a Scheduled Transaction for approval. | HCS-16   | `operator_id`, `schedule_id`, `data?`, `m?`                                         |
+| 2    | `state_update`        | STopic    | Commit state hash (simple format)             | HCS-16   | `hash`, `epoch?`                                                                    |
+| 3    | `flora_join_request`  | CTopic    | Post proxy of an external join request.       | HCS-16   | `account_id`, `connection_request_id`, `connection_topic_id`, `connection_seq`      |
+| 4    | `flora_join_vote`     | CTopic    | Member vote on a join request.                | HCS-16   | `account_id`, `approve`, `operator_id`, `connection_request_id`, `connection_seq`   |
+| 5    | `flora_join_accepted` | STopic    | Confirmed membership change.                  | HCS-16   | `members`, `epoch`                                                                  |
+| 6    | `state_hash`          | STopic    | Commit state hash (HCS-17 standardized)       | HCS-17   | `state_hash`, `topics`, `account_id`, `epoch?`                                      |
 
 **Notes**:
-- For state attestation, implementations **SHOULD** prefer the [HCS‑17](/docs/standards/hcs-17) `state_hash` format posted to the STopic
-- If `state_update` operations is used, it **MUST** mirror the HCS‑17 fields
-- All operations follow the canonical envelope structure defined below
+- **State Publications**: Flora STopics can use either HCS-16 `state_update` or [HCS‑17](/docs/standards/hcs-17) `state_hash` format
+- **HCS-17 Benefits**: The HCS-17 format provides standardized hash calculation, topic list verification, and composite state support
+- **Protocol Mixing**: STopic can receive both HCS-16 operations (2, 5) and HCS-17 operations (`state_hash`)
+- All operations follow their respective protocol's envelope structure
 
 ### Envelope & Memos
 
@@ -458,6 +460,7 @@ hcs-16:op:2:2  // state_update on STopic
 hcs-16:op:3:0  // flora_join_request on CTopic
 hcs-16:op:4:0  // flora_join_vote on CTopic
 hcs-16:op:5:2  // flora_join_accepted on STopic
+hcs-17:op:6:2  // state_hash on STopic
 ```
 
 This standardized memo format enables:
@@ -542,9 +545,41 @@ Announces the successful creation of a Flora and its associated topics. Each mem
 
 ### State Update (STopic)
 
-Commits a new state hash to the State Topic. **Note**: Implementations **SHOULD** prefer [HCS‑17](/docs/standards/hcs-17) `state_hash` format instead.
+Commits a new state hash to the State Topic. Flora implementations can choose between HCS-16 simple format or [HCS‑17](/docs/standards/hcs-17) standardized format.
 
-**Message Shape** (if not using HCS‑17 directly):
+#### Option 1: HCS-17 State Hash Format
+
+**Message Shape**:
+
+```json
+{
+  "p": "hcs-17",
+  "op": "state_hash",
+  "state_hash": "<hex-encoded-sha384-hash>",
+  "topics": ["0.0.888", "0.0.889", "0.0.890"],
+  "account_id": "0.0.777",
+  "epoch": 12,
+  "m": "Flora composite state update"
+}
+```
+
+**Fields**: See [HCS‑17 Message Protocol](/docs/standards/hcs-17#message-protocol) for complete field definitions.
+
+**Transaction Memo**: `hcs-16:op:2:2`
+
+**Benefits**:
+- Standardized state hash computation per HCS-17 methodology
+- Inter-standard compatibility across HCS ecosystem
+- Includes topic list for verification
+- Built-in support for composite state hashes (Flora/Bloom)
+- Consistent epoch management
+- Deterministic calculation enables independent verification
+
+**Use When**: You need standardized state verification, composite state aggregation, or interoperability with other HCS standards.
+
+#### Option 2: HCS-16 State Update (Simple)
+
+**Message Shape**:
 
 ```json
 {
@@ -561,18 +596,19 @@ Commits a new state hash to the State Topic. **Note**: Implementations **SHOULD*
 
 | Field       | Description                                | Type   | Required |
 | ----------- | ------------------------------------------ | ------ | -------- |
-| `hash`      | Canonical state hash (prefer HCS‑17 rules) | string | Yes      |
-| `epoch`     | Monotonically increasing counter for state | number | No       |
+| `hash`      | State hash (application-defined format)    | string | Yes      |
+| `epoch`     | Monotonically increasing counter           | number | No       |
 | `timestamp` | ISO‑8601 timestamp                         | string | No       |
 | `m`         | Optional memo                              | string | No       |
 
 **Transaction Memo**: `hcs-16:op:2:2`
 
-**Best Practice**: Use [HCS‑17](/docs/standards/hcs-17) format which provides:
-- Standardized state hash computation
-- Inter-standard compatibility
-- Built-in verification mechanisms
-- Consistent epoch management
+**Benefits**:
+- Simpler format for straightforward use cases
+- Application-defined hash calculation
+- Fewer required fields
+
+**Use When**: You have simple state requirements and don't need standardized hash calculation or composite state aggregation.
 
 ### Join Request (CTopic)
 
@@ -717,14 +753,15 @@ Confirms a successful membership change by posting the updated member list and i
 }
 ```
 
-**Member Commit State Hash — STopic**:
+**Member Commit State Hash — STopic** (HCS-17 format):
 
 ```json
 {
-  "p": "hcs-16",
-  "op": "state_update",
-  "account_id": "0.0.123456",
-  "hash": "0x9a1cfb…",
+  "p": "hcs-17",
+  "op": "state_hash",
+  "state_hash": "a3f5b8c2d1e74f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a",
+  "topics": ["0.0.888", "0.0.889", "0.0.890"],
+  "account_id": "0.0.777",
   "epoch": 12
 }
 ```
@@ -773,7 +810,7 @@ sequenceDiagram
     I->>Net: Create TTopic (memo: hcs-16:0.0.777:1)
     Net-->>I: TTopic ID 0.0.889
 
-    I->>Net: Create STopic (memo: hcs-17:0.0.777:2 or hcs-16:0.0.777:2)
+    I->>Net: Create STopic (memo: hcs-16:0.0.777:2)
     Net-->>I: STopic ID 0.0.890
 
     Note over I: Upload Flora Profile
@@ -802,7 +839,7 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 - `m` — Optional human‑readable memo
 
 **Additional Requirements**:
-- All timestamps **SHOULD** use ISO-8601 format
+- All timestamps **SHOULD** use ISO-8601 format.
 - All topic IDs **MUST** use standard Hiero format (`0.0.x`)
 - JSON **MUST** be valid and parseable
 - String fields **SHOULD** be UTF-8 encoded
@@ -824,13 +861,16 @@ Every lifecycle message is valid UTF‑8 JSON and **MUST** include:
 }
 ```
 
-**Step 2: Initial State Commitment**
+**Step 2: Initial State Commitment** (HCS-17 format)
 
 ```json
 {
-  "p": "hcs-16",
-  "op": "state_update",
-  "hash": "0x48b6…"
+  "p": "hcs-17",
+  "op": "state_hash",
+  "state_hash": "48b6c9d2e1f8a3b5c7d9e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4c6d8e0f2a4b6c8d0e2f4a6b8c0d2e4f6a8b0c2d4e6f8a0b2c4d6e8f0a2b4",
+  "topics": ["0.0.888", "0.0.889", "0.0.890"],
+  "account_id": "0.0.777",
+  "epoch": 0
 }
 ```
 

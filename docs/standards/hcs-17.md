@@ -313,18 +313,60 @@ The result of these steps will give you a fingerprint of the threshold key accou
 
 HCS-17 provides a robust, transparent, and standardized methodology for calculating state hashes within decentralized AppNet clusters, enhancing reliability and facilitating scalable synchronization across Hedera-based AI ecosystems.
 
-Topic memo format (numeric, no strings):
+### Topic Memo Format
 
-- HCS-17 topics MUST encode memo as `hcs-17:<type>:<ttl>`
-- `<type>` is a numeric enum; currently defined values:
+HCS-17 state hash topics support two memo format patterns depending on context:
+
+#### Standalone State Hash Topics
+
+For independent state hash topics (not part of an [HCS-16](/docs/standards/hcs-16) Flora):
+
+**Format**: `hcs-17:<type>:<ttl>`
+
+**Components**:
+- `hcs-17` – Protocol identifier
+- `<type>` – Numeric enum for topic type:
   - `0` → State Hash Topic (non-indexed)
-- `<ttl>` is the time-to-live in seconds for retention guidance (e.g., `86400`)
+- `<ttl>` – Time-to-live in seconds for retention guidance (e.g., `86400` for 24 hours)
 
-Examples:
+**Example**:
+```
+hcs-17:0:86400  // Standalone state hash topic with 24h TTL
+```
 
-- `hcs-17:0:86400` → State hash topic with 24h TTL
+#### HCS-16 Flora State Topics (STopic)
 
-Message format of state change to topics:
+For state topics within an [HCS-16](/docs/standards/hcs-16) Flora formation, the topic **SHOULD** use the HCS-16 memo format for consistency with other Flora topics:
+
+**Format**: `hcs-16:<floraAccountId>:2`
+
+**Components**:
+- `hcs-16` – Protocol identifier (indicates Flora infrastructure)
+- `<floraAccountId>` – The Flora account ID (e.g., `0.0.777`)
+- `2` – Topic type enum for State Topic (STopic)
+
+**Example**:
+```
+hcs-16:0.0.777:2  // State Topic for Flora 0.0.777
+```
+
+**Rationale**: Using HCS-16 memo format for Flora STopics:
+- Maintains consistency with CTopic (`hcs-16:<floraId>:0`) and TTopic (`hcs-16:<floraId>:1`)
+- Enables easy identification of all topics belonging to a Flora
+- Simplifies indexing and discovery of Flora infrastructure
+- Messages posted to this topic still use HCS-17 message protocol (see below)
+
+**Alternative**: Floras **MAY** use `hcs-17:0:<ttl>` format if they prefer explicit HCS-17 identification, though `hcs-16:<floraId>:2` is recommended for consistency with other Flora topics.
+
+---
+
+### Message Protocol
+
+All HCS-17 state hash publications use a standardized JSON message format, **regardless of whether the topic memo uses `hcs-17:*` or `hcs-16:*` format**.
+
+#### State Hash Operation
+
+**Message Shape**:
 
 ```json
 {
@@ -333,11 +375,277 @@ Message format of state change to topics:
   "state_hash": "<hex-string>",
   "topics": ["0.0.topic1", "0.0.topic2"],
   "account_id": "0.0.123456",
-  "m": "Change of state synchronization."
+  "epoch": 15,
+  "timestamp": "2025-10-03T12:00:00.000Z",
+  "m": "Optional memo"
 }
 ```
 
+**Fields**:
+
+| Field        | Description                                                      | Type     | Required |
+| ------------ | ---------------------------------------------------------------- | -------- | -------- |
+| `p`          | Protocol identifier, always `"hcs-17"`                           | string   | Yes      |
+| `op`         | Operation type, always `"state_hash"`                            | string   | Yes      |
+| `state_hash` | Hex-encoded SHA-384 state hash (96 characters)                   | string   | Yes      |
+| `topics`     | Array of topic IDs included in state calculation                 | string[] | Yes      |
+| `account_id` | Account ID whose state is being published                        | string   | Yes      |
+| `epoch`      | Monotonically increasing counter for state transitions           | number   | No       |
+| `timestamp`  | ISO-8601 timestamp of when state hash was calculated             | string   | No       |
+| `m`          | Optional human-readable memo                                     | string   | No       |
+
+**Transaction Memo** (when posting to topic):
+- For standalone topics: No specific transaction memo required
+- For [HCS-16](/docs/standards/hcs-16) Flora STopics: Use `hcs-16:op:2:2` (state_update operation on STopic)
+
+**Usage Example**:
+
+```json
+{
+  "p": "hcs-17",
+  "op": "state_hash",
+  "state_hash": "a3f5b8c2d1e74f9a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a",
+  "topics": ["0.0.12345", "0.0.67890"],
+  "account_id": "0.0.9988",
+  "epoch": 42,
+  "timestamp": "2025-10-03T14:32:15.123Z",
+  "m": "State update after topic 0.0.67890 received new message"
+}
+```
+
+**Integration with HCS-16**:
+
+When posting to an [HCS-16](/docs/standards/hcs-16) Flora's STopic (memo: `hcs-16:<floraId>:2`), use the exact same HCS-17 message format above. The `account_id` field **SHOULD** be set to the Flora account ID for composite state hashes, or to the Petal account ID for member-specific state publications.
+
+**Example for Flora Composite State**:
+
+```json
+{
+  "p": "hcs-17",
+  "op": "state_hash",
+  "state_hash": "b4e6c9d2e1f8...",
+  "topics": ["0.0.888", "0.0.889", "0.0.890"],
+  "account_id": "0.0.777",
+  "epoch": 13,
+  "timestamp": "2025-10-03T14:35:00.000Z",
+  "m": "Flora composite state after member join"
+}
+```
+
+---
+
+## Integration with Existing Standards
+
+### HCS-16 Flora Integration
+
+HCS-17 provides standardized state synchronization for [HCS-16](/docs/standards/hcs-16) Flora formations:
+
+**Topic Memo Format**: Flora STopics use HCS-16 memo format (`hcs-16:<floraId>:2`) for consistency with other Flora topics
+
+**Message Protocol**: All state publications to Flora STopics use HCS-17 message format (`"p": "hcs-17"`, `"op": "state_hash"`)
+
+**State Calculation**:
+- **Individual Petals**: Use individual account state hash algorithm
+- **Flora Composite**: Use composite state hash algorithm aggregating all Petal states plus Flora topics
+
+**Example Flora STopic Flow**:
+```
+1. Flora 0.0.777 is created with STopic 0.0.890 (memo: hcs-16:0.0.777:2)
+2. Each Petal calculates individual state hash per HCS-17
+3. Flora calculates composite state hash aggregating Petal hashes + Flora topic hashes
+4. Flora publishes to STopic using HCS-17 message format
+5. Members verify by independently recalculating composite hash
+```
+
+### HCS-15 Petal Integration
+
+[HCS-15](/docs/standards/hcs-15) Petal accounts **SHOULD** publish state hashes to enable Flora composite state calculation:
+
+**Recommended Pattern**:
+1. Petal creates dedicated state topic (memo: `hcs-17:0:86400`)
+2. Petal regularly publishes state hash updates
+3. Petal includes state topic ID in [HCS-11](/docs/standards/hcs-11) profile
+4. Flora members monitor Petal state topics for changes
+
+### HCS-11 Profile Integration
+
+State topic IDs **SHOULD** be included in [HCS-11](/docs/standards/hcs-11) profiles:
+
+**Example Profile Addition**:
+```json
+{
+  "version": "1.0",
+  "type": 1,
+  "topics": {
+    "inbound": "0.0.123",
+    "outbound": "0.0.124",
+    "state": "0.0.125"  // HCS-17 state topic
+  }
+}
+```
+
+This enables:
+- Automated discovery of state topics
+- Verification of account state by third parties
+- Integration with monitoring and analytics tools
+
+---
+
+## Implementation Workflow
+
+### For Individual Accounts (Petals)
+
+**Step 1: Identify Relevant Topics**
+
+Determine which HCS topics to include in state calculation:
+- Topics the account created (e.g., HCS-11 profile topic)
+- Topics the account actively monitors (e.g., registry topics)
+- Topics the account participates in (e.g., HCS-10 communication topics)
+
+**Step 2: Create State Topic** (Optional)
+
+If publishing state hashes regularly:
+```typescript
+const stateTopic = await new TopicCreateTransaction()
+  .setTopicMemo("hcs-17:0:86400")  // 24h TTL
+  .setSubmitKey(accountPublicKey)
+  .execute(client);
+```
+
+**Step 3: Calculate State Hash**
+
+```typescript
+import { createHash } from 'crypto';
+
+// Gather topic data
+const topics = [
+  { id: "0.0.123", runningHash: "abc123..." },
+  { id: "0.0.456", runningHash: "def456..." }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+// Build concatenation string
+const parts = topics.map(t => `${t.id}_${t.runningHash}`);
+parts.push(`${accountId}_${publicKey}`);
+const concatString = parts.join('|');
+
+// Calculate SHA-384 hash
+const stateHash = createHash('sha384')
+  .update(concatString)
+  .digest('hex');
+```
+
+**Step 4: Publish State Hash**
+
+```typescript
+await new TopicMessageSubmitTransaction()
+  .setTopicId(stateTopicId)
+  .setMessage(JSON.stringify({
+    p: "hcs-17",
+    op: "state_hash",
+    state_hash: stateHash,
+    topics: topics.map(t => t.id),
+    account_id: accountId.toString(),
+    epoch: currentEpoch,
+    timestamp: new Date().toISOString()
+  }))
+  .execute(client);
+```
+
+**Step 5: Update on Changes**
+
+You may recalculate and publish when:
+- Any monitored topic receives a new message
+- Account adds/removes topics from monitoring list
+- At regular intervals (e.g., every 60 seconds)
+
+### For Flora Accounts (Composite)
+
+**Step 1: Monitor Member State Topics**
+
+Subscribe to each Petal's state topic to receive state updates:
+```typescript
+for (const member of floraMembers) {
+  const stateTopicId = await getStateTopicFromProfile(member.accountId);
+  subscribeToTopic(stateTopicId, handleMemberStateUpdate);
+}
+```
+
+**Step 2: Calculate Composite State Hash**
+
+```typescript
+// Gather child state hashes (sorted lexicographically)
+const memberStates = [
+  { id: "0.0.111", hash: "0xaaa..." },
+  { id: "0.0.222", hash: "0xbbb..." }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+// Gather Flora topic hashes (sorted lexicographically)
+const floraTopics = [
+  { id: "0.0.333", hash: "0xccc..." },
+  { id: "0.0.444", hash: "0xddd..." }
+].sort((a, b) => a.id.localeCompare(b.id));
+
+// Build concatenation string (no delimiters)
+const memberParts = memberStates.map(m => `${m.id}_${m.hash}`);
+const topicParts = floraTopics.map(t => `${t.id}_${t.hash}`);
+const concatString = [...memberParts, ...topicParts, `${floraId}_${thresholdKeyFingerprint}`].join('|');
+
+// Calculate composite hash
+const compositeStateHash = createHash('sha384')
+  .update(concatString)
+  .digest('hex');
+```
+
+**Step 3: Publish to Flora STopic**
+
+```typescript
+await new TopicMessageSubmitTransaction()
+  .setTopicId(floraStateTopicId)  // memo: hcs-16:0.0.777:2
+  .setMessage(JSON.stringify({
+    p: "hcs-17",
+    op: "state_hash",
+    state_hash: compositeStateHash,
+    topics: floraTopics.map(t => t.id),
+    account_id: floraId.toString(),
+    epoch: floraEpoch,
+    timestamp: new Date().toISOString()
+  }))
+  .setTransactionMemo("hcs-16:op:2:2")
+  .execute(client);
+```
+
+---
+
+## Security Considerations
+
+### 1. State Hash Verification
+
+**Risk**: Malicious accounts may publish incorrect state hashes to deceive others.
+
+**Mitigations**:
+- **Independent Verification**: Recipients SHOULD independently recalculate state hashes using publicly available topic data
+- **Cross-Validation**: Compare published hashes against multiple sources
+- **Threshold Verification**: In Floras, require majority of members to agree on composite state
+- **Automated Monitoring**: Implement alerts for state hash discrepancies
+
+**Best Practice**: Never trust state hashes blindly - always verify against on-chain HCS topic data when security is critical.
+
+### 2. Topic Selection Attacks
+
+**Risk**: Accounts may selectively include/exclude topics to manipulate perceived state.
+
+**Mitigations**:
+- **Document Topic List**: Clearly specify which topics are included in HCS-11 profile
+- **Version Control**: Increment epoch when topic list changes
+- **Audit Trails**: Maintain records of topic additions/removals
+- **Policy Enforcement**: Flora policies SHOULD require consensus before changing monitored topics
+
+---
+
 ## References
 
-- [HCS‑15](/docs/standards/hcs-11): Profile standard with inbound topics for post-discovery communication
-- [HCS‑16](/docs/standards/hcs-16): Formation and governance of Floras
+- [HCS‑1](/docs/standards/hcs-1) – Static file storage on HCS
+- [HCS‑10](/docs/standards/hcs-10) – Message envelope & private routing
+- [HCS‑11](/docs/standards/hcs-11) – Profile standard with inbound topics for post-discovery communication
+- [HCS‑15](/docs/standards/hcs-15) – Petal accounts (individual agent accounts)
+- [HCS‑16](/docs/standards/hcs-16) – Formation and governance of Floras (multi-party accounts)
