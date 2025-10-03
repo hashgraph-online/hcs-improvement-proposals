@@ -160,6 +160,26 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'standards/hcs-15',
+          label: 'HCS-15: Petal Accounts',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-16',
+          label: 'HCS-16: Flora Coordination',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-17',
+          label: 'HCS-17: State Hash Calculation',
+        },
+        {
+          type: 'doc',
+          id: 'standards/hcs-18',
+          label: 'HCS-18: Flora Discovery Protocol',
+        },
+        {
+          type: 'doc',
           id: 'standards/hcs-19',
           label: 'HCS-19: AI Agent Privacy Compliance',
         },
