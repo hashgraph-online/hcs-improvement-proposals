@@ -3,7 +3,7 @@ description: The HCS-15 standard provides a dynamic ability for account holders 
 sidebar_position: 15
 ---
 
-# HCS-15 Standard: Creation of Petal (profile) Accounts
+# HCS-15 Standard: Petals - Profile Accounts
 
 ### Status: Draft
 

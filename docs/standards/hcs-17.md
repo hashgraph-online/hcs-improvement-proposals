@@ -3,7 +3,7 @@ description: HCS-17 defines the methodology for calculating state hashes of acco
 sidebar_position: 17
 ---
 
-# HCS-17 State Hash Calculation Standard
+# HCS-17 Standard: State Hash Calculation
 
 **Status:** Draft
 
@@ -28,7 +28,7 @@ sidebar_position: 17
 
 ## Abstract
 
-HCS-17 explicitly defines the methodology for calculating the state hash of accounts and accounts within decentralized formations (“Petals”, “Floras”, “Blooms”, “Meadows”) on Hedera. This standard ensures consistent, auditable, and tamper-proof state verification, facilitating reliable synchronization and consensus across distributed AI networks.
+HCS-17 explicitly defines the methodology for calculating the state hash of accounts and accounts within decentralized formations (“Floras”) on Hiero. This standard ensures consistent, auditable, and tamper-proof state verification, facilitating reliable synchronization and consensus across distributed AI networks.
 
 ## Motivation
 
@@ -42,41 +42,33 @@ Accurate and consistent state hash calculation is critical for verifying states 
 
 ## State Hash Calculation Overview
 
-HCS-17 defines a standardized cryptographic procedure for aggregating the state of relevant HCS topics into a singular hash value, representing the state of an individual account at any given time.
+HCS-17 defines a standardized cryptographic procedure for aggregating the state of relevant Account and HCS topics into a singular hash value, representing the state of an individual account at any given time.
 
 ## State Hash Calculation Methodology
 
-The state hash for a account is calculated using the following methodology:
+The state hash for an Account is calculated using the following methodology:
 
-1. Retrieve the latest running hash from each relevant HCS topic the account participates in or monitors.
-2. Concatenate each topic ID directly followed by its corresponding latest running hash in ascending order of the topic IDs.
-3. Append the account id and public key of the account at the end of the concatenated topic id string
-4. Apply the SHA384 cryptographic hash function to the concatenated string.
+1. Retrieve the latest running hash from each relevant HCS topic the account participates / monitors / or created.
+2. Concatenate each topic ID directly followed by its corresponding latest running hash in ascending order of the topic IDs and the current running hash of that topic (order topics numerically from lowest to highest). Use a `_` between the topic id and the current running hash. Use a `|` between each topic id + hash pair. (example: `0.0.123_erfgjsi|0.0.456_reyiiey`).
+3. Append the account id and public key of the account at the end of the concatenated topic id string, using the same delimmiters. 
+4. Apply the SHA384 cryptographic hash function to the concatenated string (We use SHA384 for quantum resistent hashing).
 
 Formally:
-
 ```
-StateHash = SHA384(topicId_1 || latestRunningHash_1 || topicId_2 || latestRunningHash_2 || ... || topicId_n || latestRunningHash_n || account_id || account_publicKey)
+StateHash = SHA384(topicId1_latestRunningHash1|topicId2_latestRunningHash2|accountId_accountPublicKey)
 ```
 
 Example State Hash Calculation
 
-For clarity, assume a account monitors two topics:
+For clarity, assume an account monitors two topics:
 
 - Topic ID: 0.0.12345 with latest running hash abcd1234
 - Topic ID: 0.0.67890 with latest running hash efgh5678
-- Account ID: 0.0.9988 and  public key FGHKLJHDGK
+- Account ID: 0.0.9988 and public key FGHKLJHDGK
 
-Concatenate topic IDs and hashes, then add public key on the end:
-
+Concatenated topic IDs with the lower value topic entity ids first, and include the current running hash after each topic. Then the account id and public key on the end. Apply SHA384 hashing and this is what it should look like:
 ```
-0.0.12345abcd1234_0.0.67890efgh5678_0.0.9988FGHKLJHDGK
-```
-
-Apply SHA384 hashing:
-
-```
-StateHash = SHA384("0.0.12345abcd1234||0.0.67890efgh5678||0.0.9988FGHKLJHDGK")
+StateHash = SHA384("0.0.12345_abcd1234|0.0.67890_efgh5678|0.0.9988_FGHKLJHDGK")
 ```
 
 ## Composite State Hash Calculation for Floras & Blooms
