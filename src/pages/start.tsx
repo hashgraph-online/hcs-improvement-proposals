@@ -53,7 +53,7 @@ const StartPage: React.FC = () => {
       description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
       links: [
         { label: '$1M Hackathon', href: 'https://hashgraphonline.com/hackathon' },
-        { label: 'Register Now', href: 'https://link.hashgraphonline.com/hederahacks' },
+        { label: 'Register Now', href: 'https://click.hashgraphonline.com/hederahacks' },
         { label: 'Tools', href: '/tools' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
