@@ -246,6 +246,10 @@ const config: Config = {
             from: '/hedera-ai',
             to: '/hederaai',
           },
+          {
+            from: '/registry',
+            to: 'https://registry.hashgraphonline.com',
+          },
         ],
       },
     ],
