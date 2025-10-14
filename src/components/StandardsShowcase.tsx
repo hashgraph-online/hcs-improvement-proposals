@@ -1,6 +1,10 @@
 import React from 'react';
 import CategoryShowcase from './CategoryShowcase';
 
+interface StandardsShowcaseProps {}
+
+type JSXElement = React.ReactElement;
+
 const standardsData = [
   {
     title: 'HCS-1: File Data Management',
@@ -145,13 +149,62 @@ const standardsData = [
     icon: 'HCS-13',
   },
   {
+    title: 'HCS-15: Petal Accounts',
+    category: 'Identity & Profiles',
+    status: 'draft' as const,
+    description:
+      'Enables dynamic creation of multiple account instances using the same private key, allowing for isolated profiles and asset holdings.',
+    features: ['Multiple profiles', 'Account isolation', 'Same-key management'],
+    href: '/docs/standards/hcs-15',
+    icon: 'HCS-15',
+  },
+  {
+    title: 'HCS-16: Flora Coordination',
+    category: 'AI & Communication',
+    status: 'draft' as const,
+    description:
+      'Defines rules for multi-party "Flora" accounts, enabling cohesive coordination, shared escrow, and state consensus between agents.',
+    features: ['Multi-party coordination', 'Shared escrow', 'Agent consensus'],
+    href: '/docs/standards/hcs-16',
+    icon: 'HCS-16',
+  },
+  {
+    title: 'HCS-17: State Hash Calculation',
+    category: 'Infrastructure',
+    status: 'draft' as const,
+    description:
+      'Standardized methodology for calculating cryptographic state hashes of accounts and decentralized formations for auditable verification.',
+    features: ['State verification', 'Hash calculation', 'Audit trails'],
+    href: '/docs/standards/hcs-17',
+    icon: 'HCS-17',
+  },
+  {
+    title: 'HCS-18: Flora Discovery Protocol',
+    category: 'AI & Communication',
+    status: 'draft' as const,
+    description:
+      'Discovery and formation protocol enabling autonomous Petal accounts to find each other and establish multi-party entities.',
+    features: [
+      'Agent discovery',
+      'Formation protocol',
+      'Autonomous coordination',
+    ],
+    href: '/docs/standards/hcs-18',
+    icon: 'HCS-18',
+  },
+  {
     title: 'HCS-14: Universal Agent ID Standard',
     category: 'AI & Communication',
     status: 'draft' as const,
-    description: 'W3C DID-based standard for deterministic, globally unique AI agent identifiers. Enables cross-protocol agent discovery and communication.',
-    features: ['Agent identification', 'Cross-protocol routing', 'DID compatibility'],
+    description:
+      'W3C DID-based standard for deterministic, globally unique AI agent identifiers. Enables cross-protocol agent discovery and communication.',
+    features: [
+      'Agent identification',
+      'Cross-protocol routing',
+      'DID compatibility',
+    ],
     href: '/docs/standards/hcs-14',
-    icon: 'HCS-14'
+    icon: 'HCS-14',
   },
   {
     title: 'HCS-19: AI Agent Privacy Compliance',
@@ -180,7 +233,7 @@ const standardsData = [
   },
 ];
 
-export default function StandardsShowcase(): JSX.Element {
+export default function StandardsShowcase(): React.ReactElement {
   return (
     <CategoryShowcase
       title='HCS Standards'

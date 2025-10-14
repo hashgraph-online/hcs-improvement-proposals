@@ -247,9 +247,13 @@ const config: Config = {
             to: '/hederaai',
           },
           {
+            from: '/blog/updates/standards-sdk-launch',
+            to: '/blog/standards-sdk-launch',
+          },
+          {
             from: '/registry',
             to: 'https://registry.hashgraphonline.com',
-          },
+          }
         ],
       },
     ],
