@@ -31,6 +31,16 @@ const standardsData = [
     icon: 'HCS-2',
   },
   {
+    title: 'HCS-4: HCS Standardization Process',
+    category: 'Governance & Process',
+    status: 'draft' as const,
+    description:
+      'Defines the lifecycle, roles, and criteria for proposing, reviewing, publishing, and maintaining HCS specifications.',
+    features: ['Lifecycle', 'Last Call', 'Conformance'],
+    href: '/docs/standards/hcs-4',
+    icon: 'HCS-4',
+  },
+  {
     title: 'HCS-3: Recursion within HCS',
     category: 'Core Data Management',
     status: 'published' as const,
