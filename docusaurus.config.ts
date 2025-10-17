@@ -137,6 +137,11 @@ const config: Config = {
         },
         { to: '/desktop', label: 'HOL Desktop', position: 'left' },
         { to: '/use-cases', label: 'Use Cases', position: 'left' },
+        {
+          href: 'https://registry.hashgraphonline.com',
+          label: 'Registry',
+          position: 'left',
+        },
         { to: '/members', label: 'Members', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
       ],
