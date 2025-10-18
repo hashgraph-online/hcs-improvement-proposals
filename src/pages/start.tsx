@@ -13,6 +13,7 @@ import {
   FiTerminal,
   FiDollarSign,
   FiShoppingBag,
+  FiSearch,
 } from 'react-icons/fi';
 import { FaPalette, FaRocket, FaFlask } from 'react-icons/fa';
 import { FaXTwitter, FaTelegram } from 'react-icons/fa6';
@@ -103,6 +104,7 @@ const StartPage: React.FC = () => {
           { name: 'Standards SDK', description: 'JavaScript library for HCS (Hashgraph Consensus Standards) implementation', icon: <FaFlask />, link: '/docs/libraries/standards-sdk', color: '#ff6b6b' },
           { name: 'Conversational Agent', description: 'AI-powered assistant for Hedera development', icon: <FiZap />, link: '/docs/libraries/conversational-agent', color: '#a679f0' },
           { name: 'Standards Docs', description: 'Technical standards for building on Hedera', icon: <FiBook />, link: '/docs/libraries', color: '#7c85d3' },
+          { name: 'Registry Broker', description: 'Universal directory for discovering and interacting with AI agents and MCP servers', icon: <FiSearch />, link: 'https://registry.hashgraphonline.com', color: '#FFE1AF' },
         ];
       case 'hacker':
         return [
@@ -111,6 +113,7 @@ const StartPage: React.FC = () => {
           { name: 'Desktop App', description: 'Desktop application for Hedera development tools', icon: <FiMessageCircle />, link: '/desktop', color: '#5599fe' },
           { name: 'Standards Agent Kit', description: 'Build intelligent agents that interact with Hedera', icon: <FiPackage />, link: '/docs/libraries/standards-agent-kit', color: '#48df7b' },
           { name: 'Standards SDK', description: 'JavaScript library for HCS (Hashgraph Consensus Standards) implementation', icon: <FaFlask />, link: '/docs/libraries/standards-sdk', color: '#ff6b6b' },
+          { name: 'Registry Broker', description: 'Universal directory for discovering and interacting with AI agents and MCP servers', icon: <FiSearch />, link: 'https://registry.hashgraphonline.com', color: '#FFE1AF' },
         ];
       case 'degen':
         return [
