@@ -153,6 +153,10 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
+              label: 'Overview',
+              to: '/overview',
+            },
+            {
               label: 'Standards',
               to: '/docs/standards/hcs-1',
             },
