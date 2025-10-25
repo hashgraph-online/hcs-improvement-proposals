@@ -187,7 +187,92 @@ async function inscribeFromUrl() {
 inscribeFromUrl();
 ```
 
-## Step 4: Retrieve Inscribed Content
+## Step 4: Client-Side Inscription (Browser)
+
+Inscribe files directly from the browser without exposing private keys:
+
+```javascript
+// inscribe-client-side.js
+import { inscribeWithSigner } from '@hashgraph-online/standards-sdk';
+import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
+import { LedgerId } from '@hashgraph/sdk';
+
+async function inscribeClientSide() {
+  // Initialize Hashinal WC SDK
+  const sdk = HashinalsWalletConnectSDK.getInstance();
+  
+  await sdk.init(
+    'YOUR_WALLETCONNECT_PROJECT_ID', // Get from WalletConnect Cloud
+    {
+      name: 'My Inscription App',
+      description: 'Client-side inscription with wallet',
+      url: window.location.origin,
+      icons: ['https://myapp.com/icon.png']
+    },
+    LedgerId.TESTNET
+  );
+
+  // Connect wallet
+  const session = await sdk.connect();
+  const accountInfo = await sdk.getAccountInfo();
+  
+  console.log(`🔗 Connected: ${accountInfo.accountId}`);
+
+  // Inscribe file using wallet signer
+  const result = await inscribeWithSigner(
+    {
+      type: 'buffer',
+      buffer: Buffer.from('Hello from browser!'),
+      fileName: 'browser-message.txt',
+      mimeType: 'text/plain'
+    },
+    sdk.dAppConnector, // Use Hashinal WC's signer
+    {
+      waitForConfirmation: true,
+      progressCallback: (data) => {
+        console.log(`Progress: ${data.progressPercent}%`);
+      }
+    }
+  );
+
+  console.log("✅ Client-side inscription successful!");
+  console.log(`Topic ID: ${result.result.topicId}`);
+  console.log(`Transaction ID: ${result.result.transactionId}`);
+}
+
+// HTML button to trigger inscription
+document.getElementById('inscribeBtn').addEventListener('click', inscribeClientSide);
+```
+
+### Browser Setup
+
+Add to your HTML:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Client-Side Inscription</title>
+</head>
+<body>
+    <button id="inscribeBtn">Inscribe File</button>
+    <div id="status"></div>
+    
+    <script type="module">
+        // Your inscription code here
+    </script>
+</body>
+</html>
+```
+
+### Key Benefits
+
+- ✅ **No private keys exposed** - Wallet handles all signing
+- ✅ **User controls their funds** - Each transaction requires approval
+- ✅ **Works in any browser** - No server required
+- ✅ **Secure by default** - Private keys never leave the wallet
+
+## Step 5: Retrieve Inscribed Content
 
 Retrieve and verify inscribed content:
 
