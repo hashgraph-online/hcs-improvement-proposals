@@ -223,6 +223,37 @@ A memo system is defined for indexers and browsers to understand the data's stat
 
 `hcs-2:0:60`
 
+### Transaction Memo Format (Analytics)
+
+To support downstream analytics and align with standards such as [HCS-16](./hcs-16.md), every transaction that appends an entry to an HCS-2 registry **SHOULD** include a structured memo:
+
+```
+hcs-2:op:<operationEnum>:<registryType>
+```
+
+| Component          | Description                                                                 | Example |
+| ------------------ | --------------------------------------------------------------------------- | ------- |
+| `hcs-2`            | Identifies the protocol family                                              | `hcs-2` |
+| `op`               | Indicates this memo encodes an operation                                    | `op`    |
+| `<operationEnum>`  | Numeric operation code (see table below)                                    | `0`     |
+| `<registryType>`   | Registry type enum (`0` = indexed, `1` = non-indexed)                       | `1`     |
+
+| Operation          | Enum |
+| ------------------ | ---- |
+| `register`         | `0`  |
+| `update`           | `1`  |
+| `delete`           | `2`  |
+| `migrate`          | `3`  |
+
+**Examples**
+
+```
+hcs-2:op:0:1  // register on a non-indexed registry
+hcs-2:op:1:0  // update on an indexed registry
+```
+
+Including this memo enables explorers and monitoring tools to categorize registry activity without parsing the message payload.
+
 ### Indexed Registry Mechanics [enum: 0]
 
 Uses:

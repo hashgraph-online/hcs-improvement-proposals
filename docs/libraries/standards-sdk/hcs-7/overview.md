@@ -3,394 +3,121 @@ title: Overview
 sidebar_position: 1
 ---
 
-# HCS-7: Dynamic and Programmable On-graph Assets
+# HCS‑7 Smart Hashinals in the Standards SDK
 
-The HCS-7 module enables the creation and management of dynamic, programmable, 100% on-graph assets. It bridges the gap between EVM-based smart contracts and WebAssembly (WASM) execution environments, enabling sophisticated state processing and transformations.
+The HCS‑7 module in `@hashgraphonline/standards-sdk` lets you register, orchestrate, and consume programmable hashinals that react to EVM smart contracts and WASM routing logic exactly as defined in the [HCS‑7 standard](/docs/standards/hcs-7). This page explains the moving parts exposed by the SDK and how to wire them together.
 
-## Key Concepts
+---
 
-HCS-7 introduces several key components:
+## Architecture at a Glance
 
-- **EVM Bridge**: Connects to EVM-compatible smart contracts for state reading and interaction
-- **WASM Bridge**: Enables WebAssembly-based processing and transformation of on-chain data
-- **Redis Cache**: Optional caching layer for optimizing frequent state requests
+| Layer | SDK Component | Role |
+| --- | --- | --- |
+| Registry management | `HCS7Client` (Node) / `HCS7BrowserClient` (WalletConnect) | Creates the `hcs-7:indexed:{ttl}` registry topic, registers EVM + WASM configs, and links metadata topics |
+| Contract state | `EVMBridge` + optional `RedisCache` | Calls Hedera EVM contracts through the Mirror Node, decodes ABI responses, and caches results |
+| WASM routing | `WasmBridge` | Loads the router module (e.g., topic `0.0.5269810`), builds the required JSON input, and executes `process_state` / `get_params` |
+| Transaction helpers | `buildHcs7*` builders | Low‑level builders for custom HRL pipelines and agent/tool integrations |
 
-## Getting Started
+You can use the high-level clients for most flows and drop down to the bridges/builders when composing bespoke workflows or integrating with other standards (HCS‑6/10/11/etc.).
 
-### Installation
+---
 
-The HCS-7 module is included in the Standards SDK:
+## Installation
 
 ```bash
 npm install @hashgraphonline/standards-sdk
 ```
 
-### Basic Usage
+---
 
-Import the HCS7 module and create instances:
+## Quick Start (Node / Server)
 
-```typescript
-import { HCS7 } from '@hashgraphonline/standards-sdk';
+```ts
+import { HCS7Client, HCS7ConfigType } from '@hashgraphonline/standards-sdk';
 
-// Initialize EVM Bridge
-const evmBridge = new HCS7.EVMBridge('mainnet-public');
+const client = new HCS7Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
 
-// Initialize WASM Bridge
-const wasmBridge = new HCS7.WasmBridge();
-```
+const registry = await client.createRegistry({ ttl: 86_400, submitKey: true });
+if (!registry.success || !registry.topicId) throw new Error(registry.error);
 
-## EVM Bridge
-
-The EVM Bridge provides a connection to EVM-compatible smart contracts on Hedera.
-
-### Reading Smart Contract State
-
-```typescript
-// Read state from a smart contract
-const contractState = await evmBridge.executeCommand({
-  p: 'evm', // Protocol (evm)
-  op: 'read', // Operation (read)
-  m: 'balanceOf', // Method to call
-  c: {
-    // Command parameters
-    contractAddress: '0x1234567890123456789012345678901234567890',
+await client.registerConfig({
+  registryTopicId: registry.topicId,
+  memo: 'LaunchPage minted',
+  config: {
+    type: HCS7ConfigType.EVM,
+    contractAddress: '0x1d67aaf7f7e8d806bbeba24c4dea24808e1158b8',
     abi: {
-      name: 'balanceOf',
-      inputs: [{ name: 'account', type: 'address' }],
-      outputs: [{ name: 'balance', type: 'uint256' }],
+      name: 'minted',
+      inputs: [],
+      outputs: [{ name: '', type: 'uint64' }],
       stateMutability: 'view',
       type: 'function',
     },
-    args: ['0xabcdef1234567890abcdef1234567890abcdef12'],
-  },
-});
-```
-
-### Writing to Smart Contracts
-
-```typescript
-// Execute a write operation
-const txResult = await evmBridge.executeCommand({
-  p: 'evm',
-  op: 'write',
-  m: 'transfer',
-  c: {
-    contractAddress: '0x1234567890123456789012345678901234567890',
-    abi: {
-      name: 'transfer',
-      inputs: [
-        { name: 'recipient', type: 'address' },
-        { name: 'amount', type: 'uint256' },
-      ],
-      outputs: [{ name: 'success', type: 'bool' }],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
-    args: [
-      '0xabcdef1234567890abcdef1234567890abcdef12',
-      '1000000000000000000', // 1 token with 18 decimals
-    ],
-    privateKey: '0x1234...', // Private key for transaction signing
-    gasLimit: 100000, // Optional gas limit
-    gasPrice: '100000000', // Optional gas price (in wei)
-  },
-});
-```
-
-### Listening for Events
-
-```typescript
-// Listen for contract events
-const eventListener = await evmBridge.listenForEvents({
-  p: 'evm',
-  op: 'listen',
-  m: 'Transfer',
-  c: {
-    contractAddress: '0x1234567890123456789012345678901234567890',
-    eventSignature: 'Transfer(address,address,uint256)',
-    fromBlock: 'latest',
-    // Optional filters
-    filter: {
-      from: '0xabcdef1234567890abcdef1234567890abcdef12',
-    },
   },
 });
 
-// Handle events
-eventListener.on('event', (event) => {
-  console.log('Transfer event:', event);
-
-  // Process event data
-  const { from, to, value } = event.returnValues;
-  console.log(`Transfer from ${from} to ${to} of ${value} tokens`);
+await client.registerMetadata({
+  registryTopicId: registry.topicId,
+  metadataTopicId: '0.0.3717738',
+  memo: 'odd-phase-art',
+  weight: 1,
+  tags: ['odd'],
 });
 
-// Stop listening when done
-// eventListener.stopListening();
+client.close();
 ```
 
-## WASM Bridge
+---
 
-The WASM Bridge enables WebAssembly-based processing of blockchain state.
+## Quick Start (Browser / WalletConnect)
 
-### Initializing WASM
+```ts
+import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
+import { HCS7BrowserClient } from '@hashgraphonline/standards-sdk';
 
-```typescript
-// Load WASM bytes (e.g., from an inscription or fetch)
-const wasmBytes = await fetch('/path/to/processor.wasm').then((r) =>
-  r.arrayBuffer()
-);
+const hwc = new HashinalsWalletConnectSDK({ projectId: '<walletconnect>' });
+await hwc.connect(); // prompts the user
 
-// Initialize the WASM engine
-await wasmBridge.initWasm(wasmBytes);
-```
+const client = new HCS7BrowserClient({ network: 'testnet', hwc });
 
-### Processing State
-
-```typescript
-// Process state using WASM
-const result = await wasmBridge.executeCommand({
-  p: 'wasm',
-  op: 'process',
-  m: 'process_state',
-  c: {
-    wasmTopicId: '0.0.123456', // Optional: Topic ID of the WASM inscription
-    inputType: {
-      // Input configuration
-      stateData: contractState, // Data to process (from EVM Bridge)
-    },
-    outputType: {
-      // Output configuration
-      type: 'json',
-      format: 'string',
-    },
-    params: {
-      // Optional custom parameters
-      threshold: 100,
-      factor: 1.5,
-    },
-  },
-});
-
-console.log('Processed result:', result);
-```
-
-### Complete Workflow Example
-
-```typescript
-import { HCS7 } from '@hashgraphonline/standards-sdk';
-
-async function stateProcessingPipeline() {
-  // Initialize bridges
-  const evmBridge = new HCS7.EVMBridge('mainnet-public');
-  const wasmBridge = new HCS7.WasmBridge();
-
-  try {
-    // 1. Fetch data from smart contract
-    const priceData = await evmBridge.executeCommand({
-      p: 'evm',
-      op: 'read',
-      m: 'latestRoundData',
-      c: {
-        contractAddress: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419', // ETH/USD Price Feed
-        abi: {
-          name: 'latestRoundData',
-          inputs: [],
-          outputs: [
-            { name: 'roundId', type: 'uint80' },
-            { name: 'answer', type: 'int256' },
-            { name: 'startedAt', type: 'uint256' },
-            { name: 'updatedAt', type: 'uint256' },
-            { name: 'answeredInRound', type: 'uint80' },
-          ],
-          stateMutability: 'view',
-          type: 'function',
-        },
-      },
-    });
-
-    // 2. Initialize WASM processor
-    const wasmBytes = await fetch(
-      'https://example.com/price-processor.wasm'
-    ).then((r) => r.arrayBuffer());
-    await wasmBridge.initWasm(wasmBytes);
-
-    // 3. Process state with WASM
-    const processedResult = await wasmBridge.executeCommand({
-      p: 'wasm',
-      op: 'process',
-      m: 'calculate_moving_average',
-      c: {
-        inputType: {
-          priceData: priceData,
-          window: 24, // 24-hour moving average
-        },
-        outputType: {
-          type: 'json',
-          format: 'string',
-        },
-      },
-    });
-
-    // 4. Use processed result
-    const movingAverage = JSON.parse(processedResult);
-    console.log('ETH/USD 24h Moving Average:', movingAverage.average);
-
-    return movingAverage;
-  } catch (error) {
-    console.error('Pipeline error:', error);
-    throw error;
-  }
-}
-
-stateProcessingPipeline().catch(console.error);
-```
-
-## Redis Cache
-
-The Redis Cache provides an optional caching layer for optimizing state access.
-
-### Setting Up Redis Cache
-
-```typescript
-import { HCS7 } from '@hashgraphonline/standards-sdk';
-
-// Initialize Redis Cache
-const redisCache = new HCS7.RedisCache({
-  host: 'localhost',
-  port: 6379,
-  keyPrefix: 'hcs7:state:',
-  ttl: 300, // Cache TTL in seconds
-});
-
-// Initialize EVM Bridge with cache
-const evmBridge = new HCS7.EVMBridge('mainnet-public', redisCache);
-```
-
-### Cache Configuration Options
-
-```typescript
-const cacheOptions = {
-  host: 'redis-server.example.com', // Redis server host
-  port: 6379, // Redis server port
-  password: 'your-redis-password', // Optional Redis password
-  db: 0, // Redis database number
-  keyPrefix: 'app:cache:', // Prefix for cache keys
-  ttl: 600, // Default TTL in seconds
-  maxItems: 1000, // Maximum items in cache
-  compressionThreshold: 1024, // Compress values larger than this (bytes)
-};
-
-const redisCache = new HCS7.RedisCache(cacheOptions);
-```
-
-## API Reference
-
-### EVMBridge Class
-
-```typescript
-class EVMBridge {
-  constructor(
-    network: 'mainnet-public' | 'testnet-public' | string,
-    cache?: RedisCache
-  );
-
-  executeCommand(command: EVMCommand): Promise<any>;
-  listenForEvents(command: EVMEventCommand): EventEmitter;
-  getProvider(): EthersProvider;
-}
-```
-
-### WasmBridge Class
-
-```typescript
-class WasmBridge {
-  constructor();
-
-  initWasm(wasmBytes: ArrayBuffer): Promise<void>;
-  executeCommand(command: WasmCommand): Promise<any>;
-  getExports(): Record<string, Function>;
-}
-```
-
-### RedisCache Class
-
-```typescript
-class RedisCache {
-  constructor(options: RedisCacheOptions);
-
-  get(key: string): Promise<any>;
-  set(key: string, value: any, ttl?: number): Promise<void>;
-  delete(key: string): Promise<void>;
-  flush(): Promise<void>;
-  close(): Promise<void>;
-}
-```
-
-## Advanced Topics
-
-### Custom Network Configuration
-
-```typescript
-// Custom network configuration
-const customEvmBridge = new HCS7.EVMBridge({
-  url: 'https://your-custom-rpc-endpoint.com',
-  chainId: 295,
-  name: 'Custom Hedera Network',
+await client.registerMetadata({
+  registryTopicId: '0.0.10058300',
+  metadataTopicId: '0.0.3717746',
+  memo: 'purple-phase-art',
+  weight: 1,
+  tags: ['even'],
 });
 ```
 
-### Handling Large State Data
+The browser client mirrors the Node API but pushes all signing through WalletConnect, making it safe for dapps and dashboards.
 
-```typescript
-// Configure WASM memory limits for large state processing
-const wasmBridge = new HCS7.WasmBridge({
-  initialMemory: 10, // Initial memory in pages (64KB per page)
-  maximumMemory: 100, // Maximum memory in pages
-  tableSize: 1, // Size of function table
-  debug: true, // Enable debug mode
-});
-```
+---
 
-### Bulk State Processing
+## When to Drop Down to the Bridges
 
-```typescript
-// Process multiple state items efficiently
-async function bulkProcess(stateItems) {
-  const wasmBridge = new HCS7.WasmBridge();
-  await wasmBridge.initWasm(wasmBytes);
+- **Custom schedulers / agents**: Use `EVMBridge` + `WasmBridge` directly to assemble bespoke evaluation pipelines before writing to the registry.
+- **Indexing / analytics**: Read registry messages with `HCS7BaseClient.getRegistry` and feed the payloads into your own storage or workflows.
+- **Advanced caching**: Swap the default in-memory cache for `RedisCache` when calling the same contract functions across many routers.
+- **Transaction-only stacks**: Use the `buildHcs7*` helpers to emit submit transactions from other standards (e.g., HCS‑10 agents) without instantiating the SDK clients.
 
-  // Process items in batches
-  const batchSize = 10;
-  const results = [];
+---
 
-  for (let i = 0; i < stateItems.length; i += batchSize) {
-    const batch = stateItems.slice(i, i + batchSize);
+## Demo + Toolkit
 
-    // Process batch in parallel
-    const batchResults = await Promise.all(
-      batch.map((item) =>
-        wasmBridge.executeCommand({
-          p: 'wasm',
-          op: 'process',
-          m: 'process_item',
-          c: { inputType: { item } },
-        })
-      )
-    );
+- `pnpm run demo:hcs-7:create` — creates a registry, registers the default LaunchPage EVM configs, WASM router (`0.0.5269810`), and odd/even metadata topics. Uses the credentials from `.env`.
+- [`hcs-7-toolkit`](https://github.com/hashgraph-online/hcs-7-toolkit) — publishes the WASM binary and constants used by the demo. Swap the contract/WASM topic IDs there to stand up your own DSL.
 
-    results.push(...batchResults);
-  }
+The demo proves the full loop: registry creation → `register-config` messages → metadata routing via WASM → repeatable HRL lookups.
 
-  return results;
-}
-```
+---
 
-## Browser Compatibility
+Continue with:
 
-HCS-7 WASM Bridge is compatible with all modern browsers that support WebAssembly:
-
-- Chrome (version 57+)
-- Firefox (version 52+)
-- Safari (version 11+)
-- Edge (version 16+)
+- [Node guide](./server.md) for end-to-end registry + bridge flows
+- [Browser guide](./browser.md) for WalletConnect integrations
+- [Transactions](./tx.md) for low-level builders
+- [API reference](./api.md) for all exported types and classes

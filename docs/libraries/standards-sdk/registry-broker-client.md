@@ -21,6 +21,8 @@ The production broker is pay-as-you-go. Before invoking any authenticated endpoi
 
 Once credits are loaded you can generate an API key (or use session tokens) and create a client:
 
+> 💡 The Registry Broker production API is available at `https://registry.hashgraphonline.com/api/v1`. Override `baseUrl` only if you’ve been provisioned a private deployment.
+
 ### Creating a client
 
 ```typescript
@@ -49,6 +51,32 @@ const client = new RegistryBrokerClient({
 ```
 
 You can inspect the current header set with `client.getDefaultHeaders()`.
+
+### Quickstart: Paid OpenRouter chat relay
+
+```typescript
+import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
+
+const client = new RegistryBrokerClient({
+  baseUrl: 'https://registry.hashgraphonline.com/api/v1',
+  apiKey: process.env.REGISTRY_BROKER_API_KEY,
+});
+
+const session = await client.chat.createSession({
+  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
+  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
+});
+
+const reply = await client.chat.sendMessage({
+  sessionId: session.sessionId,
+  message: 'Give me a one-line summary of your pricing.',
+  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
+});
+
+console.log(reply.message);
+```
+
+If you omit the `auth` block for paid models, the broker returns a `401` from the adapter. Free-tier models do not require this step.
 
 ## Architecture Overview
 
@@ -180,11 +208,6 @@ console.log(resolved.agent.name);
 const validation = await client.validateUaid('uaid:aid:123...');
 console.log(validation.valid, validation.formats);
 
-const broadcast = await client.broadcastToUaids(
-  ['uaid:aid:123...', 'uaid:aid:456...'],
-  { type: 'status-update', payload: { healthy: true } },
-);
-
 const status = await client.getUaidConnectionStatus('uaid:aid:123...');
 if (!status.connected) {
   console.log('Agent offline');
@@ -193,7 +216,7 @@ if (!status.connected) {
 await client.closeUaidConnection('uaid:aid:123...');
 ```
 
-Each method returns the appropriate schema-backed response (`UaidValidationResponse`, `UaidBroadcastResponse`, `UaidConnectionStatus`).
+Each method returns the appropriate schema-backed response (`UaidValidationResponse`, `UaidConnectionStatus`).
 
 ## Chat Sessions
 
@@ -235,6 +258,60 @@ sequenceDiagram
 ```
 
 You can also seed the chat by agent URL instead of UAID (`{ agentUrl: 'https://...' }`). The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
+
+### Passing downstream auth (paid OpenRouter models)
+
+Many adapters (notably OpenRouter) require *user-provided* credentials for paid tiers. Supply the downstream token with the `auth` block so the relay can authenticate on your behalf.
+
+```typescript
+const session = await client.chat.createSession({
+  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
+  auth: {
+    type: 'bearer',
+    token: process.env.OPENROUTER_API_KEY!, // the user's key, not the broker's
+  },
+});
+
+const response = await client.chat.sendMessage({
+  sessionId: session.sessionId,
+  message: 'Summarize your pricing in one sentence.',
+  auth: {
+    type: 'bearer',
+    token: process.env.OPENROUTER_API_KEY!,
+  },
+});
+```
+
+`AgentAuthConfig` supports four schemes:
+
+| `type`     | Fields used                                 | Example                                 |
+|------------|---------------------------------------------|-----------------------------------------|
+| `bearer`   | `token`                                     | `{ type: 'bearer', token: 'sk-or-...' }` |
+| `basic`    | `username`, `password`                      | `{ type: 'basic', username, password }` |
+| `apiKey`   | `headerName`, `headerValue`                 | `{ type: 'apiKey', headerName: 'x-api-key', headerValue: '...' }` |
+| `header`   | `headerName`, `headerValue`, optional `headers` map | Use for bespoke header names or multi-header payloads |
+
+When you set `auth`, the broker caches the normalized header set and reuses it for the session (updating the downstream client if subsequent requests provide different credentials). Omit `auth` for free models or agents that do not require authentication.
+
+```mermaid
+sequenceDiagram
+    participant App as Your App
+    participant SDK as RegistryBrokerClient
+    participant Broker as Registry Broker
+    participant Provider as Downstream Provider
+
+    App->>SDK: createSession({ agentUrl, auth })
+    SDK->>Broker: POST /chat/session (auth payload)
+    Broker->>Provider: Establish session with supplied headers
+    Provider-->>Broker: Session metadata
+    Broker-->>SDK: sessionId + agent card
+    App->>SDK: sendMessage({ sessionId, message, auth })
+    SDK->>Broker: POST /chat/message (auth payload)
+    Broker->>Provider: Relay message with user credentials
+    Provider-->>Broker: Provider response
+    Broker-->>SDK: Chat payload
+    SDK-->>App: Reply content
+```
 
 ## Agent Registration
 
@@ -338,7 +415,7 @@ const client = new RegistryBrokerClient({
 });
 ```
 
-## Example: Discover, Chat, Broadcast
+## Example: Discover and Chat
 
 ```typescript
 const client = new RegistryBrokerClient({ apiKey: process.env.RB_API_KEY });
@@ -350,12 +427,6 @@ const auditAgents = await client.search({ q: 'audit', minTrust: 80, limit: 5 });
 const topAgent = auditAgents.hits[0];
 const session = await client.chat.createSession({ uaid: topAgent.uaid });
 await client.chat.sendMessage({ sessionId: session.sessionId, message: 'Summarize your capabilities.' });
-
-// 3. Notify all selected agents about a new task
-await client.broadcastToUaids(
-  auditAgents.hits.map(agent => agent.uaid),
-  { type: 'task-announcement', taskId: 'tx-42' },
-);
 ```
 
 This flow demonstrates how the SDK threads the broker’s discovery, chat, and UAID utilities into a single toolkit.
@@ -369,7 +440,7 @@ All return types are exported from `@hashgraphonline/standards-sdk/services/regi
 - `RegisterAgentResponse`, `ProtocolsResponse`, `DetectProtocolResponse`
 - `RegistrySearchByNamespaceResponse`, `VectorSearchResponse`
 - `WebsocketStatsResponse`, `MetricsSummaryResponse`, `DashboardStatsResponse`
-- `UaidValidationResponse`, `UaidBroadcastResponse`, `UaidConnectionStatus`
+- `UaidValidationResponse`, `UaidConnectionStatus`
 
 Check the [source](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/src/services/registry-broker) for the latest schemas and helper utilities.
 
