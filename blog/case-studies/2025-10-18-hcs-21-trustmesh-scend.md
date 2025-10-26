@@ -1,17 +1,18 @@
 ---
-
-slug: hcs-21-trustmesh-scend
+slug: 2025-10-18-hcs-21-trustmesh-scend
 title: HCS-21 TrustMesh – Decentralized Trust Signaling with Scend
 authors: [tonycamero]
 tags: [case-study, hcs-21, trustmesh, scend, civic-tech, reputation]
 date: 2025-10-17T09:00:00-05:00
--------------------------------
+---
 
 # HCS-21 TrustMesh – Decentralized Trust Signaling with Scend
 
-[![TrustMesh Logo](./scendcash_logo.jpg)](https://scend.cash/Scend-logo.png)
+https://scend.cash/Scend-logo.png <--  Scend logo
 
 ## TrustMesh: Compliance-Grade Trust Infrastructure
+
+Before it could log student recognitions or power campus governance, TrustMesh had to prove itself in a harder arena—one bound by regulators, audits, and financial scrutiny.
 
 TrustMesh wasn’t born out of a whitepaper—it was forged in one of the most complex regulated industries in the world: cannabis finance.
 
@@ -83,6 +84,29 @@ HCS-21 will enable:
 * Looking for integration partners in civic tech, campus orgs, and regulated sectors
 
 ---
+
+## A Day in the Life of TrustMesh on Campus
+
+Imagine this:
+
+A student named Maya logs into her campus wallet app. It’s integrated with TrustMesh. On her dashboard, she sees:
+
+- A new **recognition signal** from her Debate Club president: _“Maya led with integrity and encouraged diverse voices.”_
+- A **governance poll** from the campus sustainability council, where only students with ≥3 peer trust signals can vote.
+- A pending **attestation** request from the Robotics Lab, asking her to verify mentorship given to a first-year teammate.
+
+Later that day:
+
+- Maya attends a hackathon, where participants earn **Hashinals** for collaboration and ingenuity.
+- At the end of the event, facilitators mint verifiable trust signals tied to peer-selected attributes like collaboration and integrity.
+- These signals are anchored to her **HCS-11 profile**, viewable across all Hedera-connected civic and academic platforms.
+
+By semester’s end:
+
+- Maya's trust graph reflects her contributions, backed by real peers—not likes or engagement metrics.
+- She uses this portable reputation to apply for a DAO research grant, where her signals are instantly verifiable by the funding org’s DAO.
+
+All of this—stored immutably on Hedera, composable across applications, and entirely **owned by her**.
 
 ## TrustMesh System Architecture
 
