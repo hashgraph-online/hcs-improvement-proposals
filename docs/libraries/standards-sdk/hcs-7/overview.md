@@ -17,6 +17,7 @@ The HCS‑7 module in `@hashgraphonline/standards-sdk` lets you register, orches
 | Contract state | `EVMBridge` + optional `RedisCache` | Calls Hedera EVM contracts through the Mirror Node, decodes ABI responses, and caches results |
 | WASM routing | `WasmBridge` | Loads the router module (e.g., topic `0.0.5269810`), builds the required JSON input, and executes `process_state` / `get_params` |
 | Transaction helpers | `buildHcs7*` builders | Low‑level builders for custom HRL pipelines and agent/tool integrations |
+| CDN lookup | KiloScribe CDN (`https://kiloscribe.com/api/inscription-cdn/{topicId}`) | Retrieves WASM binaries and metadata payloads inscribed via the Standards SDK |
 
 You can use the high-level clients for most flows and drop down to the bridges/builders when composing bespoke workflows or integrating with other standards (HCS‑6/10/11/etc.).
 
@@ -111,7 +112,77 @@ The browser client mirrors the Node API but pushes all signing through WalletCon
 - `pnpm run demo:hcs-7:create` — creates a registry, registers the default LaunchPage EVM configs, WASM router (`0.0.5269810`), and odd/even metadata topics. Uses the credentials from `.env`.
 - [`hcs-7-toolkit`](https://github.com/hashgraph-online/hcs-7-toolkit) — publishes the WASM binary and constants used by the demo. Swap the contract/WASM topic IDs there to stand up your own DSL.
 
-The demo proves the full loop: registry creation → `register-config` messages → metadata routing via WASM → repeatable HRL lookups.
+The demo proves the full loop: registry creation → `register-config` messages → metadata routing via WASM → repeatable HRL lookups. The SDK sources and toolkit share the same defaults, so changes to `hcs-7-toolkit/src/examples/constants.ts` can be pulled directly into your applications.
+
+---
+
+## Bridge Clients (Quick Reference)
+
+```ts
+import {
+  EVMBridge,
+  WasmBridge,
+  RedisCache,
+} from '@hashgraphonline/standards-sdk/hcs-7';
+
+const evm = new EVMBridge('testnet', undefined, new RedisCache());
+const wasm = new WasmBridge();
+```
+
+- `EVMBridge.executeCommand(s)` wraps Mirror Node `contracts/call`, decodes via `ethers.Interface`, and returns both the raw result and a flattened `stateData`.
+- `WasmBridge.createStateData` converts the EVM bridge output into the structure expected by your router (matching the `inputType.stateData` schema you registered).
+- `WasmBridge.executeWasm(state, messages)` invokes the router’s `process_state` export with your `register` payloads and returns the destination metadata topic ID.
+
+See the [Node guide](./server.md) for end‑to‑end samples that combine the bridges with the registry client.
+
+---
+
+## Fetching Smart Hashinal Metadata via KiloScribe CDN
+
+Every metadata topic (e.g., `0.0.3717738`) inscribed through the Standards SDK or toolkit can be fetched via the CDN:
+
+```ts
+const network = 'testnet';
+const topicId = '0.0.5270238'; // sample metadata topic from LaunchPage
+
+const res = await fetch(
+  `https://kiloscribe.com/api/inscription-cdn/${topicId}?network=${network}`,
+  { headers: { Accept: 'application/json' } },
+);
+const metadata = await res.json();
+```
+
+- Static assets (GLBs, MP4s, JSON, etc.) are returned with the original MIME type. Set the `Accept` header accordingly.
+- The HCS-7 toolkit uses this exact pattern when it hydrates the WASM router and example metadata cards—see [`src/examples/index.ts`](https://github.com/HashgraphOnline/hcs-7-toolkit/blob/main/src/examples/index.ts).
+- Replace `application/json` with `application/wasm` to stream the router binary from topic `0.0.5269810`, mirroring the `kiloscribe.com/api/inscription-cdn/{topicId}` calls in the toolkit demo.
+
+If you prefer to fetch directly from Hedera topics, parse the HCS-1 messages per the HCS-1 standard and build the HRL by hand.
+
+---
+
+## Publishing / Updating WASM Routers
+
+1. **Compile the module** with your language of choice (Rust/AssemblyScript). The router must export `process_state(state_json, messages_json)` and `get_params()`.
+2. **Inscribe the module** using the Standards SDK Inscriber helpers:
+
+   ```ts
+   import { inscribe } from '@hashgraphonline/standards-sdk/inscribe/inscriber';
+
+   const wasmBuffer = await fs.promises.readFile('router.wasm');
+   const result = await inscribe(
+     { type: 'buffer', buffer: wasmBuffer, fileName: 'router.wasm' },
+     { network: 'testnet', waitForConfirmation: true },
+   );
+   console.log('New WASM topic ID:', result.inscription?.topic_id);
+   ```
+
+   See [Inscribe docs](/docs/libraries/standards-sdk/inscribe) for all options (compression, metadata, CDN).
+
+3. **Register the router**: use `registerConfig` or `buildHcs7WasmMessageTx` with the returned `topic_id` as `wasmTopicId`.
+
+4. **Verify with the toolkit**: update `hcs-7-toolkit/src/examples/constants.ts` to point at the new topics and run the toolkit demo. This ensures the bridges, router, and metadata tags agree on schema and routing tags before deploying to production.
+
+---
 
 ---
 

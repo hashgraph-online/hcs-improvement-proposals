@@ -162,3 +162,30 @@ When you need to integrate with other toolchains (e.g., schedule a submit in HCS
 - `buildHcs7WasmMessageTx`
 
 Each helper serializes the payload (`p: 'hcs-7'`, `op`, etc.) so you only need to sign/send it with the Hedera SDK or another orchestration tool.
+
+---
+
+## 8. Fetching Metadata / WASM from KiloScribe
+
+Any topic you inscribe with the Standards SDK (metadata or WASM) is mirrored to the CDN. Use it when rendering hashinals or downloading routers server-side:
+
+```ts
+const topicId = '0.0.3717746';
+const res = await fetch(
+  `https://kiloscribe.com/api/inscription-cdn/${topicId}?network=testnet`,
+  { headers: { Accept: 'application/json' } },
+);
+const metadata = await res.json();
+```
+
+For WASM binaries:
+
+```ts
+const wasmTopicId = '0.0.5269810';
+const wasmBytes = await fetch(
+  `https://kiloscribe.com/api/inscription-cdn/${wasmTopicId}?network=testnet`,
+  { headers: { Accept: 'application/wasm' } },
+).then(r => r.arrayBuffer());
+```
+
+You can still pull messages directly from HCS topics if you prefer, but the CDN saves repeated decoding.
