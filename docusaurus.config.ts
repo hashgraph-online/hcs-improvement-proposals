@@ -78,6 +78,8 @@ const config: Config = {
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
+          blogSidebarCount: 'ALL',
+          blogSidebarTitle: 'All posts',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -94,11 +96,6 @@ const config: Config = {
       apiKey: '2b3fe9b2882e46e19fa5fce6272efe4f',
       indexName: 'Docs',
       contextualSearch: true,
-    },
-    blog: {
-      sidebar: {
-        groupByYear: true,
-      },
     },
     colorMode: {
       defaultMode: 'light',
