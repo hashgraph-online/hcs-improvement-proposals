@@ -1,5 +1,5 @@
 ---
-slug: 2025-10-18-hcs-21-trustmesh-scend
+slug: 2025-11-4-hcs-21-trustmesh-scend
 title: HCS-21 TrustMesh – Decentralized Trust Signaling with Scend
 authors: [tonycamero]
 tags: [case-study, hcs-21, trustmesh, scend, civic-tech, reputation]
