@@ -8,7 +8,7 @@ date: 2025-10-17T09:00:00-05:00
 
 # HCS-21 TrustMesh – Decentralized Trust Signaling with Scend
 
-https://scend.cash/Scend-logo.png <--  Scend logo
+https://scend.cash/Scend-logo.png
 
 ## TrustMesh: Compliance-Grade Trust Infrastructure
 
