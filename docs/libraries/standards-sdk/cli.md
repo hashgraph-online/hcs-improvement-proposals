@@ -522,15 +522,49 @@ Run the prerequisites first:
 
 The interactive dashboard highlights missing prerequisites in yellow.
 
-### Environment Override for Specific Runs
+### Registry Broker demo playbook
 
-Temporarily inject variables without persisting:
+The CLI bundles the full suite of registry-broker demos from `standards-sdk/demo/registry-broker`. Run them end-to-end with ledger authentication, Cloudflare tunneling, and ERC-8004 publishing:
 
 ```bash
-pnpm run cli -- demo run registry-broker \
-  --env REGISTRY_BROKER_DEMO_PROFILE=mcp \
-  --env REGISTRY_BROKER_DEMO_AUTO_TOP_UP=0
+# 1. Inspect configuration requirements
+pnpm run cli -- demo info registry-broker:register-agent-erc8004
+
+# 2. Dry run to view missing env vars (does not execute remote calls)
+pnpm run cli -- demo run registry-broker:register-agent-erc8004 --dry-run --print-env
+
+# 3. Execute against mainnet (auto top-up enabled by default)
+pnpm run cli -- demo run registry-broker:register-agent-erc8004 \
+  --env HEDERA_NETWORK=mainnet \
+  --env MAINNET_HEDERA_ACCOUNT_ID=0.0.123456 \
+  --env MAINNET_HEDERA_PRIVATE_KEY=302e... \
+  --env REGISTRY_BROKER_DEMO_TUNNEL=cloudflare
 ```
+
+The CLI automatically:
+
+- Performs ledger authentication (`createLedgerChallenge` / `verifyLedgerChallenge`).
+- Spins up a local agent (Cloudflare tunnel by default, fallback to localtunnel).
+- Registers the agent, polls the asynchronous progress endpoint, and logs ERC-8004 agent IDs.
+- Cleans up the local agent process on exit (even when the script crashes).
+
+Other useful flags:
+
+# Force local tunnel (useful when corporate networks block Cloudflare)
+pnpm run cli -- demo run registry-broker:register-agent-erc8004 \
+  --env REGISTRY_BROKER_DEMO_TUNNEL=localtunnel
+
+# Disable auto top-up and rely on a pre-funded account
+pnpm run cli -- demo run registry-broker:register-agent-erc8004 \
+  --env REGISTRY_BROKER_DEMO_AUTO_TOP_UP=0
+
+# Run the basic registration flow without ERC-8004 updates
+pnpm run cli -- demo run registry-broker:register-agent \
+  --env REGISTRY_BROKER_DEMO_ENABLE_ERC8004=0 \
+  --env REGISTRY_BROKER_DEMO_SKIP_UPDATE=1
+```
+
+Tip: copy `.env.example` to `.env` and populate `TESTNET_HEDERA_ACCOUNT_ID`, `TESTNET_HEDERA_PRIVATE_KEY`, `MAINNET_HEDERA_ACCOUNT_ID`, and `MAINNET_HEDERA_PRIVATE_KEY`. The CLI reads these automatically for both testnet and mainnet demos.
 
 ### Multi-Network Testing
 

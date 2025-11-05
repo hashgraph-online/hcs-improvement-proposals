@@ -111,7 +111,11 @@ flowchart LR
     API --> UAID
 ```
 
-The SDK mediates every request, ensuring headers and schemas are applied consistently. Credits purchased in the billing portal authorize metered endpoints; without an active balance, the broker returns `402` responses.
+The SDK mediates every request, ensuring headers and schemas are applied consistently.
+
+> ✅ **Free discovery:** keyword search, vector search, adapter catalog, and public stats are available to everyone without credits or authentication.
+
+Use the [billing portal](https://registry.hashgraphonline.com/billing) only when you need metered functionality such as agent registration, chat relay, UAID inscription, or history compaction. These endpoints require an active credit balance; otherwise the broker returns `402` responses.
 
 ## Searching the Registry
 
@@ -344,10 +348,24 @@ The following guidelines distill the patterns these demos implement so you can w
    - `mcp-adapter` → JSON-RPC HTTP or SSE transports exposed by MCP servers.
    - `nanda-adapter`, `a2a-registry-adapter`, `a2a-protocol-adapter` → A2A JSON-RPC messaging (optionally backed by `@a2a-js` clients).
    - `x402-bazaar-adapter` → Arbitrary HTTP requests defined by the agent’s X402 resource metadata.
-   - `erc8004-adapter` → Discovery only; extract an HTTPS endpoint and pass it directly as `agentUrl`.
+   - `erc8004-adapter` → Discovery only; extract an HTTPS endpoint from the `.well-known/agent-card.json` metadata (or IPFS token URI) and pass it as `agentUrl` when you create a session.
    - `virtuals-protocol-adapter` / `olas-protocol-adapter` → Discovery-only commerce/service metadata (no chat relay).
 
-   Use `const descriptors = await client.adaptersDetailed();` to hydrate the adapter catalog in-process. Each `AdapterDescriptor` exposes `chatProfile.requiresAuth`, delivery mechanisms, and capability flags so you can branch without hard-coding knowledge of the broker deployment.
+   Use `const descriptors = await client.adaptersDetailed();` to hydrate the adapter catalog in-process. Each `AdapterDescriptor` exposes `chatProfile.requiresAuth`, delivery mechanisms, and capability flags so you can branch without hard-coding knowledge of the broker deployment. The table below mirrors the fields returned by `GET /api/v1/adapters/details`:
+
+   | Adapter | Supports chat | Delivery | Transport | Streaming | Requires auth | Highlights |
+   | --- | --- | --- | --- | --- | --- | --- |
+   | `agentverse-adapter` | Yes | Mailbox | HTTPS envelope | No | Optional signer | Broker submits signed envelopes and polls mailboxes for replies. |
+   | `openrouter-adapter` | Yes | Relay | HTTPS | No | End-user OpenRouter bearer | Requires the caller’s OpenRouter token for every message. |
+   | `openconvai-adapter` | Yes | Mailbox | Hedera HCS | No | Hedera operator key | Publishes to HCS-10 topics; replies arrive asynchronously. |
+   | `mcp-adapter` | Yes | Relay | JSON-RPC HTTP/SSE | Yes | None | Streams SSE for `streamable_http` transports, plain JSON otherwise. |
+   | `nanda-adapter` | Yes | Relay | A2A JSON-RPC | No | None | Favors `@a2a-js` connections and falls back to JSON-RPC. |
+   | `a2a-registry-adapter` | Yes | Relay | JSON-RPC | No | None | Proxies records from the public A2A registry. |
+   | `a2a-protocol-adapter` | Yes | Relay | JSON-RPC | No | None | Crawls well-known A2A endpoints and relays JSON-RPC messages. |
+   | `x402-bazaar-adapter` | Yes | Relay | HTTP | No | None | Executes HTTP requests defined by Coinbase x402 resource metadata. |
+   | `erc8004-adapter` | No | Discovery | N/A | N/A | None | Emits discovery data; chat by supplying `agentUrl` derived from metadata. |
+   | `virtuals-protocol-adapter` | No | Discovery | N/A | N/A | None | Surfaces Virtuals commerce metadata without brokering chat. |
+   | `olas-protocol-adapter` | No | Discovery | N/A | N/A | None | Indexes OLAS services; integration is discovery-only today. |
 
 #### 2. Launch your local agent (optional)
 
@@ -374,7 +392,7 @@ The AgentVerse demo spins up a local A2A helper with `startLocalA2AAgent` so you
 #### Adapter transport reference
 
 - **AgentVerse (`agentverse-adapter`)** – Sends signed envelopes to `/proxy/submit` or `/submit`. Expect immediate acknowledgements followed by mailbox deliveries; poll `chat.getHistory(sessionId)` until a non-empty agent entry appears. Identity-based signatures are optional but recommended for production mailboxes.
-- **OpenRouter (`openrouter-adapter`)** – Relays to OpenRouter’s REST API. Always supply the end-user’s OpenRouter API key in the `auth` block. Responses are synchronous JSON documents; streaming is surfaced when the downstream transport supports it. The history demo shows ledger-authenticated billing plus chat history compaction against an OpenRouter model.
+- **OpenRouter (`openrouter-adapter`)** – Relays to OpenRouter’s REST API. Always supply the end-user’s OpenRouter API key in the `auth` block. Responses are synchronous JSON documents; streaming is not exposed by the adapter yet. The history demo shows ledger-authenticated billing plus chat history compaction against an OpenRouter model.
 - **OpenConvAI (`openconvai-adapter`)** – Publishes to Hedera HCS-10 topics using the broker’s operator keys. Configure the broker with `HCS10_*` variables and budget a few seconds for replies to arrive on the outbound topic. Use `chat.getHistory` to capture the eventual response.
 - **MCP (`mcp-adapter`)** – Talks to Pulse MCP servers using JSON-RPC. Inspect `agent.metadata.remoteTransport` to differentiate `http`, `streamable_http`, and `sse`. For streaming transports the adapter parses SSE and surfaces incremental chunks in the chat response.
 - **NANDA / A2A (`nanda-adapter`, `a2a-registry-adapter`, `a2a-protocol-adapter`)** – Wrap the A2A ecosystem. When an `@a2a-js` client can be established the adapter forwards prompts directly; otherwise it falls back to JSON-RPC requests against the agent’s declared endpoint. Consider running the local A2A helper from the AgentVerse demo when you need deterministic round-trips.
@@ -429,6 +447,136 @@ const registration = await client.registerAgent({
 console.log(registration.uaid, registration.agent.nativeId);
 ```
 
+### End-to-end: register, poll progress, and inspect the result
+
+The snippet below illustrates a typical mainnet flow that:
+
+1. Authenticates with ledger credentials (auto top-up enabled).
+2. Registers a new agent targeting ERC-8004 networks.
+3. Waits for the asynchronous attempt to complete.
+4. Reads the UAID endpoint to confirm on-chain identifiers.
+
+```typescript
+import 'dotenv/config';
+import { PrivateKey } from '@hashgraph/sdk';
+import {
+  RegistryBrokerClient,
+  isPendingRegisterAgentResponse,
+} from '@hashgraphonline/standards-sdk';
+
+const baseUrl = 'https://registry.hashgraphonline.com/api/v1';
+const ledgerAccountId = process.env.MAINNET_HEDERA_ACCOUNT_ID!;
+const ledgerPrivateKey = process.env.MAINNET_HEDERA_PRIVATE_KEY!;
+
+const client = new RegistryBrokerClient({
+  baseUrl,
+  registrationAutoTopUp: {
+    accountId: ledgerAccountId,
+    privateKey: ledgerPrivateKey,
+    memo: 'demo:auto-topup',
+  },
+});
+
+// Authenticate via ledger challenge
+const challenge = await client.createLedgerChallenge({
+  accountId: ledgerAccountId,
+  network: 'mainnet',
+});
+const key = PrivateKey.fromString(ledgerPrivateKey);
+const signature = Buffer.from(
+  await key.sign(Buffer.from(challenge.message, 'utf8')),
+).toString('base64');
+const verification = await client.verifyLedgerChallenge({
+  challengeId: challenge.challengeId,
+  accountId: ledgerAccountId,
+  network: 'mainnet',
+  signature,
+  publicKey: key.publicKey.toString(),
+});
+client.setApiKey(verification.key);
+client.setDefaultHeader('x-account-id', verification.accountId);
+
+const profile = {
+  version: '1.0',
+  type: 1,
+  display_name: 'Async Demo Agent',
+  alias: 'async-demo-agent',
+  bio: 'Demonstrates registry-broker async registration.',
+  properties: {
+    agentFactsUrl: 'https://demo.example.com/.well-known/agent.json',
+    tags: ['demo', 'async'],
+  },
+  socials: [{ platform: 'x', handle: 'hashgraphonline' }],
+  aiAgent: {
+    type: 0,
+    model: 'demo-model',
+    capabilities: [0, 4, 18],
+  },
+};
+
+const registration = await client.registerAgent({
+  profile,
+  registry: 'hol',
+  communicationProtocol: 'a2a',
+  endpoint: 'https://demo.example.com/a2a',
+  additionalRegistries: [
+    'erc-8004:ethereum-sepolia',
+    'erc-8004:base-sepolia',
+  ],
+  metadata: {
+    provider: 'sdk-demo',
+  },
+});
+
+let progress = null;
+if (isPendingRegisterAgentResponse(registration) && registration.attemptId) {
+  progress = await client.waitForRegistrationCompletion(
+    registration.attemptId,
+    {
+      throwOnFailure: false,
+      intervalMs: 2000,
+      onProgress: latest => {
+        const summary = Object.values(latest.additionalRegistries)
+          .map(entry => `${entry.registryKey}:${entry.status}`)
+          .join(', ');
+        console.log(`[progress] ${latest.status} ${summary}`);
+      },
+    },
+  );
+}
+
+if (progress?.status === 'failed') {
+  console.error('Registration failed', progress.errors);
+  process.exit(1);
+}
+
+console.log('UAID:', registration.uaid);
+console.log('Attempt status:', progress?.status ?? registration.status);
+
+const uaidResponse = await fetch(
+  `${baseUrl}/agents/${encodeURIComponent(registration.uaid)}`,
+  {
+    headers: {
+      accept: 'application/json',
+      'x-api-key': verification.key,
+      'x-account-id': verification.accountId,
+    },
+  },
+).then(res => {
+  if (!res.ok) {
+    throw new Error(`UAID fetch failed: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+});
+
+console.log(
+  'Additional registries:',
+  uaidResponse.metadata.additionalRegistries,
+);
+```
+
+> 📌 Save this script as `register-erc8004-demo.ts` and run it with `pnpm tsx register-erc8004-demo.ts`. Ledger credentials are read from `MAINNET_HEDERA_ACCOUNT_ID` / `MAINNET_HEDERA_PRIVATE_KEY`, so export them in your shell or `.env`.
+
 The response supplies UAID, agent metadata, optional HCS-10 registry results, and OpenConvAI compatibility data when available.
 
 ```mermaid
@@ -445,6 +593,89 @@ sequenceDiagram
     Broker-->>SDK: Registration response (UAID, agent details)
     SDK-->>App: Success payload
 ```
+
+### Handling asynchronous responses & progress tracking
+
+When a registration includes additional registries (for example ERC-8004) the broker returns `202 Accepted` with a `status: "pending"` payload. The primary Hashgraph inscription is committed immediately, while downstream registrars are processed in the background via a work queue. The SDK exposes helpers to wait on the attempt or poll progress manually:
+
+```typescript
+import {
+  isPendingRegisterAgentResponse,
+  type RegistrationProgressRecord,
+} from '@hashgraphonline/standards-sdk';
+
+const response = await client.registerAgent({
+  profile,
+  registry: 'hol',
+  communicationProtocol: 'a2a',
+  endpoint: 'https://ledger-guard.example.com',
+  additionalRegistries: ['erc-8004:ethereum-sepolia'],
+});
+
+let progress: RegistrationProgressRecord | undefined;
+
+if (isPendingRegisterAgentResponse(response) && response.attemptId) {
+  progress = await client.waitForRegistrationCompletion(response.attemptId, {
+    intervalMs: 2000,
+    timeoutMs: 5 * 60_000,
+    throwOnFailure: false, // let the caller inspect partial failures
+    onProgress: latest => {
+      console.log(
+        `Attempt ${latest.attemptId} status → ${latest.status}`,
+        Object.values(latest.additionalRegistries).map(
+          entry => `${entry.registryKey}:${entry.status}`,
+        ),
+      );
+    },
+  });
+}
+
+if (progress?.status === 'failed') {
+  throw new Error(`Registration failed: ${progress.errors?.join(', ')}`);
+}
+```
+
+All progress tracking endpoints are protected by account ownership checks. Using the SDK automatically attaches the `x-account-id` header returned during ledger authentication (or the API key context) so authorized callers can retrieve the current state later via `client.getRegistrationProgress(attemptId)`.
+
+### Updating agents & publishing to ERC-8004
+
+Updates reuse the same asynchronous pipeline. When you call `updateAgent` the broker:
+
+1. Re-validates UAID invariants (display name, native ID, primary endpoint, etc.).
+2. Inscribes an updated profile (only if the fingerprint changed).
+3. Queues any additional registries for gas-only updates. Existing ERC-8004 agent IDs are reused; only the metadata file is re-pinned and `setAgentUri` is invoked on-chain.
+
+Assuming you stored the original registration payload (or fetched the profile from search/UAID endpoints), the SDK update flow looks like this:
+
+```typescript
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
+
+const existingProfile = registration.agent.profile; // reuse the profile you stored earlier
+const updatePayload: AgentRegistrationRequest = {
+  profile: existingProfile,
+  communicationProtocol: 'a2a',
+  registry: registration.registry ?? 'hol',
+  endpoint: registration.agent.endpoint ?? registration.agent.nativeId ?? undefined,
+  additionalRegistries: [
+    'erc-8004:ethereum-sepolia',
+    'erc-8004:base-sepolia',
+  ],
+};
+
+const updateResponse = await client.updateAgent(registration.uaid, updatePayload);
+
+if (isPendingRegisterAgentResponse(updateResponse) && updateResponse.attemptId) {
+  const updateProgress = await client.waitForRegistrationCompletion(
+    updateResponse.attemptId,
+    { throwOnFailure: false },
+  );
+  console.log('Additional registries →', updateProgress?.additionalRegistries);
+}
+```
+
+- **Credits:** profile updates charge the base credit fee only when the profile actually changes. ERC-8004 updates consume gas credits only; the SDK’s auto top-up helpers can cover any shortfall by purchasing credits before retrying.
+- **Progress entries:** each additional registry tracks `status`, `credits`, `agentId`, and `agentUri`. Successful ERC-8004 updates return the canonical on-chain identifier (`<chainId>:<agentId>`) and the IPFS URI that was pinned during the run.
+- **Polling manually:** if you prefer not to block, store the attempt ID and poll `client.getRegistrationProgress(attemptId)` from another process. Responses include both the global attempt status and per-network details so UI layers can render live progress.
 
 ## Protocol Discovery
 
