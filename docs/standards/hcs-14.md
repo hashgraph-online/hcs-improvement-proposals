@@ -38,8 +38,10 @@ Last-Call-Ends: (TBD)
     - [Agent Skills](#agent-skills)
       - [Core Skills (0-19)](#core-skills-0-19)
       - [Protocol-Specific Skills (20-39)](#protocol-specific-skills-20-39)
+      - [OASF Skills Integration (100+) (Informative)](#oasf-skills-integration-100-informative)
     - [Protocol Identifiers](#protocol-identifiers)
     - [Interoperability (Informative)](#interoperability-informative)
+      - [OASF Alignment (Open Agentic Schema Framework)](#oasf-alignment-open-agentic-schema-framework)
       - [ERC‑8004 Alignment (EVM Agent Registries)](#erc8004-alignment-evm-agent-registries)
       - [Trust Over IP (ToIP) Alignment](#trust-over-ip-toip-alignment)
     - [Hash Generation](#hash-generation)
@@ -63,6 +65,7 @@ Last-Call-Ends: (TBD)
     - [Example 4: Self-Sovereign Agent (UAID)](#example-4-self-sovereign-agent-uaid)
     - [Example 5: Virtuals Protocol Agent](#example-5-virtuals-protocol-agent)
     - [Example 6: OLAS Service](#example-6-olas-service)
+    - [Example 7: OASF-Enhanced Agent](#example-7-oasf-enhanced-agent)
   - [Method Selection Guidelines](#method-selection-guidelines)
     - [When to Use UAID Target "aid" (`uaid:aid:`)](#when-to-use-uaid-target-aid-uaidaid)
     - [When to Use UAID Target "did" (`uaid:did:`)](#when-to-use-uaid-target-did-uaiddid)
@@ -291,6 +294,54 @@ The hash is computed from a canonical JSON representation containing ONLY these 
 
 These details should be discoverable through each protocol's native mechanisms or via registries that map HCS‑14 DIDs to current endpoints.
 
+**Platform Capabilities (Informative)**: Platform capabilities describe HOW an agent communicates (streaming support, payment protocols, security schemes, etc.) rather than WHAT it can do (skills). These are NOT included in the canonical hash as they represent operational characteristics that may change without affecting agent identity.
+
+**Skills vs Capabilities:**
+- **Skills** (0-39, 100+): Identity-defining functional abilities included in canonical hash (e.g., Text Generation, Code Generation, Knowledge Retrieval)
+- **Capabilities**: Operational platform features excluded from hash (e.g., streaming support, payment protocols, authentication schemes)
+
+**Capability Categories:**
+
+| Category | Examples | Storage Location |
+|----------|----------|------------------|
+| Communication | streaming, pushNotifications, websocket | A2A capabilities object, HCS-11 profile |
+| Payment | x402, stripe, custom payment protocols | OASF extensions, DID Document services |
+| Security | OAuth, API keys, x402, encryption schemes | SecuritySchemes in agent card, DID Document |
+| State Management | stateTransitionHistory, sessionPersistence | Platform metadata, HCS-11 profile |
+
+**Example Platform Capabilities (A2A agent card):**
+
+```json
+{
+  "capabilities": {
+    "streaming": false,
+    "pushNotifications": false,
+    "stateTransitionHistory": false,
+    "extensions": [
+      {
+        "uri": "https://github.com/a2aproject/A2A/blob/main/docs/extensions/x402.md",
+        "description": "x402 micropayment protocol",
+        "required": true,
+        "params": {
+          "price_usdc": "0.05",
+          "gateway_url": "https://gateway.example.com/process",
+          "payment_network": "base",
+          "payment_token": "USDC"
+        }
+      }
+    ]
+  }
+}
+```
+
+Agents advertise platform capabilities through:
+- **A2A**: `/.well-known/agent.json` `capabilities` object with boolean flags and `extensions` array
+- **HCS-11 Profile**: Optional `capabilities` field for platform features and operational metadata
+- **DID Document**: `service` endpoints with capability annotations and security requirements
+- **OASF Extensions**: Payment protocols, security schemes, and custom capability modules
+
+Platform capabilities enable discovery of operational requirements (e.g., payment protocols) without affecting the agent's core identity hash.
+
 Field normalization rules:
 
 - All strings shall be trimmed of leading and trailing whitespace.
@@ -319,6 +370,13 @@ Guidance:
 ### Agent Skills
 
 Skills are represented as numeric enums to ensure deterministic sorting, aligned with A2A protocol terminology.
+
+**Skill Namespace:**
+- **0-39**: HCS-14 Core Skills (defined below)
+- **40-99**: Reserved for future HCS-14 extensions
+- **100+**: OASF Skills (using OASF hierarchical IDs from https://schema.oasf.outshift.com)
+
+Agents MAY include both HCS-14 and OASF skill enumerations to maximize interoperability across ecosystems. The skills array shall be sorted numerically in ascending order.
 
 #### Core Skills (0-19)
 
@@ -370,6 +428,57 @@ Skills are represented as numeric enums to ensure deterministic sorting, aligned
 | 38    | Message Routing          | Route messages between agents             |
 | 39    | Trust Attestation        | Provide trust and reputation services     |
 
+#### OASF Skills Integration (100+) (Informative)
+
+For agents requiring OASF ecosystem compatibility, include OASF hierarchical skill IDs (100+) directly in the skills array alongside HCS-14 skills. The unified namespace enables seamless interoperability across both ecosystems.
+
+**OASF Skill Categories:**
+
+| OASF Category | ID Range | Example Skills |
+| ----- | -------- | -------------- |
+| Natural Language Processing | 100-199 | 10102 (Text Generation), 10103 (Entity Recognition) |
+| Images/Computer Vision | 200-299 | 20101 (Object Detection), 20201 (Image Generation) |
+| Audio | 300-399 | 30101 (Speech Recognition), 30201 (Audio Generation) |
+| Tabular/Text | 400-499 | 40101 (Text Classification), 40201 (Table QA) |
+| Analytical Skills | 500-599 | 50301 (Code Generation), 50401 (Mathematical Reasoning) |
+| Retrieval Augmented Generation | 600-699 | 60101 (Information Retrieval), 60201 (Document QA) |
+| Multi-modal | 700-799 | 70101 (Image-to-Text), 70201 (Text-to-Image) |
+| Security & Privacy | 800-899 | 80101 (Threat Detection), 80201 (Privacy Protection) |
+| Data Engineering | 900-999 | 90101 (Data Cleaning), 90201 (Feature Engineering) |
+| Agent Orchestration | 1000-1099 | 1001 (Multi-Agent Coordination), 1002 (Task Delegation) |
+| Evaluation & Monitoring | 1100-1199 | 1101 (Performance Evaluation), 1102 (Quality Assessment) |
+| DevOps/MLOps | 1200-1299 | 1201 (Model Deployment), 1202 (Infrastructure Management) |
+| Governance & Compliance | 1300-1399 | 1301 (Policy Enforcement), 1302 (Audit Trail) |
+| Tool Interaction | 1400-1499 | 1403 (API Integration), 1401 (External Tool Use) |
+| Advanced Reasoning & Planning | 1500-1599 | 1501 (Strategic Planning), 1502 (Complex Reasoning) |
+
+**Example with both HCS-14 and OASF skills:**
+
+```json
+{
+  "registry": "hol",
+  "name": "Multi-Protocol Agent",
+  "version": "1.0.0",
+  "protocol": "hcs-10",
+  "nativeId": "hedera:testnet:0.0.123456",
+  "skills": [0, 4, 17, 10102, 50301, 1403]
+}
+```
+
+In this example:
+- `0` = HCS-14 Text Generation
+- `4` = HCS-14 Code Generation
+- `17` = HCS-14 API Integration
+- `10102` = OASF Text Generation
+- `50301` = OASF Code Generation
+- `1403` = OASF API Integration
+
+The complete OASF skill taxonomy is available at https://schema.oasf.outshift.com/skill_categories.
+
+**Validation**: Implementations SHALL accept skill IDs in the ranges [0-39] and [100+]. Skill IDs in the range [40-99] are reserved and SHALL be rejected until formally specified in future HCS-14 versions.
+
+**Migration Path**: Existing agents using only HCS-14 skills (0-39) remain fully compatible. New agents MAY add OASF skills to improve discoverability in OASF-compatible registries without affecting their HCS-14 identifier hash.
+
 ### Protocol Identifiers
 
 Protocol identifiers shall use **string values** rather than enums to provide flexibility for:
@@ -380,6 +489,18 @@ Protocol identifiers shall use **string values** rather than enums to provide fl
 - Future protocol evolution and versioning
 
 ### Interoperability (Informative)
+
+#### OASF Alignment (Open Agentic Schema Framework)
+
+HCS-14 integrates directly with OASF through a unified skills namespace:
+
+- **Skills Integration**: HCS-14 supports OASF hierarchical skill IDs (100+) alongside native HCS-14 skills (0-39), enabling agents to advertise capabilities in both taxonomies within a single record.
+- **Backward Compatibility**: Agents using only HCS-14 skills (0-39) remain fully compliant. Adding OASF skills does not break existing implementations.
+- **Registry Interoperability**: Agents with OASF skills can be discovered in OASF-compatible registries while maintaining HCS-14 identifier stability.
+- **Namespace Reservation**: Skill IDs 40-99 are reserved for future HCS-14 extensions, preventing conflicts with OASF's hierarchical taxonomy (100+).
+- **DID Document Mapping**: HCS-14 DIDs can be included in OASF record locators, and OASF metadata can be embedded in HCS-14 DID Documents or profiles.
+
+This alignment enables seamless agent discovery across HCS-14 native implementations, OASF registries, and hybrid ecosystems without requiring duplicate agent records or transformation layers.
 
 #### ERC‑8004 Alignment (EVM Agent Registries)
 
@@ -628,7 +749,7 @@ Implementations shall comply with the following technical specifications:
 
 5. **Native Identifier**: The nativeId field shall contain the protocol's canonical unique identifier as specified in the Native Protocol IDs table.
 
-6. **Skills Array**: The skills field shall contain an array of numeric skill identifiers. Empty arrays are permitted.
+6. **Skills Array**: The skills field shall contain an array of numeric skill identifiers from the ranges [0-39] (HCS-14 core skills) or [100+] (OASF skills). Skill IDs in the range [40-99] are reserved and shall be rejected. Empty arrays are permitted.
 
 Determinism and Collisions (AID): AID identifiers are deterministic by design. Identical canonical agent data yields the same AID. In practice, uniqueness is anchored by `nativeId` (e.g., public key or domain) and `registry`. If distinct deployments require separate identifiers, bump `version` or use distinct `uid` values outside the hash; do not introduce non‑deterministic inputs into the canonical set.
 
@@ -766,6 +887,27 @@ _Note: UAID id equals the did:key method‑specific identifier; no new hash is c
 ```
 
 **Generated UAID (AID target):** `uaid:aid:QmZ8kL4mN6vP2wQ9xR3tY7hB5jC1sA9eD;uid=0;registry=olas;nativeId=1:42`
+
+### Example 7: OASF-Enhanced Agent
+
+```json
+{
+  "registry": "hol",
+  "name": "Advanced Analytics Agent",
+  "version": "1.0.0",
+  "protocol": "hcs-10",
+  "nativeId": "hedera:testnet:0.0.987654",
+  "skills": [0, 4, 7, 17, 10102, 50301, 60101, 1403]
+}
+```
+
+**Skills breakdown**:
+- HCS-14 Skills: `[0, 4, 7, 17]` (Text Generation, Code Generation, Knowledge Retrieval, API Integration)
+- OASF Skills: `[10102, 50301, 60101, 1403]` (NLP Text Generation, Analytical Code Generation, RAG Information Retrieval, Tool Interaction API Integration)
+
+**Generated UAID (AID target):** `uaid:aid:{base58hash};uid=0;registry=hol;nativeId=hedera:testnet:0.0.987654`
+
+_Note: The unified skills array enables discovery in both HCS-14 native registries and OASF-compatible ecosystems without requiring separate agent records._
 
 ## Method Selection Guidelines
 
