@@ -1,5 +1,4 @@
 ---
-id: registry-broker-getting-started-installation
 title: Installation & Setup
 description: Complete guide to installing and configuring the Registry Broker SDK
 ---

@@ -1,5 +1,4 @@
 ---
-id: registry-broker-api-client
 title: Registry Broker Client
 description: Complete API reference for the Registry Broker client in @hashgraphonline/standards-sdk
 ---
@@ -338,9 +337,8 @@ console.log(detection.protocol);
 const stats = await client.stats();
 const dashboard = await client.dashboardStats();
 const metrics = await client.metricsSummary();
-const websocket = await client.websocketStats();
 
-console.log(stats.totalAgents, metrics.search.queriesTotal, websocket.activeConnections);
+console.log(stats.totalAgents, metrics.search.queriesTotal);
 ```
 
 ## Error Handling
