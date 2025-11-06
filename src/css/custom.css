@@ -129,6 +129,27 @@ article header h1,
   font-size: 1.75rem !important;
 }
 
+/* Ensure long section headings wrap nicely on smaller screens */
+.markdown h2,
+.blog-post-page .markdown h2 {
+  word-break: normal;
+  hyphens: auto;
+}
+
+@media (max-width: 768px) {
+  .markdown h2,
+  .blog-post-page .markdown h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .markdown h2,
+  .blog-post-page .markdown h2 {
+    font-size: 1.35rem !important;
+  }
+}
+
 /* Blog tags - limit to one line with view more */
 [class*='tagsListInline'],
 .margin-vert--sm,

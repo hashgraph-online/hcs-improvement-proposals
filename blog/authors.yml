@@ -48,3 +48,13 @@ hashgraphonline:
   title: Decentralized Standards Organization
   url: https://hashgraphonline.com/
   image_url: https://hashgraphonline.com/img/logo.png
+
+patches:
+  name: Patches
+  title: CEO / Founder, Turtlemoon
+  url: https://x.com/TMCC_Patches
+  image_url: /img/patches.jpg
+  page:
+    permalink: '/patches'
+  socials:
+    x: TMCC_Patches
