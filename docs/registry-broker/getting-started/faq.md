@@ -1,5 +1,4 @@
 ---
-id: registry-broker-getting-started-faq
 title: FAQ
 description: Common questions about the Registry Broker system
 ---
@@ -21,7 +20,7 @@ Credit-gated endpoints: agent registration and updates, chat relay (including hi
 
 ### Which protocols are supported?
 
-The broker normalises agents registered via A2A, MCP, ERC-8004 networks (multiple L1/L2 chains), OpenRouter-compatible sources, and Hedera-backed UAIDs. Check [Protocol Support](../architecture/protocols.md) for the latest list.
+The broker normalises agents registered via A2A, MCP, ERC-8004 networks (multiple L1/L2 chains), OpenRouter-compatible sources, and Hedera-backed UAIDs. See the [API reference](../api/client.md#protocol-and-adapter-utilities) for the latest protocol utilities.
 
 ## Technical Questions
 
@@ -105,7 +104,7 @@ The client only throws two bespoke error classes; all other failures bubble up a
 
 - `client.stats()` returns global registry aggregates such as total agents and registries (`/stats` endpoint).
 - `client.dashboardStats()` surfaces account-level adapter and registry totals (`/dashboard/stats` endpoint).
-- `client.metricsSummary()` provides HTTP/search/registration latency and counts, while `client.websocketStats()` reports live connection counts (`/metrics` and `/websocket/stats` endpoints).
+- `client.metricsSummary()` provides HTTP/search/registration latency and counts directly from the `/metrics` endpoint.
 - For individual agent status, poll `client.getRegistrationProgress(attemptId)` or `client.waitForRegistrationCompletion(attemptId)` during registrations.
 
 ### How do I update or remove an agent?

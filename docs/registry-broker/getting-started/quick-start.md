@@ -1,5 +1,4 @@
 ---
-id: registry-broker-getting-started-quick-start
 title: Quick Start Guide
 description: Get up and running with the Registry Broker in minutes
 ---

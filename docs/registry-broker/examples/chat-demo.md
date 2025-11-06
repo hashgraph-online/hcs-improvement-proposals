@@ -1,5 +1,4 @@
 ---
-id: registry-broker-examples-chat-demo
 title: Chat Demo
 description: Simple example demonstrating chat functionality with the Registry Broker
 ---
@@ -25,7 +24,7 @@ This demo shows how to:
 
 ## Setup
 
-```bash
+````bash
 # Install dependencies
 npm install @hashgraphonline/standards-sdk dotenv
 
@@ -35,11 +34,10 @@ REGISTRY_BROKER_API_URL=https://registry.hashgraphonline.com/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key-here
 OPENROUTER_API_KEY=your-openrouter-key-here
 EOF
-```
-
+`
 ## Basic Chat Example
 
-```typescript
+````typescript
 // chat-demo.ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 import * as dotenv from 'dotenv';
@@ -54,7 +52,7 @@ async function main() {
   });
 
   try {
-    console.log('🔍 Searching for available agents...');
+    console.log('Searching for available agents...');
     
     // Search for agents
     const searchResults = await client.search({
@@ -72,7 +70,7 @@ async function main() {
       });
       
       if (generalResults.hits.length === 0) {
-        console.log('❌ No agents available');
+        console.log('No agents available');
         return;
       }
       
@@ -90,11 +88,11 @@ async function main() {
     }
 
     if (!selectedAgent) {
-      console.log('❌ No agents available');
+      console.log('No agents available');
       return;
     }
 
-    console.log(`\n💬 Starting chat with: ${selectedAgent.name}`);
+    console.log(`\n${selectedAgent.name}`);
     console.log(`UAID: ${selectedAgent.uaid}`);
 
     // Create chat session
@@ -103,58 +101,57 @@ async function main() {
       historyTtlSeconds: 900,
     });
 
-    console.log(`✅ Session created: ${session.sessionId}`);
-    console.log(`⏰ Session expires: ${new Date(Date.now() + session.historyTtlSeconds * 1000).toLocaleTimeString()}`);
+    console.log(`Session created: ${session.sessionId}`);
+    console.log(`Session expires: ${new Date(Date.now() + session.historyTtlSeconds * 1000).toLocaleTimeString()}`);
 
     // Send first message
     const message1 = 'Hello! Can you introduce yourself and tell me about your capabilities?';
-    console.log(`\n🗨️  User: ${message1}`);
+    console.log(`\nUser: ${message1}`);
     
     const response1 = await client.chat.sendMessage({
       sessionId: session.sessionId,
       message: message1,
     });
 
-    console.log(`🤖 Agent: ${response1.content}`);
+    console.log(`Agent: ${response1.content}`);
 
     // Send follow-up message
     const message2 = 'That\'s interesting! Can you help me with a technical problem?';
-    console.log(`\n🗨️  User: ${message2}`);
+    console.log(`\nUser: ${message2}`);
     
     const response2 = await client.chat.sendMessage({
       sessionId: session.sessionId,
       message: message2,
     });
 
-    console.log(`🤖 Agent: ${response2.content}`);
+    console.log(`Agent: ${response2.content}`);
 
     // Show chat history
-    console.log('\n📝 Chat History:');
+    console.log('\nChat History:');
     const history = await client.chat.getHistory(session.sessionId);
     history.forEach((entry, index) => {
-      const role = entry.role === 'user' ? '🗨️  User' : '🤖 Agent';
+      const role = entry.role === 'user' ? 'User' : 'Agent';
       console.log(`${index + 1}. ${role}: ${entry.content}`);
     });
 
     // Clean up
     await client.chat.endSession(session.sessionId);
-    console.log('\n✅ Session ended successfully');
+    console.log('\nSession ended successfully');
 
   } catch (error) {
     if (error instanceof Error) {
-      console.error(`❌ Error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
     } else {
-      console.error('❌ Unknown error occurred');
+      console.error('Unknown error occurred');
     }
   }
 }
 
 main();
 ```
-
 ## OpenRouter Chat Example
 
-```typescript
+````typescript
 // openrouter-demo.ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 import * as dotenv from 'dotenv';
@@ -168,7 +165,7 @@ async function main() {
   });
 
   try {
-    console.log('🚀 Starting OpenRouter chat demo...');
+    console.log('Starting OpenRouter chat demo...');
 
     // Create session with OpenRouter model
     const session = await client.chat.createSession({
@@ -179,7 +176,7 @@ async function main() {
       },
     });
 
-    console.log(`✅ Session created with OpenRouter model`);
+    console.log(`Session created with OpenRouter model`);
 
     // Send message with authentication
     const response = await client.chat.sendMessage({
@@ -191,23 +188,22 @@ async function main() {
       },
     });
 
-    console.log(`🤖 Claude: ${response.content}`);
+    console.log(`Claude: ${response.content}`);
 
     // Clean up
     await client.chat.endSession(session.sessionId);
-    console.log('✅ Session ended');
+    console.log('Session ended');
 
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error('Error:', error.message);
   }
 }
 
 main();
 ```
-
 ## Error Handling Example
 
-```typescript
+````typescript
 // error-handling-demo.ts
 import { 
   RegistryBrokerClient, 
@@ -240,16 +236,16 @@ async function main() {
       // Handle specific error codes
       switch (error.status) {
         case 401:
-          console.log('🔑 Authentication failed - check your API key');
+          console.log('Authentication failed - check your API key');
           break;
         case 402:
-          console.log('💳 Payment required - add credits to your account');
+          console.log('Payment required - add credits to your account');
           break;
         case 429:
-          console.log('⏱️  Rate limited - wait before making more requests');
+          console.log('Rate limited - wait before making more requests');
           break;
         case 500:
-          console.log('🔧 Server error - try again later');
+          console.log('Server error - try again later');
           break;
         default:
           console.log('❓ Unknown error occurred');
@@ -262,20 +258,19 @@ async function main() {
           : typeof error.cause === 'string'
           ? error.cause
           : JSON.stringify(error.cause);
-      console.log(`📄 Parse error: ${detail}`);
+      console.log(`Parse error: ${detail}`);
       
     } else {
-      console.log(`❌ Unexpected error: ${error}`);
+      console.log(`Unexpected error: ${error}`);
     }
   }
 }
 
 main();
 ```
-
 ## Multi-Agent Chat Example
 
-```typescript
+````typescript
 // multi-agent-demo.ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
@@ -321,7 +316,7 @@ async function main() {
 
   // Display responses
   responses.forEach(({ agent, response }) => {
-    console.log(`\n🤖 ${agent.name}:`);
+    console.log(`\n${agent.name}:`);
     console.log(response.content);
   });
 
@@ -332,15 +327,14 @@ async function main() {
     )
   );
 
-  console.log('\n✅ All sessions ended');
+  console.log('\nAll sessions ended');
 }
 
 main();
 ```
-
 ## Running the Demos
 
-```bash
+````bash
 # Basic chat demo
 npx tsx chat-demo.ts
 
@@ -352,25 +346,22 @@ npx tsx error-handling-demo.ts
 
 # Multi-agent demo
 npx tsx multi-agent-demo.ts
-```
-
+`
 ## Expected Output
 
-```
-🔍 Searching for available agents...
+`Searching for available agents...
 Found 2 customer support agents:
 1. Customer Support Bot - AI-powered customer service
 2. Technical Assistant - Help with technical issues
 
-💬 Starting chat with: Customer Support Bot
+Starting chat with: Customer Support Bot
 UAID: uaid:aid:a2a:hol:customer-support-001
-✅ Session created: session_abc123
-⏰ Session expires: 2:30:00 PM
+Session created: session_abc123
+Session expires: 2:30:00 PM
 
-🗨️  User: Hello! Can you introduce yourself and tell me about your capabilities?
-🤖 Agent: Hello! I'm an AI-powered customer support agent. I can help you with...
-```
-
+User: Hello! Can you introduce yourself and tell me about your capabilities?
+Agent: Hello! I'm an AI-powered customer support agent. I can help you with...
+`
 ## Key Concepts Demonstrated
 
 1. **Client Initialization**: Setting up the Registry Broker client
@@ -384,7 +375,7 @@ UAID: uaid:aid:a2a:hol:customer-support-001
 ## Next Steps
 
 
-- [Advanced Chat Features](../api/chat.md) - Explore chat API features
+- [Advanced Chat Features](../api/client.md#chat-and-history) - Explore chat API features
 
 ## Support
 

@@ -1,5 +1,4 @@
 ---
-id: registry-broker-getting-started-first-registration
 title: First Agent Registration
 description: Learn how to register your first agent with the Registry Broker
 ---

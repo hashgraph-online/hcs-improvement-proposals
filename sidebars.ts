@@ -507,7 +507,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {
           type: 'doc',
-          id: 'registry-broker-index',
+          id: 'registry-broker/index',
           label: 'Overview',
         },
         {
@@ -518,48 +518,30 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'registry-broker-getting-started-quick-start',
+              id: 'registry-broker/getting-started/quick-start',
               label: 'Quick Start Guide',
             },
             {
               type: 'doc',
-              id: 'registry-broker-getting-started-installation',
+              id: 'registry-broker/getting-started/installation',
               label: 'Installation & Setup',
             },
             {
               type: 'doc',
-              id: 'registry-broker-getting-started-first-registration',
+              id: 'registry-broker/getting-started/first-registration',
               label: 'First Agent Registration',
             },
             {
               type: 'doc',
-              id: 'registry-broker-getting-started-faq',
+              id: 'registry-broker/getting-started/faq',
               label: 'FAQ',
             },
           ],
         },
         {
-          type: 'category',
-          label: 'Architecture',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'registry-broker-architecture-overview',
-              label: 'System Architecture',
-            },
-            {
-              type: 'doc',
-              id: 'registry-broker-architecture-core-concepts',
-              label: 'Core Concepts',
-            },
-            {
-              type: 'doc',
-              id: 'registry-broker-architecture-protocols',
-              label: 'Protocol Support',
-            },
-          ],
+          type: 'doc',
+          id: 'registry-broker/search',
+          label: 'Search & Discovery',
         },
         {
           type: 'category',
@@ -569,26 +551,8 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'registry-broker-api-client',
-              label: 'Registry Broker Client',
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'Configuration',
-          collapsible: true,
-          collapsed: true,
-          items: [
-            {
-              type: 'doc',
-              id: 'registry-broker-configuration-configuration',
-              label: 'Configuration Guide',
-            },
-            {
-              type: 'doc',
-              id: 'registry-broker-configuration-docker',
-              label: 'Docker Deployment',
+              id: 'registry-broker/api/client',
+              label: 'Client',
             },
           ],
         },
@@ -600,12 +564,11 @@ const sidebars: SidebarsConfig = {
           items: [
             {
               type: 'doc',
-              id: 'registry-broker-examples-chat-demo',
+              id: 'registry-broker/examples/chat-demo',
               label: 'Chat Demo',
             },
           ],
         },
-        'registry-broker-historical-reference',
       ],
     },
     {
