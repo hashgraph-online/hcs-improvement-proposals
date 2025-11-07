@@ -20,11 +20,13 @@ This demo shows how to:
 
 - Node.js 18+
 - Registry Broker API key
-- Optional: OpenRouter API key for LLM access
+- Optional: OpenRouter API key for LLM access (`OPENROUTER_API_KEY`)
+- Optional: `OPENROUTER_MODEL_ID` (defaults to `anthropic/claude-3.5-sonnet`)
+- Optional: `OPENROUTER_REGISTRY` (defaults to `openrouter`)
 
 ## Setup
 
-````bash
+```bash
 # Install dependencies
 npm install @hashgraphonline/standards-sdk dotenv
 
@@ -34,10 +36,11 @@ REGISTRY_BROKER_API_URL=https://registry.hashgraphonline.com/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key-here
 OPENROUTER_API_KEY=your-openrouter-key-here
 EOF
-`
+```
+
 ## Basic Chat Example
 
-````typescript
+```typescript
 // chat-demo.ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 import * as dotenv from 'dotenv';
@@ -151,7 +154,7 @@ main();
 ```
 ## OpenRouter Chat Example
 
-````typescript
+```typescript
 // openrouter-demo.ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 import * as dotenv from 'dotenv';
@@ -167,25 +170,42 @@ async function main() {
   try {
     console.log('Starting OpenRouter chat demo...');
 
-    // Create session with OpenRouter model
-    const session = await client.chat.createSession({
-      agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
-      auth: {
-        type: 'bearer',
-        token: process.env.OPENROUTER_API_KEY!,
-      },
+    const apiKey = process.env.OPENROUTER_API_KEY?.trim();
+    if (!apiKey) {
+      throw new Error('Set OPENROUTER_API_KEY to run the OpenRouter demo');
+    }
+
+    const modelId =
+      process.env.OPENROUTER_MODEL_ID?.trim() || 'anthropic/claude-3.5-sonnet';
+    const registry = process.env.OPENROUTER_REGISTRY?.trim() || 'openrouter';
+    const auth = { type: 'bearer' as const, token: apiKey };
+
+    const searchResult = await client.search({
+      q: modelId,
+      registries: [registry],
+      limit: 1,
     });
 
-    console.log(`Session created with OpenRouter model`);
+    if (searchResult.hits.length === 0) {
+      throw new Error(
+        `Unable to locate model "${modelId}" in registry "${registry}"`,
+      );
+    }
 
-    // Send message with authentication
+    const { uaid } = searchResult.hits[0];
+
+    const session = await client.chat.createSession({
+      uaid,
+      auth,
+      historyTtlSeconds: 900,
+    });
+
+    console.log('Session created with OpenRouter model');
+
     const response = await client.chat.sendMessage({
       sessionId: session.sessionId,
       message: 'Explain quantum computing in one paragraph',
-      auth: {
-        type: 'bearer',
-        token: process.env.OPENROUTER_API_KEY!,
-      },
+      auth,
     });
 
     console.log(`Claude: ${response.content}`);
@@ -193,7 +213,6 @@ async function main() {
     // Clean up
     await client.chat.endSession(session.sessionId);
     console.log('Session ended');
-
   } catch (error) {
     console.error('Error:', error.message);
   }
@@ -203,7 +222,7 @@ main();
 ```
 ## Error Handling Example
 
-````typescript
+```typescript
 // error-handling-demo.ts
 import { 
   RegistryBrokerClient, 
@@ -270,7 +289,7 @@ main();
 ```
 ## Multi-Agent Chat Example
 
-````typescript
+```typescript
 // multi-agent-demo.ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
@@ -334,7 +353,7 @@ main();
 ```
 ## Running the Demos
 
-````bash
+```bash
 # Basic chat demo
 npx tsx chat-demo.ts
 
@@ -346,10 +365,12 @@ npx tsx error-handling-demo.ts
 
 # Multi-agent demo
 npx tsx multi-agent-demo.ts
-`
+```
+
 ## Expected Output
 
-`Searching for available agents...
+```
+Searching for available agents...
 Found 2 customer support agents:
 1. Customer Support Bot - AI-powered customer service
 2. Technical Assistant - Help with technical issues
@@ -361,7 +382,8 @@ Session expires: 2:30:00 PM
 
 User: Hello! Can you introduce yourself and tell me about your capabilities?
 Agent: Hello! I'm an AI-powered customer support agent. I can help you with...
-`
+```
+
 ## Key Concepts Demonstrated
 
 1. **Client Initialization**: Setting up the Registry Broker client

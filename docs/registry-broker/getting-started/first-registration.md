@@ -63,6 +63,30 @@ const client = new RegistryBrokerClient({
 
 Auto top-up is optional but recommended for unattended registrations. The client purchases missing credits when the registry returns a shortfall.
 
+### Optional — Hedera Ledger Authentication Helper
+
+```typescript
+import { PrivateKey } from '@hashgraph/sdk';
+
+await client.authenticateWithLedger({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  network: 'testnet',
+  expiresInMinutes: 10,
+  sign: message => {
+    const key = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
+    return {
+      signature: Buffer.from(key.sign(Buffer.from(message, 'utf8'))).toString(
+        'base64',
+      ),
+      signatureKind: 'raw',
+      publicKey: key.publicKey.toString(),
+    };
+  },
+});
+```
+
+The helper issues a challenge, signs it using your callback, verifies the signature, and stores the ledger API key on the client for subsequent requests.
+
 ## Step 3 — Request a Registration Quote
 
 ```typescript

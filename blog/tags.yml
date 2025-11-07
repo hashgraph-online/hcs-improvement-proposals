@@ -123,6 +123,51 @@ community:
   permalink: /community
   description: Community-related content and events
 
+updates:
+  label: Updates
+  permalink: /updates
+  description: Platform updates and release announcements
+
+hol-desktop:
+  label: HOL Desktop
+  permalink: /hol-desktop
+  description: HOL Desktop application releases and features
+
+hcs-14:
+  label: HCS-14
+  permalink: /hcs-14
+  description: HCS-14 Universal Agent ID standard updates
+
+agent-id:
+  label: Agent ID
+  permalink: /agent-id
+  description: Topics related to universal agent identifiers
+
+registry-broker:
+  label: Registry Broker
+  permalink: /registry-broker
+  description: Registry Broker platform news and tutorials
+
+tashi:
+  label: Tashi
+  permalink: /tashi
+  description: Tashi ecosystem announcements and progress
+
+hcs-15:
+  label: HCS-15
+  permalink: /hcs-15
+  description: HCS-15 Petals profile standard updates
+
+hcs-16:
+  label: HCS-16
+  permalink: /hcs-16
+  description: HCS-16 Floras AppNet standard updates
+
+hcs-17:
+  label: HCS-17
+  permalink: /hcs-17
+  description: HCS-17 State Hash standard updates
+
 monthly-recap:
   label: Monthly Recap
   permalink: /monthly-recap
