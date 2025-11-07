@@ -552,7 +552,7 @@ const sidebars: SidebarsConfig = {
             {
               type: 'doc',
               id: 'registry-broker/api/client',
-              label: 'Client',
+              label: 'Registry Broker Client',
             },
           ],
         },

@@ -219,22 +219,39 @@ if (!registeredUaid && isPendingRegisterAgentResponse(registration) && registrat
   }
 }
 
-if (registeredUaid) {
-  const updated = await client.updateAgent(registeredUaid, {
-    ...registrationPayload,
-    metadata: {
-      provider: 'example-labs',
-      uptime: 99.95,
-    },
+```
+
+### Updating a Registration
+
+```typescript
+if (!registeredUaid) {
+  throw new Error('Registration did not yield a UAID');
+}
+
+const updatePayload: AgentRegistrationRequest = {
+  ...registrationPayload,
+  endpoint: 'https://agent.example.com/v2',
+  metadata: {
+    ...registrationPayload.metadata,
+    uptime: 99.95,
+  },
+};
+
+const updated = await client.updateAgent(registeredUaid, updatePayload);
+
+if (isPendingRegisterAgentResponse(updated) && updated.attemptId) {
+  await client.waitForRegistrationCompletion(updated.attemptId, {
+    throwOnFailure: false,
+    onProgress: progress => console.log(progress.status),
   });
+}
 
-  if (isPartialRegisterAgentResponse(updated)) {
-    console.log(updated.message);
-  }
+if (isPartialRegisterAgentResponse(updated)) {
+  console.log(updated.message);
+}
 
-  if (isSuccessRegisterAgentResponse(updated)) {
-    console.log(updated.uaid);
-  }
+if (isSuccessRegisterAgentResponse(updated)) {
+  console.log('Update completed');
 }
 ```
 
@@ -292,6 +309,32 @@ client.setLedgerApiKey(verification.key);
 ```
 
 The registry automatically uses the ledger API key for privileged operations after verification.
+
+### Ledger Authentication Helper
+
+```typescript
+import { PrivateKey } from '@hashgraph/sdk';
+
+const verification = await client.authenticateWithLedger({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  network: 'testnet',
+  expiresInMinutes: 10,
+  sign: message => {
+    const key = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
+    return {
+      signature: Buffer.from(key.sign(Buffer.from(message, 'utf8'))).toString(
+        'base64',
+      ),
+      signatureKind: 'raw',
+      publicKey: key.publicKey.toString(),
+    };
+  },
+});
+
+console.log(verification.key);
+```
+
+`authenticateWithLedger` issues the challenge, signs it using your callback, verifies the signature, and sets the ledger API key on the client.
 
 ## Chat and History
 
