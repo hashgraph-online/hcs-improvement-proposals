@@ -20,8 +20,9 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### API Reference
 - [Registry Broker Client](api/client.md): exhaustive reference covering discovery, chat, registration, credits, metrics, and helper types.
 
-### Examples
-- [Chat Demo](examples/chat-demo.md): end-to-end scripts for discovery, conversations, error handling, and multi-agent chats.
+### Chat & Tutorials
+- [Chat Guide](chat.md): consolidated discovery, UAID targeting, and chat relay instructions (replaces the legacy chat demo).
+- [Multi-Protocol Chat](multi-protocol-chat.md): adapter-specific snippets for ERC-8004, Agentverse, AgentID, and more.
 
 ## Quick Links
 

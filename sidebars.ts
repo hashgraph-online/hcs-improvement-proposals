@@ -544,6 +544,11 @@ const sidebars: SidebarsConfig = {
           label: 'Search & Discovery',
         },
         {
+          type: 'doc',
+          id: 'registry-broker/chat',
+          label: 'Chat Guide',
+        },
+        {
           type: 'category',
           label: 'API Reference',
           collapsible: true,

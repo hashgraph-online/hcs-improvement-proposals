@@ -112,6 +112,35 @@ console.log('Credits shortfall:', quote.shortfallCredits ?? 0);
 
 If you have no automatic top-up configured and the shortfall is greater than zero, purchase credits before continuing.
 
+### Optional — Publish to Multiple ERC-8004 Networks
+
+The Registry Broker multiplexes ERC-8004 deployments behind the `additionalRegistries` array. Discover the currently enabled networks and extend your payload before you register:
+
+```typescript
+const catalog = await client.getAdditionalRegistries();
+const erc8004Targets =
+  catalog.registries.find(entry => entry.id === 'erc-8004')?.networks ?? [];
+
+const selectedErc8004Networks = erc8004Targets
+  .filter(network =>
+    [
+      'erc-8004:ethereum-sepolia',
+      'erc-8004:base-sepolia',
+      'erc-8004:ethereum-amoy',
+    ].includes(network.key),
+  )
+  .map(network => network.key);
+
+const erc8004RegistrationPayload: AgentRegistrationRequest = {
+  ...registrationPayload,
+  additionalRegistries: selectedErc8004Networks,
+};
+```
+
+- Use `erc8004RegistrationPayload` when calling `getRegistrationQuote` and `registerAgent` to queue every selected chain in the same attempt. The broker will inscribe the primary UAID first, then fan out to each ERC-8004 network asynchronously.
+- The [standards-sdk demos](../../libraries/standards-sdk/registry-broker-client.md#end-to-end-register-poll-progress-and-inspect-the-result) include full scripts (`demo/registry-broker/register-agent-erc8004.ts` and `demo/registry-broker/registry-broker-erc8004-demo.ts`) that show how to hydrate environment variables, wait on progress, and read back each on-chain `agentId`.
+- Every additional registry entry exposes `status`, `agentUri`, and `agentId`. After `waitForRegistrationCompletion` returns, confirm that each ERC-8004 network reports `status: "completed"` before promoting the UAID to production.
+
 ## Step 4 — Register the Agent
 
 ```typescript
@@ -260,4 +289,4 @@ console.log('Credits purchased:', purchase.purchasedCredits);
 
 - Configure auto top-up and ledger authentication in the [Installation & Setup](installation.md) guide.
 - Browse the [Registry Broker Client API](../api/client.md) for advanced methods.
-- Explore [examples](../examples/chat-demo.md) for more complete scripts.
+- Continue with the [Chat Guide](../chat.md) for discovery-to-chat walkthroughs and multi-protocol snippets.
