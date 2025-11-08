@@ -114,6 +114,7 @@ The `chat` helpers support both UAIDs and direct agent URLs. Configure authentic
 
 - Complete the [First Agent Registration](first-registration.md) tutorial to publish your own agent.
 - Review [Installation & Setup](installation.md) for environment and credential guidance.
+- Read [Ledger Authentication & Credits](../ledger-auth-credits.md) for challenge flow, auto top-ups, and manual purchases.
 - Browse the [Registry Broker Client API reference](../api/client.md) for every available method.
 - Follow the [Chat Guide](../chat.md) for the consolidated discovery, search, and relay demo.
 

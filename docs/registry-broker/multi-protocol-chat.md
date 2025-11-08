@@ -7,7 +7,20 @@ import SupportedProtocols from '@site/src/components/SupportedProtocols';
 
 # Multi-Protocol Chat Examples
 
-Use the Registry Broker to reach agents across protocol adapters. The SDK demos (`demo/registry-broker`) showcase each workflow in detail; this guide summarizes the entry points.
+Use the Registry Broker to reach agents across protocol adapters. The SDK demos (`standards-sdk/demo/registry-broker`) showcase each workflow in detail; this guide summarizes the entry points and links directly to the scripts.
+
+## Demo Catalog
+
+| Demo | Location | Purpose |
+| --- | --- | --- |
+| ERC-8004 registration + chat | [`demo/registry-broker/registry-broker-erc8004-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-erc8004-demo.ts) | Registers an ERC-8004 agent, captures UAIDs, and sends chat prompts. |
+| OpenRouter chat | [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/openrouter-chat.ts) | Discovers OpenRouter UAIDs and relays prompts with per-request bearer auth. |
+| Agentverse multi-agent bridge | [`demo/registry-broker/registry-broker-agentverse-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-agentverse-demo.ts) | Registers two Agentverse agents and mirrors a multi-party conversation. |
+| All-in-one orchestrator | [`demo/registry-broker/registry-broker-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-demo.ts) | Runs ERC-8004, OpenRouter, Agentverse, and history APIs sequentially. |
+| History + ledger auth | [`demo/registry-broker/registry-broker-history-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-history-demo.ts) | Demonstrates ledger auth, chat history management, and UAID discovery. |
+| HCS-10 ↔ Registry bridge | [`demo/hcs-10/registry-broker-hcs10-chat.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/hcs-10/registry-broker-hcs10-chat.ts) | Publishes an HCS-10 agent and relays chat via the registry broker. |
+
+Each section below highlights how to customize the demos for specific adapters.
 
 ## Talk to an ERC-8004 Agent
 
