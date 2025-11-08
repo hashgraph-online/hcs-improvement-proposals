@@ -266,7 +266,7 @@ if (registration.attemptId) {
 
 ## Credits and Ledger Authentication
 
-### Manual Credit Purchase
+### Manual Credit Purchase (HBAR)
 
 ```typescript
 const credits = await client.purchaseCreditsWithHbar({
@@ -281,6 +281,78 @@ const credits = await client.purchaseCreditsWithHbar({
 
 console.log(credits.balance, credits.purchasedCredits);
 ```
+
+### Stripe (Credit Card) Purchases
+
+The normal path for card payments is the hosted [billing portal](https://registry.hashgraphonline.com/billing). Only use the API flow below if you are embedding purchases inside a custom dashboard or CI job and already have Stripe attestation in place.
+
+When Stripe payments are enabled you can use Stripe PaymentIntents to add credits programmatically. The sequence mirrors the [credit purchase guide](https://github.com/hashgraphonline/hashgraph-online/blob/main/registry-broker/docs/credit-purchase.md#stripe-credit-purchases):
+
+1. `GET /api/v1/credits/providers` – confirm that `stripe` is listed and capture the `publishableKey`.
+2. `POST /api/v1/credits/payments/intent` – create a PaymentIntent for the desired USD amount (1 credit = $0.01). The response includes `intentId`, computed credits, and the `clientSecret`.
+3. Confirm the PaymentIntent client-side via Stripe.js or the Payment Element using the publishable key from step 1.
+4. Stripe sends `payment_intent.succeeded` to `/api/v1/credits/webhooks/stripe`; the broker credits the account automatically.
+
+Example intent creation:
+
+```typescript
+const intent = await fetch(`${baseUrl}/credits/payments/intent`, {
+  method: 'POST',
+  headers: {
+    'content-type': 'application/json',
+    'x-ledger-api-key': ledgerApiKey,
+  },
+  body: JSON.stringify({
+    accountId: '0.0.123456',
+    usdAmount: 5.00,
+    description: 'Top up via card',
+    metadata: { reason: 'demo' },
+  }),
+}).then(res => res.json());
+
+console.log(intent.intentId, intent.credits, intent.clientSecret);
+```
+
+The client secret drives the Stripe confirmation step; credits land once the webhook confirms success.
+
+### x402 (EVM) Purchases
+
+Use the built-in helper when you want to settle credit purchases with WETH/USDC over Base/Mainnet or Base Sepolia. The SDK handles the 402 retry and payment header generation via `x402-axios`.
+
+```typescript
+import { PrivateKey } from '@hashgraph/sdk';
+
+const client = new RegistryBrokerClient({ baseUrl: 'https://registry.hashgraphonline.com/api/v1' });
+await client.authenticateWithLedger({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  network: 'mainnet',
+  sign: message => {
+    const key = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
+    return {
+      signature: Buffer.from(key.sign(Buffer.from(message, 'utf8'))).toString('base64'),
+      signatureKind: 'raw',
+      publicKey: key.publicKey.toString(),
+    };
+  },
+});
+
+const result = await client.buyCreditsWithX402({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  credits: 25,
+  description: 'x402 demo top-up',
+  metadata: { reason: 'demo' },
+  evmPrivateKey: process.env.ETH_PK!,
+  network: 'base', // or 'base-sepolia'
+  rpcUrl: 'https://mainnet.base.org', // optional override
+});
+
+console.log(result.balance, result.payment?.settlement?.transaction);
+```
+
+Notes:
+- One credit = $0.01 USD. The broker quotes live ETH/USD and settles in WETH (`0x4200…0006`) on Base or Base Sepolia.
+- Keep the payer wallet funded with WETH and the facilitator wallet (`ETH_PK` inside the broker) funded with a small amount of ETH for gas; otherwise the `transferWithAuthorization` transaction fails.
+- Ledger authentication is required so the API can debit and reconcile credits for the correct Hedera account.
 
 ### Ledger Authentication Flow
 
@@ -423,4 +495,4 @@ Useful types live in `@hashgraphonline/standards-sdk/services/registry-broker`:
 ## Next Steps
 
 - Follow the step-by-step tutorials in [Getting Started](../getting-started/quick-start.md).
-- Explore end-to-end samples in [Examples](../examples/chat-demo.md).
+- Dive into the consolidated [Chat Guide](../chat.md) for discovery, session, and multi-protocol walkthroughs.

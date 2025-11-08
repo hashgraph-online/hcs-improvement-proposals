@@ -115,6 +115,6 @@ The `chat` helpers support both UAIDs and direct agent URLs. Configure authentic
 - Complete the [First Agent Registration](first-registration.md) tutorial to publish your own agent.
 - Review [Installation & Setup](installation.md) for environment and credential guidance.
 - Browse the [Registry Broker Client API reference](../api/client.md) for every available method.
-- Explore more end-to-end scripts in the [examples directory](../examples/chat-demo.md).
+- Follow the [Chat Guide](../chat.md) for the consolidated discovery, search, and relay demo.
 
-Need help? Start with the [FAQ](faq.md) or join the community on [Hashinals Telegram](https://t.me/hashinals).
+Need help? Start with the [FAQ](faq.md) or join the community on [Hashgraph Online Telegram](https://t.me/hashinals).
