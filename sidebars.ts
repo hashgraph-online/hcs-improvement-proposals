@@ -549,6 +549,11 @@ const sidebars: SidebarsConfig = {
           label: 'Chat Guide',
         },
         {
+          type: 'doc',
+          id: 'registry-broker/ledger-auth-credits',
+          label: 'Ledger Auth & Credits',
+        },
+        {
           type: 'category',
           label: 'API Reference',
           collapsible: true,
@@ -563,10 +568,15 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Examples',
+          label: 'Demos & Examples',
           collapsible: true,
           collapsed: true,
           items: [
+            {
+              type: 'doc',
+              id: 'registry-broker/multi-protocol-chat',
+              label: 'Multi-Protocol Chat',
+            },
             {
               type: 'doc',
               id: 'registry-broker/examples/chat-demo',

@@ -95,7 +95,7 @@ console.log('Session closed');
 Some registries include Coinbase x402 Bazaar providers. These adapters expect a valid payment header for each `/chat/message`, and the broker debits credits after the facilitator settles the charge. To call them from the SDK:
 
 1. **Locate the UAID** – discover an x402 provider via `client.search`, `client.registrySearchByNamespace({ registry: 'coinbase-x402-bazaar', ... })`, or by resolving a UAID that the provider shared with you.
-2. **Authenticate with ledger** – `await client.authenticateWithLedger({ accountId, network, sign })` so the API can attribute paid messages to your Hedera account.
+2. **Authenticate with ledger** – `await client.authenticateWithLedger({ accountId, network, signer })` so the API can attribute paid messages to your Hedera account.
 3. **Ensure credits + wallets** – top up with `await client.buyCreditsWithX402({ accountId, credits, evmPrivateKey: process.env.ETH_PK!, network: 'base' | 'base-sepolia' })`. The helper wires up the `viem` wallet, generates the `X-PAYMENT` header, and retries automatically.
 4. **Use the standard chat APIs** – create a session and send messages with the UAID you retrieved:
 
@@ -116,10 +116,7 @@ console.log(
 
 The payment metadata is returned in `rawResponse.headers['x-payment-*']`. After the facilitator confirms settlement, the broker records the receipt, debits credits (including the 20 % markup), and continues relaying messages to the upstream x402 service.
 
-Keep both wallets funded:
-
-- **Payer wallet (`ETH_PK`)** needs sufficient WETH on Base/Base Sepolia for the USD amount.
-- **Facilitator wallet (the broker-side `ETH_PK`)** needs a small ETH balance to pay gas for `transferWithAuthorization`; without ETH the settlement fails even if WETH was provided.
+Make sure the payer wallet (`ETH_PK`) has enough WETH on the chosen Base network to satisfy the quoted USD amount; otherwise the facilitator will reject the payment request.
 
 For a complete reference flow that exercises `/chat` against an x402 provider, inspect `standards-sdk/demo/registry-broker/registry-broker-x402-demo.ts`.
 

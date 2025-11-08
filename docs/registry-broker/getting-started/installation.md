@@ -39,7 +39,7 @@ HEDERA_PRIVATE_KEY=302e...                                # optional, needed for
 | --- | --- |
 | `REGISTRY_BROKER_API_URL` | Overrides the base URL (defaults to production). |
 | `REGISTRY_BROKER_API_KEY` | Authorises paid endpoints such as registration, chat, and UAID utilities. |
-| `REGISTRY_BROKER_LEDGER_KEY` | Populated after completing ledger verification; see the ledger tutorial. |
+| `REGISTRY_BROKER_LEDGER_KEY` | Populated after completing ledger verification; see [Ledger Authentication & Credits](../ledger-auth-credits.md). |
 | `HEDERA_ACCOUNT_ID` / `HEDERA_PRIVATE_KEY` | Required for credit purchases and ledger-backed registrations. |
 
 Load the variables via `dotenv` or your preferred configuration system.

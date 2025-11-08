@@ -320,20 +320,21 @@ The client secret drives the Stripe confirmation step; credits land once the web
 Use the built-in helper when you want to settle credit purchases with WETH/USDC over Base/Mainnet or Base Sepolia. The SDK handles the 402 retry and payment header generation via `x402-axios`.
 
 ```typescript
-import { PrivateKey } from '@hashgraph/sdk';
+import {
+  RegistryBrokerClient,
+  createPrivateKeySigner,
+} from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({ baseUrl: 'https://registry.hashgraphonline.com/api/v1' });
+const signer = createPrivateKeySigner({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'mainnet',
+});
 await client.authenticateWithLedger({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
   network: 'mainnet',
-  sign: message => {
-    const key = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
-    return {
-      signature: Buffer.from(key.sign(Buffer.from(message, 'utf8'))).toString('base64'),
-      signatureKind: 'raw',
-      publicKey: key.publicKey.toString(),
-    };
-  },
+  signer,
 });
 
 const result = await client.buyCreditsWithX402({
@@ -351,7 +352,7 @@ console.log(result.balance, result.payment?.settlement?.transaction);
 
 Notes:
 - One credit = $0.01 USD. The broker quotes live ETH/USD and settles in WETH (`0x4200…0006`) on Base or Base Sepolia.
-- Keep the payer wallet funded with WETH and the facilitator wallet (`ETH_PK` inside the broker) funded with a small amount of ETH for gas; otherwise the `transferWithAuthorization` transaction fails.
+- Keep the payer wallet funded with WETH on the selected Base network.
 - Ledger authentication is required so the API can debit and reconcile credits for the correct Hedera account.
 
 ### Ledger Authentication Flow
@@ -385,22 +386,21 @@ The registry automatically uses the ledger API key for privileged operations aft
 ### Ledger Authentication Helper
 
 ```typescript
-import { PrivateKey } from '@hashgraph/sdk';
+import {
+  RegistryBrokerClient,
+  createPrivateKeySigner,
+} from '@hashgraphonline/standards-sdk';
 
+const signer = createPrivateKeySigner({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+});
 const verification = await client.authenticateWithLedger({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
   network: 'testnet',
   expiresInMinutes: 10,
-  sign: message => {
-    const key = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
-    return {
-      signature: Buffer.from(key.sign(Buffer.from(message, 'utf8'))).toString(
-        'base64',
-      ),
-      signatureKind: 'raw',
-      publicKey: key.publicKey.toString(),
-    };
-  },
+  signer,
 });
 
 console.log(verification.key);

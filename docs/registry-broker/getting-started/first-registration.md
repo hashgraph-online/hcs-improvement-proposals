@@ -61,27 +61,24 @@ const client = new RegistryBrokerClient({
 });
 ```
 
-Auto top-up is optional but recommended for unattended registrations. The client purchases missing credits when the registry returns a shortfall.
+Auto top-up is optional but recommended for unattended registrations. The client purchases missing credits when the registry returns a shortfall. See [Ledger Authentication & Credits](../ledger-auth-credits.md) for a complete walkthrough of signing, auto top-ups, and manual credit purchases.
 
 ### Optional — Hedera Ledger Authentication Helper
 
 ```typescript
-import { PrivateKey } from '@hashgraph/sdk';
+import { createPrivateKeySigner } from '@hashgraphonline/standards-sdk';
+
+const signer = createPrivateKeySigner({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  privateKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+});
 
 await client.authenticateWithLedger({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
   network: 'testnet',
   expiresInMinutes: 10,
-  sign: message => {
-    const key = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
-    return {
-      signature: Buffer.from(key.sign(Buffer.from(message, 'utf8'))).toString(
-        'base64',
-      ),
-      signatureKind: 'raw',
-      publicKey: key.publicKey.toString(),
-    };
-  },
+  signer,
 });
 ```
 
