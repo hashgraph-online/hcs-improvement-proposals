@@ -31,8 +31,15 @@ Create `.env` in your project root:
 REGISTRY_BROKER_API_URL=https://registry.hashgraphonline.com/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key                     # optional for search-only usage
 REGISTRY_BROKER_LEDGER_KEY=                               # populated after ledger verification
+REGISTRY_BROKER_LEDGER_MODE=hedera                       # hedera (default) or evm
 HEDERA_ACCOUNT_ID=0.0.1234                                # optional, needed for registrations
 HEDERA_PRIVATE_KEY=302e...                                # optional, needed for credits or ledger auth
+MAINNET_HEDERA_ACCOUNT_ID=0.0.1001                        # optional scoped creds
+MAINNET_HEDERA_PRIVATE_KEY=302e...
+TESTNET_HEDERA_ACCOUNT_ID=0.0.2002                        # optional scoped creds
+TESTNET_HEDERA_PRIVATE_KEY=302e...
+ETH_PK=0xabc123...                                        # optional, required for evm ledger mode
+EVM_LEDGER_NETWORK=base-sepolia                           # or eip155:<chainId>
 ```
 
 | Variable | Purpose |
@@ -40,7 +47,11 @@ HEDERA_PRIVATE_KEY=302e...                                # optional, needed for
 | `REGISTRY_BROKER_API_URL` | Overrides the base URL (defaults to production). |
 | `REGISTRY_BROKER_API_KEY` | Authorises paid endpoints such as registration, chat, and UAID utilities. |
 | `REGISTRY_BROKER_LEDGER_KEY` | Populated after completing ledger verification; see [Ledger Authentication & Credits](../ledger-auth-credits.md). |
-| `HEDERA_ACCOUNT_ID` / `HEDERA_PRIVATE_KEY` | Required for credit purchases and ledger-backed registrations. |
+| `REGISTRY_BROKER_LEDGER_MODE` | Selects which signer flow demos use (`hedera` default, `evm` for EIP-155 ledgers). |
+| `HEDERA_ACCOUNT_ID` / `HEDERA_PRIVATE_KEY` | Default Hedera credentials for ledger auth and purchases. |
+| `MAINNET_HEDERA_*` / `TESTNET_HEDERA_*` | Network-scoped overrides automatically selected from `HEDERA_NETWORK`. |
+| `ETH_PK` | Required when `REGISTRY_BROKER_LEDGER_MODE=evm` or when funding credits via x402. |
+| `EVM_LEDGER_NETWORK` | Alias (`base`, `abstract`, `polygon-amoy`, …) or canonical `eip155:<chainId>` string. |
 
 Load the variables via `dotenv` or your preferred configuration system.
 
@@ -90,7 +101,7 @@ import { PrivateKey } from '@hashgraph/sdk';
 async function setupLedgerAuthentication() {
   const challenge = await registryBrokerClient.createLedgerChallenge({
     accountId: process.env.HEDERA_ACCOUNT_ID,
-    network: 'testnet',
+    network: 'hedera:testnet',
   });
 
   const operatorKey = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
@@ -101,7 +112,7 @@ async function setupLedgerAuthentication() {
   const verification = await registryBrokerClient.verifyLedgerChallenge({
     challengeId: challenge.challengeId,
     accountId: process.env.HEDERA_ACCOUNT_ID,
-    network: 'testnet',
+    network: 'hedera:testnet',
     signature,
     publicKey: operatorKey.publicKey.toString(),
   });

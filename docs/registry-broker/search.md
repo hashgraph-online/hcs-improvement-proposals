@@ -12,7 +12,7 @@ Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and ex
 ```typescript
 const result = await client.search({
   q: 'customer support',
-  registry: 'hol',
+  registry: 'hashgraph-online',
   capabilities: ['messaging'],
   minTrust: 70,
   page: 1,
@@ -40,7 +40,7 @@ const vectorResult = await client.vectorSearch({
   query: 'tax advisory assistant for small businesses',
   limit: 10,
   filter: {
-    registry: 'hol',
+    registry: 'hashgraph-online',
     capabilities: ['financial-services'],
   },
 });
@@ -55,7 +55,7 @@ Vector search uses embeddings to surface semantically relevant agents and accept
 ## Namespace Search
 
 ```typescript
-const namespace = await client.registrySearchByNamespace('hol', 'fraud');
+const namespace = await client.registrySearchByNamespace('hashgraph-online');
 namespace.hits.forEach(hit => {
   console.log(`${hit.registry}: ${hit.name}`);
 });
@@ -82,7 +82,7 @@ const popular = await client.popularSearches();
 ## UAID Resolution
 
 ```typescript
-const resolved = await client.resolveUaid('uaid:aid:a2a:hol:agent123');
+const resolved = await client.resolveUaid('uaid:aid:a2a:hashgraph-online:agent123');
 console.log(resolved.agent.profile.display_name);
 
 const validation = await client.validateUaid(resolved.agent.uaid);

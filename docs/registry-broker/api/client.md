@@ -79,7 +79,7 @@ const headers = client.getDefaultHeaders();
 const result = await client.search({
   q: 'customer support',
   limit: 10,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   capabilities: ['messaging'],
   minTrust: 70,
   sortBy: 'trust',
@@ -107,7 +107,7 @@ const vector = await client.vectorSearch({
   query: 'tax advisor for small businesses',
   limit: 5,
   filter: {
-    registry: 'hol',
+    registry: 'hashgraph-online',
     protocols: ['a2a'],
     capabilities: ['financial-services'],
   },
@@ -121,7 +121,7 @@ vector.hits.forEach(hit => {
 ### Namespace Search
 
 ```typescript
-const namespace = await client.registrySearchByNamespace('hol', 'fraud');
+const namespace = await client.registrySearchByNamespace('hashgraph-online');
 ```
 
 ### Catalog Data
@@ -138,7 +138,7 @@ const popular = await client.popularSearches();
 ### UAID Resolution
 
 ```typescript
-const resolved = await client.resolveUaid('uaid:aid:a2a:hol:agent123');
+const resolved = await client.resolveUaid('uaid:aid:a2a:hashgraph-online:agent123');
 const validation = await client.validateUaid(resolved.agent.uaid);
 const status = await client.getUaidConnectionStatus(resolved.agent.uaid);
 if (!status.connected) {
@@ -176,7 +176,7 @@ const profile: HCS11Profile = {
 
 const registrationPayload: AgentRegistrationRequest = {
   profile,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   communicationProtocol: 'a2a',
   endpoint: 'https://agent.example.com/a2a',
   additionalRegistries: ['erc-8004:ethereum-sepolia'],
@@ -320,21 +320,12 @@ The client secret drives the Stripe confirmation step; credits land once the web
 Use the built-in helper when you want to settle credit purchases with WETH/USDC over Base/Mainnet or Base Sepolia. The SDK handles the 402 retry and payment header generation via `x402-axios`.
 
 ```typescript
-import {
-  RegistryBrokerClient,
-  createPrivateKeySigner,
-} from '@hashgraphonline/standards-sdk';
-
 const client = new RegistryBrokerClient({ baseUrl: 'https://registry.hashgraphonline.com/api/v1' });
-const signer = createPrivateKeySigner({
+await client.authenticateWithLedgerCredentials({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
-  privateKey: process.env.HEDERA_PRIVATE_KEY!,
-  network: 'mainnet',
-});
-await client.authenticateWithLedger({
-  accountId: process.env.HEDERA_ACCOUNT_ID!,
-  network: 'mainnet',
-  signer,
+  network: 'hedera:mainnet',
+  hederaPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+  label: 'x402 top-up',
 });
 
 const result = await client.buyCreditsWithX402({
@@ -362,7 +353,7 @@ import { PrivateKey } from '@hashgraph/sdk';
 
 const challenge = await client.createLedgerChallenge({
   accountId: process.env.HEDERA_ACCOUNT_ID,
-  network: 'testnet',
+  network: 'hedera:testnet',
 });
 
 const operatorKey = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
@@ -370,15 +361,19 @@ const signature = Buffer.from(
   operatorKey.sign(Buffer.from(challenge.message, 'utf8')),
 ).toString('base64');
 
-const verification = await client.verifyLedgerChallenge({
-  challengeId: challenge.challengeId,
-  accountId: process.env.HEDERA_ACCOUNT_ID,
-  network: 'testnet',
-  signature,
-  publicKey: operatorKey.publicKey.toString(),
+await client.authenticateWithLedgerCredentials({
+  accountId: process.env.HEDERA_ACCOUNT_ID!,
+  network: 'hedera:testnet',
+  signer: {
+    // reuse the custom signing logic when you already have an operator key
+    sign: async messages => [
+      {
+        signature: operatorKey.sign(messages[0]!),
+        accountId: operatorKey.publicKey.toString(),
+      } as any,
+    ],
+  },
 });
-
-client.setLedgerApiKey(verification.key);
 ```
 
 The registry automatically uses the ledger API key for privileged operations after verification.
@@ -386,33 +381,36 @@ The registry automatically uses the ledger API key for privileged operations aft
 ### Ledger Authentication Helper
 
 ```typescript
-import {
-  RegistryBrokerClient,
-  createPrivateKeySigner,
-} from '@hashgraphonline/standards-sdk';
-
-const signer = createPrivateKeySigner({
+const verification = await client.authenticateWithLedgerCredentials({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
-  privateKey: process.env.HEDERA_PRIVATE_KEY!,
-  network: 'testnet',
-});
-const verification = await client.authenticateWithLedger({
-  accountId: process.env.HEDERA_ACCOUNT_ID!,
-  network: 'testnet',
+  network: 'hedera:testnet',
+  hederaPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
   expiresInMinutes: 10,
-  signer,
+  label: 'docs example',
 });
-
 console.log(verification.key);
 ```
 
-`authenticateWithLedger` issues the challenge, signs it using your callback, verifies the signature, and sets the ledger API key on the client.
+`authenticateWithLedgerCredentials` issues the challenge, signs it using the inferred signer (Hedera private key, custom `Signer`, or EVM wallet), verifies the signature, and sets the ledger API key on the client. When you pass an alias (`base`, `base-sepolia`, `mainnet`, …) the response includes both `network` (alias) and `networkCanonical` (e.g., `eip155:84532`, `hedera:mainnet`) so downstream services can migrate without breaking older tooling.
+
+```typescript
+// EVM private key example
+const evmPrivateKey = process.env.ETH_PK?.startsWith('0x')
+  ? process.env.ETH_PK
+  : `0x${process.env.ETH_PK}`;
+await client.authenticateWithLedgerCredentials({
+  accountId: process.env.REGISTRY_BROKER_EVM_ACCOUNT ?? '',
+  network: process.env.EVM_LEDGER_NETWORK ?? 'eip155:84532',
+  evmPrivateKey,
+  expiresInMinutes: 10,
+});
+```
 
 ## Chat and History
 
 ```typescript
 const session = await client.chat.createSession({
-  uaid: 'uaid:aid:a2a:hol:agent123',
+  uaid: 'uaid:aid:a2a:hashgraph-online:agent123',
   historyTtlSeconds: 1800,
 });
 

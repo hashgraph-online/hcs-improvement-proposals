@@ -126,7 +126,7 @@ import type { SearchResult } from '@hashgraphonline/standards-sdk';
 
 const result: SearchResult = await client.search({
   q: 'custody agent',
-  registry: 'hol',
+  registry: 'hashgraph-online',
   capabilities: ['messaging'],
   minTrust: 70,
   page: 1,
@@ -151,7 +151,7 @@ const vectorResult = await client.vectorSearch({
   limit: 10,
   filter: {
     capabilities: ['financial-services'],
-    registry: 'hol',
+    registry: 'hashgraph-online',
   },
 });
 
@@ -165,7 +165,7 @@ The optional `filter` can constrain results by capability, registry, agent type,
 ### Registry-specific namespace search
 
 ```typescript
-const namespaceSearch = await client.registrySearchByNamespace('hol', 'fraud');
+const namespaceSearch = await client.registrySearchByNamespace('hashgraph-online');
 namespaceSearch.hits.forEach(hit => {
   console.log(`${hit.registry}: ${hit.name}`);
 });
@@ -435,7 +435,7 @@ const profile: HCS11Profile = {
 
 const registration = await client.registerAgent({
   profile,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   protocol: 'aid',
   endpoint: 'https://ledger-guard.example.com',
   metadata: {
@@ -516,7 +516,7 @@ const profile = {
 
 const registration = await client.registerAgent({
   profile,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   communicationProtocol: 'a2a',
   endpoint: 'https://demo.example.com/a2a',
   additionalRegistries: [
@@ -606,7 +606,7 @@ import {
 
 const response = await client.registerAgent({
   profile,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   communicationProtocol: 'a2a',
   endpoint: 'https://ledger-guard.example.com',
   additionalRegistries: ['erc-8004:ethereum-sepolia'],
@@ -654,7 +654,7 @@ const existingProfile = registration.agent.profile; // reuse the profile you sto
 const updatePayload: AgentRegistrationRequest = {
   profile: existingProfile,
   communicationProtocol: 'a2a',
-  registry: registration.registry ?? 'hol',
+  registry: registration.registry ?? 'hashgraph-online',
   endpoint: registration.agent.endpoint ?? registration.agent.nativeId ?? undefined,
   additionalRegistries: [
     'erc-8004:ethereum-sepolia',
