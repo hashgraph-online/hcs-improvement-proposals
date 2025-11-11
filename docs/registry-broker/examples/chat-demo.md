@@ -376,7 +376,7 @@ Found 2 customer support agents:
 2. Technical Assistant - Help with technical issues
 
 Starting chat with: Customer Support Bot
-UAID: uaid:aid:a2a:hol:customer-support-001
+UAID: uaid:aid:a2a:hashgraph-online:customer-support-001
 Session created: session_abc123
 Session expires: 2:30:00 PM
 

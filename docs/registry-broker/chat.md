@@ -55,7 +55,7 @@ You can also start a chat by sending a message directly with a UAID:
 
 ```typescript
 const direct = await client.chat.sendMessage({
-  uaid: 'uaid:aid:a2a:hol:agent123',
+  uaid: 'uaid:aid:a2a:hashgraph-online:agent123',
   message: 'Hello from the SDK!',
 });
 ```
@@ -87,17 +87,34 @@ console.log('Session closed');
 
 - Store the UAID returned in `session.uaid` for downstream workflows (registration updates, directory listings, etc.).
 - Use `historyTtlSeconds` to balance cost and retention; the broker auto-expires chat history after the configured TTL.
-- Combine chat flows with `client.authenticateWithLedger` or `historyAutoTopUp` to keep sessions available even when the account runs low on credits.
+- Combine chat flows with `client.authenticateWithLedgerCredentials` or `historyAutoTopUp` to keep sessions available even when the account runs low on credits.
 - See the [registry-broker demos](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker) for complete scripts covering OpenRouter, history management, and async flows.
 
 ### x402-Paid Chats
 
-Some registries include Coinbase x402 Bazaar providers. These adapters expect a valid payment header for each `/chat/message`, and the broker debits credits after the facilitator settles the charge. To call them from the SDK:
+Some registries surface Coinbase x402 Bazaar providers or ERC-8004 listings that require x402 payments. These adapters expect a valid payment header for every `/chat/message`, and the broker debits credits (including the 20 % markup) once the facilitator confirms settlement.
 
-1. **Locate the UAID** – discover an x402 provider via `client.search`, `client.registrySearchByNamespace({ registry: 'coinbase-x402-bazaar', ... })`, or by resolving a UAID that the provider shared with you.
-2. **Authenticate with ledger** – `await client.authenticateWithLedger({ accountId, network, signer })` so the API can attribute paid messages to your Hedera account.
-3. **Ensure credits + wallets** – top up with `await client.buyCreditsWithX402({ accountId, credits, evmPrivateKey: process.env.ETH_PK!, network: 'base' | 'base-sepolia' })`. The helper wires up the `viem` wallet, generates the `X-PAYMENT` header, and retries automatically.
-4. **Use the standard chat APIs** – create a session and send messages with the UAID you retrieved:
+#### Prerequisites
+
+1. **Discover the UAID** – search by registry (`coinbase-x402-bazaar`, `erc-8004`, etc.) or resolve a UAID that a provider shared with you.
+2. **Ledger authentication** – `await client.authenticateWithLedgerCredentials({ accountId, network, hederaPrivateKey })` so paid chats are tied to your Hedera account.
+3. **Fund credits via x402** – keep your payer wallet (`ETH_PK`) stocked with WETH on the desired Base network, then call `client.buyCreditsWithX402`:
+
+```typescript
+await client.buyCreditsWithX402({
+  accountId: process.env.DEMO_ACCOUNT_ID!,
+  credits: 50, // 1 credit = $0.01 before the 20% markup
+  description: 'Top-up for paid chats',
+  evmPrivateKey: process.env.ETH_PK!,
+  network: 'base-sepolia', // or 'base'
+});
+```
+
+The helper provisions a `viem` wallet client, injects the `X-PAYMENT` header, retries after the initial 402, and returns the decoded payment receipt (`paymentResponse`).
+
+#### Sending a Paid Message
+
+Call the standard chat APIs—no bespoke REST plumbing is required:
 
 ```typescript
 const session = await client.chat.createSession({ uaid: x402Uaid });
@@ -114,11 +131,19 @@ console.log(
 );
 ```
 
-The payment metadata is returned in `rawResponse.headers['x-payment-*']`. After the facilitator confirms settlement, the broker records the receipt, debits credits (including the 20 % markup), and continues relaying messages to the upstream x402 service.
+The broker exposes the facilitator output in `rawResponse.headers['x-payment-*']`. Once the facilitator marks the requirement `SETTLED`, credits are debited automatically and subsequent messages in the same session remain billable.
+
+#### End-to-End Reference Demos
+
+- `standards-sdk/demo/registry-broker/registry-broker-x402-demo.ts` shows a single client chatting with a Coinbase x402 Bazaar provider and printing the payment headers.
+- `standards-sdk/demo/registry-broker/registry-broker-erc8004-x402-demo.ts` registers:
+  1. A local A2A initiator under the `hashgraph-online` registry.
+  2. A paid ERC-8004 agent whose metadata advertises an x402 capability.
+  3. A Cloudflare-backed facilitator endpoint.
+
+  The script authenticates via ledger, auto-purchases credits with `buyCreditsWithX402`, creates a session against the ERC-8004 UAID, and prints the paid response plus the credit delta. Use it as a blueprint for wiring your own UAIDs that expect x402 settlements.
 
 Make sure the payer wallet (`ETH_PK`) has enough WETH on the chosen Base network to satisfy the quoted USD amount; otherwise the facilitator will reject the payment request.
-
-For a complete reference flow that exercises `/chat` against an x402 provider, inspect `standards-sdk/demo/registry-broker/registry-broker-x402-demo.ts`.
 
 ## Resources
 

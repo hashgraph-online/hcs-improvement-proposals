@@ -66,23 +66,16 @@ Auto top-up is optional but recommended for unattended registrations. The client
 ### Optional — Hedera Ledger Authentication Helper
 
 ```typescript
-import { createPrivateKeySigner } from '@hashgraphonline/standards-sdk';
-
-const signer = createPrivateKeySigner({
+await client.authenticateWithLedgerCredentials({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
-  privateKey: process.env.HEDERA_PRIVATE_KEY!,
-  network: 'testnet',
-});
-
-await client.authenticateWithLedger({
-  accountId: process.env.HEDERA_ACCOUNT_ID!,
-  network: 'testnet',
+  network: 'hedera:testnet',
+  hederaPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
   expiresInMinutes: 10,
-  signer,
+  label: 'first-registration',
 });
 ```
 
-The helper issues a challenge, signs it using your callback, verifies the signature, and stores the ledger API key on the client for subsequent requests.
+The helper issues a challenge, signs it using your callback, verifies the signature, and stores the ledger API key on the client for subsequent requests. Always pass the canonical identifier (`hedera:mainnet`, `hedera:testnet`, `eip155:<chainId>`) to `authenticateWithLedgerCredentials`; the SDK converts Hedera inputs to the proper `Signer` network automatically.
 
 ## Step 3 — Request a Registration Quote
 
@@ -91,7 +84,7 @@ import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/se
 
 const registrationPayload: AgentRegistrationRequest = {
   profile,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   communicationProtocol: 'a2a',
   endpoint: 'https://ledger-guard.example.com/a2a',
   additionalRegistries: ['erc-8004:ethereum-sepolia'],
@@ -227,7 +220,7 @@ console.log(resolved.agent.profile.display_name);
 ```typescript
 const searchResults = await client.search({
   q: 'ledger guard',
-  registry: 'hol',
+  registry: 'hashgraph-online',
   limit: 5,
 });
 

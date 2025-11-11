@@ -67,6 +67,6 @@ if (isSuccessRegisterAgentResponse(response)) {
 
 - Use `client.getRegistrationProgress(attemptId)` when you only need the latest status.
 - Reuse the `AgentRegistrationRequest` structure from the original registration to keep payloads consistent.
-- Combine this flow with `client.authenticateWithLedger` or auto top-up if the update requires additional credits.
+- Combine this flow with `client.authenticateWithLedgerCredentials` or auto top-up if the update requires additional credits.
 
 See the [Standards SDK registry-broker demos](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker) for end-to-end scripts covering ledger authentication, ERC-8004 updates, and OpenRouter flows.

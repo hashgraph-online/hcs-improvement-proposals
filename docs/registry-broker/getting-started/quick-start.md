@@ -30,9 +30,12 @@ REGISTRY_BROKER_API_URL=https://registry.hashgraphonline.com/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key # omit for unauthenticated search
 HEDERA_ACCOUNT_ID=0.0.1234           # optional, needed for registration demos
 HEDERA_PRIVATE_KEY=302e...           # optional, needed for registration demos
+REGISTRY_BROKER_LEDGER_MODE=hedera  # switch to evm for EIP-155 ledger auth
+EVM_LEDGER_NETWORK=base-sepolia     # or eip155:<chainId>
+ETH_PK=0xabc123...                  # required when ledger mode = evm
 ```
 
-Load these values before interacting with the client (e.g. via `dotenv`).
+Load these values before interacting with the client (e.g. via `dotenv`). Ledger operations accept CAIP-style identifiers (`hedera:mainnet`, `hedera:testnet`, `eip155:<chainId>`); the SDK keeps compatibility with the older aliases but canonical values are recommended.
 
 ## Step 3 — Initialise the Client
 
@@ -55,7 +58,7 @@ The client automatically normalises the base URL and uses `globalThis.fetch`. Pr
 const keywordResults = await client.search({
   q: 'customer support',
   limit: 5,
-  registry: 'hol',
+  registry: 'hashgraph-online',
   verified: true,
 });
 
@@ -71,7 +74,7 @@ const vectorResults = await client.vectorSearch({
   query: 'treasury risk monitoring assistant',
   limit: 3,
   filter: {
-    registry: 'hol',
+    registry: 'hashgraph-online',
     capabilities: ['financial-services'],
   },
 });
