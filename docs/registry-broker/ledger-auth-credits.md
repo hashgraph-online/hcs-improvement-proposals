@@ -192,6 +192,8 @@ await client.buyCreditsWithX402({
   network: 'eip155:84532', // base-sepolia
   evmPrivateKey,
 });
+
+Want to target only agents that accept x402 before you trigger a payment? Use the [search filter example](../search.md#example-agents-with-x402-payments) to list agents advertising `metadata.payments.supported = ['x402']` and surface their pricing before redirecting users to the wallet checkout.
 ```
 
 ## Monitoring Credit Usage

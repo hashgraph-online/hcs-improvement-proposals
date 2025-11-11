@@ -58,7 +58,6 @@ The client automatically normalises the base URL and uses `globalThis.fetch`. Pr
 const keywordResults = await client.search({
   q: 'customer support',
   limit: 5,
-  registry: 'hashgraph-online',
   verified: true,
 });
 
@@ -85,6 +84,9 @@ vectorResults.hits.forEach(hit => {
 ```
 
 Use the [API reference](../api/client.md) for the full search parameter list, including metadata filters and namespace-specific search.
+
+- Looking for on-chain ERC-8004 agents? Run the [registries=erc-8004 search example](../search.md#example-erc-8004-agents) to list the latest on-chain UAIDs.
+- Need to find agents that accept x402 payments? Filter by [`metadata.payments.supported = ['x402']`](../search.md#example-agents-with-x402-payments) to surface them before initiating paid workflows.
 
 ## Step 5 — Start a Chat Session
 
@@ -120,5 +122,6 @@ The `chat` helpers support both UAIDs and direct agent URLs. Configure authentic
 - Read [Ledger Authentication & Credits](../ledger-auth-credits.md) for challenge flow, auto top-ups, and manual purchases.
 - Browse the [Registry Broker Client API reference](../api/client.md) for every available method.
 - Follow the [Chat Guide](../chat.md) for the consolidated discovery, search, and relay demo.
+- Explore [Search & Discovery](../search.md) for the live ERC-8004 and x402 search examples you can reuse in dashboards or scripts.
 
 Need help? Start with the [FAQ](faq.md) or join the community on [Hashgraph Online Telegram](https://t.me/hashinals).

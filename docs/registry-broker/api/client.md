@@ -79,7 +79,6 @@ const headers = client.getDefaultHeaders();
 const result = await client.search({
   q: 'customer support',
   limit: 10,
-  registry: 'hashgraph-online',
   capabilities: ['messaging'],
   minTrust: 70,
   sortBy: 'trust',
@@ -100,6 +99,41 @@ Key parameters:
 - `metadata`: Record of arrays to match metadata tags (e.g. `{ tier: ['enterprise'] }`).
 - `sortBy` and `sortOrder`: Sort results (`trust`, `latency`, etc.).
 
+| Filter | Syntax | Example values / notes |
+| --- | --- | --- |
+| Registry | `registries=erc-8004` | Leave empty for broad discovery. Use `erc-8004`, `coinbase-x402-bazaar`, etc. when targeting specific partners. |
+| Protocol | `protocols=a2a,erc-8004` | Matches adapter-reported protocol identifiers. |
+| Capabilities | `capabilities=messaging,financial-services` | Uses canonical capability labels derived from HCS-11 profiles and adapter metadata. |
+| Metadata | `metadata.provider=ledger-labs`, `metadata.payments.supported=x402`, `metadata.paymentRequiredProtocols=x402` | Any `metadata.<key>=value` pair is accepted. Repeat the parameter to OR multiple values. |
+| Pricing/auth | `metadata.isFree=true`, `metadata.payments.protocols=x402`, `metadata.payments.protocols.x402.paymentNetwork=base` | Inspect whether an agent is free, which payment protocol it exposes, or which network/token it expects. |
+| Quality | `minTrust=80`, `verified=true`, `online=true` | Filter by trust scores and availability. |
+| Type | `type=ai-agents`, `type=mcp-servers` | Automatically scopes adapter lists based on agent category. |
+
+The server accepts repeated `metadata.<key>=value` parameters and automatically normalizes protocol names (`erc-8004`, `openrouter`, etc.). Use the [Search & Discovery guide](../search.md) for live curl examples covering ERC-8004 and x402 discovery filters.
+
+#### Filter for ERC-8004 agents
+
+```typescript
+const erc8004Agents = await client.search({
+  registries: ['erc-8004'],
+  limit: 5,
+  sortBy: 'most-recent',
+});
+```
+
+#### Filter for x402-enabled agents
+
+```typescript
+const x402Agents = await client.search({
+  metadata: {
+    'payments.supported': ['x402'],
+  },
+  limit: 5,
+});
+```
+
+Both filters mirror the live `/search` examples documented in [Search & Discovery](../search.md#example-erc-8004-agents).
+
 ### Vector Search
 
 ```typescript
@@ -107,7 +141,6 @@ const vector = await client.vectorSearch({
   query: 'tax advisor for small businesses',
   limit: 5,
   filter: {
-    registry: 'hashgraph-online',
     protocols: ['a2a'],
     capabilities: ['financial-services'],
   },
@@ -183,6 +216,25 @@ const registrationPayload: AgentRegistrationRequest = {
   metadata: {
     provider: 'example-labs',
     trustScore: 92,
+  },
+};
+
+// Advertise optional x402 pricing
+const withX402 = {
+  ...registrationPayload,
+  metadata: {
+    ...registrationPayload.metadata,
+    payments: {
+      supported: ['x402'],
+      protocols: {
+        x402: {
+          paymentNetwork: 'base',
+          paymentToken: 'USDC',
+          priceUsdc: 0.05,
+          gatewayUrl: 'https://x402.cambrian.network/process',
+        },
+      },
+    },
   },
 };
 
