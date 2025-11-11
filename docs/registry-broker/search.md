@@ -7,6 +7,35 @@ description: Learn how to query the registry, filter results, and explore catalo
 
 Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and explore catalog information. This guide highlights the core search workflows and the supporting catalog endpoints.
 
+## Example: ERC-8004 Agents
+
+ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` (or `protocols: ['erc-8004']`) to query those records. The snippet below mirrors a real request to `http://localhost:4000/api/v1/search?registries=erc-8004&limit=3`, which currently returns Babylon Prediction Markets agents with UAIDs such as:
+
+```json
+{
+  "name": "Babylon Prediction Markets",
+  "uaid": "uaid:aid:7uGHL6U2GYw95VbZ3jvy5P11qW52MrojpFXozmBy8cFuHk8T1jRw6trVpx1zwS4Y78;uid=11155111:1538;registry=erc-8004;proto=erc-8004;nativeId=11155111:1538"
+}
+```
+
+```typescript
+const erc8004Agents = await client.search({
+  registries: ['erc-8004'],
+  limit: 5,
+  sortBy: 'most-recent',
+});
+
+erc8004Agents.hits.forEach(hit => {
+  console.log({
+    name: hit.profile.display_name,
+    uaid: hit.uaid,
+    nativeId: hit.metadata?.nativeId,
+  });
+});
+```
+
+Because this example uses the live `/search` endpoint, you can run the curl command above before referencing it in demos to ensure you are showing the latest data.
+
 ## Keyword Search
 
 ```typescript
@@ -32,6 +61,60 @@ result.hits.forEach(hit => {
 - `metadata`: target specific metadata keys (for example `metadata.industry=finance`).
 - `verified`, `online`: restrict results to verified or currently online agents.
 - `sortBy`, `sortOrder`: reorder results by trust, latency, or other supported fields.
+
+| Filter | Example values | Notes |
+| --- | --- | --- |
+| `registries` | `['erc-8004']`, `['coinbase-x402-bazaar']` | Leave empty for broad coverage. `hashgraph-online` only returns direct registrations, so expect a narrow set. |
+| `protocols` | `['a2a']`, `['openrouter']`, `['erc-8004']` | Adapter/registry protocol identifiers (normalized to lowercase). |
+| `capabilities` | `['messaging']`, `['financial-services']` | Canonical labels derived from HCS-11 profiles, adapter metadata, and OASF capability maps. |
+| `metadata.<key>` | `metadata.provider=ledger-labs`, `metadata.industry=finance` | Repeat the parameter to OR multiple values. Keys accept dot-notation. |
+| Payments metadata | `metadata.payments.supported=x402`, `metadata.payments.protocols.x402.paymentNetwork=base` | Set by ERC-8004/A2A adapters when you advertise payment rails during registration. |
+| Pricing flags | `metadata.isFree=true`, `metadata.paymentRequiredProtocols=x402` | Distinguish free agents from those that require payment headers. |
+| Quality filters | `minTrust=80`, `verified=true`, `online=true` | Filter by trust scores, verification, or online status. |
+| Type | `type=ai-agents`, `type=mcp-servers` | Automatically scopes adapter filters behind the scenes. |
+
+> **Reminder:** `registries: ['hashgraph-online']` only returns agents registered directly with the Hashgraph Online broker, so expect a narrow set. Leave the field empty unless you purposely want to target a specific registry namespace.
+
+### Example: Agents with x402 Payments
+
+Many ERC-8004 agents publish metadata describing which payment rails they support. You can query for x402-enabled agents by filtering on `metadata.payments.supported`. The curl request below (`http://localhost:4000/api/v1/search?metadata.payments.supported=x402&limit=3`) currently returns Deep42 agents that advertise x402 support:
+
+```json
+{
+  "name": "Deep42",
+  "uaid": "uaid:aid:d65a9TpAgvTsWUsg6UeWKPaJVc5WAh2t39insoiTw1jxUWzE37sbb8F53joFEZzJp;uid=11155111:1033;registry=erc-8004;proto=erc-8004;nativeId=11155111:1033",
+  "payments": {
+    "supported": ["x402"],
+    "protocols": {
+      "x402": {
+        "paymentNetwork": "base",
+        "paymentToken": "USDC",
+        "priceUsdc": 0.05
+      }
+    }
+  }
+}
+```
+
+```typescript
+const x402Agents = await client.search({
+  metadata: {
+    'payments.supported': ['x402'],
+  },
+  limit: 5,
+});
+
+x402Agents.hits.forEach(hit => {
+  console.log({
+    name: hit.profile.display_name,
+    uaid: hit.uaid,
+    payments: hit.metadata?.payments,
+  });
+});
+```
+
+Use the `payments.protocols.x402` block to tailor your UI (for example, surface the expected payment network or advertised price) before driving users into the checkout flow.
+
 
 ## Vector Search
 

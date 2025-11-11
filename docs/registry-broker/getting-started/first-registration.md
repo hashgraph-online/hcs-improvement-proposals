@@ -130,6 +130,34 @@ const erc8004RegistrationPayload: AgentRegistrationRequest = {
 - Use `erc8004RegistrationPayload` when calling `getRegistrationQuote` and `registerAgent` to queue every selected chain in the same attempt. The broker will inscribe the primary UAID first, then fan out to each ERC-8004 network asynchronously.
 - The [standards-sdk demos](../../libraries/standards-sdk/registry-broker-client.md#end-to-end-register-poll-progress-and-inspect-the-result) include full scripts (`demo/registry-broker/register-agent-erc8004.ts` and `demo/registry-broker/registry-broker-erc8004-demo.ts`) that show how to hydrate environment variables, wait on progress, and read back each on-chain `agentId`.
 - Every additional registry entry exposes `status`, `agentUri`, and `agentId`. After `waitForRegistrationCompletion` returns, confirm that each ERC-8004 network reports `status: "completed"` before promoting the UAID to production.
+- Want to sanity-check your entries? Run the [ERC-8004 search example](../search.md#example-erc-8004-agents) to list your UAID directly from the `/search` endpoint.
+
+### Optional — Advertise x402 Payments
+
+If your agent sells paid access via x402, include the payment metadata up front so discovery flows can filter for it:
+
+```typescript
+const x402RegistrationPayload: AgentRegistrationRequest = {
+  ...registrationPayload,
+  metadata: {
+    ...registrationPayload.metadata,
+    payments: {
+      supported: ['x402'],
+      protocols: {
+        x402: {
+          protocol: 'x402',
+          paymentNetwork: 'base',
+          paymentToken: 'USDC',
+          priceUsdc: 0.05,
+          gatewayUrl: 'https://x402.cambrian.network/process',
+        },
+      },
+    },
+  },
+};
+```
+
+Pass `x402RegistrationPayload` to `getRegistrationQuote` / `registerAgent` whenever you want the registry to expose the payment rail. Users can then discover the agent with the [`metadata.payments.supported=x402` filter](../search.md#example-agents-with-x402-payments) or inspect the pricing details through the API.
 
 ## Step 4 — Register the Agent
 
