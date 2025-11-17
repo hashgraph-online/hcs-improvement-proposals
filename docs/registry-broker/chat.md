@@ -9,6 +9,22 @@ Use the `RegistryBrokerClient` to open chat sessions by UAID or adapter URL, sen
 
 ## Creating a Session by UAID
 
+### Quick-start conversation helper
+
+```typescript
+const conversation = await client.chat.start({
+  uaid: openRouterDemoUaid,
+  encryption: { preference: 'preferred' },
+});
+
+await conversation.send({ plaintext: 'Summarize your capabilities.' });
+const history = await client.chat.getHistory(conversation.sessionId, {
+  decrypt: true,
+});
+```
+
+`chat.start` creates the session, negotiates encryption when possible, and returns a `ChatConversationHandle` with the same `send` / `decryptHistoryEntry` helpers used by the encrypted chat demo.
+
 ```typescript
 const openRouterDemoUaid =
   'uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet';
@@ -31,6 +47,12 @@ const session = await client.chat.createSession({
   agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
   auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
   historyTtlSeconds: 900,
+});
+
+// identical helper form
+const conversation = await client.chat.start({
+  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
+  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
 });
 ```
 
@@ -64,7 +86,7 @@ const direct = await client.chat.sendMessage({
 
 ```typescript
 const history = await client.chat.getHistory(session.sessionId);
-console.log('Entries:', history.length);
+console.log('Entries:', history.history.length);
 
 const compacted = await client.chat.compactHistory({
   sessionId: session.sessionId,
@@ -89,6 +111,8 @@ console.log('Session closed');
 - Use `historyTtlSeconds` to balance cost and retention; the broker auto-expires chat history after the configured TTL.
 - Combine chat flows with `client.authenticateWithLedgerCredentials` or `historyAutoTopUp` to keep sessions available even when the account runs low on credits.
 - See the [registry-broker demos](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker) for complete scripts covering OpenRouter, history management, and async flows.
+- Pass `{ decrypt: true }` to `client.chat.getHistory(sessionId, options)` to have the SDK return a `decryptedHistory` array when the client knows the shared secret (for example, when created via `RegistryBrokerClient.initializeAgent`).
+- Prefer the high-level `client.chat.startConversation` / `acceptConversation` helpers for encrypted sessions—they handle handshakes, shared secrets, and ciphertext payloads automatically.
 
 ### x402-Paid Chats
 
@@ -144,6 +168,12 @@ The broker exposes the facilitator output in `rawResponse.headers['x-payment-*']
   The script authenticates via ledger, auto-purchases credits with `buyCreditsWithX402`, creates a session against the ERC-8004 UAID, and prints the paid response plus the credit delta. Use it as a blueprint for wiring your own UAIDs that expect x402 settlements.
 
 Make sure the payer wallet (`ETH_PK`) has enough WETH on the chosen Base network to satisfy the quoted USD amount; otherwise the facilitator will reject the payment request.
+
+### Encrypted Sessions
+
+- Enable `encryptionRequested` when calling `chat.createSession`, or use the conversation helpers mentioned above.
+- `client.chat.getHistory(sessionId, { decrypt: true })` returns both the raw broker entries and a `decryptedHistory` array for convenience.
+- See the [Encrypted Chat guide](encrypted-chat.md) for server configuration, key registration, and a full demo.
 
 ## Resources
 

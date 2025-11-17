@@ -242,3 +242,11 @@ hgrimoire:
   label: hgrimoire
   permalink: /hgrimoire
   description: Hgrimoire-related content
+mesh-network:
+  label: Mesh Network
+  permalink: /mesh-network
+  description: Mesh network technologies and applications
+robotics:
+  label: Robotics
+  permalink: /robotics
+  description: Robotics and autonomous systems content

@@ -213,24 +213,24 @@ const brandProfiles: Record<string, MemberTheme> = {
       'Mirror Node Hosting',
     ],
   },
-  LaunchBadge: {
+  Tashi: {
     primary: '#ea580c',
     secondary: '#c2410c',
     accent: '#f97316',
     background:
       'from-orange-50 to-amber-50 dark:from-orange-950 dark:to-amber-950',
     text: 'text-orange-900 dark:text-orange-100',
-    personality: 'professional',
+    personality: 'futuristic',
     gradient: 'from-orange-500 to-amber-600',
     icon: FiLayers,
-    logo: '/logo_icons/Launchbadge.png',
-    specialty: 'Software Engineering',
+    logo: '/logo_icons/Tashi.png',
+    specialty: 'Real-Time Mesh Network',
     fontFamily: 'system-ui, sans-serif',
-    messageStyle: 'technical-excellence',
+    messageStyle: 'futuristic-technical',
     brandElements: [
-      'Build Hedera Apps',
-      'SDK Development',
-      'Wallet Integration',
+      'Robotic Orchestration',
+      'AI Agent Coordination',
+      'Decentralized MQTT',
     ],
   },
   Turtlemoon: {
@@ -318,15 +318,15 @@ const teamMembers: TeamMember[] = [
     },
   },
   {
-    name: 'LaunchBadge',
+    name: 'Tashi',
     description:
-      'LaunchBadge is a software engineering company dedicated to fostering excellence at the cutting edge of technology. We believe that the future of software is in the hands of those who are passionate about innovation.',
-    logo: '/img/logos/lb_logo.png',
-    website: 'https://launchbadge.com',
+      'Tashi Network is a real-time, global mesh network that empowers robotics communication, AI agent coordination, multiplayer gaming and IoT interactions. Tashi mesh eliminates dependency on central servers, allowing almost instantaneous sync between machines.',
+    logo: '/img/logos/tashi.png',
+    website: 'https://tashi.network',
     realWorldFocus:
-      'Premier Hedera development firm with verified deepest ecosystem expertise. Built fundamental infrastructure: official SDKs, MyHbarWallet (canonical), Kabuto API/Explorer, Hedera Developer Portal, Trezor/Ledger apps.',
+      'Real-time mesh network with 50,000+ nodes enabling machine-to-machine coordination. Successfully closed $2M funding round led by Blockchain Founders Fund. Targets robotics, AI agents, multiplayer gaming, and IoT with decentralized MQTT (FoxMQ) and DePIN infrastructure.',
     theme: {
-      ...brandProfiles['LaunchBadge'],
+      ...brandProfiles['Tashi'],
     },
   },
   {

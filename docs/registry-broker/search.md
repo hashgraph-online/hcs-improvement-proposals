@@ -72,13 +72,23 @@ result.hits.forEach(hit => {
 | Pricing flags | `metadata.isFree=true`, `metadata.paymentRequiredProtocols=x402` | Distinguish free agents from those that require payment headers. |
 | Quality filters | `minTrust=80`, `verified=true`, `online=true` | Filter by trust scores, verification, or online status. |
 | Type | `type=ai-agents`, `type=mcp-servers` | Automatically scopes adapter filters behind the scenes. |
-| Availability sort | `sortBy=most-available` | Surfaces agents that recently responded to broker-side pings, factoring in success rate and latency. |
+| Availability sort | `sortBy=most-available` | Surfaces agents that recently responded to the API’s availability probes. Offline/failed probes receive a score of `0`, while recent low-latency probes float to the top. |
 
 > **Reminder:** `registries: ['hashgraph-online']` only returns agents registered directly with the Hashgraph Online broker, so expect a narrow set. Leave the field empty unless you purposely want to target a specific registry namespace.
 
 ### Availability Monitoring & Sorting
 
-The worker now pings chat-capable agents between discovery runs. Each probe attempts to open a connection through the agent’s adapter (A2A, MCP, OpenRouter, etc.) without sending a paid request. The broker stores the result (`metadata.availabilityStatus`, latency, and a rolling `availabilityScore`) and updates the `/search` index in-place. Use `sortBy=most-available` to prioritise agents that recently responded with the lowest latency, or combine it with `online=true` to hide agents that have not answered recent pings. Payment-gated adapters (HCS-10, x402) are marked as “Payment Required” instead of being pinged.
+The API now records availability metadata for chat-capable agents. Each probe attempts to open a connection through the agent’s adapter (A2A, MCP, OpenRouter, etc.) without sending a paid request. Probe summaries (`metadata.availabilityStatus`, a rolling `metadata.availabilityScore`, latency, and timestamps) are merged into the `/search` index in-place. Use `sortBy=most-available` to prioritise agents that recently responded with the lowest latency, or combine it with `online=true` to hide agents that have not answered recent pings. Payment-gated adapters (HCS-10, x402) are marked as “Payment Required” instead of being probed.
+
+Probe results include:
+
+- `metadata.availabilityStatus`: `online`, `offline`, `error`, or `skipped`. Offline/error entries are treated as availability score `0`.
+- `metadata.availabilityLatencyMs`: the most recent round-trip time (bounded at 10 seconds).
+- `metadata.availabilityScore`: an exponentially weighted score (0–1) that blends success history, latency, and recency. Fresh, low-latency probes approach 1.0, while stale probes decay toward 0.3 and offline probes drop to 0.
+- `metadata.availabilityCheckedAt`: when the last probe completed.
+- `metadata.availabilityReason`: optional error/cached failure reason (for example `endpoint-unreachable-cached` when DNS proved invalid).
+
+Unreachable hostnames are cached for 24 hours so the API does not continuously probe garbage records. Hosts that require payment are marked as `skipped` rather than probed so you can still detect the listing without incurring costs.
 
 Upcoming metrics on the roadmap include consecutive failure counters, 24h uptime aggregates, adapter-provided reliability scores (for registries such as x402 Bazaar), and surfacing payment queue depth so you can rank service providers by more than raw latency.
 
