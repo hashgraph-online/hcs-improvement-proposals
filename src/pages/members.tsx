@@ -12,7 +12,7 @@ const RepeatingLogosBackground: React.FC = () => {
     { src: '/logo_icons/Hashgate.png', alt: 'Hashgate' },
     { src: '/logo_icons/Hashpack.png', alt: 'Hashpack' },
     { src: '/logo_icons/Kiloscribe.png', alt: 'Kiloscribe' },
-    { src: '/logo_icons/Launchbadge.png', alt: 'Launchbadge' },
+    { src: '/logo_icons/Tashi.png', alt: 'Tashi' },
     { src: '/logo_icons/Neuron_Dark.png', alt: 'Neuron' },
     { src: '/logo_icons/SentX_Dark.png', alt: 'SentX' },
     { src: '/logo_icons/Turtlemoon.png', alt: 'Turtlemoon' },
@@ -120,7 +120,7 @@ const RepeatingLogosBackground: React.FC = () => {
       
       {positions.map((pos, index) => {
         const logo = logos[pos.logoIndex];
-        const needsHigherVisibility = logo.alt === 'Kiloscribe' || logo.alt === 'Launchbadge' || logo.alt === 'Hashpack' || logo.alt === 'Turtlemoon';
+        const needsHigherVisibility = logo.alt === 'Kiloscribe' || logo.alt === 'Tashi' || logo.alt === 'Hashpack' || logo.alt === 'Turtlemoon';
         const opacity = needsHigherVisibility ? 0.12 : 0.08;
         const animationDuration = 20 + (index % 10) * 3;
         const animationDelay = index * 0.2;
