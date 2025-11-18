@@ -14,6 +14,7 @@ type PrimaryButtonProps = {
   size?: 'sm' | 'md' | 'lg';
   variant?: 'primary' | 'secondary' | 'outline';
   isExternal?: boolean;
+  umamiEvent?: string;
 };
 
 const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
@@ -27,6 +28,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
       size = 'md',
       variant = 'primary',
       isExternal = false,
+      umamiEvent,
       ...props
     },
     ref
@@ -79,6 +81,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
             ref={ref}
             className={buttonClass}
             onClick={onClick}
+            data-umami-event={umamiEvent}
             {...props}
           >
             <span className={cn(variant === 'primary' ? 'text-white' : '')}>
@@ -100,6 +103,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
               rel='noopener noreferrer'
               className={buttonClass}
               style={{ textDecoration: 'none' }}
+              data-umami-event={umamiEvent}
             >
               <span className={cn(variant === 'primary' ? 'text-white' : '')}>
                 {children}
@@ -111,6 +115,7 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
               to={href}
               className={buttonClass}
               style={{ textDecoration: 'none' }}
+              data-umami-event={umamiEvent}
             >
               <span className={cn(variant === 'primary' ? 'text-white' : '')}>
                 {children}
@@ -124,7 +129,12 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
 
     return (
       <MotionWrapper>
-        <button ref={ref} className={buttonClass} {...props}>
+        <button
+          ref={ref}
+          className={buttonClass}
+          data-umami-event={umamiEvent}
+          {...props}
+        >
           <span className={cn(variant === 'primary' ? 'text-white' : '')}>
             {children}
           </span>

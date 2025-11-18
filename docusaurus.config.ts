@@ -101,29 +101,39 @@ const config: Config = {
     colorMode: {
       defaultMode: 'light',
       disableSwitch: false,
-      respectPrefersColorScheme: true,
+      respectPrefersColorScheme: false,
     },
     tableOfContents: {
       minHeadingLevel: 2,
       maxHeadingLevel: 5,
     },
     navbar: {
-      title: 'Hashgraph Online',
+      title: 'HOL',
       logo: {
         alt: 'Hashgraph Online Logo',
         src: 'Logo_Icon.png',
       },
       items: [
         { to: '/docs/standards/', label: 'Standards', position: 'left' },
-        { to: '/tools', label: 'Tools', position: 'left' },
         {
           type: 'dropdown',
-          label: 'Hackathons',
+          label: 'Tools',
+          position: 'left',
+          items: [
+            { label: 'Standards SDK', to: '/docs/libraries/standards-sdk' },
+            { label: 'Conversational Agent', to: '/docs/libraries/conversational-agent' },
+            { label: 'Standards Agent Kit', to: '/docs/standards/hcs-10' },
+            { label: 'Explore All', to: '/tools' },
+          ],
+        },
+        {
+          type: 'dropdown',
+          label: 'Events',
           position: 'left',
           items: [
             {
               to: '/hackathon',
-              label: 'AI Track - Africa Hackathon',
+              label: 'Africa Hackathon (Ended)',
               className: 'dropdown__link--parent',
             },
             {
@@ -133,14 +143,8 @@ const config: Config = {
             { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
           ],
         },
-        { to: '/desktop', label: 'HOL Desktop', position: 'left' },
-        { to: '/use-cases', label: 'Use Cases', position: 'left' },
-        {
-          href: 'https://registry.hashgraphonline.com',
-          label: 'Registry',
-          position: 'left',
-        },
-        { to: '/members', label: 'Members', position: 'left' },
+        { to: '/members', label: 'DAO', position: 'left' },
+        { to: '/registry', label: 'Registry', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
       ],
     },
@@ -199,6 +203,10 @@ const config: Config = {
             {
               label: 'Terms of Service',
               to: '/terms-of-service',
+            },
+            {
+              label: 'Use Cases',
+              to: '/use-cases',
             },
           ],
         },

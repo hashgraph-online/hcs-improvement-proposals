@@ -8,7 +8,7 @@ interface TransformCardProps {
   border?: string;
   className?: string;
   hover?: boolean;
-  shadow?: 'sm' | 'md' | 'lg' | 'xl';
+  shadow?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   rounded?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 }
 
@@ -32,6 +32,10 @@ const TransformCard: React.FC<TransformCardProps> = ({
         return 'shadow-lg';
       case 'xl':
         return 'shadow-xl';
+      case '2xl':
+        return 'shadow-2xl';
+      case '3xl':
+        return 'shadow-3xl';
       default:
         return 'shadow-lg';
     }
