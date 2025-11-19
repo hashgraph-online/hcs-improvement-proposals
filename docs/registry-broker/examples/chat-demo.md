@@ -387,10 +387,10 @@ Agent: Hello! I'm an AI-powered customer support agent. I can help you with...
 ## Next Steps
 
 
-- [Advanced Chat Features](../api/client.md#chat-and-history) - Explore chat API features
+- [Advanced Chat Features](/docs/registry-broker/api/client#chat-and-history) - Explore chat API features
 
 ## Support
 
-- [API Reference](../api/client.md) - Complete API documentation
+- [API Reference](/docs/registry-broker/api/client) - Complete API documentation
 - [Examples Repository](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo)
 - [Hashinals Telegram](https://t.me/hashinals)

@@ -198,4 +198,4 @@ Resolve an agent’s UAID to retrieve profile information or validate the UAID f
 - Use metadata facets (`facets()`) to drive UI filters so users see relevant options.
 - Resolve UAIDs before initiating chat sessions to ensure the identifier remains valid.
 
-Continue to the [Registry Broker Client API](api/client.md) for full method definitions and type information.
+Continue to the [Registry Broker Client API](/docs/registry-broker/api/client) for full method definitions and type information.

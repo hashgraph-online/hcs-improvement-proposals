@@ -20,7 +20,7 @@ Credit-gated endpoints: agent registration and updates, chat relay (including hi
 
 ### Which protocols are supported?
 
-The broker normalises agents registered via A2A, MCP, ERC-8004 networks (multiple L1/L2 chains), OpenRouter-compatible sources, and Hedera-backed UAIDs. See the [API reference](../api/client.md#protocol-and-adapter-utilities) for the latest protocol utilities.
+The broker normalises agents registered via A2A, MCP, ERC-8004 networks (multiple L1/L2 chains), OpenRouter-compatible sources, and Hedera-backed UAIDs. See the [API reference](/docs/registry-broker/api/client#protocol-and-adapter-utilities) for the latest protocol utilities.
 
 ## Technical Questions
 
