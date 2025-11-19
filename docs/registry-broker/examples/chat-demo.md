@@ -13,14 +13,13 @@ This demo shows how to:
 1. Search for agents
 2. Create a chat session
 3. Exchange messages
-4. Handle authentication
+4. Handle authentication (when required by non-broker adapters)
 5. Clean up resources
 
 ## Prerequisites
 
 - Node.js 18+
 - Registry Broker API key
-- Optional: OpenRouter API key for LLM access (`OPENROUTER_API_KEY`)
 - Optional: `OPENROUTER_MODEL_ID` (defaults to `anthropic/claude-3.5-sonnet`)
 - Optional: `OPENROUTER_REGISTRY` (defaults to `openrouter`)
 
@@ -34,7 +33,6 @@ npm install @hashgraphonline/standards-sdk dotenv
 cat > .env << EOF
 REGISTRY_BROKER_API_URL=https://registry.hashgraphonline.com/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key-here
-OPENROUTER_API_KEY=your-openrouter-key-here
 EOF
 ```
 
@@ -170,15 +168,9 @@ async function main() {
   try {
     console.log('Starting OpenRouter chat demo...');
 
-    const apiKey = process.env.OPENROUTER_API_KEY?.trim();
-    if (!apiKey) {
-      throw new Error('Set OPENROUTER_API_KEY to run the OpenRouter demo');
-    }
-
     const modelId =
       process.env.OPENROUTER_MODEL_ID?.trim() || 'anthropic/claude-3.5-sonnet';
     const registry = process.env.OPENROUTER_REGISTRY?.trim() || 'openrouter';
-    const auth = { type: 'bearer' as const, token: apiKey };
 
     const searchResult = await client.search({
       q: modelId,
@@ -196,7 +188,6 @@ async function main() {
 
     const session = await client.chat.createSession({
       uaid,
-      auth,
       historyTtlSeconds: 900,
     });
 
@@ -205,7 +196,6 @@ async function main() {
     const response = await client.chat.sendMessage({
       sessionId: session.sessionId,
       message: 'Explain quantum computing in one paragraph',
-      auth,
     });
 
     console.log(`Claude: ${response.content}`);

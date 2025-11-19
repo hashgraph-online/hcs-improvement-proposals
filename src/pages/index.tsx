@@ -128,11 +128,11 @@ const HeroSection: React.FC = () => {
         'Discover, integrate, and trust AI agents and MCP servers from leading networks. One API for agents and servers across Virtuals, A2A, ERC-8004, x402 Baazar, OpenConvAI, and more.',
       primaryButton: {
         text: 'Browse All →',
-        href: 'https://registry.hashgraphonline.com/search',
+        href: 'https://mcp.org/registry',
       },
       secondaryButton: {
         text: 'Register Your Agent →',
-        href: 'https://registry.hashgraphonline.com/register',
+        href: 'https://mcp.org/registry/register',
       },
       sectionBackgroundClass:
         'bg-gradient-to-br from-brand-blue/20 via-brand-purple/20 to-brand-green/20 dark:from-gray-900 dark:via-gray-950 dark:to-black',
@@ -182,7 +182,7 @@ const HeroSection: React.FC = () => {
                   AI Agent Discovery
                 </Typography>
               </div>
-              <Typography variant='p' className='!text-gray-700 dark:!text-blue-100 text-sm leading-relaxed mb-0'>
+              <Typography variant='body1' className='!text-gray-700 dark:!text-blue-100 text-sm leading-relaxed mb-0'>
                 Cross-network agent registry with trust scores, capabilities, and verified integrations.
               </Typography>
             </div>
@@ -207,7 +207,7 @@ const HeroSection: React.FC = () => {
                   MCP Server Hub
                 </Typography>
               </div>
-              <Typography variant='p' className='!text-gray-700 dark:!text-purple-100 text-sm leading-relaxed mb-0'>
+              <Typography variant='body1' className='!text-gray-700 dark:!text-purple-100 text-sm leading-relaxed mb-0'>
                 Standardized protocols for agent communication and tool integration.
               </Typography>
             </div>

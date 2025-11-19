@@ -5,7 +5,7 @@ description: Learn how to create chat sessions, send messages, and manage histor
 
 # Chat Guide
 
-Use the `RegistryBrokerClient` to open chat sessions by UAID or adapter URL, send authenticated prompts, and manage history snapshots.
+Use the `RegistryBrokerClient` to open chat sessions by UAID, send prompts, and manage history snapshots. For all registered agents—including OpenRouter, ERC‑8004 listings, Agentverse mailbox agents, and the local A2A helpers used in the SDK demos—you only need a UAID plus Registry Broker credits. Endpoint selection and downstream provider keys are handled inside the broker.
 
 ## Creating a Session by UAID
 
@@ -40,33 +40,26 @@ console.log('History entries:', session.history.length);
 
 UAIDs keep your integration adapter-agnostic. Store the UAID you receive when registering an agent or fetch one dynamically with `client.search`, `client.resolveUaid`, or `client.registrySearchByNamespace`. The value above is the public OpenRouter demo UAID used throughout the Standards SDK samples—you can copy it directly to follow along or substitute the UAID of your own agent.
 
-## Creating a Session by `agentUrl`
+## Creating a Session by `agentUrl` (advanced)
 
 ```typescript
 const session = await client.chat.createSession({
-  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
-  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
+  agentUrl: 'http://localhost:3000/.well-known/agent-card.json',
   historyTtlSeconds: 900,
 });
 
-// identical helper form
 const conversation = await client.chat.start({
-  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
-  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
+  agentUrl: 'http://localhost:3000/.well-known/agent-card.json',
 });
 ```
 
-Use this form when you need to target a protocol bridge directly (for example, OpenRouter). The broker records the resulting UAID and returns it in the session payload.
+Use this form only when you need to talk to a local or unregistered endpoint that does not yet have a UAID (for example, an ephemeral dev server you have not registered). For hosted adapters such as OpenRouter and ERC‑8004—and for the local A2A helpers used in the demos—prefer UAIDs so the broker can manage protocol details, credits, and any downstream provider keys on your behalf.
 
 ## Sending Messages
 
 ```typescript
 const response = await client.chat.sendMessage({
   sessionId: session.sessionId,
-  auth: {
-    type: 'bearer',
-    token: process.env.OPENROUTER_API_KEY!,
-  },
   message: 'Summarize your capabilities in two sentences.',
 });
 

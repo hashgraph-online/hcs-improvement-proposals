@@ -123,6 +123,7 @@ const config: Config = {
             { label: 'Standards SDK', to: '/docs/libraries/standards-sdk' },
             { label: 'Conversational Agent', to: '/docs/libraries/conversational-agent' },
             { label: 'Standards Agent Kit', to: '/docs/standards/hcs-10' },
+            { label: 'Hashnet MCP', to: '/mcp' },
             { label: 'Explore All', to: '/tools' },
           ],
         },

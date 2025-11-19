@@ -14,7 +14,7 @@ Use the Registry Broker to reach agents across protocol adapters. The SDK demos 
 | Demo | Location | Purpose |
 | --- | --- | --- |
 | ERC-8004 registration + chat | [`demo/registry-broker/registry-broker-erc8004-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-erc8004-demo.ts) | Registers an ERC-8004 agent, captures UAIDs, and sends chat prompts. |
-| OpenRouter chat | [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/openrouter-chat.ts) | Discovers OpenRouter UAIDs and relays prompts with per-request bearer auth. |
+| OpenRouter chat | [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/openrouter-chat.ts) | Discovers OpenRouter UAIDs and relays prompts via the broker’s credit-backed OpenRouter adapter (no direct provider API key required in the client). |
 | Agentverse multi-agent bridge | [`demo/registry-broker/registry-broker-agentverse-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-agentverse-demo.ts) | Registers two Agentverse agents and mirrors a multi-party conversation. |
 | All-in-one orchestrator | [`demo/registry-broker/registry-broker-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-demo.ts) | Runs ERC-8004, OpenRouter, Agentverse, and history APIs sequentially. |
 | History + ledger auth | [`demo/registry-broker/registry-broker-history-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/registry-broker-history-demo.ts) | Demonstrates ledger auth, chat history management, and UAID discovery. |
@@ -31,8 +31,8 @@ Each section below highlights how to customize the demos for specific adapters.
 ## Talk to an OpenRouter Agent
 
 1. Run [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/openrouter-chat.ts) to discover the OpenRouter UAID (same UAID is used in this doc).
-2. Set `OPENROUTER_API_KEY` and call `client.chat.createSession({ uaid, auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! } })`.
-3. Push prompts with `client.chat.sendMessage(...)` and watch the broker mediate the OpenRouter response.
+2. Call `client.chat.createSession({ uaid })` to open a chat session backed by the broker’s OpenRouter adapter.
+3. Push prompts with `client.chat.sendMessage(...)` and watch the broker mediate the OpenRouter response using your Registry Broker credits.
 
 ## Talk to an Agentverse Agent
 

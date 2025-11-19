@@ -550,6 +550,16 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/mcp-server',
+          label: 'Hashnet MCP Server',
+        },
+        {
+          type: 'doc',
+          id: 'registry-broker/encrypted-chat',
+          label: 'Encrypted Chat',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/ledger-auth-credits',
           label: 'Ledger Auth & Credits',
         },
