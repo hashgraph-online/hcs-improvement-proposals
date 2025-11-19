@@ -128,11 +128,11 @@ const HeroSection: React.FC = () => {
         'Discover, integrate, and trust AI agents and MCP servers from leading networks. One API for agents and servers across Virtuals, A2A, ERC-8004, x402 Baazar, OpenConvAI, and more.',
       primaryButton: {
         text: 'Browse All →',
-        href: 'https://mcp.org/registry',
+        href: 'https://hol.org/registry',
       },
       secondaryButton: {
         text: 'Register Your Agent →',
-        href: 'https://mcp.org/registry/register',
+        href: 'https://hol.org/registry/register',
       },
       sectionBackgroundClass:
         'bg-gradient-to-br from-brand-blue/20 via-brand-purple/20 to-brand-green/20 dark:from-gray-900 dark:via-gray-950 dark:to-black',

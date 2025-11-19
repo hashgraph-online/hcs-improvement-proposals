@@ -156,7 +156,7 @@ export default function MCPPage() {
                   </span>
                 </PrimaryButton>
                 <PrimaryButton
-                  href='https://mcp.org/registry/search'
+                  href='https://hol.org/registry/search'
                   umamiEvent='mcp-cta-explore'
                   className='!bg-[#3f4174] hover:!bg-[#353763] !text-white !shadow-lg !shadow-[#3f4174]/25 hover:!shadow-xl hover:!shadow-[#3f4174]/30'
                 >
