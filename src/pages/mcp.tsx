@@ -5,6 +5,7 @@ import {
   Typography,
   PrimaryButton,
   TransformCard,
+  Terminal,
 } from '../components/ui';
 import {
   FaRocket,
@@ -43,7 +44,16 @@ export default function MCPPage() {
     }
   };
 
-  const installCommand = 'npx @hol-org/hashnet-mcp@latest up';
+  const [packageManager, setPackageManager] = useState<'npm' | 'pnpm' | 'yarn' | 'bun'>('npm');
+
+  const commands = {
+    npm: 'npx -y @hol-org/hashnet-mcp@latest quickstart',
+    pnpm: 'pnpm dlx @hol-org/hashnet-mcp@latest quickstart',
+    yarn: 'yarn dlx @hol-org/hashnet-mcp@latest quickstart',
+    bun: 'bun x @hol-org/hashnet-mcp@latest quickstart',
+  };
+
+  const installCommand = commands[packageManager];
 
   return (
     <Layout
@@ -82,53 +92,51 @@ export default function MCPPage() {
                 </Typography>
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className='max-w-3xl mx-auto relative'
-              >
-                <div className='absolute inset-0 bg-gradient-to-r from-brand-purple/20 via-brand-blue/20 to-brand-green/20 rounded-2xl blur-2xl opacity-60' />
-                <div className='relative bg-gradient-to-br from-white/95 via-gray-50/95 to-white/95 dark:from-gray-900/95 dark:via-gray-800/95 dark:to-gray-900/95 backdrop-blur-sm rounded-2xl px-6 pt-4 pb-6 border border-brand-blue/30 shadow-2xl shadow-brand-blue/20 group hover:shadow-brand-blue/30 transition-all duration-300'>
-                  <div className='flex items-center justify-between mb-3'>
-                    <div className='flex items-center gap-2'>
-                      <div className='flex gap-1.5'>
-                        <div className='w-3 h-3 rounded-full bg-brand-purple' />
-                        <div className='w-3 h-3 rounded-full bg-brand-blue' />
-                        <div className='w-3 h-3 rounded-full bg-brand-green' />
-                      </div>
-                      <Typography variant='caption' className='text-gray-500 dark:text-gray-400 uppercase tracking-wider text-xs ml-2'>
-                        Quick Start
-                      </Typography>
-                    </div>
-                    <button
-                      onClick={() => handleCopyCode(installCommand)}
-                      className='px-4 py-2 rounded-lg bg-brand-blue/10 hover:bg-brand-blue/20 border border-brand-blue/30 hover:border-brand-blue/50 text-brand-blue hover:text-white dark:hover:text-white transition-all text-sm flex items-center gap-2 font-mono'
-                      aria-label='Copy command'
-                    >
-                      {copiedCode === installCommand ? (
-                        <>
-                          <FaCheckCircle className='w-4 h-4 text-green-400' />
-                          <span>Copied!</span>
-                        </>
-                      ) : (
-                        <>
-                          <FaCopy className='w-4 h-4' />
-                          <span>Copy</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                  <div
-                    onClick={() => handleCopyCode(installCommand)}
-                    className='bg-gray-100/80 dark:bg-black/40 rounded-lg p-4 border border-gray-300/50 dark:border-gray-700/50 cursor-pointer hover:border-brand-blue/50 transition-colors'
+                <div className='relative max-w-3xl mx-auto'>
+                  <Terminal 
+                    title='hashnet-setup.exe' 
+                    className='relative z-10' 
+                    theme='system'
+                    headerActions={
+                      <>
+                        {(['npm', 'pnpm', 'yarn', 'bun'] as const).map((pm) => (
+                          <button
+                            key={pm}
+                            onClick={() => setPackageManager(pm)}
+                            className={`text-xs font-mono font-bold uppercase tracking-wider transition-colors px-2 py-1 rounded outline-none border-none focus:outline-none focus:ring-0 ${
+                              packageManager === pm
+                                ? 'text-brand-green bg-brand-green/10'
+                                : 'text-gray-400 dark:text-gray-800 hover:text-gray-700 dark:hover:text-gray-500'
+                            }`}
+                          >
+                            {pm}
+                          </button>
+                        ))}
+                      </>
+                    }
                   >
-                    <code className='text-base sm:text-lg font-mono text-brand-blue block select-all'>
-                      <span className='text-gray-400 dark:text-gray-500'>$</span> {installCommand}
-                    </code>
-                  </div>
+                    <div className='flex flex-col justify-center min-h-[120px]'>
+                      <div className='flex justify-center'>
+                        <Terminal.Line
+                          prompt='>'
+                          command={installCommand}
+                          clickable
+                          onClick={() => handleCopyCode(installCommand)}
+                        />
+                      </div>
+                      <div className='mt-2 text-center'>
+                        {copiedCode === installCommand && (
+                          <div className='text-xs font-mono text-green-400'>
+                            ✓ Command copied to clipboard
+                          </div>
+                        )}
+                      </div>
+                      <div className='text-[10px] font-mono text-gray-500 border-t border-gray-200 dark:border-gray-800 mt-1 pt-1'>
+                        <span className='text-gray-600'>[SYSTEM_CHECK]</span> ERC-8004: <span className='text-green-500'>DETECTED</span> | x402: <span className='text-green-500'>ONLINE</span>
+                      </div>
+                    </div>
+                  </Terminal>
                 </div>
-              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0 }}
@@ -137,7 +145,7 @@ export default function MCPPage() {
                 className='flex flex-col sm:flex-row justify-center items-center gap-4 pt-2'
               >
                 <PrimaryButton
-                  href='/docs'
+                  href='/docs/registry-broker/mcp-server'
                   variant='secondary'
                   umamiEvent='mcp-cta-docs'
                   className='!bg-[#5599fe] hover:!bg-[#4488ed] !text-white !shadow-lg !shadow-[#5599fe]/25 hover:!shadow-xl hover:!shadow-[#5599fe]/30'
@@ -148,7 +156,7 @@ export default function MCPPage() {
                   </span>
                 </PrimaryButton>
                 <PrimaryButton
-                  href='/search'
+                  href='https://mcp.org/registry/search'
                   umamiEvent='mcp-cta-explore'
                   className='!bg-[#3f4174] hover:!bg-[#353763] !text-white !shadow-lg !shadow-[#3f4174]/25 hover:!shadow-xl hover:!shadow-[#3f4174]/30'
                 >
@@ -161,6 +169,38 @@ export default function MCPPage() {
             </div>
           </div>
         </section>
+
+        <div className='w-full bg-slate-100 dark:bg-gray-950 border-y border-slate-200 dark:border-gray-800 overflow-hidden py-3 relative z-10'>
+          <div className='absolute inset-0 bg-brand-blue/3'></div>
+          <motion.div
+            animate={{ x: ['0%', '-50%'] }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: 'linear',
+            }}
+            className='flex whitespace-nowrap w-fit'
+          >
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className='flex items-center gap-16 px-8'>
+                <div className='flex items-center gap-3'>
+                  <div className='w-2 h-2 bg-green-500/70 rounded-full animate-pulse shadow-[0_0_6px_rgba(34,197,94,0.5)]' />
+                  <span className='text-sm font-mono font-bold text-gray-400 dark:text-gray-400 uppercase tracking-[0.15em]'>
+                    Find and connect to any agent on the planet
+                  </span>
+                </div>
+                <span className='text-brand-blue/40 font-mono text-lg'>///</span>
+                <div className='flex items-center gap-3'>
+                  <FaGlobeAmericas className='text-brand-blue/70 animate-pulse' />
+                  <span className='text-sm font-mono font-bold text-brand-blue/80 uppercase tracking-[0.15em]'>
+                    Native x402 & ERC-8004 Support
+                  </span>
+                </div>
+                <span className='text-brand-blue/40 font-mono text-lg'>///</span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
 
         <section className='relative py-20 bg-gray-50 dark:bg-gray-900 overflow-hidden'>
           <motion.div
@@ -251,8 +291,8 @@ export default function MCPPage() {
                   />
                 </div>
 
-                <div className='relative grid grid-cols-3 gap-8 max-w-5xl mx-auto'>
-                  <div className='col-span-3 flex justify-center mb-8'>
+                <div className='relative grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 max-w-5xl mx-auto'>
+                  <div className='col-span-2 md:col-span-3 flex justify-center mb-8'>
                     <motion.div
                       initial={{ opacity: 0, scale: 0.8, y: 40 }}
                       whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -279,45 +319,46 @@ export default function MCPPage() {
                   </div>
 
                   {[
-                    { icon: <FaRocket />, label: 'AI Agents', color: 'purple' },
-                    { icon: <FaServer />, label: 'MCP Servers', color: 'blue' },
-                    { icon: <FaExchangeAlt />, label: 'Data Brokers', color: 'green' },
-                    { icon: <FaPlug />, label: 'Agent Tools', color: 'purple' },
-                    { icon: <FaNetworkWired />, label: 'AI Infrastructure', color: 'blue' },
-                    { icon: <FaLayerGroup />, label: 'Data Sources', color: 'green' },
+                    { label: 'AI_AGENTS', color: 'purple', code: 'CONNECT', status: 'ONLINE' },
+                    { label: 'MCP_SERVERS', color: 'blue', code: 'INIT', status: 'ACTIVE' },
+                    { label: 'x402_PAYMENTS', color: 'green', code: 'SYNC', status: 'READY' },
+                    { label: 'ERC-8004_STD', color: 'purple', code: 'REGISTER', status: 'LOADED' },
+                    { label: 'INFRASTRUCTURE', color: 'blue', code: 'SCALE', status: 'OPTIMAL' },
+                    { label: 'DATA_STREAMS', color: 'green', code: 'STREAM', status: 'FLOWING' },
                   ].map((item, index) => (
                     <motion.div
                       key={item.label}
-                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '-50px' }}
                       transition={{
-                        duration: 0.7,
-                        delay: index * 0.15,
-                        ease: [0.16, 1, 0.3, 1],
+                        duration: 0.5,
+                        delay: index * 0.1,
                       }}
                       className='relative group'
                     >
-                      <motion.div
-                        animate={{
-                          y: [0, -8, 0],
-                        }}
-                        transition={{
-                          duration: 3,
-                          repeat: Infinity,
-                          delay: index * 0.2,
-                        }}
-                      >
-                        <div className={`absolute inset-0 bg-linear-to-br from-brand-${item.color}/20 via-brand-${item.color}/10 to-transparent rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity`} />
-                        <div className='relative bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 text-center shadow-lg'>
-                          <div className={`text-4xl mb-3 text-brand-${item.color}`}>
-                            {item.icon}
+                      <div className='bg-gray-100 dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-sm p-1 shadow-sm'>
+                        <div className='bg-white dark:bg-black border border-gray-200 dark:border-gray-800 p-4 relative overflow-hidden'>
+                          <div className={`absolute top-0 left-0 w-1 h-full bg-brand-${item.color}`} />
+                          <div className='flex justify-between items-start mb-3'>
+                            <div className='text-[10px] font-mono text-gray-400'>
+                              MOD_{index.toString().padStart(2, '0')}
+                            </div>
+                            <div className={`w-2 h-2 rounded-full bg-brand-${item.color} animate-pulse`} />
                           </div>
-                          <Typography variant='body2' className='text-sm font-mono font-semibold text-gray-700 dark:text-white'>
+                          <Typography variant='body2' className='font-mono font-bold text-gray-700 dark:text-white mb-1 tracking-tight'>
                             {item.label}
                           </Typography>
+                          <div className='flex items-center gap-2 mt-2'>
+                            <span className='text-[10px] font-mono text-brand-blue bg-brand-blue/10 px-1 rounded'>
+                              {item.code}()
+                            </span>
+                            <span className='text-[10px] font-mono text-green-500'>
+                              [{item.status}]
+                            </span>
+                          </div>
                         </div>
-                      </motion.div>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -363,28 +404,28 @@ export default function MCPPage() {
               <div className='grid md:grid-cols-2 gap-6'>
                 {[
                   {
-                    icon: <FaShieldAlt className='text-3xl text-brand-purple' />,
                     title: 'Full ERC-8004 Support',
                     description: 'Production-grade implementation of the ERC-8004 standard.',
                     highlight: 'Live now',
+                    color: 'purple',
                   },
                   {
-                    icon: <FaCoins className='text-3xl text-brand-blue' />,
                     title: 'Universal x402 Payments',
                     description: 'Credit-based transactions from any blockchain implementing x402.',
                     highlight: 'Multi-chain',
+                    color: 'blue',
                   },
                   {
-                    icon: <FaLayerGroup className='text-3xl text-brand-green' />,
                     title: 'Multi-Protocol Indexing',
                     description: 'Indexing Virtuals, A2A, ERC-8004, x402 Bazaar, OpenConvAI, and more.',
                     highlight: 'Growing',
+                    color: 'green',
                   },
                   {
-                    icon: <FaLock className='text-3xl text-brand-purple' />,
                     title: 'Identity & Trust',
                     description: 'Unified, verifiable agent identity with ledger-backed credits.',
                     highlight: 'Secure',
+                    color: 'purple',
                   },
                 ].map((item, index) => (
                   <motion.div
@@ -400,28 +441,27 @@ export default function MCPPage() {
                     whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
                   >
                     <TransformCard
-                      className='h-full p-6'
+                      className='h-full p-8 overflow-hidden relative'
                       background='bg-gray-50 dark:bg-gray-800'
                       border='border border-gray-200 dark:border-gray-700'
                       shadow='md'
                     >
-                      <div className='flex flex-col items-center text-center gap-4'>
-                        <div className='w-16 h-16 rounded-2xl bg-white dark:bg-gray-900 flex items-center justify-center shadow-lg'>
-                          {item.icon}
-                        </div>
-                        <div>
-                          <div className='flex items-center justify-center gap-2 mb-2'>
-                            <Typography variant='h5' className='text-lg font-mono font-bold text-gray-700 dark:text-white'>
-                              {item.title}
-                            </Typography>
-                          </div>
-                          <span className='inline-block text-xs px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue font-mono mb-3'>
-                            {item.highlight}
-                          </span>
-                          <Typography variant='body2' color='muted' className='text-sm'>
-                            {item.description}
+                      <div className='absolute -top-6 -right-6 text-9xl font-bold text-gray-200/50 dark:text-gray-700/20 font-mono select-none pointer-events-none'>
+                        0{index + 1}
+                      </div>
+                      <div className='relative z-10'>
+                        <div className='flex items-center gap-3 mb-4'>
+                          <div className={`w-1 h-8 bg-brand-${item.color} rounded-full`} />
+                          <Typography variant='h5' className='text-xl font-mono font-bold text-gray-700 dark:text-white'>
+                            {item.title}
                           </Typography>
                         </div>
+                        <span className='inline-block text-xs px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue font-mono mb-4'>
+                          {item.highlight}
+                        </span>
+                        <Typography variant='body2' color='muted' className='text-base leading-relaxed'>
+                          {item.description}
+                        </Typography>
                       </div>
                     </TransformCard>
                   </motion.div>
@@ -520,15 +560,15 @@ export default function MCPPage() {
                       shadow='lg'
                     >
                       <div className='flex items-start gap-6'>
-                        <div className='shrink-0'>
+                        <div className='shrink-0 pt-1'>
                           {item.icon}
                         </div>
                         <div className='flex-1'>
-                          <div className='flex items-center gap-3 mb-3'>
+                          <div className='flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2'>
                             <Typography variant='h4' className='text-xl font-bold text-gray-700 dark:text-white'>
                               {item.title}
                             </Typography>
-                            <span className='text-xs px-3 py-1 rounded-full bg-brand-blue/10 text-brand-blue font-mono'>
+                            <span className='text-xs px-2.5 py-0.5 rounded-full bg-brand-blue/10 text-brand-blue font-mono font-medium border border-brand-blue/20'>
                               {item.standard}
                             </span>
                           </div>
@@ -564,19 +604,22 @@ export default function MCPPage() {
               <div className='grid md:grid-cols-3 gap-8'>
                 {[
                   {
-                    icon: <FaShieldAlt className='text-5xl text-brand-blue' />,
-                    title: 'Identity',
+                    title: 'IDENTITY',
                     description: 'Unified, verifiable agent registration using HCS standards.',
+                    color: 'purple',
+                    icon: 'ID',
                   },
                   {
-                    icon: <FaSearch className='text-5xl text-brand-purple' />,
-                    title: 'Discovery',
+                    title: 'DISCOVERY',
                     description: 'Real-time indexing and intelligent search across all networks.',
+                    color: 'blue',
+                    icon: 'SRCH',
                   },
                   {
-                    icon: <FaExchangeAlt className='text-5xl text-brand-green' />,
-                    title: 'Coordination',
+                    title: 'COORDINATION',
                     description: 'Ledger-backed credits and standardized interaction protocols.',
+                    color: 'green',
+                    icon: 'SYNC',
                   },
                 ].map((pillar, index) => (
                   <motion.div
@@ -591,24 +634,25 @@ export default function MCPPage() {
                     }}
                     whileHover={{ y: -8, transition: { duration: 0.3 } }}
                   >
-                    <TransformCard
-                      className='h-full p-8'
-                      background='bg-white/90 dark:bg-gray-900/80 backdrop-blur-sm'
-                      border='border border-white/60 dark:border-gray-800'
-                      shadow='lg'
-                    >
-                      <div className='flex flex-col items-center text-center gap-4'>
-                        <div className='flex items-center justify-center w-24 h-24 rounded-2xl bg-linear-to-br from-brand-purple/10 via-brand-blue/10 to-brand-green/10 dark:from-brand-purple/20 dark:via-brand-blue/20 dark:to-brand-green/20'>
-                          {pillar.icon}
+                    <div className='h-full bg-gray-100 dark:bg-gray-900 p-1 rounded-lg border border-gray-200 dark:border-gray-800'>
+                      <div className='h-full bg-white dark:bg-black rounded-md p-8 relative overflow-hidden group border border-gray-200 dark:border-gray-800'>
+                        <div className='absolute top-0 right-0 p-4 opacity-20 font-mono text-4xl font-bold text-gray-300 dark:text-gray-700 select-none'>
+                          0{index + 1}
                         </div>
-                        <Typography variant='h3' className='text-2xl font-mono font-bold text-gray-700 dark:text-white'>
+                        <div className={`w-16 h-16 mb-6 rounded-lg bg-brand-${pillar.color}/10 flex items-center justify-center border border-brand-${pillar.color}/20`}>
+                          <span className={`font-mono font-bold text-brand-${pillar.color}`}>
+                            {pillar.icon}
+                          </span>
+                        </div>
+                        <Typography variant='h3' className='text-lg font-mono font-bold text-gray-700 dark:text-white mb-3'>
                           {pillar.title}
                         </Typography>
-                        <Typography variant='body1' color='muted' className='text-sm leading-relaxed'>
+                        <Typography variant='body1' color='muted' className='text-sm leading-relaxed font-mono'>
                           {pillar.description}
                         </Typography>
+                        <div className={`absolute bottom-0 left-0 w-full h-1 bg-brand-${pillar.color}/50 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500`} />
                       </div>
-                    </TransformCard>
+                    </div>
                   </motion.div>
                 ))}
               </div>
@@ -634,36 +678,37 @@ export default function MCPPage() {
                 </Typography>
               </div>
 
-              <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6'>
+              <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4'>
                 {[
-                  { name: 'Virtuals', badge: 'Live' },
-                  { name: 'A2A', badge: 'Live' },
-                  { name: 'ERC-8004', badge: 'Live' },
-                  { name: 'x402 Bazaar', badge: 'Live' },
-                  { name: 'OpenConvAI', badge: 'Live' },
+                  { name: 'Virtuals', badge: 'CONNECTED', latency: '12ms' },
+                  { name: 'A2A Network', badge: 'CONNECTED', latency: '24ms' },
+                  { name: 'ERC-8004', badge: 'CONNECTED', latency: '08ms' },
+                  { name: 'x402 Bazaar', badge: 'CONNECTED', latency: '15ms' },
+                  { name: 'OpenConvAI', badge: 'CONNECTED', latency: '31ms' },
                 ].map((network, index) => (
                   <motion.div
                     key={network.name}
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: '-30px' }}
                     transition={{
-                      duration: 0.6,
+                      duration: 0.4,
                       delay: index * 0.1,
-                      ease: [0.16, 1, 0.3, 1],
                     }}
-                    whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
-                    className='relative group'
+                    className='group'
                   >
-                    <div className='absolute inset-0 bg-linear-to-br from-brand-purple/20 via-brand-blue/20 to-brand-green/20 rounded-xl blur opacity-0 group-hover:opacity-100 transition-opacity' />
-                    <div className='relative bg-gray-50 dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 text-center h-full flex flex-col justify-center items-center gap-3'>
-                      <FaPlug className='text-3xl text-brand-blue' />
-                      <Typography variant='h6' className='font-mono font-bold text-gray-700 dark:text-white'>
+                    <div className='bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-3 rounded-sm hover:border-brand-blue/50 transition-colors relative overflow-hidden'>
+                      <div className='flex justify-between items-center mb-2'>
+                        <div className='w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]' />
+                        <span className='text-[10px] font-mono text-gray-500'>{network.latency}</span>
+                      </div>
+                      <Typography variant='body2' className='font-mono font-bold text-gray-700 dark:text-gray-300 group-hover:text-brand-blue dark:group-hover:text-white transition-colors mb-1'>
                         {network.name}
                       </Typography>
-                      <span className='text-xs px-2 py-1 rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-mono'>
-                        {network.badge}
-                      </span>
+                      <div className='text-[10px] font-mono text-brand-blue/80'>
+                        [{network.badge}]
+                      </div>
+                      <div className='absolute bottom-0 left-0 w-full h-[2px] bg-brand-blue/30 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left' />
                     </div>
                   </motion.div>
                 ))}
@@ -813,7 +858,7 @@ export default function MCPPage() {
                 transition={{ duration: 0.7, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
                 className='flex justify-center items-center py-4'
               >
-                <PrimaryButton href='/docs#getting-started/quick-start.md' variant='primary' umamiEvent='mcp-footer-get-started'>
+                <PrimaryButton href='/docs/registry-broker/mcp-server' variant='primary' umamiEvent='mcp-footer-get-started'>
                   <span className='flex items-center gap-3 text-xl px-6 py-2'>
                     <FaRocket className='w-7 h-7' />
                     Start with Hashnet MCP

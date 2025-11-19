@@ -365,8 +365,7 @@ REGISTRY_BROKER_DEMO_BODY_TIMEOUT_MS        # Timeout in ms
 ### Additional Variables
 
 ```bash
-OPENROUTER_API_KEY              # For OpenRouter chat demos
-OPENROUTER_MODEL_ID             # Model selection
+OPENROUTER_MODEL_ID             # Model selection for OpenRouter UAID demos
 CLOUDFLARED_BIN                 # Path to cloudflared binary
 STANDARDS_SDK_ROOT              # SDK repository root
 ```

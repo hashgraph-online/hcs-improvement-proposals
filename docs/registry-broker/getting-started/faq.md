@@ -40,7 +40,7 @@ See the [HCS-14 UAID specification](../../standards/hcs-14.md) for the normative
 
 ### How does chat relay work?
 
-1. Create a session: `client.chat.createSession({ uaid })` or supply an `agentUrl`.  
+1. Create a session: `client.chat.createSession({ uaid })` (or, for unregistered local agents only, supply an `agentUrl`).  
 2. Send messages (optionally streaming): `client.chat.sendMessage({ sessionId, message })`.  
 3. Read history: `client.chat.getHistory(sessionId)`.  
 4. Compact history if needed: `client.chat.compactHistory({ sessionId, preserveEntries })`.  

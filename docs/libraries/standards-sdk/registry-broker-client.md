@@ -52,7 +52,7 @@ const client = new RegistryBrokerClient({
 
 You can inspect the current header set with `client.getDefaultHeaders()`.
 
-### Quickstart: Paid OpenRouter chat relay
+### Quickstart: OpenRouter chat relay
 
 ```typescript
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
@@ -63,20 +63,18 @@ const client = new RegistryBrokerClient({
 });
 
 const session = await client.chat.createSession({
-  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
-  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
+  uaid: 'uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet',
 });
 
 const reply = await client.chat.sendMessage({
   sessionId: session.sessionId,
   message: 'Give me a one-line summary of your pricing.',
-  auth: { type: 'bearer', token: process.env.OPENROUTER_API_KEY! },
 });
 
 console.log(reply.message);
 ```
 
-If you omit the `auth` block for paid models, the broker returns a `401` from the adapter. Free-tier models do not require this step.
+For the hosted Registry Broker, the OpenRouter adapter is configured with its own API key and uses your credit balance, so you do **not** need to pass an OpenRouter token from the client for standard flows. You only need the `auth` block for custom deployments or when you explicitly proxy end‑user credentials through the broker.
 
 ## Architecture Overview
 
@@ -272,18 +270,18 @@ sequenceDiagram
     SDK->>Broker: DELETE /chat/session
 ```
 
-You can also seed the chat by agent URL instead of UAID (`{ agentUrl: 'https://...' }`). The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
+You can also seed the chat by agent URL instead of UAID (`{ agentUrl: 'https://...' }`) when talking to local or unregistered endpoints. The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
 
 ### Passing downstream auth (paid OpenRouter models)
 
-Many adapters (notably OpenRouter) require *user-provided* credentials for paid tiers. Supply the downstream token with the `auth` block so the relay can authenticate on your behalf.
+Many adapters support *user-provided* credentials for advanced or multi‑tenant scenarios. Supply the downstream token with the `auth` block when you need to override the broker’s default credentials or forward end‑user headers verbatim.
 
 ```typescript
 const session = await client.chat.createSession({
-  agentUrl: 'openrouter://anthropic/claude-3.5-sonnet',
+  uaid: 'uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet',
   auth: {
     type: 'bearer',
-    token: process.env.OPENROUTER_API_KEY!, // the user's key, not the broker's
+    token: process.env.PROVIDER_API_KEY!, // optional end-user key for non-broker adapters
   },
 });
 
@@ -292,7 +290,7 @@ const response = await client.chat.sendMessage({
   message: 'Summarize your pricing in one sentence.',
   auth: {
     type: 'bearer',
-    token: process.env.OPENROUTER_API_KEY!,
+    token: process.env.PROVIDER_API_KEY!,
   },
 });
 ```
@@ -348,7 +346,7 @@ The following guidelines distill the patterns these demos implement so you can w
    - `mcp-adapter` → JSON-RPC HTTP or SSE transports exposed by MCP servers.
    - `nanda-adapter`, `a2a-registry-adapter`, `a2a-protocol-adapter` → A2A JSON-RPC messaging (optionally backed by `@a2a-js` clients).
    - `x402-bazaar-adapter` → Arbitrary HTTP requests defined by the agent’s X402 resource metadata.
-   - `erc8004-adapter` → Discovery only; extract an HTTPS endpoint from the `.well-known/agent-card.json` metadata (or IPFS token URI) and pass it as `agentUrl` when you create a session.
+   - `erc8004-adapter` → ERC‑8004 discovery with optional chat relay; the broker can derive HTTP/A2A endpoints from `.well-known/agent-card.json` metadata or IPFS token URIs when you chat by UAID.
    - `virtuals-protocol-adapter` / `olas-protocol-adapter` → Discovery-only commerce/service metadata (no chat relay).
 
    Use `const descriptors = await client.adaptersDetailed();` to hydrate the adapter catalog in-process. Each `AdapterDescriptor` exposes `chatProfile.requiresAuth`, delivery mechanisms, and capability flags so you can branch without hard-coding knowledge of the broker deployment. The table below mirrors the fields returned by `GET /api/v1/adapters/details`:
@@ -363,13 +361,13 @@ The following guidelines distill the patterns these demos implement so you can w
    | `a2a-registry-adapter` | Yes | Relay | JSON-RPC | No | None | Proxies records from the public A2A registry. |
    | `a2a-protocol-adapter` | Yes | Relay | JSON-RPC | No | None | Crawls well-known A2A endpoints and relays JSON-RPC messages. |
    | `x402-bazaar-adapter` | Yes | Relay | HTTP | No | None | Executes HTTP requests defined by Coinbase x402 resource metadata. |
-   | `erc8004-adapter` | No | Discovery | N/A | N/A | None | Emits discovery data; chat by supplying `agentUrl` derived from metadata. |
+   | `erc8004-adapter` | Yes (via UAID) | Discovery + relay | HTTP / A2A | No | None | Emits discovery data and supports chat when you supply the ERC‑8004 UAID; the broker derives endpoints from metadata. |
    | `virtuals-protocol-adapter` | No | Discovery | N/A | N/A | None | Surfaces Virtuals commerce metadata without brokering chat. |
    | `olas-protocol-adapter` | No | Discovery | N/A | N/A | None | Indexes OLAS services; integration is discovery-only today. |
 
 #### 2. Launch your local agent (optional)
 
-The AgentVerse demo spins up a local A2A helper with `startLocalA2AAgent` so you can observe a full two-way conversation. Any local service that exposes the ASI chat protocol will work—just pass its URL to `client.chat.sendMessage({ agentUrl, ... })` when you forward the remote agent’s reply.
+The AgentVerse demo spins up a local A2A helper with `startLocalA2AAgent` so you can observe a full two-way conversation. Any local service that exposes the ASI chat protocol will work—just pass its URL to `client.chat.sendMessage({ agentUrl, ... })` when you forward the remote agent’s reply; for registry-backed agents, prefer UAIDs instead.
 
 #### 3. Handling AgentVerse mailbox and proxy agents
 
@@ -380,7 +378,7 @@ The AgentVerse demo spins up a local A2A helper with `startLocalA2AAgent` so you
 #### 4. Talking to ERC-8004 agents
 
 - Resolve an HTTP endpoint from the search hit. The ERC-8004 demo inspects `metadata.communicationEndpoints.primary`, `hit.endpoints.wellKnown`, and on-chain registration data to derive a usable URL.
-- Create a chat session with `agentUrl` and send messages as usual. ERC-8004 agents typically respond immediately; you can still call `getHistory` to archive context.
+- Create a chat session by UAID and send messages as usual. ERC‑8004 agents typically respond immediately; you can still call `getHistory` to archive context.
 - When the agent publishes only an IPFS token URI, transform it to an HTTPS gateway (e.g. `ipfs://...` → `https://ipfs.io/ipfs/...`).
 
 #### 5. Session hygiene
@@ -397,7 +395,7 @@ The AgentVerse demo spins up a local A2A helper with `startLocalA2AAgent` so you
 - **MCP (`mcp-adapter`)** – Talks to Pulse MCP servers using JSON-RPC. Inspect `agent.metadata.remoteTransport` to differentiate `http`, `streamable_http`, and `sse`. For streaming transports the adapter parses SSE and surfaces incremental chunks in the chat response.
 - **NANDA / A2A (`nanda-adapter`, `a2a-registry-adapter`, `a2a-protocol-adapter`)** – Wrap the A2A ecosystem. When an `@a2a-js` client can be established the adapter forwards prompts directly; otherwise it falls back to JSON-RPC requests against the agent’s declared endpoint. Consider running the local A2A helper from the AgentVerse demo when you need deterministic round-trips.
 - **X402 Bazaar (`x402-bazaar-adapter`)** – Builds arbitrary HTTP requests from the message payload (`method`, `target`, `headers`, `body`). Use it when an agent exposes a REST interface via X402 metadata.
-- **ERC-8004 (`erc8004-adapter`)** – Discovery-only. Extract a usable HTTPS endpoint from registration metadata (communication endpoints, token URI, IPFS link) and supply it as `agentUrl` when you create the session. The ERC-8004 demo illustrates this flow end-to-end.
+- **ERC-8004 (`erc8004-adapter`)** – Discovery-first with UAID chat. Let the broker extract a usable HTTP or A2A endpoint from registration metadata (communication endpoints, token URI, IPFS link) and chat by UAID—the ERC‑8004 demos illustrate this flow end-to-end.
 - **Virtuals Protocol (`virtuals-protocol-adapter`) & OLAS (`olas-protocol-adapter`)** – Provide discovery metadata for ACP commerce and OLAS autonomous services respectively; the broker does not currently proxy chat for these registries.
 
 Following these practices keeps cross-protocol conversations predictable and reproducible. Reference the demos for working code that combines discovery, UAID normalization, and chat relay in one script.
