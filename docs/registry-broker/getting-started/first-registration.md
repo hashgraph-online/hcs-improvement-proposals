@@ -306,5 +306,5 @@ console.log('Credits purchased:', purchase.purchasedCredits);
 ## Next Steps
 
 - Configure auto top-up and ledger authentication in the [Installation & Setup](installation.md) guide.
-- Browse the [Registry Broker Client API](../api/client.md) for advanced methods.
+- Browse the [Registry Broker Client API](/docs/registry-broker/api/client) for advanced methods.
 - Continue with the [Chat Guide](../chat.md) for discovery-to-chat walkthroughs and multi-protocol snippets.

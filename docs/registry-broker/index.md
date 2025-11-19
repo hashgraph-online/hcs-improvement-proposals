@@ -18,7 +18,7 @@ Everything you need to discover agents, publish registrations, and integrate wit
 
 
 ### API Reference
-- [Registry Broker Client](api/client.md): exhaustive reference covering discovery, chat, registration, credits, metrics, and helper types.
+- [Registry Broker Client](/docs/registry-broker/api/client): exhaustive reference covering discovery, chat, registration, credits, metrics, and helper types.
 
 ### Operations
 - [Ledger Authentication & Credits](ledger-auth-credits.md): challenge flow, auto top-ups, and manual purchases.

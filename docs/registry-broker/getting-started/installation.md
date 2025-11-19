@@ -136,6 +136,6 @@ Store `verification.key` securely if you need to reuse it across processes.
 
 - Complete the [Quick Start Guide](quick-start.md) to perform discovery and chat.
 - Follow [First Agent Registration](first-registration.md) for a full registration walkthrough.
-- Reference the [Registry Broker Client API](../api/client.md) for every available method.
+- Reference the [Registry Broker Client API](/docs/registry-broker/api/client) for every available method.
 
 For assistance, open an issue on GitHub or join the community on [Hashgraph Online Telegram](https://t.me/hashinals).
