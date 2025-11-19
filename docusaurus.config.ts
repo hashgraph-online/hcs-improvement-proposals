@@ -145,7 +145,7 @@ const config: Config = {
           ],
         },
         { to: '/members', label: 'DAO', position: 'left' },
-        { to: '/registry', label: 'Registry', position: 'left' },
+        { href: 'https://hol.org/registry', label: 'Registry', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
       ],
     },

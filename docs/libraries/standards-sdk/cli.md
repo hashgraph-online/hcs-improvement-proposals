@@ -218,7 +218,7 @@ pnpm run cli -- config \
   --network testnet \
   --account-id 0.0.123456 \
   --private-key 302e020100300506032b657004220420... \
-  --registry-base-url https://registry.hashgraphonline.com/api/v1 \
+  --registry-base-url https://https://hol.org/registry/api/v1 \
   --prefer-cloudflared true
 ```
 
@@ -299,7 +299,7 @@ Example output (credentials redacted):
     "defaultPrivateKey": "302e…7890"
   },
   "registryBroker": {
-    "baseUrl": "https://registry.hashgraphonline.com/api/v1",
+    "baseUrl": "https://https://hol.org/registry/api/v1",
     "useLedger": true,
     "autoTopUp": true,
     "profileMode": "ai"
@@ -698,7 +698,7 @@ export CLOUDFLARED_BIN=/usr/local/bin/cloudflared
 
 3. Check registry broker health (if applicable):
    ```bash
-   curl https://registry.hashgraphonline.com/api/v1/health
+   curl https://https://hol.org/registry/api/v1/health
    ```
 
 4. Run demo with verbose logging:

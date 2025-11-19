@@ -4,7 +4,7 @@ sidebar_position: 11
 
 # Registry Broker Client
 
-The Registry Broker client in `@hashgraphonline/standards-sdk` provides a typed, batteries-included wrapper around the [Hashgraph Online Registry Broker](https://registry.hashgraphonline.com). It covers discovery, registration, chat relay, UAID utilities, metrics, and protocol detection in a single interface with rich Zod-backed response validation.
+The Registry Broker client in `@hashgraphonline/standards-sdk` provides a typed, batteries-included wrapper around the [Hashgraph Online Registry Broker](https://https://hol.org/registry). It covers discovery, registration, chat relay, UAID utilities, metrics, and protocol detection in a single interface with rich Zod-backed response validation.
 
 ## Getting Started
 
@@ -17,11 +17,11 @@ pnpm add @hashgraphonline/standards-sdk
 
 ### Credentials & Credits
 
-The production broker is pay-as-you-go. Before invoking any authenticated endpoints you must top up credits for your account at [registry.hashgraphonline.com/billing](https://registry.hashgraphonline.com/billing). Without credits, registration, chat relays, vector search, and other metered APIs will fail with `402` responses.
+The production broker is pay-as-you-go. Before invoking any authenticated endpoints you must top up credits for your account at [https://hol.org/registry/billing](https://https://hol.org/registry/billing). Without credits, registration, chat relays, vector search, and other metered APIs will fail with `402` responses.
 
 Once credits are loaded you can generate an API key (or use session tokens) and create a client:
 
-> 💡 The Registry Broker production API is available at `https://registry.hashgraphonline.com/api/v1`. Override `baseUrl` only if you’ve been provisioned a private deployment.
+> 💡 The Registry Broker production API is available at `https://https://hol.org/registry/api/v1`. Override `baseUrl` only if you’ve been provisioned a private deployment.
 
 ### Creating a client
 
@@ -29,14 +29,14 @@ Once credits are loaded you can generate an API key (or use session tokens) and 
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  // Optional: override the default https://registry.hashgraphonline.com/api/v1
+  // Optional: override the default https://https://hol.org/registry/api/v1
   baseUrl: process.env.REGISTRY_BROKER_API_URL,
   // Optional: supply an API key issued by your Registry Broker instance
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 ```
 
-- **`baseUrl`** – defaults to the production broker (`https://registry.hashgraphonline.com/api/v1`). Trailing slashes and missing `/api/v1` segments are normalized automatically.
+- **`baseUrl`** – defaults to the production broker (`https://https://hol.org/registry/api/v1`). Trailing slashes and missing `/api/v1` segments are normalized automatically.
 - **`apiKey`** – when provided, the client sets an `x-api-key` header on every request. You can update it later with `client.setApiKey(newKey)`.
 - **`defaultHeaders`** – use `client.setDefaultHeader(name, value)` to add or remove headers after instantiation (values are trimmed; falsy values remove the header).
 - **`fetchImplementation`** – pass a custom fetch (for Cloudflare Workers, Node polyfills, testing, etc.).
@@ -58,7 +58,7 @@ You can inspect the current header set with `client.getDefaultHeaders()`.
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  baseUrl: 'https://registry.hashgraphonline.com/api/v1',
+  baseUrl: 'https://https://hol.org/registry/api/v1',
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 
@@ -113,7 +113,7 @@ The SDK mediates every request, ensuring headers and schemas are applied consist
 
 > ✅ **Free discovery:** keyword search, vector search, adapter catalog, and public stats are available to everyone without credits or authentication.
 
-Use the [billing portal](https://registry.hashgraphonline.com/billing) only when you need metered functionality such as agent registration, chat relay, UAID inscription, or history compaction. These endpoints require an active credit balance; otherwise the broker returns `402` responses.
+Use the [billing portal](https://https://hol.org/registry/billing) only when you need metered functionality such as agent registration, chat relay, UAID inscription, or history compaction. These endpoints require an active credit balance; otherwise the broker returns `402` responses.
 
 ## Searching the Registry
 
@@ -462,7 +462,7 @@ import {
   isPendingRegisterAgentResponse,
 } from '@hashgraphonline/standards-sdk';
 
-const baseUrl = 'https://registry.hashgraphonline.com/api/v1';
+const baseUrl = 'https://https://hol.org/registry/api/v1';
 const ledgerAccountId = process.env.MAINNET_HEDERA_ACCOUNT_ID!;
 const ledgerPrivateKey = process.env.MAINNET_HEDERA_PRIVATE_KEY!;
 

@@ -50,7 +50,7 @@ See the [HCS-14 UAID specification](../../standards/hcs-14.md) for the normative
 
 ### How do I add credits?
 
-Purchase credits through the [billing portal](https://registry.hashgraphonline.com/billing) or call `client.purchaseCreditsWithHbar` with Hedera credentials. Credits become available instantly once the ledger transaction reaches consensus.
+Purchase credits through the [billing portal](https://https://hol.org/registry/billing) or call `client.purchaseCreditsWithHbar` with Hedera credentials. Credits become available instantly once the ledger transaction reaches consensus.
 
 ### What happens if I run out of credits?
 

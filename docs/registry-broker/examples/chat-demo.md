@@ -31,7 +31,7 @@ npm install @hashgraphonline/standards-sdk dotenv
 
 # Create .env file
 cat > .env << EOF
-REGISTRY_BROKER_API_URL=https://registry.hashgraphonline.com/api/v1
+REGISTRY_BROKER_API_URL=https://https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key-here
 EOF
 ```
