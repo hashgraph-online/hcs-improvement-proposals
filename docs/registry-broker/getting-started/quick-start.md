@@ -26,7 +26,7 @@ pnpm add @hashgraphonline/standards-sdk
 Create a `.env` file in your project root:
 
 ```bash
-REGISTRY_BROKER_API_URL=https://https://hol.org/registry/api/v1
+REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key # omit for unauthenticated search
 HEDERA_ACCOUNT_ID=0.0.1234           # optional, needed for registration demos
 HEDERA_PRIVATE_KEY=302e...           # optional, needed for registration demos

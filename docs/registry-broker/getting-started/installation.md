@@ -11,7 +11,7 @@ Install the `@hashgraphonline/standards-sdk`, configure credentials, and verify 
 
 - Node.js 20 or later
 - pnpm 8+ (npm works, but instructions use pnpm)
-- Access to `https://https://hol.org/registry` over HTTPS
+- Access to `https://hol.org/registry` over HTTPS
 - Registry Broker API key for paid features (search works without it)
 
 ## Step 1 — Install Dependencies
@@ -28,7 +28,7 @@ The SDK ships with TypeScript definitions—no additional typings are required.
 Create `.env` in your project root:
 
 ```bash
-REGISTRY_BROKER_API_URL=https://https://hol.org/registry/api/v1
+REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key                     # optional for search-only usage
 REGISTRY_BROKER_LEDGER_KEY=                               # populated after ledger verification
 REGISTRY_BROKER_LEDGER_MODE=hedera                       # hedera (default) or evm
