@@ -379,10 +379,14 @@ ul.tags.expanded::after {
   color: #15162a;
   font-size: 0.95rem;
   padding: 0.1rem 0;
+  scroll-margin: 0 !important;
+  scroll-padding: 0 !important;
 }
 
 .search-input-field:focus {
   outline: none;
+  scroll-margin: 0 !important;
+  scroll-padding: 0 !important;
 }
 
 .search-input-field::placeholder {
