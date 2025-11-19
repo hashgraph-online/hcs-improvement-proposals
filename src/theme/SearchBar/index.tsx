@@ -25,11 +25,48 @@ const SearchBar: React.FC = () => {
     | undefined;
 
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [query, setQuery] = useState('');
   const [hits, setHits] = useState<AlgoliaHit[]>([]);
   const [loading, setLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [noResults, setNoResults] = useState(false);
+
+  // Prevent scroll when typing in search
+  useEffect(() => {
+    let scrollPosition = 0;
+
+    const saveScrollPosition = () => {
+      scrollPosition = window.scrollY;
+    };
+
+    const restoreScrollPosition = () => {
+      window.scrollTo(0, scrollPosition);
+    };
+
+    const input = inputRef.current;
+    if (input) {
+      input.addEventListener('input', saveScrollPosition);
+      input.addEventListener('focus', saveScrollPosition);
+    }
+
+    // Listen for any scroll events and restore position
+    const handleScroll = () => {
+      if (document.activeElement === input) {
+        restoreScrollPosition();
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      if (input) {
+        input.removeEventListener('input', saveScrollPosition);
+        input.removeEventListener('focus', saveScrollPosition);
+      }
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const clearSearch = useCallback(() => {
     setQuery('');
@@ -176,6 +213,7 @@ const SearchBar: React.FC = () => {
           </svg>
         </span>
         <input
+          ref={inputRef}
           type='search'
           className='search-input-field'
           placeholder='Search...'
