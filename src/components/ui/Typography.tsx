@@ -9,6 +9,8 @@ type TypographyVariant =
   | 'h5'
   | 'h6'
   | 'body'
+  | 'body1'
+  | 'body2'
   | 'caption'
   | 'code'
   | 'comment'
@@ -34,6 +36,7 @@ interface TypographyProps {
   className?: string;
   as?: keyof JSX.IntrinsicElements;
   noDefaultSize?: boolean; // Allow disabling default sizes
+  align?: 'left' | 'center' | 'right' | 'justify';
 }
 
 const Typography: React.FC<TypographyProps> = ({
@@ -45,6 +48,7 @@ const Typography: React.FC<TypographyProps> = ({
   className,
   as,
   noDefaultSize = false,
+  align,
 }) => {
   const getVariantClasses = () => {
     // If noDefaultSize is true, only return font weight and non-size styles
@@ -63,7 +67,10 @@ const Typography: React.FC<TypographyProps> = ({
         case 'h6':
           return 'font-bold';
         case 'body':
+        case 'body1':
           return 'leading-relaxed';
+        case 'body2':
+          return 'leading-relaxed text-sm';
         case 'caption':
           return '';
         case 'code':
@@ -95,6 +102,10 @@ const Typography: React.FC<TypographyProps> = ({
         return 'text-base lg:text-lg font-bold';
       case 'body':
         return 'text-base leading-relaxed';
+      case 'body1':
+        return 'text-base leading-relaxed';
+      case 'body2':
+        return 'text-sm leading-relaxed';
       case 'caption':
         return 'text-sm';
       case 'code':
@@ -153,6 +164,15 @@ const Typography: React.FC<TypographyProps> = ({
     getVariantClasses(),
     getGradientClasses(),
     getColorClasses(),
+    align === 'center'
+      ? 'text-center'
+      : align === 'right'
+        ? 'text-right'
+        : align === 'justify'
+          ? 'text-justify'
+          : align === 'left'
+            ? 'text-left'
+            : '',
     mono ||
       [
         'h1',

@@ -10,6 +10,7 @@ import {
   FaExternalLinkAlt,
   FaGlobe,
   FaComments,
+  FaDesktop,
 } from 'react-icons/fa';
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
 import PrimaryButton from '../hackathon/PrimaryButton';
@@ -168,6 +169,22 @@ const ToolsSection: React.FC = () => {
   };
 
   const tools: Tool[] = [
+    {
+      icon: <FaDesktop />,
+      title: 'HOL Desktop',
+      description:
+        'Cross-platform desktop app with chat, transaction approvals, LangChain tools, and MCP server management for Hedera agents.',
+      link: '/desktop',
+      installCommand: 'git clone https://github.com/hashgraph-online/desktop',
+      isNew: true,
+      color: 'purple',
+      quickStart: `# Clone and run HOL Desktop
+git clone https://github.com/hashgraph-online/desktop
+cd desktop
+pnpm install
+pnpm dev`,
+      docsLink: 'https://github.com/hashgraph-online/desktop#readme',
+    },
     {
       icon: <FaGithub />,
       title: 'Standards SDK',

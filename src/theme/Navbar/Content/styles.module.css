@@ -1,0 +1,161 @@
+/* Navbar inner container - single line guaranteed */
+.navbarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 60px;
+  padding: 0 1.5rem;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
+  overflow: visible;
+}
+
+/* Left section - logo and left nav items */
+.navbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+  height: 100%;
+}
+
+/* Right section - right nav items, theme toggle, search */
+.navbarRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 1;
+  min-width: 0;
+  height: 100%;
+  margin-left: auto;
+}
+
+/* Navigation links containers */
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  height: 100%;
+}
+
+/* Individual nav items styling */
+.navLinks :global(.navbar__item) {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.navLinks :global(.navbar__link) {
+  padding: 0.375rem 0.875rem 0.625rem 0.875rem !important;
+  margin: 0 !important;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  line-height: 1;
+}
+
+.navLinks :global(.navbar__link:hover) {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Remove any default margins from dropdowns */
+.navLinks :global(.dropdown) {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Hide nav links when search is active on desktop */
+@media (min-width: 997px) {
+  .navbarRight:has(:global(.navbar-search-wrapper--active)) .navLinks {
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+}
+
+/* Color mode toggle compact styling */
+.colorModeToggle {
+  margin: 0;
+  flex-shrink: 0;
+  order: 2;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.colorModeToggle :global(button) {
+  padding: 0.5rem !important;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Search wrapper - compact and expandable */
+.searchWrapper {
+  order: 3;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+/* Mobile responsive */
+@media (max-width: 996px) {
+  .navbarInner {
+    padding: 0 1rem;
+    gap: 0.75rem;
+    height: 60px;
+    position: relative;
+  }
+
+  .navbarLeft {
+    gap: 0.75rem;
+    flex: 1;
+  }
+
+  .navbarRight {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .navLinks {
+    display: none;
+  }
+
+  /* Mobile search - slide-down panel below navbar */
+  .searchWrapper {
+    position: static;
+  }
+
+  .searchWrapper :global(.navbar-search-wrapper) {
+    position: relative;
+  }
+}
+
+/* Extra compact for very small screens */
+@media (max-width: 768px) {
+  .navbarInner {
+    padding: 0 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .navbarLeft {
+    gap: 0.5rem;
+  }
+}
