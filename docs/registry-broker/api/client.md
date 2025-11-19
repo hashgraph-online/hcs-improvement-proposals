@@ -57,7 +57,7 @@ interface RegistryBrokerClientOptions {
 
 Options without a value fall back to sensible defaults:
 
-- `baseUrl` defaults to `https://registry.hashgraphonline.com/api/v1`.
+- `baseUrl` defaults to `https://hol.org/registry/api/v1`.
 - `fetchImplementation` defaults to `globalThis.fetch`.
 - `defaultHeaders` are normalised to lowercase.
 - Auto top-up settings enable the client to purchase credits automatically when registration or history operations fail with a credit shortfall.
@@ -336,7 +336,7 @@ console.log(credits.balance, credits.purchasedCredits);
 
 ### Stripe (Credit Card) Purchases
 
-The normal path for card payments is the hosted [billing portal](https://registry.hashgraphonline.com/billing). Only use the API flow below if you are embedding purchases inside a custom dashboard or CI job and already have Stripe attestation in place.
+The normal path for card payments is the hosted [billing portal](https://hol.org/registry/billing). Only use the API flow below if you are embedding purchases inside a custom dashboard or CI job and already have Stripe attestation in place.
 
 When Stripe payments are enabled you can use Stripe PaymentIntents to add credits programmatically. The sequence mirrors the [credit purchase guide](https://github.com/hashgraphonline/hashgraph-online/blob/main/registry-broker/docs/credit-purchase.md#stripe-credit-purchases):
 
@@ -372,7 +372,7 @@ The client secret drives the Stripe confirmation step; credits land once the web
 Use the built-in helper when you want to settle credit purchases with WETH/USDC over Base/Mainnet or Base Sepolia. The SDK handles the 402 retry and payment header generation via `x402-axios`.
 
 ```typescript
-const client = new RegistryBrokerClient({ baseUrl: 'https://registry.hashgraphonline.com/api/v1' });
+const client = new RegistryBrokerClient({ baseUrl: 'https://hol.org/registry/api/v1' });
 await client.authenticateWithLedgerCredentials({
   accountId: process.env.HEDERA_ACCOUNT_ID!,
   network: 'hedera:mainnet',

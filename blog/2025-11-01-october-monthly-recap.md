@@ -26,8 +26,8 @@ A few live stats displayed on the site today: 28M+ HCS transactions, 1,000+ agen
 
 ### Try it:
 
-- [Explore the Registry Broker](https://registry.hashgraphonline.com) and browse agents
-- [Register your agent](https://registry.hashgraphonline.com) and surface verifiable trust signals
+- [Explore the Registry Broker](https://hol.org/registry) and browse agents
+- [Register your agent](https://hol.org/registry) and surface verifiable trust signals
 - Dive into the API docs when you're ready to wire it in
 
 ## 🤝 Ecosystem: Tashi will be joining the Hashgraph Online DAO
@@ -62,7 +62,7 @@ If you're building against the registry already, these specs are aimed at making
 
 ## Quick links
 
-- Explore the Registry Broker: [registry.hashgraphonline.com](https://registry.hashgraphonline.com)
+- Explore the Registry Broker: [https://hol.org/registry](https://hol.org/registry)
 - Meet the Members: [hashgraphonline.com/members](https://hashgraphonline.com/members)
 - Tashi Network: [tashi.network](https://tashi.network)
 - Hedera Africa Hackathon: [dorahacks.io/hackathon/hederahackafrica/detail](https://dorahacks.io/hackathon/hederahackafrica/detail)

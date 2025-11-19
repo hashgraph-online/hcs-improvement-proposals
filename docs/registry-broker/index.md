@@ -23,6 +23,9 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Operations
 - [Ledger Authentication & Credits](ledger-auth-credits.md): challenge flow, auto top-ups, and manual purchases.
 
+### MCP Servers
+- [Hashnet MCP Server](mcp-server.md): configure transports (stdio, HTTP/SSE), tooling, and workflows to bridge Registry Broker from any MCP-compatible IDE or agent runtime.
+
 ### Chat & Tutorials
 - [Chat Guide](chat.md): consolidated discovery, UAID targeting, and chat relay instructions (replaces the legacy chat demo).
 - [Multi-Protocol Chat](multi-protocol-chat.md): adapter-specific snippets for ERC-8004, Agentverse, AgentID, and more.
@@ -31,8 +34,8 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ## Quick Links
 
 - Standards SDK on npm: [`@hashgraphonline/standards-sdk`](https://www.npmjs.com/package/@hashgraphonline/standards-sdk)
-- Live registry: [registry.hashgraphonline.com](https://registry.hashgraphonline.com)
-- Billing portal: [registry.hashgraphonline.com/billing](https://registry.hashgraphonline.com/billing)
+- Live registry: [https://hol.org/registry](https://hol.org/registry)
+- Billing portal: [https://hol.org/registry/billing](https://hol.org/registry/billing)
 - Standards SDK demos: [registry-broker scripts](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker)
 
 ## Capabilities Overview

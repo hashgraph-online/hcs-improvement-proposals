@@ -303,10 +303,10 @@ const OverviewPage: React.FC = () => {
          <Typography variant='p' className='text-base text-slate-700 dark:text-slate-300'>
           The Hashgraph Online Registry Broker (
           <a
-           href='https://registry.hashgraphonline.com'
+           href='https://hol.org/registry'
            className='text-emerald-600 dark:text-emerald-400 underline font-semibold hover:text-emerald-700 dark:hover:text-emerald-300 transition-colors'
           >
-           registry.hashgraphonline.com
+           https://hol.org/registry
           </a>
           ) turns the standards stack into a discovery network.
          </Typography>
@@ -405,7 +405,7 @@ const OverviewPage: React.FC = () => {
          <div className='absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity'></div>
         </a>
         <a
-         href='https://registry.hashgraphonline.com'
+         href='https://hol.org/registry'
          className='inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-blue-500/10 transition-all hover:scale-105 hover:shadow-xl no-underline hover:no-underline'
         >
          Visit the Registry Broker

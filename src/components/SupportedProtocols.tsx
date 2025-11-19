@@ -14,7 +14,7 @@ type DashboardStats = {
   agentsByProtocol: Record<string, number>;
 };
 
-const API_URL = 'https://registry.hashgraphonline.com/api/v1/dashboard/stats';
+const API_URL = 'https://hol.org/registry/api/v1/dashboard/stats';
 
 const SupportedProtocols = () => {
   const [stats, setStats] = useState<DashboardStats | null>(null);

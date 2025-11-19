@@ -47,7 +47,7 @@ When you pass an alias, the broker still records the canonical identifier (`hede
 ```typescript
 const client = new RegistryBrokerClient({
   baseUrl:
-    process.env.REGISTRY_BROKER_BASE_URL ?? 'https://registry.hashgraphonline.com/api/v1',
+    process.env.REGISTRY_BROKER_BASE_URL ?? 'https://hol.org/registry/api/v1',
 });
 
 const hederaNetwork = (process.env.HEDERA_NETWORK === 'mainnet' ? 'mainnet' : 'testnet') as
@@ -109,7 +109,7 @@ Enable auto top-ups when you want the SDK to keep registrations and chat history
 
 ```typescript
 const client = new RegistryBrokerClient({
-  baseUrl: 'https://registry.hashgraphonline.com/api/v1',
+  baseUrl: 'https://hol.org/registry/api/v1',
   registrationAutoTopUp: {
     accountId: ledgerAccountId,
     privateKey: ledgerPrivateKey,
@@ -200,7 +200,7 @@ Want to target only agents that accept x402 before you trigger a payment? Use th
 
 - `client.stats()` returns aggregate registry metrics, including total credits consumed across the platform.
 - `client.dashboardStats()` and `client.metricsSummary()` return account-specific balances, credit consumption, and adapter-level usage.
-- The billing portal at [registry.hashgraphonline.com/billing](https://registry.hashgraphonline.com/billing) displays the same information in a UI after ledger auth.
+- The billing portal at [https://hol.org/registry/billing](https://hol.org/registry/billing) displays the same information in a UI after ledger auth.
 
 ## Troubleshooting
 
