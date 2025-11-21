@@ -33,7 +33,7 @@ module.exports = {
           200: '#bfdbfe',
           300: '#93c5fd',
           400: '#60a5fa',
-          500: '#5599fe', // Updated to brand blue
+          500: '#5599fe',
           600: '#2563eb',
           700: '#1d4ed8',
           800: '#1e40af',
@@ -45,6 +45,11 @@ module.exports = {
           green: '#3ec878',
           charcoal: '#464646',
           smoke: '#8c8c8c',
+        },
+        navbar: {
+          dropdown: '#6289d5',
+          'link-hover': 'rgba(255, 255, 255, 0.15)',
+          'link-active': 'rgba(255, 255, 255, 0.2)',
         },
       },
       animation: {
@@ -107,6 +112,17 @@ module.exports = {
         'hedera-gradient': 'linear-gradient(135deg, #8259ef 0%, #2d84eb 100%)',
         'hedera-green-gradient':
           'linear-gradient(135deg, #3ec878 0%, #2d84eb 100%)',
+        'navbar-gradient':
+          'linear-gradient(135deg, rgba(85, 153, 254, 0.95) 0%, rgba(63, 65, 116, 0.95) 100%)',
+        'navbar-gradient-dark':
+          'linear-gradient(135deg, rgba(85, 153, 254, 0.95) 0%, rgba(63, 65, 116, 0.95) 100%)',
+      },
+      backdropBlur: {
+        navbar: '12px',
+      },
+      boxShadow: {
+        navbar:
+          '0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08)',
       },
     },
   },

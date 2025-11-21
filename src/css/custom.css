@@ -251,11 +251,8 @@ ul.tags.expanded::after {
   display: inline;
 }
 
-/* Navbar menu items - make them smaller */
-.navbar__item,
-.navbar__link {
-  font-size: 0.9rem !important;
-}
+/* Navbar menu items - vertical alignment and sizing */
+
 
 /* Color mode toggle - white for visibility */
 .navbar__toggle,
@@ -562,12 +559,7 @@ ul.tags.expanded::after {
   z-index: 1;
 }
 
-/* Keep navbar background light in both themes */
-.navbar {
-  background-color: #ffffff !important;
-  --ifm-navbar-background-color: #ffffff !important;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1) !important;
-}
+/* Navbar background is now handled by Tailwind in theme/Navbar/index.tsx */
 
 /* Fix blog dark mode - force dark backgrounds */
 [data-theme='dark'] .blog-wrapper,
@@ -641,12 +633,6 @@ html[data-theme='dark'] body {
 
 /* Sidebar active/selected items */
 [data-theme='dark'] .menu__link--active,
-[data-theme='dark'] .navbar__link--active,
-[data-theme='dark'] aside .text-brand-blue,
-[data-theme='dark'] aside [class*='isActive'],
-[data-theme='dark'] aside [class*='active'] {
-  color: #7c85d3 !important; /* Light purple for active items */
-}
 
 /* Blog sidebar selected post styling */
 [data-theme='dark'] .blog-sidebar-item__link--active,
@@ -697,7 +683,7 @@ html[data-theme='dark'] body {
 /* Smooth transitions for color mode changes - removed global * selector that was causing issues */
 /* Apply transitions more selectively to avoid button color inheritance issues */
 body,
-.navbar,
+
 .footer,
 .theme-doc-sidebar-container {
   transition: background-color 0.8s ease-in-out, color 0.3s ease-in-out,
@@ -726,8 +712,6 @@ label,
 }
 
 /* Interactive elements with mixed speeds - more specific to avoid button conflicts */
-.navbar__link,
-.navbar__item,
 input,
 textarea {
   transition: background-color 0.6s ease-in-out, color 0.3s ease-in-out,
@@ -851,118 +835,6 @@ textarea {
 
 [data-theme='dark'] .markdown > h4 {
   color: var(--brand-variables);
-}
-
-/* Navbar styles */
-/* Modern navbar with glassmorphism effect */
-.navbar {
-  background: linear-gradient(
-    135deg,
-    rgba(85, 153, 254, 0.95) 0%,
-    rgba(63, 65, 116, 0.95) 100%
-  );
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
-
-/* Brand/logo styling */
-.navbar__brand {
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-  font-family: 'Roboto Mono', monospace;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-  height: 100%;
-}
-
-.navbar__brand:hover {
-  transform: scale(1.02);
-}
-
-.navbar__logo {
-  height: 2rem;
-  margin-right: 0.625rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-  display: block;
-}
-
-/* Title styling */
-.navbar__title {
-  color: #ffffff !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  font-family: 'Roboto Mono', monospace;
-  font-weight: 600;
-  font-size: 1.25rem;
-  letter-spacing: -0.02em;
-  white-space: nowrap;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-}
-
-/* Navigation links */
-.navbar__link {
-  font-weight: 500;
-  font-family: 'Roboto Mono', monospace;
-  color: rgba(255, 255, 255, 0.95);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  white-space: nowrap;
-}
-
-.navbar__link:hover {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-1px);
-}
-
-.navbar__link--active {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-/* Search wrapper sizing */
-.navbar-search-wrapper {
-  position: relative;
-  width: 260px;
-  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.navbar-search-wrapper--active {
-  width: min(520px, 45vw);
-}
-
-.search-suggestions-panel {
-  max-width: 840px;
-}
-
-/* Dark mode navbar */
-[data-theme='dark'] .navbar {
-  background: linear-gradient(
-    135deg,
-    rgba(30, 32, 50, 0.95) 0%,
-    rgba(20, 22, 36, 0.95) 100%
-  );
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-[data-theme='dark'] .navbar__link {
-  color: rgba(255, 255, 255, 0.9);
-}
-
-[data-theme='dark'] .navbar__link:hover {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.12);
-}
-
-[data-theme='dark'] .navbar__link--active {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.16);
 }
 
 @media (max-width: 996px) {
@@ -1172,29 +1044,11 @@ textarea {
   color: #bfdbfe;
 }
 
-/* Dark mode adjustments - Keep navbar the same */
-[data-theme='dark'] .navbar {
-  background: linear-gradient(
-    135deg,
-    var(--brand-functions) 0%,
-    var(--brand-keywords) 100%
-  ) !important;
-}
+/* Dark mode navbar background is now handled by Tailwind in theme/Navbar/index.tsx */
 
 /* Ensure navbar links stay white in dark mode */
-[data-theme='dark'] .navbar__link {
-  color: #e0e7ff !important;
-}
 
-[data-theme='dark'] .navbar__link:hover {
-  color: #ffffff !important;
-  background-color: rgba(255, 255, 255, 0.1) !important;
-}
 
-[data-theme='dark'] .navbar__link--active {
-  color: #7c85d3 !important;
-  background-color: rgba(124, 133, 211, 0.1) !important;
-}
 
 [data-theme='dark'] .footer {
   background: linear-gradient(
@@ -1260,15 +1114,15 @@ textarea {
   background-color: rgba(124, 133, 211, 0.1) !important;
 }
 
-/* Mobile menu dropdown arrow - use filter to make it white in both themes */
-.navbar-sidebar .menu__link--sublist-caret:after {
-  filter: brightness(0) invert(1) !important;
+/* Mobile menu dropdown arrow - use border-color for white carets */
+.navbar-sidebar .menu__link--sublist-caret:before {
+  border-color: white transparent transparent transparent !important;
   opacity: 1 !important;
 }
 
-[data-theme='light'] .navbar-sidebar .menu__link--sublist-caret:after,
-[data-theme='dark'] .navbar-sidebar .menu__link--sublist-caret:after {
-  filter: brightness(0) invert(1) !important;
+[data-theme='light'] .navbar-sidebar .menu__link--sublist-caret:before,
+[data-theme='dark'] .navbar-sidebar .menu__link--sublist-caret:before {
+  border-color: white transparent transparent transparent !important;
   opacity: 1 !important;
 }
 
@@ -1295,8 +1149,8 @@ textarea {
   fill: #ffffff !important;
 }
 
-.navbar-sidebar .menu__list-item-collapsible .menu__link--sublist:after {
-  filter: brightness(0) invert(1) !important;
+.navbar-sidebar .menu__list-item-collapsible .menu__link--sublist:before {
+  border-color: white transparent transparent transparent !important;
 }
 
 /* Fix mobile sidebar content visibility issues */
@@ -1464,62 +1318,13 @@ textarea {
 }
 
 /* Hackathons dropdown styling with consistent blue color */
-.navbar__item.dropdown > .navbar__link:hover,
-.navbar__item.dropdown > .navbar__link[aria-expanded='true'],
-.navbar__item.dropdown
-  > .navbar__link.navbar__link--active[aria-expanded='true'] {
-  background-color: #6289d5 !important;
-  color: #ffffff !important;
-  border-radius: 0.25rem !important;
-}
 
-.navbar__item.dropdown > .navbar__link::after {
-  border: none !important;
-  content: '⌄';
-  display: inline-flex;
-  align-items: center;
-  font-size: 1.2em;
-  line-height: 1;
-  padding-left: 0.25rem;
-  vertical-align: middle;
-  color: inherit;
-  transition: transform 0.2s ease;
-}
 
 /* Remove bottom border radius when dropdown is open for seamless look */
-.navbar__item.dropdown > .navbar__link[aria-expanded='true'] {
-  border-radius: 0.25rem 0.25rem 0 0 !important;
-}
 
 /* Ensure the dropdown parent stays highlighted when dropdown is open */
-.navbar__item.dropdown:hover > .navbar__link,
-.navbar__item.dropdown.dropdown--hoverable:hover > .navbar__link,
-.navbar__item.dropdown.dropdown--show > .navbar__link {
-  background-color: #6289d5 !important;
-  color: #ffffff !important;
-}
 
 /* Simple dropdown that extends from navbar */
-.navbar__item.dropdown .dropdown__menu {
-  /* Use solid blue color to match highlighted Hackathons */
-  background: #6289d5;
-
-  /* Seamless positioning - no gap */
-  margin-top: 0;
-  top: 100%;
-  border: none;
-  border-radius: 0 8px 8px 8px;
-  padding: 0.75rem 0;
-  min-width: 280px;
-  box-shadow: 0 8px 12px -4px rgba(0, 0, 0, 0.1);
-
-  /* No horizontal shift for seamless connection */
-  transform: translateX(0) !important;
-
-  /* Animation */
-  animation: dropdownSlideDown 0.3s ease-out;
-  transform-origin: top;
-}
 
 /* Dropdown animation - no horizontal shift */
 @keyframes dropdownSlideDown {
@@ -1550,23 +1355,8 @@ textarea {
   background-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-.navbar__item.dropdown .dropdown__link {
-  color: #e0e7ff;
-  font-family: 'Roboto Mono', monospace;
-  font-weight: 500;
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
 
-.navbar__item.dropdown .dropdown__link:hover {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
-  text-decoration: none;
-}
 
-.navbar__item.dropdown .dropdown__link--active {
-  color: #ffffff;
-  background-color: rgba(255, 255, 255, 0.1);
-}
 
 /* Dark mode dropdown fixes */
 [data-theme='dark'] .navbar__item.dropdown .dropdown__link {
@@ -5375,4 +5165,46 @@ main .theme-doc-generated-index-item:hover::after,
   font-size: 0.5rem;
   top: 50%;
   transform: translateY(-50%);
+}
+
+
+/* Force navbar title to be white in mobile sidebar */
+.navbar-sidebar .navbar__brand b,
+.navbar-sidebar b {
+  color: white !important;
+}
+
+/* Fix mobile sidebar dropdown arrows/carets - comprehensive targeting */
+/* Target all caret pseudo-elements - BEFORE not AFTER */
+.navbar-sidebar .menu__link--sublist:before,
+.navbar-sidebar .menu__link--sublist-caret:before,
+.navbar-sidebar .menu__list-item-collapsible .menu__link:before,
+.navbar-sidebar .menu__caret:before {
+  border-color: white transparent transparent transparent !important;
+  opacity: 1 !important;
+}
+
+/* Target all caret SVGs with maximum specificity */
+.navbar-sidebar svg,
+.navbar-sidebar .menu__caret svg,
+.navbar-sidebar .clean-btn svg,
+.navbar-sidebar button svg,
+.navbar-sidebar .menu__link svg {
+  color: white !important;
+  fill: white !important;
+  stroke: white !important;
+}
+
+/* Fix mobile sidebar header layout */
+.navbar-sidebar__brand {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.navbar-sidebar .close {
+  color: white !important;
+  position: static !important;
+  margin-left: auto !important;
 }
