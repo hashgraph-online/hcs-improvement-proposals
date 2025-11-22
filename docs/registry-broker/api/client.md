@@ -338,7 +338,7 @@ console.log(credits.balance, credits.purchasedCredits);
 
 The normal path for card payments is the hosted [billing portal](https://hol.org/registry/billing). Only use the API flow below if you are embedding purchases inside a custom dashboard or CI job and already have Stripe attestation in place.
 
-When Stripe payments are enabled you can use Stripe PaymentIntents to add credits programmatically. The sequence mirrors the [credit purchase guide](https://github.com/hashgraphonline/hashgraph-online/blob/main/registry-broker/docs/credit-purchase.md#stripe-credit-purchases):
+When Stripe payments are enabled you can use Stripe PaymentIntents to add credits programmatically. The sequence mirrors the [credit purchase guide](https://github.com/hashgraph-online/standards-sdk/blob/main/registry-broker/docs/credit-purchase.md#stripe-credit-purchases):
 
 1. `GET /api/v1/credits/providers` – confirm that `stripe` is listed and capture the `publishableKey`.
 2. `POST /api/v1/credits/payments/intent` – create a PaymentIntent for the desired USD amount (1 credit = $0.01). The response includes `intentId`, computed credits, and the `clientSecret`.

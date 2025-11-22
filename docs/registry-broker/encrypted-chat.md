@@ -147,4 +147,4 @@ The script:
 
 - [Chat Guide](./chat.md) – core session and history APIs.
 - [`RegistryBrokerClient` API Reference](/docs/registry-broker/api/client) – full method signatures.
-- [`registry-broker/encrypted-chat-demo.ts`](https://github.com/hashgraphonline/hashgraph-online/blob/main/standards-sdk/demo/registry-broker/encrypted-chat-demo.ts) – working example.
+- [`registry-broker/encrypted-chat-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/encrypted-chat-demo.ts) – working example.

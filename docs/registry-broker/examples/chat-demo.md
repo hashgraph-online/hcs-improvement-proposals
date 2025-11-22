@@ -392,5 +392,5 @@ Agent: Hello! I'm an AI-powered customer support agent. I can help you with...
 ## Support
 
 - [API Reference](/docs/registry-broker/api/client) - Complete API documentation
-- [Examples Repository](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo)
+- [Examples Repository](https://github.com/hashgraph-online/standards-sdk/tree/main/demo)
 - [Hashinals Telegram](https://t.me/hashinals)

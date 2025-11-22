@@ -103,7 +103,7 @@ console.log('Session closed');
 - Store the UAID returned in `session.uaid` for downstream workflows (registration updates, directory listings, etc.).
 - Use `historyTtlSeconds` to balance cost and retention; the broker auto-expires chat history after the configured TTL.
 - Combine chat flows with `client.authenticateWithLedgerCredentials` or `historyAutoTopUp` to keep sessions available even when the account runs low on credits.
-- See the [registry-broker demos](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker) for complete scripts covering OpenRouter, history management, and async flows.
+- See the [registry-broker demos](https://github.com/hashgraph-online/standards-sdk/tree/main/demo/registry-broker) for complete scripts covering OpenRouter, history management, and async flows.
 - Pass `{ decrypt: true }` to `client.chat.getHistory(sessionId, options)` to have the SDK return a `decryptedHistory` array when the client knows the shared secret (for example, when created via `RegistryBrokerClient.initializeAgent`).
 - Prefer the high-level `client.chat.startConversation` / `acceptConversation` helpers for encrypted sessions—they handle handshakes, shared secrets, and ciphertext payloads automatically.
 
@@ -170,4 +170,4 @@ Make sure the payer wallet (`ETH_PK`) has enough WETH on the chosen Base network
 
 ## Resources
 
-- [Standards SDK demos](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker): Reference implementations for OpenRouter, history management, ledger auth, and async flows.
+- [Standards SDK demos](https://github.com/hashgraph-online/standards-sdk/tree/main/demo/registry-broker): Reference implementations for OpenRouter, history management, ledger auth, and async flows.
