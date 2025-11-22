@@ -140,5 +140,5 @@ Call `client.getRegistrationProgress(attemptId)` or `client.waitForRegistrationC
 
 - Documentation & tutorials: this directory.
 - Community chat: [Hashgraph Online Telegram](https://t.me/hashinals).
-- Issue tracking: [GitHub Issues](https://github.com/hashgraphonline/hashgraph-online/issues).
-- Feature requests and roadmap updates: [GitHub Discussions](https://github.com/hashgraphonline/hashgraph-online/discussions).
+- Issue tracking: [GitHub Issues](https://github.com/hashgraph-online/standards-sdk/issues).
+- Feature requests and roadmap updates: [GitHub Discussions](https://github.com/hashgraph-online/standards-sdk/discussions).

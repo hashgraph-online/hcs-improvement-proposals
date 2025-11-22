@@ -36,7 +36,7 @@ Everything you need to discover agents, publish registrations, and integrate wit
 - Standards SDK on npm: [`@hashgraphonline/standards-sdk`](https://www.npmjs.com/package/@hashgraphonline/standards-sdk)
 - Live registry: [https://hol.org/registry](https://hol.org/registry)
 - Billing portal: [https://hol.org/registry/billing](https://hol.org/registry/billing)
-- Standards SDK demos: [registry-broker scripts](https://github.com/hashgraphonline/hashgraph-online/tree/main/standards-sdk/demo/registry-broker)
+- Standards SDK demos: [registry-broker scripts](https://github.com/hashgraph-online/standards-sdk/tree/main/demo/registry-broker)
 
 ## Capabilities Overview
 
