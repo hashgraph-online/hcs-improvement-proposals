@@ -1077,9 +1077,12 @@ textarea {
 .navbar-sidebar {
   background: linear-gradient(
     135deg,
-    var(--brand-functions) 0%,
-    var(--brand-keywords) 100%
+    rgb(98, 137, 213) 0%,
+    rgb(80, 115, 184) 50%,
+    rgb(63, 65, 116) 100%
   ) !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
 }
 
 .navbar-sidebar__backdrop {
@@ -1092,6 +1095,9 @@ textarea {
 
 .navbar-sidebar__items {
   background: transparent !important;
+  width: 100% !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .navbar-sidebar__item {
@@ -1158,6 +1164,9 @@ textarea {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
+  overflow-y: auto !important;
+  max-height: calc(100vh - 60px) !important;
+  -webkit-overflow-scrolling: touch !important;
 }
 
 .navbar-sidebar .menu__list {
@@ -1205,8 +1214,9 @@ textarea {
 
   .navbar-sidebar .navbar-sidebar__items {
     height: auto !important;
-    overflow-y: visible !important;
-    max-height: none !important;
+    overflow-y: auto !important;
+    max-height: calc(100vh - 60px) !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   /* Force navbar menu items to show in mobile sidebar */
@@ -5174,6 +5184,8 @@ main .theme-doc-generated-index-item:hover::after,
   color: white !important;
 }
 
+/* Improve mobile sidebar menu hierarchy - handled below with better styling */
+
 /* Fix mobile sidebar dropdown arrows/carets - comprehensive targeting */
 /* Target all caret pseudo-elements - BEFORE not AFTER */
 .navbar-sidebar .menu__link--sublist:before,
@@ -5207,4 +5219,229 @@ main .theme-doc-generated-index-item:hover::after,
   color: white !important;
   position: static !important;
   margin-left: auto !important;
+}
+
+/* Mobile search bar styling to match registry */
+.navbar-sidebar .navbar__search {
+  margin: 1rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.navbar-sidebar .navbar__search input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 0.375rem !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 0.875rem !important;
+  padding: 0.625rem 1rem !important;
+  width: 100% !important;
+}
+
+.navbar-sidebar .navbar__search input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.navbar-sidebar .navbar__search input:focus {
+  outline: none !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Enhanced mobile menu item styling */
+.navbar-sidebar .menu__list-item {
+  margin: 0.125rem 0 !important;
+}
+
+.navbar-sidebar .menu__link {
+  border-radius: 0.375rem !important;
+  padding: 0.5rem 0.75rem !important;
+  margin: 0 1rem !important;
+  transition: all 150ms !important;
+  font-family: 'Roboto Mono', monospace !important;
+  font-size: 0.875rem !important;
+  color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.navbar-sidebar .menu__link:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+}
+
+/* Dropdown section headers - uppercase and muted */
+.navbar-sidebar .menu__link--sublist {
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  padding: 0.25rem 0.75rem !important;
+  padding-top: 0.5rem !important;
+  margin: 0 1rem !important;
+  background: none !important;
+}
+
+.navbar-sidebar .menu__link--sublist:hover {
+  background: none !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Indented dropdown items */
+.navbar-sidebar .menu__list .menu__list .menu__link:not(.menu__link--sublist) {
+  padding-left: 1.5rem !important;
+  margin-left: 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+/* Mobile menu items container */
+.navbar-sidebar__items {
+  padding-top: 0.75rem !important;
+  background: transparent !important;
+  overflow-y: auto !important;
+  max-height: calc(100vh - 60px) !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* Better spacing for mobile menu */
+.navbar-sidebar .menu__list {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* NUCLEAR OVERRIDE - ADDED BY DROID */
+/* Complete Docusaurus navbar override */
+.navbar-sidebar {
+  background: linear-gradient(
+    135deg,
+    rgb(98, 137, 213) 0%,
+    rgb(80, 115, 184) 50%,
+    rgb(63, 65, 116) 100%
+  ) !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1000 !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Override all item containers */
+.navbar-sidebar__items {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-y: auto !important;
+  max-height: calc(100vh - 60px) !important;
+  -webkit-overflow-scrolling: touch !important;
+  border: none !important;
+}
+
+/* Override individual items */
+.navbar-sidebar__item,
+.navbar-sidebar .menu {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* Reset list styles safely */
+.navbar-sidebar ul {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.navbar-sidebar li {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Targeted link overrides - restoring strict override but maintaining layout */
+.navbar-sidebar .menu__link,
+.navbar-sidebar .navbar__link {
+  all: unset !important;
+  display: block !important; /* Restore block display */
+  cursor: pointer !important;
+  box-sizing: border-box !important;
+  font-family: 'Roboto Mono', monospace !important; /* Ensure font matches */
+}
+
+/* Exclude Logo link from global unset if it was targeted before */
+.navbar-sidebar__brand a {
+  all: revert !important;
+  text-decoration: none !important;
+}
+
+.navbar-sidebar .menu__link:hover,
+.navbar-sidebar .navbar__link:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  text-decoration: none !important;
+}
+
+/* Complete Docusaurus navbar override - NUCLEAR OPTION */
+.navbar-sidebar {
+  background: linear-gradient(
+    135deg,
+    rgb(98, 137, 213) 0%,
+    rgb(80, 115, 184) 50%,
+    rgb(63, 65, 116) 100%
+  ) !important;
+  width: 100vw !important;
+  max-width: 100vw !important;
+  height: 100vh !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: 1000 !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Override all item containers */
+.navbar-sidebar__items {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow-y: auto !important;
+  max-height: calc(100vh - 60px) !important;
+  -webkit-overflow-scrolling: touch !important;
+  border: none !important;
+}
+
+/* Override individual items */
+.navbar-sidebar__item {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* Remove all Docusaurus link styles */
+/* Reset Docusaurus link styles safely - allow Tailwind to win */
+.navbar-sidebar a,
+.navbar-sidebar .menu__link,
+.navbar-sidebar .navbar__link {
+  background: transparent;
+  text-decoration: none;
+  border: none;
+  /* Removed all: unset !important to fix "ugly" layout */
+}
+
+/* Reset all list styles */
+.navbar-sidebar ul,
+.navbar-sidebar li {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }

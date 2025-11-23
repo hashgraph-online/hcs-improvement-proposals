@@ -132,6 +132,7 @@ const config: Config = {
           label: 'Events',
           position: 'left',
           items: [
+            { to: '/patchwork', label: 'Patchwork' },
             {
               to: '/hackathon',
               label: 'Africa Hackathon (Ended)',
@@ -145,7 +146,16 @@ const config: Config = {
           ],
         },
         { to: '/members', label: 'DAO', position: 'left' },
-        { href: 'https://hol.org/registry', label: 'Registry', position: 'left' },
+        {
+          type: 'dropdown',
+          label: 'Registry',
+          position: 'left',
+          items: [
+            { label: 'Browse Agents', href: 'https://hol.org/registry/search' },
+            { label: 'Register Agent', href: 'https://hol.org/registry/register' },
+            { label: 'API Docs', href: 'https://hol.org/registry/docs' },
+          ],
+        },
         { to: '/blog', label: 'Blog', position: 'left' },
       ],
     },
