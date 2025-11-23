@@ -77,24 +77,26 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-1 min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden z-50">
-          {items.map((item, index) => (
-            <Link
-              key={index}
-              to={item.to}
-              className={`
-                block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
-                no-underline hover:no-underline
-                transition-all duration-150
-                hover:bg-white/10 hover:text-white
-                border-b border-white/10 last:border-b-0
-                ${item.className || ''}
-              `.trim().replace(/\s+/g, ' ')}
-              onClick={() => setIsOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
+        <div className="absolute top-full left-0 pt-1 -mt-1 z-50">
+          <div className="min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden">
+            {items.map((item, index) => (
+              <Link
+                key={index}
+                to={item.to}
+                className={`
+                  block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
+                  no-underline hover:no-underline
+                  transition-all duration-150
+                  hover:bg-white/10 hover:text-white
+                  border-b border-white/10 last:border-b-0
+                  ${item.className || ''}
+                `.trim().replace(/\s+/g, ' ')}
+                onClick={() => setIsOpen(false)}
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </div>
