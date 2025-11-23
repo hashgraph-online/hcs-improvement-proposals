@@ -231,6 +231,20 @@ const standardsData = [
     href: '/docs/standards/hcs-20',
     icon: 'HCS-20',
   },
+  {
+    title: 'HCS-21: Package Declaration Registry',
+    category: 'Infrastructure',
+    status: 'draft' as const,
+    description:
+      'Generic package declaration ledger for npm, PyPI, OCI, CLI plugins, and more. Streamlined metadata pointers keep provenance verifiable across ecosystems.',
+    features: [
+      'Multi-registry declarations',
+      'HCS-1 metadata pointers',
+      'Direct Hedera provenance',
+    ],
+    href: '/docs/standards/hcs-21',
+    icon: 'HCS-21',
+  },
 ];
 
 export default function StandardsShowcase(): React.ReactElement {
