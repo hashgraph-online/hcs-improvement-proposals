@@ -11,17 +11,23 @@ sidebar_position: 21
 
 ### Table of Contents
 
-- [Authors](#authors)
-- [Abstract](#abstract)
-- [Motivation](#motivation)
-- [Specification](#specification)
-  - [Architecture Overview](#architecture-overview)
-  - [Topic System](#topic-system)
-  - [Message Format](#message-format)
-  - [Operations Reference](#operations-reference)
-  - [Reference Flow](#reference-flow)
-- [Validation](#validation)
-- [Security Considerations](#security-considerations)
+- [HCS-21 Standard: Adapter Declaration Registry](#hcs-21-standard-adapter-declaration-registry)
+    - [Status: Draft](#status-draft)
+    - [Version: 1.0](#version-10)
+    - [Table of Contents](#table-of-contents)
+  - [Authors](#authors)
+  - [Abstract](#abstract)
+  - [Motivation](#motivation)
+  - [Normative Language](#normative-language)
+  - [Specification](#specification)
+    - [Architecture Overview](#architecture-overview)
+    - [Topic System](#topic-system)
+    - [Message Format](#message-format)
+    - [Operations Reference](#operations-reference)
+    - [Reference Flow](#reference-flow)
+  - [Validation](#validation)
+  - [Security Considerations](#security-considerations)
+  - [Conclusion](#conclusion)
 
 ## Authors
 
@@ -49,29 +55,32 @@ The key words “MUST”, “MUST NOT”, “SHOULD”, and “MAY” are to be 
 
 ### Topic System
 
-| Memo Format | Description | Notes |
-| --- | --- | --- |
+| Memo Format                | Description               | Notes                                                                                                                                      |
+| -------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
 | `hcs-21:<indexed>:<ttl>:0` | Adapter declaration topic | `indexed` is `0` (full history) or `1` (tail-only caches). `ttl` is a cache hint in seconds. The trailing `0` marks the HCS-21 topic type. |
 
 ### Message Format
 
 Each declaration is JSON and MUST be ≤ 1024 bytes when serialized.
 
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `p` | string | Yes | Protocol identifier. MUST equal `"hcs-21"`. |
-| `op` | string | Yes | Operation: `"register"` or `"update"` (matching HCS-2 terminology). |
-| `registry` | string | Yes | Package registry. MUST be `"npm"` or `"pypi"`. |
-| `pkg` | string | Yes | Package coordinate including version (e.g., `"@scope/adapter@2.3.0"`, `"requests==2.32.0"`). |
+| Field      | Type   | Required | Description                                                                                                                              |
+| ---------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `p`        | string | Yes      | Protocol identifier. MUST equal `"hcs-21"`.                                                                                              |
+| `op`       | string | Yes      | Operation: `"register"` or `"update"` (matching HCS-2 terminology).                                                                      |
+| `registry` | string | Yes      | Package registry. MUST be `"npm"` or `"pypi"`.                                                                                           |
+| `pkg`      | string | Yes      | Package coordinate including version (e.g., `"@scope/adapter@2.3.0"`, `"requests==2.32.0"`).                                             |
+| `name`     | string | Yes      | Human-readable adapter name.                                                                                                             |
+| `kind`     | string | No       | Declares whether the adapter interacts with a `"web2"` or `"web3"` upstream.                                                             |
+| `metadata` | string | No       | Optional HCS-1 pointer (HRL `hcs://1/<topicId>/<sequence>`) containing extended metadata such as contact info or capability descriptors. |
 
 The transaction payer recorded by Hedera is the canonical adapter owner. Consumers MUST verify the payer account instead of trusting inline identity data.
 
 ### Operations Reference
 
-| Code | Name | Description |
-| --- | --- | --- |
+| Code       | Name     | Description                                                                                                                            |
+| ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `register` | Register | First declaration for a given package coordinate. Consumers record the registry + package and associate it with the transaction payer. |
-| `update` | Update | Subsequent declaration for the same registry + package. Used to refresh metadata or announce a new package version. |
+| `update`   | Update   | Subsequent declaration for the same registry + package. Used to refresh metadata or announce a new package version.                    |
 
 ### Reference Flow
 
