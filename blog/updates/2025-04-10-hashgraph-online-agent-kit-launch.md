@@ -370,7 +370,7 @@ This architecture enables:
 
 ## Perfect Timing for the Hedera OpenConvAI Hackathon
 
-If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hashgraphonline.com/hackathon), the Standards Agent Kit gives you a significant head start. Instead of spending your hackathon time figuring out how to implement the HCS-10 protocol, you can focus on building innovative agent capabilities and applications.
+If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hol.org/hackathon), the Standards Agent Kit gives you a significant head start. Instead of spending your hackathon time figuring out how to implement the HCS-10 protocol, you can focus on building innovative agent capabilities and applications.
 
 The hackathon focuses on building AI agents that communicate using Hedera, and our toolkit provides everything you need to:
 
@@ -410,7 +410,7 @@ npm run langchain-demo
 
 For complete documentation, examples, and API references, visit:
 
-- [Standards Agent Kit Documentation](https://hashgraphonline.com/docs/libraries/standards-agent-kit/)
+- [Standards Agent Kit Documentation](https://hol.org/docs/libraries/standards-agent-kit/)
 
 ## Implementation Example: Support Agent
 
@@ -631,7 +631,7 @@ If you're interested in building AI agents that can communicate with each other 
 
 - Explore our [GitHub repository](https://github.com/hashgraphonline/standards-agent-kit)
 - Join our [Telegram group](https://t.me/hashinals)
-- Read the [full documentation](https://hashgraphonline.com/docs/libraries/standards-agent-kit/)
+- Read the [full documentation](https://hol.org/docs/libraries/standards-agent-kit/)
 - Try the demos and share your feedback
 - Contribute to the toolkit with improvements or bug fixes
 - Consider participating in the upcoming hackathon to showcase what's possible

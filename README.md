@@ -2,7 +2,7 @@
 
 This repository is the canonical source for HCS — Hashgraph Consensus Standards — authored and maintained by Hashgraph Online. It contains specifications (HCS-1, HCS-2, HCS-3, HCS-10, HCS-12, etc.), SDK guides, and examples used across the Hashgraph Online ecosystem.
 
-Live docs: https://hashgraphonline.com
+Live docs: https://hol.org
 
 ## Mission
 

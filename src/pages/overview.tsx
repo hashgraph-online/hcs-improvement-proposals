@@ -398,7 +398,7 @@ const OverviewPage: React.FC = () => {
 
        <div className='flex flex-col sm:flex-row justify-center gap-4 pt-4'>
         <a
-         href='https://hashgraphonline.com/docs/standards'
+         href='https://hol.org/docs/standards'
          className='group relative inline-flex items-center justify-center px-8 py-4 rounded-full bg-blue-600 font-semibold overflow-hidden transition-all hover:scale-105 hover:shadow-2xl no-underline hover:no-underline'
         >
          <span className='relative z-10 text-white no-underline'>View Standards Documentation</span>

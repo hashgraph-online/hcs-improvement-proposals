@@ -4,7 +4,7 @@ import Head from '@docusaurus/Head';
 
 export default function SDK() {
   const redirectUrl =
-    'https://hashgraphonline.com/docs/libraries/standards-sdk/';
+    'https://hol.org/docs/libraries/standards-sdk/';
 
   useEffect(() => {
     window.location.href = redirectUrl;

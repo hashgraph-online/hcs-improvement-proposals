@@ -39,7 +39,7 @@ const StartPage: React.FC = () => {
       title: "I'm a Developer",
       description: 'Start coding with our SDKs, Agent Kit, and standards.',
       links: [
-        { label: '$1M Hackathon', href: 'https://hashgraphonline.com/hackathon' },
+        { label: '$1M Hackathon', href: 'https://hol.org/hackathon' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
         { label: 'Conversational Agent', href: '/docs/libraries/conversational-agent' },
@@ -53,8 +53,8 @@ const StartPage: React.FC = () => {
       title: "I'm a Hacker",
       description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
       links: [
-        { label: '$1M Hackathon', href: 'https://hashgraphonline.com/hackathon' },
-        { label: 'Register Now', href: 'https://click.hashgraphonline.com/hederahacks' },
+        { label: '$1M Hackathon', href: 'https://hol.org/hackathon' },
+        { label: 'Register Now', href: 'https://click.hol.org/hederahacks' },
         { label: 'Tools', href: '/tools' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
@@ -90,7 +90,7 @@ const StartPage: React.FC = () => {
         name: '$1M Hackathon',
         description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
         icon: <FiDollarSign />,
-        link: 'https://hashgraphonline.com/hackathon',
+        link: 'https://hol.org/hackathon',
         color: '#14b8a6',
       },
     ];
@@ -119,7 +119,7 @@ const StartPage: React.FC = () => {
         return [
           { name: 'Create a Wallet', description: 'Get started with HashPack wallet for Hedera', icon: <FiShoppingBag />, link: 'https://www.hashpack.app/', color: '#48df7b' },
           { name: 'Follow on X', description: 'Stay connected with Hashgraph Online on X', icon: <FiExternalLink />, link: 'https://x.com/HashgraphOnline', color: '#a679f0' },
-          { name: 'Blog', description: 'Stay updated with latest news and insights', icon: <FiBook />, link: 'https://hashgraphonline.com/blog/', color: '#5599fe' },
+          { name: 'Blog', description: 'Stay updated with latest news and insights', icon: <FiBook />, link: 'https://hol.org/blog/', color: '#5599fe' },
         ];
       case 'creator':
         return [

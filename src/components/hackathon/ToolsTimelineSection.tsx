@@ -50,7 +50,7 @@ const ToolsTimelineSection: React.FC = () => {
       title: 'Standards SDK',
       description:
         'Access the full suite of HCS Improvement Proposals and reference implementations including the OpenConvAI SDK.',
-      link: 'https://hashgraphonline.com/docs/libraries/standards-sdk/',
+      link: 'https://hol.org/docs/libraries/standards-sdk/',
       isNew: true,
       color: 'green',
     },
@@ -83,7 +83,7 @@ const ToolsTimelineSection: React.FC = () => {
       title: 'Standards AgentKit',
       description:
         'Next-generation toolkit for building conversational AI agents with integrated Hedera Consensus Service support.',
-      link: 'https://hashgraphonline.com/docs/libraries/standards-agent-kit/',
+      link: 'https://hol.org/docs/libraries/standards-agent-kit/',
       isNew: true,
       color: 'purple',
     },

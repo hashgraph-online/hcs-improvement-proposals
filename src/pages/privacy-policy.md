@@ -6,9 +6,9 @@ Last updated: October 15, 2024
 
 Welcome to **Hashgraph Online DAO LLC**.
 
-Hashgraph Online DAO LLC ("us", "we", or "our") operates https://hashgraphonline.com (hereinafter referred to as "**Service**").
+Hashgraph Online DAO LLC ("us", "we", or "our") operates https://hol.org (hereinafter referred to as "**Service**").
 
-Our Privacy Policy governs your visit to https://hashgraphonline.com, and explains how we collect, safeguard and disclose information that results from your use of our Service. 
+Our Privacy Policy governs your visit to https://hol.org, and explains how we collect, safeguard and disclose information that results from your use of our Service. 
 
 We use your data to provide and improve Service. By using Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, the terms used in this Privacy Policy have the same meanings as in our Terms and Conditions.
 
@@ -16,7 +16,7 @@ Our Terms and Conditions ("**Terms**") govern all use of our Service and togethe
 
 ## Definitions
 
-**SERVICE** means the https://hashgraphonline.com website operated by Hashgraph Online DAO LLC.
+**SERVICE** means the https://hol.org website operated by Hashgraph Online DAO LLC.
 
 **PERSONAL DATA** means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession).
 
@@ -128,7 +128,7 @@ If you are a resident of the European Union (EU) and European Economic Area (EEA
 
 We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal Data.
 
-If you wish to be informed what Personal Data we hold about you and if you want it to be removed from our systems, please email us at help@hashgraphonline.com. 
+If you wish to be informed what Personal Data we hold about you and if you want it to be removed from our systems, please email us at help@hol.org. 
 
 In certain circumstances, you have the following data protection rights:
 
@@ -152,7 +152,7 @@ According to CalOPPA we agree to the following:
 - users can visit our site anonymously;
 - our Privacy Policy link includes the word "Privacy", and can easily be found on the page specified above on the home page of our website;
 - users will be notified of any privacy policy changes on our Privacy Policy Page;
-- users are able to change their personal information by emailing us at help@hashgraphonline.com. 
+- users are able to change their personal information by emailing us at help@hol.org. 
 
 Our Policy on "Do Not Track" Signals:
 
@@ -231,5 +231,4 @@ You are advised to review this Privacy Policy periodically for any changes. Chan
 
 If you have any questions about this Privacy Policy, please contact us:
 
-By email: help@hashgraphonline.com.
-
+By email: help@hol.org.

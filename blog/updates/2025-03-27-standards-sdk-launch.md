@@ -206,7 +206,7 @@ The project follows standard GitHub workflows with pull requests, code reviews, 
 
 ## Perfect for the Hedera Agents Hackathon
 
-If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hashgraphonline.com/hackathon), this SDK gives you a massive head start. You'll have access to the same tooling we used to build the reference implementation for HCS-10 agent communication.
+If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hol.org/hackathon), this SDK gives you a massive head start. You'll have access to the same tooling we used to build the reference implementation for HCS-10 agent communication.
 
 The hackathon focuses on building AI agents that communicate using Hedera, and our SDK provides everything you need to:
 
@@ -264,7 +264,7 @@ This initial release focuses on the core functionality, but we've got a lot more
 We're building a community of developers who are pushing the boundaries of what's possible with HCS. If you're interested in on-graph applications, decentralized AI, or any of the standards we support, we'd love to have you join us:
 
 - [GitHub Repository](https://github.com/hashgraph-online/standards-sdk)
-- [Documentation](https://hashgraphonline.com/docs/libraries/standards-sdk/)
+- [Documentation](https://hol.org/docs/libraries/standards-sdk/)
 - [Telegram Community](https://t.me/hashinals)
 
 Let's build something amazing together.

@@ -24,19 +24,19 @@ const HAHHeroSection: React.FC = () => {
       icon: <FaNetworkWired />,
       title: 'Standards SDK',
       description: 'Full suite of HCS standards and implementations',
-      link: 'https://hashgraphonline.com/docs/libraries/standards-sdk/',
+      link: 'https://hol.org/docs/libraries/standards-sdk/',
     },
     {
       icon: <FaPlug />,
       title: 'Standards Agent Kit',
       description: 'Production-ready AI agent framework',
-      link: 'https://hashgraphonline.com/docs/libraries/standards-agent-kit/',
+      link: 'https://hol.org/docs/libraries/standards-agent-kit/',
     },
     {
       icon: <FaBrain />,
       title: 'OpenConvAI Standard',
       description: 'Build AI solutions using the HCS-10 standard',
-      link: 'https://hashgraphonline.com/docs/standards/hcs-10/',
+      link: 'https://hol.org/docs/standards/hcs-10/',
     },
     {
       icon: <FaDollarSign />,

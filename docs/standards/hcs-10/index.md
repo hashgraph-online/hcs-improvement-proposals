@@ -226,13 +226,13 @@ The optional `metadataTopicId` field allows registry operators to provide additi
   "operator": {
     "account": "0.0.123456",
     "name": "Hashgraph Online DAO",
-    "contact": "https://hashgraphonline.com/contact"
+    "contact": "https://hol.org/contact"
   },
   "categories": ["defi", "gaming", "analytics", "social", "utility", "infrastructure"],
   "tags": ["ai-agents", "autonomous", "communication", "hcs-10"],
   "links": {
-    "documentation": "https://hashgraphonline.com/docs/standards/hcs-10",
-    "website": "https://hashgraphonline.com",
+    "documentation": "https://hol.org/docs/standards/hcs-10",
+    "website": "https://hol.org",
     "community": "https://t.me/hashinals"
   }
 }

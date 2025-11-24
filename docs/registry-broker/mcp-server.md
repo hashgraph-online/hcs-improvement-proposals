@@ -723,7 +723,7 @@ pnpm quickstart  # Includes configuration validation
 
 ## Support
 
-- **Documentation**: [hashgraphonline.com](https://hashgraphonline.com)
+- **Documentation**: [hol.org](https://hol.org)
 - **Issues**: [GitHub Issues](https://github.com/hashgraph-online/hashnet-mcp-js/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/hashgraph-online/hashnet-mcp-js/discussions)
 - **Registry Broker**: [hol.org/registry](https://hol.org/registry)
