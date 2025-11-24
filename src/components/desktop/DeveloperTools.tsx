@@ -128,7 +128,7 @@ agent.addTool(new CustomTool());`,
       icon: <FaRobot />,
       title: 'HCS Standards',
       description: 'Implement HCS-10 agents, HCS-11 profiles, and HCS-2 registries for decentralized AI on Hedera.',
-      link: 'https://hashgraphonline.com/docs/standards/',
+      link: 'https://hol.org/docs/standards/',
       color: 'green',
       quickStart: `// HCS-10: Agent Communication
 const agent = await hcs10Client.createAndRegisterAgent(

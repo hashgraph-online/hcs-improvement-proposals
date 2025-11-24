@@ -44,10 +44,10 @@ We're proud sponsors of the **AI Track** at the 2025 Hedera Africa Hackathon, th
 
 ### Tools for Builders
 
-- [Standards SDK](https://hashgraphonline.com/docs/libraries/standards-sdk/) - Access the full suite of HCS Improvement Proposals and OpenConvAI SDK
+- [Standards SDK](https://hol.org/docs/libraries/standards-sdk/) - Access the full suite of HCS Improvement Proposals and OpenConvAI SDK
 - [Hedera Agent Kit](https://github.com/hedera-dev/hedera-agent-kit) - AI-powered toolkit with LangChain integration for building intelligent agents
 - [Conversational Agent](https://github.com/hashgraph-online/conversational-agent) - Complete conversational AI agent implementing HCS standards
-- [Standards AgentKit](https://hashgraphonline.com/docs/libraries/standards-agent-kit/) - Langchain-based toolkit implementing HCS standards
+- [Standards AgentKit](https://hol.org/docs/libraries/standards-agent-kit/) - Langchain-based toolkit implementing HCS standards
 - [Moonscape Portal](https://moonscape.tech) - Live testing environment for AI agents using HCS-10
 - [Hiero JavaScript SDK](https://github.com/hashgraph/hedera-sdk-js) - Official SDK for building on Hedera with JavaScript/TypeScript
 - [Hedera Consensus Service](https://docs.hedera.com/hedera/sdks-and-apis/sdks/consensus-service) - Build decentralized applications with verifiable timestamps and ordering

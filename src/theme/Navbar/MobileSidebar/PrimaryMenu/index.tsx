@@ -75,16 +75,20 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
 
                   if (subItem.href) {
                     return (
-                      <a
+                      <div
                         key={subIndex}
-                        href={subItem.href}
-                        className={linkClass}
-                        onClick={() => mobileSidebar.toggle()}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        className={`${linkClass} cursor-pointer`}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          window.open(subItem.href, '_blank');
+                          mobileSidebar.toggle();
+                        }}
+                        role="button"
+                        tabIndex={0}
                       >
                         {subItem.label}
-                      </a>
+                      </div>
                     );
                   }
 
@@ -109,16 +113,20 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
 
         if (item.href) {
           return (
-            <a
+            <div
               key={index}
-              href={item.href}
-              className={linkClass}
-              onClick={() => mobileSidebar.toggle()}
-              target="_blank"
-              rel="noopener noreferrer"
+              className={`${linkClass} cursor-pointer`}
+              onMouseDown={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                window.open(item.href, '_blank');
+                mobileSidebar.toggle();
+              }}
+              role="button"
+              tabIndex={0}
             >
               {item.label}
-            </a>
+            </div>
           );
         }
 

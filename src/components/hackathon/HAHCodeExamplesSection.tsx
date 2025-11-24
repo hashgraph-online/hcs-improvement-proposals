@@ -1216,7 +1216,7 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
               repositories.
             </p>
             <PrimaryButton
-              href='https://hashgraphonline.com/docs/libraries/standards-sdk/hcs-10/examples'
+              href='https://hol.org/docs/libraries/standards-sdk/hcs-10/examples'
               target='_blank'
               rel='noopener noreferrer'
               size='sm'

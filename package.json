@@ -2,6 +2,26 @@
   "name": "hgo",
   "version": "0.0.0",
   "private": true,
+  "homepage": "https://hol.org",
+  "keywords": [
+    "hashgraph online",
+    "hcs",
+    "hedera",
+    "hashgraph",
+    "web3",
+    "bitcoin",
+    "standards",
+    "sdk"
+  ],
+  "author": "Hashgraph Online <hello@hashgraphonline.com>",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/hashgraph-online"
+  },
+  "bugs": {
+    "url": "https://github.com/hashgraph-online/standards-sdk/issues"
+  },
+  "license": "Apache-2.0",
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",

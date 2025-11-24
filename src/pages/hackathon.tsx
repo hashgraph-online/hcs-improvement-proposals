@@ -6,7 +6,7 @@ type TrackViewFn = (url: string, referrer?: string) => void;
 type UmamiObject = { track?: TrackFn; trackView?: TrackViewFn };
 type UmamiLike = UmamiObject | TrackFn | undefined;
 
-const target = 'https://click.hashgraphonline.com/hederahacks';
+const target = 'https://click.hol.org/hederahacks';
 
 function getUmami(): UmamiLike {
   const w = window as unknown as { umami?: unknown };
@@ -50,4 +50,3 @@ export default function HackathonRedirect(): JSX.Element {
     </>
   );
 }
-

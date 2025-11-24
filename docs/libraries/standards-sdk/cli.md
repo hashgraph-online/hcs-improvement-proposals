@@ -846,4 +846,4 @@ Validates TypeScript compilation and exports.
 
 - **GitHub Issues**: [hashgraph-online/standards-sdk](https://github.com/hashgraph-online/standards-sdk/issues)
 - **Community**: [Telegram](https://t.me/hashinals)
-- **Documentation**: [hashgraphonline.com](https://hashgraphonline.com)
+- **Documentation**: [hol.org](https://hol.org)

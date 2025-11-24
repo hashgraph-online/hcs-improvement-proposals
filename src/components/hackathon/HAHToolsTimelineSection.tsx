@@ -192,7 +192,7 @@ const HAHToolsTimelineSection: React.FC = () => {
       title: 'Standards SDK',
       description:
         'Access the full suite of HCS Improvement Proposals and reference implementations including the OpenConvAI SDK for Agent <> Agent communication.',
-      link: 'https://hashgraphonline.com/docs/libraries/standards-sdk/',
+      link: 'https://hol.org/docs/libraries/standards-sdk/',
       installCommand: 'npm install @hashgraphonline/standards-sdk',
       isNew: false,
       color: 'green',

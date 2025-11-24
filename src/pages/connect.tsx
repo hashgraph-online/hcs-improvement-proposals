@@ -25,7 +25,7 @@ type LinkItem = {
 const links: LinkItem[] = [
   {
     title: 'Hashgraph Online Website',
-    url: 'https://hashgraphonline.com',
+    url: 'https://hol.org',
     description: 'The main Hashgraph Online website and documentation hub',
     icon: <FaGlobe />,
     color: '#2563eb',
@@ -60,7 +60,7 @@ const links: LinkItem[] = [
   },
   {
     title: 'HCS Standards Documentation',
-    url: 'https://hashgraphonline.com/docs/category/standards',
+    url: 'https://hol.org/docs/category/standards',
     description: 'Learn about Hedera Consensus Service Standards',
     icon: <FaBook />,
     color: '#3ec878',

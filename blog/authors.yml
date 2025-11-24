@@ -46,8 +46,8 @@ hue:
 hashgraphonline:
   name: Hashgraph Online
   title: Decentralized Standards Organization
-  url: https://hashgraphonline.com/
-  image_url: https://hashgraphonline.com/img/logo.png
+  url: https://hol.org/
+  image_url: https://hol.org/img/logo.png
 
 patches:
   name: Patches

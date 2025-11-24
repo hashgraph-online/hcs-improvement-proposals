@@ -19,6 +19,7 @@ import {
   CodeComment,
   CodeHeading,
 } from '../components/ui';
+import { FaNetworkWired, FaFingerprint, FaCoins, FaSearch, FaRocket, FaServer, FaCube, FaProjectDiagram, FaCode, FaLayerGroup } from 'react-icons/fa';
 
 interface Tool {
   title: string;
@@ -120,6 +121,89 @@ const HeroSection: React.FC = () => {
    * Configuration for all hero carousel slides
    */
   const slides: HeroSlide[] = [
+    {
+      id: 'mcp',
+      title: 'Hashnet MCP Server',
+      titleGradient: 'linear-gradient(90deg, #b56cff, #5599fe, #48df7b)',
+      subtitle:
+        'The backbone for agentic search. Interconnecting agents, services, and data across Web2 and Web3.',
+      primaryButton: {
+        text: 'Explore MCP →',
+        href: '/mcp',
+      },
+      secondaryButton: {
+        text: 'Documentation →',
+        href: '/docs/registry-broker/mcp-server',
+      },
+      terminalCommand: 'npx @hol-org/hashnet-mcp@latest up',
+      terminalLines: [
+        '✓ Hashnet MCP Server starting...',
+        '✓ ERC-8004 Identity: CONNECTED',
+        '✓ x402 Payments: ENABLED',
+        '✓ Agent Discovery: ONLINE',
+      ],
+      rightContent: (
+        <div className='relative w-full h-full flex flex-col items-center justify-center p-4'>
+          {/* Decorative Background Elements */}
+          <div className='absolute inset-0 bg-gradient-to-br from-brand-blue/5 via-brand-purple/5 to-brand-green/5 rounded-3xl blur-2xl' />
+          
+          {/* Main System Status Card - Compact */}
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className='relative z-10 w-full max-w-[400px] mb-4'
+          >
+             <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md border border-white/50 dark:border-gray-700 rounded-xl p-3 shadow-xl shadow-brand-blue/5 flex items-center justify-between ring-1 ring-black/5">
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-purple to-brand-blue flex items-center justify-center text-white shadow-lg shadow-brand-purple/20">
+                      <FaNetworkWired className="text-lg" />
+                   </div>
+                   <div>
+                      <div className="font-bold text-gray-900 dark:text-white text-sm">HOL Registry Broker</div>
+                      <div className="text-[10px] text-brand-blue font-mono font-medium uppercase tracking-wider">Hashnet MCP Server</div>
+                   </div>
+                </div>
+                <div className="flex items-center gap-1.5 bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full border border-green-100 dark:border-green-900/30">
+                   <span className="relative flex h-1.5 w-1.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
+                    </span>
+                   <span className="text-[9px] font-bold text-green-700 dark:text-green-400 tracking-wide">ONLINE</span>
+                </div>
+             </div>
+          </motion.div>
+
+          {/* Module Grid - Compact & Icon-First */}
+          <div className='grid grid-cols-3 gap-3 w-full max-w-[400px] relative z-10'>
+            {[
+                { icon: <FaRocket />, label: 'Agents', status: 'On', color: 'purple' },
+                { icon: <FaServer />, label: 'Servers', status: 'On', color: 'blue' },
+                { icon: <FaCoins />, label: 'Payments', status: 'On', color: 'green' },
+                { icon: <FaFingerprint />, label: 'Identity', status: 'On', color: 'purple' },
+                { icon: <FaNetworkWired />, label: 'Infra', status: 'On', color: 'blue' },
+                { icon: <FaLayerGroup />, label: 'Data', status: 'On', color: 'green' },
+            ].map((item, index) => (
+                <motion.div
+                  key={item.label}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 + index * 0.1 }}
+                >
+                  <div className='bg-white/60 dark:bg-gray-800/60 backdrop-blur-sm rounded-xl p-3 border border-white/40 dark:border-gray-700 shadow-sm hover:shadow-md hover:bg-white dark:hover:bg-gray-800 hover:border-brand-blue/20 transition-all duration-300 flex flex-col items-center gap-2 group cursor-default h-full'>
+                     <div className={`text-brand-${item.color} bg-brand-${item.color}/10 p-2 rounded-lg group-hover:scale-110 transition-transform duration-300`}>
+                        {item.icon}
+                     </div>
+                     <div className='text-xs font-bold text-gray-700 dark:text-gray-200 font-mono text-center leading-none'>
+                        {item.label}
+                     </div>
+                  </div>
+                </motion.div>
+            ))}
+          </div>
+        </div>
+      ),
+    },
     {
       id: 'registry',
       title: 'Universal Agentic Registry',
