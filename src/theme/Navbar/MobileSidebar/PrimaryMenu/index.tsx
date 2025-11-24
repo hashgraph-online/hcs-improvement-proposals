@@ -78,11 +78,12 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
                       <div
                         key={subIndex}
                         className={`${linkClass} cursor-pointer`}
-                        onMouseDown={(e) => {
+                        onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
                           window.open(subItem.href, '_blank');
-                          mobileSidebar.toggle();
+                          // Small delay to ensure navigation triggers before unmount
+                          setTimeout(() => mobileSidebar.toggle(), 50);
                         }}
                         role="button"
                         tabIndex={0}
@@ -116,11 +117,12 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
             <div
               key={index}
               className={`${linkClass} cursor-pointer`}
-              onMouseDown={(e) => {
+              onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 window.open(item.href, '_blank');
-                mobileSidebar.toggle();
+                // Small delay to ensure navigation triggers before unmount
+                setTimeout(() => mobileSidebar.toggle(), 50);
               }}
               role="button"
               tabIndex={0}

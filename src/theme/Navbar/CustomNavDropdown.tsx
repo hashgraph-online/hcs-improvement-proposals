@@ -4,7 +4,8 @@ import {useLocation} from '@docusaurus/router';
 
 interface DropdownItem {
   label: string;
-  to: string;
+  to?: string;
+  href?: string;
   className?: string;
 }
 
@@ -22,7 +23,7 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const {pathname} = useLocation();
 
-  const isActive = items.some((item) => pathname.startsWith(item.to));
+  const isActive = items.some((item) => item.to && pathname.startsWith(item.to));
 
   const handleMouseEnter = () => setIsOpen(true);
   const handleMouseLeave = () => setIsOpen(false);
@@ -51,6 +52,7 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
     >
       <button
         type="button"
+        onClick={() => setIsOpen(!isOpen)}
         className={`
           flex items-center px-3 py-1.5 gap-1 rounded-md
           text-white/95 font-['Roboto_Mono'] font-medium text-[15px]
@@ -79,23 +81,42 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
       {isOpen && (
         <div className="absolute top-full left-0 pt-1 -mt-1 z-50">
           <div className="min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden">
-            {items.map((item, index) => (
-              <Link
-                key={index}
-                to={item.to}
-                className={`
-                  block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
-                  no-underline hover:no-underline
-                  transition-all duration-150
-                  hover:bg-white/10 hover:text-white
-                  border-b border-white/10 last:border-b-0
-                  ${item.className || ''}
-                `.trim().replace(/\s+/g, ' ')}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {items.map((item, index) => {
+              const linkClass = `
+                block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
+                no-underline hover:no-underline
+                transition-all duration-150
+                hover:bg-white/10 hover:text-white
+                border-b border-white/10 last:border-b-0
+                ${item.className || ''}
+              `.trim().replace(/\s+/g, ' ');
+
+              if (item.href) {
+                return (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className={linkClass}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
+              return (
+                <Link
+                  key={index}
+                  to={item.to}
+                  className={linkClass}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}
