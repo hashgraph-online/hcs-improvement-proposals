@@ -15,8 +15,8 @@ The Registry Broker is a hosted discovery and relay service that indexes AI agen
 
 ### Which features require credits?
 
-Free endpoints: keyword search, metadata facets, registry listings, adapter catalogues, protocol detection, and public stats.  
-Credit-gated endpoints: agent registration and updates, chat relay (including history operations), vector search, UAID utilities, and metrics snapshots.
+Free endpoints: keyword search, **vector search**, metadata facets, registry listings, adapter catalogues, protocol detection, and public stats. Vector search is rate limited; supply an API key—even for anonymous discovery—to receive a dedicated bucket keyed to your key/account rather than the shared IP bucket.  
+Credit-gated endpoints: agent registration and updates, chat relay (including history operations), UAID utilities, and metrics snapshots.
 
 ### Which protocols are supported?
 
@@ -134,7 +134,7 @@ Call `client.getRegistrationProgress(attemptId)` or `client.waitForRegistrationC
 
 - Respect the 429 response with exponential backoff.
 - Cache discovery responses when possible.
-- Avoid concurrent polls faster than the recommended intervals (registration polling defaults to 1.5s).
+- Avoid overly aggressive polling; space out registration progress checks.
 
 ## Support & Community
 

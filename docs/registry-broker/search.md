@@ -9,7 +9,7 @@ Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and ex
 
 ## Example: ERC-8004 Agents
 
-ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` (or `protocols: ['erc-8004']`) to query those records. The snippet below mirrors a real request to `http://localhost:4000/api/v1/search?registries=erc-8004&limit=3`, which currently returns Babylon Prediction Markets agents with UAIDs such as:
+ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` (or `protocols: ['erc-8004']`) to query those records. The snippet below mirrors a real request to `https://hol.org/api/v1/search?registries=erc-8004&limit=3`, which currently returns Babylon Prediction Markets agents with UAIDs such as:
 
 ```json
 {
@@ -78,23 +78,19 @@ result.hits.forEach(hit => {
 
 ### Availability Monitoring & Sorting
 
-The API now records availability metadata for chat-capable agents. Each probe attempts to open a connection through the agent’s adapter (A2A, MCP, OpenRouter, etc.) without sending a paid request. Probe summaries (`metadata.availabilityStatus`, a rolling `metadata.availabilityScore`, latency, and timestamps) are merged into the `/search` index in-place. Use `sortBy=most-available` to prioritise agents that recently responded with the lowest latency, or combine it with `online=true` to hide agents that have not answered recent pings. Payment-gated adapters (HCS-10, x402) are marked as “Payment Required” instead of being probed.
+The API records lightweight availability metadata for chat-capable agents and merges it into `/search`. Use `sortBy=most-available` to prioritise agents that have recently responded; pair it with `online=true` to hide stale listings. Payment-gated adapters (HCS-10, x402) are marked as “Payment Required” instead of being probed.
 
-Probe results include:
+Probe metadata includes:
 
-- `metadata.availabilityStatus`: `online`, `offline`, `error`, or `skipped`. Offline/error entries are treated as availability score `0`.
-- `metadata.availabilityLatencyMs`: the most recent round-trip time (bounded at 10 seconds).
-- `metadata.availabilityScore`: an exponentially weighted score (0–1) that blends success history, latency, and recency. Fresh, low-latency probes approach 1.0, while stale probes decay toward 0.3 and offline probes drop to 0.
-- `metadata.availabilityCheckedAt`: when the last probe completed.
-- `metadata.availabilityReason`: optional error/cached failure reason (for example `endpoint-unreachable-cached` when DNS proved invalid).
-
-Unreachable hostnames are cached for 24 hours so the API does not continuously probe garbage records. Hosts that require payment are marked as `skipped` rather than probed so you can still detect the listing without incurring costs.
-
-Upcoming metrics on the roadmap include consecutive failure counters, 24h uptime aggregates, adapter-provided reliability scores (for registries such as x402 Bazaar), and surfacing payment queue depth so you can rank service providers by more than raw latency.
+- `metadata.availabilityStatus`: `online`, `offline`, `error`, or `skipped`.
+- `metadata.availabilityLatencyMs`: most recent round-trip time in milliseconds.
+- `metadata.availabilityScore`: 0–1 score reflecting recency and responsiveness.
+- `metadata.availabilityCheckedAt`: timestamp of the latest probe.
+- `metadata.availabilityReason`: optional error context for offline/skipped entries.
 
 ### Example: Agents with x402 Payments
 
-Many ERC-8004 agents publish metadata describing which payment rails they support. You can query for x402-enabled agents by filtering on `metadata.payments.supported`. The curl request below (`http://localhost:4000/api/v1/search?metadata.payments.supported=x402&limit=3`) currently returns Deep42 agents that advertise x402 support:
+Many ERC-8004 agents publish metadata describing which payment rails they support. You can query for x402-enabled agents by filtering on `metadata.payments.supported`. The curl request below (`https://hol.org/api/v1/search?metadata.payments.supported=x402&limit=3`) currently returns Deep42 agents that advertise x402 support:
 
 ```json
 {
@@ -140,7 +136,9 @@ const vectorResult = await client.vectorSearch({
   query: 'tax advisory assistant for small businesses',
   limit: 10,
   filter: {
-    registry: 'hashgraph-online',
+    registry: 'erc-8004',
+    protocols: ['erc-8004', 'a2a'],
+    adapter: ['erc8004-adapter'],
     capabilities: ['financial-services'],
   },
 });
@@ -150,7 +148,24 @@ vectorResult.hits.forEach(hit => {
 });
 ```
 
-Vector search uses embeddings to surface semantically relevant agents and accepts an optional `filter` block to narrow by registry, capability, metadata, and other attributes.
+Vector search uses embeddings to surface semantically relevant agents and accepts an optional `filter` block to narrow by registry, capability, metadata, and other attributes. If semantic search is temporarily unavailable, `RegistryBrokerClient` automatically falls back to keyword search while preserving the response shape so your downstream ranking code does not need to change.
+
+Vector search is **credit-free** but rate limited. Requests are bucketed by API key (when present), then by authenticated account, and finally by caller IP. Responses include standard rate-limit headers; 429s include `Retry-After`. Provide an API key whenever possible so your traffic is isolated from the shared IP bucket.
+
+### Check search readiness
+
+Use `client.searchStatus()` (or `GET /api/v1/search/status`) to confirm the service is ready before issuing high-value semantic queries:
+
+```typescript
+const status = await client.searchStatus();
+if (!status.ready) {
+  console.warn('Search backend is still warming up.');
+}
+```
+
+
+
+Public clients can poll the route to confirm readiness before issuing high-value queries.
 
 ## Namespace Search
 

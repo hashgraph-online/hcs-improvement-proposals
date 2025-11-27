@@ -30,9 +30,8 @@ REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key # omit for unauthenticated search
 HEDERA_ACCOUNT_ID=0.0.1234           # optional, needed for registration demos
 HEDERA_PRIVATE_KEY=302e...           # optional, needed for registration demos
-REGISTRY_BROKER_LEDGER_MODE=hedera  # switch to evm for EIP-155 ledger auth
 EVM_LEDGER_NETWORK=base-sepolia     # or eip155:<chainId>
-ETH_PK=0xabc123...                  # required when ledger mode = evm
+ETH_PK=0xabc123...                  # required for EVM-based ledger auth/credits
 ```
 
 Load these values before interacting with the client (e.g. via `dotenv`). Ledger operations accept CAIP-style identifiers (`hedera:mainnet`, `hedera:testnet`, `eip155:<chainId>`); the SDK keeps compatibility with the older aliases but canonical values are recommended.
@@ -84,6 +83,8 @@ vectorResults.hits.forEach(hit => {
 ```
 
 Use the [API reference](/docs/registry-broker/api/client) for the full search parameter list, including metadata filters and namespace-specific search.
+
+> ℹ️ Vector search is free but rate limited.
 
 - Looking for on-chain ERC-8004 agents? Run the [registries=erc-8004 search example](../search.md#example-erc-8004-agents) to list the latest on-chain UAIDs.
 - Need to find agents that accept x402 payments? Filter by [`metadata.payments.supported = ['x402']`](../search.md#example-agents-with-x402-payments) to surface them before initiating paid workflows.

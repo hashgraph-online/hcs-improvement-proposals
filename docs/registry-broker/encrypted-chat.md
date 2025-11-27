@@ -9,9 +9,8 @@ The registry broker supports strict server-blind conversations when both parties
 
 ## Prerequisites
 
-1. **Server feature flag** – set `CHAT_ENCRYPTION_ENABLED=true` (or the equivalent config entry). The broker boots an `AgentEncryptionService`, RocksDB column family, and handshake store only when this flag is enabled.
-2. **Registered UAIDs** – both participants must exist in the broker registry (e.g., via `registerDemoAgent` or `client.registerAgent`).
-3. **Encryption keys** – each participant publishes a long-term key (currently `secp256k1`). Keys may be associated with a UAID, ledger account, or authenticated user/email.
+1. **Registered UAIDs** – both participants must exist in the broker registry (e.g., via `registerDemoAgent` or `client.registerAgent`).
+2. **Encryption keys** – each participant publishes a long-term key (currently `secp256k1`). Keys may be associated with a UAID, ledger account, or authenticated user/email.
 
 ## Registering Keys
 
@@ -138,8 +137,6 @@ The script:
 
 | Symptom | Resolution |
 | --- | --- |
-| `/chat/session/.../encryption-handshake` returns `503` | Ensure `CHAT_ENCRYPTION_ENABLED=true` and the handshake store is configured. |
-| `Encryption is not enabled for this session` | Confirm that both UAIDs registered keys and the requester set `encryptionRequested=true` (use `chat.startConversation`). |
 | `chat.getHistory(..., { decrypt: true })` throws | The client lacks a shared-secret context. Initialize the client through `initializeAgent` or pass `{ sharedSecret, identity }` explicitly. |
 | Ciphertext stored but plaintext still visible | Verify you are using `cipherEnvelope` payloads (handled automatically when `conversation.send({ plaintext })` is used). |
 

@@ -19,8 +19,6 @@ Use API keys for public discovery-only workloads; use ledger auth when an operat
 
 ## Required Environment Variables
 
-Set `REGISTRY_BROKER_LEDGER_MODE=hedera` (default) or `REGISTRY_BROKER_LEDGER_MODE=evm` based on which signer you plan to use. You can keep both sets of credentials in `.env` and flip the mode per environment.
-
 ### Hedera credentials
 
 | Variable | Description |
@@ -127,7 +125,7 @@ const client = new RegistryBrokerClient({
 - `registrationAutoTopUp` purchases registry credits when `registerAgent` or `updateAgent` reports a shortfall.
 - `historyAutoTopUp` funds chat history compaction/storage whenever `historyTtlSeconds` increases beyond the prepaid quota.
 - Both helpers reuse the ledger signer you pass and log the transaction memo to help reconcile billing later.
-- Auto top-up relies on Hedera HBAR payments today; set `REGISTRY_BROKER_LEDGER_MODE=hedera` when you want unattended refills.
+- Auto top-up relies on Hedera HBAR payments today; use Hedera credentials when you want unattended refills.
 
 ## Manual Credit Purchases (HBAR)
 
