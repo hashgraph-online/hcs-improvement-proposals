@@ -151,6 +151,8 @@ vector.hits.forEach(hit => {
 });
 ```
 
+Vector search is credit-free but subject to the shared rate limiter.
+
 ### Namespace Search
 
 ```typescript

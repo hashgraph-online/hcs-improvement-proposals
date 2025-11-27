@@ -611,6 +611,11 @@ const sidebars: SidebarsConfig = {
               id: 'registry-broker/examples/chat-demo',
               label: 'Chat Demo',
             },
+            {
+              type: 'doc',
+              id: 'registry-broker/examples/ping-agent-demo',
+              label: 'Ping Demo',
+            },
           ],
         },
       ],

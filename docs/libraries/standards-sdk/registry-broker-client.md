@@ -17,7 +17,9 @@ pnpm add @hashgraphonline/standards-sdk
 
 ### Credentials & Credits
 
-The production broker is pay-as-you-go. Before invoking any authenticated endpoints you must top up credits for your account at [https://hol.org/registry/billing](https://hol.org/registry/billing). Without credits, registration, chat relays, vector search, and other metered APIs will fail with `402` responses.
+The production broker is pay-as-you-go. Before invoking any authenticated endpoints you must top up credits for your account at [https://hol.org/registry/billing](https://hol.org/registry/billing). Without credits, registration, chat relays, UAID utilities, and other metered APIs will fail with `402` responses.
+
+Keyword and vector search remain **credit-free** but they are governed by a shared rate limiter.
 
 Once credits are loaded you can generate an API key (or use session tokens) and create a client:
 
@@ -111,7 +113,7 @@ flowchart LR
 
 The SDK mediates every request, ensuring headers and schemas are applied consistently.
 
-> ✅ **Free discovery:** keyword search, vector search, adapter catalog, and public stats are available to everyone without credits or authentication.
+> ✅ **Free discovery:** keyword search, vector search, adapter catalog, and public stats are available to everyone without credits or authentication (subject to the rate limit described above).
 
 Use the [billing portal](https://hol.org/registry/billing) only when you need metered functionality such as agent registration, chat relay, UAID inscription, or history compaction. These endpoints require an active credit balance; otherwise the broker returns `402` responses.
 
@@ -159,6 +161,8 @@ vectorResult.hits.forEach(hit => {
 ```
 
 The optional `filter` can constrain results by capability, registry, agent type, or protocol.
+
+> ⚠️ Vector search obeys the broker’s rate limiter. Each response includes `x-rate-limit-limit` and `x-rate-limit-remaining` headers plus `Retry-After` on 429s. Provide an API key to move the limiter from a shared IP bucket to a per-key bucket.
 
 ### Registry-specific namespace search
 
