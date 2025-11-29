@@ -1,14 +1,35 @@
 ---
-slug: 2025-11-4-hcs-21-trustmesh-scend
-title: HCS-21 TrustMesh – Decentralized Trust Signaling with Scend
+
+slug: 2025-11-4-trustmesh-scend
+title: TrustMesh – Decentralized Trust Signaling with Scend
 authors: [tonycamero]
-tags: [case-study, hcs-21, trustmesh, scend, civic-tech, reputation]
+tags: [case-study, hcs-proposal, trustmesh, scend, civic-tech, reputation]
 date: 2025-10-17T09:00:00-05:00
+-------------------------------
+
+# TrustMesh – Decentralized Trust Signaling with Scend
+
+[https://scend.cash/Scend-logo.png](https://scend.cash/Scend-logo.png)
+
+## Problem Statement
+
+Modern digital systems cannot answer a simple question: **“Who can I trust, and why?”**
+
+Social platforms measure visibility—not integrity. Credential systems measure completion—not character. Blockchains measure value—not context. As a result:
+
+* Communities cannot verify real contributions.
+* Institutions cannot rely on portable reputation.
+* Civic groups cannot coordinate without centralized gatekeepers.
+* DAOs cannot distinguish between real humans and noise.
+* Students, workers, and creators cannot port the trust they’ve earned across apps or organizations.
+
+The world runs on trust, but the internet runs on **likes, follows, unverifiable claims, and opaque scoring systems**. Nothing ties trust to identity, context, or time—and nothing makes it portable.
+
+**TrustMesh exists because the modern internet has no protocol for trust.**
+
+By turning trust into a verifiable, contextual, programmable primitive anchored on Hedera Consensus Service, TrustMesh unifies human trust and digital systems.
+
 ---
-
-# HCS-21 TrustMesh – Decentralized Trust Signaling with Scend
-
-https://scend.cash/Scend-logo.png
 
 ## TrustMesh: Compliance-Grade Trust Infrastructure
 
@@ -63,15 +84,15 @@ All acknowledgements, polls, and trust links in the demo ride on these open stan
 
 ---
 
-## From Hackathon to HCS-21: What’s Next
+## From Hackathon to Proposed HCS Standard: What’s Next
 
-We’re proposing **HCS-21 – Decentralized Trust Signaling**, an extension designed to unify the schema and structure of social trust events.
+We’re proposing **Decentralized Trust Signaling**, an extension designed to unify the schema and structure of social trust events.
 
 | Proposed Standard            | Purpose                                                                 |
 | ---------------------------- | ----------------------------------------------------------------------- |
-| **HCS-21 – Trust Signaling** | Merges recognition, stake, and attestation events into a unified format |
+| **HCS-X – Trust Signaling** | Merges recognition, stake, and attestation events into a unified format |
 
-HCS-21 will enable:
+HCS-X will enable:
 
 * Interoperable civic and social signals across dApps and networks
 * Wallet-native trust recognition
@@ -79,9 +100,9 @@ HCS-21 will enable:
 
 **Next steps:**
 
-* HCS-21 draft specification in progress
+* HCS-X draft specification in progress
 * SDK for developers to log/query trust signals
-* Looking for integration partners in civic tech, campus orgs, and regulated sectors
+* Seeking integration partners in civic tech, campus orgs, and regulated sectors
 
 ---
 
@@ -91,22 +112,24 @@ Imagine this:
 
 A student named Maya logs into her campus wallet app. It’s integrated with TrustMesh. On her dashboard, she sees:
 
-- A new **recognition signal** from her Debate Club president: _“Maya led with integrity and encouraged diverse voices.”_
-- A **governance poll** from the campus sustainability council, where only students with ≥3 peer trust signals can vote.
-- A pending **attestation** request from the Robotics Lab, asking her to verify mentorship given to a first-year teammate.
+* A new **recognition signal** from her Debate Club president: *“Maya led with integrity and encouraged diverse voices.”*
+* A **governance poll** from the campus sustainability council, where only students with ≥3 peer trust signals can vote.
+* A pending **attestation** request from the Robotics Lab, asking her to verify mentorship given to a first-year teammate.
 
 Later that day:
 
-- Maya attends a hackathon, where participants earn **Hashinals** for collaboration and ingenuity.
-- At the end of the event, facilitators mint verifiable trust signals tied to peer-selected attributes like collaboration and integrity.
-- These signals are anchored to her **HCS-11 profile**, viewable across all Hedera-connected civic and academic platforms.
+* Maya attends a hackathon, where participants earn **Hashinals** for collaboration and ingenuity.
+* Facilitators mint verifiable trust signals tied to peer-selected attributes like collaboration and integrity.
+* These signals anchor to her **HCS-11 profile**, viewable across all Hedera-connected civic and academic platforms.
 
 By semester’s end:
 
-- Maya's trust graph reflects her contributions, backed by real peers—not likes or engagement metrics.
-- She uses this portable reputation to apply for a DAO research grant, where her signals are instantly verifiable by the funding org’s DAO.
+* Maya's trust graph reflects her contributions, backed by real peers—not likes or engagement metrics.
+* She uses this portable reputation to apply for a DAO research grant, where her signals are instantly verifiable by the funding org’s DAO.
 
 All of this—stored immutably on Hedera, composable across applications, and entirely **owned by her**.
+
+---
 
 ## TrustMesh System Architecture
 
@@ -128,7 +151,7 @@ Each user holds a finite number of trust tokens inside their **Inner Circle**. T
 
 Where the Guardian measures carbon, TrustMesh measures **character**.
 
-What began as decentralized infrastructure for a highly-regulated market is now proving viable for civic networks, cooperatives, and coordination protocols at scale.
+What began as decentralized infrastructure for a highly regulated market is now proving viable for civic networks, cooperatives, and coordination protocols at scale.
 
 **TrustMesh demonstrates that programmable trust isn’t a theory—it’s live, verifiable, and standards-based.**
 
