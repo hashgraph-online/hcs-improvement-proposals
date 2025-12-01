@@ -156,6 +156,7 @@ const config: Config = {
             { label: 'API Docs', href: 'https://hol.org/registry/docs' },
           ],
         },
+        { href: 'https://hol.org/points', label: 'Points', position: 'left' },
         { to: '/blog', label: 'Blog', position: 'left' },
       ],
     },
