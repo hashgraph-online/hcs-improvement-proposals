@@ -58,3 +58,12 @@ patches:
     permalink: '/patches'
   socials:
     x: TMCC_Patches
+
+tonycamero:
+  name: Tony Camero
+  title: Founder, Scend
+  url: https://github.com/tonycamero
+  image_url: https://avatars.githubusercontent.com/u/5650741?v=4
+  socials:
+    x: tonycamero
+    github: tonycamero
