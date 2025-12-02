@@ -1,10 +1,10 @@
 ---
 
-slug: 2025-11-4-trustmesh-scend
+slug: 2025-12-3-trustmesh-scend
 title: TrustMesh – Decentralized Trust Signaling with Scend
 authors: [tonycamero]
 tags: [case-study, hcs-proposal, trustmesh, scend, civic-tech, reputation]
-date: 2025-10-17T09:00:00-05:00
+date: 2025-12-03T09:00:00-05:00
 -------------------------------
 
 # TrustMesh – Decentralized Trust Signaling with Scend
