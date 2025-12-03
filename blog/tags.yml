@@ -198,6 +198,31 @@ compliance:
   permalink: /compliance
   description: Regulatory compliance and related tooling
 
+hcs-proposal:
+  label: HCS Proposal
+  permalink: /hcs-proposal
+  description: Proposals and drafts for new HCS standards
+
+trustmesh:
+  label: TrustMesh
+  permalink: /trustmesh
+  description: TrustMesh product updates and case studies
+
+scend:
+  label: Scend
+  permalink: /scend
+  description: Content related to Scend and its integrations
+
+civic-tech:
+  label: Civic Tech
+  permalink: /civic-tech
+  description: Civic technology and governance use cases
+
+reputation:
+  label: Reputation
+  permalink: /reputation
+  description: Reputation, attestations, and trust signaling topics
+
 hcs-19:
   label: HCS-19
   permalink: /hcs-19
