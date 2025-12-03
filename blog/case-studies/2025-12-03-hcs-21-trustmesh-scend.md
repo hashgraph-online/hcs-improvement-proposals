@@ -31,6 +31,8 @@ By turning trust into a verifiable, contextual, programmable primitive anchored 
 
 ---
 
+<!-- truncate -->
+
 ## TrustMesh: Compliance-Grade Trust Infrastructure
 
 Before it could log student recognitions or power campus governance, TrustMesh had to prove itself in a harder arena—one bound by regulators, audits, and financial scrutiny.
