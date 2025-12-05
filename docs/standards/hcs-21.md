@@ -46,6 +46,7 @@ sidebar_position: 21
       - [Signature/hash verification flow](#signaturehash-verification-flow)
       - [State proof hash flow](#state-proof-hash-flow)
   - [Reference Flow](#reference-flow)
+    - [Frontend registry resolution (discovery → manifest → adapter set)](#frontend-registry-resolution-discovery--manifest--adapter-set)
   - [Implementation Workflow](#implementation-workflow)
   - [Validation](#validation)
   - [Security Considerations](#security-considerations)
@@ -68,7 +69,6 @@ sidebar_position: 21
 4. **Operational clarity:** Petals must know runtime prerequisites, rate limits, fee policies, and state topics before participating in consensus. Encoding this information in an inscribed manifest removes guesswork and reduces misconfiguration.
 5. **Open participation:** A public adapter interface lets third-party developers describe any data source (agent registries, PGA scores, governance feeds, etc.) so Floras can add new consensus targets without rewriting infrastructure.
 
-The previous HCS-21 proposal focused on generic package declarations. This revision specializes the standard for Flora adapters so Floras, registries, and marketplaces can coordinate around the exact adapter code that governs their consensus flows.
 
 ## Normative Language
 
