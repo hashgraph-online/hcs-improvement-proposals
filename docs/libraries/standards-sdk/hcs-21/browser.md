@@ -5,7 +5,7 @@ sidebar_position: 4
 
 # HCS-21 Browser Client (`HCS21BrowserClient`)
 
-`HCS21BrowserClient` wraps the Hashinals WalletConnect SDK so browser apps can publish package declarations directly from a user-controlled wallet. It reuses the base validation logic from the server client but signs transactions through WalletConnect.
+`HCS21BrowserClient` wraps the Hashinals WalletConnect SDK so browser apps can publish adapter declarations directly from a user-controlled wallet. It reuses the same validation logic as the server client but signs transactions through WalletConnect.
 
 ## Setup
 
@@ -13,7 +13,7 @@ sidebar_position: 4
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 import {
   HCS21BrowserClient,
-  PackageMetadataRecord,
+  Logger,
 } from '@hashgraphonline/standards-sdk';
 
 const hwc = new HashinalsWalletConnectSDK({
@@ -24,37 +24,52 @@ const browserClient = new HCS21BrowserClient({
   network: 'testnet',
   hwc,
 });
+
+const logger = new Logger({ module: 'hcs-21-browser', level: 'info' });
 ```
 
-## Publish a Declaration
+## Publish an Adapter Declaration
 
 ```ts
-const declaration = {
-  op: 'register',
-  registry: 'pypi',
-  t_id: '0.0.700777',
-  name: 'Sample Hedera Package',
-  description: 'CLI plugin published from the browser client',
-  author: 'kantorcodes',
-  tags: ['cli', 'demo'],
-  metadata: 'hcs://1/0.0.4922770/15',
-};
-
 await browserClient.publishDeclaration({
   topicId: '0.0.600123',
-  declaration,
+  declaration: {
+    op: 'register',
+    adapterId: 'pypi/community/pga-tour-adapter@0.4.0',
+    entity: 'dataset',
+    adapterPackage: {
+      registry: 'pypi',
+      name: 'pga-tour-adapter',
+      version: '0.4.0',
+      integrity: 'sha384-demo-digest',
+    },
+    manifest: 'hcs://1/0.0.4922770',
+    manifestSequence: 15, // optional: pin a specific manifest message
+    flora: {
+      account: '0.0.700001',
+      threshold: '2-of-3',
+      ctopic: '0.0.700101',
+      ttopic: '0.0.700102',
+      stopic: '0.0.700103',
+    },
+    stateModel: 'hcs-21.dataset-consensus@1',
+  },
 });
 ```
 
-`HCS21BrowserClient` still enforces the schema; invalid metadata pointers or registries throw before any wallet prompt appears.
+`HCS21BrowserClient` enforces the schema and 1 KB cap before the wallet prompts the user to sign.
 
 ## Fetch Declarations from the Wallet SDK
 
 ```ts
 const latest = await browserClient.fetchDeclarations('0.0.600123');
 latest.forEach(payload => {
-  console.log(payload.sequenceNumber, payload.payer);
+  logger.info('hcs-21 declaration', {
+    sequence: payload.sequenceNumber,
+    payer: payload.payer,
+    adapter: payload.declaration.adapter_id,
+  });
 });
 ```
 
-Because the browser client streams through the wallet SDK, it is ideal for dashboards that need read/write access without exposing operator keys.
+Streaming through the wallet SDK keeps dashboards read/write without exposing operator keys.

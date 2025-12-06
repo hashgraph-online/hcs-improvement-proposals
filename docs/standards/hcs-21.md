@@ -67,8 +67,7 @@ sidebar_position: 21
 2. **Deterministic consensus artifacts:** Downstream services require reproducible hashes per adapter so [HCS-17](/docs/standards/hcs-17) (or an equivalent) can be audited. Adapters SHOULD name a canonicalization profile (`state_model`) to make this explicit.
 3. **Decentralized distribution:** Adapters are published as signed packages on any deterministic registry (npm, PyPI, crates.io, Maven Central, OCI, IPFS, Arweave, HTTP with SRI, etc.) and resolved through signed manifests, allowing machine-verifiable provenance without centralized app stores.
 4. **Operational clarity:** Petals must know runtime prerequisites, rate limits, fee policies, and state topics before participating in consensus. Encoding this information in an inscribed manifest removes guesswork and reduces misconfiguration.
-5. **Open participation:** A public adapter interface lets third-party developers describe any data source (agent registries, PGA scores, governance feeds, etc.) so Floras can add new consensus targets without rewriting infrastructure.
-
+5. **Open participation:** A public adapter interface lets third-party developers describe any data source (agent registries, PGA scores, governance feeds, etc.) so Floras can add new consensus targets without rewriting infrastructure
 
 ## Normative Language
 
@@ -238,9 +237,12 @@ Adapter registries SHOULD publish a lightweight HCS-1 document that describes th
 | `runtime.entry`              | Yes              | Module path exported by the package (e.g., `dist/index.js`).                                                                                                       |
 | `runtime.dependencies`       | No               | Peer dependencies (e.g., `@hashgraphonline/standards-sdk`).                                                                                                        |
 | `runtime.env`                | No               | Required environment variables (names only; no secrets).                                                                                                           |
-| `capabilities.discovery`     | Yes              | Boolean indicating if the adapter discovers new entities.                                                                                                          |
-| `capabilities.communication` | Yes              | Boolean for chat/routing support.                                                                                                                                  |
-| `capabilities.protocols`     | Yes              | Array of protocol identifiers handled.                                                                                                                             |
+| `capabilities.discovery`              | Yes      | Boolean indicating if the adapter discovers new entities.                                                                                                          |
+| `capabilities.discovery_tags`         | No       | Optional tags describing discovery domains (e.g., `agents`, `datasets`, `marketplaces`) for UI filtering/search.                                                   |
+| `capabilities.communication`          | Yes      | Boolean for chat/routing support.                                                                                                                                  |
+| `capabilities.communication_channels` | No       | Optional list of supported channels/transports (e.g., `text`, `voice`, `x402`, `webrtc`, `grpc`).                                                                  |
+| `capabilities.protocols`              | Yes      | Array of protocol identifiers handled.                                                                                                                             |
+| `capabilities.extras`                 | No       | Free-form key/value map for additional capability metadata (e.g., rate limits, locales, auth modes) that frontends can index.                                      |
 | `consensus.state_model`      | No (recommended) | Name of the canonicalization profile (e.g., `hcs-21.agent-consensus@1`) matching the declaration’s `state_model`.                                                  |
 | `consensus.profile_uri`      | No (recommended) | Resolvable pointer (HCS-1/IPFS/Arweave/HTTPS/OCI) to the profile document containing canonicalization rules **and a JSON Schema or equivalent** for payload shape. |
 | `consensus.entity_schema`    | No (recommended) | Identifier describing the payload schema hashed under [HCS-17](/docs/standards/hcs-17); SHOULD match or embed the schema referenced by `profile_uri`.              |
@@ -280,10 +282,22 @@ runtime:
     - X402_API_KEY
 capabilities:
   discovery: true
+  discovery_tags:
+    - agents
+    - marketplaces
   communication: true
+  communication_channels:
+    - text
+    - x402
   protocols:
     - x402
     - uaid
+  extras:
+    locales:
+      - en
+      - es
+    rate_limit:
+      requests_per_minute: 120
 consensus:
   state_model: hcs-21.generic@1
   profile_uri: ipfs://bafy... # points to canonicalization + JSON Schema

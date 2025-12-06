@@ -232,15 +232,15 @@ const standardsData = [
     icon: 'HCS-20',
   },
   {
-    title: 'HCS-21: Package Declaration Registry',
+    title: 'HCS-21: Adapter Registry',
     category: 'Infrastructure',
     status: 'draft' as const,
     description:
-      'Generic package declaration ledger for npm, PyPI, OCI, CLI plugins, and more. Streamlined metadata pointers keep provenance verifiable across ecosystems.',
+      'Adapter registry standard that binds manifests, package integrity, and appnet context so participants run the same deterministic code.',
     features: [
-      'Multi-registry declarations',
-      'HCS-1 metadata pointers',
-      'Direct Hedera provenance',
+      'Adapter declarations',
+      'HCS-1 manifest pointers',
+      'Registry-of-registries support',
     ],
     href: '/docs/standards/hcs-21',
     icon: 'HCS-21',

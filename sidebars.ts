@@ -193,7 +193,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'doc',
           id: 'standards/hcs-21',
-          label: 'HCS-21: Package Declaration Registry',
+          label: 'HCS-21: Adapter Registry',
         },
       ],
     },
@@ -430,7 +430,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'HCS-21: Package Registry',
+              label: 'HCS-21: Adapter Registry',
               link: { type: 'doc', id: 'libraries/standards-sdk/hcs-21/index' },
               collapsible: true,
               collapsed: true,

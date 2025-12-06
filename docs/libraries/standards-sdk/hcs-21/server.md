@@ -5,15 +5,18 @@ sidebar_position: 3
 
 # HCS-21 Server Client (`HCS21Client`)
 
-Use `HCS21Client` inside Node.js services (bots, registries, CI/CD pipelines) to create package registry topics, inscribe metadata, and publish or stream declarations.
+Use `HCS21Client` inside Node.js services (registries, CI/CD, Petal orchestration) to create adapter registry topics, inscribe manifests or registry metadata via HCS-1, and publish or stream adapter declarations.
 
 ## Initialization
 
 ```ts
 import {
+  AdapterManifest,
   HCS21Client,
-  PackageMetadataRecord,
+  Logger,
 } from '@hashgraphonline/standards-sdk';
+
+const logger = new Logger({ module: 'hcs-21-server', level: 'info' });
 
 const client = new HCS21Client({
   network: 'testnet',
@@ -23,79 +26,111 @@ const client = new HCS21Client({
 });
 ```
 
-## Inscribe Metadata via HCS-1
+## Inscribe an Adapter Manifest (HCS-1)
 
 ```ts
-const metadata: PackageMetadataRecord = {
-  schema: 'hcs-21/metadata@1.0',
-  t_id: '0.0.1234567',
-  website: 'https://hashgraph.online',
-  docs: 'https://hashgraph.online/docs/libraries/standards-sdk/',
-  source: 'https://github.com/hashgraph-online/standards-sdk',
-  tags: ['sdk', 'registry'],
-  capabilities: ['registry-broker', 'cli'],
+const manifest: AdapterManifest = {
+  meta: {
+    spec_version: '1.0',
+    adapter_version: '1.3.2',
+    generated: new Date().toISOString(),
+  },
+  adapter: {
+    id: 'npm/@hashgraphonline/x402-bazaar-adapter@1.3.2',
+    name: 'X402 Bazaar Agent Adapter',
+    maintainers: [{ name: 'Hashgraph Online', contact: 'ops@hashgraph.online' }],
+    license: 'Apache-2.0',
+  },
+  package: {
+    registry: 'npm',
+    dist_tag: 'stable',
+    artifacts: [
+      {
+        url: 'npm://@hashgraphonline/x402-bazaar-adapter@1.3.2',
+        digest: 'sha384-demo-digest',
+        signature: 'demo-signature',
+      },
+    ],
+  },
+  runtime: {
+    platforms: ['node>=20.10.0'],
+    primary: 'node',
+    entry: 'dist/index.js',
+    dependencies: ['@hashgraphonline/standards-sdk@^1.8.0'],
+    env: ['X402_API_KEY'],
+  },
+  capabilities: {
+    discovery: true,
+    communication: true,
+    protocols: ['x402', 'uaid'],
+  },
+  consensus: {
+    entity_schema: 'hcs-21.entity-consensus@1',
+    required_fields: ['entity_id', 'registry', 'state_hash', 'epoch'],
+    hashing: 'sha384',
+  },
 };
 
-const pointer = await client.inscribeMetadata({ metadata });
-// pointer.pointer === 'hcs://1/0.0.1234567/42'
+const manifestPointer = await client.inscribeMetadata({ document: manifest });
+// manifestPointer.pointer -> "hcs://1/<topic>"
+// manifestPointer.manifestSequence -> sequence number for this manifest
 ```
 
-## Create a Registry Topic
+## Create an Adapter Registry Topic
 
 ```ts
-const topicId = await client.createRegistryTopic({
+const registryTopicId = await client.createRegistryTopic({
   ttl: 3600,
   indexed: 0,
-  transactionMemo: 'hcs-21 registry demo',
+  transactionMemo: 'flora adapter registry',
 });
 ```
 
-## Publish & Update Declarations
+## Publish Adapter Declarations
 
 ```ts
-const packageTopicId = '0.0.1234567'; // HCS-2 topic that stores package versions
-
 await client.publishDeclaration({
-  topicId,
+  topicId: registryTopicId,
   declaration: {
     op: 'register',
-    registry: 'npm',
-    t_id: packageTopicId,
-    name: 'Standards SDK',
-    description: 'Typed helpers for Hedera standards',
-    author: 'Kantorcodes',
-    tags: ['sdk', 'registry'],
-    metadata: pointer.pointer,
+    adapterId: manifest.adapter.id,
+    entity: 'agent',
+    adapterPackage: {
+      registry: 'npm',
+      name: '@hashgraphonline/x402-bazaar-adapter',
+      version: '1.3.2',
+      integrity: 'sha384-demo-digest',
+    },
+    manifest: manifestPointer.pointer,
+    manifestSequence: manifestPointer.manifestSequence,
+    flora: {
+      account: '0.0.9876',
+      threshold: '2-of-3',
+      ctopic: '0.0.700111',
+      ttopic: '0.0.700112',
+      stopic: '0.0.700113',
+    },
+    stateModel: 'hcs-21.entity-consensus@1',
   },
-});
-
-await client.publishDeclaration({
-  topicId,
-  declaration: {
-    op: 'update',
-    registry: 'npm',
-    t_id: packageTopicId,
-    name: 'Standards SDK',
-    description: 'Rotated metadata pointer',
-    author: 'Kantorcodes',
-    metadata: pointer.pointer,
-  },
-  transactionMemo: 'rotate metadata pointer',
 });
 ```
 
 ## Stream Declarations
 
 ```ts
-const latest = await client.fetchDeclarations(topicId, {
+const latest = await client.fetchDeclarations(registryTopicId, {
   limit: 10,
   order: 'desc',
 });
 
 latest.forEach(envelope => {
-  console.log(envelope.sequenceNumber, envelope.payer);
-  console.log(envelope.declaration.registry, envelope.declaration.n);
+  logger.info('hcs-21 declaration', {
+    sequence: envelope.sequenceNumber,
+    payer: envelope.payer,
+    adapter: envelope.declaration.adapter_id,
+    stateModel: envelope.declaration.state_model,
+  });
 });
 ```
 
-The `HCS21Client` automatically filters out non-`hcs-21` payloads and validates each declaration against the schema from the standard.
+The `HCS21Client` filters non-`hcs-21` payloads, enforces the 1 KB limit, and validates every declaration against the updated schema.

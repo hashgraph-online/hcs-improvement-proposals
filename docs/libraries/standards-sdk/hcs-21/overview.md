@@ -3,53 +3,50 @@ title: Overview
 sidebar_position: 2
 ---
 
-# HCS-21: Package Declaration Registry
+# HCS-21: Adapter Registry
 
-The HCS-21 module in the Standards SDK lets you publish package declarations (npm, PyPI, OCI, Composer, CLI plugins, etc.) straight to Hedera Consensus Service. Every declaration pairs a registry namespace with the package’s HCS-2 topic ID (`t_id`) plus a short human summary (`n`, `d`, `a`, `tags`). Optional HCS-1 metadata pointers let downstream systems (Registry Broker, HPM, compliance scanners) hydrate richer manifests without trusting centralized APIs.
+The HCS-21 module in the Standards SDK publishes **adapter declarations** for appnets (including Floras). Each declaration links an adapter ID to its HCS-1 manifest, package fingerprint, appnet context (ctopic/ttopic/stopic), and state model identifier so every participant executes the same deterministic adapter code.
 
 ## What’s Included
 
-- **`HCS21Client`** (Node.js) — creates registry topics, inscribes metadata, publishes declarations, and streams them back using mirror nodes.
-- **`HCS21BrowserClient`** (WalletConnect) — enables dApps to publish declarations directly from a user’s wallet without sharing private keys.
-- **Transaction helpers** — `buildHcs21CreateRegistryTx` and `buildHcs21MessageTx` let you embed HCS-21 flows into custom transaction managers.
-- **Typed schemas** — `PackageDeclaration`, `PackageMetadataRecord`, and validation helpers keep payloads inside the 1 KB limit and aligned with HCS-21.
+- **`HCS21Client`** (Node.js) — creates registry topics, inscribes manifests or registry metadata (HCS-1), publishes adapter declarations, and streams them back via mirror nodes.
+- **`HCS21BrowserClient`** (WalletConnect) — lets dApps publish adapter declarations from a user wallet while reusing the same validation logic.
+- **Transaction helpers** — `buildHcs21CreateRegistryTx` and `buildHcs21MessageTx` generate compliant memos and message payloads for custom pipelines.
+- **Typed schemas** — `AdapterDeclaration`, `AdapterManifest`, `RegistryMetadataRecord`, and validation helpers keep payloads inside the 1 KB limit and aligned with the updated HCS-21 standard.
 
 ```mermaid
 flowchart LR
     subgraph Off-chain
-        Dev[Publisher]
+        Publisher[Adapter Publisher]
         SDK[Standards SDK HCS-21]
         Browser[HCS21BrowserClient]
     end
     subgraph Hedera
-        Topic[HCS-21 Registry Topic]
-        Metadata[HCS-1 Metadata Topic]
+    Manifest[HCS-1 Manifest Topic]
+        RegistryTopic[HCS-21 Adapter Registry Topic]
     end
-    subgraph Consumers
-        Broker[Registry Broker]
-        HPM[Hedera Package Manager]
+    subgraph Floras
+        Flora[HCS-16 Flora]
     end
 
-    Dev --> SDK
+    Publisher --> SDK
     Browser --> SDK
-    SDK --> Metadata
-    SDK --> Topic
-    Topic --> Broker
-    Topic --> HPM
-    Metadata --> Broker
-    Metadata --> HPM
+    SDK --> Manifest
+    SDK --> RegistryTopic
+    RegistryTopic --> Flora
+    Manifest --> Flora
 ```
 
 ## Key Capabilities
 
-- Multi-registry namespace support (`npm`, `pypi`, `oci`, `composer`, `cargo`, etc.).
-- Strict metadata pointers (`hcs://1/<topic>/<sequence>`) with optional `t_id` for HPM-style version feeds.
-- Mirror-node streaming helpers that automatically filter `hcs-21` payloads.
-- Works with submit keys, HIP-991 fee gates, or public topics.
+- Adapter declarations include `adapter_id`, `entity`, `package` integrity, manifest pointer (`hcs://1/<topic>`), optional `manifest_sequence` to pin a specific message, appnet/Flora thresholds/topics, and `state_model`.
+- Manifest and registry metadata helpers enforce the HCS-1 pointer format (`hcs://1/<topic>`).
+- Memo builder supports adapter registries and registry-of-registries topics (`hcs-21:<indexed>:<ttl>:<type>:<meta>`).
+- Mirror-node streaming filters only `hcs-21` payloads while preserving payer, sequence, and consensus timestamp.
 
 ## Where to Next
 
-- [Server SDK](./server.md) — instantiate `HCS21Client`, inscribe metadata, and publish declarations from Node.js services.
+- [Server SDK](./server.md) — instantiate `HCS21Client`, inscribe manifests, and publish declarations from Node.js services.
 - [Browser SDK](./browser.md) — wire HCS-21 into wallet-connected front-ends.
 - [Transaction Helpers](./tx.md) — build custom workflows using low-level builders.
 - [API Reference](./api.md) — quick lookup for available types and classes.
