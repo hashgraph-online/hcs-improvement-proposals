@@ -133,8 +133,8 @@ flowchart TD
 | Topic                            | Protocol / Memo                       | Purpose                                                                                      | Notes                                                                                                                                                                              |
 | -------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Registry-of-registries           | `hcs-21:0:<ttl>:1:<category_meta>`    | Lists adapter categories. Each message sets `t_id = <adapter_category_topic_id>`.            | `category_meta` SHOULD be an HCS-1 pointer describing the category (name, entity type, docs).                                                                                      |
-| Adapter category index           | `hcs-21:0:<ttl>:2:<category_meta>`    | Enumerates adapters within the category.                                                     | Each message MUST use `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`. `category_meta` matches the pointer published in the discovery entry.          |
-| Adapter version pointer          | `hcs-2:1:<ttl>`                       | Tracks the active adapter declaration topic for a single adapter (latest message only).      | Messages SHOULD set `m = "adapter:<adapter_id>"`. No `metadata` field is required because the adapter manifest pointer lives in the HCS-21 declaration topic referenced by `t_id`. |
+| Adapter category index           | `hcs-21:0:<ttl>:2:<category_meta>`    | Enumerates adapters within the category.                                                     | Each message MUST set `m = "adapter:<namespace>/<name>"` and `t_id = <adapter_version_pointer_topic_id>`. `category_meta` matches the pointer published in the discovery entry.          |
+| Adapter version pointer          | `hcs-2:1:<ttl>`                       | Tracks the active adapter declaration topic for a single adapter (latest message only).      | Messages SHOULD set `m = "adapter:<namespace>/<name>"`. No `metadata` field is required because the adapter manifest pointer lives in the HCS-21 declaration topic referenced by `t_id`. |
 | Adapter declaration topic        | `hcs-21:0:<ttl>:0:<manifest_pointer>` | Stores HCS-21 `register`, `update`, `delete` payloads for a specific adapter version stream. | `manifest_pointer` SHOULD reference the adapter manifest (`hcs://1/<topic>` preferred).                                                                                            |
 | Adapter manifest topic / pointer | `hcs://1/<topic>` (HCS-1)             | Immutable adapter manifest (YAML/JSON).                                                      | Consumer resolves `hcs://1/<topic>` to download manifest. Alternative immutable pointers (IPFS, Arweave, OCI, HTTPS with SRI) are allowed when they fit Hedera memo limits.        |
 
@@ -143,8 +143,8 @@ flowchart TD
 | Memo                                  | Scope                                                     | Notes                                                                                                |
 | ------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
 | `hcs-21:0:<ttl>:1:<meta>`             | Registry-of-registries (HCS-2 indexed)                    | `meta` SHOULD point to category metadata (`hcs://1/<topic>` or IPFS/Arweave/OCI/HTTPS with SRI).     |
-| `hcs-21:0:<ttl>:2:<meta>`             | Adapter category index (HCS-2 indexed)                    | `meta` matches the discovery entry. Messages use `m = "adapter:<adapter_id>"`, `t_id = version ptr`. |
-| `hcs-2:1:<ttl>`                       | Adapter version pointer (HCS-2 non-indexed)               | Latest message only; use `m = "adapter:<adapter_id>"`. No metadata field is used on these messages.  |
+| `hcs-21:0:<ttl>:2:<meta>`             | Adapter category index (HCS-2 indexed)                    | `meta` matches the discovery entry. Messages use `m = "adapter:<namespace>/<name>"`, `t_id = version ptr`. |
+| `hcs-2:1:<ttl>`                       | Adapter version pointer (HCS-2 non-indexed)               | Latest message only; use `m = "adapter:<namespace>/<name>"` so the slug stays stable. No metadata field is used on these messages.  |
 | `hcs-21:0:<ttl>:0:<manifest_pointer>` | Adapter declaration topic (HCS-21 indexed)                | `manifest_pointer` SHOULD be `hcs://1/<topic>`; other immutable pointers allowed when memo fits.     |
 | `hcs://1/<topic>`                     | Adapter or registry metadata manifest (HCS-1 inscription) | Contains YAML/JSON metadata; referenced from memos above.                                            |
 
@@ -155,7 +155,7 @@ Only discovery and category entries use the `<meta>` slot (to describe the categ
 Adapter discovery now spans **four** deterministic layers so adapter registries can rotate topics or adapter releases without rewriting the global discovery list:
 
 1. **Registry-of-registries topic (`hcs-21:0:<ttl>:1:<meta>`)** — HCS-2 indexed list of adapter category topics and metadata pointers. Rarely changes.
-2. **Adapter category topic (`hcs-21:0:<ttl>:2:<meta>`)** — HCS-2 indexed registry listing adapters inside that category. Each message sets `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>` plus optional metadata (for example, manifest pointer, docs).
+2. **Adapter category topic (`hcs-21:0:<ttl>:2:<meta>`)** — HCS-2 indexed registry listing adapters inside that category. Each message sets `m = "adapter:<namespace>/<name>"` and `t_id = <adapter_version_pointer_topic_id>` plus optional metadata (for example, manifest pointer, docs).
 3. **Adapter version pointer topic (`hcs-2:1:<ttl>`)** — HCS-2 non-indexed topic dedicated to a single adapter. Only the most recent message matters and its `t_id` points at the active HCS-21 declaration topic for that adapter.
 4. **Adapter declaration topic (`hcs-21:0:<ttl>:0:<meta>`)** — per-adapter HCS-21 topics carrying the `register/update/delete` payloads.
 
@@ -171,7 +171,7 @@ graph TD
   MANIFEST["HCS-1 manifest topic"]
 
   ROR -->|hcs-2 register| CAT
-  CAT -->|m=adapter:<id> t_id = version pointer| PTR
+  CAT -->|m=adapter:<namespace>/<name> t_id = version pointer| PTR
   PTR -->|latest t_id| ADPT
   ADPT --> DECL
   DECL -->|manifest pointer| MANIFEST
@@ -382,7 +382,7 @@ adapters:
 
 ### Guidelines
 
-- **Adapter references:** MUST point to the canonical `adapter_id` (namespace/name@version) from the HCS-21 declaration. Optional `version_range` lets a Flora accept maintenance releases.
+- **Adapter references:** Config files and manifests MUST use the canonical `adapter_id` (namespace/name@version) from the HCS-21 declaration. HCS-2 memos intentionally use `adapter:<namespace>/<name>` because the version pointer controls the active release. Optional `version_range` lets a Flora accept maintenance releases.
 - **Required flag:** Petals MUST run adapters marked `required: true` before joining the Flora. Optional adapters MAY be enabled for enhanced data sets.
 - **Config overrides:** Provide deterministic overrides (env var names, rate limits, or secrets placeholders). Sensitive values SHOULD reference secret names rather than raw credentials.
 - **Linkage:** A registry or declaration MAY also carry a pointer to this manifest (for example, `config.appnet_manifest`) so consumers can correlate on-chain declarations with the appnet’s adapter set.
@@ -394,12 +394,12 @@ adapters:
 Consumers now resolve adapters through a three-hop pointer chain before reaching the per-adapter HCS-21 topic. This layered pattern mirrors other HCS standards and keeps a verifiable version history for every layer. Metadata appears only in discovery/category memos; pointer messages themselves stay minimal:
 
 1. **Discovery topic (HCS-2 indexed):** Create an HCS topic with memo `hcs-21:0:<ttl>:1:<meta>`. This is the canonical registry-of-registries list and changes rarely. Each entry points directly to an adapter category topic via `t_id`.
-2. **Adapter category topic (HCS-2 indexed):** Create a `hcs-21:0:<ttl>:2:<meta>` topic per registry category. Each message represents a single adapter and stores `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`. Do not add metadata fields here; the topic memo already carries the category pointer.
+2. **Adapter category topic (HCS-2 indexed):** Create a `hcs-21:0:<ttl>:2:<meta>` topic per registry category. Each message represents a single adapter and stores `m = "adapter:<namespace>/<name>"` and `t_id = <adapter_version_pointer_topic_id>`. Do not add metadata fields here; the topic memo already carries the category pointer.
 3. **Adapter version pointer (HCS-2 non-indexed):** For every adapter, create a `hcs-2:1:<ttl>` topic. Only the latest message is relevant; it points to the active HCS-21 declaration topic for that adapter via `t_id`. These pointer messages do not include metadata.
 4. **Adapter declaration topic (HCS-21 indexed):** Create `hcs-21:0:<ttl>:0:<meta>` topics per adapter. These topics carry the actual HCS-21 declarations.
 5. **Wire them together:**  
    a. Post a `register` message to the discovery topic with `t_id = <adapter_category_topic_id>`.  
-   b. Post `register` messages to each category topic with `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`.  
+  b. Post `register` messages to each category topic with `m = "adapter:<namespace>/<name>"` and `t_id = <adapter_version_pointer_topic_id>`.  
    c. Post a `register` message to each adapter version pointer topic with `t_id = <adapter_declaration_topic_id>`. Use `migrate` only if a pointer topic must be replaced.
 6. **Rotate without moving the discovery entry:** When rotating an adapter registry or individual adapter topic, create the new topic, publish another pointer message on the layer above, and keep upstream entries unchanged so consumers always resolve the latest pointer before subscribing.
 
@@ -437,7 +437,7 @@ Consumers now resolve adapters through a three-hop pointer chain before reaching
 }
 ```
 
-When the registry rotates to a new category topic, publish another `register` message (same structure) inside the version pointer topic with the new `t_id`. To rotate or replace an individual adapter, create a fresh HCS-21 topic for that adapter, post a `register` message in the category topic with the same `adapter:<id>` memo and the new `t_id`, and optionally retire the previous adapter topic. Consumers stream the discovery topic → resolve the version pointer → read the category entry for each adapter → subscribe to its HCS-21 topic for declarations.
+When the registry rotates to a new category topic, publish another `register` message (same structure) inside the version pointer topic with the new `t_id`. To rotate or replace an individual adapter, create a fresh HCS-21 topic for that adapter, post a `register` message in the category topic with the same `adapter:<namespace>/<name>` memo and the new `t_id`, and optionally retire the previous adapter topic. Consumers stream the discovery topic → resolve the version pointer → read the category entry for each adapter → subscribe to its HCS-21 topic for declarations.
 
 ## Adapter Runtime Contract
 
@@ -684,7 +684,7 @@ sequenceDiagram
 7. `buildConsensusRecords()` outputs canonical JSON with stable ordering so payload hashes are reproducible across Petals.
 8. `verifyRecord()` rejects records whose entity identifier lacks a consensus entry or whose payload hash diverges from the stored value.
 9. `sourceFingerprint` values are deterministic across Petals for a given adapter and configuration, and consumers verify that fingerprints match across proofs so configuration mismatches are immediately detectable.
-10. Topic memos MUST follow the table above: discovery (`hcs-21:0:<ttl>:1:<meta>`) points to adapter category topics and MAY include category metadata; category topics (`hcs-21:0:<ttl>:2:<meta>`) list adapters with `m = "adapter:<id>"` and `t_id` = version pointer; version pointers use `hcs-2:1:<ttl>` with no metadata; declaration topics use `hcs-21:0:<ttl>:0:<manifest_pointer>`. Only discovery/category entries carry metadata, and only the latest message is relevant on version pointer topics.
+10. Topic memos MUST follow the table above: discovery (`hcs-21:0:<ttl>:1:<meta>`) points to adapter category topics and MAY include category metadata; category topics (`hcs-21:0:<ttl>:2:<meta>`) list adapters with `m = "adapter:<namespace>/<name>"` and `t_id =` version pointer; version pointers use `hcs-2:1:<ttl>` with the same memo slug and no metadata; declaration topics use `hcs-21:0:<ttl>:0:<manifest_pointer>`. Only discovery/category entries carry metadata, and only the latest message is relevant on version pointer topics.
 
 ## Security Considerations
 
