@@ -86,37 +86,62 @@ const registryTopicId = await client.createRegistryTopic({
 });
 ```
 
-## Create a Version Pointer Topic (HCS-2)
+## Create an Adapter Category Topic (HCS-21 indexed)
 
-Version pointer topics are HCS-2 **non-indexed** registries that always return the latest HCS-21 topic ID. They let you rotate adapter registries without rewriting the discovery list.
+Adapter categories organize adapters inside a discovery list. Each entry uses the slug `adapter:<namespace>/<name>` and points to a version pointer topic.
+
+```ts
+const categoryTopicId =
+  process.env.HCS21_CATEGORY_TOPIC_ID ||
+  (await client.createAdapterCategoryTopic({
+    ttl: 86400,
+    metaTopicId: process.env.HCS21_REGISTRY_METADATA_POINTER, // optional HCS-1 registry manifest
+    transactionMemo: 'adapter-registry:price:category',
+  }));
+
+await client.registerCategoryTopic({
+  discoveryTopicId: process.env.HCS21_DISCOVERY_TOPIC_ID!,
+  categoryTopicId,
+  metadata: process.env.HCS21_REGISTRY_METADATA_POINTER,
+  memo: 'adapter-registry:price',
+});
+```
+
+## Create a Version Pointer Topic (HCS-2 Non-Indexed)
+
+Version pointers are `hcs-2:1:<ttl>` topics. Only the latest message matters; it references the live HCS-21 declaration topic for that adapter or registry.
 
 ```ts
 const versionPointerTopicId =
   process.env.HCS21_VERSION_TOPIC_ID ||
-  (await client.createRegistryVersionTopic({
+  (await client.createAdapterVersionPointerTopic({
     ttl: 3600,
+    memoOverride: 'hcs-2:1:3600',
     transactionMemo: 'adapter-registry:pointer',
   }));
 ```
 
 ## Publish the Current Registry Topic
 
-Publish the active HCS-21 topic into the version pointer topic, then register the pointer in the global registry-of-registries.
+Publish the active HCS-21 topic into the version pointer, then list that pointer inside the category topic.
 
 ```ts
-await client.publishRegistryVersion({
+await client.publishVersionPointer({
   versionTopicId: versionPointerTopicId,
-  registryTopicId,
-  metadata: 'hcs://1/0.0.123456', // optional registry metadata pointer
-  memo: 'adapter-registry:price:v1',
+  declarationTopicId: registryTopicId,
+  memo: 'adapter:npm/@hashgraphonline/x402-bazaar-adapter',
 });
 
-await client.registerVersionTopic({
-  registryOfRegistriesTopicId: process.env.HCS21_ROR_TOPIC_ID!,
+await client.publishCategoryEntry({
+  categoryTopicId,
+  adapterId: 'npm/@hashgraphonline/x402-bazaar-adapter',
   versionTopicId: versionPointerTopicId,
-  memo: 'adapter-registry:price',
+  metadata: process.env.HCS21_REGISTRY_METADATA_POINTER,
 });
 ```
+
+- Rotating to a new registry topic only requires another `publishVersionPointer` call with the new `declarationTopicId`.
+- Category entries stay fixed; consumers always resolve the slug (`adapter:npm/...`) to discover the active pointer before streaming declarations.
 
 ## Publish Adapter Declarations
 
@@ -137,7 +162,7 @@ await client.publishDeclaration({
     manifestSequence: manifestPointer.manifestSequence,
     config: {
       account: '0.0.9876',
-      threshold: '2-of-3',
+      threshold: '2/3',
       ctopic: '0.0.700111',
       ttopic: '0.0.700112',
       stopic: '0.0.700113',
@@ -152,14 +177,15 @@ await client.publishDeclaration({
 Consumers (and automated publishers) should resolve the version pointer topic before streaming or publishing. The helper returns the active HCS-21 topic ID plus metadata.
 
 ```ts
-const pointer = await client.resolveRegistryPointer(versionPointerTopicId);
-// pointer.registryTopicId -> latest HCS-21 topic
+const pointer = await client.resolveVersionPointer(versionPointerTopicId);
+const activeRegistryTopicId =
+  process.env.HCS21_REGISTRY_TOPIC_ID || pointer.declarationTopicId;
 ```
 
 ## Stream Declarations
 
 ```ts
-const latest = await client.fetchDeclarations(registryTopicId, {
+const latest = await client.fetchDeclarations(activeRegistryTopicId, {
   limit: 10,
   order: 'desc',
 });

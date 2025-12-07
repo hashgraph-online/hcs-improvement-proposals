@@ -122,6 +122,8 @@ The `protocols` and `extras.sources` fields let dashboards filter adapters by su
 
 ## 2. Inscribe and declare (HCS‑21)
 
+Before publishing, resolve the adapter’s version pointer (or the registry-level pointer) so you don’t hardcode topic IDs:
+
 ```ts
 import fs from 'node:fs';
 import yaml from 'js-yaml';
@@ -143,8 +145,14 @@ async function publishPriceAdapter() {
     fileName: 'price-feed-adapter.yml',
   });
 
+  const pointer = await hcs21.resolveVersionPointer(
+    process.env.HCS21_VERSION_POINTER_TOPIC_ID!,
+  );
+  const registryTopicId =
+    process.env.HCS21_REGISTRY_TOPIC_ID || pointer.declarationTopicId;
+
   await hcs21.publishDeclaration({
-    topicId: process.env.HCS21_REGISTRY_TOPIC_ID!,
+    topicId: registryTopicId,
     declaration: {
       op: 'register',
       adapterId: 'npm/@hol-org/flora-price-adapter@0.5.0',
@@ -157,9 +165,9 @@ async function publishPriceAdapter() {
       },
       manifest: manifestPointer.pointer,
       manifestSequence: manifestPointer.manifestSequence,
-      flora: {
+      config: {
         account: process.env.FLORA_ACCOUNT_ID!,
-        threshold: '2-of-3',
+        threshold: '2/3',
         ctopic: process.env.FLORA_TOPIC_COMMUNICATION!,
         ttopic: process.env.FLORA_TOPIC_TRANSACTION!,
         stopic: process.env.FLORA_TOPIC_STATE!,

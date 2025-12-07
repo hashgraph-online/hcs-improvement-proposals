@@ -10,8 +10,8 @@ The HCS-21 module in the Standards SDK publishes **adapter declarations** for ap
 ## What’s Included
 
 - **`HCS21Client`** (Node.js) — creates registry topics, inscribes manifests or registry metadata (HCS-1), publishes adapter declarations, and streams them back via mirror nodes.
-- **Version pointer helpers** — manage the HCS-2 non-indexed topics that keep track of the latest adapter registry (`createRegistryVersionTopic`, `publishRegistryVersion`, `registerVersionTopic`, `resolveRegistryPointer`).
-- **`HCS21BrowserClient`** (WalletConnect) — lets dApps publish adapter declarations from a user wallet while reusing the same validation logic.
+- **Version pointer helpers** — manage the HCS-2 non-indexed topics that keep track of the latest adapter or registry topic (`createAdapterVersionPointerTopic`, `publishVersionPointer`, `publishCategoryEntry`, `resolveVersionPointer`).
+- **`HCS21BrowserClient`** (WalletConnect) — mirrors the server SDK from a browser wallet: create discovery/category/version-pointer topics, publish adapter declarations, and stream them without exposing operator keys.
 - **Transaction helpers** — `buildHcs21CreateRegistryTx` and `buildHcs21MessageTx` generate compliant memos and message payloads for custom pipelines.
 - **Typed schemas** — `AdapterDeclaration`, `AdapterManifest`, `RegistryMetadataRecord`, and validation helpers keep payloads inside the 1 KB limit and aligned with the updated HCS-21 standard.
 

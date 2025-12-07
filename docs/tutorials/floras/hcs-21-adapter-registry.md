@@ -132,11 +132,11 @@ The pointer is usually `hcs://1/<topicId>`. Keep both the pointer and `manifestS
 
 ## 3. Wire the registry topics
 
-Create (or reuse) the three layered topics before publishing adapters:
+Create (or reuse) the layered topics before publishing adapters:
 
 1. **Adapter registry topic (`type=0`)** — stores HCS-21 declarations.
-2. **Version pointer topic (HCS-2 non-indexed)** — exposes the latest registry topic ID.
-3. **Registry-of-registries entry** — registers the pointer topic in the global discovery list.
+2. **Adapter category topic (`type=2`)** — registered inside the discovery topic so consumers can find this registry.
+3. **Version pointer topic (HCS-2 non-indexed)** — exposes the latest declaration topic for each adapter slug.
 
 ```ts
 const registryTopicId =
@@ -148,30 +148,45 @@ const registryTopicId =
     transactionMemo: 'adapter-registry:price',
   }));
 
+const categoryTopicId =
+  process.env.HCS21_CATEGORY_TOPIC_ID ||
+  (await hcs21.createAdapterCategoryTopic({
+    ttl: 86400,
+    metaTopicId: process.env.HCS21_REGISTRY_METADATA_POINTER,
+    transactionMemo: 'adapter-registry:price:category',
+  }));
+
+await hcs21.registerCategoryTopic({
+  discoveryTopicId: process.env.HCS21_DISCOVERY_TOPIC_ID!,
+  categoryTopicId,
+  metadata: process.env.HCS21_REGISTRY_METADATA_POINTER,
+  memo: 'adapter-registry:price',
+});
+
 const versionTopicId =
   process.env.HCS21_VERSION_POINTER_TOPIC_ID ||
-  (await hcs21.createRegistryVersionTopic({
+  (await hcs21.createAdapterVersionPointerTopic({
     ttl: 86400,
+    memoOverride: 'hcs-2:1:86400',
     transactionMemo: 'adapter-registry:price:pointer',
   }));
 
-await hcs21.publishRegistryVersion({
+await hcs21.publishVersionPointer({
   versionTopicId,
-  registryTopicId,
-  metadata: manifestPointer.pointer,
-  memo: 'adapter-registry:price:v1',
+  declarationTopicId: registryTopicId,
+  memo: 'adapter:npm/@hol-org/example-adapter',
 });
 
-await hcs21.registerVersionTopic({
-  registryOfRegistriesTopicId: process.env.HCS21_ROR_TOPIC_ID!,
+await hcs21.publishCategoryEntry({
+  categoryTopicId,
+  adapterId: 'npm/@hol-org/example-adapter',
   versionTopicId,
-  metadata: manifestPointer.pointer,
-  memo: 'adapter-registry:price',
+  metadata: process.env.HCS21_REGISTRY_METADATA_POINTER,
 });
 ```
 
-- Rotating to a new registry topic only requires another `publishRegistryVersion` call with the new `registryTopicId`.
-- The registry-of-registries entry stays fixed; consumers always fetch the pointer topic before streaming declarations.
+- Rotating to a new registry topic only requires another `publishVersionPointer` call with the new `declarationTopicId`.
+- Discovery entries remain stable; consumers always resolve the slug (`adapter:npm/@hol-org/example-adapter`) to discover the pointer before streaming declarations.
 
 ---
 
@@ -180,11 +195,11 @@ await hcs21.registerVersionTopic({
 ```ts
 async function publishDeclaration() {
   const manifestPointer = await inscribeManifest();
-  const pointer = await hcs21.resolveRegistryPointer(
+  const pointer = await hcs21.resolveVersionPointer(
     process.env.HCS21_VERSION_POINTER_TOPIC_ID!,
   );
   const registryTopicId =
-    process.env.HCS21_REGISTRY_TOPIC_ID || pointer.registryTopicId;
+    process.env.HCS21_REGISTRY_TOPIC_ID || pointer.declarationTopicId;
 
   await hcs21.publishDeclaration({
     topicId: registryTopicId,
@@ -202,7 +217,7 @@ async function publishDeclaration() {
       manifestSequence: manifestPointer.manifestSequence,
       config: {
         account: process.env.FLORA_ACCOUNT_ID!,
-        threshold: '2-of-3',
+        threshold: '2/3',
         ctopic: process.env.FLORA_TOPIC_COMMUNICATION!,
         ttopic: process.env.FLORA_TOPIC_TRANSACTION!,
         stopic: process.env.FLORA_TOPIC_STATE!,
@@ -227,9 +242,11 @@ Front-ends can use `fetchDeclarations` to pull all adapters for a registry and f
 
 ```ts
 async function listAdapters() {
-  const { registryTopicId } = await hcs21.resolveRegistryPointer(
+  const pointer = await hcs21.resolveVersionPointer(
     process.env.HCS21_VERSION_POINTER_TOPIC_ID!,
   );
+  const registryTopicId =
+    process.env.HCS21_REGISTRY_TOPIC_ID || pointer.declarationTopicId;
   const messages = await hcs21.fetchDeclarations(
     registryTopicId,
     { limit: 100, order: 'desc' },
