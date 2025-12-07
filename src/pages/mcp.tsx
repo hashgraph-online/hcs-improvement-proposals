@@ -858,7 +858,7 @@ export default function MCPPage() {
                 transition={{ duration: 0.7, delay: 1.0, ease: [0.16, 1, 0.3, 1] }}
                 className='flex justify-center items-center py-4'
               >
-                <PrimaryButton href='/docs#getting-started/quick-start.md' variant='primary' umamiEvent='mcp-footer-get-started'>
+                <PrimaryButton href='/docs/registry-broker/getting-started/quick-start' variant='primary' umamiEvent='mcp-footer-get-started'>
                   <span className='flex items-center gap-3 text-xl px-6 py-2'>
                     <FaRocket className='w-7 h-7' />
                     Start with Hashnet MCP

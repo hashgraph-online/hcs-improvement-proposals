@@ -666,6 +666,39 @@ const sidebars: SidebarsConfig = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Floras & Petals',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/floras/petals',
+              label: 'Petals (HCS-15)',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/floras',
+              label: 'Floras (HCS-16) · Part 1',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/floras-price-oracle',
+              label: 'Floras (HCS-16) · Part 2',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/hcs-17-state-proofs',
+              label: 'HCS-17 State Proofs',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/hcs-21-adapter-registry',
+              label: 'HCS-21 Adapter Registry',
+            },
+          ],
+        },
       ],
     },
     'tooling',

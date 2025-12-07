@@ -232,6 +232,8 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 | topics.state          | string | Yes      | Topic ID that records Flora state commitments (see [HCS-17](/docs/standards/hcs-17) for hash formatting)        |
 | topics.custom         | array  | No       | Optional array of additional topic descriptors including `name`, `topicId`, and optional `description` fields   |
 | policies              | object | No       | Optional governance or automation policies expressed as implementation-defined key/value pairs                 |
+| flora.config          | object | No       | Optional Flora configuration metadata                                                                          |
+| flora.config.uri      | string | No       | Resolvable URI (HCS-1 HRL preferred; IPFS/Arweave/OCI/HTTPS with integrity accepted) to the Flora configuration file (`flora.yaml` / `appnet.yaml`) used with HCS-21 declarations |
 
 Flora profiles **shall** set their `type` field to `3` and reference the Flora account’s dedicated HCS topics in `inboundTopicId` and `outboundTopicId`. Additional nested fields may be introduced by future Flora revisions but must not violate this base contract.
 
@@ -259,6 +261,9 @@ Flora profiles **shall** set their `type` field to `3` and reference the Flora a
         "description": "Used for attestation of offchain software"
       }
     ]
+  },
+  "flora": {
+    "uri": "hcs://1/0.0.600123"
   },
   "policies": {
     "membershipChange": "2/3",

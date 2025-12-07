@@ -45,7 +45,7 @@ await browserClient.publishDeclaration({
     },
     manifest: 'hcs://1/0.0.4922770',
     manifestSequence: 15, // optional: pin a specific manifest message
-    flora: {
+    config: {
       account: '0.0.700001',
       threshold: '2-of-3',
       ctopic: '0.0.700101',

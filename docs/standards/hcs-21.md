@@ -31,7 +31,7 @@ sidebar_position: 21
     - [Registry metadata (HCS-1)](#registry-metadata-hcs-1)
     - [Manifest Fields](#manifest-fields)
     - [Example Manifest](#example-manifest)
-  - [Flora Adapter Set Declarations](#flora-adapter-set-declarations)
+  - [Flora Adapter Set Declarations (flora.yaml)](#flora-adapter-set-declarations-florayaml)
     - [YAML schema (minimum fields)](#yaml-schema-minimum-fields)
     - [Guidelines](#guidelines)
   - [Registry-of-Registries (HCS-2 Discovery)](#registry-of-registries-hcs-2-discovery)
@@ -131,7 +131,32 @@ flowchart TD
 
 | Memo Format                            | Description                 | Notes                                                                                                                                                                                                                                                                                                                                                                                       |
 | -------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hcs-21:<indexed>:<ttl>:<type>:<meta>` | Adapter-related topic memos | `indexed` is `0` (full history) or `1` (tail-only caches). `ttl` hints desired cache duration in seconds. `type` enums: `0` = adapter registry topic (holds HCS-21 declarations), `1` = registry-of-registries topic (lists adapter registries via HCS-2). `meta` (optional) is a pointer to registry metadata (HCS-1 topic ID preferred; IPFS/Arweave/HTTP/OCI allowed when short enough). |
+| `hcs-21:<indexed>:<ttl>:<type>:<meta>` | Adapter-related topic memos | `indexed` is `0` (full history) or `1` (tail-only caches). `ttl` hints desired cache duration in seconds. `type` enums: `0` = adapter registry topic (holds HCS-21 declarations), `1` = registry-of-registries topic that lists **version-pointer topics** (HCS-2) rather than direct adapter topics. `meta` (optional) is a pointer to registry metadata (HCS-1 topic ID preferred; IPFS/Arweave/HTTP/OCI allowed when short enough). |
+
+### Layered registry graph
+
+Adapter discovery now spans three deterministic layers so adapter registries can rotate topics without rewriting the global discovery list:
+
+1. **Registry-of-registries topic (HCS-2, indexed)** — memo `hcs-21:0:<ttl>:1:<meta>`. Each message lists a *version pointer topic* (`t_id`) and optional metadata pointer. This top-level list rarely changes.
+2. **Version pointer topic (HCS-2, non-indexed)** — memo `hcs-2:1:<ttl>`. Only the latest message matters. Each entry points to the active HCS-21 adapter registry topic (`t_id`) and MAY include a pointer to registry metadata. To rotate a registry, post another `register` message here. Reserve the `migrate` operation for the rare case where the pointer topic itself must move to a brand-new topic.
+3. **Adapter registry topic (HCS-21, indexed)** — memo `hcs-21:0:<ttl>:0:<meta>`. Stores the actual HCS-21 adapter declarations.
+
+Consumers follow the chain **registry-of-registries → version pointer topic → HCS-21 topic** before subscribing to declarations. Publishers rotate registries by creating a new HCS-21 topic, posting a new pointer to the version topic, and leaving the top-level entry untouched.
+
+```mermaid
+graph TD
+  ROR["Registry-of-registries\n(HCS-2 indexed)"]
+  PTR["Version pointer\n(HCS-2 non-indexed)"]
+  REG["Adapter registry\n(HCS-21 indexed)"]
+  DECL["Adapter declarations\n(HCS-21 messages ≤1 KB)"]
+
+  ROR -->|hcs-2 register| PTR
+  PTR -->|latest t_id| REG
+  REG --> DECL
+  DECL -->|manifest pointer| MANIFEST["HCS-1 manifest topic"]
+```
+
+The diagram shows how discovery flows through HCS-2 topics before hitting the HCS-21 declaration topic. Only the version pointer changes when a registry rotates; the registry-of-registries entry remains stable and consumers always read the pointer first.
 
 ## Message Format
 
@@ -310,7 +335,7 @@ consensus:
   hashing: sha384
 ```
 
-## Flora Adapter Set Declarations
+## Flora Adapter Set Declarations (flora.yaml)
 
 Every Flora publishes a configuration document (commonly `flora.yaml`) that declares which adapters must be active before a Petal can join consensus. This file references HCS-21 declarations so matchmaking services can verify compatibility automatically.
 
@@ -345,25 +370,41 @@ adapters:
 
 ## Registry-of-Registries (HCS-2 Discovery)
 
-To help consumers find adapter registries for a given domain, HCS-21 leverages [HCS-2](/docs/standards/hcs-2) to publish a **registry of registries**:
+Consumers now resolve adapters through a two-hop HCS-2 flow before reaching the HCS-21 topic. The pattern mirrors the profile registries shipped with the Registry Broker and keeps a verifiable version history for each adapter registry:
 
-- Create an HCS topic with memo `hcs-21:0:<ttl>:1:<meta>` to serve as the discovery topic (type `1`).
-- Post `hcs-2` `register` operations to that topic, where each entry points to an adapter registry topic (`t_id`) and, optionally, its metadata HCS-1 topic (`metadata` field in the HCS-2 payload).
-- Consumers stream the registry-of-registries topic to enumerate available adapter registries, then subscribe to the adapter registry topics (type `0`) to receive HCS-21 declarations.
+1. **Discovery topic (HCS-2 indexed):** Create an HCS topic with memo `hcs-21:0:<ttl>:1:<meta>`. This is the canonical registry-of-registries list and changes rarely.
+2. **Version pointer (HCS-2 non-indexed):** For each adapter registry category, create a `hcs-2:1:<ttl>` topic. Only the most recent message is relevant; it points to the active HCS-21 adapter topic.
+3. **Adapter registry topic (HCS-21 indexed):** Create the standard `hcs-21:0:<ttl>:0:<meta>` topic that stores the declarations.
+4. **Wire them together:**  
+   a. Post a `register` message to the version pointer topic with `t_id = <adapter_registry_topic_id>`. Use `migrate` only if the pointer topic itself must be replaced (for example, decommissioning the old topic entirely).  
+   b. Post a `register` message to the discovery topic with `t_id = <version_pointer_topic_id>`.
+5. **Rotate without moving the discovery entry:** When rotating an adapter registry topic, publish another message to the version pointer topic referencing the new HCS-21 topic. Consumers always read the latest pointer before subscribing, so the registry-of-registries entry remains stable.
 
-**HCS-2 payload for registry-of-registries entry**
+**HCS-2 payload in the registry-of-registries topic (points to the version pointer)**
+
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "<version_pointer_topic_id>",
+  "metadata": "hcs://1/<registry_metadata_topic>", // optional short pointer
+  "m": "adapter-registry:price-feeds"
+}
+```
+
+**HCS-2 payload inside the version pointer topic (points to the live HCS-21 topic)**
 
 ```json
 {
   "p": "hcs-2",
   "op": "register",
   "t_id": "<adapter_registry_topic_id>",
-  "metadata": "hcs://1/<metaTopicId>", // optional pointer to registry metadata
-  "m": "adapter-registry"
+  "metadata": "hcs://1/<registry_metadata_topic>",
+  "m": "adapter-registry:price-feeds:v1"
 }
 ```
 
-This approach mirrors the discovery pattern used in HCS-10, providing a structured way to bootstrap adapter discovery without hardcoding registry endpoints.
+When the registry rotates to a new topic, publish another `register` message (same structure) inside the version pointer topic with the new `t_id`. Use `migrate` only when the entire pointer topic is being retired and replaced. Consumers stream the discovery topic → resolve the version pointer topic → subscribe to the referenced HCS-21 topic for adapter declarations.
 
 ## Adapter Runtime Contract
 
@@ -546,8 +587,9 @@ sequenceDiagram
 ### Frontend registry resolution (discovery → manifest → adapter set)
 
 ```mermaid
-flowchart LR
+flowchart TB
   ROR["Registry-of-registries<br/>(HCS-2 on topic type=1)"]
+  PTR["Version pointer topic<br/>(HCS-2 non-indexed)"]
   REG["Adapter registry topic<br/>(HCS-21 declarations, type=0)"]
   DEC["Adapter declaration<br/>(manifest pointer + config.appnet_manifest)"]
   MAN["Adapter manifest<br/>(HCS-1/IPFS/Arweave/OCI/HTTPS)"]
@@ -557,7 +599,8 @@ flowchart LR
   FE["Frontend/indexer"]
 
   FE --> ROR
-  ROR --> REG
+  ROR --> PTR
+  PTR --> REG
   REG --> DEC
   DEC --> MAN
   DEC --> APPNET
@@ -571,12 +614,16 @@ sequenceDiagram
     participant Pub as Adapter Publisher
     participant H1 as HCS-1 (Manifest)
     participant H21 as HCS-21 Topic
+    participant Ptr as HCS-2 Version Topic
+    participant Ror as HCS-2 Registry List
     participant Flora as HCS-16 Flora
     participant Repo as Consensus Repository
 
     Pub->>Pub: Implement FloraAdapter + tests
     Pub->>H1: Inscribe adapter.yml (HCS-1)
     Pub->>H21: Submit adapter declaration (register)
+    Pub->>Ptr: Register latest HCS-21 topic (hcs-2)
+    Pub->>Ror: Register version topic (hcs-2)
     Flora->>H21: Stream declaration, verify payer
     Flora->>H1: Fetch manifest, verify digest/signature
     Flora->>Registry: Fetch package, verify integrity
@@ -604,7 +651,7 @@ sequenceDiagram
 7. `buildConsensusRecords()` outputs canonical JSON with stable ordering so payload hashes are reproducible across Petals.
 8. `verifyRecord()` rejects records whose entity identifier lacks a consensus entry or whose payload hash diverges from the stored value.
 9. `sourceFingerprint` values are deterministic across Petals for a given adapter and configuration, and consumers verify that fingerprints match across proofs so configuration mismatches are immediately detectable.
-10. Topic memos follow `hcs-21:<indexed>:<ttl>:<type>:<meta>` with `type` in `{0,1}` and, when present, `<meta>` pointing to HCS-1 registry metadata. Registry-of-registries topics MUST carry `type = 1` and use `hcs-2` messages to list adapter registry topics.
+10. Topic memos follow `hcs-21:<indexed>:<ttl>:<type>:<meta>` with `type` in `{0,1}` and, when present, `<meta>` pointing to HCS-1 registry metadata. Registry-of-registries topics MUST carry `type = 1`, point to HCS-2 **version pointer topics**, and those pointer topics MUST be non-indexed (`hcs-2:1:<ttl>`) so they only expose the latest adapter registry topic ID.
 
 ## Security Considerations
 

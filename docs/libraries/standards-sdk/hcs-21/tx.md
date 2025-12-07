@@ -57,7 +57,7 @@ const declaration: AdapterDeclaration = {
   },
   manifest: 'hcs://1/0.0.600777',
   manifest_sequence: 3, // optional pin
-  flora: {
+  config: {
     account: '0.0.9001',
     threshold: '2-of-3',
     ctopic: '0.0.9101',

@@ -1,0 +1,11 @@
+{
+  "label": "Floras & Petals",
+  "position": 3,
+  "collapsible": true,
+  "collapsed": false,
+  "link": {
+    "type": "generated-index",
+    "title": "Floras & Petals",
+    "description": "Set up Petals (HCS-15), Floras (HCS-16), and prepare for HCS-17/HCS-21 flows."
+  }
+}

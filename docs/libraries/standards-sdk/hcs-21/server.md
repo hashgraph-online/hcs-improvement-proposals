@@ -86,6 +86,38 @@ const registryTopicId = await client.createRegistryTopic({
 });
 ```
 
+## Create a Version Pointer Topic (HCS-2)
+
+Version pointer topics are HCS-2 **non-indexed** registries that always return the latest HCS-21 topic ID. They let you rotate adapter registries without rewriting the discovery list.
+
+```ts
+const versionPointerTopicId =
+  process.env.HCS21_VERSION_TOPIC_ID ||
+  (await client.createRegistryVersionTopic({
+    ttl: 3600,
+    transactionMemo: 'adapter-registry:pointer',
+  }));
+```
+
+## Publish the Current Registry Topic
+
+Publish the active HCS-21 topic into the version pointer topic, then register the pointer in the global registry-of-registries.
+
+```ts
+await client.publishRegistryVersion({
+  versionTopicId: versionPointerTopicId,
+  registryTopicId,
+  metadata: 'hcs://1/0.0.123456', // optional registry metadata pointer
+  memo: 'adapter-registry:price:v1',
+});
+
+await client.registerVersionTopic({
+  registryOfRegistriesTopicId: process.env.HCS21_ROR_TOPIC_ID!,
+  versionTopicId: versionPointerTopicId,
+  memo: 'adapter-registry:price',
+});
+```
+
 ## Publish Adapter Declarations
 
 ```ts
@@ -103,7 +135,7 @@ await client.publishDeclaration({
     },
     manifest: manifestPointer.pointer,
     manifestSequence: manifestPointer.manifestSequence,
-    flora: {
+    config: {
       account: '0.0.9876',
       threshold: '2-of-3',
       ctopic: '0.0.700111',
@@ -113,6 +145,15 @@ await client.publishDeclaration({
     stateModel: 'hcs-21.entity-consensus@1',
   },
 });
+```
+
+## Resolve the Active Registry Topic
+
+Consumers (and automated publishers) should resolve the version pointer topic before streaming or publishing. The helper returns the active HCS-21 topic ID plus metadata.
+
+```ts
+const pointer = await client.resolveRegistryPointer(versionPointerTopicId);
+// pointer.registryTopicId -> latest HCS-21 topic
 ```
 
 ## Stream Declarations
