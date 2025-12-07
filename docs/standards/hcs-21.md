@@ -12,9 +12,9 @@ sidebar_position: 21
 ### Table of Contents
 
 - [HCS-21 Standard: Adapter Registry](#hcs-21-standard-adapter-registry)
-    - [Status: Draft](#status-draft)
-    - [Version: 2.0](#version-20)
-    - [Table of Contents](#table-of-contents)
+  - [Status: Draft](#status-draft)
+  - [Version: 2.0](#version-20)
+  - [Table of Contents](#table-of-contents)
   - [Authors](#authors)
   - [Abstract](#abstract)
   - [Motivation](#motivation)
@@ -130,9 +130,25 @@ flowchart TD
 
 ## Topic System
 
-| Memo Format                            | Description                 | Notes                                                                                                                                                                                                                                                                                                                                                                                                                             |
-| -------------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hcs-21:<indexed>:<ttl>:<type>:<meta>` | Adapter-related topic memos | `indexed` is `0` (full history) or `1` (tail-only caches). `ttl` hints desired cache duration in seconds. `type` enums: `0` = adapter declaration topic (per adapter HCS-21 stream), `1` = registry-of-registries discovery pointer (HCS-2 indexed), `2` = adapter category index topic (HCS-2 indexed list that links adapter IDs to their dedicated declaration topics). `meta` (optional) is a short pointer to registry metadata (`hcs://1/<topic>`, IPFS CID, OCI digest, etc.). |
+| Topic                            | Protocol / Memo                       | Purpose                                                                                      | Notes                                                                                                                                                                              |
+| -------------------------------- | ------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Registry-of-registries           | `hcs-21:0:<ttl>:1:<category_meta>`    | Lists adapter categories. Each message sets `t_id = <adapter_category_topic_id>`.            | `category_meta` SHOULD be an HCS-1 pointer describing the category (name, entity type, docs).                                                                                      |
+| Adapter category index           | `hcs-21:0:<ttl>:2:<category_meta>`    | Enumerates adapters within the category.                                                     | Each message MUST use `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`. `category_meta` matches the pointer published in the discovery entry.          |
+| Adapter version pointer          | `hcs-2:1:<ttl>`                       | Tracks the active adapter declaration topic for a single adapter (latest message only).      | Messages SHOULD set `m = "adapter:<adapter_id>"`. No `metadata` field is required because the adapter manifest pointer lives in the HCS-21 declaration topic referenced by `t_id`. |
+| Adapter declaration topic        | `hcs-21:0:<ttl>:0:<manifest_pointer>` | Stores HCS-21 `register`, `update`, `delete` payloads for a specific adapter version stream. | `manifest_pointer` SHOULD reference the adapter manifest (`hcs://1/<topic>` preferred).                                                                                            |
+| Adapter manifest topic / pointer | `hcs://1/<topic>` (HCS-1)             | Immutable adapter manifest (YAML/JSON).                                                      | Consumer resolves `hcs://1/<topic>` to download manifest. Alternative immutable pointers (IPFS, Arweave, OCI, HTTPS with SRI) are allowed when they fit Hedera memo limits.        |
+
+### Topic memo formats
+
+| Memo                                  | Scope                                                     | Notes                                                                                                |
+| ------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `hcs-21:0:<ttl>:1:<meta>`             | Registry-of-registries (HCS-2 indexed)                    | `meta` SHOULD point to category metadata (`hcs://1/<topic>` or IPFS/Arweave/OCI/HTTPS with SRI).     |
+| `hcs-21:0:<ttl>:2:<meta>`             | Adapter category index (HCS-2 indexed)                    | `meta` matches the discovery entry. Messages use `m = "adapter:<adapter_id>"`, `t_id = version ptr`. |
+| `hcs-2:1:<ttl>`                       | Adapter version pointer (HCS-2 non-indexed)               | Latest message only; use `m = "adapter:<adapter_id>"`. No metadata field is used on these messages.  |
+| `hcs-21:0:<ttl>:0:<manifest_pointer>` | Adapter declaration topic (HCS-21 indexed)                | `manifest_pointer` SHOULD be `hcs://1/<topic>`; other immutable pointers allowed when memo fits.     |
+| `hcs://1/<topic>`                     | Adapter or registry metadata manifest (HCS-1 inscription) | Contains YAML/JSON metadata; referenced from memos above.                                            |
+
+Only discovery and category entries use the `<meta>` slot (to describe the category). Version pointer messages omit metadata entirely; adapter declaration topics carry the manifest pointer in their memo, so pointer messages stay minimal.
 
 ### Layered registry graph
 
@@ -249,35 +265,35 @@ Adapter registries SHOULD publish a lightweight HCS-1 document that describes th
 
 ### Manifest Fields
 
-| Section                      | Required         | Description                                                                                                                                                        |
-| ---------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `meta.spec_version`          | Yes              | Version of this manifest schema (e.g., `1.0`). Enables backward compatibility similar to Dify’s manifest versioning [3].                                           |
-| `meta.adapter_version`       | Yes              | SemVer of the adapter package. MUST match the package version referenced in the declaration.                                                                       |
-| `meta.minimum_flora_version` | No               | Compatibility hint for Flora/appnet implementations. Omit if not applicable.                                                                                       |
-| `meta.generated`             | Yes              | ISO timestamp when the manifest was produced.                                                                                                                      |
-| `adapter.name`               | Yes              | Human-readable name.                                                                                                                                               |
-| `adapter.id`                 | Yes              | Matches `adapter_id` in the HCS-21 message.                                                                                                                        |
-| `adapter.maintainers`        | Yes              | Array of `{name, contact}` objects.                                                                                                                                |
-| `adapter.license`            | Yes              | SPDX identifier or `SEE LICENSE IN ...`.                                                                                                                           |
-| `package.registry`           | Yes              | Registry identifier or scheme (e.g., `npm`, `pypi`, `crate`, `maven`, `oci`, `ipfs`, `https`).                                                                     |
-| `package.dist_tag`           | No               | Optional channel name understood by the registry (e.g., npm `latest`, PyPI `rc`, Maven `-SNAPSHOT`).                                                               |
-| `package.artifacts`          | Yes              | Array of `{url, digest, signature}` entries for tarballs, wheels, crates, JARs, WASM bundles, OCI layers, etc.                                                     |
-| `runtime.platforms`          | Yes              | Array describing supported runtime families (e.g., `node>=20`, `python>=3.11`, `wasm32-wasi`, `rust>=1.79`, `oci:image`).                                          |
-| `runtime.primary`            | Yes              | Name of the reference platform used by the publisher (e.g., `node`, `python`, `wasm`).                                                                             |
-| `runtime.entry`              | Yes              | Module path exported by the package (e.g., `dist/index.js`).                                                                                                       |
-| `runtime.dependencies`       | No               | Peer dependencies (e.g., `@hashgraphonline/standards-sdk`).                                                                                                        |
-| `runtime.env`                | No               | Required environment variables (names only; no secrets).                                                                                                           |
-| `capabilities.discovery`              | Yes      | Boolean indicating if the adapter discovers new entities.                                                                                                          |
-| `capabilities.discovery_tags`         | No       | Optional tags describing discovery domains (e.g., `agents`, `datasets`, `marketplaces`) for UI filtering/search.                                                   |
-| `capabilities.communication`          | Yes      | Boolean for chat/routing support.                                                                                                                                  |
-| `capabilities.communication_channels` | No       | Optional list of supported channels/transports (e.g., `text`, `voice`, `x402`, `webrtc`, `grpc`).                                                                  |
-| `capabilities.protocols`              | Yes      | Array of protocol identifiers handled.                                                                                                                             |
-| `capabilities.extras`                 | No       | Free-form key/value map for additional capability metadata (e.g., rate limits, locales, auth modes) that frontends can index.                                      |
-| `consensus.state_model`      | No (recommended) | Name of the canonicalization profile (e.g., `hcs-21.agent-consensus@1`) matching the declaration’s `state_model`.                                                  |
-| `consensus.profile_uri`      | No (recommended) | Resolvable pointer (HCS-1/IPFS/Arweave/HTTPS/OCI) to the profile document containing canonicalization rules **and a JSON Schema or equivalent** for payload shape. |
-| `consensus.entity_schema`    | No (recommended) | Identifier describing the payload schema hashed under [HCS-17](/docs/standards/hcs-17); SHOULD match or embed the schema referenced by `profile_uri`.              |
-| `consensus.required_fields`  | Yes              | Array of field names each Petal MUST supply in consensus payloads.                                                                                                 |
-| `consensus.hashing`          | Yes              | Hash algorithm (MUST be `sha384`).                                                                                                                                 |
+| Section                               | Required         | Description                                                                                                                                                        |
+| ------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `meta.spec_version`                   | Yes              | Version of this manifest schema (e.g., `1.0`). Enables backward compatibility similar to Dify’s manifest versioning [3].                                           |
+| `meta.adapter_version`                | Yes              | SemVer of the adapter package. MUST match the package version referenced in the declaration.                                                                       |
+| `meta.minimum_flora_version`          | No               | Compatibility hint for Flora/appnet implementations. Omit if not applicable.                                                                                       |
+| `meta.generated`                      | Yes              | ISO timestamp when the manifest was produced.                                                                                                                      |
+| `adapter.name`                        | Yes              | Human-readable name.                                                                                                                                               |
+| `adapter.id`                          | Yes              | Matches `adapter_id` in the HCS-21 message.                                                                                                                        |
+| `adapter.maintainers`                 | Yes              | Array of `{name, contact}` objects.                                                                                                                                |
+| `adapter.license`                     | Yes              | SPDX identifier or `SEE LICENSE IN ...`.                                                                                                                           |
+| `package.registry`                    | Yes              | Registry identifier or scheme (e.g., `npm`, `pypi`, `crate`, `maven`, `oci`, `ipfs`, `https`).                                                                     |
+| `package.dist_tag`                    | No               | Optional channel name understood by the registry (e.g., npm `latest`, PyPI `rc`, Maven `-SNAPSHOT`).                                                               |
+| `package.artifacts`                   | Yes              | Array of `{url, digest, signature}` entries for tarballs, wheels, crates, JARs, WASM bundles, OCI layers, etc.                                                     |
+| `runtime.platforms`                   | Yes              | Array describing supported runtime families (e.g., `node>=20`, `python>=3.11`, `wasm32-wasi`, `rust>=1.79`, `oci:image`).                                          |
+| `runtime.primary`                     | Yes              | Name of the reference platform used by the publisher (e.g., `node`, `python`, `wasm`).                                                                             |
+| `runtime.entry`                       | Yes              | Module path exported by the package (e.g., `dist/index.js`).                                                                                                       |
+| `runtime.dependencies`                | No               | Peer dependencies (e.g., `@hashgraphonline/standards-sdk`).                                                                                                        |
+| `runtime.env`                         | No               | Required environment variables (names only; no secrets).                                                                                                           |
+| `capabilities.discovery`              | Yes              | Boolean indicating if the adapter discovers new entities.                                                                                                          |
+| `capabilities.discovery_tags`         | No               | Optional tags describing discovery domains (e.g., `agents`, `datasets`, `marketplaces`) for UI filtering/search.                                                   |
+| `capabilities.communication`          | Yes              | Boolean for chat/routing support.                                                                                                                                  |
+| `capabilities.communication_channels` | No               | Optional list of supported channels/transports (e.g., `text`, `voice`, `x402`, `webrtc`, `grpc`).                                                                  |
+| `capabilities.protocols`              | Yes              | Array of protocol identifiers handled.                                                                                                                             |
+| `capabilities.extras`                 | No               | Free-form key/value map for additional capability metadata (e.g., rate limits, locales, auth modes) that frontends can index.                                      |
+| `consensus.state_model`               | No (recommended) | Name of the canonicalization profile (e.g., `hcs-21.agent-consensus@1`) matching the declaration’s `state_model`.                                                  |
+| `consensus.profile_uri`               | No (recommended) | Resolvable pointer (HCS-1/IPFS/Arweave/HTTPS/OCI) to the profile document containing canonicalization rules **and a JSON Schema or equivalent** for payload shape. |
+| `consensus.entity_schema`             | No (recommended) | Identifier describing the payload schema hashed under [HCS-17](/docs/standards/hcs-17); SHOULD match or embed the schema referenced by `profile_uri`.              |
+| `consensus.required_fields`           | Yes              | Array of field names each Petal MUST supply in consensus payloads.                                                                                                 |
+| `consensus.hashing`                   | Yes              | Hash algorithm (MUST be `sha384`).                                                                                                                                 |
 
 ### Example Manifest
 
@@ -375,26 +391,26 @@ adapters:
 
 ## Registry-of-Registries (HCS-2 Discovery)
 
-Consumers now resolve adapters through a three-hop pointer chain before reaching the per-adapter HCS-21 topic. The pattern mirrors the profile registries shipped with the Registry Broker and keeps a verifiable version history for every layer:
+Consumers now resolve adapters through a three-hop pointer chain before reaching the per-adapter HCS-21 topic. This layered pattern mirrors other HCS standards and keeps a verifiable version history for every layer. Metadata appears only in discovery/category memos; pointer messages themselves stay minimal:
 
 1. **Discovery topic (HCS-2 indexed):** Create an HCS topic with memo `hcs-21:0:<ttl>:1:<meta>`. This is the canonical registry-of-registries list and changes rarely. Each entry points directly to an adapter category topic via `t_id`.
-2. **Adapter category topic (HCS-2 indexed):** Create a `hcs-21:0:<ttl>:2:<meta>` topic per registry category. Each message represents a single adapter and stores `m = "adapter:<adapter_id>"`, optional metadata (for example, `hcs://1/<manifest_topic>`), and `t_id = <adapter_version_pointer_topic_id>`.
-3. **Adapter version pointer (HCS-2 non-indexed):** For every adapter, create a `hcs-2:1:<ttl>` topic. Only the latest message is relevant; it points to the active HCS-21 declaration topic for that adapter via `t_id`.
+2. **Adapter category topic (HCS-2 indexed):** Create a `hcs-21:0:<ttl>:2:<meta>` topic per registry category. Each message represents a single adapter and stores `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`. Do not add metadata fields here; the topic memo already carries the category pointer.
+3. **Adapter version pointer (HCS-2 non-indexed):** For every adapter, create a `hcs-2:1:<ttl>` topic. Only the latest message is relevant; it points to the active HCS-21 declaration topic for that adapter via `t_id`. These pointer messages do not include metadata.
 4. **Adapter declaration topic (HCS-21 indexed):** Create `hcs-21:0:<ttl>:0:<meta>` topics per adapter. These topics carry the actual HCS-21 declarations.
 5. **Wire them together:**  
    a. Post a `register` message to the discovery topic with `t_id = <adapter_category_topic_id>`.  
    b. Post `register` messages to each category topic with `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`.  
-   c. Post a `register` message to each adapter version pointer topic with `t_id = <adapter_declaration_topic_id>`. Use `migrate` only if a pointer topic must be replaced.  
+   c. Post a `register` message to each adapter version pointer topic with `t_id = <adapter_declaration_topic_id>`. Use `migrate` only if a pointer topic must be replaced.
 6. **Rotate without moving the discovery entry:** When rotating an adapter registry or individual adapter topic, create the new topic, publish another pointer message on the layer above, and keep upstream entries unchanged so consumers always resolve the latest pointer before subscribing.
 
-**HCS-2 payload in the registry-of-registries topic (points to the version pointer)**
+**HCS-2 payload in the registry-of-registries topic (points to the adapter category)**
 
 ```json
 {
   "p": "hcs-2",
   "op": "register",
   "t_id": "<adapter_category_topic_id>",
-  "metadata": "hcs://1/<registry_metadata_topic>", // optional short pointer
+  "metadata": "hcs://1/<category_metadata_topic>", // optional short pointer describing this category
   "m": "adapter-registry:price-feeds"
 }
 ```
@@ -406,8 +422,7 @@ Consumers now resolve adapters through a three-hop pointer chain before reaching
   "p": "hcs-2",
   "op": "register",
   "t_id": "<adapter_version_pointer_topic_id>",
-  "metadata": "hcs://1/<registry_metadata_topic>",
-  "m": "adapter:npm/@hol-org/adapter-binance@0.1.2"
+  "m": "adapter:npm/@hol-org/adapter-binance"
 }
 ```
 
@@ -418,8 +433,7 @@ Consumers now resolve adapters through a three-hop pointer chain before reaching
   "p": "hcs-2",
   "op": "register",
   "t_id": "<adapter_declaration_topic_id>",
-  "metadata": "hcs://1/<adapter_manifest_topic>",
-  "m": "adapter:npm/@hol-org/adapter-binance@0.1.2"
+  "m": "adapter:npm/@hol-org/adapter-binance"
 }
 ```
 
@@ -670,7 +684,7 @@ sequenceDiagram
 7. `buildConsensusRecords()` outputs canonical JSON with stable ordering so payload hashes are reproducible across Petals.
 8. `verifyRecord()` rejects records whose entity identifier lacks a consensus entry or whose payload hash diverges from the stored value.
 9. `sourceFingerprint` values are deterministic across Petals for a given adapter and configuration, and consumers verify that fingerprints match across proofs so configuration mismatches are immediately detectable.
-10. Topic memos follow `hcs-21:<indexed>:<ttl>:<type>:<meta>` with `type` in `{0,1}` and, when present, `<meta>` pointing to HCS-1 registry metadata. Registry-of-registries topics MUST carry `type = 1`, point to HCS-2 **version pointer topics**, and those pointer topics MUST be non-indexed (`hcs-2:1:<ttl>`) so they only expose the latest adapter registry topic ID.
+10. Topic memos MUST follow the table above: discovery (`hcs-21:0:<ttl>:1:<meta>`) points to adapter category topics and MAY include category metadata; category topics (`hcs-21:0:<ttl>:2:<meta>`) list adapters with `m = "adapter:<id>"` and `t_id` = version pointer; version pointers use `hcs-2:1:<ttl>` with no metadata; declaration topics use `hcs-21:0:<ttl>:0:<manifest_pointer>`. Only discovery/category entries carry metadata, and only the latest message is relevant on version pointer topics.
 
 ## Security Considerations
 
