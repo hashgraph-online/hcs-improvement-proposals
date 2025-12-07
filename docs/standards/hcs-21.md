@@ -23,6 +23,7 @@ sidebar_position: 21
   - [Architecture Overview](#architecture-overview)
   - [Adapter Lifecycle](#adapter-lifecycle)
   - [Topic System](#topic-system)
+    - [Layered registry graph](#layered-registry-graph)
   - [Message Format](#message-format)
     - [Adapter Declaration Schema](#adapter-declaration-schema)
       - [Operations](#operations)
@@ -129,31 +130,35 @@ flowchart TD
 
 ## Topic System
 
-| Memo Format                            | Description                 | Notes                                                                                                                                                                                                                                                                                                                                                                                       |
-| -------------------------------------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `hcs-21:<indexed>:<ttl>:<type>:<meta>` | Adapter-related topic memos | `indexed` is `0` (full history) or `1` (tail-only caches). `ttl` hints desired cache duration in seconds. `type` enums: `0` = adapter registry topic (holds HCS-21 declarations), `1` = registry-of-registries topic that lists **version-pointer topics** (HCS-2) rather than direct adapter topics. `meta` (optional) is a pointer to registry metadata (HCS-1 topic ID preferred; IPFS/Arweave/HTTP/OCI allowed when short enough). |
+| Memo Format                            | Description                 | Notes                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `hcs-21:<indexed>:<ttl>:<type>:<meta>` | Adapter-related topic memos | `indexed` is `0` (full history) or `1` (tail-only caches). `ttl` hints desired cache duration in seconds. `type` enums: `0` = adapter declaration topic (per adapter HCS-21 stream), `1` = registry-of-registries discovery pointer (HCS-2 indexed), `2` = adapter category index topic (HCS-2 indexed list that links adapter IDs to their dedicated declaration topics). `meta` (optional) is a short pointer to registry metadata (`hcs://1/<topic>`, IPFS CID, OCI digest, etc.). |
 
 ### Layered registry graph
 
-Adapter discovery now spans three deterministic layers so adapter registries can rotate topics without rewriting the global discovery list:
+Adapter discovery now spans **four** deterministic layers so adapter registries can rotate topics or adapter releases without rewriting the global discovery list:
 
-1. **Registry-of-registries topic (HCS-2, indexed)** — memo `hcs-21:0:<ttl>:1:<meta>`. Each message lists a *version pointer topic* (`t_id`) and optional metadata pointer. This top-level list rarely changes.
-2. **Version pointer topic (HCS-2, non-indexed)** — memo `hcs-2:1:<ttl>`. Only the latest message matters. Each entry points to the active HCS-21 adapter registry topic (`t_id`) and MAY include a pointer to registry metadata. To rotate a registry, post another `register` message here. Reserve the `migrate` operation for the rare case where the pointer topic itself must move to a brand-new topic.
-3. **Adapter registry topic (HCS-21, indexed)** — memo `hcs-21:0:<ttl>:0:<meta>`. Stores the actual HCS-21 adapter declarations.
+1. **Registry-of-registries topic (`hcs-21:0:<ttl>:1:<meta>`)** — HCS-2 indexed list of adapter category topics and metadata pointers. Rarely changes.
+2. **Adapter category topic (`hcs-21:0:<ttl>:2:<meta>`)** — HCS-2 indexed registry listing adapters inside that category. Each message sets `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>` plus optional metadata (for example, manifest pointer, docs).
+3. **Adapter version pointer topic (`hcs-2:1:<ttl>`)** — HCS-2 non-indexed topic dedicated to a single adapter. Only the most recent message matters and its `t_id` points at the active HCS-21 declaration topic for that adapter.
+4. **Adapter declaration topic (`hcs-21:0:<ttl>:0:<meta>`)** — per-adapter HCS-21 topics carrying the `register/update/delete` payloads.
 
-Consumers follow the chain **registry-of-registries → version pointer topic → HCS-21 topic** before subscribing to declarations. Publishers rotate registries by creating a new HCS-21 topic, posting a new pointer to the version topic, and leaving the top-level entry untouched.
+Consumers follow the chain **registry-of-registries → category entry → version pointer → adapter declaration topic** before reading declarations. Publishers rotate registries or adapters by creating fresh topics, posting new pointers at the layer above, and leaving upstream entries untouched.
 
 ```mermaid
 graph TD
-  ROR["Registry-of-registries\n(HCS-2 indexed)"]
-  PTR["Version pointer\n(HCS-2 non-indexed)"]
-  REG["Adapter registry\n(HCS-21 indexed)"]
-  DECL["Adapter declarations\n(HCS-21 messages ≤1 KB)"]
+  ROR["Registry-of-registries(HCS-2 indexed)"]
+  CAT["Adapter category(HCS-2 indexed)"]
+  PTR["Adapter version pointer(HCS-2 non-indexed)"]
+  ADPT["Adapter declaration(HCS-21 indexed)"]
+  DECL["HCS-21 payloads(register/update/delete)"]
+  MANIFEST["HCS-1 manifest topic"]
 
-  ROR -->|hcs-2 register| PTR
-  PTR -->|latest t_id| REG
-  REG --> DECL
-  DECL -->|manifest pointer| MANIFEST["HCS-1 manifest topic"]
+  ROR -->|hcs-2 register| CAT
+  CAT -->|m=adapter:<id> t_id = version pointer| PTR
+  PTR -->|latest t_id| ADPT
+  ADPT --> DECL
+  DECL -->|manifest pointer| MANIFEST
 ```
 
 The diagram shows how discovery flows through HCS-2 topics before hitting the HCS-21 declaration topic. Only the version pointer changes when a registry rotates; the registry-of-registries entry remains stable and consumers always read the pointer first.
@@ -370,15 +375,17 @@ adapters:
 
 ## Registry-of-Registries (HCS-2 Discovery)
 
-Consumers now resolve adapters through a two-hop HCS-2 flow before reaching the HCS-21 topic. The pattern mirrors the profile registries shipped with the Registry Broker and keeps a verifiable version history for each adapter registry:
+Consumers now resolve adapters through a three-hop pointer chain before reaching the per-adapter HCS-21 topic. The pattern mirrors the profile registries shipped with the Registry Broker and keeps a verifiable version history for every layer:
 
-1. **Discovery topic (HCS-2 indexed):** Create an HCS topic with memo `hcs-21:0:<ttl>:1:<meta>`. This is the canonical registry-of-registries list and changes rarely.
-2. **Version pointer (HCS-2 non-indexed):** For each adapter registry category, create a `hcs-2:1:<ttl>` topic. Only the most recent message is relevant; it points to the active HCS-21 adapter topic.
-3. **Adapter registry topic (HCS-21 indexed):** Create the standard `hcs-21:0:<ttl>:0:<meta>` topic that stores the declarations.
-4. **Wire them together:**  
-   a. Post a `register` message to the version pointer topic with `t_id = <adapter_registry_topic_id>`. Use `migrate` only if the pointer topic itself must be replaced (for example, decommissioning the old topic entirely).  
-   b. Post a `register` message to the discovery topic with `t_id = <version_pointer_topic_id>`.
-5. **Rotate without moving the discovery entry:** When rotating an adapter registry topic, publish another message to the version pointer topic referencing the new HCS-21 topic. Consumers always read the latest pointer before subscribing, so the registry-of-registries entry remains stable.
+1. **Discovery topic (HCS-2 indexed):** Create an HCS topic with memo `hcs-21:0:<ttl>:1:<meta>`. This is the canonical registry-of-registries list and changes rarely. Each entry points directly to an adapter category topic via `t_id`.
+2. **Adapter category topic (HCS-2 indexed):** Create a `hcs-21:0:<ttl>:2:<meta>` topic per registry category. Each message represents a single adapter and stores `m = "adapter:<adapter_id>"`, optional metadata (for example, `hcs://1/<manifest_topic>`), and `t_id = <adapter_version_pointer_topic_id>`.
+3. **Adapter version pointer (HCS-2 non-indexed):** For every adapter, create a `hcs-2:1:<ttl>` topic. Only the latest message is relevant; it points to the active HCS-21 declaration topic for that adapter via `t_id`.
+4. **Adapter declaration topic (HCS-21 indexed):** Create `hcs-21:0:<ttl>:0:<meta>` topics per adapter. These topics carry the actual HCS-21 declarations.
+5. **Wire them together:**  
+   a. Post a `register` message to the discovery topic with `t_id = <adapter_category_topic_id>`.  
+   b. Post `register` messages to each category topic with `m = "adapter:<adapter_id>"` and `t_id = <adapter_version_pointer_topic_id>`.  
+   c. Post a `register` message to each adapter version pointer topic with `t_id = <adapter_declaration_topic_id>`. Use `migrate` only if a pointer topic must be replaced.  
+6. **Rotate without moving the discovery entry:** When rotating an adapter registry or individual adapter topic, create the new topic, publish another pointer message on the layer above, and keep upstream entries unchanged so consumers always resolve the latest pointer before subscribing.
 
 **HCS-2 payload in the registry-of-registries topic (points to the version pointer)**
 
@@ -386,25 +393,37 @@ Consumers now resolve adapters through a two-hop HCS-2 flow before reaching the 
 {
   "p": "hcs-2",
   "op": "register",
-  "t_id": "<version_pointer_topic_id>",
+  "t_id": "<adapter_category_topic_id>",
   "metadata": "hcs://1/<registry_metadata_topic>", // optional short pointer
   "m": "adapter-registry:price-feeds"
 }
 ```
 
-**HCS-2 payload inside the version pointer topic (points to the live HCS-21 topic)**
+**HCS-2 payload inside the adapter category topic (points to the adapter version pointer)**
 
 ```json
 {
   "p": "hcs-2",
   "op": "register",
-  "t_id": "<adapter_registry_topic_id>",
+  "t_id": "<adapter_version_pointer_topic_id>",
   "metadata": "hcs://1/<registry_metadata_topic>",
-  "m": "adapter-registry:price-feeds:v1"
+  "m": "adapter:npm/@hol-org/adapter-binance@0.1.2"
 }
 ```
 
-When the registry rotates to a new topic, publish another `register` message (same structure) inside the version pointer topic with the new `t_id`. Use `migrate` only when the entire pointer topic is being retired and replaced. Consumers stream the discovery topic → resolve the version pointer topic → subscribe to the referenced HCS-21 topic for adapter declarations.
+**HCS-2 payload inside the adapter version pointer topic (points to the live HCS-21 topic)**
+
+```json
+{
+  "p": "hcs-2",
+  "op": "register",
+  "t_id": "<adapter_declaration_topic_id>",
+  "metadata": "hcs://1/<adapter_manifest_topic>",
+  "m": "adapter:npm/@hol-org/adapter-binance@0.1.2"
+}
+```
+
+When the registry rotates to a new category topic, publish another `register` message (same structure) inside the version pointer topic with the new `t_id`. To rotate or replace an individual adapter, create a fresh HCS-21 topic for that adapter, post a `register` message in the category topic with the same `adapter:<id>` memo and the new `t_id`, and optionally retire the previous adapter topic. Consumers stream the discovery topic → resolve the version pointer → read the category entry for each adapter → subscribe to its HCS-21 topic for declarations.
 
 ## Adapter Runtime Contract
 
