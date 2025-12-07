@@ -47,7 +47,7 @@ await browserClient.publishDeclaration({
     manifestSequence: 15, // optional: pin a specific manifest message
     config: {
       account: '0.0.700001',
-      threshold: '2-of-3',
+      threshold: '2/3', // express as t/n to mirror Flora key lists
       ctopic: '0.0.700101',
       ttopic: '0.0.700102',
       stopic: '0.0.700103',

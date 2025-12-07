@@ -46,8 +46,8 @@ flowchart LR
 
 ## Key Capabilities
 
-- Adapter declarations include `adapter_id`, `entity`, `package` integrity, manifest pointer (`hcs://1/<topic>`), optional `manifest_sequence` to pin a specific message, appnet/Flora thresholds/topics via `config`, and `state_model`.
-- Manifest and registry metadata helpers enforce the HCS-1 pointer format (`hcs://1/<topic>`).
+- Adapter declarations include `adapter_id`, `entity`, `package` integrity, manifest pointer (`hcs://1/<topic>` or another immutable URI such as `ipfs://`, `ar://`, `oci://`), optional `manifest_sequence` to pin a specific message, appnet/Flora thresholds/topics via `config`, and `state_model`.
+- Manifest and registry metadata helpers accept HCS-1 pointers as well as other hashed content-addressable stores (IPFS, Arweave, OCI, HTTPS+SRI) so long as they fit inside topic memos.
 - Memo builder supports adapter registries and registry-of-registries topics (`hcs-21:<indexed>:<ttl>:<type>:<meta>`), plus version pointer topics (`hcs-2:1:<ttl>`).
 - Pointer utilities keep the registry-of-registries entries stable: publish new HCS-21 topics to the pointer, register the pointer once, and resolve it before streaming.
 - Mirror-node streaming filters only `hcs-21` payloads while preserving payer, sequence, and consensus timestamp.

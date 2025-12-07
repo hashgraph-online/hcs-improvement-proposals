@@ -192,7 +192,7 @@ Each message MUST be UTF-8 JSON ≤1024 bytes.
 | ----------------- | ------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `type`            | string | Yes      | Appnet type (e.g., `"flora"`, `"custom"`).                                                                                                                                       |
 | `account`         | string | No       | Conditional for `type: "flora"`: Flora account ID (or appnet-specific identifier for other types).                                                                               |
-| `threshold`       | string | No       | Conditional for `type: "flora"`: threshold description (e.g., `2-of-3`).                                                                                                         |
+| `threshold`       | string | No       | Conditional for `type: "flora"`: threshold description using `t/n` format (e.g., `2/3` for a 2-of-3 Flora key list).                                                             |
 | `ctopic`          | string | No       | Conditional for `type: "flora"`: coordination/communication topic per [HCS-16](/docs/standards/hcs-16).                                                                          |
 | `ttopic`          | string | No       | Conditional for `type: "flora"`: transaction topic per [HCS-16](/docs/standards/hcs-16).                                                                                         |
 | `stopic`          | string | No       | Conditional for `type: "flora"`: state topic per [HCS-16](/docs/standards/hcs-16).                                                                                               |
@@ -344,7 +344,7 @@ Every Flora publishes a configuration document (commonly `flora.yaml`) that decl
 ```yaml
 flora:
   account: 0.0.9876
-  threshold: 2-of-3
+  threshold: 2/3
 adapters:
   - adapter_id: oci/@hashgraphonline/x402-bazaar-adapter@1.3.2
     required: true
@@ -647,7 +647,7 @@ sequenceDiagram
 3. Package integrity hash matches the tarball downloaded from the declared registry.
 4. Manifest pointer resolves to YAML that conforms to the schema above and whose transaction payer equals the declaration payer.
 5. When provided, `state_model` names the [HCS-17](/docs/standards/hcs-17) schema (or versioned profile) that consumers should use when validating the adapter’s consensus payload; `consensus.profile_uri` SHOULD resolve to that profile + JSON Schema. Adapters MUST produce SHA-384 hashes that conform to the HCS-17 rules for whichever schema they reference.
-6. When `config.type = "flora"`, the `threshold` value aligns with the actual Flora key list (`T/M`).
+6. When `config.type = "flora"`, the `threshold` value aligns with the actual Flora key list (`T/M`, e.g., `2/3`).
 7. `buildConsensusRecords()` outputs canonical JSON with stable ordering so payload hashes are reproducible across Petals.
 8. `verifyRecord()` rejects records whose entity identifier lacks a consensus entry or whose payload hash diverges from the stored value.
 9. `sourceFingerprint` values are deterministic across Petals for a given adapter and configuration, and consumers verify that fingerprints match across proofs so configuration mismatches are immediately detectable.

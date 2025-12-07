@@ -28,6 +28,7 @@ sidebar_position: 11
       - [Common Fields for All Types](#common-fields-for-all-types)
       - [Personal Profile Fields](#personal-profile-fields)
       - [AI Agent Profile Fields](#ai-agent-profile-fields)
+      - [Flora Profile Fields](#flora-profile-fields)
       - [MCP Server Profile Fields](#mcp-server-profile-fields)
       - [MCP Server Verification Process](#mcp-server-verification-process)
         - [DNS Verification](#dns-verification)
@@ -36,6 +37,7 @@ sidebar_position: 11
         - [Complete Verification Example](#complete-verification-example)
         - [Complete Client Verification Implementation](#complete-client-verification-implementation)
     - [HCS-10 Integration for AI Agents](#hcs-10-integration-for-ai-agents)
+    - [DID Field](#did-field)
     - [HCS-19 Integration for Privacy Compliance](#hcs-19-integration-for-privacy-compliance)
     - [Profile Update Flow](#profile-update-flow)
     - [Enums and Constants](#enums-and-constants)
@@ -145,7 +147,8 @@ All profiles share these common fields:
 | properties         | object  | No       | Additional unstructured profile properties                                                           |
 | inboundTopicId     | string  | No       | [HCS-10](/docs/standards/hcs-10) inbound communication topic                                         |
 | outboundTopicId    | string  | No       | [HCS-10](/docs/standards/hcs-10) action record topic                                                 |
-| privacy_compliance | object  | No       | Optional [HCS-19](/docs/standards/hcs-19) compliance metadata and topic references                   |
+| privacy_compliance | object  | No       | Optional [HCS-19](/docs/standards/hcs-19) compliance metadata and topic references                   |                                                               |
+| appnet      | string | No       | Resolvable URI (HCS-1 HRL preferred; IPFS/Arweave/OCI/HTTPS with integrity accepted) to the Flora configuration file (`flora.yaml` / `appnet.yaml`) used with HCS-21 declarations. Flora.yaml is preferred but supports other appnet schemas |
 
 Profiles that implement the [HCS-15](/docs/standards/hcs-15) petal account pattern shall populate the `base_account` field with the Hedera account ID of the base account that shares the private key. Profiles that implement the [HCS-16](/docs/standards/hcs-16) Flora pattern shall provide `inboundTopicId` and `outboundTopicId` values that reference the Flora communication and transaction topics.
 
@@ -232,8 +235,6 @@ _Personal profiles (type=0) are not officially supported in this version of the 
 | topics.state          | string | Yes      | Topic ID that records Flora state commitments (see [HCS-17](/docs/standards/hcs-17) for hash formatting)        |
 | topics.custom         | array  | No       | Optional array of additional topic descriptors including `name`, `topicId`, and optional `description` fields   |
 | policies              | object | No       | Optional governance or automation policies expressed as implementation-defined key/value pairs                 |
-| flora.config          | object | No       | Optional Flora configuration metadata                                                                          |
-| flora.config.uri      | string | No       | Resolvable URI (HCS-1 HRL preferred; IPFS/Arweave/OCI/HTTPS with integrity accepted) to the Flora configuration file (`flora.yaml` / `appnet.yaml`) used with HCS-21 declarations |
 
 Flora profiles **shall** set their `type` field to `3` and reference the Flora account’s dedicated HCS topics in `inboundTopicId` and `outboundTopicId`. Additional nested fields may be introduced by future Flora revisions but must not violate this base contract.
 
