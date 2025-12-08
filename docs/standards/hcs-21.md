@@ -80,7 +80,7 @@ The key words “MUST”, “MUST NOT”, “SHOULD”, and “MAY” are to be 
 | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Adapter**             | Deterministic software module that ingests data for a specific entity type and emits consensus-ready records for a Flora.                                                        |
 | **Adapter Package**     | The distributable artifact (for example, npm/PyPI/crates.io/OCI/IPFS) that exports the adapter factory defined in this standard (TypeScript reference provided for clarity).     |
-| **Adapter Manifest**    | YAML document, inscribed via [HCS-1](/docs/standards/hcs-1), that describes metadata, runtime requirements, capabilities, and consensus bindings for a specific adapter release. |
+| **Adapter Manifest**    | YAML document published immutably (HCS-1 topic, IPFS, Arweave, OCI, HTTPS+SRI, etc.) that describes metadata, runtime requirements, capabilities, and consensus bindings for a specific adapter release. |
 | **Adapter Declaration** | HCS-21 topic message that links an adapter ID to its manifest, package coordinates, and Flora context.                                                                           |
 | **Entity Type**         | Logical type managed by an adapter (e.g., `agent`, `dataset`, `marketplace`).                                                                                                    |
 | **Appnet**              | A coordinated set of participants that reach consensus (for example, Floras per [HCS-16](/docs/standards/hcs-16)).                                                               |
@@ -120,10 +120,10 @@ flowchart TD
   K -->|Delete| J
 ```
 
-1. **Authoring:** Implement the adapter contract (see [Adapter Runtime Contract](#adapter-runtime-contract)) in your chosen language. The reference TypeScript definition illustrates the required methods (`createFloraAdapter`, `buildConsensusRecords`, etc.), but any language/runtime MAY be used as long as the exported API matches. Package metadata MUST follow semver and include typings or schema definitions where applicable (mirroring VS Code’s manifest guidance [1]).
-2. **Manifest drafting:** Create a YAML manifest (see below) describing runtime requirements, dependencies, consensus schemas, and the adapter’s capabilities. Include `meta.spec_version` and, optionally, `meta.minimum_flora_version` (or equivalent appnet compatibility) to enforce compatibility, mirroring plugin ecosystems such as Dify [3].
+1. **Authoring:** Implement the adapter contract (see [Adapter Runtime Contract](#adapter-runtime-contract)) in your chosen language. The reference TypeScript definition illustrates the required methods (`createAdapter`, `buildConsensusRecords`, etc.), but any language/runtime MAY be used as long as the exported API matches. Package metadata MUST follow semver and include typings or schema definitions where applicable (mirroring VS Code’s manifest guidance [1]).
+2. **Manifest drafting:** Create a YAML manifest (see below) describing runtime requirements, dependencies, consensus schemas, and the adapter’s capabilities. Include `meta.spec_version` and, optionally, `meta.minimum_version` (an appnet-specific compatibility field) so Floras or other appnets can enforce minimum supported software versions when loading the adapter.
 3. **Inscription / publication:** Upload the manifest via [HCS-1](/docs/standards/hcs-1) **or** publish it to another immutable store (IPFS, Arweave, HTTP with SRI, OCI image label). Keep the pointer (e.g., `hcs://1/<topic>` or `ipfs://<cid>`). Participants later resolve this pointer.
-4. **Declaration:** Submit an HCS-21 message referencing the adapter manifest, package, target Flora, and supported entity types.
+4. **Declaration:** Submit an HCS-21 message referencing the adapter manifest, package, target appnet (for example, a Flora), and supported entity types.
 5. **Verification:** Participants download the package, verify integrity hashes, and ensure their runtime environment (for example, Node.js ≥20, Python ≥3.11, WASM-compatible host, OCI runtime) matches the requirements declared in the manifest. They MAY check the manifest signature against the payer recorded on the declaration when present.
 6. **Consensus operation:** Each Petal executes the adapter, emits deterministic `AdapterConsensusRecord`s, and uses [HCS-17](/docs/standards/hcs-17) hashes to publish state on the Flora’s STopic. A compliant consensus service persists those proofs.
 7. **Updates or removals:** Publishers issue `update` or `delete` operations on the adapter topic. Appnets SHOULD treat the latest declaration per adapter ID as canonical.
@@ -267,9 +267,9 @@ Adapter registries SHOULD publish a lightweight HCS-1 document that describes th
 
 | Section                               | Required         | Description                                                                                                                                                        |
 | ------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `meta.spec_version`                   | Yes              | Version of this manifest schema (e.g., `1.0`). Enables backward compatibility similar to Dify’s manifest versioning [3].                                           |
+| `meta.spec_version`                   | Yes              | Version of this manifest schema (e.g., `1.0`). Enables backward compatibility when the manifest format evolves.                                                    |
 | `meta.adapter_version`                | Yes              | SemVer of the adapter package. MUST match the package version referenced in the declaration.                                                                       |
-| `meta.minimum_flora_version`          | No               | Compatibility hint for Flora/appnet implementations. Omit if not applicable.                                                                                       |
+| `meta.minimum_version`                | No               | Compatibility hint for the target appnet software (for example, `flora-node@>=2.1.0` or `custom-appnet@>=0.9`). Omit if not applicable.                             |
 | `meta.generated`                      | Yes              | ISO timestamp when the manifest was produced.                                                                                                                      |
 | `adapter.name`                        | Yes              | Human-readable name.                                                                                                                                               |
 | `adapter.id`                          | Yes              | Matches `adapter_id` in the HCS-21 message.                                                                                                                        |
@@ -652,7 +652,7 @@ sequenceDiagram
     participant Flora as HCS-16 Flora
     participant Repo as Consensus Repository
 
-    Pub->>Pub: Implement FloraAdapter + tests
+    Pub->>Pub: Implement adapter + tests
     Pub->>H1: Inscribe adapter.yml (HCS-1)
     Pub->>H21: Submit adapter declaration (register)
     Pub->>Ptr: Register latest HCS-21 topic (hcs-2)
