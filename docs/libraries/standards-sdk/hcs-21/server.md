@@ -74,6 +74,7 @@ const manifest: AdapterManifest = {
 const manifestPointer = await client.inscribeMetadata({ document: manifest });
 // manifestPointer.pointer -> "hcs://1/<topic>"
 // manifestPointer.manifestSequence -> sequence number for this manifest
+// manifestPointer.totalCostHbar -> network fee paid for the inscription
 ```
 
 ## Create an Adapter Registry Topic
