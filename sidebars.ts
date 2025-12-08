@@ -193,7 +193,7 @@ const sidebars: SidebarsConfig = {
         {
           type: 'doc',
           id: 'standards/hcs-21',
-          label: 'HCS-21: Package Declaration Registry',
+          label: 'HCS-21: Adapter Registry',
         },
       ],
     },
@@ -430,7 +430,7 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
-              label: 'HCS-21: Package Registry',
+              label: 'HCS-21: Adapter Registry',
               link: { type: 'doc', id: 'libraries/standards-sdk/hcs-21/index' },
               collapsible: true,
               collapsed: true,
@@ -663,6 +663,39 @@ const sidebars: SidebarsConfig = {
               type: 'doc',
               id: 'tutorials/inscriptions/create-nft-with-inscriptions',
               label: 'Create NFT with Inscriptions',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Floras & Petals',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'tutorials/floras/petals',
+              label: 'Petals (HCS-15)',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/floras',
+              label: 'Floras (HCS-16) · Part 1',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/floras-price-oracle',
+              label: 'Floras (HCS-16) · Part 2',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/hcs-17-state-proofs',
+              label: 'HCS-17 State Proofs',
+            },
+            {
+              type: 'doc',
+              id: 'tutorials/floras/hcs-21-adapter-registry',
+              label: 'HCS-21 Adapter Registry',
             },
           ],
         },

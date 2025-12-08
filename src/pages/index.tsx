@@ -1582,12 +1582,12 @@ const StandardsSection: React.FC = () => {
     },
     {
       id: 'HCS-21',
-      name: 'Package Declaration Registry',
-      description: 'Lightweight package declaration registry for ecosystem metadata.',
+      name: 'Adapter Registry',
+      description: 'Adapter registry that links HCS-1 manifests, package fingerprints, and appnet context so participants stay in sync.',
       specification: '/docs/standards/hcs-21',
       status: 'DRAFT',
       adoptions: [],
-      codeExample: 'declarePackage(registry, topicId)',
+      codeExample: 'declareAdapter(adapterId, manifestPointer)',
     },
   ];
 

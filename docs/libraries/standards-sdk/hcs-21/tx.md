@@ -5,56 +5,72 @@ sidebar_position: 5
 
 # Transaction Builders
 
-The HCS-21 module exposes low-level helpers when you need to compose transactions manually (e.g., batching, custom fee schedules, or advanced signing flows).
+The HCS-21 module exposes low-level helpers for composing adapter registry transactions (custom batching, fee schedules, or advanced signing flows).
 
 ## `buildHcs21CreateRegistryTx`
 
-Creates a `TopicCreateTransaction` with the correct memo format (`hcs-21:<indexed>:<ttl>:0`) and optional admin/submit keys.
+Creates a `TopicCreateTransaction` with the correct memo format (`hcs-21:<indexed>:<ttl>:<type>:<meta>`) and optional admin/submit keys.
 
 ```ts
 import {
   buildHcs21CreateRegistryTx,
+  HCS21TopicType,
+  Logger,
   MaybeKey,
 } from '@hashgraphonline/standards-sdk';
+
+const logger = new Logger({ module: 'hcs-21-tx', level: 'info' });
 
 const tx = buildHcs21CreateRegistryTx({
   ttl: 3600,
   indexed: 0,
+  type: HCS21TopicType.ADAPTER_REGISTRY,
   adminKey: myAdminKey as MaybeKey,
   submitKey: mySubmitKey as MaybeKey,
 });
 
-const response = await tx.setTransactionMemo('hcs-21 registry').execute(client);
+const response = await tx.setTransactionMemo('flora adapter registry').execute(client);
 const receipt = await response.getReceipt(client);
-console.log('topicId', receipt.topicId?.toString());
+logger.info('topic ready', { topicId: receipt.topicId?.toString() });
 ```
 
 ## `buildHcs21MessageTx`
 
-Wraps a validated `PackageDeclaration` into a `TopicMessageSubmitTransaction`.
+Wraps a validated `AdapterDeclaration` into a `TopicMessageSubmitTransaction`.
 
 ```ts
 import {
+  AdapterDeclaration,
   buildHcs21MessageTx,
-  PackageDeclaration,
 } from '@hashgraphonline/standards-sdk';
 
-const declaration: PackageDeclaration = {
+const declaration: AdapterDeclaration = {
   p: 'hcs-21',
   op: 'register',
-  registry: 'oci',
-  t_id: '0.0.800111',
-  n: 'Registry Adapter',
-  d: 'OCI container adapter for Registry Broker',
-  a: 'kantorcodes',
-  tags: ['oci', 'adapter'],
-  metadata: 'hcs://1/0.0.600777/3',
+  adapter_id: 'oci/@hashgraphonline/x402-bazaar-adapter@1.3.2',
+  entity: 'agent',
+  package: {
+    registry: 'oci',
+    name: '@hashgraphonline/x402-bazaar-adapter',
+    version: '1.3.2',
+    integrity: 'sha384-demo-digest',
+  },
+  manifest: 'hcs://1/0.0.600777',
+  manifest_sequence: 3, // optional pin
+  config: {
+    account: '0.0.9001',
+    threshold: '2-of-3',
+    ctopic: '0.0.9101',
+    ttopic: '0.0.9102',
+    stopic: '0.0.9103',
+  },
+  state_model: 'hcs-21.entity-consensus@1',
 };
 
 const tx = buildHcs21MessageTx({
   topicId: '0.0.700999',
   declaration,
-  transactionMemo: 'adapter container registration',
+  transactionMemo: 'adapter declaration',
 });
 
 await (await tx.execute(client)).getReceipt(client);

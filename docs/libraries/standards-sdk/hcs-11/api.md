@@ -76,9 +76,9 @@ parseProfileFromString(profileStr: string): HCS11Profile | null
 setProfileForAccountMemo(topicId: string, topicStandard?: 1|2|7): string // hcs-11:hcs://<std>/<topicId>
 
 // Inscription flows
-inscribeImage(buffer: Buffer, fileName: string, options?): Promise<{ success: boolean; topicId?: string; transactionId?: string; error?: string }>
-inscribeProfile(profile: HCS11Profile, options?): Promise<{ success: boolean; profileTopicId?: string; transactionId?: string; error?: string }>
-createAndInscribeProfile(builder: AgentBuilder|PersonBuilder|MCPServerBuilder, updateAccountMemo?: boolean): Promise<{ success: boolean; profileTopicId?: string; transactionId?: string; error?: string }>
+inscribeImage(buffer: Buffer, fileName: string, options?): Promise<{ success: boolean; topicId?: string; transactionId?: string; totalCostHbar?: string; error?: string }>
+inscribeProfile(profile: HCS11Profile, options?): Promise<{ success: boolean; profileTopicId?: string; transactionId?: string; totalCostHbar?: string; error?: string }>
+createAndInscribeProfile(builder: AgentBuilder|PersonBuilder|MCPServerBuilder, updateAccountMemo?: boolean): Promise<{ success: boolean; profileTopicId?: string; transactionId?: string; totalCostHbar?: string; error?: string }>
 updateAccountMemoWithProfile(accountId: string, profileTopicId: string): Promise<{ success: boolean; error?: string }>
 
 // Discovery helpers
