@@ -28,7 +28,7 @@ export type ChartDataPoint = {
 };
 
 const fetchMonthlyStats = async (): Promise<MonthlyStatsResponse> => {
-  const response = await fetch('https://kiloscribe.com/api/hashinal/monthly-stats');
+  const response = await fetch('https://hol.org/points/api/hashinal/monthly-stats');
   if (!response.ok) {
     throw new Error('Failed to fetch monthly stats');
   }

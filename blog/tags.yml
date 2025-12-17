@@ -218,6 +218,41 @@ civic-tech:
   permalink: /civic-tech
   description: Civic technology and governance use cases
 
+hashnet-mcp:
+  label: Hashnet MCP
+  permalink: /hashnet-mcp
+  description: Hashnet MCP Server updates and guides
+
+mcp:
+  label: MCP
+  permalink: /mcp
+  description: Model Context Protocol (MCP) content and integrations
+
+erc-8004:
+  label: ERC-8004
+  permalink: /erc-8004
+  description: ERC-8004 trustless agents and registry interoperability
+
+x402:
+  label: x402
+  permalink: /x402
+  description: Coinbase x402 payments and credit flows
+
+hcs-21:
+  label: HCS-21
+  permalink: /hcs-21
+  description: HCS-21 Adapter Registry standard updates
+
+patchwork:
+  label: Patchwork
+  permalink: /patchwork
+  description: Patchwork AI Standards working sessions and program updates
+
+standards-sdk:
+  label: Standards SDK
+  permalink: /standards-sdk
+  description: Standards SDK releases, demos, and developer tooling
+
 reputation:
   label: Reputation
   permalink: /reputation
