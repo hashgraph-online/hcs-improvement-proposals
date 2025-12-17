@@ -62,6 +62,14 @@ module.exports = {
         blob: 'blob 7s infinite',
         shine: 'shine 3s linear infinite',
         shimmer: 'shimmer 2s linear infinite',
+        'gradient-x': 'gradient-x 15s ease infinite',
+        'spin-slow': 'spin 8s linear infinite',
+        'spin-reverse-slow': 'spin 8s linear infinite reverse',
+        'spin-slow-reverse': 'spin 8s linear infinite reverse',
+        'float-delayed': 'float 6s ease-in-out 3s infinite',
+        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+        dash: 'dash 1.5s ease-in-out infinite alternate',
+        scan: 'scan 4s linear infinite',
       },
       keyframes: {
         float: {
@@ -105,6 +113,25 @@ module.exports = {
         shimmer: {
           '0%': { backgroundPosition: '-100% 0' },
           '100%': { backgroundPosition: '100% 0' },
+        },
+        'gradient-x': {
+          '0%, 100%': {
+            'background-size': '200% 200%',
+            'background-position': 'left center',
+          },
+          '50%': {
+            'background-size': '200% 200%',
+            'background-position': 'right center',
+          },
+        },
+        dash: {
+          to: {
+            'stroke-dashoffset': '0',
+          },
+        },
+        scan: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' },
         },
       },
       backgroundImage: {

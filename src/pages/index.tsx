@@ -10,6 +10,8 @@ import InteractiveShowcase, {
   ShowcaseItem,
 } from '../components/InteractiveShowcase';
 import { HashgraphConsensus } from '../components/HashgraphConsensus';
+import { formatNumber } from '../lib/format';
+import { fetchHolProductionMetrics, type HolProductionMetrics } from '../lib/hol-metrics';
 import {
   StatusBadge,
   TransformCard,
@@ -710,322 +712,80 @@ const AutonomousInfrastructureSection: React.FC = () => {
             </Typography>
           </div>
 
-          <div className='grid grid-cols-1 sm:grid-cols-3 gap-6'>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+                {/* Card 1: Websites */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.1 }}
                   viewport={{ once: true }}
-                  className='flex flex-col items-center text-center space-y-3'
+                  className='relative group'
                 >
-                  <motion.div
-                    animate={{
-                      rotateY: [0, 360],
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }}
-                    className='text-brand-blue/70'
-                    style={{
-                      height: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <svg
-                      width='40'
-                      height='40'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='1'
-                    >
-                      <circle cx='12' cy='12' r='10' />
-                      <ellipse cx='12' cy='12' rx='10' ry='5' />
-                      <path d='M2 12 Q12 8 22 12' />
-                      <path d='M2 12 Q12 16 22 12' />
-                      <line x1='12' y1='2' x2='12' y2='22' />
-                    </svg>
-                  </motion.div>
-                  <TransformCard
-                    rotation='rotate-[-1deg]'
-                    background='bg-gradient-to-br from-brand-blue/30 to-brand-blue/20'
-                    border='border border-brand-blue/50'
-                    shadow='lg'
-                    className='p-4 backdrop-blur-sm w-full min-h-[120px]'
-                  >
-                    <motion.div
-                      initial={{ x: -10, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <Typography
-                        color='muted'
-                        className='text-lg text-white/90 font-bold uppercase tracking-wide mb-2'
-                      >
-                        // Websites exist
+                   <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
+                   <div className='relative h-full bg-white/5 dark:bg-white/5 backdrop-blur-md border border-white/10 dark:border-white/10 rounded-3xl p-8 hover:border-brand-blue/30 transition-colors duration-300 flex flex-col items-center text-center'>
+                      <div className="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-brand-blue/20 to-brand-blue/5 flex items-center justify-center border border-brand-blue/20 group-hover:scale-110 transition-transform duration-300">
+                         <FaNetworkWired className="text-2xl text-brand-blue" />
+                      </div>
+                      
+                      <Typography className='text-sm font-mono uppercase tracking-widest text-brand-blue mb-3 font-bold'>
+                        // WEBSITES EXIST
                       </Typography>
-                    </motion.div>
-                    <motion.div
-                      animate={{
-                        opacity: [0.5, 1, 0.5],
-                        scale: [0.95, 1.05, 0.95],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      <Typography className='text-xl font-black text-white leading-tight'>
-                        without web servers
-                      </Typography>
-                    </motion.div>
-                  </TransformCard>
+                      
+                      <h3 className="text-2xl lg:text-3xl font-black text-white leading-tight mb-2">
+                        without <br/>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">web servers</span>
+                      </h3>
+                   </div>
                 </motion.div>
 
+                {/* Card 2: AI Agents */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.25 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
                   viewport={{ once: true }}
-                  className='flex flex-col items-center text-center space-y-3'
+                  className='relative group'
                 >
-                  <div
-                    className='text-brand-green/70'
-                    style={{
-                      height: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <svg
-                      width='108'
-                      height='40'
-                      viewBox='0 0 60 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='1'
-                    >
-                      <rect x='4' y='6' width='12' height='14' rx='2' />
-                      <circle cx='7' cy='11' r='1.5' fill='currentColor'>
-                        <animate
-                          attributeName='opacity'
-                          values='1;0.1;1'
-                          dur='2s'
-                          repeatCount='indefinite'
-                        />
-                      </circle>
-                      <circle cx='13' cy='11' r='1.5' fill='currentColor'>
-                        <animate
-                          attributeName='opacity'
-                          values='1;0.3;1'
-                          dur='3s'
-                          repeatCount='indefinite'
-                          begin='0.5s'
-                        />
-                      </circle>
-                      <path d='M7 15 Q10 17 13 15' strokeLinecap='round' />
-                      <line x1='8' y1='2' x2='8' y2='6' strokeLinecap='round'>
-                        <animate
-                          attributeName='opacity'
-                          values='0;1;0'
-                          dur='1.5s'
-                          repeatCount='indefinite'
-                        />
-                      </line>
-                      <line x1='12' y1='2' x2='12' y2='6' strokeLinecap='round'>
-                        <animate
-                          attributeName='opacity'
-                          values='0;1;0'
-                          dur='1.5s'
-                          repeatCount='indefinite'
-                          begin='0.5s'
-                        />
-                      </line>
-                      <rect x='44' y='6' width='12' height='14' rx='2' />
-                      <circle cx='47' cy='11' r='1.5' fill='currentColor'>
-                        <animate
-                          attributeName='opacity'
-                          values='1;0.3;1'
-                          dur='3s'
-                          repeatCount='indefinite'
-                          begin='1s'
-                        />
-                      </circle>
-                      <circle cx='53' cy='11' r='1.5' fill='currentColor'>
-                        <animate
-                          attributeName='opacity'
-                          values='1;0.3;1'
-                          dur='3s'
-                          repeatCount='indefinite'
-                          begin='1.5s'
-                        />
-                      </circle>
-                      <path d='M47 15 Q50 17 53 15' strokeLinecap='round' />
-                      <line x1='48' y1='2' x2='48' y2='6' strokeLinecap='round'>
-                        <animate
-                          attributeName='opacity'
-                          values='0;1;0'
-                          dur='1.5s'
-                          repeatCount='indefinite'
-                          begin='1s'
-                        />
-                      </line>
-                      <line x1='52' y1='2' x2='52' y2='6' strokeLinecap='round'>
-                        <animate
-                          attributeName='opacity'
-                          values='0;1;0'
-                          dur='1.5s'
-                          repeatCount='indefinite'
-                          begin='1.5s'
-                        />
-                      </line>
-                      <path
-                        d='M16 12 C20 10, 25 10, 30 12 C35 14, 40 14, 44 12'
-                        strokeDasharray='2 1'
-                        opacity='0.5'
-                      >
-                        <animate
-                          attributeName='opacity'
-                          values='0;1;0'
-                          dur='1.5s'
-                          repeatCount='indefinite'
-                        />
-                      </path>
-                      <path
-                        d='M16 12 C20 14, 25 14, 30 12 C35 10, 40 10, 44 12'
-                        strokeDasharray='2 1'
-                        opacity='0.5'
-                      >
-                        <animate
-                          attributeName='opacity'
-                          values='0;1;0'
-                          dur='1.5s'
-                          repeatCount='indefinite'
-                          begin='0.75s'
-                        />
-                      </path>
-                    </svg>
-                  </div>
-                  <TransformCard
-                    rotation='rotate-[1deg]'
-                    background='bg-gradient-to-br from-brand-green/30 to-brand-green/20'
-                    border='border border-brand-green/50'
-                    shadow='lg'
-                    className='p-4 backdrop-blur-sm w-full min-h-[120px]'
-                  >
-                    <motion.div
-                      initial={{ x: -10, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <Typography
-                        color='muted'
-                        className='text-lg text-white/90 font-bold uppercase tracking-wide mb-2'
-                      >
-                        // AI agents discover
+                   <div className="absolute inset-0 bg-gradient-to-br from-brand-green/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
+                   <div className='relative h-full bg-white/5 dark:bg-white/5 backdrop-blur-md border border-white/10 dark:border-white/10 rounded-3xl p-8 hover:border-brand-green/30 transition-colors duration-300 flex flex-col items-center text-center'>
+                      <div className="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-brand-green/20 to-brand-green/5 flex items-center justify-center border border-brand-green/20 group-hover:scale-110 transition-transform duration-300">
+                         <FaRocket className="text-2xl text-brand-green" />
+                      </div>
+                      
+                      <Typography className='text-sm font-mono uppercase tracking-widest text-brand-green mb-3 font-bold'>
+                        // AI AGENTS DISCOVER
                       </Typography>
-                    </motion.div>
-                    <motion.div
-                      animate={{
-                        opacity: [0.5, 1, 0.5],
-                        scale: [0.95, 1.05, 0.95],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                        delay: 0.6,
-                      }}
-                    >
-                      <Typography className='text-xl font-black text-white leading-tight'>
-                        each other autonomously
-                      </Typography>
-                    </motion.div>
-                  </TransformCard>
+                      
+                      <h3 className="text-2xl lg:text-3xl font-black text-white leading-tight mb-2">
+                        each other <br/>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">autonomously</span>
+                      </h3>
+                   </div>
                 </motion.div>
 
+                {/* Card 3: Economic Systems */}
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 0.4 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
                   viewport={{ once: true }}
-                  className='flex flex-col items-center text-center space-y-3'
+                  className='relative group'
                 >
-                  <motion.div
-                    animate={{
-                      rotateY: [0, 180, 360],
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                    className='text-brand-purple/70'
-                    style={{
-                      height: '40px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <svg
-                      width='40'
-                      height='40'
-                      viewBox='0 0 24 24'
-                      fill='none'
-                      stroke='currentColor'
-                      strokeWidth='1'
-                    >
-                      <circle cx='12' cy='12' r='10' />
-                      <circle cx='12' cy='12' r='6' strokeDasharray='2 1' />
-                      <path d='M12 8 L12 16 M9 10 L15 10 M9 14 L15 14' strokeLinecap='round' />
-                      <circle cx='12' cy='12' r='2' fill='currentColor' />
-                    </svg>
-                  </motion.div>
-                  <TransformCard
-                    rotation='rotate-[-0.5deg]'
-                    background='bg-gradient-to-br from-brand-purple/30 to-brand-purple/20'
-                    border='border border-brand-purple/50'
-                    shadow='lg'
-                    className='p-4 backdrop-blur-sm w-full min-h-[120px]'
-                  >
-                    <motion.div
-                      initial={{ x: -10, opacity: 0 }}
-                      whileInView={{ x: 0, opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                    >
-                      <Typography
-                        color='muted'
-                        className='text-lg text-white/90 font-bold uppercase tracking-wide mb-2'
-                      >
-                        // Economic systems
+                   <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
+                   <div className='relative h-full bg-white/5 dark:bg-white/5 backdrop-blur-md border border-white/10 dark:border-white/10 rounded-3xl p-8 hover:border-brand-purple/30 transition-colors duration-300 flex flex-col items-center text-center'>
+                      <div className="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-brand-purple/20 to-brand-purple/5 flex items-center justify-center border border-brand-purple/20 group-hover:scale-110 transition-transform duration-300">
+                         <FaCoins className="text-2xl text-brand-purple" />
+                      </div>
+                      
+                      <Typography className='text-sm font-mono uppercase tracking-widest text-brand-purple mb-3 font-bold'>
+                        // ECONOMIES
                       </Typography>
-                    </motion.div>
-                    <motion.div
-                      animate={{
-                        opacity: [0.5, 1, 0.5],
-                        scale: [0.95, 1.05, 0.95],
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                        delay: 1.2,
-                      }}
-                    >
-                      <Typography className='text-xl font-black text-white leading-tight'>
-                        run themselves
-                      </Typography>
-                    </motion.div>
-                  </TransformCard>
+                      
+                      <h3 className="text-2xl lg:text-3xl font-black text-white leading-tight mb-2">
+                        run <br/>
+                        <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">themselves</span>
+                      </h3>
+                   </div>
                 </motion.div>
           </div>
         </div>
@@ -1711,6 +1471,26 @@ const StandardsSection: React.FC = () => {
 const MetricsSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
+  const [holMetrics, setHolMetrics] = useState<HolProductionMetrics | null>(null);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void (async () => {
+      try {
+        const result = await fetchHolProductionMetrics(controller.signal);
+        if (controller.signal.aborted) return;
+        setHolMetrics(result);
+      } catch {
+        if (controller.signal.aborted) return;
+        setHolMetrics(null);
+      }
+    })();
+
+    return () => controller.abort();
+  }, []);
+
+  const totalTransactionsLabel = holMetrics ? `${formatNumber(holMetrics.totalOnChainTransactions)}+` : '—';
+  const filesStoredLabel = holMetrics ? `${formatNumber(holMetrics.hcs1TopicsCreated)}+` : '—';
 
   return (
     <section
@@ -1782,13 +1562,13 @@ const MetricsSection: React.FC = () => {
                   totalTransactions
                 </div>
 
-                <div className='space-y-6'>
-                  <div className='relative'>
-                    <div className='text-5xl lg:text-6xl font-mono font-black text-brand-blue leading-none'>
-                      28M+
-                    </div>
-                    <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-green rounded-full animate-pulse'></div>
-                  </div>
+	                  <div className='space-y-6'>
+	                    <div className='relative'>
+	                      <div className='text-5xl lg:text-6xl font-mono font-black text-brand-blue leading-none whitespace-nowrap'>
+	                      {totalTransactionsLabel}
+	                      </div>
+	                      <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-green rounded-full animate-pulse'></div>
+	                    </div>
 
                   <div className='space-y-3'>
                     <Typography
@@ -1894,13 +1674,13 @@ const MetricsSection: React.FC = () => {
                   onGraphStorage
                 </div>
 
-                <div className='space-y-6'>
-                  <div className='relative'>
-                    <div className='text-5xl lg:text-6xl font-mono font-black text-brand-purple leading-none'>
-                      120K+
-                    </div>
-                    <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-green rounded-full animate-pulse delay-700'></div>
-                  </div>
+	                  <div className='space-y-6'>
+	                    <div className='relative'>
+	                      <div className='text-5xl lg:text-6xl font-mono font-black text-brand-purple leading-none whitespace-nowrap'>
+	                      {filesStoredLabel}
+	                      </div>
+	                      <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-green rounded-full animate-pulse delay-700'></div>
+	                    </div>
 
                   <div className='space-y-3'>
                     <Typography

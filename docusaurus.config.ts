@@ -114,7 +114,22 @@ const config: Config = {
         src: 'Logo_Icon.png',
       },
       items: [
-        { to: '/docs/standards/', label: 'Standards', position: 'left' },
+        {
+          type: 'dropdown',
+          label: 'Standards',
+          position: 'left',
+          items: [
+            { label: 'Standards Overview', to: '/standards' },
+            { label: 'Standards Library', to: '/docs/standards/' },
+            { label: 'Files & Hashinals', to: '/hashinals' },
+            { label: 'Data Registries', to: '/registries' },
+            { label: 'Universal Agent Identity', to: '/hcs-14' },
+            { label: 'Identity Metadata', to: '/profiles' },
+            { label: 'Auditable Points', to: '/hcs-20' },
+            { label: 'Agent Communication', to: '/openconvai' },
+            { label: 'AppNet Accounts', to: '/floras' },
+          ],
+        },
         {
           type: 'dropdown',
           label: 'Tools',
