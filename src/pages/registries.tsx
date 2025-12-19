@@ -24,7 +24,7 @@ const RegistryNode = ({ x, y, size, delay, color }: { x: number, y: number, size
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1, delay, ease: "backOut" }}
     >
-        <div className="absolute inset-0 bg-white dark:bg-[#0a0b14] rounded-full opacity-90 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-white dark:bg-[#1a1f3a] rounded-full opacity-90 backdrop-blur-sm" />
         <motion.div 
             className="w-[40%] h-[40%] rounded-full relative z-20"
             style={{ backgroundColor: color }}
@@ -99,7 +99,7 @@ const RegistriesHeroVisual = () => {
 };
 
 const OpVisual = ({ op, color, desc }: { op: string, color: string, desc: string }) => (
-    <div className="relative p-12 bg-white dark:bg-[#0f0f16] rounded-[2rem] border border-gray-200 dark:border-white/10 shadow-xl overflow-hidden group hover:border-opacity-50 transition-all duration-500" style={{ borderColor: `${color}30` }}>
+    <div className="relative p-12 bg-white dark:bg-[#1a1f3a] rounded-[2rem] border border-gray-200 dark:border-white/10 shadow-xl overflow-hidden group hover:border-opacity-50 transition-all duration-500" style={{ borderColor: `${color}30` }}>
         <div className="absolute top-0 right-0 p-8 opacity-5 text-9xl group-hover:opacity-10 transition-opacity font-bold" style={{ color }}>
             {op[0].toUpperCase()}
         </div>
@@ -146,7 +146,7 @@ export default function RegistriesPage() {
 
   return (
     <Layout title="HCS-2 Registries" description="The Nervous System of the Hashgraph.">
-      <div className='min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#a679f0] selection:text-white transition-colors duration-300'>
+      <div className='min-h-screen bg-white dark:bg-[#1a1f3a] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#a679f0] selection:text-white transition-colors duration-300'>
         <ScrollProgress />
 
         {/* Background Effects */}
@@ -177,16 +177,18 @@ export default function RegistriesPage() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
+                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
                                     <div className="py-2">
                                         <Link to="/standards" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Overview</Link>
                                         <Link to="/docs/intro" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Library</Link>
+                                        <Link to="/tutorials" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Tutorials</Link>
                                         <div className="h-px bg-gray-100 dark:bg-white/5 my-1" />
                                         <Link to="/hashinals" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Files & Hashinals</Link>
                                         <Link to="/registries" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Data Registries</Link>
                                         <Link to="/hcs-14" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Universal Agent Identity</Link>
                                         <Link to="/profiles" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Identity Metadata</Link>
                                         <Link to="/hcs-20" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Auditable Points</Link>
+                                        <Link to="/hcs-21" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Adapter Registry</Link>
                                         <Link to="/openconvai" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Agent Communication</Link>
                                         <Link to="/floras" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">AppNet Accounts</Link>
                                     </div>
@@ -231,7 +233,7 @@ export default function RegistriesPage() {
         </section>
 
         {/* 2. THE CONCEPT - Split View */}
-        <section className="py-64 relative z-10 bg-white dark:bg-[#050505]/80 backdrop-blur-3xl border-t border-b border-gray-200 dark:border-white/5">
+        <section className="py-64 relative z-10 bg-white dark:bg-[#1a1f3a]/80 backdrop-blur-3xl border-t border-b border-gray-200 dark:border-white/5">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px]">
                  <div className="grid xl:grid-cols-2 gap-48">
                      <div className="sticky top-48 h-fit">
@@ -256,7 +258,7 @@ export default function RegistriesPage() {
                                 initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
-                                className="p-16 rounded-[3rem] bg-gray-50 dark:bg-[#0f0f16] border border-gray-200 dark:border-white/5 hover:border-[#a679f0]/50 transition-colors group shadow-xl"
+                                className="p-16 rounded-[3rem] bg-gray-50 dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#a679f0]/50 transition-colors group shadow-xl"
                              >
                                  <h3 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">{item.title}</h3>
                                  <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
@@ -269,7 +271,7 @@ export default function RegistriesPage() {
 
         {/* 3. SCHEMA DEEP DIVE - Wide */}
         <section className="py-64 relative z-10 overflow-hidden">
-             <div className="absolute inset-0 bg-gray-50 dark:bg-[#0a0b10] skew-y-2 transform origin-top-left -z-10 scale-110" />
+             <div className="absolute inset-0 bg-gray-50 dark:bg-[#1a1f3a] skew-y-2 transform origin-top-left -z-10 scale-110" />
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px]">
                  <SectionHeader title="Strict Typing." subtitle="SCHEMA" color="purple" />
                  
@@ -278,7 +280,7 @@ export default function RegistriesPage() {
                          <p className="text-2xl text-gray-600 dark:text-gray-400 mb-16 leading-relaxed">
                              Every message in an HCS-2 registry must follow a precise JSON schema. This ensures interoperability across the entire ecosystem.
                          </p>
-                         <div className="bg-white dark:bg-black p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl">
+                         <div className="bg-white dark:bg-[#1a1f3a] p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl">
                              <div className="space-y-8 font-mono text-lg">
                                  <div className="flex gap-8 border-b border-gray-200 dark:border-white/10 pb-4">
                                      <span className="text-[#a679f0] w-24">p</span>
@@ -341,7 +343,7 @@ export default function RegistriesPage() {
         </section>
 
         {/* 5. MODES OF OPERATION - Full Width */}
-        <section className="py-64 bg-[#0a0b10] text-white">
+        <section className="py-64 bg-[#1a1f3a] text-white">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px]">
                  <div className="grid lg:grid-cols-2 gap-32 items-center">
                      <div>
@@ -382,7 +384,7 @@ export default function RegistriesPage() {
                          </p>
                          
                          {/* Practical Example */}
-                         <div className="bg-white dark:bg-black p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl mt-12">
+                         <div className="bg-white dark:bg-[#1a1f3a] p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl mt-12">
                              <h4 className="text-xl font-bold mb-6 text-[#a679f0] uppercase tracking-widest">Practical Example: Organization Tree</h4>
                              <div className="flex flex-col gap-6 font-mono text-lg">
                                  <div className="flex items-center gap-4 text-[#a679f0]">
@@ -425,21 +427,21 @@ export default function RegistriesPage() {
         </section>
 
         {/* 7. MIGRATION */}
-        <section className="py-64 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0b10]">
+        <section className="py-64 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#1a1f3a]">
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px]">
                 <h3 className="text-6xl font-bold mb-24 text-center">Migration Paths.</h3>
                 <div className="grid xl:grid-cols-3 gap-16">
-                    <div className="p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-xl">
+                    <div className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-xl">
                         <FaGlobe className="text-6xl text-[#5599fe] mb-8" />
                         <h4 className="text-3xl font-bold mb-4">Topic Rotation</h4>
                         <p className="text-xl text-gray-500">Keys compromised? Post a <code>migrate</code> op pointing to a new secure topic. Clients follow the breadcrumbs.</p>
                     </div>
-                    <div className="p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-xl">
+                    <div className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-xl">
                         <FaServer className="text-6xl text-[#a679f0] mb-8" />
                         <h4 className="text-3xl font-bold mb-4">Snapshotting</h4>
                         <p className="text-xl text-gray-500">Registry too large? Create a new topic with the current state as the genesis message. Link old history.</p>
                     </div>
-                    <div className="p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-xl">
+                    <div className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-xl">
                         <FaCogs className="text-6xl text-[#48df7b] mb-8" />
                         <h4 className="text-3xl font-bold mb-4">Forking</h4>
                         <p className="text-xl text-gray-500">Community disagreement? Anyone can read the public topic and create a divergent registry starting from block N.</p>
@@ -488,7 +490,7 @@ export default function RegistriesPage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="max-w-5xl mx-auto bg-white dark:bg-[#0f0f16] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
+                    className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Start Indexing.</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-8">

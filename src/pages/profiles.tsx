@@ -88,7 +88,7 @@ export default function ProfilesPage() {
 
   return (
     <Layout title="HCS-11 Profiles" description="Universal Identity on Hedera.">
-      <div className='min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#a679f0] selection:text-white transition-colors duration-300'>
+      <div className='min-h-screen bg-white dark:bg-[#1a1f3a] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#a679f0] selection:text-white transition-colors duration-300'>
         <ScrollProgress />
         
         {/* Background Noise */}
@@ -115,15 +115,18 @@ export default function ProfilesPage() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
+                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
                                     <div className="py-2">
+                                        <Link to="/standards" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Overview</Link>
                                         <Link to="/docs/intro" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Library</Link>
+                                        <Link to="/tutorials" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Tutorials</Link>
                                         <div className="h-px bg-gray-100 dark:bg-white/5 my-1" />
                                         <Link to="/hashinals" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Files & Hashinals</Link>
                                         <Link to="/registries" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Data Registries</Link>
                                         <Link to="/hcs-14" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Universal Agent Identity</Link>
                                         <Link to="/profiles" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Identity Metadata</Link>
                                         <Link to="/hcs-20" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Auditable Points</Link>
+                                        <Link to="/hcs-21" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Adapter Registry</Link>
                                         <Link to="/openconvai" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Agent Communication</Link>
                                         <Link to="/floras" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">AppNet Accounts</Link>
                                     </div>
@@ -168,7 +171,7 @@ export default function ProfilesPage() {
         </section>
 
         {/* 2. THE PROBLEM / SOLUTION - Split View */}
-        <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#0a0b10] border-t border-b border-gray-200 dark:border-white/5">
+        <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#1a1f3a] border-t border-b border-gray-200 dark:border-white/5">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="grid xl:grid-cols-2 gap-16">
                      <div className="sticky top-48 h-fit">
@@ -193,7 +196,7 @@ export default function ProfilesPage() {
                                 initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
-                                className="p-16 rounded-[3rem] bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/5 hover:border-[#5599fe]/50 transition-colors group shadow-xl"
+                                className="p-16 rounded-[3rem] bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#5599fe]/50 transition-colors group shadow-xl"
                              >
                                  <div className="w-20 h-20 rounded-2xl bg-[#5599fe]/10 text-[#5599fe] flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
                                      {item.icon}
@@ -218,7 +221,7 @@ export default function ProfilesPage() {
                         <p className="text-2xl text-gray-600 dark:text-gray-400 mb-16 leading-relaxed">
                             It starts with the account memo. By standardizing this single field, we unlock infinite extensibility without clogging the main account object.
                         </p>
-                        <div className="bg-white dark:bg-black p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl">
+                        <div className="bg-white dark:bg-[#1a1f3a] p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl">
                             <h4 className="text-xl font-bold mb-8 text-[#a679f0] uppercase tracking-widest">Supported Protocols</h4>
                             <ul className="space-y-6 font-mono text-lg">
                                 <li className="flex items-center gap-4">
@@ -242,7 +245,7 @@ export default function ProfilesPage() {
                     </div>
                     <div className="relative">
                         <div className="absolute -top-12 -left-12 text-gray-200 dark:text-white/5 text-9xl z-0"><FaKey /></div>
-                        <div className="relative z-10 bg-[#0f0f16] p-16 rounded-[4rem] border border-white/10 shadow-2xl">
+                        <div className="relative z-10 bg-[#1a1f3a] p-16 rounded-[4rem] border border-white/10 shadow-2xl">
                             <div className="text-gray-500 mb-8 font-mono text-lg uppercase tracking-widest">// AI AGENT PROFILE</div>
                             <Terminal title="agent-profile.json">
                                 <Terminal.Line command='cat agent-profile.json | jq .' />
@@ -279,24 +282,24 @@ export default function ProfilesPage() {
                          </p>
                          
                          <div className="space-y-12">
-                             <div className="p-10 bg-white dark:bg-[#0f0f16] border-l-8 border-[#48df7b] rounded-r-3xl shadow-lg">
+                             <div className="p-10 bg-white dark:bg-[#1a1f3a] border-l-8 border-[#48df7b] rounded-r-3xl shadow-lg">
                                  <h4 className="text-2xl font-bold mb-4 flex items-center gap-3"><FaGlobe /> DNS Verification</h4>
                                  <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">Add a TXT record to your domain containing your Hedera Account ID.</p>
-                                 <code className="block bg-gray-100 dark:bg-black p-4 rounded-xl font-mono text-sm">_hedera.example.com IN TXT "0.0.123456"</code>
+                                 <code className="block bg-gray-100 dark:bg-[#1a1f3a] p-4 rounded-xl font-mono text-sm">_hedera.example.com IN TXT "0.0.123456"</code>
                              </div>
 
-                             <div className="p-10 bg-white dark:bg-[#0f0f16] border-l-8 border-[#5599fe] rounded-r-3xl shadow-lg">
+                             <div className="p-10 bg-white dark:bg-[#1a1f3a] border-l-8 border-[#5599fe] rounded-r-3xl shadow-lg">
                                  <h4 className="text-2xl font-bold mb-4 flex items-center gap-3"><FaKey /> Signature Verification</h4>
                                  <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">Sign your server URL with your account's private key. Clients verify the sig on-chain.</p>
                              </div>
 
-                             <div className="p-10 bg-white dark:bg-[#0f0f16] border-l-8 border-[#a679f0] rounded-r-3xl shadow-lg">
+                             <div className="p-10 bg-white dark:bg-[#1a1f3a] border-l-8 border-[#a679f0] rounded-r-3xl shadow-lg">
                                  <h4 className="text-2xl font-bold mb-4 flex items-center gap-3"><FaServer /> Challenge Verification</h4>
                                  <p className="text-gray-600 dark:text-gray-400 text-lg mb-4">Expose a <code>/hedera-verification</code> endpoint that returns a signed timestamp.</p>
                              </div>
                          </div>
                      </div>
-                     <div className="bg-[#0f0f16] p-16 rounded-[4rem] border border-white/10 shadow-2xl relative overflow-hidden">
+                     <div className="bg-[#1a1f3a] p-16 rounded-[4rem] border border-white/10 shadow-2xl relative overflow-hidden">
                          <div className="absolute top-0 right-0 p-12 opacity-10 text-[12rem] text-[#48df7b]">
                              <FaCheckCircle />
                          </div>
@@ -329,7 +332,7 @@ export default function ProfilesPage() {
         </section>
 
         {/* 5. PRIVACY & COMPLIANCE (HCS-19) */}
-        <section className="py-24 bg-gray-50 dark:bg-[#0a0b10] text-gray-900 dark:text-white">
+        <section className="py-24 bg-gray-50 dark:bg-[#1a1f3a] text-gray-900 dark:text-white">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="text-center max-w-5xl mx-auto mb-16">
                      <h2 className="text-6xl md:text-8xl font-bold mb-12 text-[#a679f0]">Privacy Built-In.</h2>
@@ -340,7 +343,7 @@ export default function ProfilesPage() {
                  </div>
                  
                  <div className="grid xl:grid-cols-2 gap-12 items-center">
-                     <div className="order-2 xl:order-1 p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl">
+                     <div className="order-2 xl:order-1 p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl">
                          <Terminal title="privacy-compliance.json">
                              <Terminal.Line command='cat privacy-compliance.json | jq .' />
                              <Terminal.Line output='{' type="output" />
@@ -438,7 +441,7 @@ export default function ProfilesPage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="max-w-5xl mx-auto bg-white dark:bg-[#0f0f16] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
+                    className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Claim Your Identity.</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-8">

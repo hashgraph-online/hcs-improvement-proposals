@@ -21,7 +21,7 @@ interface TerminalLineProps {
 const TerminalLine: React.FC<TerminalLineProps & { className?: string }> = ({
   command,
   output,
-  prompt = '$',
+  prompt,
   type = 'command',
   className = '',
   onClick,
@@ -30,10 +30,10 @@ const TerminalLine: React.FC<TerminalLineProps & { className?: string }> = ({
   if (command) {
     return (
       <div 
-        className={`flex items-center space-x-2 ${className} ${clickable ? 'cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 -mx-2 px-2 py-1 rounded transition-colors duration-200' : ''}`}
+        className={`flex items-center ${prompt ? 'space-x-2' : ''} ${className} ${clickable ? 'cursor-pointer hover:bg-black/5 dark:hover:bg-white/5 -mx-2 px-2 py-1 rounded transition-colors duration-200' : ''}`}
         onClick={onClick}
       >
-        <span className='text-brand-green font-mono'>{prompt}</span>
+        {prompt && <span className='text-brand-green font-mono'>{prompt}</span>}
         <span className='font-mono'>{command}</span>
       </div>
     );

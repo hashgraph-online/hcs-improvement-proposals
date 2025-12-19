@@ -2,6 +2,9 @@
 sidebar_position: 8
 ---
 
+import { TabbedTerminal } from '@site/src/components/ui';
+import { FaCode, FaServer, FaShieldAlt, FaTools, FaCogs } from 'react-icons/fa';
+
 # Configuration and Integration
 
 The Standards SDK provides flexible configuration options to integrate with various Hedera infrastructure providers and customize behavior for your specific needs.
@@ -10,25 +13,30 @@ The Standards SDK provides flexible configuration options to integrate with vari
 
 The SDK supports integration with custom mirror node providers beyond the default Hedera public mirror nodes. This enables enhanced performance, reliability, and access to specialized features.
 
-### Default Configuration
+### Default & Custom Providers
 
-By default, the SDK uses Hedera's public mirror nodes:
-
-```typescript
-import { HederaMirrorNode } from '@hashgraphonline/standards-sdk';
+<TabbedTerminal
+  title="Mirror Node Setup"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'default',
+      title: 'Default',
+      language: 'typescript',
+      icon: <FaServer />,
+      code: `import { HederaMirrorNode } from '@hashgraphonline/standards-sdk';
 
 // Uses public Hedera mirror nodes
 const mirrorNode = new HederaMirrorNode('mainnet', logger);
 // Mainnet: https://mainnet-public.mirrornode.hedera.com
-// Testnet: https://testnet.mirrornode.hedera.com
-```
-
-### Custom Mirror Node Providers
-
-Configure the SDK to use third-party mirror node services:
-
-```typescript
-import { HederaMirrorNode, Logger } from '@hashgraphonline/standards-sdk';
+// Testnet: https://testnet.mirrornode.hedera.com`
+    },
+    {
+      id: 'hgraph',
+      title: 'HGraph Provider',
+      language: 'typescript',
+      icon: <FaServer />,
+      code: `import { HederaMirrorNode, Logger } from '@hashgraphonline/standards-sdk';
 
 const logger = new Logger({ module: 'MyApp', level: 'info' });
 
@@ -36,9 +44,14 @@ const logger = new Logger({ module: 'MyApp', level: 'info' });
 const hgraphMirrorNode = new HederaMirrorNode('mainnet', logger, {
   customUrl: 'https://mainnet.hedera.api.hgraph.dev/v1/<API-KEY>',
   apiKey: 'your-hgraph-api-key'
-});
-
-// Example: Custom Provider with Headers
+});`
+    },
+    {
+      id: 'custom',
+      title: 'Custom Headers',
+      language: 'typescript',
+      icon: <FaShieldAlt />,
+      code: `// Example: Custom Provider with Headers
 const customMirrorNode = new HederaMirrorNode('mainnet', logger, {
   customUrl: 'https://custom-mirror.example.com/api',
   apiKey: 'your-api-key',
@@ -46,8 +59,10 @@ const customMirrorNode = new HederaMirrorNode('mainnet', logger, {
     'X-Provider-Id': 'my-application',
     'X-Request-Source': 'production'
   }
-});
-```
+});`
+    }
+  ]}
+/>
 
 ### Configuration Options
 
@@ -68,10 +83,16 @@ interface MirrorNodeConfig {
 
 ### Dynamic Configuration Updates
 
-Update mirror node configuration at runtime based on application needs:
-
-```typescript
-const mirrorNode = new HederaMirrorNode('mainnet', logger);
+<TabbedTerminal
+  title="Runtime Configuration"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'dynamic',
+      title: 'Dynamic Switching',
+      language: 'typescript',
+      icon: <FaCogs />,
+      code: `const mirrorNode = new HederaMirrorNode('mainnet', logger);
 
 // Switch to high-performance provider during peak usage
 function switchToHighPerformanceMode() {
@@ -91,22 +112,34 @@ function switchToStandardMode() {
     apiKey: undefined,
     headers: {}
   });
-}
-```
+}`
+    }
+  ]}
+/>
 
 ## Retry Configuration
 
 Customize retry behavior for network requests to handle transient failures:
 
-```typescript
-// Configure retry settings
+<TabbedTerminal
+  title="Retry Logic"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'retry',
+      title: 'Retry Strategy',
+      language: 'typescript',
+      icon: <FaTools />,
+      code: `// Configure retry settings
 mirrorNode.configureRetry({
   maxRetries: 5,              // Maximum number of retry attempts
   initialDelayMs: 500,        // Initial delay between retries
   maxDelayMs: 30000,          // Maximum delay between retries
   backoffFactor: 2            // Exponential backoff multiplier
-});
-```
+});`
+    }
+  ]}
+/>
 
 ### Retry Strategy
 
@@ -119,10 +152,18 @@ The SDK implements intelligent retry logic:
 
 ## Integration with HCS Protocols
 
-### HCS-1 Inscriptions with Custom Mirror Nodes
+### Custom Mirror Nodes with Inscriptions & HCS-10
 
-```typescript
-import { inscribe } from '@hashgraphonline/standards-sdk';
+<TabbedTerminal
+  title="Protocol Integration"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'inscribe',
+      title: 'HCS-1 Inscription',
+      language: 'typescript',
+      icon: <FaCode />,
+      code: `import { inscribe } from '@hashgraphonline/standards-sdk';
 
 // Configure custom mirror node for inscriptions
 const customConfig = {
@@ -144,13 +185,14 @@ const result = await inscribe(
     accountId: '0.0.123456',
     privateKey: 'your-private-key'
   }
-);
-```
-
-### HCS-10 Agent Communication
-
-```typescript
-import { HCS10Client } from '@hashgraphonline/standards-sdk';
+);`
+    },
+    {
+      id: 'hcs10',
+      title: 'HCS-10 Agent',
+      language: 'typescript',
+      icon: <FaCode />,
+      code: `import { HCS10Client } from '@hashgraphonline/standards-sdk';
 
 // Initialize with custom mirror node
 const agentClient = new HCS10Client({
@@ -159,15 +201,25 @@ const agentClient = new HCS10Client({
     customUrl: 'https://agent-optimized-mirror.com',
     apiKey: process.env.AGENT_MIRROR_KEY
   })
-});
-```
+});`
+    }
+  ]}
+/>
 
 ## Environment-Based Configuration
 
 Implement environment-aware configuration:
 
-```typescript
-import { HederaMirrorNode, Logger } from '@hashgraphonline/standards-sdk';
+<TabbedTerminal
+  title="Environment Setup"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'env',
+      title: 'Env Aware Factory',
+      language: 'typescript',
+      icon: <FaTools />,
+      code: `import { HederaMirrorNode, Logger } from '@hashgraphonline/standards-sdk';
 
 function createMirrorNode(network: 'mainnet' | 'testnet'): HederaMirrorNode {
   const logger = new Logger({ 
@@ -203,32 +255,32 @@ function createMirrorNode(network: 'mainnet' | 'testnet'): HederaMirrorNode {
   }
 
   return new HederaMirrorNode(network, logger);
-}
-```
+}`
+    }
+  ]}
+/>
 
 ## Performance Optimization
 
-### Connection Pooling
+### Connection Pooling & Batching
 
-When using custom mirror nodes, implement connection pooling for better performance:
-
-```typescript
-import { HederaMirrorNode } from '@hashgraphonline/standards-sdk';
-
-// Create a pool of mirror node instances
+<TabbedTerminal
+  title="Optimization"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'pooling',
+      title: 'Connection Pool',
+      language: 'typescript',
+      icon: <FaServer />,
+      code: `// Create a pool of mirror node instances
 class MirrorNodePool {
   private pool: HederaMirrorNode[] = [];
   private currentIndex = 0;
 
-  constructor(
-    size: number,
-    network: 'mainnet' | 'testnet',
-    config: MirrorNodeConfig
-  ) {
+  constructor(size: number, network: 'mainnet' | 'testnet', config: MirrorNodeConfig) {
     for (let i = 0; i < size; i++) {
-      this.pool.push(
-        new HederaMirrorNode(network, logger, config)
-      );
+      this.pool.push(new HederaMirrorNode(network, logger, config));
     }
   }
 
@@ -246,15 +298,14 @@ const mirrorPool = new MirrorNodePool(5, 'mainnet', {
 });
 
 // Get next available mirror node instance
-const mirrorNode = mirrorPool.getNext();
-```
-
-### Request Batching
-
-Optimize multiple mirror node requests:
-
-```typescript
-// Batch multiple account queries
+const mirrorNode = mirrorPool.getNext();`
+    },
+    {
+      id: 'batching',
+      title: 'Request Batching',
+      language: 'typescript',
+      icon: <FaTools />,
+      code: `// Batch multiple account queries
 async function batchAccountQueries(accountIds: string[]) {
   const mirrorNode = new HederaMirrorNode('mainnet', logger, {
     customUrl: process.env.BATCH_OPTIMIZED_MIRROR_URL,
@@ -274,87 +325,89 @@ async function batchAccountQueries(accountIds: string[]) {
   }
 
   return results;
-}
-```
+}`
+    }
+  ]}
+/>
 
 ## Security Considerations
 
-### API Key Management
+### API Key Management & Secure Headers
 
-Best practices for managing API keys:
-
-```typescript
-// Never hardcode API keys
-const UNSAFE = {
-  apiKey: 'sk_live_abc123...' // ❌ Never do this
-};
+<TabbedTerminal
+  title="Security"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'keys',
+      title: 'API Managing',
+      language: 'typescript',
+      icon: <FaShieldAlt />,
+      code: `// Never hardcode API keys
+const UNSAFE = { apiKey: 'sk_live_abc123...' }; // ❌ Never do this
 
 // Use environment variables
-const SAFE = {
-  apiKey: process.env.MIRROR_NODE_API_KEY // ✅ Load from environment
-};
+const SAFE = { apiKey: process.env.MIRROR_NODE_API_KEY }; // ✅ Load from environment
 
 // Validate API key presence
 if (!process.env.MIRROR_NODE_API_KEY) {
   throw new Error('MIRROR_NODE_API_KEY environment variable is required');
-}
-```
-
-### Secure Headers
-
-Add security headers when using custom providers:
-
-```typescript
-const mirrorNode = new HederaMirrorNode('mainnet', logger, {
+}`
+    },
+    {
+      id: 'headers',
+      title: 'Secure Headers',
+      language: 'typescript',
+      icon: <FaShieldAlt />,
+      code: `const mirrorNode = new HederaMirrorNode('mainnet', logger, {
   customUrl: process.env.MIRROR_NODE_URL,
   apiKey: process.env.API_KEY,
   headers: {
     'X-Request-ID': generateRequestId(),
     'X-Client-Version': packageJson.version,
-    'User-Agent': `${packageJson.name}/${packageJson.version}`
+    'User-Agent': \`\${packageJson.name}/\${packageJson.version}\`
   }
-});
-```
+});`
+    }
+  ]}
+/>
 
 ## Monitoring and Debugging
 
-### Request Logging
-
-Enable detailed logging for debugging:
-
-```typescript
-const logger = new Logger({
+<TabbedTerminal
+  title="Monitoring"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'logging',
+      title: 'Request Logging',
+      language: 'typescript',
+      icon: <FaCode />,
+      code: `const logger = new Logger({
   module: 'MirrorNode',
   level: 'debug', // Enable debug logs
   callback: (level, message, meta) => {
-    // Custom logging logic
     if (meta?.url) {
-      console.log(`Mirror Node Request: ${meta.url}`);
+      console.log(\`Mirror Node Request: \${meta.url}\`);
     }
   }
 });
 
 const mirrorNode = new HederaMirrorNode('testnet', logger, {
   customUrl: process.env.DEBUG_MIRROR_URL
-});
-```
-
-### Performance Metrics
-
-Track mirror node performance:
-
-```typescript
-class MetricsMirrorNode extends HederaMirrorNode {
-  private metrics = {
-    requests: 0,
-    errors: 0,
-    totalLatency: 0
-  };
+});`
+    },
+    {
+      id: 'metrics',
+      title: 'Metrics Wrapper',
+      language: 'typescript',
+      icon: <FaCogs />,
+      code: `class MetricsMirrorNode extends HederaMirrorNode {
+  private metrics = { requests: 0, errors: 0, totalLatency: 0 };
 
   async requestAccount(accountId: string) {
     const start = Date.now();
     this.metrics.requests++;
-
     try {
       const result = await super.requestAccount(accountId);
       this.metrics.totalLatency += Date.now() - start;
@@ -372,11 +425,13 @@ class MetricsMirrorNode extends HederaMirrorNode {
       errorRate: this.metrics.errors / this.metrics.requests
     };
   }
-}
-```
+}`
+    }
+  ]}
+/>
 
 ## Next Steps
 
-- Learn about [HCS-10 Agent Communication](./hcs-10) for agent-specific configurations
+- Learn about [HCS-10 Agent Communication](./hcs-10/overview.md) for agent-specific configurations
 - Explore [Utilities and Services](./utils-services.md) for more helper functions
 - View [Integration Examples](https://github.com/hashgraph-online/standards-sdk/tree/main/examples) on GitHub

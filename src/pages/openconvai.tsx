@@ -68,7 +68,7 @@ const NeuralNetworkVisual = () => {
 
 const MessageFlowVisual = () => {
     return (
-        <div className="w-full h-full min-h-[600px] bg-[#0a0b10] rounded-[3rem] border border-white/10 p-12 relative overflow-hidden flex flex-col justify-between shadow-2xl">
+        <div className="w-full h-full min-h-[600px] bg-[#1a1f3a] rounded-[3rem] border border-white/10 p-12 relative overflow-hidden flex flex-col justify-between shadow-2xl">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0.5 h-full bg-gradient-to-b from-[#5599fe] via-[#a679f0] to-[#48df7b] opacity-20" />
             
             <div className="flex justify-between items-start z-10">
@@ -116,7 +116,7 @@ const FeatureCard = ({ icon, title, description, color = "#5599fe", delay = 0 })
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-50px" }}
         transition={{ duration: 0.8, delay }}
-        className="p-10 h-full bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/5 backdrop-blur-sm rounded-[2rem] hover:border-[#5599fe]/50 transition-all shadow-xl dark:shadow-none group"
+        className="p-10 h-full bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 backdrop-blur-sm rounded-[2rem] hover:border-[#5599fe]/50 transition-all shadow-xl dark:shadow-none group"
     >
         <div className="w-16 h-16 mb-8 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-500" style={{ backgroundColor: `${color}15`, color }}>{icon}</div>
         <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{title}</h3>
@@ -160,7 +160,7 @@ const OpenConvAIPage: React.FC = () => {
       title='HCS-10 OpenConvAI | Hashgraph Online'
       description='HCS-10 OpenConvAI: Decentralized AI Agent Communication Protocol.'
     >
-      <div className='min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#5599fe] selection:text-white transition-colors duration-300'>
+      <div className='min-h-screen bg-white dark:bg-[#1a1f3a] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#5599fe] selection:text-white transition-colors duration-300'>
         <ScrollProgress />
         
         {/* Background Effects */}
@@ -221,7 +221,7 @@ const OpenConvAIPage: React.FC = () => {
         </section>
 
         {/* 2. THE PROBLEM / SOLUTION - Split View */}
-        <section className="py-24 relative z-10 bg-white dark:bg-[#050505]/80 backdrop-blur-3xl border-t border-b border-gray-200 dark:border-white/5">
+        <section className="py-24 relative z-10 bg-white dark:bg-[#1a1f3a]/80 backdrop-blur-3xl border-t border-b border-gray-200 dark:border-white/5">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="grid xl:grid-cols-2 gap-16">
                      <div className="sticky top-48 h-fit">
@@ -267,26 +267,26 @@ const OpenConvAIPage: React.FC = () => {
 
         {/* 3. ARCHITECTURE - Wide */}
         <section className="py-24 relative z-10 overflow-hidden">
-            <div className="absolute inset-0 bg-gray-50 dark:bg-[#0a0b10] skew-y-2 transform origin-top-left -z-10 scale-110" />
+            <div className="absolute inset-0 bg-gray-50 dark:bg-[#1a1f3a] skew-y-2 transform origin-top-left -z-10 scale-110" />
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <SectionHeader title="Topic Architecture." subtitle="THE PROTOCOL" color="blue" />
                 
                 <div className="grid xl:grid-cols-3 gap-16 mt-32">
-                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
+                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                         <div className="absolute -top-10 left-12 w-20 h-20 bg-[#a679f0] rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">1</div>
                         <h3 className="text-4xl font-bold mb-6 mt-4">Registry Topic</h3>
                         <code className="block w-full p-6 bg-gray-100 dark:bg-gray-900 rounded-2xl font-mono text-lg text-[#a679f0] mb-8">hcs-10:0:86400:3</code>
                         <p className="text-gray-600 dark:text-gray-400 text-xl leading-relaxed">The global phonebook. Agents announce their existence here. It can be fee-gated via HIP-991 to prevent spam.</p>
                     </motion.div>
 
-                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-24">
+                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-24">
                         <div className="absolute -top-10 left-12 w-20 h-20 bg-[#5599fe] rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">2</div>
                         <h3 className="text-4xl font-bold mb-6 mt-4">Inbound Topic</h3>
                         <code className="block w-full p-6 bg-gray-100 dark:bg-gray-900 rounded-2xl font-mono text-lg text-[#5599fe] mb-8">hcs-10:0:86400:0:{`{id}`}</code>
                         <p className="text-gray-600 dark:text-gray-400 text-xl leading-relaxed">The agent's public inbox. Other agents send <code>connection_request</code> messages here. Think of it as a DM request.</p>
                     </motion.div>
 
-                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-black rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-48">
+                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-48">
                         <div className="absolute -top-10 left-12 w-20 h-20 bg-[#48df7b] rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">3</div>
                         <h3 className="text-4xl font-bold mb-6 mt-4">Connection Topic</h3>
                         <code className="block w-full p-6 bg-gray-100 dark:bg-gray-900 rounded-2xl font-mono text-lg text-[#48df7b] mb-8">hcs-10:1:86400:2:{`{id}`}</code>
@@ -332,7 +332,7 @@ const OpenConvAIPage: React.FC = () => {
         </section>
 
         {/* 5. CODE DEEP DIVE - Wide */}
-        <section className="py-24 bg-[#f0f0f0] dark:bg-[#0a0b10] text-gray-900 dark:text-white transition-colors duration-300">
+        <section className="py-24 bg-[#f0f0f0] dark:bg-[#1a1f3a] text-gray-900 dark:text-white transition-colors duration-300">
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <SectionHeader title="Build on HCS-10." subtitle="DEVELOPER SDK" color="blue" />
                 
@@ -422,7 +422,7 @@ const OpenConvAIPage: React.FC = () => {
         </section>
 
         {/* 7. ECONOMICS & SPAM */}
-        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0b10]">
+        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#1a1f3a]">
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <div className="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
@@ -454,7 +454,7 @@ const OpenConvAIPage: React.FC = () => {
                             </li>
                         </ul>
                     </div>
-                    <div className="bg-white dark:bg-black p-16 rounded-[4rem] shadow-2xl border border-gray-200 dark:border-white/10 relative overflow-hidden">
+                    <div className="bg-white dark:bg-[#1a1f3a] p-16 rounded-[4rem] shadow-2xl border border-gray-200 dark:border-white/10 relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-12 opacity-5">
                             <FaDollarSign className="text-[15rem] text-[#48df7b]" />
                         </div>

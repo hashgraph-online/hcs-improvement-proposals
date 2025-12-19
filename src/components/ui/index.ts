@@ -28,3 +28,5 @@ export {
   CodeHeading,
 } from './Typography';
 export { LaptopMockup } from './LaptopMockup';
+export { default as TabbedTerminal } from './TabbedTerminal';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './Tabs';

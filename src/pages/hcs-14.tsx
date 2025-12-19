@@ -35,7 +35,7 @@ const UAIDHeroVisual = () => {
                 repeat: Infinity, 
                 ease: "easeInOut" 
             }}
-            className="relative w-[500px] h-[300px] rounded-[2rem] border-2 border-[#5599fe]/50 bg-white/10 dark:bg-black/80 backdrop-blur-2xl shadow-[0_0_100px_rgba(85,153,254,0.3)] flex flex-col p-8 justify-between [transform-style:preserve-3d]"
+            className="relative w-[500px] h-[300px] rounded-[2rem] border-2 border-[#5599fe]/50 bg-white/10 dark:bg-[#1a1f3a]/80 backdrop-blur-2xl shadow-[0_0_100px_rgba(85,153,254,0.3)] flex flex-col p-8 justify-between [transform-style:preserve-3d]"
         >
             <div className="flex justify-between items-start [transform:translateZ(40px)]">
                 <div className="flex items-center gap-4">
@@ -69,21 +69,21 @@ const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, sub
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div 
+            <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="flex items-center gap-4 mb-6"
+                className="flex items-center gap-3 mb-4"
             >
-                <span className="w-16 h-1 rounded-full" style={{ backgroundColor: colorHex }} />
-                <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
+                <span className="w-12 h-0.5 rounded-full" style={{ backgroundColor: colorHex }} />
+                <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
             </motion.div>
-            <motion.h2 
+            <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
+                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
             </motion.h2>
@@ -98,7 +98,7 @@ export default function HCS14Page() {
   
   return (
     <Layout title="HCS-14 Universal Agent ID" description="Globally unique identifiers for AI agents.">
-      <div className='min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#5599fe] selection:text-white transition-colors duration-300'>
+      <div className='min-h-screen bg-white dark:bg-[#1a1f3a] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#5599fe] selection:text-white transition-colors duration-300'>
         <ScrollProgress />
         
         {/* Background Noise */}
@@ -125,15 +125,17 @@ export default function HCS14Page() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
+                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
                                     <div className="py-2">
                                         <Link to="/docs/intro" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Library</Link>
+                                        <Link to="/tutorials" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Tutorials</Link>
                                         <div className="h-px bg-gray-100 dark:bg-white/5 my-1" />
                                         <Link to="/hashinals" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Files & Hashinals</Link>
                                         <Link to="/registries" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Data Registries</Link>
                                         <Link to="/hcs-14" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Universal Agent Identity</Link>
                                         <Link to="/profiles" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Identity Metadata</Link>
                                         <Link to="/hcs-20" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Auditable Points</Link>
+                                        <Link to="/hcs-21" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Adapter Registry</Link>
                                         <Link to="/openconvai" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Agent Communication</Link>
                                         <Link to="/floras" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">AppNet Accounts</Link>
                                     </div>
@@ -141,21 +143,21 @@ export default function HCS14Page() {
                             )}
                         </div>
 
-                        <h1 className="text-8xl md:text-9xl font-bold tracking-tighter leading-[0.85] mb-12">
+                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.85] mb-6">
                             ONE ID. <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#5599fe] animate-gradient-x">EVERY PROTOCOL.</span>
                         </h1>
 
-                        <p className="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 max-w-3xl mb-16 leading-relaxed border-l-8 border-[#5599fe] pl-10">
-                            <strong>HCS-14 Universal Agent ID</strong> enables consistent agent identification across web2 APIs, web3 protocols, and hybrid systems. 
+                        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mb-8 leading-relaxed border-l-4 border-[#5599fe] pl-6">
+                            <strong>HCS-14 Universal Agent ID</strong> enables consistent agent identification across web2 APIs, web3 protocols, and hybrid systems.
                             Deterministic, self-describing, and decentralized.
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-8">
-                            <PrimaryButton href="/docs/standards/hcs-14" className="!text-xl !px-12 !py-6 shadow-2xl shadow-blue-500/20 rounded-2xl flex items-center justify-center gap-3">
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <PrimaryButton href="/docs/standards/hcs-14" className="!text-base !px-8 !py-4 shadow-2xl shadow-blue-500/20 rounded-2xl flex items-center justify-center gap-3">
                                 READ SPEC <FaIdCard />
                             </PrimaryButton>
-                            <SecondaryButton href="https://hol.org/points" className="!text-xl !px-12 !py-6 !border-[#48df7b] !text-[#48df7b] hover:!bg-[#48df7b] hover:!text-white rounded-2xl">
+                            <SecondaryButton href="https://hol.org/points" className="!text-base !px-8 !py-4 !border-[#48df7b] !text-[#48df7b] hover:!bg-[#48df7b] hover:!text-white rounded-2xl">
                                 COLLECT POINTS
                             </SecondaryButton>
                         </div>
@@ -177,16 +179,16 @@ export default function HCS14Page() {
         </section>
 
         {/* 2. THE FRAGMENTATION PROBLEM */}
-        <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#0a0b10] border-t border-b border-gray-200 dark:border-white/5">
+        <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#1a1f3a] border-t border-b border-gray-200 dark:border-white/5">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
-                 <div className="grid xl:grid-cols-2 gap-16">
+                 <div className="grid xl:grid-cols-2 gap-8">
                      <div className="sticky top-48 h-fit">
                          <SectionHeader title="The Babel Problem." subtitle="FRAGMENTATION" color="purple" />
-                         <p className="text-2xl text-gray-600 dark:text-gray-400 mb-12 leading-relaxed">
+                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                              Every protocol has its own ID system. Web2 has URLs. Blockchains have addresses. Registries have names. 
                              Agents cannot cross these boundaries without losing their identity.
                          </p>
-                         <div className="p-10 bg-[#a679f0]/10 border border-[#a679f0]/30 rounded-3xl">
+                         <div className="p-6 bg-[#a679f0]/10 border border-[#a679f0]/30 rounded-3xl">
                              <p className="text-xl text-gray-900 dark:text-white leading-relaxed font-bold">
                                  HCS-14 creates a Universal Translation Layer. A single UAID string contains everything needed to verify and route to an agent, regardless of its native habitat.
                              </p>
@@ -203,12 +205,12 @@ export default function HCS14Page() {
                                 initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
-                                className="p-16 rounded-[3rem] bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/5 hover:border-[#a679f0]/50 transition-colors group shadow-xl"
+                                className="p-12 rounded-[3rem] bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#a679f0]/50 transition-colors group shadow-xl"
                              >
                                  <div className="w-20 h-20 rounded-2xl bg-[#a679f0]/10 text-[#a679f0] flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
                                      {item.icon}
                                  </div>
-                                 <h3 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">{item.title}</h3>
+                                 <h3 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{item.title}</h3>
                                  <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
                              </motion.div>
                          ))}
@@ -225,28 +227,28 @@ export default function HCS14Page() {
                 
                 <div className="grid xl:grid-cols-2 gap-12 mt-32 items-start">
                     <div>
-                        <div className="mb-16">
-                            <h3 className="text-4xl font-bold mb-6 text-[#5599fe]">1. The AID Target</h3>
+                        <div className="mb-8">
+                            <h3 className="text-3xl font-bold mb-4 text-[#5599fe]">1. The AID Target</h3>
                             <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
                                 For agents that don't have a W3C DID. The identifier is a <strong>deterministic SHA-384 hash</strong> of the agent's canonical metadata (Name, Registry, Protocol, Native ID, Skills).
                             </p>
-                            <code className="block bg-white dark:bg-black p-6 rounded-2xl border border-gray-200 dark:border-white/10 font-mono text-[#5599fe] text-lg">
+                            <code className="block bg-white dark:bg-[#1a1f3a] p-6 rounded-2xl border border-gray-200 dark:border-white/10 font-mono text-[#5599fe] text-lg">
                                 uaid:aid:{`{hash}`};registry=hol;proto=hcs-10
                             </code>
                         </div>
                         
                         <div>
-                            <h3 className="text-4xl font-bold mb-6 text-[#a679f0]">2. The UAID Target</h3>
+                            <h3 className="text-3xl font-bold mb-4 text-[#a679f0]">2. The UAID Target</h3>
                             <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-8">
                                 For agents that <strong>already have</strong> a self-sovereign DID. HCS-14 wraps the existing DID to add universal routing parameters without changing the underlying identity.
                             </p>
-                            <code className="block bg-white dark:bg-black p-6 rounded-2xl border border-gray-200 dark:border-white/10 font-mono text-[#a679f0] text-lg">
+                            <code className="block bg-white dark:bg-[#1a1f3a] p-6 rounded-2xl border border-gray-200 dark:border-white/10 font-mono text-[#a679f0] text-lg">
                                 uaid:did:{`{method-id}`};registry=hol;nativeId=...
                             </code>
                         </div>
                     </div>
 
-                    <div className="bg-[#0f0f16] p-16 rounded-[4rem] border border-white/10 shadow-2xl relative overflow-hidden">
+                    <div className="bg-[#1a1f3a] p-12 rounded-[4rem] border border-white/10 shadow-2xl relative overflow-hidden">
                         <div className="absolute top-0 right-0 p-12 opacity-10 text-[15rem] text-[#5599fe]">
                             <FaFingerprint />
                         </div>
@@ -282,8 +284,8 @@ export default function HCS14Page() {
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <SectionHeader title="Anatomy of an ID." subtitle="SCHEMA" color="green" />
                  
-                 <div className="bg-white dark:bg-[#0a0b10] p-16 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden">
-                     <div className="flex flex-wrap items-center justify-center gap-4 text-2xl md:text-4xl font-mono font-bold mb-16">
+                 <div className="bg-white dark:bg-[#1a1f3a] p-12 rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl overflow-hidden">
+                     <div className="flex flex-wrap items-center justify-center gap-4 text-lg md:text-2xl font-mono font-bold mb-8">
                          <span className="text-gray-400">uaid:</span>
                          <span className="text-[#5599fe]">aid</span>
                          <span className="text-gray-400">:</span>
@@ -317,27 +319,27 @@ export default function HCS14Page() {
         </section>
 
         {/* 5. INTEROPERABILITY */}
-        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0b10]">
+        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#1a1f3a]">
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <div className="grid xl:grid-cols-2 gap-12 items-center">
                     <div className="order-2 xl:order-1">
                         <div className="grid gap-8">
-                            <div className="p-10 bg-white dark:bg-black rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg flex items-center gap-8">
-                                <div className="text-4xl text-[#5599fe]"><FaGlobe /></div>
+                            <div className="p-6 bg-white dark:bg-[#1a1f3a] rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg flex items-center gap-8">
+                                <div className="text-3xl text-[#5599fe]"><FaGlobe /></div>
                                 <div>
                                     <h4 className="text-xl font-bold">Google A2A</h4>
                                     <p className="text-gray-500"><code>nativeId</code> = domain.com</p>
                                 </div>
                             </div>
-                            <div className="p-10 bg-white dark:bg-black rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg flex items-center gap-8">
-                                <div className="text-4xl text-[#a679f0]"><FaServer /></div>
+                            <div className="p-6 bg-white dark:bg-[#1a1f3a] rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg flex items-center gap-8">
+                                <div className="text-3xl text-[#a679f0]"><FaServer /></div>
                                 <div>
                                     <h4 className="text-xl font-bold">Anthropic MCP</h4>
                                     <p className="text-gray-500"><code>nativeId</code> = server-name</p>
                                 </div>
                             </div>
-                            <div className="p-10 bg-white dark:bg-black rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg flex items-center gap-8">
-                                <div className="text-4xl text-[#48df7b]"><FaBolt /></div>
+                            <div className="p-6 bg-white dark:bg-[#1a1f3a] rounded-3xl border border-gray-200 dark:border-white/10 shadow-lg flex items-center gap-8">
+                                <div className="text-3xl text-[#48df7b]"><FaBolt /></div>
                                 <div>
                                     <h4 className="text-xl font-bold">Hedera HCS-10</h4>
                                     <p className="text-gray-500"><code>nativeId</code> = hedera:testnet:0.0.x</p>
@@ -347,7 +349,7 @@ export default function HCS14Page() {
                     </div>
                     <div className="order-1 xl:order-2">
                         <SectionHeader title="Native Protocol IDs." subtitle="INTEROP" color="purple" />
-                        <p className="text-2xl text-gray-600 dark:text-gray-400 mb-12 leading-relaxed">
+                        <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                             HCS-14 respects existing ecosystems. It wraps native IDs (like CAIP-10 accounts or Web Domains) instead of replacing them.
                         </p>
                         <p className="text-xl text-gray-500 leading-relaxed">
@@ -365,7 +367,7 @@ export default function HCS14Page() {
                 
                 <div className="grid xl:grid-cols-2 gap-12 mt-24">
                     <div>
-                        <h4 className="text-3xl font-bold mb-8 text-[#5599fe]">Generate AID</h4>
+                        <h4 className="text-2xl font-bold mb-6 text-[#5599fe]">Generate AID</h4>
                         <Terminal title="generate-id.ts">
                             <Terminal.Line command="import { AgentID } from '@hashgraph/standards';" />
                             <Terminal.Line output="" />
@@ -382,7 +384,7 @@ export default function HCS14Page() {
                     </div>
                     
                     <div>
-                        <h4 className="text-3xl font-bold mb-8 text-[#a679f0]">Parse & Route</h4>
+                        <h4 className="text-2xl font-bold mb-6 text-[#a679f0]">Parse & Route</h4>
                         <Terminal title="parse-id.ts">
                             <Terminal.Line command="const parsed = AgentID.parse(uaidString);" />
                             <Terminal.Line output="" />
@@ -406,14 +408,14 @@ export default function HCS14Page() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="max-w-5xl mx-auto bg-white dark:bg-[#0f0f16] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
+                    className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-16 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
-                    <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Unify Your Agents.</h2>
+                    <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Unify Your Agents.</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-8">
-                        <PrimaryButton href="/docs/libraries/standards-sdk" className="!text-2xl !px-16 !py-8 shadow-2xl rounded-2xl">
+                        <PrimaryButton href="/docs/libraries/standards-sdk" className="!text-base !px-8 !py-4 shadow-2xl rounded-2xl">
                             START BUILDING
                         </PrimaryButton>
-                        <SecondaryButton href="https://hol.org/points" className="!text-2xl !px-16 !py-8 rounded-2xl">
+                        <SecondaryButton href="https://hol.org/points" className="!text-base !px-8 !py-4 rounded-2xl">
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
