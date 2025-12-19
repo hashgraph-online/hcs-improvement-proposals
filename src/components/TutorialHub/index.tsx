@@ -1,20 +1,68 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Typography, AnimatedBackground } from '../ui';
+import { AnimatedBackground } from '../ui';
 import { tutorials } from './data';
 import VideoTheater from './VideoTheater';
 import TutorialStepList from './TutorialStepList';
 import TutorialWaterfall from './TutorialWaterfall';
 
+const getTutorialIdFromHash = (hash: string, fallbackId: string): string => {
+    const rawHash = hash.startsWith('#') ? hash.slice(1) : hash;
+    if (!rawHash) {
+        return fallbackId;
+    }
+    const parsed = rawHash.startsWith('tutorial=') ? rawHash.slice('tutorial='.length) : rawHash;
+    const decoded = decodeURIComponent(parsed);
+    const match = tutorials.find(tutorial => tutorial.id === decoded);
+    return match ? match.id : fallbackId;
+};
+
+const buildTutorialHash = (tutorialId: string): string =>
+    `tutorial=${encodeURIComponent(tutorialId)}`;
+
 const TutorialHub: React.FC = () => {
-    const [activeTutorialId, setActiveTutorialId] = useState(tutorials[0].id);
+    const [activeTutorialId, setActiveTutorialId] = useState(() => {
+        if (typeof window === 'undefined') {
+            return tutorials[0].id;
+        }
+        return getTutorialIdFromHash(window.location.hash, tutorials[0].id);
+    });
 
     const activeTutorial = tutorials.find(t => t.id === activeTutorialId) || tutorials[0];
 
+    React.useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+        }
+        const handleHashChange = () => {
+            const nextId = getTutorialIdFromHash(window.location.hash, tutorials[0].id);
+            if (nextId !== activeTutorialId) {
+                setActiveTutorialId(nextId);
+            }
+        };
+
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, [activeTutorialId]);
+
+    const handleSelect = React.useCallback((id: string) => {
+        setActiveTutorialId(id);
+        if (typeof window === 'undefined') {
+            return;
+        }
+        const nextHash = buildTutorialHash(id);
+        if (window.location.hash !== `#${nextHash}`) {
+            window.history.replaceState(
+                null,
+                '',
+                `${window.location.pathname}${window.location.search}#${nextHash}`
+            );
+        }
+    }, []);
+
     return (
         <div className="min-h-screen bg-white dark:bg-gray-950">
-            {/* 1. Header / Hero: "Learning Paths" */}
             <section className="relative py-6 sm:py-8 overflow-hidden border-b border-gray-100 dark:border-gray-900">
                 <AnimatedBackground
                     variant='blobs'
@@ -40,15 +88,12 @@ const TutorialHub: React.FC = () => {
                 </div>
             </section>
 
-            {/* Main Content Area */}
             <div className="container mx-auto px-4 max-w-7xl pt-6 pb-12">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
-                    {/* Left Column: Active Content (Dominant) */}
                     <div className="lg:col-span-8 space-y-12">
-                        {/* 2. Active Content Card (Video) */}
                         <motion.div
-                            key={activeTutorialId} // Re-animate on change
+                            key={activeTutorialId}
                             initial={{ opacity: 0, scale: 0.98 }}
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.4 }}
@@ -56,20 +101,17 @@ const TutorialHub: React.FC = () => {
                             <VideoTheater tutorial={activeTutorial} />
                         </motion.div>
 
-                        {/* 4. Tabs/Waterfall Content */}
                         <TutorialWaterfall tutorial={activeTutorial} />
                     </div>
 
-                    {/* Right Column: Steps (Secondary) */}
                     <div className="lg:col-span-4">
                         <div className="sticky top-24">
                             <TutorialStepList
                                 currentId={activeTutorialId}
                                 steps={tutorials}
-                                onSelect={setActiveTutorialId}
+                                onSelect={handleSelect}
                             />
 
-                            {/* Optional: Need Help? Box */}
                             <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
                                 <h4 className="font-bold text-gray-900 dark:text-white mb-2">Need Help?</h4>
                                 <p className="text-sm text-gray-500 mb-4">
