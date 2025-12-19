@@ -4,7 +4,7 @@ export const hcs1InscriptionsTutorial: Tutorial = {
   id: "hcs-1-inscriptions",
   title: "HCS-1 Inscriptions",
   subtitle: "Immutable Content Pointers",
-  videoId: "placeholder_hcs1",
+  videoId: "QbAnm0koz3Y",
   duration: "Video",
   difficulty: "Intermediate",
   prerequisites: ["Standards SDK"],

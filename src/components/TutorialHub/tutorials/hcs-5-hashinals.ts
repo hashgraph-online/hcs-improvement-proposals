@@ -4,7 +4,7 @@ export const hcs5HashinalsTutorial: Tutorial = {
   id: "hcs-5-hashinals",
   title: "HCS-5 Hashinals",
   subtitle: "NFTs Backed by HCS-1",
-  videoId: "QbAnm0koz3Y",
+  videoId: "placeholder_hcs5",
   duration: "Video",
   difficulty: "Intermediate",
   prerequisites: ["HCS-1", "Hedera HTS"],
