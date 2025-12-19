@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Tutorial } from './data';
+import type { Tutorial } from './types';
 import { Typography } from '../ui';
 import YouTube from '../YouTube';
 

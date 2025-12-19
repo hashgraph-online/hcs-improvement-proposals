@@ -2,7 +2,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';
-import { Tutorial } from './data';
+import type { Tutorial } from './types';
 
 interface TutorialStepListProps {
     currentId: string;

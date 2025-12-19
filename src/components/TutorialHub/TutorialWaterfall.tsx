@@ -1,7 +1,7 @@
 
 import React from 'react';
 import CodeBlock from '@theme/CodeBlock';
-import { Tutorial } from './data';
+import type { Tutorial } from './types';
 import { Typography } from '../ui';
 
 interface TutorialWaterfallProps {

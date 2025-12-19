@@ -6,8 +6,8 @@ import TutorialHub from '../components/TutorialHub';
 export default function TutorialsPage() {
     return (
         <Layout
-            title="Academy | Hashgraph Standards"
-            description="Master the Agentic Internet with interactive tutorials."
+            title="Hashgraph Standards Academy | HCS Tutorials"
+            description="Learn Hedera Consensus Service (HCS) standards with guided video tutorials, code labs, and real Standards SDK examples for Hashgraph Online."
         >
             <TutorialHub />
         </Layout>
