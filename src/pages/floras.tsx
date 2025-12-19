@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
-import { FaSitemap, FaFingerprint, FaExchangeAlt, FaBolt, FaKey, FaShieldAlt, FaVoteYea, FaNetworkWired, FaUsers, FaCoins, FaCheckDouble, FaTrashAlt, FaArrowDown, FaDatabase } from 'react-icons/fa';
+import { FaSitemap, FaFingerprint, FaExchangeAlt, FaBolt, FaKey, FaShieldAlt, FaVoteYea, FaNetworkWired, FaUsers, FaCoins, FaCheckDouble, FaTrashAlt, FaArrowDown, FaDatabase, FaCogs, FaProjectDiagram, FaLayerGroup } from 'react-icons/fa';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import CodeSnippet from '../components/CodeSnippet';
@@ -39,7 +39,6 @@ const FloraHeroOrb = () => {
             return (
                <g key={i}>
                   <line x1="50%" y1="50%" x2={`${cx}%`} y2={`${cy}%`} stroke="#5599fe" strokeWidth="1" strokeDasharray="4 4" opacity="0.2" />
-                  {/* Flowing Data Packet */}
                   <motion.circle r="3" fill="#5599fe"
                      animate={{ 
                         cx: ["50%", `${cx}%`],
@@ -64,7 +63,6 @@ const FloraHeroOrb = () => {
       {/* ORBITING PETALS (The Signers) */}
       {[0, 120, 240].map((deg, i) => {
          const rad = (deg - 90) * (Math.PI / 180);
-         // Radius = 160px approx
          const x = 160 * Math.cos(rad);
          const y = 160 * Math.sin(rad);
          
@@ -78,13 +76,11 @@ const FloraHeroOrb = () => {
                transition={{ delay: i * 0.2 }}
             >
                <div className="relative group">
-                  <div className="w-16 h-16 bg-white dark:bg-[#0f0f16] rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
+                  <div className="w-16 h-16 bg-white dark:bg-[#1a1f3a] rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
                      <div className="text-[#5599fe] text-xl mb-1"><FaFingerprint /></div>
                      <div className="text-[8px] font-mono text-gray-400">KEY_{i+1}</div>
-                     {/* Status Dot */}
-                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#48df7b] border-2 border-white dark:border-[#0f0f16] rounded-full" />
+                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#48df7b] border-2 border-white dark:border-[#1a1f3a] rounded-full" />
                   </div>
-                  {/* Label tooltip */}
                   <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-mono whitespace-nowrap bg-gray-900 text-white px-2 py-1 rounded">
                      0.0.{1000 + i}
                   </div>
@@ -100,14 +96,10 @@ const FloraHeroOrb = () => {
          animate={{ scale: 1, opacity: 1 }}
          transition={{ delay: 0.5, duration: 0.8 }}
       >
-         {/* Ripples */}
          <div className="absolute inset-0 rounded-full border border-[#5599fe]/20 animate-ping-slow" />
          <div className="absolute -inset-4 rounded-full border border-[#a679f0]/20 animate-ping-slow delay-75" />
          
-         {/* Main Hub */}
          <div className="w-40 h-40 bg-gradient-to-br from-white to-gray-50 dark:from-[#1a1b2e] dark:to-gray-900 rounded-full border-2 border-[#5599fe]/30 flex flex-col items-center justify-center shadow-[0_0_50px_rgba(85,153,254,0.2)] backdrop-blur-xl">
-             
-             {/* Triad Indicators */}
              <div className="flex gap-2 mb-3">
                  <div className="w-1.5 h-8 bg-[#a679f0] rounded-full animate-pulse" title="Communication" />
                  <div className="w-1.5 h-10 bg-[#5599fe] rounded-full animate-pulse delay-75" title="Execution" />
@@ -128,9 +120,175 @@ const FloraHeroOrb = () => {
   );
 };
 
+const AnatomyVisual = () => {
+    return (
+        <div className="w-full h-full min-h-[700px] bg-gray-50 dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 p-12 relative overflow-hidden flex flex-col justify-center items-center shadow-inner">
+            {/* 1. MEMBERS LAYER */}
+            <div className="flex gap-8 mb-8 relative z-10">
+                {[1, 2, 3].map(i => (
+                    <motion.div 
+                        key={i}
+                        initial={{ y: -20, opacity: 0 }}
+                        whileInView={{ y: 0, opacity: 1 }}
+                        transition={{ delay: i * 0.1 }}
+                        className="w-16 h-16 rounded-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/20 flex items-center justify-center text-xl text-[#a679f0] shadow-lg"
+                    >
+                        <FaFingerprint />
+                    </motion.div>
+                ))}
+            </div>
+
+            {/* Connecting Lines */}
+            <div className="h-32 w-0.5 bg-gradient-to-b from-[#a679f0] to-[#5599fe] mb-8 relative z-0">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-0.5 bg-[#a679f0]" /> {/* Horizontal bar */}
+                <div className="absolute top-0 left-[-64px] w-0.5 h-4 bg-[#a679f0]" />
+                <div className="absolute top-0 right-[-64px] w-0.5 h-4 bg-[#a679f0]" />
+            </div>
+
+            {/* 2. FLORA LAYER */}
+            <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                className="w-full max-w-lg bg-white dark:bg-[#1a1f3a] rounded-[2.5rem] border-2 border-[#5599fe]/20 p-8 shadow-2xl relative z-10"
+            >
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#5599fe] text-white px-4 py-1 rounded-full text-xs font-bold font-mono tracking-widest flex items-center gap-2">
+                    <FaBolt /> FLORA ACCOUNT
+                </div>
+
+                <div className="grid grid-cols-3 gap-4 text-center mt-4">
+                    <div className="p-4 rounded-2xl bg-[#5599fe]/5 border border-[#5599fe]/10">
+                        <FaDatabase className="mx-auto text-2xl text-[#5599fe] mb-2" />
+                        <div className="text-xs font-bold text-[#5599fe]">DATA</div>
+                        <div className="text-[10px] text-gray-500">HCS Topics</div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-[#48df7b]/5 border border-[#48df7b]/10">
+                        <FaCoins className="mx-auto text-2xl text-[#48df7b] mb-2" />
+                        <div className="text-xs font-bold text-[#48df7b]">TREASURY</div>
+                        <div className="text-[10px] text-gray-500">HBAR & Tokens</div>
+                    </div>
+                    <div className="p-4 rounded-2xl bg-[#a679f0]/5 border border-[#a679f0]/10">
+                        <FaShieldAlt className="mx-auto text-2xl text-[#a679f0] mb-2" />
+                        <div className="text-xs font-bold text-[#a679f0]">CONSENSUS</div>
+                        <div className="text-[10px] text-gray-500">Threshold Key</div>
+                    </div>
+                </div>
+            </motion.div>
+        </div>
+    )
+}
+
+const StateHashVisual = () => {
+  return (
+    <div className="relative w-full h-[700px] bg-[#3f4174] rounded-[3rem] border border-white/10 overflow-hidden flex flex-col items-center justify-between py-16 shadow-2xl">
+      
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#5599fe]/5 via-transparent to-[#48df7b]/5" />
+
+      {/* TOP: INPUTS */}
+      <div className="flex justify-center gap-4 md:gap-8 z-10 w-full px-8">
+          <InputNode icon={<FaUsers />} label="MEMBERS" color="#5599fe" delay={0} />
+          <InputNode icon={<FaDatabase />} label="TOPICS" color="#a679f0" delay={0.2} />
+          <InputNode icon={<FaCogs />} label="CONFIG" color="#48df7b" delay={0.4} />
+      </div>
+
+      {/* MIDDLE: MERGING BEAMS */}
+      <div className="relative flex-1 w-full flex justify-center items-center">
+          {/* Beams */}
+          <div className="absolute top-0 w-full h-1/2 flex justify-center">
+              <motion.div 
+                className="w-0.5 h-full bg-gradient-to-b from-[#5599fe] to-[#a679f0] absolute left-[20%] md:left-[30%] origin-top"
+                initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} transition={{ duration: 1 }}
+              />
+              <motion.div 
+                className="w-0.5 h-full bg-gradient-to-b from-[#a679f0] to-[#a679f0] absolute left-1/2 -translate-x-1/2 origin-top"
+                initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} transition={{ duration: 1, delay: 0.2 }}
+              />
+              <motion.div 
+                className="w-0.5 h-full bg-gradient-to-b from-[#48df7b] to-[#a679f0] absolute right-[20%] md:right-[30%] origin-top"
+                initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} transition={{ duration: 1, delay: 0.4 }}
+              />
+          </div>
+
+          {/* Central Processor */}
+          <div className="relative z-20 mt-12">
+              <motion.div 
+                  animate={{ 
+                      boxShadow: ["0 0 60px rgba(166,121,240,0.2)", "0 0 100px rgba(166,121,240,0.4)", "0 0 60px rgba(166,121,240,0.2)"],
+                      borderColor: ["rgba(255,255,255,0.1)", "rgba(255,255,255,0.3)", "rgba(255,255,255,0.1)"]
+                  }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="w-48 h-48 rounded-full border border-white/10 border-t-[#a679f0] border-r-[#5599fe] border-b-[#48df7b] flex items-center justify-center backdrop-blur-md"
+              >
+                  <div className="text-center">
+                      <div className="text-[10px] tracking-[0.3em] font-mono text-gray-500 mb-2">HASHING</div>
+                      <div className="text-3xl font-bold text-white">SHA-384</div>
+                  </div>
+              </motion.div>
+              
+              {/* Particles Flowing In */}
+              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  {[...Array(6)].map((_, i) => (
+                      <motion.div
+                          key={i}
+                          className="absolute w-2 h-2 bg-white rounded-full"
+                          animate={{ 
+                              y: [-100, 0], 
+                              opacity: [0, 1, 0],
+                              scale: [0.5, 1.5, 0]
+                          }}
+                          transition={{ 
+                              duration: 2, 
+                              repeat: Infinity, 
+                              delay: i * 0.3,
+                              ease: "circIn" 
+                          }}
+                      />
+                  ))}
+              </div>
+          </div>
+      </div>
+
+      {/* BOTTOM: OUTPUT */}
+      <div className="z-10 flex flex-col items-center gap-4">
+          <motion.div 
+            initial={{ height: 0 }} 
+            whileInView={{ height: 60 }} 
+            className="w-0.5 bg-gradient-to-b from-[#a679f0] to-[#48df7b]" 
+          />
+          
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            viewport={{ once: true }}
+            className="px-10 py-5 bg-[#48df7b]/10 border border-[#48df7b]/30 rounded-2xl backdrop-blur-xl shadow-[0_0_30px_rgba(72,223,123,0.15)] text-center"
+          >
+              <div className="text-xs font-bold text-[#48df7b] tracking-widest mb-1">STATE ROOT</div>
+              <code className="text-white font-mono text-lg">0x7f3a...9c2b</code>
+          </motion.div>
+      </div>
+
+    </div>
+  )
+}
+
+const InputNode = ({ icon, label, color, delay }) => (
+    <motion.div 
+        initial={{ y: -20, opacity: 0 }}
+        whileInView={{ y: 0, opacity: 1 }}
+        transition={{ delay }}
+        className="flex flex-col items-center gap-3"
+    >
+        <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10" style={{ backgroundColor: `${color}15`, color }}>
+            {icon}
+        </div>
+        <div className="text-xs font-bold text-gray-400 tracking-wider">{label}</div>
+    </motion.div>
+)
+
 const KeyArchitectureVisual = () => {
     return (
-        <div className="w-full h-full min-h-[600px] bg-white dark:bg-[#0f0f16] rounded-[3rem] border border-gray-200 dark:border-white/10 p-16 relative overflow-hidden flex flex-col justify-center items-center shadow-2xl">
+        <div className="w-full h-full min-h-[600px] bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 p-16 relative overflow-hidden flex flex-col justify-center items-center shadow-2xl">
             {/* Base Account */}
             <div className="relative z-20 flex flex-col items-center">
                 <div className="w-24 h-24 bg-[#a679f0] rounded-full flex items-center justify-center text-white text-4xl shadow-[0_0_50px_rgba(166,121,240,0.4)] mb-4">
@@ -151,7 +309,7 @@ const KeyArchitectureVisual = () => {
                     <motion.div 
                         key={i}
                         whileHover={{ y: -10 }}
-                        className="flex flex-col items-center p-6 bg-gray-50 dark:bg-black/50 rounded-2xl border border-gray-200 dark:border-white/10"
+                        className="flex flex-col items-center p-6 bg-gray-50 dark:bg-[#1a1f3a]/50 rounded-2xl border border-gray-200 dark:border-white/10"
                     >
                         <div className="w-16 h-16 bg-[#5599fe]/20 rounded-full flex items-center justify-center text-[#5599fe] text-2xl mb-4">
                             <FaFingerprint />
@@ -168,7 +326,7 @@ const KeyArchitectureVisual = () => {
 const TriadCard = ({ color, title, code, desc, icon }) => (
     <motion.div 
         whileHover={{ y: -20, rotateX: 5 }}
-        className="p-12 h-full bg-white dark:bg-[#0f0f16] rounded-[3rem] border-t-8 shadow-2xl relative overflow-hidden group"
+        className="p-12 h-full bg-white dark:bg-[#1a1f3a] rounded-[3rem] border-t-8 shadow-2xl relative overflow-hidden group"
         style={{ borderColor: color }}
     >
         <div className="absolute top-0 right-0 p-8 opacity-5 text-9xl group-hover:opacity-10 transition-opacity" style={{ color }}>
@@ -178,7 +336,7 @@ const TriadCard = ({ color, title, code, desc, icon }) => (
             <div className="text-4xl" style={{ color }}>{icon}</div>
         </div>
         <h4 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">{title}</h4>
-        <code className="inline-block px-4 py-2 bg-gray-100 dark:bg-black rounded-lg font-mono text-sm text-gray-500 mb-8">{code}</code>
+        <code className="inline-block px-4 py-2 bg-gray-100 dark:bg-[#1a1f3a] rounded-lg font-mono text-sm text-gray-500 mb-8">{code}</code>
         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed relative z-10">
             {desc}
         </p>
@@ -211,6 +369,63 @@ const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, sub
     );
 };
 
+const ConsensusVisual = () => {
+    return (
+        <div className="w-full h-full min-h-[500px] bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 p-12 relative overflow-hidden flex flex-col justify-center items-center shadow-2xl">
+            {/* Transaction Proposal */}
+            <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true }}
+                className="w-full max-w-md bg-gray-50 dark:bg-[#1a1f3a] rounded-2xl border-2 border-[#5599fe] p-6 mb-12 relative z-10"
+            >
+                <div className="flex justify-between items-center mb-4">
+                    <div className="text-xs font-bold text-[#5599fe] tracking-widest">SCHEDULED TX</div>
+                    <div className="text-xs font-mono text-gray-400">0.0.999</div>
+                </div>
+                <div className="text-lg font-bold mb-2">Transfer 100 ℏ</div>
+                <div className="w-full h-2 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
+                    <motion.div 
+                        className="h-full bg-[#5599fe]"
+                        initial={{ width: "0%" }}
+                        whileInView={{ width: "66%" }}
+                        transition={{ duration: 1.5, delay: 0.5 }}
+                    />
+                </div>
+                <div className="text-right text-xs mt-2 text-[#5599fe] font-bold">2/3 SIGNED</div>
+            </motion.div>
+
+            {/* Signers */}
+            <div className="flex gap-8 relative z-10">
+                {[1, 2, 3].map(i => (
+                    <div key={i} className="flex flex-col items-center gap-3">
+                        <motion.div 
+                            initial={{ scale: 0 }}
+                            whileInView={{ scale: 1 }}
+                            transition={{ delay: i * 0.2 }}
+                            className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl border-2 shadow-lg transition-colors duration-500 ${i <= 2 ? 'bg-[#48df7b]/10 border-[#48df7b] text-[#48df7b]' : 'bg-gray-100 dark:bg-white/5 border-gray-300 dark:border-white/10 text-gray-400'}`}
+                        >
+                            <FaFingerprint />
+                        </motion.div>
+                        <div className={`text-xs font-mono font-bold ${i <= 2 ? 'text-[#48df7b]' : 'text-gray-400'}`}>
+                            {i <= 2 ? 'SIGNED' : 'PENDING'}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {/* Execution Line */}
+            <motion.div 
+                className="absolute top-1/2 left-0 w-full h-0.5 bg-[#48df7b]"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                transition={{ duration: 1, delay: 1.5 }}
+                style={{ originX: 0 }}
+            />
+        </div>
+    )
+}
+
 // --- MAIN PAGE ---
 
 export default function FlorasPage() {
@@ -218,7 +433,7 @@ export default function FlorasPage() {
 
   return (
     <Layout title="HCS-16 Floras" description="Decentralized AppNet Accounts on Hiero.">
-      <div className='min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#a679f0] selection:text-white transition-colors duration-300'>
+      <div className='min-h-screen bg-white dark:bg-[#1a1f3a] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#a679f0] selection:text-white transition-colors duration-300'>
         <ScrollProgress />
         
         {/* Background Noise */}
@@ -246,16 +461,18 @@ export default function FlorasPage() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
+                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
                                     <div className="py-2">
                                         <Link to="/standards" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Overview</Link>
                                         <Link to="/docs/intro" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Library</Link>
+                                        <Link to="/tutorials" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Tutorials</Link>
                                         <div className="h-px bg-gray-100 dark:bg-white/5 my-1" />
                                         <Link to="/hashinals" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Files & Hashinals</Link>
                                         <Link to="/registries" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Data Registries</Link>
                                         <Link to="/hcs-14" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Universal Agent Identity</Link>
                                         <Link to="/profiles" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Identity Metadata</Link>
                                         <Link to="/hcs-20" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Auditable Points</Link>
+                                        <Link to="/hcs-21" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Adapter Registry</Link>
                                         <Link to="/openconvai" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Agent Communication</Link>
                                         <Link to="/floras" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">AppNet Accounts</Link>
                                     </div>
@@ -269,7 +486,7 @@ export default function FlorasPage() {
                         </h1>
 
                         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-xl mb-8 leading-relaxed border-l-4 border-[#a679f0] pl-6">
-                            Upgrade standard multisig accounts into programmable data networks.
+                            Upgrade standard multisig accounts into programmable data networks.{' '}
                             <strong>HCS-16 Floras</strong> unify identity, sovereign state, and localized consensus into a single living organism.
                         </p>
 
@@ -300,13 +517,13 @@ export default function FlorasPage() {
         </section>
 
         {/* 2. HCS-15: PETALS (The Foundation) */}
-        <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#0a0b10] border-t border-b border-gray-200 dark:border-white/5">
+        <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#1a1f3a] border-t border-b border-gray-200 dark:border-white/5">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="grid xl:grid-cols-2 gap-16">
                      <div className="sticky top-24 h-fit">
                          <SectionHeader title="Petal Accounts." subtitle="HCS-15" color="blue" />
                          <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                             Before you can form a Flora, you need a Petal.
+                             Before you can form a Flora, you need a Petal.{' '}
                              <strong>HCS-15</strong> enables users and agents to create infinite, isolated on-chain identities that share a single ECDSA private key.
                          </p>
                          <p className="text-base text-gray-500 leading-relaxed mb-6">
@@ -318,6 +535,38 @@ export default function FlorasPage() {
                      <KeyArchitectureVisual />
                  </div>
              </div>
+        </section>
+
+        {/* 2.5. WHAT IS A FLORA? (The Bridge) */}
+        <section className="py-24 relative z-10 overflow-hidden">
+            <div className="absolute inset-0 bg-[#5599fe]/5 skew-y-2 transform origin-top-left -z-10 scale-110" />
+            <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
+                <div className="grid xl:grid-cols-2 gap-16 items-center">
+                    <div className="order-2 xl:order-1">
+                        <AnatomyVisual />
+                    </div>
+                    <div className="order-1 xl:order-2">
+                        <SectionHeader title="What is a Flora?" subtitle="DEFINITION" color="purple" />
+                        <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                            A Flora is a <strong>sovereign AppNet account</strong>—a decentralized root of trust for applications, organizations, and agent swarms. While it secures a shared <strong>Treasury</strong> via cryptographic <strong>Thresholds</strong>, its true power lies in coordination.
+                        </p>
+                        <p className="text-base text-gray-500 leading-relaxed mb-8">
+                            It acts as a <strong>consensus engine</strong> for its members. By binding communication, transaction proposals, and state proofs into a single identity, a Flora becomes a programmable entity capable of running complex, decentralized logic entirely on-graph.
+                        </p>
+                        <div className="flex gap-4">
+                            <div className="flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300">
+                                <span className="w-2 h-2 bg-[#5599fe] rounded-full" /> Data
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300">
+                                <span className="w-2 h-2 bg-[#a679f0] rounded-full" /> Consensus
+                            </div>
+                            <div className="flex items-center gap-2 text-sm font-bold text-gray-700 dark:text-gray-300">
+                                <span className="w-2 h-2 bg-[#48df7b] rounded-full" /> Treasury
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
 
         {/* 3. HCS-16: THE TRIAD */}
@@ -356,7 +605,7 @@ export default function FlorasPage() {
         </section>
 
         {/* 4. NETWORK FORMATION */}
-        <section className="py-24 bg-white dark:bg-[#0a0b10] text-gray-900 dark:text-white overflow-hidden relative">
+        <section className="py-24 bg-white dark:bg-[#1a1f3a] text-gray-900 dark:text-white overflow-hidden relative">
             <div className="absolute inset-0 bg-[#a679f0]/5 skew-y-3 transform origin-top-left" />
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <div className="grid xl:grid-cols-2 gap-16 items-center">
@@ -370,14 +619,14 @@ export default function FlorasPage() {
                                 { title: "Activation", desc: "Members post `flora_created` to CTopic to confirm participation." }
                             ].map((step, i) => (
                                 <div key={i} className="relative">
-                                    <div className="absolute -left-[52px] top-0 w-8 h-8 bg-[#a679f0] rounded-full flex items-center justify-center font-bold text-black border-2 border-white dark:border-black text-sm">{i + 1}</div>
+                                    <div className="absolute -left-[52px] top-0 w-8 h-8 bg-[#a679f0] rounded-full flex items-center justify-center font-bold text-white border-2 border-white dark:border-[#1a1f3a] text-sm">{i + 1}</div>
                                     <h4 className="text-xl font-bold mb-2">{step.title}</h4>
                                     <p className="text-gray-600 dark:text-gray-400 text-base">{step.desc}</p>
                                 </div>
                             ))}
                         </div>
                     </div>
-                    <div className="bg-gray-100 dark:bg-[#0f0f16] p-16 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
+                    <div className="bg-gray-100 dark:bg-[#1a1f3a] p-16 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                         <div className="absolute -top-10 -right-10 w-32 h-32 bg-[#a679f0]/20 rounded-full blur-3xl" />
                         <div className="text-gray-500 mb-8 font-mono text-lg uppercase tracking-widest">// FLORA PROFILE (HCS-11 EXTENSION)</div>
                         <Terminal title="flora-profile.json" className="h-full">
@@ -406,39 +655,71 @@ export default function FlorasPage() {
             </div>
         </section>
 
+        {/* 4.5. CONSENSUS (New Section) */}
+        <section className="py-24 relative z-10">
+             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
+                 <div className="grid xl:grid-cols-2 gap-16 items-center">
+                     <div>
+                         <SectionHeader title="Native Consensus." subtitle="EXECUTION" color="blue" />
+                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                             Floras leverage the native <strong>Hedera Consensus Service (HCS)</strong> and <strong>Threshold Keys</strong> to reach agreement. 
+                             Unlike complex smart contract DAOs, basic coordination happens directly on the ledger layer.
+                         </p>
+                         <p className="text-base text-gray-500 mb-8 leading-relaxed">
+                             Proposals are broadcast to the <strong>Transaction Topic (TTopic)</strong>. Members review the `schedule_id` and sign the transaction using their Petal keys. Once the threshold (e.g., 2-of-3) is met, the Hedera network automatically executes the action.
+                         </p>
+                     </div>
+                     <div>
+                         <ConsensusVisual />
+                     </div>
+                 </div>
+             </div>
+        </section>
+
         {/* 5. HCS-17: STATE */}
         <section className="py-24 relative z-10">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
-                 <SectionHeader title="Composite State Hash." subtitle="HCS-17" color="green" />
-                 <div className="grid xl:grid-cols-2 gap-16">
+                 <SectionHeader title="The Heartbeat of Trust." subtitle="HCS-17" color="green" />
+                 <div className="grid xl:grid-cols-2 gap-16 items-center">
                      <div>
-                         <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
-                             How do you trust a decentralized organism? You verify its Pulse.
-                             <strong>HCS-17</strong> defines a deterministic method for calculating a "State Hash" (SHA-384).
+                         <p className="text-xl text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                             In a decentralized organism, truth isn't just stored in a database—it's derived.{' '}
+                             <strong>HCS-17</strong> allows any observer to cryptographically verify the exact state of a Flora in milliseconds, without replaying the entire history.
                          </p>
-                         <p className="text-base text-gray-500 mb-6">
-                             For Floras, this is recursive:
+                         <p className="text-lg text-gray-500 mb-12">
+                             It acts as a real-time, tamper-proof pulse. By aggregating member states, topic sequences, and configuration into a single Merkle-like hash, we achieve instant finality for AppNet state.
                          </p>
-                         <div className="p-6 bg-gray-50 dark:bg-[#0f0f16] rounded-2xl border border-gray-200 dark:border-white/10">
-                             <code className="text-base font-mono text-[#48df7b]">SHA384( Σ(Members) | Σ(Topics) | KeyFP )</code>
+                         
+                         <div className="space-y-6">
+                             <div className="flex gap-4 items-start">
+                                 <div className="w-10 h-10 rounded-lg bg-[#48df7b]/10 flex items-center justify-center text-[#48df7b] shrink-0 mt-1">
+                                     <FaCheckDouble />
+                                 </div>
+                                 <div>
+                                     <h4 className="font-bold text-gray-900 dark:text-white">Trustless Verification</h4>
+                                     <p className="text-sm text-gray-500">Light clients can verify state without running a full node.</p>
+                                 </div>
+                             </div>
+                             <div className="flex gap-4 items-start">
+                                 <div className="w-10 h-10 rounded-lg bg-[#48df7b]/10 flex items-center justify-center text-[#48df7b] shrink-0 mt-1">
+                                     <FaBolt />
+                                 </div>
+                                 <div>
+                                     <h4 className="font-bold text-gray-900 dark:text-white">Instant Sync</h4>
+                                     <p className="text-sm text-gray-500">New members can join and sync state immediately using the latest pulse.</p>
+                                 </div>
+                             </div>
                          </div>
                      </div>
                      <div>
-                         <div className="bg-white dark:bg-black p-8 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl">
-                             <h4 className="font-bold mb-6 text-xl">Algorithm Breakdown</h4>
-                             <ul className="space-y-4 text-base text-gray-600 dark:text-gray-400">
-                                 <li className="flex gap-4"><FaCheckDouble className="text-[#48df7b] mt-1 text-lg" /> 1. Sort & Hash Member States (Petals)</li>
-                                 <li className="flex gap-4"><FaCheckDouble className="text-[#48df7b] mt-1 text-lg" /> 2. Sort & Hash Topic Running Hashes</li>
-                                 <li className="flex gap-4"><FaCheckDouble className="text-[#48df7b] mt-1 text-lg" /> 3. Combine with Threshold Key Fingerprint</li>
-                             </ul>
-                         </div>
+                         <StateHashVisual />
                      </div>
                  </div>
              </div>
         </section>
 
         {/* 6. GOVERNANCE & VOTING */}
-        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0b10]">
+        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#1a1f3a]">
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1200px] text-center">
                 <FaVoteYea className="text-5xl text-[#a679f0] mx-auto mb-6" />
                 <h3 className="text-4xl md:text-5xl font-bold mb-6">On-Chain Governance.</h3>
@@ -586,10 +867,10 @@ export default function FlorasPage() {
                         </div>
                     </div>
 
-                    <div className="bg-white dark:bg-[#0f0f16] p-8 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl">
+                    <div className="bg-white dark:bg-[#1a1f3a] p-8 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl">
                         <div className="text-gray-500 mb-6 font-mono text-sm uppercase tracking-widest">// DEMO ARCHITECTURE</div>
                         <div className="space-y-6">
-                            <div className="p-6 bg-gray-50 dark:bg-black/50 rounded-2xl border border-gray-200 dark:border-white/10">
+                            <div className="p-6 bg-gray-50 dark:bg-[#1a1f3a]/50 rounded-2xl border border-gray-200 dark:border-white/10">
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className="w-3 h-3 rounded-full bg-[#5599fe]" />
                                     <span className="font-mono text-sm text-[#5599fe]">3 PETAL NODES</span>
@@ -597,7 +878,7 @@ export default function FlorasPage() {
                                 <p className="text-sm text-gray-600 dark:text-gray-400">Binance, CoinGecko, Hedera Rate adapters</p>
                             </div>
 
-                            <div className="p-6 bg-gray-50 dark:bg-black/50 rounded-2xl border border-gray-200 dark:border-white/10">
+                            <div className="p-6 bg-gray-50 dark:bg-[#1a1f3a]/50 rounded-2xl border border-gray-200 dark:border-white/10">
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className="w-3 h-3 rounded-full bg-[#a679f0]" />
                                     <span className="font-mono text-sm text-[#a679f0]">HCS-17 PROOFS</span>
@@ -605,7 +886,7 @@ export default function FlorasPage() {
                                 <p className="text-sm text-gray-600 dark:text-gray-400">State hashes published to consensus topic</p>
                             </div>
 
-                            <div className="p-6 bg-gray-50 dark:bg-black/50 rounded-2xl border border-gray-200 dark:border-white/10">
+                            <div className="p-6 bg-gray-50 dark:bg-[#1a1f3a]/50 rounded-2xl border border-gray-200 dark:border-white/10">
                                 <div className="flex items-center gap-3 mb-3">
                                     <div className="w-3 h-3 rounded-full bg-[#48df7b]" />
                                     <span className="font-mono text-sm text-[#48df7b]">CONSUMER API</span>
@@ -633,7 +914,7 @@ export default function FlorasPage() {
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="max-w-4xl mx-auto bg-white dark:bg-[#0f0f16] p-12 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl"
+                    className="max-w-4xl mx-auto bg-white dark:bg-[#1a1f3a] p-12 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Form Your Network.</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">

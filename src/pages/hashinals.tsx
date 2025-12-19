@@ -58,12 +58,12 @@ const HeroCube = () => {
 
 const PipelineVisual = () => {
     return (
-        <div className="w-full h-80 bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/10 rounded-[3rem] flex items-center justify-between px-16 relative overflow-hidden shadow-2xl">
+        <div className="w-full h-80 bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 rounded-[3rem] flex items-center justify-between px-16 relative overflow-hidden shadow-2xl">
             <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(72,223,123,0.05)_50%,transparent_100%)] animate-scan-slow" />
             
             {/* Stage 1: Raw */}
             <div className="relative z-10 flex flex-col items-center gap-6 group">
-                <div className="w-40 h-40 bg-gray-50 dark:bg-black border-4 border-gray-300 dark:border-white/20 rounded-3xl flex items-center justify-center shadow-xl group-hover:border-[#48df7b] transition-all duration-500 transform group-hover:scale-105">
+                <div className="w-40 h-40 bg-gray-50 dark:bg-[#1a1f3a] border-4 border-gray-300 dark:border-white/20 rounded-3xl flex items-center justify-center shadow-xl group-hover:border-[#48df7b] transition-all duration-500 transform group-hover:scale-105">
                     <div className="text-6xl text-gray-400 group-hover:text-[#48df7b] transition-colors font-mono">01</div>
                 </div>
                 <span className="text-lg font-mono font-bold tracking-widest text-gray-500 group-hover:text-[#48df7b]">RAW.BIN</span>
@@ -142,7 +142,7 @@ const TokenBindingVisual = () => {
                     transition={{ duration: 0.8, delay: 0.3 }}
                     className="flex flex-col items-center gap-4"
                 >
-                    <div className="w-16 h-16 rounded-full bg-white dark:bg-black border-2 border-[#5599fe] flex items-center justify-center shadow-lg">
+                    <div className="w-16 h-16 rounded-full bg-white dark:bg-[#1a1f3a] border-2 border-[#5599fe] flex items-center justify-center shadow-lg">
                         <FaLink className="text-2xl text-[#5599fe]" />
                     </div>
                     <div className="text-center">
@@ -158,7 +158,7 @@ const TokenBindingVisual = () => {
                     transition={{ duration: 0.8, delay: 0.6 }}
                     className="relative"
                 >
-                    <div className="w-48 h-48 md:w-64 md:h-64 bg-white dark:bg-black border-4 border-[#5599fe] rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(85,153,254,0.4)]">
+                    <div className="w-48 h-48 md:w-64 md:h-64 bg-white dark:bg-[#1a1f3a] border-4 border-[#5599fe] rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(85,153,254,0.4)]">
                         <div className="text-center">
                             <div className="text-xs md:text-sm font-bold text-gray-500 tracking-widest mb-2">HTS TOKEN</div>
                             <div className="text-[#5599fe] font-mono text-3xl md:text-4xl font-bold">#123</div>
@@ -187,9 +187,9 @@ const TokenBindingVisual = () => {
 
 const MutablePointerVisual = () => {
     return (
-        <div className="w-full h-full min-h-[400px] relative bg-gray-50 dark:bg-[#0f0f16] rounded-[3rem] border border-gray-200 dark:border-white/10 overflow-hidden p-16 flex flex-col xl:flex-row items-center justify-between gap-16 shadow-inner">
+        <div className="w-full h-full min-h-[400px] relative bg-gray-50 dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 overflow-hidden p-16 flex flex-col xl:flex-row items-center justify-between gap-16 shadow-inner">
             {/* Token */}
-            <div className="w-64 h-64 bg-white dark:bg-black border-[4px] border-[#a679f0] rounded-[2rem] flex flex-col items-center justify-center relative z-10 shadow-[0_0_60px_rgba(166,121,240,0.3)]">
+            <div className="w-64 h-64 bg-white dark:bg-[#1a1f3a] border-[4px] border-[#a679f0] rounded-[2rem] flex flex-col items-center justify-center relative z-10 shadow-[0_0_60px_rgba(166,121,240,0.3)]">
                 <span className="text-[#a679f0] font-bold mb-4 text-2xl">HCS-6 Token</span>
                 <div className="px-6 py-3 bg-[#a679f0]/10 rounded-xl text-lg font-mono font-bold">ptr: 0.0.99</div>
                 <div className="absolute -right-16 top-1/2 w-16 h-1.5 bg-[#a679f0]" />
@@ -217,7 +217,7 @@ const MutablePointerVisual = () => {
             </div>
 
             {/* Content */}
-            <div className="w-64 h-64 bg-white dark:bg-black border-[4px] border-[#48df7b] rounded-[2rem] flex flex-col items-center justify-center relative z-10 shadow-[0_0_60px_rgba(72,223,123,0.3)]">
+            <div className="w-64 h-64 bg-white dark:bg-[#1a1f3a] border-[4px] border-[#48df7b] rounded-[2rem] flex flex-col items-center justify-center relative z-10 shadow-[0_0_60px_rgba(72,223,123,0.3)]">
                 <span className="text-[#48df7b] font-bold mb-4 text-2xl">HCS-1 Content</span>
                 <div className="px-6 py-3 bg-[#48df7b]/10 rounded-xl text-lg font-mono font-bold">0.0.555</div>
                 <div className="absolute -left-16 top-1/2 w-16 h-1.5 bg-[#48df7b]" />
@@ -259,7 +259,7 @@ export default function HashinalsPage() {
 
   return (
     <Layout title="HCS-1/5/6 Hashinals" description="True on-chain artifacts on Hedera.">
-      <div className='min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#48df7b] selection:text-[#0a0b14] transition-colors duration-300'>
+      <div className='min-h-screen bg-white dark:bg-[#1a1f3a] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#48df7b] selection:text-[#0a0b14] transition-colors duration-300'>
         <ScrollProgress />
         
         {/* Background Effects */}
@@ -290,16 +290,18 @@ export default function HashinalsPage() {
                             </button>
 
                             {isDropdownOpen && (
-                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#0f0f16] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
+                                <div className="absolute left-0 mt-2 w-72 rounded-2xl shadow-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden origin-top-left animate-fade-in-down">
                                     <div className="py-2">
                                         <Link to="/standards" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Overview</Link>
                                         <Link to="/docs/intro" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Standards Library</Link>
+                                        <Link to="/tutorials" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Tutorials</Link>
                                         <div className="h-px bg-gray-100 dark:bg-white/5 my-1" />
                                         <Link to="/hashinals" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Files & Hashinals</Link>
                                         <Link to="/registries" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Data Registries</Link>
                                         <Link to="/hcs-14" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Universal Agent Identity</Link>
                                         <Link to="/profiles" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Identity Metadata</Link>
                                         <Link to="/hcs-20" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Auditable Points</Link>
+                                        <Link to="/hcs-21" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Adapter Registry</Link>
                                         <Link to="/openconvai" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">Agent Communication</Link>
                                         <Link to="/floras" className="block px-4 py-3 text-sm text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-[#5599fe] transition-colors !no-underline">AppNet Accounts</Link>
                                     </div>
@@ -345,7 +347,7 @@ export default function HashinalsPage() {
         </section>
 
         {/* 2. THE PHILOSOPHY - Split View */}
-        <section className="py-24 relative z-10 bg-white dark:bg-[#050505]/80 backdrop-blur-3xl border-t border-b border-gray-200 dark:border-white/5">
+        <section className="py-24 relative z-10 bg-white dark:bg-[#1a1f3a]/80 backdrop-blur-3xl border-t border-b border-gray-200 dark:border-white/5">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="grid xl:grid-cols-2 gap-48">
                      <div className="sticky top-48 h-fit">
@@ -370,7 +372,7 @@ export default function HashinalsPage() {
                                 initial={{ opacity: 0, y: 50 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true, margin: "-100px" }}
-                                className="p-12 rounded-[2rem] bg-gray-50 dark:bg-[#0f0f16] border border-gray-200 dark:border-white/5 hover:border-[#48df7b]/50 transition-colors group shadow-xl"
+                                className="p-12 rounded-[2rem] bg-gray-50 dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#48df7b]/50 transition-colors group shadow-xl"
                              >
                                  <div className="w-20 h-20 rounded-2xl bg-[#48df7b]/10 text-[#48df7b] flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
                                      {item.icon}
@@ -386,7 +388,7 @@ export default function HashinalsPage() {
 
         {/* 3. HCS-1: THE PIPELINE - Wide */}
         <section className="py-24 relative z-10 overflow-hidden">
-             <div className="absolute inset-0 bg-gray-50 dark:bg-[#0a0b10] skew-y-2 transform origin-top-left -z-10 scale-110" />
+             <div className="absolute inset-0 bg-gray-50 dark:bg-[#1a1f3a] skew-y-2 transform origin-top-left -z-10 scale-110" />
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <SectionHeader title="The File Pipeline." subtitle="HCS-1 STANDARD" color="blue" />
                  
@@ -400,21 +402,21 @@ export default function HashinalsPage() {
                  <PipelineVisual />
 
                  <div className="grid xl:grid-cols-3 gap-16 mt-32">
-                     <div className="p-12 border-t-8 border-[#48df7b] bg-white dark:bg-black rounded-[2rem] shadow-2xl">
+                     <div className="p-12 border-t-8 border-[#48df7b] bg-white dark:bg-[#1a1f3a] rounded-[2rem] shadow-2xl">
                          <h4 className="text-3xl font-bold mb-6 text-[#48df7b]">1. Compress</h4>
                          <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">Input data (image, JSON, GLB) is compressed using <strong>zstd</strong> or <strong>brotli</strong>. Reduces on-chain footprint by 30-50%.</p>
                          <Terminal title="compression.ts">
                              <Terminal.Line command="zstd.compress(buffer, 10)" />
                          </Terminal>
                      </div>
-                     <div className="p-12 border-t-8 border-[#5599fe] bg-white dark:bg-black rounded-[2rem] shadow-2xl">
+                     <div className="p-12 border-t-8 border-[#5599fe] bg-white dark:bg-[#1a1f3a] rounded-[2rem] shadow-2xl">
                          <h4 className="text-3xl font-bold mb-6 text-[#5599fe]">2. Encode</h4>
                          <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">The binary compressed blob is converted to a <strong>base64</strong> string. Ensures payload is safe for JSON transport.</p>
                          <Terminal title="encoding.ts">
                              <Terminal.Line command="buffer.toString('base64')" />
                          </Terminal>
                      </div>
-                     <div className="p-12 border-t-8 border-[#a679f0] bg-white dark:bg-black rounded-[2rem] shadow-2xl">
+                     <div className="p-12 border-t-8 border-[#a679f0] bg-white dark:bg-[#1a1f3a] rounded-[2rem] shadow-2xl">
                          <h4 className="text-3xl font-bold mb-6 text-[#a679f0]">3. Chunk</h4>
                          <p className="text-gray-600 dark:text-gray-400 mb-8 text-lg">The string is sliced into <strong>1024-char</strong> segments. Bypasses HCS message size limits for high speed.</p>
                          <Terminal title="chunking.ts">
@@ -458,7 +460,7 @@ export default function HashinalsPage() {
                              </li>
                          </ul>
                      </div>
-                     <div className="bg-[#0f0f16] p-16 rounded-[4rem] border border-white/10 shadow-2xl font-mono text-base relative overflow-hidden group">
+                     <div className="bg-[#1a1f3a] p-16 rounded-[4rem] border border-white/10 shadow-2xl font-mono text-base relative overflow-hidden group">
                          <div className="absolute top-0 right-0 p-12 opacity-10 text-[10rem] group-hover:opacity-20 transition-opacity">
                              <FaLayerGroup />
                          </div>
@@ -489,7 +491,7 @@ export default function HashinalsPage() {
         </section>
 
         {/* 5. HCS-5: THE BINDING - Full Width Dark */}
-        <section className="py-24 bg-[#0a0b10] text-white overflow-hidden">
+        <section className="py-24 bg-[#1a1f3a] text-white overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="text-center max-w-4xl mx-auto mb-16">
                      <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#5599fe]">Tokenizing Data.</h2>
@@ -507,7 +509,7 @@ export default function HashinalsPage() {
                          <p className="text-base text-gray-400 mb-6">
                              The token's metadata field must use the <strong>Hedera Resource Locator</strong> schema. This tells wallets that the image isn't on a server, but on the ledger.
                          </p>
-                         <div className="p-6 bg-black rounded-2xl border border-white/10 font-mono text-center text-[#5599fe] text-lg">
+                         <div className="p-6 bg-[#1a1f3a] rounded-2xl border border-white/10 font-mono text-center text-[#5599fe] text-lg">
                              hcs://1/0.0.123456
                          </div>
                      </div>
@@ -529,7 +531,7 @@ export default function HashinalsPage() {
                          <div className="bg-white dark:bg-gray-900 p-12 md:p-16 rounded-[3rem] md:rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl">
                              <h4 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-[#5599fe]">Token Metadata Example</h4>
                              <div className="space-y-6">
-                                 <div className="p-6 bg-gray-50 dark:bg-black rounded-2xl">
+                                 <div className="p-6 bg-gray-50 dark:bg-[#1a1f3a] rounded-2xl">
                                      <div className="text-sm font-mono text-gray-500 mb-2">HRL in metadata field:</div>
                                      <div className="text-lg md:text-xl font-mono text-[#5599fe] break-all">hcs://1/0.0.3541181</div>
                                  </div>
@@ -566,7 +568,7 @@ export default function HashinalsPage() {
         </section>
 
         {/* 7. HCS-6: DYNAMIC EVOLUTION */}
-        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#0a0b10]">
+        <section className="py-24 border-t border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-[#1a1f3a]">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="text-center mb-16">
                     <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900 dark:text-white">
@@ -635,15 +637,15 @@ export default function HashinalsPage() {
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <h3 className="text-6xl font-bold mb-24 text-center">Dynamic Possibilities.</h3>
                 <div className="grid xl:grid-cols-3 gap-16">
-                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-black shadow-2xl">
+                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
                         <h4 className="font-bold text-3xl mb-6">Gaming</h4>
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">Weapon durability, character leveling, or skin changes. The NFT stays the same, the visuals update via HCS-6.</p>
                     </motion.div>
-                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-black shadow-2xl">
+                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
                         <h4 className="font-bold text-3xl mb-6">Real Estate</h4>
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">A property deed NFT. The HCS-6 registry tracks maintenance logs, tax payments, and renovations over decades.</p>
                     </motion.div>
-                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-black shadow-2xl">
+                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
                         <h4 className="font-bold text-3xl mb-6">Identity</h4>
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">A profile picture NFT. The user can update their PFP by simply posting a message to their registry topic.</p>
                     </motion.div>
@@ -652,13 +654,13 @@ export default function HashinalsPage() {
         </section>
 
         {/* 10. CTA */}
-        <section className="py-24 text-center relative z-10 bg-white dark:bg-[#0a0b10]">
+        <section className="py-24 text-center relative z-10 bg-white dark:bg-[#1a1f3a]">
             <div className="container mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="max-w-4xl mx-auto bg-white dark:bg-[#0f0f16] p-12 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl"
+                    className="max-w-4xl mx-auto bg-white dark:bg-[#1a1f3a] p-12 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Ready to Inscribe?</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-4">

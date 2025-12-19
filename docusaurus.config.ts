@@ -121,6 +121,7 @@ const config: Config = {
           items: [
             { label: 'Standards Overview', to: '/standards' },
             { label: 'Standards Library', to: '/docs/standards/' },
+            { label: 'Tutorials', to: '/tutorials' },
             { label: 'Files & Hashinals', to: '/hashinals' },
             { label: 'Data Registries', to: '/registries' },
             { label: 'Universal Agent Identity', to: '/hcs-14' },
