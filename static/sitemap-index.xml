@@ -2,7 +2,7 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Main site (hcs-improvement-proposals/Docusaurus) -->
   <sitemap>
-    <loc>https://hol.org/sitemap-root.xml</loc>
+    <loc>https://hol.org/sitemap.xml</loc>
   </sitemap>
   
   <!-- Registry (registry-broker/frontend) -->
