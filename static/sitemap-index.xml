@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Main site (hcs-improvement-proposals/Docusaurus) -->
+  <sitemap>
+    <loc>https://hol.org/sitemap-root.xml</loc>
+  </sitemap>
+  
+  <!-- Registry (registry-broker/frontend) -->
+  <sitemap>
+    <loc>https://hol.org/registry/sitemap.xml</loc>
+  </sitemap>
+  
+  <!-- Points Portal (hol-points-portal) -->
+  <sitemap>
+    <loc>https://hol.org/points/sitemap.xml</loc>
+  </sitemap>
+</sitemapindex>

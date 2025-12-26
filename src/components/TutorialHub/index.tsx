@@ -111,7 +111,6 @@ const TutorialHub: React.FC = () => {
                                 steps={tutorials}
                                 onSelect={handleSelect}
                             />
-
                             <div className="mt-8 p-6 bg-gray-50 dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800">
                                 <h4 className="font-bold text-gray-900 dark:text-white mb-2">Need Help?</h4>
                                 <p className="text-sm text-gray-500 mb-4">

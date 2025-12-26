@@ -5367,3 +5367,35 @@ main .theme-doc-generated-index-item:hover::after,
   padding: 0 !important;
   margin: 0 !important;
 }
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS - Core Web Vitals
+   ============================================ */
+
+/* Reduced motion preference - disable animations for accessibility and CWV */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Content-visibility optimization for off-screen content */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Optimize sidebar for paint containment */
+.theme-doc-sidebar-container nav {
+  contain: layout style paint;
+}
+
+/* Lazy load images below the fold */
+img[loading="lazy"] {
+  content-visibility: auto;
+}

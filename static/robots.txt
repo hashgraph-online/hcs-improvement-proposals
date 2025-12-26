@@ -1,0 +1,66 @@
+# Hashgraph Online (hol.org) - Unified Robots.txt
+# This file covers all subdomains proxied through Cloudflare:
+# - hol.org/ (hcs-improvement-proposals - Docusaurus)
+# - hol.org/points/ (hol-points-portal - Next.js)
+# - hol.org/registry/ (registry-broker - Vite+React)
+
+User-agent: *
+Allow: /
+
+# Sitemap Index (covers all sub-sitemaps)
+Sitemap: https://hol.org/sitemap.xml
+
+# Allow AI/LLM crawlers for Answer Engine Optimization (AEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# Disallow build artifacts and sensitive paths
+User-agent: *
+Disallow: /build/
+Disallow: /search
+Disallow: /.docusaurus/
+
+# Points Portal - Disallow admin and auth
+Disallow: /points/admin/
+Disallow: /points/api/
+Disallow: /points/oauth/
+
+# Registry - Disallow sensitive pages
+Disallow: /registry/admin/
+Disallow: /registry/dashboard/api-key-history
+Disallow: /registry/verify-email
+Disallow: /registry/reset-password
+Disallow: /registry/forgot-password
+
+# Crawl-delay for politeness
+Crawl-delay: 1
