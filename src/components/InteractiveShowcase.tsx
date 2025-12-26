@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { FiTerminal, FiGitBranch, FiPlay, FiPause, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { AnimatedBackground } from './ui';
 

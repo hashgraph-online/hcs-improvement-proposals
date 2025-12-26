@@ -1,7 +1,7 @@
 import React from 'react';
 import { FAQItem } from '../hackathon/FAQSection';
 import { useInView } from 'react-intersection-observer';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   FaInfoCircle,
   FaUserPlus,

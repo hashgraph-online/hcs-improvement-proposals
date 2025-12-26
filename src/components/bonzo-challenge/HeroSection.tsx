@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useAnimation, useInView } from 'framer-motion';
+import { motion, useAnimation, useInView } from 'motion/react';
 import Link from '@docusaurus/Link';
 import {
   FaCalendarAlt,

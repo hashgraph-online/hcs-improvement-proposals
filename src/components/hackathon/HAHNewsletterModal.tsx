@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import PrimaryButton from './PrimaryButton';
 

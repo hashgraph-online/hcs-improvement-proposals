@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from './SecondaryButton';

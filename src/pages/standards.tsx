@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
-import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue } from 'motion/react';
 import { FaArrowRight, FaNetworkWired, FaFingerprint, FaDatabase } from 'react-icons/fa';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'motion/react';
 import {
   FaTwitter,
   FaTelegram,

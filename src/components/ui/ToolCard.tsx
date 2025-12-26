@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'motion/react';
 import { FaArrowRight } from 'react-icons/fa';
 import PrimaryButton from '../hackathon/PrimaryButton';
 import HackathonTypography from '../hackathon/HackathonTypography';

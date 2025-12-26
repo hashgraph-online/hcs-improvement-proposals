@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView } from 'motion/react';
 import Link from '@docusaurus/Link';
 import TransformCard from '../components/ui/TransformCard';
 import PrimaryButton from '../components/PrimaryButton';

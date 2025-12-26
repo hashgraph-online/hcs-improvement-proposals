@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaEnvelope, FaBell, FaCalendarAlt, FaNewspaper, FaUsers, FaCode } from 'react-icons/fa';
 import Layout from '@theme/Layout';
 import { TransformCard } from '../components/ui';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { Section } from '../hackathon/Section';
 

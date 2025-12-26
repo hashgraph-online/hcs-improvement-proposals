@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaDesktop, FaTerminal, FaNpm, FaPlug, FaCode, FaRobot } from 'react-icons/fa';
 import InteractiveToolsSection, { Tool } from '../ui/InteractiveToolsSection';
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'motion/react';
 import {
   FaRobot, FaIdCard, FaBrain, FaNetworkWired, FaExchangeAlt, 
   FaShieldAlt, FaDollarSign, FaRegTimesCircle, FaGlobe, 

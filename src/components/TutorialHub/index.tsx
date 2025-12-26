@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { AnimatedBackground } from '../ui';
 import { tutorials } from './data';
 import VideoTheater from './VideoTheater';

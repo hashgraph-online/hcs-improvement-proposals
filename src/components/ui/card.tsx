@@ -1,6 +1,6 @@
 'use client';
 import { cn } from '@site/src/lib/utils';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { forwardRef, HTMLAttributes, useState } from 'react';
 import Typography from '../Typography';
 
