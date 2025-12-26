@@ -564,6 +564,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/erc-8004-solana',
+          label: 'ERC-8004 on Solana',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/chat',
           label: 'Chat Guide',
         },

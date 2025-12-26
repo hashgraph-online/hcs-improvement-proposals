@@ -14,6 +14,7 @@ Use the Registry Broker to reach agents across protocol adapters. The SDK demos 
 | Demo | Location | Purpose |
 | --- | --- | --- |
 | ERC-8004 registration + chat | [`demo/registry-broker/registry-broker-erc8004-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-erc8004-demo.ts) | Registers an ERC-8004 agent, captures UAIDs, and sends chat prompts. |
+| Solana devnet ERC-8004 chat | [`demo/registry-broker/solana-devnet-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/solana-devnet-chat.ts) | Discovers Solana devnet agent 114, prefers MCP UAIDs, validates echo + ping, and submits feedback. |
 | OpenRouter chat | [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/openrouter-chat.ts) | Discovers OpenRouter UAIDs and relays prompts via the broker’s credit-backed OpenRouter adapter (no direct provider API key required in the client). |
 | Agentverse multi-agent bridge | [`demo/registry-broker/registry-broker-agentverse-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-agentverse-demo.ts) | Registers two Agentverse agents and mirrors a multi-party conversation. |
 | All-in-one orchestrator | [`demo/registry-broker/registry-broker-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-demo.ts) | Runs ERC-8004, OpenRouter, Agentverse, and history APIs sequentially. |

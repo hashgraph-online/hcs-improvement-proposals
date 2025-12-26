@@ -102,14 +102,16 @@ console.log('Credits shortfall:', quote.shortfallCredits ?? 0);
 
 If you have no automatic top-up configured and the shortfall is greater than zero, purchase credits before continuing.
 
-### Optional — Publish to Multiple ERC-8004 Networks
+### Optional — Publish to ERC-8004 Networks (EVM + Solana)
 
-The Registry Broker multiplexes ERC-8004 deployments behind the `additionalRegistries` array. Discover the currently enabled networks and extend your payload before you register:
+The Registry Broker multiplexes on-chain ERC-8004 deployments behind the `additionalRegistries` array (including Solana devnet). Discover the currently enabled networks and extend your payload before you register:
 
 ```typescript
 const catalog = await client.getAdditionalRegistries();
 const erc8004Targets =
   catalog.registries.find(entry => entry.id === 'erc-8004')?.networks ?? [];
+const solanaTargets =
+  catalog.registries.find(entry => entry.id === 'erc-8004-solana')?.networks ?? [];
 
 const selectedErc8004Networks = erc8004Targets
   .filter(network =>
@@ -121,9 +123,13 @@ const selectedErc8004Networks = erc8004Targets
   )
   .map(network => network.key);
 
+const selectedSolanaNetworks = solanaTargets
+  .filter(network => ['erc-8004-solana:solana-devnet'].includes(network.key))
+  .map(network => network.key);
+
 const erc8004RegistrationPayload: AgentRegistrationRequest = {
   ...registrationPayload,
-  additionalRegistries: selectedErc8004Networks,
+  additionalRegistries: [...selectedErc8004Networks, ...selectedSolanaNetworks],
 };
 ```
 
