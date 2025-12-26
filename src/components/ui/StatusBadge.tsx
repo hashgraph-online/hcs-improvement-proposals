@@ -17,7 +17,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
   const getVariantClasses = () => {
     switch (variant) {
       case 'success':
-        return 'bg-green-100/80 dark:bg-green-800/80 border-green-200/50 dark:border-green-700/50 text-green-600 dark:text-green-400';
+        return 'bg-green-100/80 dark:bg-green-800/80 border-green-200/50 dark:border-green-700/50 text-green-700 dark:text-green-400';
       case 'info':
         return 'bg-blue-100/80 dark:bg-blue-800/80 border-blue-200/50 dark:border-blue-700/50 text-blue-600 dark:text-blue-400';
       case 'warning':
@@ -49,7 +49,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
           animated ? 'animate-pulse' : ''
         }`}
       ></div>
-      <span className='text-xs font-mono uppercase tracking-wide'>
+      <span className='text-xs font-mono uppercase tracking-wide text-current'>
         {children}
       </span>
     </div>

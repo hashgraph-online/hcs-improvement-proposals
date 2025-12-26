@@ -1,11 +1,13 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
 import { motion, useAnimation, AnimatePresence, useInView } from 'framer-motion';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import Modal from '../components/Modal';
-import UseCaseSection from '../components/UseCaseSection';
+
+// Lazy load heavy below-the-fold components
+const UseCaseSection = lazy(() => import('../components/UseCaseSection'));
 import InteractiveShowcase, {
   ShowcaseItem,
 } from '../components/InteractiveShowcase';
@@ -1745,7 +1747,9 @@ const Home: React.FC = () => {
         <AutonomousInfrastructureSection />
         <WhatWeDoSection />
         <MetricsSection />
-        <UseCaseSection />
+        <Suspense fallback={<div className="py-20 text-center"><div className="animate-pulse text-gray-400">Loading...</div></div>}>
+          <UseCaseSection />
+        </Suspense>
         <StandardsSection />
       </main>
     </Layout>

@@ -80,9 +80,14 @@ html {
   scroll-padding-top: 80px;
 }
 
-/* Enhanced transitions for all interactive elements */
-* {
-  transition-property: transform, box-shadow, opacity, background-color;
+/* Smooth transitions for interactive elements only (not all elements) */
+a,
+button,
+input,
+select,
+textarea,
+[role="button"] {
+  transition-property: transform, box-shadow, opacity, background-color, border-color;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
