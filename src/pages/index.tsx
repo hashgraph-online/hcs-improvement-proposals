@@ -163,7 +163,7 @@ const HeroSection: React.FC = () => {
                    </div>
                    <div>
                       <div className="font-bold text-gray-900 dark:text-white text-sm">HOL Registry Broker</div>
-                      <div className="text-[10px] text-brand-blue font-mono font-medium uppercase tracking-wider">Hashnet MCP Server</div>
+                      <div className="text-[10px] text-blue-600 dark:text-brand-blue font-mono font-medium uppercase tracking-wider">Hashnet MCP Server</div>
                    </div>
                 </div>
                 <div className="flex items-center gap-1.5 bg-green-50 dark:bg-green-900/20 px-2.5 py-1 rounded-full border border-green-100 dark:border-green-900/30">
@@ -410,6 +410,12 @@ const HeroSection: React.FC = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
   };
 
+  const [isFirstRender, setIsFirstRender] = useState(true);
+
+  useEffect(() => {
+    setIsFirstRender(false);
+  }, []);
+
   return (
     <section
       className='relative overflow-hidden'
@@ -465,7 +471,11 @@ const HeroSection: React.FC = () => {
             <AnimatePresence mode='wait'>
               <motion.div
                 key={currentSlide}
-                initial={{ opacity: 0, x: -50 }}
+                initial={
+                  isFirstRender && currentSlide === 0
+                    ? { opacity: 1, x: 0 }
+                    : { opacity: 0, x: -50 }
+                }
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 50 }}
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
@@ -596,7 +606,11 @@ const HeroSection: React.FC = () => {
               <AnimatePresence mode='wait'>
                 <motion.div
                   key={`right-${currentSlide}`}
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={
+                    isFirstRender && currentSlide === 0
+                      ? { opacity: 1, scale: 1 }
+                      : { opacity: 0, scale: 0.95 }
+                  }
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.6, ease: 'easeInOut' }}
@@ -619,7 +633,7 @@ const HeroSection: React.FC = () => {
         style={{ background: 'none', border: 'none', padding: 0, top: '325px', zIndex: 30 }}
       >
         <svg
-          className='w-8 h-8 lg:w-10 lg:h-10 text-gray-400 dark:text-gray-600 group-hover:text-brand-blue dark:group-hover:text-brand-blue transition-colors duration-300'
+          className='w-8 h-8 lg:w-10 lg:h-10 text-gray-500 dark:text-gray-400 group-hover:text-brand-blue dark:group-hover:text-brand-blue transition-colors duration-300'
           fill='none'
           stroke='currentColor'
           viewBox='0 0 24 24'
@@ -641,7 +655,7 @@ const HeroSection: React.FC = () => {
         style={{ background: 'none', border: 'none', padding: 0, top: '325px', zIndex: 30 }}
       >
         <svg
-          className='w-8 h-8 lg:w-10 lg:h-10 text-gray-400 dark:text-gray-600 group-hover:text-brand-blue dark:group-hover:text-brand-blue transition-colors duration-300'
+          className='w-8 h-8 lg:w-10 lg:h-10 text-gray-500 dark:text-gray-400 group-hover:text-brand-blue dark:group-hover:text-brand-blue transition-colors duration-300'
           fill='none'
           stroke='currentColor'
           viewBox='0 0 24 24'
@@ -661,7 +675,7 @@ const HeroSection: React.FC = () => {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`w-3 h-3 rounded-full transition-all duration-300 border-2 border-transparent ${
               index === currentSlide
                 ? 'bg-brand-blue scale-125'
                 : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-400'
@@ -942,7 +956,7 @@ const StandardMainContent: React.FC<StandardMainContentProps> = ({
     <div className='bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden'>
       <div className='p-4 space-y-3'>
         <div className='flex items-center justify-between'>
-          <span className='text-sm font-mono text-brand-blue'>
+          <span className='text-sm font-mono text-blue-600 dark:text-brand-blue'>
             {standard.id}
           </span>
           <StatusBadge
@@ -1436,7 +1450,7 @@ const StandardsSection: React.FC = () => {
                 }}
               >
                 <div className='text-sm font-mono text-gray-700 dark:text-gray-300'>
-                  <span className='text-brand-green'>$</span> npm install @hashgraphonline/standards-sdk
+                  <span className='text-green-600 dark:text-brand-green'>$</span> npm install @hashgraphonline/standards-sdk
                 </div>
               </div>
               <AnimatePresence>
@@ -1515,8 +1529,8 @@ const MetricsSection: React.FC = () => {
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <div className='text-xs font-mono text-gray-600 dark:text-gray-400 uppercase tracking-[0.3em] mb-4'>
-            <span className='text-gray-800 dark:text-gray-400'>//</span> LIVE IN PRODUCTION
+          <div className='text-xs font-mono text-gray-700 dark:text-gray-400 uppercase tracking-[0.3em] mb-4'>
+            <span className='text-gray-900 dark:text-gray-400'>//</span> LIVE IN PRODUCTION
           </div>
           <Typography
             variant='h2'
@@ -1564,7 +1578,7 @@ const MetricsSection: React.FC = () => {
 
 	                  <div className='space-y-6'>
 	                    <div className='relative'>
-	                      <div className='text-5xl lg:text-6xl font-mono font-black text-brand-blue leading-none whitespace-nowrap'>
+	                      <div className='text-5xl lg:text-6xl font-mono font-black text-blue-600 dark:text-brand-blue leading-none whitespace-nowrap'>
 	                      {totalTransactionsLabel}
 	                      </div>
 	                      <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-green rounded-full animate-pulse'></div>
@@ -1572,7 +1586,7 @@ const MetricsSection: React.FC = () => {
 
                   <div className='space-y-3'>
                     <Typography
-                      variant='h4'
+                      variant='h3'
                       className='text-lg lg:text-xl font-mono font-bold text-gray-900 dark:text-white'
                     >
                       Total Transactions
@@ -1584,7 +1598,7 @@ const MetricsSection: React.FC = () => {
                       <Typography
                         color='purple'
                         as='span'
-                        className='text-brand-purple'
+                        className='text-purple-600 dark:text-brand-purple'
                       >
                         Processing
                       </Typography>{' '}
@@ -1620,7 +1634,7 @@ const MetricsSection: React.FC = () => {
 
                 <div className='space-y-6'>
                   <div className='relative'>
-                    <div className='text-5xl lg:text-6xl font-mono font-black text-brand-green leading-none'>
+                    <div className='text-5xl lg:text-6xl font-mono font-black text-green-600 dark:text-brand-green leading-none'>
                       300K+
                     </div>
                     <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-blue rounded-full animate-pulse delay-300'></div>
@@ -1628,7 +1642,7 @@ const MetricsSection: React.FC = () => {
 
                   <div className='space-y-3'>
                     <Typography
-                      variant='h4'
+                      variant='h3'
                       className='text-lg lg:text-xl font-mono font-bold text-gray-900 dark:text-white'
                     >
                       CDN Requests Daily
@@ -1640,7 +1654,7 @@ const MetricsSection: React.FC = () => {
                       <Typography
                         color='blue'
                         as='span'
-                        className='text-brand-blue'
+                        className='text-blue-600 dark:text-brand-blue'
                       >
                         Serving
                       </Typography>{' '}
@@ -1676,7 +1690,7 @@ const MetricsSection: React.FC = () => {
 
 	                  <div className='space-y-6'>
 	                    <div className='relative'>
-	                      <div className='text-5xl lg:text-6xl font-mono font-black text-brand-purple leading-none whitespace-nowrap'>
+	                      <div className='text-5xl lg:text-6xl font-mono font-black text-purple-600 dark:text-brand-purple leading-none whitespace-nowrap'>
 	                      {filesStoredLabel}
 	                      </div>
 	                      <div className='absolute -top-2 -right-2 w-6 h-6 bg-brand-green rounded-full animate-pulse delay-700'></div>
@@ -1684,7 +1698,7 @@ const MetricsSection: React.FC = () => {
 
                   <div className='space-y-3'>
                     <Typography
-                      variant='h4'
+                      variant='h3'
                       className='text-lg lg:text-xl font-mono font-bold text-gray-900 dark:text-white'
                     >
                       Files Stored
@@ -1696,7 +1710,7 @@ const MetricsSection: React.FC = () => {
                       <Typography
                         color='green'
                         as='span'
-                        className='text-brand-green'
+                        className='text-green-600 dark:text-brand-green'
                       >
                         On-graph
                       </Typography>{' '}
