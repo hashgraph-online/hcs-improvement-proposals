@@ -116,7 +116,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
         {title && (
           <div className='text-center mb-12'>
-            <div className='inline-flex items-center gap-2 text-xs font-mono text-brand-functions uppercase tracking-[0.3em] mb-6 bg-white/80 dark:bg-gray-800/80 px-4 py-2 rounded-full backdrop-blur-sm'>
+            <div className='inline-flex items-center gap-2 text-xs font-mono text-gray-700 dark:text-gray-300 uppercase tracking-[0.3em] mb-6 bg-white/90 dark:bg-gray-800/90 px-4 py-2 rounded-full backdrop-blur-sm border border-gray-200 dark:border-gray-700'>
               <FiTerminal className='w-4 h-4' />
               {title}
             </div>

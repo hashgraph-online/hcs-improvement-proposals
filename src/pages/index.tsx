@@ -670,19 +670,25 @@ const HeroSection: React.FC = () => {
         </svg>
       </button>
 
-      <div className='absolute left-1/2 flex items-center gap-2' style={{ bottom: '32px', transform: 'translateX(-50%)', zIndex: 20 }}>
-        {slides.map((_, index) => (
+      <div className='absolute left-1/2 flex items-center gap-3' style={{ bottom: '32px', transform: 'translateX(-50%)', zIndex: 20 }}>
+        {slides.map((slide, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 border-2 border-transparent ${
+            className={`w-6 h-6 rounded-full transition-all duration-300 flex items-center justify-center ${
               index === currentSlide
-                ? 'bg-brand-blue scale-125'
-                : 'bg-gray-400 dark:bg-gray-600 hover:bg-gray-600 dark:hover:bg-gray-400'
+                ? 'scale-110'
+                : 'hover:scale-105'
             }`}
             style={{ border: 'none', outline: 'none' }}
-            aria-label={`Go to slide ${index + 1}`}
-          />
+            aria-label={`Go to slide ${index + 1}: ${slide.title}`}
+          >
+            <span className={`block w-3 h-3 rounded-full transition-all duration-300 ${
+              index === currentSlide
+                ? 'bg-brand-blue'
+                : 'bg-gray-400 dark:bg-gray-600'
+            }`} />
+          </button>
         ))}
       </div>
 
