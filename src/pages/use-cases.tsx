@@ -22,7 +22,7 @@ export const useCases: UseCase[] = [
     name: 'Moonscape',
     description:
       'Moonscape is a portal implementing OpenConvAI. Find, Connect and talk with AI agents on Hedera.',
-    image: '/use-cases/moonscape-portal.jpg',
+    image: '/use-cases/moonscape-portal.webp',
     color: '#e17000',
     link: 'https://moonscape.tech',
     creator: 'Moonscape',
@@ -32,7 +32,7 @@ export const useCases: UseCase[] = [
     name: 'LinkPages',
     description:
       'LinkPages enable you to create a decentralized link in bio page on-graph through the Hashgraph Online standards. It is developed and operated by KiloScribe',
-    image: '/use-cases/link-page-use-case.jpeg',
+    image: '/use-cases/link-page-use-case.webp',
     color: '#8fe6a4',
     link: 'https://kiloscribe.com',
     creator: 'KiloScribe',
@@ -42,7 +42,7 @@ export const useCases: UseCase[] = [
     name: 'Bonzo Points',
     description:
       'Bonzo Finance operates a transparent points leaderboard for their Aave-based lending protocol on Hedera, built using the HCS-20 standard. Users can earn and track points through lending and borrowing activities, with all data being fully verifiable on-chain through the Hedera Consensus Service.',
-    image: '/use-cases/bonzo.png',
+    image: '/use-cases/bonzo.webp',
     color: '#66A3FF',
     link: 'https://bonzo.finance',
     creator: 'Bonzo Finance',
@@ -53,7 +53,7 @@ export const useCases: UseCase[] = [
     name: 'HashPack Wallet',
     description:
       'HashPack renders Hashinals inside the wallet, enabling users and creators to interact with this innovative standard, view files, and see inscription numbers.',
-    image: '/use-cases/hashpack-u.png',
+    image: '/use-cases/hashpack-u.webp',
     color: '#4ECDC4',
     link: 'https://www.hashpack.app/',
     creator: 'HashPack',
@@ -63,7 +63,7 @@ export const useCases: UseCase[] = [
     name: 'SentX',
     description:
       'SentX is the leading marketplace on Hedera, enabling users to buy, sell, and discover Hashinals.',
-    image: '/use-cases/sentx.png',
+    image: '/use-cases/sentx.webp',
     color: '#4B0082',
     link: 'https://sentx.io',
     creator: 'SentX',
@@ -74,7 +74,7 @@ export const useCases: UseCase[] = [
     name: 'Hashinals.com',
     description:
       'Hashinals.com is a platform for viewing and search Hashinal Inscription Numbers, built by Turtlemoon.',
-    image: '/use-cases/hashinals.png',
+    image: '/use-cases/hashinals.webp',
     color: '#00000',
     link: 'https://hashinals.com/',
     creator: 'Turtlemoon',
@@ -84,7 +84,7 @@ export const useCases: UseCase[] = [
     name: 'Tashi Place',
     description:
       'Tashi is the "Forever Game" protocol, building technology that enables strictly peer-to-peer multiplayer gaming. We\'re building an SDK to be used with hashinals to enable in-browser multiplayer games without ever having to host a server. Our proof of concept is a game called Tashi Place, which is a multiplayer pixel art game.',
-    image: '/use-cases/tashi.png',
+    image: '/use-cases/tashi.webp',
     color: '#6B66FF',
     link: 'https://tashi.gg',
     creator: 'Tashi',
@@ -94,7 +94,7 @@ export const useCases: UseCase[] = [
     name: 'Sketchverse',
     description:
       "Sketchverse is Hedera's first experimentalon-graph metaverse built on Hedera, utilizing Hashinals. Sketchverse includes 300 plots of land, 3D assets and a growing community.",
-    image: '/use-cases/sketchverse.jpeg',
+    image: '/use-cases/sketchverse.webp',
     color: '#FFD700',
     link: 'https://blankpaper-rust.vercel.app/',
     creator: 'BlankPaper',
@@ -105,7 +105,7 @@ export const useCases: UseCase[] = [
     name: 'HGrimoire',
     description:
       "HGrimoire is wallet-like explorer, tool suite, and Hashinal Grims portal built on Hedera.",
-    image: '/use-cases/hgrimoire.png',
+    image: '/use-cases/hgrimoire.webp',
     color: '#181817ff',
     link: 'https://grimterminal.app/',
     creator: 'Hashinal Grims',

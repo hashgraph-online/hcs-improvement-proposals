@@ -128,7 +128,7 @@ const UseCaseSection: React.FC = () => {
               className='text-lg lg:text-xl text-gray-600 dark:text-gray-300 mt-12 max-w-4xl mx-auto'
             >
               Real companies building real applications.{' '}
-              <span className='text-brand-blue'>Live implementations</span> of
+              <span className='text-blue-600 dark:text-brand-blue'>Live implementations</span> of
               HCS standards.
             </Typography>
           </div>
@@ -226,7 +226,7 @@ const UseCaseSection: React.FC = () => {
                       </div>
 
                       <div className='bg-gray-100/80 dark:bg-gray-900/50 rounded-lg p-3 border border-gray-200/50 dark:border-gray-700/30'>
-                        <div className='text-sm font-mono text-brand-purple'>
+                        <div className='text-sm font-mono text-purple-600 dark:text-brand-purple'>
                           {useCases[currentIndex]?.tagline}
                         </div>
                       </div>
@@ -255,38 +255,42 @@ const UseCaseSection: React.FC = () => {
           {/* Arrow navigation buttons */}
           <button
             onClick={() => {
-              console.log('Previous clicked, current:', currentIndex);
               goToPrevious();
             }}
             className='absolute -left-16 top-1/2 transform -translate-y-1/2 z-30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-full p-3 shadow-lg hover:bg-white dark:hover:bg-gray-700 hover:scale-110 transition-all duration-300 group'
+            aria-label='Previous use case'
           >
             <FiChevronLeft className='w-5 h-5 text-gray-700 dark:text-gray-300 group-hover:text-brand-blue transition-colors duration-300' />
           </button>
 
           <button
             onClick={() => {
-              console.log('Next clicked, current:', currentIndex);
               goToNext();
             }}
             className='absolute -right-16 top-1/2 transform -translate-y-1/2 z-30 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 rounded-full p-3 shadow-lg hover:bg-white dark:hover:bg-gray-700 hover:scale-110 transition-all duration-300 group'
+            aria-label='Next use case'
           >
             <FiChevronRight className='w-5 h-5 text-gray-700 dark:text-gray-300 group-hover:text-brand-blue transition-colors duration-300' />
           </button>
 
           {/* Navigation dots */}
           <div className='flex justify-center mt-8 space-x-3'>
-            {useCases.map((_, index) => (
+            {useCases.map((useCase, index) => (
               <div key={index} className='relative'>
-                {/* Individual blur background for each dot */}
                 <div className='absolute inset-0 bg-slate-800/30 backdrop-blur-sm rounded-full scale-110 blur -z-10'></div>
                 <button
                   onClick={() => setCurrentIndex(index)}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 border-0 outline-none relative z-10 ${
+                  className={`w-6 h-6 rounded-full transition-all duration-300 border-0 outline-none relative z-10 flex items-center justify-center ${
                     index === currentIndex
-                      ? 'bg-brand-blue scale-125'
-                      : 'bg-white hover:bg-brand-blue'
+                      ? 'bg-brand-blue scale-110'
+                      : 'bg-white/80 hover:bg-brand-blue'
                   }`}
-                />
+                  aria-label={`View ${useCase.name}`}
+                >
+                  <span className={`block w-3 h-3 rounded-full ${
+                    index === currentIndex ? 'bg-white' : 'bg-gray-400'
+                  }`} />
+                </button>
               </div>
             ))}
           </div>

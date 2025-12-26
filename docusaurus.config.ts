@@ -34,18 +34,18 @@ const config: Config = {
     {
       tagName: 'link',
       attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap',
+        rel: 'preload',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap',
+        as: 'style',
       },
     },
     {
       tagName: 'link',
       attributes: {
-        rel: 'preload',
-        href: 'https://fonts.gstatic.com/s/robotomono/v23/L0xuDF4xlVMF-BfR8bXMIhJHg45mwgGEFl0_gP.woff2',
-        as: 'font',
-        type: 'font/woff2',
-        crossorigin: 'anonymous',
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap',
+        media: 'print',
+        onload: "this.media='all'",
       },
     },
   ],
