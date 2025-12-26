@@ -1,5 +1,5 @@
 import * as React from "react"
-import { motion, LayoutGroup } from "framer-motion"
+import { motion, LayoutGroup } from "motion/react"
 
 function cn(...classes: (string | undefined | null | false)[]) {
   return classes.filter(Boolean).join(" ")
