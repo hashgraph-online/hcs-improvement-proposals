@@ -1,5 +1,5 @@
 import Layout from '@theme/Layout';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { Typography, PrimaryButton } from '../components/ui';
 import {
   FaCalendarAlt,

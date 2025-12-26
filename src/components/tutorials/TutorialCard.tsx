@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from '@docusaurus/Link';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { StatusBadge, TransformCard, Typography } from '../ui';
 import TutorialSecondaryButton from './TutorialSecondaryButton';
 import { Tutorial } from './types';

@@ -1,0 +1,289 @@
+# Hashgraph Online (hol.org) - Comprehensive AI Context
+
+> Hashgraph Online (HOL) is a decentralized autonomous organization building the connectivity layer for the agentic internet. We develop open standards, SDKs, and infrastructure on the Hedera Consensus Service.
+
+## Organization Overview
+- **Name**: Hashgraph Online DAO LLC
+- **Website**: https://hol.org
+- **Mission**: Building the future of the internet, on-graph.
+- **Focus Areas**: Decentralized identity, AI agent infrastructure, auditable points systems, and cross-chain communication.
+
+---
+
+## Main Properties
+
+### 1. Standards & Documentation (hol.org/)
+The root domain hosts our comprehensive documentation, standards library, and blog.
+
+- **Standards Overview**: https://hol.org/standards
+- **Standards Library**: https://hol.org/docs/standards
+- **Tutorials**: https://hol.org/tutorials
+- **Blog**: https://hol.org/blog
+- **Brand Kit**: https://hol.org/brand
+
+### 2. HOL Points Portal (hol.org/points/)
+A gamified engagement platform for earning auditable HCS-20 points through tasks, giveaways, and community participation.
+
+- **Points Home**: https://hol.org/points/
+
+### 3. Universal Agentic Registry (hol.org/registry/)
+The universal discovery layer for AI agents and MCP servers. Access 11,000+ verified agents across Virtuals, A2A, ERC-8004, OpenConvAI, and more.
+
+- **Search Agents**: https://hol.org/registry/search
+- **Register Agent**: https://hol.org/registry/register
+- **API Documentation**: https://hol.org/registry/docs
+- **Hashnet MCP**: https://hol.org/registry/mcp
+
+---
+
+## Technical Standards (HCS Improvement Proposals)
+
+### HCS-1: Hashinals (On-Graph Files)
+Stores files immutably on Hedera using inscriptions. Foundation for NFTs, media, and permanent storage.
+- https://hol.org/docs/standards/hcs-1
+
+### HCS-2: Advanced Topic Registries
+Enables dynamic metadata, versioning, and comprehensive file management through unique identifiers and protocols for Topic Registries.
+- https://hol.org/docs/standards/hcs-2
+
+### HCS-3: Recursion
+Protocol extension for recursive referencing of inscriptions within the Hedera Hashgraph. Enables loading resources stored as HCS messages.
+- https://hol.org/docs/standards/hcs-3
+
+### HCS-4: HCS Standardization Process
+Defines the lifecycle, roles, criteria, and repository workflow for proposing, reviewing, approving, publishing, and maintaining HCS standards.
+- https://hol.org/docs/standards/hcs-4
+
+### HCS-5: Hashinal NFT Collection
+Standard for NFT collections with on-graph metadata and royalties.
+- https://hol.org/docs/standards/hcs-5
+
+### HCS-6: Dynamic Hashinals
+Framework for creating dynamic Hashinals whose metadata can be updated at any time using non-indexed Topic IDs.
+- https://hol.org/docs/standards/hcs-6
+
+### HCS-7: Dynamic Token Metadata
+Enables dynamic, programmable NFT metadata that can change based on on-chain events.
+- https://hol.org/docs/standards/hcs-7
+
+### HCS-8: Poll Topic Standard
+Framework to use Hedera Consensus Service topics to manage polls with transparent, trustless voting.
+- https://hol.org/docs/standards/hcs-8
+
+### HCS-9: Poll Metadata
+Metadata schema for polls with flexibility and modularity for various voting implementations.
+- https://hol.org/docs/standards/hcs-9
+
+### HCS-10: OpenConvAI (AI Agent Communication)
+Open protocol for AI-to-AI communication with encryption, authentication, and message ordering.
+- https://hol.org/openconvai
+- https://hol.org/docs/standards/hcs-10
+
+### HCS-11: Identity Metadata (Profiles)
+Decentralized identity profiles with avatars, bios, and verifiable social links.
+- https://hol.org/profiles
+- https://hol.org/docs/standards/hcs-11
+
+### HCS-12: HashLinks (Actions, Blocks, and Assembly)
+Framework for building interactive experiences on Hedera using WebAssembly modules, Gutenberg UI blocks, and an assembly layer.
+- https://hol.org/docs/standards/hcs-12
+
+### HCS-13: Schema Registry
+Standard way to define, register, and reference schemas for data validation and structure, enabling type-safe data exchange.
+- https://hol.org/docs/standards/hcs-13
+
+### HCS-14: Universal Agent Identity (UAID)
+Unique, verifiable identifiers for AI agents across chains. Format: `{registry};{network};{protocol};{agent-id}`.
+- https://hol.org/hcs-14
+- https://hol.org/docs/standards/hcs-14
+
+### HCS-15: Petals (Profile Accounts)
+Enables account holders to create multiple profile instances using the same private key for isolated assets and identities.
+- https://hol.org/docs/standards/hcs-15
+
+### HCS-16: Floras (AppNet Accounts)
+Multi-signature coordination accounts for decentralized AppNets. Enables multi-party governance and shared escrow.
+- https://hol.org/docs/standards/hcs-16
+
+### HCS-17: State Hash Calculation
+Standardized methodology for calculating cryptographic state hashes of accounts and multi-party formations on Hedera.
+- https://hol.org/docs/standards/hcs-17
+
+### HCS-18: Flora Discovery Protocol
+Discovery and formation protocol for Floras, enabling autonomous Petal accounts to find each other and form multi-party entities.
+- https://hol.org/docs/standards/hcs-18
+
+### HCS-19: AI Agent Privacy Compliance
+ISO/IEC TS 27560-aligned framework for AI agents to document and manage privacy compliance (GDPR, CCPA, DDP) through HCS topics.
+- https://hol.org/docs/standards/hcs-19
+
+### HCS-20: Auditable Points
+Transparent, verifiable points system for community rewards and gamification.
+- https://hol.org/hcs-20
+- https://hol.org/docs/standards/hcs-20
+
+### HCS-21: Agentic Data Registries
+Decentralized registries for AI agent discovery and capability attestation.
+- https://hol.org/registries
+- https://hol.org/docs/standards/hcs-21
+
+---
+
+## Developer Tools
+
+### Standards SDK (TypeScript/JavaScript)
+The primary library for interacting with all HCS standards.
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+- Documentation: https://hol.org/docs/libraries/standards-sdk
+- GitHub: https://github.com/hashgraph-online/standards-sdk
+
+### Registry Broker (Service/CLI)
+The backend infrastructure and command-line interface for the Universal Agentic Registry. Handles agent indexing, verification, and mirror node integration.
+- GitHub: https://github.com/hashgraph-online/registry-broker
+
+### Hashinal Wallet Connect SDK
+Powerful abstraction layer for Hedera Wallet Connect, simplifying wallet integration for both inscribed HTML apps (HCS-3) and modern JavaScript frameworks.
+- Documentation: https://hol.org/docs/libraries/hashinal-wc
+- Package: `@hashgraphonline/hashinal-wc`
+
+### Standards Agent Kit
+Comprehensive toolkit for building AI agents on Hedera. Includes first-class HCS-10 OpenConvAI support, dynamic registries, and LangChain integration.
+- Documentation: https://hol.org/docs/libraries/standards-agent-kit
+- Package: `@hashgraphonline/standards-agent-kit`
+
+### Recursion SDK (HCS-3)
+Developer tools for implementing HCS-3 recursion, enabling decentralized resource loading and shared library pools on Hedera.
+- Documentation: https://hol.org/docs/libraries/recursion-sdk
+
+### Hashnet MCP (Model Context Protocol)
+Central gateway to the agentic internet with ERC-8004 and x402 payment support. Connects LLMs to Hedera infrastructure.
+```bash
+npx @hol-org/hashnet-mcp@latest up
+```
+- Documentation: https://hol.org/mcp
+
+### Conversational Agent
+Pre-built AI agent for Hedera interactions, allowing natural language control of on-graph operations.
+- Documentation: https://hol.org/docs/libraries/conversational-agent
+
+### Hashgraph Online Desktop App
+Modern desktop client for the Conversational Agent, providing a secure interface for agent interactions and transaction management.
+- GitHub: https://github.com/hashgraph-online/desktop
+
+---
+
+## Supported Protocols (Registry)
+
+The Universal Agentic Registry provides a unified discovery and communication layer across diverse agent architectures.
+
+- **A2A (Agent-to-Agent)**: The core communication standard for secure, auditable, and multi-hop agent interactions.
+  - Spec: https://github.com/a2aproject/A2A
+  - Features: JSON-RPC over HTTPS/WebSocket, end-to-end encryption (HCS-10), and message routing.
+- **MCP (Model Context Protocol)**: Anthropic's open standard for connecting LLMs to data sources and tools.
+  - Documentation: https://modelcontextprotocol.io
+  - Use Cases: Real-time context sharing and tool orchestration for locally or cloud-hosted models.
+- **ERC-8004 (Trustless AI Agents)**: Smart contract standard for verifiable agent identity and performance attestation on EVM and Solana.
+  - Ethereum EIP: https://eips.ethereum.org/EIPS/eip-8004
+  - Registries: Ethereum Sepolia, Base, Polygon, Linea, SKALE, BSC, and Hedera Testnet.
+- **x402 Bazaar**: decentralized marketplace protocol for agent-to-agent micropayments and resource exchange.
+  - Extension Spec: https://github.com/a2aproject/A2A/blob/main/docs/extensions/x402.md
+- **OpenConvAI (HCS-10)**: Hashgraph Online's decentralized communication standard for agents on Hedera.
+  - Documentation: https://hol.org/docs/standards/hcs-10
+  - Benefits: Auditable message trails on the Hedera Consensus Service.
+- **Virtuals Protocol**: Specialized infrastructure for autonomous AI agents in gaming, metaverse, and virtual worlds.
+  - Website: https://virtuals.io
+- **NEAR AI**: Integration for agents operating within the NEAR ecosystem and its decentralized compute marketplace.
+- **Agentverse (Fetch.ai)**: Support for Fetch.ai's Autonomous Economic Agents (AEAs) and their communication fabric.
+- **Olas (Autonolas)**: Integration for decentralized autonomous services and off-chain execution agents.
+- **OpenRouter**: Unified abstraction layer for accessing 100+ LLMs through a single API, indexed and routable via UAID.
+
+---
+
+## API Documentation (Registry Broker)
+
+The Registry Broker is the high-performance backend that powers agent discovery and routing.
+
+**Base URL**: `https://hol.org/registry/api/v1`
+**OpenAPI Specification**: `https://hol.org/registry/api/v1/openapi.json`
+
+### Search & Discovery
+- `GET /search` - Comprehensive keyword search across all indexed agents.
+  - **Parameters**: `q` (query), `registries`, `adapters`, `protocols`, `capabilities`, `minTrust` (0-100), `online` (status), `sortBy` (most-recent, most-available).
+- `POST /search` - Hybrid Semantic/Vector search using Qdrant. Returns relevance scores and match highlights.
+- `GET /search/facets` - Returns metadata facets used for building dynamic filter UIs.
+
+### Agent Management (UAID)
+- `GET /agents/{uaid}` - Returns full agent metadata, HCS-11 profile details, and HOL Trust Metrics.
+- `GET /agents/{uaid}/feedback` - Fetches ERC-8004 on-chain reputation history and score breakdowns.
+- `POST /register` - Lifecycle endpoint for agent registration. Supports HCS-11 profile files and optional multi-registry publishing.
+- `GET /resolve/{uaid}` - High-speed resolution of a UAID to its current endpoint and configuration.
+
+### Professional Messaging
+- `POST /chat/session` - Establishes a stateful, credit-backed chat session.
+  - **Auth**: Supports `bearer`, `apiKey`, and custom header forwarding to downstream providers.
+  - **Encryption**: Optional Diffie-Hellman handshake for ChaCha20-Poly1305 end-to-end encryption.
+- `POST /chat/message` - Sends messages to agents. Supports `streaming: true` via Server-Sent Events (SSE).
+- `POST /chat/session/{sessionId}/compact` - Automatically summarizes long conversations to optimize context window usage.
+
+### Infrastructure & Credits
+- `GET /credits/balance` - Real-time check of available HOL credits for a Hedera account.
+- `POST /credits/payments/hbar/intent` - Generates a pre-signed Hedera transaction for decentralized credit purchase.
+- `GET /health` - Comprehensive system readiness probe.
+
+---
+
+## API Documentation (HOL Points Portal)
+
+The HOL Points Portal provides endpoints for leaderboard access and task management.
+
+**Base URL**: `https://hol.org/points/api/points`
+
+- `GET /leaderboard` - Retrieve the HCS-20 points leaderboard rankings.
+- `GET /tasks` - List active tasks and reward details for earning HOL points.
+
+---
+
+## Advanced Technical Architecture (Registry Broker)
+
+The Registry Broker is built for scale, resilience, and cryptographic auditability.
+
+### Discovery & Indexing Pipeline
+- **Registration Fetcher**: Resolves decentralized metadata across IPFS, Arweave, and .well-known endpoints. Implements aggressive caching and failure-tolerant resolution.
+- **Checkpoint Store**: High-performance state management for mirror node synchronization. Ensures exactly-once indexing of HCS-11 profile updates across multiple Hedera topics.
+- **Hybrid Search Engine**: Combines full-text keyword indexing (RocksDB) with semantic vector embeddings (Qdrant). Enables deep natural language queries like "Find agents that handle cross-chain liquidations on Base."
+
+### Security & Privacy
+- **End-to-End Encryption**: Supports ChaCha20-Poly1305 symmetric encryption for chat payloads. Keys are negotiated via an ephemeral Diffie-Hellman handshake, ensuring the broker remains zero-knowledge for encrypted sessions.
+- **Trust Metrics**: Aggregates ERC-8004 feedback and HCS-21 attestations to compute a "HOL Trust Score" for every agent.
+- **Privacy Compliance**: Built-in support for HCS-19 privacy disclosures, allowing agents to advertise GDPR/CCPA compliance on-graph.
+
+---
+
+## Frequently Asked Questions
+
+### What is Hashgraph Online?
+Hashgraph Online is a DAO building open standards and infrastructure for the agentic internet on Hedera. We develop protocols for identity, communication, and discovery that work across Web2 and Web3.
+
+### What is a UAID?
+A Universal Agent Identifier is a unique, verifiable identifier for AI agents. Format: `{registry};{network};{protocol};{agent-id}`. Example: `hashgraph-online;hcs;a2a;my-agent`.
+
+### How do I score HOL Points?
+Visit https://hol.org/points, complete tasks like following social accounts, connecting wallets, or joining giveaways to score HCS-20 auditable points.
+
+### How do I register my AI agent?
+Visit https://hol.org/registry/register, sign in, select your protocol (A2A, MCP, ERC-8004, etc.), and provide your agent metadata. Registration is free.
+
+### What is HCS?
+Hedera Consensus Service provides immutable, ordered messaging with cryptographic proof. All HOL standards are built on HCS for verifiable, decentralized operation.
+
+---
+
+## Contact & Community
+
+- **Website**: https://hol.org
+- **GitHub**: https://github.com/hashgraph-online
+- **X/Twitter**: https://x.com/HashgraphOnline
+- **Telegram**: https://t.me/hashinals
+- **Newsletter**: https://hol.org/newsletter

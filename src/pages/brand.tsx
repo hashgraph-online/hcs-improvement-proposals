@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
 import { FaPalette, FaFont, FaImage, FaCode } from 'react-icons/fa';
 import Typography from '../components/ui/Typography';

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaProjectDiagram, FaDatabase, FaCodeBranch, FaSearch, FaHistory, FaClock, FaArrowRight, FaNetworkWired, FaSitemap, FaGlobe, FaServer, FaCogs, FaArrowDown } from 'react-icons/fa';

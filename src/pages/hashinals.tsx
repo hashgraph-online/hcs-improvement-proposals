@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaCube, FaLayerGroup, FaBolt, FaFingerprint, FaCode, FaCompressArrowsAlt, FaPuzzlePiece, FaDatabase, FaArrowDown, FaLink, FaHistory, FaArrowRight } from 'react-icons/fa';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaEnvelope, FaBell, FaCalendarCheck, FaGift, FaRocket, FaStar } from 'react-icons/fa';
 import PrimaryButton from './PrimaryButton';
 

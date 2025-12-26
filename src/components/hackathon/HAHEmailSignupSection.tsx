@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaEnvelope, FaBell, FaCalendarAlt } from 'react-icons/fa';
 import { TransformCard } from '../ui';
 import PrimaryButton from './PrimaryButton';

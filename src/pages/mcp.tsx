@@ -1,6 +1,6 @@
 import Layout from '@theme/Layout';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import {
   Typography,
   PrimaryButton,

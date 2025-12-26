@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import Typography from '../ui/Typography';
 import Terminal from '../ui/Terminal';
 import CLITerminal from '../ui/CLITerminal';

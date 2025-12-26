@@ -19,7 +19,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 }) => {
   const classes = classNames(
     'inline-block font-mono font-semibold text-white rounded-lg transition-all duration-300 transform',
-    'bg-brand-blue hover:bg-[#4488ee] hover:text-white hover:scale-105 hover:-translate-y-1',
+    'bg-[#3f4174] hover:bg-brand-blue hover:text-white hover:scale-105 hover:-translate-y-1',
     'border border-transparent shadow-md hover:shadow-xl active:scale-95',
     'focus:outline-none focus:ring-2 focus:ring-brand-blue focus:ring-opacity-50',
     'no-underline hover:no-underline text-center',

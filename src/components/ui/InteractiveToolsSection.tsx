@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaExternalLinkAlt, FaBookOpen } from 'react-icons/fa';
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
 import PrimaryButton from '../hackathon/PrimaryButton';

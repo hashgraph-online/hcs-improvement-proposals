@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { motion, useInView, useScroll } from 'framer-motion';
+import { motion, useInView, useScroll } from 'motion/react';
 import {
   FaCode,
   FaRobot,

@@ -1,7 +1,6 @@
 
 import React from 'react';
 import clsx from 'clsx';
-import { motion } from 'framer-motion';
 import type { Tutorial } from './types';
 
 interface TutorialStepListProps {
@@ -11,25 +10,61 @@ interface TutorialStepListProps {
 }
 
 const TutorialStepList: React.FC<TutorialStepListProps> = ({ currentId, steps, onSelect }) => {
+    const [query, setQuery] = React.useState('');
+
+    const normalizedQuery = React.useMemo(
+        () => query.trim().toLowerCase(),
+        [query]
+    );
+
+    const filteredSteps = React.useMemo(() => {
+        if (!normalizedQuery) {
+            return steps;
+        }
+        return steps.filter(step => {
+            const haystack = [
+                step.title,
+                step.subtitle,
+                ...(step.prerequisites || [])
+            ]
+                .join(' ')
+                .toLowerCase();
+            return haystack.includes(normalizedQuery);
+        });
+    }, [steps, normalizedQuery]);
+
+    const handleSearchChange = React.useCallback(
+        (event: React.ChangeEvent<HTMLInputElement>) => {
+            setQuery(event.target.value);
+        },
+        []
+    );
+
+    const currentIndex = steps.findIndex(step => step.id === currentId);
+
     return (
         <div className="w-full">
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 px-2">
-                Learning Path
-            </h3>
+            <div className="mb-4 px-2">
+                <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
+                    Learning Path
+                </h3>
+                <input
+                    type="search"
+                    value={query}
+                    onChange={handleSearchChange}
+                    placeholder="Search tutorials"
+                    aria-label="Search tutorials"
+                    className="w-full rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-3 py-2 text-sm text-gray-700 dark:text-gray-200 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40"
+                />
+            </div>
 
-            <div className="relative space-y-0">
-                {/* Vertical line connecting steps - purely decorative */}
+            <div className="relative space-y-0 lg:max-h-[calc(100vh-18rem)] lg:overflow-y-auto lg:pr-1">
                 <div className="absolute left-4 top-4 bottom-4 w-px bg-gray-200 dark:bg-gray-800" />
 
-                {steps.map((step, index) => {
+                {filteredSteps.map(step => {
                     const isActive = step.id === currentId;
-                    const isPast = steps.findIndex(s => s.id === currentId) > index;
-                    const isFuture = !isActive && !isPast;
-
-                    // Determine status color/icon
-                    // Past: Checked (Green)
-                    // Active: Blue Pulse
-                    // Future: Grey border
+                    const stepIndex = steps.findIndex(s => s.id === step.id);
+                    const isPast = currentIndex > stepIndex;
 
                     return (
                         <div
@@ -40,7 +75,6 @@ const TutorialStepList: React.FC<TutorialStepListProps> = ({ currentId, steps, o
                             )}
                             onClick={() => onSelect(step.id)}
                         >
-                            {/* Checkbox / Indicator */}
                             <div className="relative z-10 flex-shrink-0 mt-0.5">
                                 {isPast ? (
                                     <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white shadow-sm border border-green-600">
@@ -50,16 +84,15 @@ const TutorialStepList: React.FC<TutorialStepListProps> = ({ currentId, steps, o
                                     </div>
                                 ) : isActive ? (
                                     <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-md ring-4 ring-blue-100 dark:ring-blue-900 border border-blue-600">
-                                        <span className="font-mono text-sm font-bold">{index + 1}</span>
+                                        <span className="font-mono text-sm font-bold">{stepIndex + 1}</span>
                                     </div>
                                 ) : (
                                     <div className="w-8 h-8 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-300 dark:border-gray-700 text-gray-400 font-mono text-sm font-medium flex items-center justify-center group-hover:border-gray-400 dark:group-hover:border-gray-600 transition-colors">
-                                        {index + 1}
+                                        {stepIndex + 1}
                                     </div>
                                 )}
                             </div>
 
-                            {/* Content */}
                             <div className="flex-1 min-w-0 py-1">
                                 <div className="flex items-center justify-between mb-0.5">
                                     <p className={clsx(
@@ -88,6 +121,11 @@ const TutorialStepList: React.FC<TutorialStepListProps> = ({ currentId, steps, o
                         </div>
                     );
                 })}
+                {filteredSteps.length === 0 && (
+                    <div className="px-4 py-6 text-sm text-gray-500">
+                        No tutorials match your search.
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 import { FiTerminal, FiGitBranch, FiPlay, FiPause, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { AnimatedBackground } from './ui';
 
@@ -116,7 +116,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
         {title && (
           <div className='text-center mb-12'>
-            <div className='inline-flex items-center gap-2 text-xs font-mono text-brand-functions uppercase tracking-[0.3em] mb-6 bg-white/80 dark:bg-gray-800/80 px-4 py-2 rounded-full backdrop-blur-sm'>
+            <div className='inline-flex items-center gap-2 text-xs font-mono text-gray-700 dark:text-gray-300 uppercase tracking-[0.3em] mb-6 bg-white/90 dark:bg-gray-800/90 px-4 py-2 rounded-full backdrop-blur-sm border border-gray-200 dark:border-gray-700'>
               <FiTerminal className='w-4 h-4' />
               {title}
             </div>
@@ -150,6 +150,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                       <button
                         onClick={() => setIsPlaying(!isPlaying)}
                         className='p-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-all duration-200'
+                        aria-label={isPlaying ? 'Pause auto-rotation' : 'Start auto-rotation'}
                       >
                         {isPlaying ? (
                           <FiPause className='w-3 h-3 text-gray-700 dark:text-gray-300' />
@@ -226,6 +227,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                     <button
                       onClick={() => setIsPlaying(!isPlaying)}
                       className='p-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-all duration-200'
+                      aria-label={isPlaying ? 'Pause auto-rotation' : 'Start auto-rotation'}
                     >
                       {isPlaying ? (
                         <FiPause className='w-3.5 h-3.5 text-gray-700 dark:text-gray-300' />
@@ -234,7 +236,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                       )}
                     </button>
                   )}
-                  <div className='text-xs text-gray-500 dark:text-gray-400'>
+                  <div className='text-xs text-gray-600 dark:text-gray-400'>
                     {items.length} {items.length === 1 ? 'item' : 'items'}
                   </div>
                 </div>

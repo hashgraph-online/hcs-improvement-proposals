@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { FaPlay } from 'react-icons/fa';
 import { TimeLeft } from './types';
 import PrimaryButton from './PrimaryButton';

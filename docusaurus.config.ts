@@ -34,9 +34,38 @@ const config: Config = {
     {
       tagName: 'link',
       attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap',
+        rel: 'preload',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap',
+        as: 'style',
       },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap',
+        media: 'print',
+        onload: "this.media='all'",
+      },
+    },
+    {
+      tagName: 'style',
+      attributes: {},
+      innerHTML: `
+        /* Critical CSS for above-the-fold content */
+        body{margin:0;font-family:'Roboto',system-ui,-apple-system,sans-serif;background:#fff}
+        .navbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}
+        [data-theme='dark'] body{background:#111827;color:#f3f4f6}
+        [data-theme='dark'] .navbar{background:rgba(17,24,39,.95)}
+        main{min-height:100vh}
+        section{position:relative;overflow:hidden}
+        .container{max-width:1280px;margin:0 auto;padding:0 1rem}
+        h1,h2,h3{font-family:'Roboto Mono',monospace;font-weight:500}
+        .text-brand-blue{color:#5599fe}
+        .bg-brand-blue{background:#5599fe}
+        .text-brand-purple{color:#a679f0}
+        .text-brand-green{color:#48df7b}
+      `,
     },
   ],
 
@@ -111,7 +140,7 @@ const config: Config = {
       title: 'HOL',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'Logo_Icon.png',
+        src: 'Logo_Icon.webp',
       },
       items: [
         {

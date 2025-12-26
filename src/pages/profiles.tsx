@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaUserAstronaut, FaServer, FaShieldAlt, FaGlobe, FaTwitter, FaGithub, FaDiscord, FaLinkedin, FaYoutube, FaArrowDown, FaKey, FaFingerprint, FaRobot, FaCheckCircle, FaUserCheck, FaIdCard } from 'react-icons/fa';

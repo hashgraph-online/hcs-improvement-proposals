@@ -38,7 +38,7 @@ All the SDK helpers we’ll use (`HCS15Client`, `HCS11Client`, registry-broker c
 1. Install Node.js ≥ 20 and pnpm ≥ 10.
 2. Create a project and install the SDK:
    ```bash
-   pnpm add @hol-org/standards-sdk @hashgraph/sdk
+   pnpm add @hashgraphonline/standards-sdk @hashgraph/sdk
    ```
 3. Prepare `.env` (never commit secrets):
    ```
@@ -48,6 +48,10 @@ All the SDK helpers we’ll use (`HCS15Client`, `HCS11Client`, registry-broker c
 
    # optional: location to cache generated Petal accounts
    PETAL_CACHE=./.petals.json
+
+   # base account + key used for Petal creation
+   PETAL_BASE_ACCOUNT_ID=0.0.5678
+   PETAL_BASE_KEY=302e02...
    ```
 4. Smoke-test the credentials:
    ```bash
@@ -79,7 +83,7 @@ Fund the corresponding account with a few HBAR (e.g., via the Hedera Portal fauc
 
 ```ts
 // src/petals/create-petal.ts
-import { HCS15Client } from '@hol-org/standards-sdk';
+import { HCS15Client } from '@hashgraphonline/standards-sdk';
 import { PrivateKey } from '@hashgraph/sdk';
 
 const operatorId = process.env.HEDERA_OPERATOR_ID!;
@@ -96,13 +100,20 @@ async function createPetalAccount() {
     process.env.PETAL_BASE_KEY!,
   );
 
-  const { accountId } = await hcs15.createPetalAccount({
+  const { accountId, profile } = await hcs15.createPetalAccount({
     basePrivateKey,
     initialBalance: 5, // HBAR
     accountMemo: 'HCS-15 Petal',
+    profile: {
+      baseAccountId: process.env.PETAL_BASE_ACCOUNT_ID!,
+      displayName: 'Demo Petal A',
+      alias: 'demo-petal-a',
+      ttl: 300,
+    },
   });
 
   console.log('Petal created:', accountId);
+  console.log('Profile topic:', profile?.profileTopicId);
   return { accountId, basePrivateKey };
 }
 
@@ -124,7 +135,7 @@ Mirror node verification (next step) will confirm the keys match. If you want de
 ## 4. Verify the Petal (mirror-node check)
 
 ```ts
-import { HCS15Client } from '@hol-org/standards-sdk';
+import { HCS15Client } from '@hashgraphonline/standards-sdk';
 
 async function verifyPetal(petalAccountId: string, baseAccountId: string) {
   const ok = await hcs15.verifyPetalAccount(petalAccountId, baseAccountId);
@@ -153,38 +164,9 @@ If verification fails:
 
 ---
 
-## 5. Publish an HCS-11 Petal profile
+## 5. Confirm the HCS-11 Petal profile
 
-Floras and discovery registries expect HCS-11 profiles. Use `HCS11Client` to publish one that references your ledger info:
-
-```ts
-import { HCS11Client } from '@hol-org/standards-sdk';
-
-const hcs11 = new HCS11Client({
-  network: process.env.HEDERA_NETWORK || 'testnet',
-  operatorId,
-  operatorKey,
-});
-
-await hcs11.publishProfile({
-  accountId: petalAccountId,
-  profile: {
-    version: '1.0',
-    display_name: 'Demo Petal A',
-    type: 1, // AI agent / Petal
-    socials: [
-      { platform: 'x', handle: '@demo-petal' },
-    ],
-    flora: {
-      config: {
-        uri: process.env.FLORA_CONFIG_URI, // pointer to flora.yaml/appnet.yaml
-      },
-    },
-  },
-});
-```
-
-Now any consumer can query the Petal’s account memo (`hcs-11:hcs://1/...`) and resolve its profile.
+`createPetalAccount` can publish the HCS-11 profile and update the Petal account memo for you (see step 3). You should still confirm the memo is set and resolvable.
 
 Recommended fields for Petal profiles:
 
@@ -193,6 +175,7 @@ Recommended fields for Petal profiles:
 | `display_name` | Human-readable identifier (“Flora Oracle Petal A”). |
 | `type` | Use `1` (AI agent) or whichever value you’ve allocated for Petals. |
 | `socials` | Provide at least one contact channel (X, Discord, Matrix). |
+| `base_account` | Required for Petals; must reference the base account that shares the key. |
 | `flora.config.uri` | Points to `flora.yaml` so matchmakers can ensure compatibility. |
 | `ledger.challenge` (optional) | Include instructions for ledger challenge endpoints if you run your own. |
 
@@ -210,7 +193,7 @@ pnpm dlx hedera-cli account:memo --account $PETAL_ACCOUNT
 Before a Petal is trusted with registry interactions (credit purchases, encryption key registration, x402 payments), it must prove control of its ledger key. The registry broker exposes a challenge/response flow. Example:
 
 ```ts
-import { RegistryBrokerClient } from '@hol-org/standards-sdk/dist/services/registry-broker/client';
+import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk/dist/services/registry-broker/client';
 
 const broker = new RegistryBrokerClient({
   baseUrl: 'https://hol.org/registry/api/v1',
@@ -236,7 +219,7 @@ This is the same utility used in `/demo/hcs-15/petal-accounts-demo.ts`. Run it w
 If you want other Floras to discover your Petal automatically, emit an HCS-18 announcement. The SDK’s `HCS18Client` (see `demo/hcs-18/flora-discovery-demo.ts`) will build the `petal_available` message for you. Minimal example:
 
 ```ts
-import { HCS18Client } from '@hol-org/standards-sdk';
+import { HCS18Client } from '@hashgraphonline/standards-sdk';
 
 const hcs18 = new HCS18Client({
   network: process.env.HEDERA_NETWORK || 'testnet',

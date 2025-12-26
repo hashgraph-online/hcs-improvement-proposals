@@ -80,9 +80,14 @@ html {
   scroll-padding-top: 80px;
 }
 
-/* Enhanced transitions for all interactive elements */
-* {
-  transition-property: transform, box-shadow, opacity, background-color;
+/* Smooth transitions for interactive elements only (not all elements) */
+a,
+button,
+input,
+select,
+textarea,
+[role="button"] {
+  transition-property: transform, box-shadow, opacity, background-color, border-color;
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -5366,4 +5371,36 @@ main .theme-doc-generated-index-item:hover::after,
   list-style: none !important;
   padding: 0 !important;
   margin: 0 !important;
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS - Core Web Vitals
+   ============================================ */
+
+/* Reduced motion preference - disable animations for accessibility and CWV */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Content-visibility optimization for off-screen content */
+.content-visibility-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+/* Optimize sidebar for paint containment */
+.theme-doc-sidebar-container nav {
+  contain: layout style paint;
+}
+
+/* Lazy load images below the fold */
+img[loading="lazy"] {
+  content-visibility: auto;
 }

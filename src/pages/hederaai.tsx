@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useInView, AnimatePresence } from 'motion/react';
 import {
   FaMicrophone,
   FaCalendarAlt,

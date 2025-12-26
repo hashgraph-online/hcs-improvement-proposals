@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { motion, useAnimation } from 'framer-motion';
+import { motion, useAnimation } from 'motion/react';
 import { Typography } from '../ui';
 import TutorialCard from './TutorialCard';
 import { TutorialCategory } from './types';

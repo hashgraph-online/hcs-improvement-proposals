@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, buttonVariants } from './button';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { cn } from '../../lib/utils';
 import Link from '@docusaurus/Link';

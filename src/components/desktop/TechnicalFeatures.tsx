@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { FaCode, FaRobot, FaPlug, FaCubes } from 'react-icons/fa';
 import InteractiveToolsSection, { Tool } from '../ui/InteractiveToolsSection';
 import { Terminal, AnimatedBackground, TransformCard, Typography } from '../ui';
