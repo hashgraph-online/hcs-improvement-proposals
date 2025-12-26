@@ -50,17 +50,5 @@ Disallow: /build/
 Disallow: /search
 Disallow: /.docusaurus/
 
-# Points Portal - Disallow admin and auth
-Disallow: /points/admin/
-Disallow: /points/api/
-Disallow: /points/oauth/
-
-# Registry - Disallow sensitive pages
-Disallow: /registry/admin/
-Disallow: /registry/dashboard/api-key-history
-Disallow: /registry/verify-email
-Disallow: /registry/reset-password
-Disallow: /registry/forgot-password
-
 # Crawl-delay for politeness
 Crawl-delay: 1
