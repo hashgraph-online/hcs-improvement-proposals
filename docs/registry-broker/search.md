@@ -9,12 +9,12 @@ Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and ex
 
 ## Example: ERC-8004 Agents
 
-ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` (or `protocols: ['erc-8004']`) to query those records. The snippet below mirrors a real request to `https://hol.org/api/v1/search?registries=erc-8004&limit=3`, which currently returns Babylon Prediction Markets agents with UAIDs such as:
+ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` to query those records. The snippet below mirrors a real request to `https://hol.org/api/v1/search?registries=erc-8004&limit=3`, which currently returns agents with UAIDs such as:
 
 ```json
 {
-  "name": "Babylon Prediction Markets",
-  "uaid": "uaid:aid:7uGHL6U2GYw95VbZ3jvy5P11qW52MrojpFXozmBy8cFuHk8T1jRw6trVpx1zwS4Y78;uid=11155111:1538;registry=erc-8004;proto=erc-8004;nativeId=11155111:1538"
+  "name": "Agent 0x1059Ed65AD58ffc83642C9Be3f24C250905a28FB",
+  "uaid": "uaid:aid:8sMXrrsZonyfZsmUMMSEhbUJhDBrSHqoQevXa1nVn9mQ8MogoGEbC1zhqbj7ZD2vGR;uid=11155111:1668;registry=erc-8004;proto=erc-8004;nativeId=11155111:1668"
 }
 ```
 
@@ -30,11 +30,18 @@ erc8004Agents.hits.forEach(hit => {
     name: hit.profile.display_name,
     uaid: hit.uaid,
     nativeId: hit.metadata?.nativeId,
+    protocols: hit.protocols, // a2a/mcp when detected
   });
 });
 ```
 
 Because this example uses the live `/search` endpoint, you can run the curl command above before referencing it in demos to ensure you are showing the latest data.
+
+## Example: ERC-8004 Solana (Devnet)
+
+Solana devnet ERC-8004 agents are indexed under the `erc-8004-solana` registry. Use `registries: ['erc-8004-solana']` to discover them, then prefer the `proto=a2a` or `proto=mcp` UAIDs when opening chat sessions.
+
+See [ERC-8004 on Solana (Devnet)](erc-8004-solana.md) for a complete walkthrough (including agent 114).
 
 ## Keyword Search
 
@@ -65,7 +72,7 @@ result.hits.forEach(hit => {
 | Filter | Example values | Notes |
 | --- | --- | --- |
 | `registries` | `['erc-8004']`, `['coinbase-x402-bazaar']` | Leave empty for broad coverage. `hashgraph-online` only returns direct registrations, so expect a narrow set. |
-| `protocols` | `['a2a']`, `['openrouter']`, `['erc-8004']` | Adapter/registry protocol identifiers (normalized to lowercase). |
+| `protocols` | `['a2a']`, `['mcp']`, `['openrouter']` | Communication protocols extracted from agent endpoints (normalized to lowercase). |
 | `capabilities` | `['messaging']`, `['financial-services']` | Canonical labels derived from HCS-11 profiles, adapter metadata, and OASF capability maps. |
 | `metadata.<key>` | `metadata.provider=ledger-labs`, `metadata.industry=finance` | Repeat the parameter to OR multiple values. Keys accept dot-notation. |
 | Payments metadata | `metadata.payments.supported=x402`, `metadata.payments.protocols.x402.paymentNetwork=base` | Set by ERC-8004/A2A adapters when you advertise payment rails during registration. |
