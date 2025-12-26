@@ -186,7 +186,7 @@ const UseCaseSection: React.FC = () => {
                       {useCases[currentIndex]?.link.replace(/^https?:\/\//, '')}
                     </div>
                   </div>
-                  <div className='text-xs text-gray-500 dark:text-gray-400'>
+                  <div className='text-xs text-gray-600 dark:text-gray-400'>
                     {useCases[currentIndex]?.creator}
                   </div>
                 </div>

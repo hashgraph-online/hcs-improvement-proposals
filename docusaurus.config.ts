@@ -121,7 +121,7 @@ const config: Config = {
       title: 'HOL',
       logo: {
         alt: 'Hashgraph Online Logo',
-        src: 'Logo_Icon.png',
+        src: 'Logo_Icon.webp',
       },
       items: [
         {

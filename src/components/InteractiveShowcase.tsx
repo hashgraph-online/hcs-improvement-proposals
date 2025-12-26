@@ -150,6 +150,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                       <button
                         onClick={() => setIsPlaying(!isPlaying)}
                         className='p-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-all duration-200'
+                        aria-label={isPlaying ? 'Pause auto-rotation' : 'Start auto-rotation'}
                       >
                         {isPlaying ? (
                           <FiPause className='w-3 h-3 text-gray-700 dark:text-gray-300' />
@@ -226,6 +227,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                     <button
                       onClick={() => setIsPlaying(!isPlaying)}
                       className='p-1.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-all duration-200'
+                      aria-label={isPlaying ? 'Pause auto-rotation' : 'Start auto-rotation'}
                     >
                       {isPlaying ? (
                         <FiPause className='w-3.5 h-3.5 text-gray-700 dark:text-gray-300' />
@@ -234,7 +236,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                       )}
                     </button>
                   )}
-                  <div className='text-xs text-gray-500 dark:text-gray-400'>
+                  <div className='text-xs text-gray-600 dark:text-gray-400'>
                     {items.length} {items.length === 1 ? 'item' : 'items'}
                   </div>
                 </div>
