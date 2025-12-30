@@ -5373,11 +5373,6 @@ main .theme-doc-generated-index-item:hover::after,
   margin: 0 !important;
 }
 
-/* ============================================
-   PERFORMANCE OPTIMIZATIONS - Core Web Vitals
-   ============================================ */
-
-/* Reduced motion preference - disable animations for accessibility and CWV */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -5389,7 +5384,6 @@ main .theme-doc-generated-index-item:hover::after,
   }
 }
 
-/* Content-visibility optimization for off-screen content */
 .content-visibility-auto {
   content-visibility: auto;
   contain-intrinsic-size: auto 500px;
@@ -5403,4 +5397,75 @@ main .theme-doc-generated-index-item:hover::after,
 /* Lazy load images below the fold */
 img[loading="lazy"] {
   content-visibility: auto;
+}
+
+.animate-pulse,
+.animate-bounce,
+.animate-ping,
+[class*="motion-"],
+[data-motion] {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Optimize button interactions for faster INP */
+button,
+a,
+[role="button"],
+.cursor-pointer {
+  touch-action: manipulation;
+}
+
+/* Reduce paint complexity for animated backgrounds */
+.blur-xl,
+.blur-2xl,
+.blur-3xl {
+  contain: strict;
+  will-change: transform;
+}
+
+/* Optimize carousel/slider transitions */
+[class*="AnimatePresence"] > *,
+.hero-slide {
+  will-change: opacity, transform;
+  contain: layout;
+}
+
+/* Optimize scroll containers */
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Passive event listener hint for scroll elements */
+.scroll-container {
+  scroll-behavior: smooth;
+  overscroll-behavior: contain;
+}
+
+/* Reduce repaints on hover states */
+.group:hover > *,
+.hover\:scale-105:hover,
+.hover\:scale-110:hover,
+.hover\:-translate-y-1:hover {
+  will-change: transform;
+}
+
+/* Content containment for sections */
+section {
+  contain: layout style;
+}
+
+/* Optimize SVG rendering */
+svg {
+  shape-rendering: optimizeSpeed;
+}
+
+/* Reduce layout thrashing from inline animations */
+[style*="transform"],
+[style*="opacity"] {
+  contain: layout;
 }

@@ -1,7 +1,7 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import React, { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
-import { motion, useAnimation, AnimatePresence, useInView } from 'motion/react';
+import React, { useState, useEffect, useRef, useCallback, lazy, Suspense, useMemo } from 'react';
+import { motion, AnimatePresence, useInView } from 'motion/react';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import Modal from '../components/Modal';
@@ -109,12 +109,12 @@ const HeroSection: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
-  const handleCopy = (command: string) => {
+  const handleCopy = useCallback((command: string) => {
     if (!command) return;
     navigator.clipboard.writeText(command);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
+  }, []);
 
   const standardsTerminalCommand = 'npm install @hashgraphonline/standards-sdk';
   const standardsTerminalLines = [
@@ -402,16 +402,16 @@ const HeroSection: React.FC = () => {
   /**
    * Navigate to previous slide
    */
-  const goToPrevSlide = () => {
+  const goToPrevSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-  };
+  }, [slides.length]);
 
   /**
    * Navigate to next slide
    */
-  const goToNextSlide = () => {
+  const goToNextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
+  }, [slides.length]);
 
   const [isFirstRender, setIsFirstRender] = useState(true);
 
@@ -419,11 +419,14 @@ const HeroSection: React.FC = () => {
     setIsFirstRender(false);
   }, []);
 
+  const handleMouseEnter = useCallback(() => setIsPaused(true), []);
+  const handleMouseLeave = useCallback(() => setIsPaused(false), []);
+
   return (
     <section
       className='relative overflow-hidden'
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       style={{ minHeight: '650px', maxHeight: '650px' }}
     >
       <AnimatePresence mode='wait'>

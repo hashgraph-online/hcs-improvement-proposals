@@ -485,6 +485,54 @@ await client.chat.endSession(session.sessionId);
 
 When `historyAutoTopUp` is configured, the client retries `createSession` automatically if chat history retention fails due to insufficient credits.
 
+## Agent Feedback (ERC-8004)
+
+Registry Broker supports submitting and reading **on-chain feedback** for ERC-8004 agents (EVM + Solana). Feedback is intended to be submitted after a real chat session; the broker uses the session to enforce eligibility rules.
+
+Related docs:
+
+- [Agent Feedback (ERC-8004)](../feedback.md)
+- Demo: `standards-sdk/demo/registry-broker/feedback-demo.ts`
+
+```typescript
+const uaid = 'uaid:...';
+
+const session = await client.chat.createSession({
+  uaid,
+  historyTtlSeconds: 900,
+});
+
+await client.chat.sendMessage({ sessionId: session.sessionId, uaid, message: '1/3' });
+await client.chat.sendMessage({ sessionId: session.sessionId, uaid, message: '2/3' });
+await client.chat.sendMessage({ sessionId: session.sessionId, uaid, message: '3/3' });
+
+const eligibility = await client.checkAgentFeedbackEligibility(uaid, {
+  sessionId: session.sessionId,
+});
+
+if (!eligibility.eligible) {
+  await client.chat.endSession(session.sessionId);
+  throw new Error(`Not eligible: ${eligibility.reason ?? 'unknown_reason'}`);
+}
+
+const submission = await client.submitAgentFeedback(uaid, {
+  sessionId: session.sessionId,
+  score: 92,
+  tag1: 'quality',
+  tag2: 'accuracy',
+});
+
+const feedback = await client.getAgentFeedback(uaid);
+const index = await client.listAgentFeedbackIndex({
+  page: 1,
+  limit: 50,
+  registries: ['erc-8004', 'erc-8004-solana'],
+});
+
+console.log(submission.transactionHash, feedback.summary, index.total);
+await client.chat.endSession(session.sessionId);
+```
+
 ## Protocol and Adapter Utilities
 
 ```typescript

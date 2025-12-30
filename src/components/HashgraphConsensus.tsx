@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 
 interface HashgraphEvent {
   id: string;
@@ -15,41 +15,38 @@ interface HashgraphConsensusProps {
   animated?: boolean;
 }
 
+const NODE_COUNT = 9;
+const WIDTH = 800;
+const HEIGHT = 600;
+const ROUNDS = 8;
+const EVENTS_PER_ROUND = 3;
+
 /**
  * HashgraphConsensus visualizes the actual Hedera hashgraph consensus algorithm.
  * Shows the DAG structure with events, gossip propagation, and virtual voting.
+ * Optimized for performance with Intersection Observer and reduced re-renders.
  */
 export const HashgraphConsensus: React.FC<HashgraphConsensusProps> = ({
   className = '',
   animated = true,
 }) => {
-  const [events, setEvents] = useState<HashgraphEvent[]>([]);
   const [activeGossip, setActiveGossip] = useState<string[]>([]);
+  const [isVisible, setIsVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const nodeCount = 9;
-  const width = 800;
-  const height = 600;
-
-  useEffect(() => {
+  const events = useMemo(() => {
     const initialEvents: HashgraphEvent[] = [];
-    const rounds = 8;
-    const eventsPerRound = 3;
-
-    for (let round = 0; round < rounds; round++) {
-      for (let i = 0; i < eventsPerRound; i++) {
-        const nodeId = (round * eventsPerRound + i) % nodeCount;
+    for (let round = 0; round < ROUNDS; round++) {
+      for (let i = 0; i < EVENTS_PER_ROUND; i++) {
+        const nodeId = (round * EVENTS_PER_ROUND + i) % NODE_COUNT;
         const event: HashgraphEvent = {
           id: `event-${round}-${i}`,
-          x: 100 + (nodeId * (width - 200)) / (nodeCount - 1),
-          y: height - 80 - round * 60,
+          x: 100 + (nodeId * (WIDTH - 200)) / (NODE_COUNT - 1),
+          y: HEIGHT - 80 - round * 60,
           timestamp: Date.now() + round * 1000,
           parentHashes:
             round > 0
-              ? [
-                  `event-${round - 1}-${Math.floor(
-                    Math.random() * eventsPerRound
-                  )}`,
-                ]
+              ? [`event-${round - 1}-${i % EVENTS_PER_ROUND}`]
               : [],
           nodeId,
           round,
@@ -57,30 +54,55 @@ export const HashgraphConsensus: React.FC<HashgraphConsensusProps> = ({
         initialEvents.push(event);
       }
     }
-
-    setEvents(initialEvents);
+    return initialEvents;
   }, []);
 
   useEffect(() => {
-    if (!animated) return;
+    if (!containerRef.current) return;
 
-    const interval = setInterval(() => {
-      const randomEvent = events[Math.floor(Math.random() * events.length)];
-      if (randomEvent) {
-        setActiveGossip([randomEvent.id]);
-        setTimeout(() => setActiveGossip([]), 1500);
-      }
-    }, 2000);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: '100px' }
+    );
 
-    return () => clearInterval(interval);
-  }, [events, animated]);
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const animateGossip = useCallback(() => {
+    if (events.length === 0) return;
+    const randomIndex = Math.floor(Math.random() * events.length);
+    const randomEvent = events[randomIndex];
+    if (randomEvent) {
+      setActiveGossip([randomEvent.id]);
+    }
+  }, [events]);
+
+  useEffect(() => {
+    if (!animated || !isVisible) {
+      setActiveGossip([]);
+      return;
+    }
+
+    const interval = setInterval(animateGossip, 4000);
+    const clearGossipTimeout = setInterval(() => {
+      setActiveGossip([]);
+    }, 5500);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(clearGossipTimeout);
+    };
+  }, [animated, isVisible, animateGossip]);
 
   return (
-    <div className={`relative ${className}`}>
+    <div ref={containerRef} className={`relative ${className}`}>
       <svg
-        width={width}
-        height={height}
-        viewBox={`0 0 ${width} ${height}`}
+        width={WIDTH}
+        height={HEIGHT}
+        viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         className='w-full h-full'
       >
         <defs>
@@ -133,18 +155,18 @@ export const HashgraphConsensus: React.FC<HashgraphConsensusProps> = ({
         )}
 
         {/* Node positions (bottom) */}
-        {Array.from({ length: nodeCount }).map((_, nodeIndex) => (
+        {Array.from({ length: NODE_COUNT }).map((_, nodeIndex) => (
           <g key={`node-${nodeIndex}`}>
             <circle
-              cx={100 + (nodeIndex * (width - 200)) / (nodeCount - 1)}
-              cy={height - 30}
+              cx={100 + (nodeIndex * (WIDTH - 200)) / (NODE_COUNT - 1)}
+              cy={HEIGHT - 30}
               r='8'
               fill='currentColor'
               className='text-gray-400 dark:text-gray-600'
             />
             <text
-              x={100 + (nodeIndex * (width - 200)) / (nodeCount - 1)}
-              y={height - 10}
+              x={100 + (nodeIndex * (WIDTH - 200)) / (NODE_COUNT - 1)}
+              y={HEIGHT - 10}
               textAnchor='middle'
               fontSize='10'
               fill='currentColor'
@@ -194,7 +216,7 @@ export const HashgraphConsensus: React.FC<HashgraphConsensusProps> = ({
           x1='50'
           y1='80'
           x2='50'
-          y2={height - 60}
+          y2={HEIGHT - 60}
           stroke='currentColor'
           strokeWidth='1'
           className='text-gray-300 dark:text-gray-600'

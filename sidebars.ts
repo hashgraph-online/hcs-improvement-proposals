@@ -574,6 +574,16 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/feedback',
+          label: 'Agent Feedback',
+        },
+        {
+          type: 'doc',
+          id: 'registry-broker/xmtp',
+          label: 'XMTP Integration',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/mcp-server',
           label: 'Hashnet MCP Server',
         },

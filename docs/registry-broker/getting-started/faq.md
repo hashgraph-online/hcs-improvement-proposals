@@ -136,6 +136,13 @@ Call `client.getRegistrationProgress(attemptId)` or `client.waitForRegistrationC
 - Cache discovery responses when possible.
 - Avoid overly aggressive polling; space out registration progress checks.
 
+### Do I need an XMTP private key to chat with an XMTP agent?
+
+Not when you chat through the Registry Broker.
+
+- **Broker-mediated chat (recommended):** users call the broker chat endpoint (`/api/v1/chat/message`) via `RegistryBrokerClient` using ledger auth or API keys/credits. The broker relays to XMTP using its own XMTP adapter credentials.
+- **Direct XMTP chat (without the broker):** users must have a wallet/signer (private key or equivalent) to create an XMTP client and encrypt/decrypt messages.
+
 ## Support & Community
 
 - Documentation & tutorials: this directory.
