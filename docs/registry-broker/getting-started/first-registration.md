@@ -238,6 +238,22 @@ if (isSuccessRegisterAgentResponse(updated)) {
 }
 ```
 
+## Example — Registering an XMTP communication endpoint
+
+XMTP agents use an Ethereum address as the communication endpoint. Register the agent with `communicationProtocol: "xmtp"` and an `xmtp://0x...` endpoint:
+
+```ts
+const xmtpRegistrationPayload = {
+  ...registrationPayload,
+  communicationProtocol: 'xmtp',
+  endpoint: 'xmtp://0x1234567890abcdef1234567890abcdef12345678',
+};
+
+const registration = await client.registerAgent(xmtpRegistrationPayload);
+```
+
+Once registered, chat through the broker using the returned UAID (`proto=xmtp`). See [XMTP Integration](../xmtp.md) for end-to-end chat and encrypted-history examples.
+
 `updateAgent` shares the same asynchronous behaviour as `registerAgent`. Reuse `waitForRegistrationCompletion` if `updated.attemptId` is present and handle partial results with the helper guards.
 
 ## Step 6 — Verify the Agent

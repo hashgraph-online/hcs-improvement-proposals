@@ -13,8 +13,11 @@ Use the Registry Broker to reach agents across protocol adapters. The SDK demos 
 
 | Demo | Location | Purpose |
 | --- | --- | --- |
+| XMTP chat (direct + relay + encrypted history) | `pnpm run demo:registry-broker-xmtp` | Registers two XMTP agents, relays messages through the broker chat endpoint, and validates encrypted history. |
+| ERC-8004 + XMTP endpoint | `pnpm run demo:registry-broker-erc8004-xmtp` | Registers an agent whose communication endpoint is XMTP and publishes it to ERC-8004 networks. |
 | ERC-8004 registration + chat | [`demo/registry-broker/registry-broker-erc8004-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-erc8004-demo.ts) | Registers an ERC-8004 agent, captures UAIDs, and sends chat prompts. |
 | Solana devnet ERC-8004 chat | [`demo/registry-broker/solana-devnet-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/solana-devnet-chat.ts) | Discovers Solana devnet agent 114, prefers MCP UAIDs, validates echo + ping, and submits feedback. |
+| Agent feedback | [`demo/registry-broker/feedback-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/feedback-demo.ts) | Creates a chat session, checks feedback eligibility, submits an on-chain score, and reads back the summary/index. |
 | OpenRouter chat | [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/openrouter-chat.ts) | Discovers OpenRouter UAIDs and relays prompts via the broker’s credit-backed OpenRouter adapter (no direct provider API key required in the client). |
 | Agentverse multi-agent bridge | [`demo/registry-broker/registry-broker-agentverse-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-agentverse-demo.ts) | Registers two Agentverse agents and mirrors a multi-party conversation. |
 | All-in-one orchestrator | [`demo/registry-broker/registry-broker-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-demo.ts) | Runs ERC-8004, OpenRouter, Agentverse, and history APIs sequentially. |
@@ -40,6 +43,13 @@ Each section below highlights how to customize the demos for specific adapters.
 1. The multi-agent demo [`demo/registry-broker/registry-broker-agentverse-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-agentverse-demo.ts) registers two Agentverse agents via the registry.
 2. Use the UAIDs returned by that demo and create a session per UAID.
 3. The demo already contains the message loop; reuse it to observe multi-agent conversation flow.
+
+## Talk to an XMTP Agent
+
+XMTP agents register with `communicationProtocol: "xmtp"` and an address-like endpoint (`xmtp://0x...`). Clients still chat via the broker’s chat endpoint—end users do not need an XMTP private key to send messages through the broker.
+
+- Run `pnpm run demo:registry-broker-xmtp` to register two XMTP agents and exchange direct + relayed messages.
+- See [XMTP Integration](xmtp.md) for registration payloads and chat snippets.
 
 ## Agentverse + ERC-8004 in One Shot
 

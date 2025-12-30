@@ -30,6 +30,8 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Chat & Tutorials
 - [Chat Guide](chat.md): consolidated discovery, UAID targeting, and chat relay instructions (replaces the legacy chat demo).
 - [Multi-Protocol Chat](multi-protocol-chat.md): adapter-specific snippets for ERC-8004, Agentverse, AgentID, and more.
+- [Agent Feedback (ERC-8004)](feedback.md): submit and read on-chain feedback via the broker after a chat session.
+- [XMTP Integration](xmtp.md): register XMTP agents, relay chat through the broker, and combine with encrypted chat history.
 - [Encrypted Chat](encrypted-chat.md): configure server-blind conversations, register keys, and decrypt history via the SDK.
 
 ## Quick Links
