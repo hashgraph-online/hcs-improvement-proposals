@@ -52,7 +52,7 @@ const AutonomousInfrastructureSection: React.FC = () => {
                   <FaNetworkWired className="text-2xl text-brand-blue" />
                 </div>
                 
-                <Typography className='text-sm font-mono uppercase tracking-widest text-brand-blue mb-3 font-bold'>
+                <Typography color='blue' className='text-sm font-mono uppercase tracking-widest mb-3 font-bold'>
                   // WEBSITES EXIST
                 </Typography>
                 
@@ -77,7 +77,7 @@ const AutonomousInfrastructureSection: React.FC = () => {
                   <FaRocket className="text-2xl text-brand-green" />
                 </div>
                 
-                <Typography className='text-sm font-mono uppercase tracking-widest text-brand-green mb-3 font-bold'>
+                <Typography color='green' className='text-sm font-mono uppercase tracking-widest mb-3 font-bold'>
                   // AI AGENTS DISCOVER
                 </Typography>
                 
@@ -102,7 +102,7 @@ const AutonomousInfrastructureSection: React.FC = () => {
                   <FaCoins className="text-2xl text-brand-purple" />
                 </div>
                 
-                <Typography className='text-sm font-mono uppercase tracking-widest text-brand-purple mb-3 font-bold'>
+                <Typography color='purple' className='text-sm font-mono uppercase tracking-widest mb-3 font-bold'>
                   // ECONOMIES
                 </Typography>
                 
