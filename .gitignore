@@ -9,6 +9,10 @@
 .cache-loader
 /static/blog-search-index.json
 
+# Auto-generated legal pages (fetched from hol.org/points/legal/ at build time)
+/src/pages/privacy-policy.mdx
+/src/pages/terms-of-service.mdx
+
 # Misc
 .DS_Store
 .env.local
