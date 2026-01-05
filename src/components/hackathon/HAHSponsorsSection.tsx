@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { FiAward } from 'react-icons/fi';
 import { Typography, GradientText } from '../ui';
 
@@ -61,10 +60,7 @@ const HAHSponsorsSection: React.FC = () => {
     <section className='relative py-20 lg:py-24 overflow-hidden bg-white dark:bg-gray-900'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='max-w-6xl mx-auto'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <div
             className='text-center mb-12'
           >
             <div className='inline-flex items-center gap-2 mb-6 bg-purple-100 dark:bg-purple-900/30 px-4 py-2 rounded-full'>
@@ -91,18 +87,15 @@ const HAHSponsorsSection: React.FC = () => {
               Our consortium members are proud sponsors of the AI Track at
               Hedera Africa Hackathon
             </Typography>
-          </motion.div>
+          </div>
 
           <div className='grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8'>
             {sponsors.map((sponsor, index) => (
-              <motion.a
+              <a
                 key={sponsor.name}
                 href={sponsor.url}
                 target='_blank'
                 rel='noopener noreferrer'
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
                 className='group relative bg-gray-50 dark:bg-gray-800 rounded-xl p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:scale-105 border border-gray-200 dark:border-gray-700 hover:border-purple-300 dark:hover:border-purple-700'
               >
                 <div className='absolute inset-0 bg-gradient-to-r from-purple-500/0 to-purple-600/0 group-hover:from-purple-500/5 group-hover:to-purple-600/5 rounded-xl transition-all duration-300' />
@@ -122,7 +115,7 @@ const HAHSponsorsSection: React.FC = () => {
                 <Typography className='text-center mt-4 text-sm font-mono text-gray-600 dark:text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300'>
                   {sponsor.name}
                 </Typography>
-              </motion.a>
+              </a>
             ))}
           </div>
         </div>

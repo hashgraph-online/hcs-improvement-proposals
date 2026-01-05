@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import {
   FaGithub,
   FaYoutube,
@@ -39,14 +38,11 @@ const CONSTANTS: Constants = {
 
 const RequirementsSection: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const isTitleInView = useInView(titleRef, { once: true, margin: '-100px' });
+  const isTitleInView = true;
   const codeRef = useRef<HTMLDivElement>(null);
-  const isCodeInView = useInView(codeRef, { once: true, margin: '-100px' });
+  const isCodeInView = true;
   const metricsRef = useRef<HTMLDivElement>(null);
-  const isMetricsInView = useInView(metricsRef, {
-    once: true,
-    margin: '-100px',
-  });
+  const isMetricsInView = true;
 
   return (
     <section
@@ -65,22 +61,8 @@ const RequirementsSection: React.FC = () => {
 
       <div className='container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10'>
         <div className='text-center mb-6 sm:mb-8 md:mb-10 max-w-4xl mx-auto'>
-          <motion.div
+          <div
             ref={titleRef}
-            initial={{ opacity: 0, y: 50 }}
-            animate={
-              isTitleInView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.8,
-                      type: 'spring',
-                      stiffness: 50,
-                    },
-                  }
-                : {}
-            }
             className='relative inline-block pb-2'
           >
             <HackathonTypography
@@ -93,22 +75,9 @@ const RequirementsSection: React.FC = () => {
             >
               Submission Requirements
             </HackathonTypography>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={
-              isTitleInView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.6,
-                      delay: 0.3,
-                    },
-                  }
-                : {}
-            }
+          <div
           >
             <HackathonTypography
               variant='body1'
@@ -121,23 +90,10 @@ const RequirementsSection: React.FC = () => {
               judging panel will analyze each submission based on innovation,
               technical implementation, and potential impact.
             </HackathonTypography>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className='flex flex-wrap gap-1.5 sm:gap-2 justify-center'
-            initial={{ opacity: 0, y: 20 }}
-            animate={
-              isTitleInView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.6,
-                      delay: 0.5,
-                    },
-                  }
-                : {}
-            }
           >
             <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-[#a679f0]/10 dark:bg-[#a679f0]/20 text-[#a679f0] rounded-full text-xs sm:text-sm font-medium'>
               #AI
@@ -148,15 +104,12 @@ const RequirementsSection: React.FC = () => {
             <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-[#48df7b]/10 dark:bg-[#48df7b]/20 text-[#48df7b] rounded-full text-xs sm:text-sm font-medium'>
               #ConvAI
             </span>
-          </motion.div>
+          </div>
         </div>
 
         <div className='max-w-6xl mx-auto mb-6 sm:mb-8 md:mb-10'>
-          <motion.div
+          <div
             className='grid grid-cols-2 gap-1.5 sm:gap-3 md:gap-4 lg:gap-5'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
           >
             <RequirementCard
               icon={<FaGithub />}
@@ -190,24 +143,11 @@ const RequirementsSection: React.FC = () => {
               iconBg='bg-gradient-to-r from-[#2d84eb] to-[#1c5da3]'
               borderColor='bg-[#2d84eb]/30'
             />
-          </motion.div>
+          </div>
         </div>
 
-        <motion.div
+        <div
           className='relative max-w-5xl mx-auto mb-6 sm:mb-8 md:mb-10'
-          initial={{ opacity: 0, y: 30 }}
-          animate={
-            isTitleInView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.8,
-                    delay: 0.6,
-                  },
-                }
-              : {}
-          }
         >
           <div
             className='absolute -inset-3 sm:-inset-6 lg:-inset-10 bg-gradient-to-r from-[#a679f0]/5 to-[#5599fe]/5 dark:from-[#a679f0]/10 dark:to-[#5599fe]/10 rounded-2xl sm:rounded-3xl blur-xl'
@@ -257,24 +197,10 @@ const RequirementsSection: React.FC = () => {
               aria-hidden='true'
             ></div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           ref={codeRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={
-            isCodeInView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.8,
-                    type: 'spring',
-                    stiffness: 50,
-                  },
-                }
-              : {}
-          }
           className='relative max-w-6xl mx-auto mb-6 sm:mb-8 md:mb-10'
         >
           <div className='flex items-center mb-3 sm:mb-4 md:mb-5'>
@@ -292,32 +218,14 @@ const RequirementsSection: React.FC = () => {
           <div className='bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm rounded-lg sm:rounded-xl p-0 border border-[#5599fe]/10 dark:border-[#5599fe]/20 shadow-lg overflow-hidden'>
             <TabbedCodeBlock tabs={CODE_EXAMPLES} />
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           ref={metricsRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={
-            isMetricsInView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.8,
-                    type: 'spring',
-                    stiffness: 50,
-                  },
-                }
-              : {}
-          }
           className='relative max-w-7xl mx-auto mb-6 sm:mb-8'
         >
           <div className='mb-6 sm:mb-8 md:mb-10 text-center'>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
               className='relative mb-8'
             >
               <div className='relative w-16 h-16 mx-auto mb-4'>
@@ -337,7 +245,7 @@ const RequirementsSection: React.FC = () => {
               >
                 Judging Criteria
               </HackathonTypography>
-            </motion.div>
+            </div>
 
             <HackathonTypography
               variant='body1'
@@ -443,7 +351,7 @@ const RequirementsSection: React.FC = () => {
               <div className='w-full h-px bg-gradient-to-r from-transparent via-hedera-purple/30 to-transparent my-4 sm:my-5 md:my-6'></div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

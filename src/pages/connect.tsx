@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useInView } from 'motion/react';
 import {
   FaTwitter,
   FaTelegram,
@@ -100,27 +99,18 @@ const LinkCard: React.FC<{ link: LinkItem; index: number }> = ({
   index,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, amount: 0.2 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
       className='group'
     >
-      <motion.a
+      <a
         href={link.url}
         target='_blank'
         rel='noopener noreferrer'
         className='block rounded-xl bg-white dark:bg-gray-800/50 overflow-hidden shadow-lg border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm transition-all duration-300'
-        whileHover={{ y: -4, x: 0 }}
-        whileTap={{ scale: 0.98 }}
       >
         <div className='p-6'>
           <div className='flex items-start gap-4'>
@@ -149,14 +139,14 @@ const LinkCard: React.FC<{ link: LinkItem; index: number }> = ({
             </div>
           </div>
         </div>
-      </motion.a>
-    </motion.div>
+      </a>
+    </div>
   );
 };
 
 export default function LinksPage(): JSX.Element {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = true;
 
   return (
     <Layout
@@ -171,12 +161,9 @@ export default function LinksPage(): JSX.Element {
 
         <div className='container mx-auto px-6 py-20 relative z-10'>
           <div className='max-w-4xl mx-auto'>
-            <motion.div
+            <div
               ref={sectionRef}
               className='text-center mb-16'
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7 }}
             >
               <div className='relative w-24 h-24 mx-auto mb-6'>
                 <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
@@ -199,7 +186,7 @@ export default function LinksPage(): JSX.Element {
                 Explore the Hashgraph Online ecosystem through these useful
                 resources and community channels.
               </Typography>
-            </motion.div>
+            </div>
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
               {links.map((link, index) => (
@@ -207,20 +194,13 @@ export default function LinksPage(): JSX.Element {
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.6,
-                delay: 0.4,
-                ease: [0.25, 0.1, 0.25, 1],
-              }}
+            <div
               className='mt-16 text-center'
             >
               <Typography variant='p' color='secondary'>
                 © {new Date().getFullYear()} Hashgraph Online DAO LLC
               </Typography>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

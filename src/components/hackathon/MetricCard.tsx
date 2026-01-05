@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import HackathonTypography from './HackathonTypography';
 
 interface MetricCardProps {
@@ -20,26 +19,11 @@ const MetricCard: React.FC<MetricCardProps> = ({
   gradientEnd,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, margin: '-50px' });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={
-        isInView
-          ? {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.5,
-                delay: index * 0.1,
-                type: 'spring',
-                stiffness: 50,
-              },
-            }
-          : {}
-      }
       className='relative'
     >
       <div
@@ -105,23 +89,16 @@ const MetricCard: React.FC<MetricCardProps> = ({
           aria-valuemax={100}
           aria-label={`${title} metric: ${percentage}%`}
         >
-          <motion.div
-            initial={{ width: 0 }}
-            animate={isInView ? { width: `${percentage}%` } : {}}
-            transition={{
-              duration: 1.2,
-              delay: index * 0.1 + 0.2,
-              ease: 'easeOut',
-            }}
+          <div
             className='h-full absolute top-0 left-0 rounded-full'
             style={{
               background: `linear-gradient(to right, ${gradientStart}, ${gradientEnd})`,
               boxShadow: `0 0 8px ${gradientStart}80`,
             }}
-          ></motion.div>
+          ></div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

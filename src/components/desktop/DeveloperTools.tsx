@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { FaDesktop, FaTerminal, FaNpm, FaPlug, FaCode, FaRobot } from 'react-icons/fa';
 import InteractiveToolsSection, { Tool } from '../ui/InteractiveToolsSection';
 
@@ -156,11 +155,7 @@ const registry = await hcs2Client.getRegistry('0.0.REGISTRY_ID');`,
     <section className='py-20'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='max-w-7xl mx-auto'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
           >
             <InteractiveToolsSection
               tools={tools}
@@ -168,7 +163,7 @@ const registry = await hcs2Client.getRegistry('0.0.REGISTRY_ID');`,
               subtitle='Everything you need to build with AI agents on Hedera'
               browserTitle='hol-desktop-tools.dev'
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 
 type AIPulseEffectProps = {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -44,43 +43,14 @@ const AIPulseEffect: React.FC<AIPulseEffectProps> = ({
 
   return (
     <div className={`relative ${sizeMappings[size]}`}>
-      <motion.div
+      <div
         className={`absolute inset-0 rounded-full bg-gradient-radial ${colorMappings[color]}`}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [opacity, opacity * 0.5, opacity],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration,
-          ease: 'easeInOut',
-        }}
       />
-      <motion.div
+      <div
         className={`absolute inset-0 rounded-full bg-gradient-radial ${colorMappings[color]}`}
-        animate={{
-          scale: [1.1, 1.3, 1.1],
-          opacity: [opacity * 0.7, opacity * 0.3, opacity * 0.7],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: duration * 1.3,
-          ease: 'easeInOut',
-          delay: 0.5,
-        }}
       />
-      <motion.div
+      <div
         className={`absolute inset-0 rounded-full bg-gradient-radial ${colorMappings[color]}`}
-        animate={{
-          scale: [1.2, 1.4, 1.2],
-          opacity: [opacity * 0.5, opacity * 0.2, opacity * 0.5],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: duration * 1.7,
-          ease: 'easeInOut',
-          delay: 1,
-        }}
       />
     </div>
   );

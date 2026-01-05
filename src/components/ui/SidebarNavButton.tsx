@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 
 interface SidebarNavButtonProps {
   isActive: boolean;
@@ -18,7 +17,7 @@ const SidebarNavButton: React.FC<SidebarNavButtonProps> = ({
   className = '',
 }) => {
   return (
-    <motion.button
+    <button
       onClick={onClick}
       className={`
         w-full text-left rounded-lg transition-all duration-200 border
@@ -28,10 +27,9 @@ const SidebarNavButton: React.FC<SidebarNavButtonProps> = ({
         }
         ${className}
       `}
-      whileHover={{ x: 2 }}
     >
       {children}
-    </motion.button>
+    </button>
   );
 };
 

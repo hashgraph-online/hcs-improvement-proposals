@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
 import { FaExternalLinkAlt, FaBookOpen } from 'react-icons/fa';
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
 import PrimaryButton from '../hackathon/PrimaryButton';
@@ -166,11 +165,7 @@ const InteractiveToolsSection: React.FC<InteractiveToolsSectionProps> = ({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
+    <div
       className='max-w-5xl mx-auto'
     >
       <div className='text-center mb-12'>
@@ -267,11 +262,8 @@ const InteractiveToolsSection: React.FC<InteractiveToolsSectionProps> = ({
           </div>
 
           <div className='flex-1 min-w-0 max-w-full p-4 lg:p-6 xl:p-8 bg-white dark:bg-gray-900 overflow-auto'>
-            <motion.div
+            <div
               key={activeToolIndex}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3 }}
             >
               <div className='mb-6'>
                 {tools[activeToolIndex].isNew && (
@@ -308,16 +300,14 @@ const InteractiveToolsSection: React.FC<InteractiveToolsSectionProps> = ({
                         </div>
                         <div className='flex items-start gap-2'>
                           {copied ? (
-                            <motion.div
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
+                            <div
                               className='flex items-center gap-1.5 px-2 py-0.5 rounded bg-green-500/20 text-green-500'
                             >
                               <svg className='w-3 h-3' fill='currentColor' viewBox='0 0 20 20'>
                                 <path fillRule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clipRule='evenodd' />
                               </svg>
                               <span className='text-xs font-medium'>Copied!</span>
-                            </motion.div>
+                            </div>
                           ) : (
                             <div className='flex items-center gap-1.5 px-2 py-0.5 rounded text-gray-500 hover:text-gray-400 hover:bg-gray-800/50 transition-all'>
                               <svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -334,9 +324,7 @@ const InteractiveToolsSection: React.FC<InteractiveToolsSectionProps> = ({
                           <code className='text-gray-900 dark:text-white/80'>
                             {tools[activeToolIndex].installCommand}
                           </code>
-                          <motion.span
-                            animate={{ opacity: [1, 0] }}
-                            transition={{ duration: 0.8, repeat: Infinity }}
+                          <span
                             className='inline-block w-2 h-4 bg-gray-600 dark:bg-white/70'
                           />
                         </div>
@@ -402,11 +390,11 @@ const InteractiveToolsSection: React.FC<InteractiveToolsSectionProps> = ({
                   </PrimaryButton>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

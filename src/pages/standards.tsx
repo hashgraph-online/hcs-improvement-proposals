@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
-import { motion, useScroll, useTransform, useSpring, useInView, useMotionValue } from 'motion/react';
 import { FaArrowRight, FaNetworkWired, FaFingerprint, FaDatabase } from 'react-icons/fa';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
@@ -115,16 +114,12 @@ const ParticleConstellation = () => {
 const StandardRow = ({ code, name, desc, link, color, index }) => {
     return (
         <Link to={link} className="block group !no-underline">
-            <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.5 }}
+            <div
                 className="relative py-8 md:py-12 border-b border-gray-200 dark:border-white/10 transition-colors"
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-50/50 dark:via-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                <motion.div
+                <div
                     className="absolute bottom-0 left-0 h-[2px] bg-current w-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                     style={{ color }}
                 />
@@ -152,7 +147,7 @@ const StandardRow = ({ code, name, desc, link, color, index }) => {
                         <FaArrowRight className="text-sm md:text-base" />
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </Link>
     );
 };
@@ -162,39 +157,30 @@ const StandardRow = ({ code, name, desc, link, color, index }) => {
  */
 const SectionHeader = ({ number, title, subtitle, color, icon: Icon }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const isInView = true;
 
   return (
     <div ref={ref} className="mb-12 md:mb-20">
-      <motion.div
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: isInView ? 1 : 0 }}
-        transition={{ duration: 0.8 }}
+      <div
         className="h-1 rounded-full mb-6 md:mb-8"
         style={{ backgroundColor: color, transformOrigin: 'left' }}
       />
 
       <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 mb-6 md:mb-8">
-        <motion.div
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+        <div
           className="w-12 h-12 md:w-16 md:h-16 rounded-2xl flex items-center justify-center"
           style={{ backgroundColor: `${color}20` }}
         >
           <Icon className="text-2xl md:text-3xl" style={{ color }} />
-        </motion.div>
+        </div>
 
         <div className="flex-1">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : 20 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+          <div
           >
             <div className="text-xs md:text-sm font-mono tracking-widest mb-2 md:mb-3 opacity-60">{number}</div>
             <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-3 md:mb-4 text-gray-900 dark:text-white">{title}</h2>
             <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl leading-relaxed">{subtitle}</p>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>
@@ -202,20 +188,18 @@ const SectionHeader = ({ number, title, subtitle, color, icon: Icon }) => {
 };
 
 export default function StandardsOverviewPage() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  
+  
 
   const heroRef = useRef(null);
-  const heroScroll = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroOpacity = useTransform(heroScroll.scrollYProgress, [0, 0.6], [1, 0]);
-  const heroScale = useTransform(heroScroll.scrollYProgress, [0, 0.6], [1, 0.9]);
+  
+  
 
   return (
     <Layout title="Standards Overview" description="The complete suite of Hashgraph Online standards.">
       <div className="min-h-screen bg-white dark:bg-[#050505] font-sans text-gray-900 dark:text-white overflow-x-hidden selection:bg-[#5599fe] selection:text-white transition-colors duration-300">
-        <motion.div
+        <div
           className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]"
-          style={{ scaleX }}
         />
 
         <div className="fixed inset-0 pointer-events-none z-0 opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
@@ -223,57 +207,46 @@ export default function StandardsOverviewPage() {
         <div ref={heroRef} className="relative h-screen flex items-center justify-center overflow-hidden bg-[#050505]">
           <ParticleConstellation />
 
-          <motion.div
-            style={{ opacity: heroOpacity, scale: heroScale }}
+          <div
+            
             className="relative z-10 text-center container mx-auto px-4 md:px-6"
           >
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
+            <div
               className="inline-flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 md:py-3 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 text-xs md:text-sm font-mono tracking-[0.3em] mb-6 md:mb-8 text-white"
             >
               <span className="w-2 h-2 rounded-full bg-[#5599fe] animate-pulse" />
               THE AUTONOMOUS INTERNET
-            </motion.div>
+            </div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
+            <h1
               className="text-5xl md:text-7xl lg:text-9xl font-bold tracking-tighter leading-[0.9] mb-4 md:mb-6 text-white"
             >
               Infrastructure<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b]">
                 That Runs Itself
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.4 }}
+            <p
               className="text-lg md:text-xl lg:text-2xl text-gray-400 max-w-3xl mx-auto px-4"
             >
               Websites without servers. Systems without gatekeepers.
               <br className="hidden md:block" />
               Open standards for the next generation of the internet.
-            </motion.p>
-          </motion.div>
+            </p>
+          </div>
 
-          <motion.div
-            style={{ opacity: heroOpacity }}
+          <div
+            
             className="absolute bottom-8 md:bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
           >
             <span className="font-mono text-xs tracking-widest text-[#5599fe]">SCROLL TO EXPLORE</span>
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
+            <div
               className="w-6 h-10 rounded-full border-2 border-[#5599fe] flex justify-center pt-2"
             >
-              <motion.div className="w-1 h-2 bg-[#5599fe] rounded-full" />
-            </motion.div>
-          </motion.div>
+              <div className="w-1 h-2 bg-[#5599fe] rounded-full" />
+            </div>
+          </div>
         </div>
 
         <div className="relative z-20 bg-white dark:bg-[#0a0b10] rounded-t-[2rem] md:rounded-t-[4rem] -mt-8 md:-mt-16">
@@ -388,11 +361,7 @@ export default function StandardsOverviewPage() {
 
           <section className="relative py-16 md:py-24 lg:py-16 overflow-hidden bg-gradient-to-br from-gray-50 to-white dark:from-[#0a0b10] dark:to-[#050505]">
             <div className="container mx-auto px-4 md:px-6 text-center">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
+              <div
                 className="max-w-3xl mx-auto"
               >
                 <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-8 md:mb-12 text-gray-900 dark:text-white">
@@ -412,7 +381,7 @@ export default function StandardsOverviewPage() {
                     COLLECT POINTS
                   </SecondaryButton>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </section>
         </div>

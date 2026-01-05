@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Link from '@docusaurus/Link';
-import { motion } from 'motion/react';
 import { StatusBadge, TransformCard, Typography } from '../ui';
 import TutorialSecondaryButton from './TutorialSecondaryButton';
 import { Tutorial } from './types';
@@ -20,9 +19,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({ tutorial }) => {
   } as const;
   
   return (
-    <motion.div
-      whileHover={{ y: -5 }}
-      transition={{ duration: 0.2 }}
+    <div
     >
       <Link 
         to={isAvailable ? tutorial.href : '#'} 
@@ -71,9 +68,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({ tutorial }) => {
               </div>
               
               {isAvailable ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: isHovered ? 1 : 0 }}
+                <div
                   className='mt-3 sm:mt-4'
                 >
                   <TutorialSecondaryButton 
@@ -82,7 +77,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({ tutorial }) => {
                   >
                     Start Tutorial →
                   </TutorialSecondaryButton>
-                </motion.div>
+                </div>
               ) : (
                 <div className='mt-3 sm:mt-4 text-center'>
                   <StatusBadge variant='warning' className='text-xs sm:text-sm'>
@@ -94,7 +89,7 @@ const TutorialCard: React.FC<TutorialCardProps> = ({ tutorial }) => {
           </div>
         </TransformCard>
       </Link>
-    </motion.div>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaUserAstronaut, FaServer, FaShieldAlt, FaGlobe, FaTwitter, FaGithub, FaDiscord, FaLinkedin, FaYoutube, FaArrowDown, FaKey, FaFingerprint, FaRobot, FaCheckCircle, FaUserCheck, FaIdCard } from 'react-icons/fa';
@@ -11,9 +10,9 @@ import Terminal from '../components/ui/Terminal';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] origin-left z-[100]" />;
 };
 
 const IdentityHeroVisual = () => {
@@ -25,15 +24,13 @@ const IdentityHeroVisual = () => {
       {/* ORBITAL RINGS */}
       <div className="relative w-[600px] h-[600px] flex items-center justify-center [transform-style:preserve-3d]">
         {[0, 60, 120].map((deg, i) => (
-            <motion.div
+            <div
                 key={i}
-                animate={{ rotateX: [0, 360], rotateY: [0, 360], rotateZ: [0, 360] }}
-                transition={{ duration: 40 + i * 10, repeat: Infinity, ease: "linear" }}
                 className="absolute inset-0 rounded-full border border-[#a679f0]/30"
                 style={{ transform: `rotate(${deg}deg)` }}
             >
                 <div className="absolute top-0 left-1/2 w-4 h-4 bg-[#a679f0] rounded-full shadow-[0_0_30px_#a679f0]" />
-            </motion.div>
+            </div>
         ))}
         
         {/* CORE */}
@@ -57,24 +54,17 @@ const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, s
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-4 mb-6"
             >
                 <span className="w-16 h-1 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -82,8 +72,8 @@ const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, s
 // --- MAIN PAGE ---
 
 export default function ProfilesPage() {
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   return (
@@ -98,10 +88,7 @@ export default function ProfilesPage() {
         <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    <motion.div 
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
+                    <div
                     >
                         {/* DROPDOWN MENU */}
                         <div className="relative inline-block text-left mb-12 z-50">
@@ -152,7 +139,7 @@ export default function ProfilesPage() {
                                 COLLECT POINTS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="hidden lg:block relative">
                         <IdentityHeroVisual />
@@ -161,13 +148,11 @@ export default function ProfilesPage() {
              </div>
 
              {/* Scroll Indicator */}
-             <motion.div 
-                animate={{ y: [0, 15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+             <div
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#a679f0] text-3xl opacity-50"
              >
                  <FaArrowDown />
-             </motion.div>
+             </div>
         </section>
 
         {/* 2. THE PROBLEM / SOLUTION - Split View */}
@@ -191,11 +176,8 @@ export default function ProfilesPage() {
                              { icon: <FaRobot />, title: "AI Native", desc: "First-class support for Agent capabilities, model types, and HCS-10 communication channels." },
                              { icon: <FaServer />, title: "MCP Servers", desc: "Verify ownership of Model Context Protocol servers via DNS, signatures, or challenges." }
                          ].map((item, i) => (
-                             <motion.div 
+                             <div 
                                 key={i}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-100px" }}
                                 className="p-16 rounded-[3rem] bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#5599fe]/50 transition-colors group shadow-xl"
                              >
                                  <div className="w-20 h-20 rounded-2xl bg-[#5599fe]/10 text-[#5599fe] flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
@@ -203,7 +185,7 @@ export default function ProfilesPage() {
                                  </div>
                                  <h3 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">{item.title}</h3>
                                  <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
-                             </motion.div>
+                             </div>
                          ))}
                      </div>
                  </div>
@@ -437,10 +419,7 @@ export default function ProfilesPage() {
         {/* 8. CTA */}
         <section className="py-24 text-center relative z-10 bg-gradient-to-b from-transparent to-[#0a0b10]">
             <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                <div
                     className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Claim Your Identity.</h2>
@@ -452,7 +431,7 @@ export default function ProfilesPage() {
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
 

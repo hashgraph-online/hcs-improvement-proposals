@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import {
   FaCode,
   FaRobot,
@@ -957,15 +956,7 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
   return (
     <section className='pt-8 pb-24 sm:pt-12 sm:pb-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
       <div className='absolute inset-0'>
-        <motion.div
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%'],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
+        <div
           className='absolute inset-0 opacity-[0.02] dark:opacity-[0.05]'
           style={{
             backgroundImage: `radial-gradient(circle at 20% 30%, rgba(166, 121, 240, 0.1) 0%, transparent 50%),
@@ -977,25 +968,17 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-        <motion.div
+        <div
           className='text-center mb-16'
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+          <div
             className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#5599fe]/10 to-[#48df7b]/10 dark:from-[#5599fe]/20 dark:to-[#48df7b]/20 border border-[#5599fe]/20 dark:border-[#5599fe]/30 mb-6'
           >
             <FaCode className='text-[#5599fe] mr-2' />
             <span className='text-sm font-bold text-[#5599fe] dark:text-[#48df7b]'>
               QUICK START GUIDE
             </span>
-          </motion.div>
+          </div>
 
           <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
             <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -1007,13 +990,9 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
             Get started quickly with these practical examples. From basic setup
             to advanced AI agent integrations.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
           className='max-w-7xl mx-auto'
         >
           <div className='bg-white dark:bg-gray-900 rounded-3xl shadow-2xl ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden'>
@@ -1090,11 +1069,8 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
               </div>
 
               <div className='flex-1 lg:min-w-0 lg:max-h-[calc(100vh-200px)]'>
-                <motion.div
+                <div
                   key={activeExample}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3 }}
                   className='h-full flex flex-col'
                 >
                   <div className='p-6 border-b border-gray-200 dark:border-gray-700'>
@@ -1106,7 +1082,7 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
                         <span className='text-xs text-gray-500 dark:text-white/60 font-mono'>
                           {examples[activeExample].language}
                         </span>
-                        <motion.button
+                        <button
                           onClick={() =>
                             copyToClipboard(
                               examples[activeExample].code,
@@ -1114,20 +1090,16 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
                             )
                           }
                           className='flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 hover:from-gray-200 hover:to-gray-300 dark:hover:from-gray-700 dark:hover:to-gray-600 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md border border-gray-300 dark:border-gray-600'
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
                         >
                           {copiedStates[examples[activeExample].id] ? (
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
+                            <div
                               className='flex items-center gap-1.5'
                             >
                               <FaCheck className='text-green-600 dark:text-green-400' />
                               <span className='text-green-600 dark:text-green-400'>
                                 Copied!
                               </span>
-                            </motion.div>
+                            </div>
                           ) : (
                             <>
                               <FaCopy className='text-gray-600 dark:text-gray-300' />
@@ -1136,7 +1108,7 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
                               </span>
                             </>
                           )}
-                        </motion.button>
+                        </button>
                       </div>
                     </div>
                     <p className='text-gray-600 dark:text-white/70'>
@@ -1188,17 +1160,13 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
                       </Highlight>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+        <div
           className='mt-12 grid md:grid-cols-2 gap-6 max-w-4xl mx-auto'
         >
           <TransformCard
@@ -1254,7 +1222,7 @@ async function uploadTokenMetadata(metadata: any): Promise<string> {
               Try Demos
             </PrimaryButton>
           </TransformCard>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

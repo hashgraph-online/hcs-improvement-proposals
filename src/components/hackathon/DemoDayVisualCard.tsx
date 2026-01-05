@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { FaTrophy, FaMicrophone, FaUsers } from 'react-icons/fa';
 import HackathonTypography from './HackathonTypography';
 import AIPulseEffect from './AIPulseEffect';
@@ -11,10 +10,7 @@ const DemoDayVisualCard: React.FC = () => {
   const timeLeft = useCountdown(EVENT_DATE);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ type: 'spring', stiffness: 50, delay: 0.4 }}
+    <div
       className='relative w-full max-w-md sm:max-w-lg mx-auto lg:max-w-none'
     >
       <div className='absolute -inset-4 sm:-inset-6 bg-gradient-radial from-hedera-green/20 to-transparent blur-3xl opacity-30'></div>
@@ -98,7 +94,7 @@ const DemoDayVisualCard: React.FC = () => {
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

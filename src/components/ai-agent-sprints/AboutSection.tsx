@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import {
   FaLightbulb,
   FaRocket,
@@ -24,18 +23,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   color,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, amount: 0.2 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.1 + 0.2,
-        ease: 'easeOut',
-      }}
       className='flex'
     >
       <div
@@ -49,13 +41,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
         </h3>
         <p className='text-gray-600 dark:text-gray-300'>{description}</p>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const AboutSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+  const isInView = true;
 
   const features = [
     {
@@ -114,10 +106,7 @@ const AboutSection: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
         <div className='flex flex-col lg:flex-row gap-16'>
           <div className='lg:w-1/2'>
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.1 }}
+            <div
             >
               <div className='inline-block mb-6'>
                 <div className='px-4 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium'>
@@ -150,7 +139,7 @@ const AboutSection: React.FC = () => {
                   View Current Challenge
                 </a>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           <div className='lg:w-1/2 space-y-8'>

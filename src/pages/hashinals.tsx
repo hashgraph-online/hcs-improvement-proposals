@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaCube, FaLayerGroup, FaBolt, FaFingerprint, FaCode, FaCompressArrowsAlt, FaPuzzlePiece, FaDatabase, FaArrowDown, FaLink, FaHistory, FaArrowRight } from 'react-icons/fa';
@@ -11,9 +10,9 @@ import CodeSnippet from '../components/CodeSnippet';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#48df7b] via-[#5599fe] to-[#a679f0] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#48df7b] via-[#5599fe] to-[#a679f0] origin-left z-[100]" />;
 };
 
 const HeroCube = () => {
@@ -21,9 +20,7 @@ const HeroCube = () => {
     <div className="relative w-full h-[800px] flex items-center justify-center perspective-[2000px] overflow-visible">
       {/* BACKGROUND GRID */}
       <div className="absolute inset-0 perspective-[1000px] opacity-20 dark:opacity-10">
-         <motion.div 
-            animate={{ rotateX: [20, 25, 20], translateY: [0, -50, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+         <div
             className="w-[200%] h-[200%] -ml-[50%] -mt-[25%] bg-[linear-gradient(to_right,#48df7b_1px,transparent_1px),linear-gradient(to_bottom,#48df7b_1px,transparent_1px)] bg-[size:6rem_6rem] [transform-style:preserve-3d] [transform:rotateX(60deg)]"
          />
       </div>
@@ -33,9 +30,7 @@ const HeroCube = () => {
 
       {/* CUBE */}
       <div className="relative z-10 w-[400px] h-[400px] flex items-center justify-center [transform-style:preserve-3d]">
-        <motion.div 
-            animate={{ rotateY: 360, rotateZ: 45 }}
-            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+        <div
             className="relative w-64 h-64 [transform-style:preserve-3d]"
         >
             {[...Array(6)].map((_, i) => {
@@ -50,7 +45,7 @@ const HeroCube = () => {
                     </div>
                 );
             })}
-        </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -71,9 +66,7 @@ const PipelineVisual = () => {
 
             {/* Pipe 1 */}
             <div className="flex-1 h-3 bg-gray-200 dark:bg-white/10 mx-8 relative overflow-hidden rounded-full">
-                <motion.div 
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                <div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-[#48df7b] to-transparent"
                 />
             </div>
@@ -88,9 +81,7 @@ const PipelineVisual = () => {
 
             {/* Pipe 2 */}
             <div className="flex-1 h-3 bg-gray-200 dark:bg-white/10 mx-8 relative overflow-hidden rounded-full">
-                <motion.div 
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 1 }}
+                <div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-[#5599fe] to-transparent"
                 />
             </div>
@@ -99,14 +90,12 @@ const PipelineVisual = () => {
             <div className="relative z-10 flex flex-col items-center gap-6">
                 <div className="flex gap-3">
                     {[1,2,3].map(i => (
-                        <motion.div 
+                        <div 
                             key={i}
-                            animate={{ y: [0, -15, 0] }}
-                            transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
                             className="w-10 h-16 bg-[#5599fe]/10 border-2 border-[#5599fe] rounded-lg flex items-center justify-center"
                         >
                             <div className="w-2 h-2 bg-[#5599fe] rounded-full" />
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
                 <span className="text-lg font-mono font-bold tracking-widest text-[#5599fe]">CHUNKS</span>
@@ -119,11 +108,7 @@ const TokenBindingVisual = () => {
     return (
         <div className="relative w-full max-w-6xl mx-auto py-24">
             <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
-                <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
+                <div
                     className="relative"
                 >
                     <div className="w-48 h-48 md:w-64 md:h-64 bg-gradient-to-br from-white to-gray-100 dark:from-[#1a1b2e] dark:to-black border-4 border-[#48df7b] rounded-3xl flex flex-col items-center justify-center shadow-[0_0_60px_rgba(72,223,123,0.3)]">
@@ -133,13 +118,9 @@ const TokenBindingVisual = () => {
                         <div className="text-xs md:text-sm text-[#48df7b] font-mono font-bold tracking-widest">HCS-1 FILE</div>
                         <div className="mt-2 font-mono text-xs text-gray-500">0.0.456789</div>
                     </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
+                <div
                     className="flex flex-col items-center gap-4"
                 >
                     <div className="w-16 h-16 rounded-full bg-white dark:bg-[#1a1f3a] border-2 border-[#5599fe] flex items-center justify-center shadow-lg">
@@ -149,13 +130,9 @@ const TokenBindingVisual = () => {
                         <div className="text-sm font-mono text-[#5599fe] mb-1">HCS-5 BINDING</div>
                         <div className="text-xs text-gray-500 max-w-[120px]">Permanent on-chain link</div>
                     </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.6 }}
+                <div
                     className="relative"
                 >
                     <div className="w-48 h-48 md:w-64 md:h-64 bg-white dark:bg-[#1a1f3a] border-4 border-[#5599fe] rounded-full flex items-center justify-center shadow-[0_0_80px_rgba(85,153,254,0.4)]">
@@ -165,14 +142,10 @@ const TokenBindingVisual = () => {
                             <div className="mt-2 text-xs text-gray-500">NFT Serial</div>
                         </div>
                     </div>
-                </motion.div>
+                </div>
             </div>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.9 }}
+            <div
                 className="mt-16 text-center max-w-2xl mx-auto"
             >
                 <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#5599fe]/10 border border-[#5599fe]/30">
@@ -180,7 +153,7 @@ const TokenBindingVisual = () => {
                     <FaArrowRight className="text-[#5599fe]" />
                     <span className="font-mono text-sm">NFT Metadata</span>
                 </div>
-            </motion.div>
+            </div>
         </div>
     )
 }
@@ -200,15 +173,12 @@ const MutablePointerVisual = () => {
                 <div className="absolute -top-6 left-12 px-6 py-2 bg-[#a679f0] text-white font-bold rounded-full shadow-lg">REGISTRY 0.0.99</div>
                 
                 <div className="flex flex-col gap-6 w-full px-16">
-                    <motion.div 
-                        initial={{ opacity: 0.3, scale: 0.95 }}
-                        animate={{ opacity: [0.3, 1, 0.3], scale: [0.95, 1, 0.95] }}
-                        transition={{ duration: 3, repeat: Infinity }}
+                    <div
                         className="w-full h-20 bg-[#a679f0]/20 border-2 border-[#a679f0] rounded-2xl flex items-center justify-between px-8"
                     >
                         <span className="text-lg font-bold text-[#a679f0]">LATEST MSG</span>
                         <span className="font-mono text-lg text-gray-900 dark:text-white">t_id: 0.0.555</span>
-                    </motion.div>
+                    </div>
                     <div className="w-full h-20 bg-gray-200 dark:bg-white/5 border border-transparent rounded-2xl flex items-center justify-between px-8 opacity-40">
                         <span className="text-lg font-bold text-gray-500">HISTORY</span>
                         <span className="font-mono text-lg text-gray-500">t_id: 0.0.444</span>
@@ -230,24 +200,17 @@ const SectionHeader = ({ title, subtitle, color = "green" }: { title: string, su
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-3 mb-4"
             >
                 <span className="w-12 h-0.5 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -273,11 +236,7 @@ export default function HashinalsPage() {
         <section className="relative min-h-screen flex items-center pt-20 pb-16 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
-                    >
+                    <div>
                         {/* DROPDOWN MENU */}
                         <div className="relative inline-block text-left mb-6 z-50">
                             <button
@@ -328,7 +287,7 @@ export default function HashinalsPage() {
                                 COLLECT POINTS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="hidden lg:flex items-center justify-center h-[500px]">
                         <HeroCube />
@@ -337,13 +296,11 @@ export default function HashinalsPage() {
              </div>
 
              {/* Scroll Indicator */}
-             <motion.div
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+             <div
                 className="absolute bottom-8 left-1/2 -translate-x-1/2 text-[#48df7b] text-2xl opacity-50"
              >
                  <FaArrowDown />
-             </motion.div>
+             </div>
         </section>
 
         {/* 2. THE PHILOSOPHY - Split View */}
@@ -367,11 +324,8 @@ export default function HashinalsPage() {
                              { icon: <FaLink />, title: "Accessibility", desc: "Data is retrievable via any Mirror Node using standard REST APIs. No special gateways, no API keys, no walled gardens." },
                              { icon: <FaHistory />, title: "Provenance", desc: "Every chunk has a consensus timestamp. You can prove exactly when a file was uploaded, down to the nanosecond." }
                          ].map((item, i) => (
-                             <motion.div 
+                             <div 
                                 key={i}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-100px" }}
                                 className="p-12 rounded-[2rem] bg-gray-50 dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#48df7b]/50 transition-colors group shadow-xl"
                              >
                                  <div className="w-20 h-20 rounded-2xl bg-[#48df7b]/10 text-[#48df7b] flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
@@ -379,7 +333,7 @@ export default function HashinalsPage() {
                                  </div>
                                  <h3 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{item.title}</h3>
                                  <p className="text-lg text-gray-600 dark:text-gray-400">{item.desc}</p>
-                             </motion.div>
+                             </div>
                          ))}
                      </div>
                  </div>
@@ -637,18 +591,18 @@ export default function HashinalsPage() {
             <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                 <h3 className="text-6xl font-bold mb-24 text-center">Dynamic Possibilities.</h3>
                 <div className="grid xl:grid-cols-3 gap-16">
-                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
+                    <div className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
                         <h4 className="font-bold text-3xl mb-6">Gaming</h4>
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">Weapon durability, character leveling, or skin changes. The NFT stays the same, the visuals update via HCS-6.</p>
-                    </motion.div>
-                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
+                    </div>
+                    <div className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
                         <h4 className="font-bold text-3xl mb-6">Real Estate</h4>
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">A property deed NFT. The HCS-6 registry tracks maintenance logs, tax payments, and renovations over decades.</p>
-                    </motion.div>
-                    <motion.div whileHover={{ y: -20 }} className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
+                    </div>
+                    <div className="p-16 border border-gray-200 dark:border-white/10 rounded-[3rem] hover:border-[#a679f0] transition-colors bg-white dark:bg-[#1a1f3a] shadow-2xl">
                         <h4 className="font-bold text-3xl mb-6">Identity</h4>
                         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">A profile picture NFT. The user can update their PFP by simply posting a message to their registry topic.</p>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -656,10 +610,7 @@ export default function HashinalsPage() {
         {/* 10. CTA */}
         <section className="py-24 text-center relative z-10 bg-white dark:bg-[#1a1f3a]">
             <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                <div
                     className="max-w-4xl mx-auto bg-white dark:bg-[#1a1f3a] p-12 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Ready to Inscribe?</h2>
@@ -671,7 +622,7 @@ export default function HashinalsPage() {
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
 

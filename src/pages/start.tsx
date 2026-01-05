@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { motion } from 'motion/react';
 import {
   FiCode,
   FiPackage,
@@ -137,23 +136,17 @@ const StartPage: React.FC = () => {
         {/* Hero Section with Enhanced Background */}
         <div className='relative overflow-hidden'>
           <div className='absolute inset-0 z-0'>
-            <motion.div className='absolute top-20 -right-40 w-96 h-96 bg-gradient-to-br from-[#5599fe]/20 to-[#a679f0]/20 rounded-full blur-3xl' animate={{ x: [0, 40, 0], y: [0, -20, 0] }} transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }} />
-            <motion.div className='absolute -bottom-20 -left-40 w-96 h-96 bg-gradient-to-br from-[#48df7b]/20 to-[#5599fe]/20 rounded-full blur-3xl' animate={{ x: [0, -30, 0], y: [0, 30, 0] }} transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }} />
-            <motion.div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-[#a679f0]/10 via-transparent to-[#48df7b]/10 rounded-full blur-3xl' animate={{ rotate: [0, 360] }} transition={{ duration: 60, repeat: Infinity, ease: 'linear' }} />
+            <div className='absolute top-20 -right-40 w-96 h-96 bg-gradient-to-br from-[#5599fe]/20 to-[#a679f0]/20 rounded-full blur-3xl' />
+            <div className='absolute -bottom-20 -left-40 w-96 h-96 bg-gradient-to-br from-[#48df7b]/20 to-[#5599fe]/20 rounded-full blur-3xl' />
+            <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-[#a679f0]/10 via-transparent to-[#48df7b]/10 rounded-full blur-3xl' />
           </div>
           
           <div className='container mx-auto px-6 sm:px-8 lg:px-12 relative z-10 py-20 sm:py-24 lg:py-32'>
             {/* Enhanced Hero Section */}
-            <motion.section 
-              initial={{ opacity: 0, y: 30 }} 
-              animate={{ opacity: 1, y: 0 }} 
-              transition={{ duration: 0.8, ease: 'easeOut' }} 
+            <section 
               className='text-center max-w-6xl mx-auto'
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+              <div
                 className='mb-8'
               >
                 <div className='inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-[#a679f0]/20 to-[#5599fe]/20 border border-[#a679f0]/30 mb-6'>
@@ -170,17 +163,12 @@ const StartPage: React.FC = () => {
                   <br />
                   Get details on our <span className='font-bold text-[#1DA1F2]'>X</span> and <span className='font-bold text-[#48df7b]'>Telegram</span>.
                 </Typography>
-              </motion.div>
+              </div>
               
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+              <div
                 className='flex flex-col sm:flex-row gap-4 justify-center items-center mb-12'
               >
-                <motion.div 
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                <div
                   className='group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#1DA1F2] to-[#1a91da] hover:from-[#1a91da] hover:to-[#1681c2] text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300 w-full sm:w-auto sm:min-w-[220px]' 
                   data-umami-event='start-hero-twitter' 
                   onClick={() => { if (typeof window !== 'undefined') window.open('https://x.com/HashgraphOnline', '_blank'); }}
@@ -188,10 +176,8 @@ const StartPage: React.FC = () => {
                   <FaXTwitter className='text-xl' />
                   Get Details on X
                   <FiArrowRight className='text-xl group-hover:translate-x-1 transition-transform' />
-                </motion.div>
-                <motion.div 
-                  whileHover={{ scale: 1.05, y: -2 }}
-                  whileTap={{ scale: 0.98 }}
+                </div>
+                <div
                   className='group inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-[#48df7b] to-[#3aca6c] hover:from-[#3aca6c] hover:to-[#2fb35c] text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300 w-full sm:w-auto sm:min-w-[220px]' 
                   data-umami-event='start-hero-telegram' 
                   onClick={() => { if (typeof window !== 'undefined') window.open('https://t.me/hashinals', '_blank'); }}
@@ -199,9 +185,9 @@ const StartPage: React.FC = () => {
                   <FaTelegram className='text-xl' />
                   Get Details on Telegram
                   <FiExternalLink className='text-xl group-hover:translate-x-1 transition-transform' />
-                </motion.div>
-              </motion.div>
-            </motion.section>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
 
@@ -210,18 +196,10 @@ const StartPage: React.FC = () => {
           <div className='container mx-auto px-6 sm:px-8 lg:px-12 py-16 sm:py-20 lg:py-24'>
 
             {/* Tools Section */}
-            <motion.section 
-              initial={{ opacity: 0, y: 30 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true, amount: 0.2 }} 
-              transition={{ duration: 0.8 }} 
+            <section 
               className='mb-20'
             >
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
+              <div
                 className='text-center mb-12'
               >
                 <div className='flex items-center justify-center gap-3 mb-4'>
@@ -233,17 +211,11 @@ const StartPage: React.FC = () => {
                 <Typography variant='body' className='text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto'>
                   Everything you need to build winning applications on Hedera. Follow our channels for hackathon details and giveaway info.
                 </Typography>
-              </motion.div>
+              </div>
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {getToolsForTrack('hacker').map((tool, index) => (
-                  <motion.div 
+                  <div 
                     key={tool.name} 
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                    whileHover={{ y: -8, scale: 1.03 }} 
-                    whileTap={{ scale: 0.97 }} 
                     className='group relative bg-gradient-to-br from-white to-slate-50 dark:from-gray-800 dark:to-gray-900 rounded-3xl p-6 shadow-lg hover:shadow-2xl cursor-pointer border border-slate-200/50 dark:border-gray-700/50 transition-all duration-300 overflow-hidden' 
                     data-umami-event={`start-tool-${tool.name.toLowerCase().replace(/\s+/g, '-')}`}
                     onClick={() => { 
@@ -258,14 +230,14 @@ const StartPage: React.FC = () => {
                     
                     <div className='relative z-10'>
                       <div className='flex items-start gap-4 mb-4'>
-                        <motion.div 
+                        <div 
                           className='w-14 h-14 rounded-2xl flex items-center justify-center shadow-sm transition-all duration-300 group-hover:scale-110' 
                           style={{ backgroundColor: `${tool.color}15`, border: `2px solid ${tool.color}20` }}
                         >
                           <div style={{ color: tool.color }} className='text-2xl'>
                             {tool.icon}
                           </div>
-                        </motion.div>
+                        </div>
                         <div className='flex-1'>
                           <Typography variant='h4' className='font-bold text-slate-800 dark:text-slate-100 mb-2 group-hover:text-opacity-90 transition-all' style={{ color: tool.color }}>
                             {tool.name}
@@ -283,55 +255,41 @@ const StartPage: React.FC = () => {
                         <FiArrowRight className='text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300 group-hover:translate-x-1 transition-all duration-300' />
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.section>
+            </section>
 
             {/* Enhanced Newsletter CTA */}
-            <motion.section 
-              initial={{ opacity: 0, y: 30 }} 
-              whileInView={{ opacity: 1, y: 0 }} 
-              viewport={{ once: true, amount: 0.2 }} 
-              transition={{ duration: 0.8 }} 
+            <section 
               className='mb-20'
             >
               <div className='relative max-w-5xl mx-auto'>
-                <motion.div 
+                <div 
                   className='bg-gradient-to-r from-[#5599fe]/10 via-[#a679f0]/10 to-[#48df7b]/10 dark:from-[#5599fe]/20 dark:via-[#a679f0]/20 dark:to-[#48df7b]/20 rounded-3xl p-8 sm:p-12 text-center relative overflow-hidden border border-[#a679f0]/20 dark:border-[#a679f0]/30'
                 >
                   {/* Background decoration */}
                   <div className='absolute inset-0 bg-gradient-to-r from-[#5599fe]/5 to-[#a679f0]/5 rounded-3xl'></div>
-                  <motion.div 
+                  <div 
                     className='absolute top-4 right-4 w-16 h-16 bg-[#48df7b]/20 rounded-full blur-xl'
-                    animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-                  ></motion.div>
-                  <motion.div 
+                  ></div>
+                  <div 
                     className='absolute bottom-4 left-4 w-12 h-12 bg-[#a679f0]/20 rounded-full blur-xl'
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                  ></motion.div>
+                  ></div>
                   
                   <div className='relative z-10'>
-                    <motion.div 
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6 }}
+                    <div
                       className='w-16 h-16 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#a679f0] to-[#5599fe] flex items-center justify-center shadow-lg'
                     >
                       <FiMail className='text-white text-2xl' />
-                    </motion.div>
+                    </div>
                     <Typography variant='h3' className='text-2xl font-bold text-slate-800 dark:text-slate-100 mb-3'>
                       Never Miss an Update
                     </Typography>
                     <Typography variant='body' className='text-lg text-slate-600 dark:text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed'>
                       Get weekly updates on new bounties, tools, community highlights, and exclusive hackathon insights delivered to your inbox.
                     </Typography>
-                    <motion.div 
-                      whileHover={{ scale: 1.05, y: -2 }}
-                      whileTap={{ scale: 0.95 }}
+                    <div
                       className='inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-[#a679f0] to-[#925fe0] hover:from-[#925fe0] hover:to-[#7c4fd6] text-white rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl cursor-pointer transition-all duration-300' 
                       onClick={() => setIsNewsletterModalOpen(true)} 
                       data-umami-event='start-newsletter-cta'
@@ -339,14 +297,14 @@ const StartPage: React.FC = () => {
                       <FiMail className='text-xl' />
                       Subscribe to Newsletter
                       <FiArrowRight className='text-xl' />
-                    </motion.div>
+                    </div>
                     <p className='text-xs text-slate-500 dark:text-slate-400 mt-4'>
                       Join 5,000+ developers • No spam, unsubscribe anytime
                     </p>
                   </div>
-                </motion.div>
+                </div>
               </div>
-            </motion.section>
+            </section>
           </div>
         </div>
       </div>

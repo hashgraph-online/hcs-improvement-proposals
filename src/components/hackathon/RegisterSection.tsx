@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import {
   FaTrophy,
   FaArrowRight,
@@ -21,22 +20,16 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <motion.div
+    <div
       className='fixed inset-0 bg-black/80 dark:bg-black/90 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-20'
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onClose();
         }
       }}
     >
-      <motion.div
+      <div
         className='relative w-full max-w-4xl mx-auto bg-gradient-to-br from-[#8259ef]/90 to-[#2d84eb]/90 dark:from-[#8259ef] dark:to-[#2d84eb] rounded-xl overflow-hidden shadow-2xl border border-[#8259ef]/30 dark:border-[#8259ef]/40 my-2 sm:my-4'
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
       >
         <div className='flex justify-between items-center p-3 sm:p-4 md:p-5 border-b border-[#8259ef]/50 dark:border-[#8259ef]/60'>
           <h2 className='text-lg sm:text-xl md:text-2xl font-bold text-white dark:text-white'>
@@ -79,8 +72,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
             Close
           </button>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
@@ -96,11 +89,7 @@ const RegisterSection: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-6'>
         <div className='flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8'>
           <div className='lg:w-1/2'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+            <div
             >
               <div className='inline-block px-3 py-1 mb-3 sm:mb-4 rounded-full bg-red-500/10 border border-red-500/20'>
                 <span className='text-xs sm:text-sm text-red-500 font-medium'>
@@ -121,14 +110,10 @@ const RegisterSection: React.FC = () => {
                 Stay tuned for our next hackathon and continue building the future of
                 autonomous AI communication.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className='space-y-3 sm:space-y-4'
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.2 }}
             >
               <div className='bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-3 sm:p-4 rounded-xl border border-[#8259ef]/10 dark:border-[#8259ef]/20 shadow-md'>
                 <div className='flex flex-col md:flex-row items-center gap-3 sm:gap-4'>
@@ -188,15 +173,11 @@ const RegisterSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           <div className='lg:w-1/2 mt-8 lg:mt-0'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+            <div
             >
               <h3
                 className='text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center font-styrene'
@@ -206,17 +187,13 @@ const RegisterSection: React.FC = () => {
               >
                 <FaTrophy className='text-[#3ec878] mr-2' /> Prize Distribution (Hackathon Ended)
               </h3>
-            </motion.div>
+            </div>
 
             <div className='space-y-3 sm:space-y-4'>
               <div className='relative'>
                 <div className='absolute -inset-1 sm:-inset-2 bg-gradient-to-r from-[#8259ef]/40 to-[#2d84eb]/40 rounded-3xl blur-lg opacity-20'></div>
-                <motion.div
+                <div
                   className='relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-3 sm:p-4 rounded-xl border border-[#8259ef]/10 dark:border-[#8259ef]/20 shadow-sm'
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.6 }}
                 >
                   <div className='flex justify-between items-center mb-2 sm:mb-3'>
                     <div>
@@ -260,15 +237,11 @@ const RegisterSection: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
-              <motion.div
+              <div
                 className='bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-3 sm:p-4 rounded-xl border border-[#8259ef]/10 dark:border-[#8259ef]/20 shadow-sm'
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.8 }}
               >
                 <div className='flex justify-between items-center mb-3 sm:mb-4'>
                   <div>
@@ -312,14 +285,10 @@ const RegisterSection: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
+              <div
                 className='bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 p-3 sm:p-4 rounded-xl border border-[#8259ef]/10 dark:border-[#8259ef]/20 shadow-sm'
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 1.0 }}
               >
                 <div className='flex justify-between items-center mb-3 sm:mb-4'>
                   <div>
@@ -363,7 +332,7 @@ const RegisterSection: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import {
   FaCalendarAlt,
   FaClock,
@@ -38,7 +37,7 @@ const SprintCard: React.FC<SprintCardProps> = ({
   index,
 }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = true;
 
   // Define status-based styling
   const statusStyles = {
@@ -76,15 +75,8 @@ const SprintCard: React.FC<SprintCardProps> = ({
   const buttonVariant = status === 'active' ? 'primary' : 'secondary';
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
       className={`relative rounded-2xl bg-white dark:bg-gray-800/90 border ${style.border} ${style.shadow} overflow-hidden`}
     >
       {/* Status indicator */}
@@ -142,25 +134,18 @@ const SprintCard: React.FC<SprintCardProps> = ({
           {buttonText[status]}
         </PrimaryButton>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 // Future Sprint Card - placeholder for upcoming sprints
 const FutureSprintCard: React.FC<{ index: number }> = ({ index }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.1 + 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
       className='relative rounded-2xl bg-white/30 dark:bg-gray-800/30 border border-dashed border-gray-300 dark:border-gray-700 overflow-hidden'
     >
       <div className='h-24 bg-gradient-to-r from-gray-200/50 to-gray-100/50 dark:from-gray-700/50 dark:to-gray-800/50 relative overflow-hidden'>
@@ -203,13 +188,13 @@ const FutureSprintCard: React.FC<{ index: number }> = ({ index }) => {
           Get Notifications
         </PrimaryButton>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const SprintsSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+  const isInView = true;
 
   const sprints = [
     {
@@ -264,10 +249,7 @@ const SprintsSection: React.FC = () => {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+        <div
           className='text-center max-w-3xl mx-auto mb-16'
         >
           <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
@@ -278,7 +260,7 @@ const SprintsSection: React.FC = () => {
             time-boxed sprint focuses on solving specific challenges with
             cutting-edge AI technology.
           </p>
-        </motion.div>
+        </div>
 
         <div className='grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-8 max-w-5xl mx-auto'>
           {sprints.map((sprint, index) => (
@@ -288,10 +270,7 @@ const SprintsSection: React.FC = () => {
         </div>
 
         <div className='mt-16 text-center'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
+          <div
           >
             <p className='text-gray-600 dark:text-gray-300 mb-6'>
               More sprint challenges are in development. Join our community for
@@ -305,7 +284,7 @@ const SprintsSection: React.FC = () => {
             >
               Join our Telegram Community
             </PrimaryButton>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

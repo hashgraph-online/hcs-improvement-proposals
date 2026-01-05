@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { FiTerminal, FiGitBranch, FiPlay, FiPause, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { AnimatedBackground } from './ui';
 
@@ -179,29 +178,23 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                         />
                       </div>
                       <div className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
-                        <motion.div
-                          animate={{ rotate: expandedMobile === index ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
+                        <div
                         >
                           <FiChevronDown className='w-5 h-5 text-gray-500' />
-                        </motion.div>
+                        </div>
                       </div>
                     </div>
-                    <AnimatePresence>
+                    <>
                       {expandedMobile === index && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
+                        <div
                           className='overflow-hidden'
                         >
                           <div className='p-4 border-t border-gray-200 dark:border-gray-700'>
                             <MainContent item={item} index={index} />
                           </div>
-                        </motion.div>
+                        </div>
                       )}
-                    </AnimatePresence>
+                    </>
                   </div>
                 ))}
               </div>
@@ -271,9 +264,7 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                 {/* Scroll indicator */}
                 {scrollPosition !== 'middle' && (
                   <div className={`absolute ${scrollPosition === 'bottom' ? 'top-14' : 'bottom-2'} left-1/2 transform -translate-x-1/2 pointer-events-none z-10`}>
-                    <motion.div
-                      animate={{ y: scrollPosition === 'bottom' ? [0, -5, 0] : [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
+                    <div
                       className='text-gray-400 dark:text-gray-600'
                     >
                       {scrollPosition === 'bottom' ? (
@@ -281,25 +272,21 @@ export function InteractiveShowcase<T extends ShowcaseItem>({
                       ) : (
                         <FiChevronDown className='w-5 h-5' />
                       )}
-                    </motion.div>
+                    </div>
                   </div>
                 )}
               </div>
 
               <div className='flex-1 p-8 overflow-y-auto'>
-                <AnimatePresence mode='wait'>
-                  <motion.div
+                <>
+                  <div
                     key={activeIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4 }}
                     onMouseEnter={() => setIsPlaying(false)}
                     onMouseLeave={() => autoRotate && setIsPlaying(true)}
                   >
                     <MainContent item={activeItem} index={activeIndex} />
-                  </motion.div>
-                </AnimatePresence>
+                  </div>
+                </>
               </div>
             </div>
           </div>

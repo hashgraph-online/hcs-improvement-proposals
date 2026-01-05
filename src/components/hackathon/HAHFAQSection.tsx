@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
   FaChevronDown,
   FaRobot,
@@ -47,7 +46,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
-  const itemIsInView = useInView(itemRef, { once: true, amount: 0.1 });
+  const itemIsInView = true;
   const inView = isInView && itemIsInView;
 
   const colors = [
@@ -58,15 +57,8 @@ export const FAQItem: React.FC<FAQItemProps> = ({
   const colorSet = colors[index % 3];
 
   return (
-    <motion.div
+    <div
       ref={itemRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.05,
-        ease: 'easeOut',
-      }}
     >
       <div
         className={`relative overflow-hidden transition-all duration-300 hover:scale-[1.02] rounded-2xl ${
@@ -84,55 +76,44 @@ export const FAQItem: React.FC<FAQItemProps> = ({
         >
           <div className='flex items-center gap-4'>
             {icon && (
-              <motion.div
-                animate={{
-                  rotate: isOpen ? 360 : 0,
-                  scale: isOpen ? 1.1 : 1,
-                }}
-                transition={{ duration: 0.5 }}
+              <div
                 className='flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center text-white'
                 style={{
                   background: `linear-gradient(135deg, ${colorSet.primary}, ${colorSet.secondary})`,
                 }}
               >
                 {icon}
-              </motion.div>
+              </div>
             )}
             <span className='text-base sm:text-lg font-semibold text-gray-700 dark:text-white'>
               {question}
             </span>
           </div>
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
+          <div
             className='flex-shrink-0 ml-4'
             style={{ color: colorSet.primary }}
           >
             <FaChevronDown className='text-xl' />
-          </motion.div>
+          </div>
         </button>
 
-        <AnimatePresence>
+        <>
           {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+            <div
             >
               <div className='h-px w-full bg-gradient-to-r from-transparent via-gray-200 dark:via-gray-700 to-transparent' />
               <div className='px-6 pb-6 pt-4'>{answer}</div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = true;
 
   const faqs = [
     {
@@ -613,16 +594,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
       className='py-24 sm:py-32 bg-gray-50 dark:bg-gray-900 overflow-hidden relative'
     >
       <div className='absolute inset-0'>
-        <motion.div
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%'],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            repeatType: 'reverse',
-            ease: 'linear',
-          }}
+        <div
           className='absolute inset-0'
           style={{
             backgroundImage: `
@@ -635,26 +607,18 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
         />
       </div>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl relative z-10'>
-        <motion.div
+        <div
           className='text-center mb-16'
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
         >
           <div className='inline-block mb-6'>
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+            <div
               className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#a679f0]/10 to-[#5599fe]/10 dark:from-[#a679f0]/20 dark:to-[#5599fe]/20 border border-[#a679f0]/20 dark:border-[#a679f0]/30 mb-4'
             >
               <FaQuestion className='text-[#a679f0] mr-2' />
               <span className='text-sm font-bold text-[#a679f0] dark:text-[#48df7b]'>
                 KNOWLEDGE BASE
               </span>
-            </motion.div>
+            </div>
 
             <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
               <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -680,7 +644,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
               t.me/hashinals
             </a>
           </Typography>
-        </motion.div>
+        </div>
 
         <div className='grid gap-4 max-w-4xl mx-auto'>
           {faqs.map((faq, index) => (
@@ -695,11 +659,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+        <div
           className='text-center mt-16'
         >
           <Typography variant='h3' className='mb-4 text-gray-700 dark:text-white'>
@@ -732,7 +692,7 @@ const HAHFAQSection: React.FC<HAHFAQSectionProps> = ({ onNewsletterClick }) => {
               </button>
             )}
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

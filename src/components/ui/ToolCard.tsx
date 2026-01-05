@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import { FaArrowRight } from 'react-icons/fa';
 import PrimaryButton from '../hackathon/PrimaryButton';
 import HackathonTypography from '../hackathon/HackathonTypography';
@@ -28,7 +27,7 @@ const ToolCard: React.FC<ToolCardProps> = ({
   buttonText = 'View Documentation',
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const cardInView = useInView(cardRef, { once: true, amount: 0.3 });
+  const cardInView = true;
 
   const colorMap = {
     purple: {
@@ -63,15 +62,8 @@ const ToolCard: React.FC<ToolCardProps> = ({
   const colorStyle = colorMap[color];
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 100 }}
-      animate={cardInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.8,
-        delay: index * 0.15,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
       className='relative h-full group'
       style={{
         transformStyle: 'preserve-3d',
@@ -79,13 +71,8 @@ const ToolCard: React.FC<ToolCardProps> = ({
       }}
       id={id}
     >
-      <motion.div
+      <div
         className={`h-full overflow-hidden rounded-[2rem] border border-white/10 dark:border-gray-800/50 ${colorStyle.borderHover} transition-colors duration-700 shadow-[0_20px_80px_-20px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_80px_-20px_rgba(0,0,0,0.2)]`}
-        whileHover={{
-          boxShadow: `0 30px 100px -20px ${colorStyle.glow}, 0 10px 20px -10px ${colorStyle.glow}`,
-          translateY: -5,
-        }}
-        transition={{ duration: 0.4 }}
       >
         <div className={`relative ${colorStyle.bg} overflow-hidden`}>
           <div className='absolute top-0 right-0 w-32 h-32 rounded-full bg-white/5 blur-3xl transform translate-x-16 -translate-y-10'></div>
@@ -132,8 +119,8 @@ const ToolCard: React.FC<ToolCardProps> = ({
             {buttonText}
           </PrimaryButton>
         </div>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 

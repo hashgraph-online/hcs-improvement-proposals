@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaCube, FaCheckCircle, FaCode, FaNetworkWired, FaArrowDown, FaBoxes, FaKey, FaDatabase, FaFileCode } from 'react-icons/fa';
@@ -8,18 +7,15 @@ import SecondaryButton from '../components/SecondaryButton';
 import Terminal from '../components/ui/Terminal';
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" />;
 };
 
 const AdapterComparison = () => {
     return (
         <div className="grid lg:grid-cols-2 gap-8 mt-16">
-            <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="relative p-12 bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 rounded-[3rem] overflow-hidden"
             >
                 <div className="absolute top-4 right-4 px-4 py-2 bg-gray-500/20 text-gray-500 rounded-full text-sm font-bold">
@@ -40,12 +36,9 @@ const AdapterComparison = () => {
                 <p className="text-sm text-gray-500 mt-6">
                     Without adapters, Flora nodes have no intelligence—just empty coordination.
                 </p>
-            </motion.div>
+            </div>
 
-            <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="relative p-12 bg-white dark:bg-[#1a1f3a] border-2 border-[#5599fe] rounded-[3rem] overflow-hidden shadow-[0_0_40px_rgba(85,153,254,0.3)]"
             >
                 <div className="absolute top-4 right-4 px-4 py-2 bg-[#5599fe] text-white rounded-full text-sm font-bold">
@@ -58,10 +51,8 @@ const AdapterComparison = () => {
                         { name: 'Agent Registry', icon: <FaNetworkWired />, color: '#a679f0' },
                         { name: 'Trust Signals', icon: <FaKey />, color: '#48df7b' }
                     ].map((adapter, i) => (
-                        <motion.div
+                        <div
                             key={i}
-                            animate={{ scale: [1, 1.02, 1] }}
-                            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
                             className="flex items-center gap-4 p-4 bg-gradient-to-r from-white/50 dark:from-white/5 to-transparent border border-gray-200 dark:border-white/10 rounded-xl"
                         >
                             <div className="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style={{ backgroundColor: `${adapter.color}20`, color: adapter.color }}>
@@ -72,13 +63,13 @@ const AdapterComparison = () => {
                                 <div className="text-sm text-gray-500">Processing consensus...</div>
                             </div>
                             <FaCheckCircle className="text-[#48df7b]" />
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
                 <p className="text-sm text-gray-500 mt-6">
                     With HCS-21, each adapter brings deterministic intelligence to the Flora.
                 </p>
-            </motion.div>
+            </div>
         </div>
     );
 };
@@ -124,12 +115,9 @@ const AdapterFlow = () => {
                 ))}
             </div>
 
-            <AnimatePresence mode="wait">
-                <motion.div
+            <>
+                <div
                     key={activeStep}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
                     className="p-12 bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/10 rounded-[3rem]"
                 >
                     <div className="flex items-center gap-6 mb-6">
@@ -149,8 +137,8 @@ const AdapterFlow = () => {
                     <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                         {steps[activeStep].desc}
                     </p>
-                </motion.div>
-            </AnimatePresence>
+                </div>
+            </>
 
             <div className="flex justify-center gap-4 mt-8">
                 <button
@@ -174,24 +162,17 @@ const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, sub
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-3 mb-4"
             >
                 <span className="w-12 h-0.5 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -209,10 +190,7 @@ export default function HCS21Page() {
                 <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
                     <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px] relative z-10">
                         <div className="grid lg:grid-cols-2 gap-12 items-center">
-                            <motion.div
-                                initial={{ opacity: 0, x: -50 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 1, ease: "easeOut" }}
+                            <div
                             >
                                 <div className="relative inline-block text-left mb-12 z-50">
                                     <button
@@ -260,20 +238,16 @@ export default function HCS21Page() {
                                         BUILD ADAPTER
                                     </SecondaryButton>
                                 </div>
-                            </motion.div>
+                            </div>
 
                             <div className="hidden lg:block relative">
-                                <motion.div
-                                    animate={{ rotate: 360 }}
-                                    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                                <div
                                     className="relative w-full h-[600px] flex items-center justify-center"
                                 >
                                     <div className="absolute inset-0 bg-gradient-to-tr from-[#5599fe]/20 via-transparent to-[#a679f0]/20 blur-[150px] rounded-full" />
                                     {[0, 1, 2].map((i) => (
-                                        <motion.div
+                                        <div
                                             key={i}
-                                            animate={{ scale: [1, 1.1, 1] }}
-                                            transition={{ duration: 3, repeat: Infinity, delay: i * 1 }}
                                             className="absolute w-32 h-32 rounded-2xl border-4 flex items-center justify-center text-4xl"
                                             style={{
                                                 borderColor: i === 0 ? '#5599fe' : i === 1 ? '#a679f0' : '#48df7b',
@@ -284,20 +258,18 @@ export default function HCS21Page() {
                                             }}
                                         >
                                             <FaCube style={{ color: i === 0 ? '#5599fe' : i === 1 ? '#a679f0' : '#48df7b' }} />
-                                        </motion.div>
+                                        </div>
                                     ))}
-                                </motion.div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    <motion.div
-                        animate={{ y: [0, 15, 0] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                    <div
                         className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#a679f0] text-3xl opacity-50"
                     >
                         <FaArrowDown />
-                    </motion.div>
+                    </div>
                 </section>
 
                 <section className="py-24 relative z-10 bg-gray-50 dark:bg-[#1a1f3a] border-t border-b border-gray-200 dark:border-white/5">
@@ -326,9 +298,8 @@ export default function HCS21Page() {
                                     { name: 'Coinbase Adapter', price: '$42,148', icon: <FaDatabase />, color: '#a679f0' },
                                     { name: 'Kraken Adapter', price: '$42,152', icon: <FaDatabase />, color: '#48df7b' }
                                 ].map((adapter, i) => (
-                                    <motion.div
+                                    <div
                                         key={i}
-                                        whileHover={{ scale: 1.02 }}
                                         className="p-6 border border-gray-200 dark:border-white/10 rounded-2xl bg-gradient-to-br from-white dark:from-[#1a1f3a] to-gray-50 dark:to-[#1a1f3a]"
                                     >
                                         <div className="flex items-center gap-3 mb-4">
@@ -339,7 +310,7 @@ export default function HCS21Page() {
                                         </div>
                                         <div className="text-3xl font-bold mb-2" style={{ color: adapter.color }}>{adapter.price}</div>
                                         <div className="text-sm text-gray-500">BTC/USD</div>
-                                    </motion.div>
+                                    </div>
                                 ))}
                             </div>
                             <div className="mt-8 p-6 bg-[#48df7b]/10 border border-[#48df7b]/30 rounded-2xl">

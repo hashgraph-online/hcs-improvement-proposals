@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import {
   FaComments,
   FaExternalLinkAlt,
@@ -19,25 +18,17 @@ const MoonscapeTestingSection: React.FC<MoonscapeTestingSectionProps> = ({
   
   return (
     <div className='mt-24'>
-      <motion.div
+      <div
         className='text-center mb-16'
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
       >
-        <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+        <div
           className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#48df7b]/10 to-[#5599fe]/10 dark:from-[#48df7b]/20 dark:to-[#5599fe]/20 border border-[#48df7b]/20 dark:border-[#48df7b]/30 mb-6'
         >
           <FaComments className='text-[#48df7b] mr-2' />
           <span className='text-sm font-bold text-[#48df7b] dark:text-[#5599fe]'>
             TESTING YOUR AI AGENT
           </span>
-        </motion.div>
+        </div>
 
         <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
           <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -49,27 +40,15 @@ const MoonscapeTestingSection: React.FC<MoonscapeTestingSectionProps> = ({
           Building an AI agent? Use the Moonscape Portal to interact with
           your agent in a real-world environment.
         </p>
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
+      <div
         className='max-w-6xl mx-auto'
       >
         <div className='relative rounded-3xl overflow-hidden shadow-2xl bg-white dark:bg-gray-900 ring-1 ring-gray-200/50 dark:ring-gray-600'>
           <div className='absolute inset-0'>
             <div className='absolute inset-0 bg-gradient-to-br from-[#48df7b]/5 via-[#5599fe]/5 to-[#a679f0]/5 dark:from-[#48df7b]/10 dark:via-[#5599fe]/10 dark:to-[#a679f0]/10' />
-            <motion.div
-              animate={{
-                backgroundPosition: ['0% 0%', '100% 100%'],
-              }}
-              transition={{
-                duration: 20,
-                repeat: Infinity,
-                repeatType: 'reverse',
-              }}
+            <div
               className='absolute inset-0 opacity-30'
               style={{
                 backgroundImage:
@@ -93,11 +72,7 @@ const MoonscapeTestingSection: React.FC<MoonscapeTestingSectionProps> = ({
 
             {/* Content - Smaller column like homepage */}
             <div className='lg:col-span-5 flex flex-col justify-center pl-4'>
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.2 }}
+              <div
               >
                 <h3 className='text-2xl lg:text-3xl font-bold mb-2 text-gray-700 dark:text-white'>
                   For AI Agent Projects: Moonscape Portal
@@ -173,11 +148,11 @@ const MoonscapeTestingSection: React.FC<MoonscapeTestingSectionProps> = ({
                     Browse Agents
                   </a>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

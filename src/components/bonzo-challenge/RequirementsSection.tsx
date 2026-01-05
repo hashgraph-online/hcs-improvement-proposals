@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import {
   FaGithub,
   FaYoutube,
@@ -38,12 +37,9 @@ const CONSTANTS: Constants = {
 
 const RequirementsSection: React.FC = () => {
   const titleRef = useRef<HTMLHeadingElement>(null);
-  const isTitleInView = useInView(titleRef, { once: true, margin: '-100px' });
+  const isTitleInView = true;
   const metricsRef = useRef<HTMLDivElement>(null);
-  const isMetricsInView = useInView(metricsRef, {
-    once: true,
-    margin: '-100px',
-  });
+  const isMetricsInView = true;
 
   return (
     <section
@@ -63,22 +59,8 @@ const RequirementsSection: React.FC = () => {
 
       <div className='container mx-auto px-3 sm:px-4 md:px-6 lg:px-8 relative z-10'>
         <div className='text-center mb-10 sm:mb-14 md:mb-20 max-w-4xl mx-auto'>
-          <motion.div
+          <div
             ref={titleRef}
-            initial={{ opacity: 0, y: 50 }}
-            animate={
-              isTitleInView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.8,
-                      type: 'spring',
-                      stiffness: 50,
-                    },
-                  }
-                : {}
-            }
             className='relative inline-block pb-2'
           >
             <Typography
@@ -90,22 +72,9 @@ const RequirementsSection: React.FC = () => {
             >
               Submission Requirements
             </Typography>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={
-              isTitleInView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.6,
-                      delay: 0.3,
-                    },
-                  }
-                : {}
-            }
+          <div
           >
             <Typography
               variant='body1'
@@ -118,23 +87,10 @@ const RequirementsSection: React.FC = () => {
               will analyze each submission based on innovation, technical
               implementation, and potential impact.
             </Typography>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className='flex flex-wrap gap-1.5 sm:gap-2 justify-center'
-            initial={{ opacity: 0, y: 20 }}
-            animate={
-              isTitleInView
-                ? {
-                    opacity: 1,
-                    y: 0,
-                    transition: {
-                      duration: 0.6,
-                      delay: 0.5,
-                    },
-                  }
-                : {}
-            }
           >
             <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-hedera-purple/10 dark:bg-hedera-purple/20 text-hedera-purple rounded-full text-xs sm:text-sm font-medium'>
               #AI
@@ -145,15 +101,12 @@ const RequirementsSection: React.FC = () => {
             <span className='px-2 py-1 sm:px-3 sm:py-1.5 bg-hedera-green/10 dark:bg-hedera-green/20 text-hedera-green rounded-full text-xs sm:text-sm font-medium'>
               #Finance
             </span>
-          </motion.div>
+          </div>
         </div>
 
         <div className='max-w-6xl mx-auto mb-12 sm:mb-16 md:mb-20'>
-          <motion.div
+          <div
             className='grid grid-cols-2 gap-1.5 sm:gap-3 md:gap-4 lg:gap-5'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
           >
             <RequirementCard
               icon={<FaGithub />}
@@ -187,24 +140,11 @@ const RequirementsSection: React.FC = () => {
               iconBg='bg-gradient-to-r from-[#2d84eb] to-[#1c5da3]'
               borderColor='bg-[#2d84eb]/30'
             />
-          </motion.div>
+          </div>
         </div>
 
-        <motion.div
+        <div
           className='relative max-w-5xl mx-auto mb-12 sm:mb-16 md:mb-20'
-          initial={{ opacity: 0, y: 30 }}
-          animate={
-            isTitleInView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.8,
-                    delay: 0.6,
-                  },
-                }
-              : {}
-          }
         >
           <div
             className='absolute -inset-3 sm:-inset-6 lg:-inset-10 bg-gradient-to-r from-hedera-purple/5 to-hedera-blue/5 dark:from-hedera-purple/10 dark:to-hedera-blue/10 rounded-2xl sm:rounded-3xl blur-xl'
@@ -251,32 +191,14 @@ const RequirementsSection: React.FC = () => {
               aria-hidden='true'
             ></div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
+        <div
           ref={metricsRef}
-          initial={{ opacity: 0, y: 40 }}
-          animate={
-            isMetricsInView
-              ? {
-                  opacity: 1,
-                  y: 0,
-                  transition: {
-                    duration: 0.8,
-                    type: 'spring',
-                    stiffness: 50,
-                  },
-                }
-              : {}
-          }
           className='relative max-w-7xl mx-auto mb-12 sm:mb-16'
         >
           <div className='mb-10 sm:mb-14 md:mb-16 text-center'>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
               className='relative mb-8'
             >
               <div className='relative w-24 h-24 mx-auto mb-6'>
@@ -294,7 +216,7 @@ const RequirementsSection: React.FC = () => {
               >
                 Judging Criteria
               </Typography>
-            </motion.div>
+            </div>
 
             <Typography
               variant='body1'
@@ -387,7 +309,7 @@ const RequirementsSection: React.FC = () => {
               <div className='w-full h-px bg-gradient-to-r from-transparent via-hedera-purple/30 to-transparent my-8 sm:my-10 md:my-12'></div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

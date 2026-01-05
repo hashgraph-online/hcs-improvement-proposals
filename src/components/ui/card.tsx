@@ -1,6 +1,5 @@
 'use client';
 import { cn } from '@site/src/lib/utils';
-import { motion } from 'motion/react';
 import { forwardRef, HTMLAttributes, useState } from 'react';
 import Typography from '../Typography';
 
@@ -26,7 +25,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-      <motion.div
+      <div
         ref={ref}
         className={cn(
           'relative flex flex-col overflow-hidden rounded-lg text-gray-900 dark:text-white',
@@ -36,10 +35,6 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           className
         )}
         initial={false}
-        animate={{
-          scale: isHovered && !disableGrow ? 1.02 : 1,
-        }}
-        transition={{ duration: 0.2 }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         {...props}
@@ -63,7 +58,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
             )}
           />
         )}
-      </motion.div>
+      </div>
     );
   }
 );
@@ -71,12 +66,9 @@ Card.displayName = 'Card';
 
 const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <motion.div
+    <div
       ref={ref}
       className={cn('flex flex-col p-2 px-6', className)}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
       {...props}
     />
   )
@@ -128,12 +120,9 @@ CardSubTitle.displayName = 'CardSubTitle';
 
 const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <motion.div
+    <div
       ref={ref}
       className={cn('p-6 pt-0 flex-grow', className)}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
       {...props}
     />
   )
@@ -142,12 +131,9 @@ CardContent.displayName = 'CardContent';
 
 const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (
-    <motion.div
+    <div
       ref={ref}
       className={cn('flex items-center p-6 pt-0 mt-auto', className)}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2, delay: 0.1 }}
       {...props}
     />
   )
@@ -156,16 +142,13 @@ CardFooter.displayName = 'CardFooter';
 
 const CardImage = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
   ({ className, children, ...props }, ref) => (
-    <motion.div
+    <div
       ref={ref}
       className={cn('overflow-hidden', className)}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
       {...props}
     >
       {children}
-    </motion.div>
+    </div>
   )
 );
 CardImage.displayName = 'CardImage';
@@ -174,12 +157,9 @@ const CardDescription = forwardRef<
   HTMLParagraphElement,
   HTMLAttributes<HTMLParagraphElement>
 >(({ className, ...props }, ref) => (
-  <motion.div
+  <div
     ref={ref}
     className={cn('text-sm text-gray-500 dark:text-gray-400 mt-4', className)}
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.2, delay: 0.1 }}
     {...props}
   />
 ));

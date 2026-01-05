@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
 import {
   FaTrophy,
   FaArrowRight,
@@ -36,16 +35,8 @@ const HAHRegisterSection: React.FC = () => {
   return (
     <section className='pt-24 sm:pt-32 relative bg-white dark:bg-gray-900 overflow-hidden'>
       <div className='absolute inset-0'>
-        <motion.div
+        <div
           className='absolute inset-0'
-          animate={{
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
           style={{
             backgroundImage: `radial-gradient(circle at 20% 50%, rgba(166, 121, 240, 0.15) 0%, transparent 50%),
                            radial-gradient(circle at 80% 50%, rgba(72, 223, 123, 0.15) 0%, transparent 50%),
@@ -53,15 +44,7 @@ const HAHRegisterSection: React.FC = () => {
           }}
         />
 
-        <motion.div
-          animate={{
-            backgroundPosition: ['0px 0px', '50px 50px'],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
+        <div
           className='absolute inset-0 opacity-[0.03] dark:opacity-[0.05]'
           style={{
             backgroundImage: `linear-gradient(rgba(166, 121, 240, 0.5) 1px, transparent 1px),
@@ -74,11 +57,7 @@ const HAHRegisterSection: React.FC = () => {
       <div className='relative z-10'>
         <div className='container mx-auto px-4 sm:px-6 max-w-7xl'>
           <div className='text-center mb-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+            <div
             >
               <h2 className='text-3xl sm:text-4xl font-bold mb-6'>
                 <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -94,15 +73,11 @@ const HAHRegisterSection: React.FC = () => {
                 the future of autonomous AI on the world's most sustainable
                 public ledger.
               </Typography>
-            </motion.div>
+            </div>
           </div>
 
           <div className='grid lg:grid-cols-2 gap-8 mb-16'>
-            <motion.div
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
             >
               <TransformCard
                 rotation='rotate-[-1deg]'
@@ -129,19 +104,14 @@ const HAHRegisterSection: React.FC = () => {
                       <span className='text-[#48df7b]'>$</span>
                       <span className='text-white'>{commandTyped}</span>
                       {commandTyped.length < command.length && (
-                        <motion.span
-                          animate={{ opacity: [1, 0] }}
-                          transition={{ duration: 0.5, repeat: Infinity }}
+                        <span
                           className='inline-block w-2 h-4 bg-[#48df7b]'
                         />
                       )}
                     </div>
 
                     {commandTyped.length === command.length && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
+                      <div
                         className='mt-4 text-gray-400'
                       >
                         <div>✓ Checking requirements...</div>
@@ -154,18 +124,14 @@ const HAHRegisterSection: React.FC = () => {
                         <div className='mt-2 text-white'>
                           → Ready to build amazing AI agents!
                         </div>
-                      </motion.div>
+                      </div>
                     )}
                   </div>
                 </div>
               </TransformCard>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
               className='space-y-4'
             >
               <TransformCard
@@ -233,14 +199,10 @@ const HAHRegisterSection: React.FC = () => {
                   </div>
                 </div>
               </TransformCard>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+          <div
             className='text-center'
           >
             <div className='flex flex-col sm:flex-row gap-4 justify-center mb-12'>
@@ -271,16 +233,12 @@ const HAHRegisterSection: React.FC = () => {
                 View Main Event
               </PrimaryButton>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
-      <motion.div
+      <div
         className='mt-16 bg-gray-900'
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.4 }}
       >
         <div className='py-12'>
           <p className='text-xs text-gray-300 mb-4 text-center'>
@@ -315,7 +273,7 @@ const HAHRegisterSection: React.FC = () => {
             </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

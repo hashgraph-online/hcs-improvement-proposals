@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView, useScroll } from 'motion/react';
 import {
   FaCode,
   FaRobot,
@@ -19,7 +18,7 @@ import { Section } from '../hackathon/Section';
 
 const TimelineSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+  const isInView = true;
 
   const tools = [
     {
@@ -143,11 +142,7 @@ const TimelineSection: React.FC = () => {
       <div className='container mx-auto px-6 relative'>
         <div className='mb-24'>
           <div className='flex flex-col items-center text-center mb-20'>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
               className='relative mb-8'
             >
               <div className='relative w-24 h-24 mx-auto mb-6'>
@@ -162,13 +157,9 @@ const TimelineSection: React.FC = () => {
               <h2 className='text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878]'>
                 Tools & Resources
               </h2>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <div
               className='max-w-2xl'
             >
               <Typography variant='body1'>
@@ -177,7 +168,7 @@ const TimelineSection: React.FC = () => {
                 accelerate your development process and build innovative AI
                 agents for Bonzo Finance.
               </Typography>
-            </motion.div>
+            </div>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10'>
@@ -198,10 +189,7 @@ const TimelineSection: React.FC = () => {
         </div>
 
         <div className='mt-32' id='schedule'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.1 }}
+          <div
             className='max-w-4xl mx-auto text-center mb-16'
           >
             <Section icon={<FaClock />} title='Challenge Timeline' />
@@ -209,7 +197,7 @@ const TimelineSection: React.FC = () => {
               Key dates and milestones for the Bonzo Finance AI Agent Challenge.
               Mark your calendar and stay on track for your submission.
             </Typography>
-          </motion.div>
+          </div>
 
           <div className='max-w-4xl mx-auto'>
             {timeline.map((event, index) => (

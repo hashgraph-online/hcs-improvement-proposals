@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import { FaCode, FaRobot, FaPlug, FaCubes } from 'react-icons/fa';
 import InteractiveToolsSection, { Tool } from '../ui/InteractiveToolsSection';
 import { Terminal, AnimatedBackground, TransformCard, Typography } from '../ui';
@@ -138,10 +137,7 @@ await agent.processMessage('Send 5 HBAR to Bob');
       />
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+        <div
           className='text-center mb-16'
         >
           <div className='mb-4'>
@@ -163,7 +159,7 @@ await agent.processMessage('Send 5 HBAR to Bob');
               Production-ready AI agent infrastructure built on LangChain, Hedera, and MCP
             </Typography>
           </div>
-        </motion.div>
+        </div>
 
         <InteractiveToolsSection
           tools={architectureComponents}
@@ -172,10 +168,7 @@ await agent.processMessage('Send 5 HBAR to Bob');
           browserTitle='architecture-explorer.sh'
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+        <div
           className='mt-20'
         >
           <div className='grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto'>
@@ -251,12 +244,9 @@ await agent.processMessage('Send 5 HBAR to Bob');
               </div>
             </TransformCard>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+        <div
           className='mt-16 text-center'
         >
           <div className='relative group max-w-3xl mx-auto'>
@@ -276,18 +266,15 @@ await agent.processMessage('Send 5 HBAR to Bob');
                 <Terminal.Line output='// Ready to build AI agents on Hedera' type='comment' />
               </Terminal>
               {copied && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
+                <div
                   className='absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-md text-sm font-medium shadow-lg'
                 >
                   Copied!
-                </motion.div>
+                </div>
               )}
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

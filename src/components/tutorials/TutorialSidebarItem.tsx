@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { Typography } from '../ui';
 import { TutorialItem } from './types';
 
@@ -26,10 +25,7 @@ const TutorialSidebarItem: React.FC<TutorialSidebarItemProps> = ({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.05, duration: 0.4 }}
+    <div
       onClick={onClick}
       className={`cursor-pointer transition-all duration-500 relative ${
         isActive
@@ -66,7 +62,7 @@ const TutorialSidebarItem: React.FC<TutorialSidebarItemProps> = ({
           <span className='text-xs text-gray-500'>{tutorial.duration}</span>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

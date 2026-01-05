@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import {
   FaCalendarAlt,
   FaGlobe,
@@ -18,25 +17,13 @@ const FloatingParticle: React.FC<{
   x: number;
   y: number;
 }> = ({ size, delay, duration, x, y }) => (
-  <motion.div
+  <div
     className='absolute rounded-full bg-hedera-purple/20 dark:bg-hedera-purple/30'
     style={{
       width: `${size}px`,
       height: `${size}px`,
       left: `${x}%`,
       top: `${y}%`,
-    }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{
-      opacity: [0, 0.8, 0],
-      scale: [0, 1, 0.8],
-      y: [-20, 20],
-    }}
-    transition={{
-      repeat: Infinity,
-      duration,
-      delay,
-      ease: 'easeInOut',
     }}
   />
 );
@@ -77,22 +64,16 @@ const HederaAIDemoDayHero: React.FC = () => {
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
         <div className='flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16'>
-          <motion.div
+          <div
             className='lg:w-1/2 text-center lg:text-left'
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.div
+            <div
               className='inline-flex items-center rounded-full border border-hedera-green/20 px-4 py-1.5 text-sm font-medium bg-gradient-to-r from-hedera-blue/5 to-hedera-purple/5 mb-6'
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <span className='text-hedera-purple'>
                 May 20th-21st, 10AM EDT
               </span>
-            </motion.div>
+            </div>
 
             <div className='mb-6'>
               <HackathonTypography
@@ -155,11 +136,8 @@ const HederaAIDemoDayHero: React.FC = () => {
               </div>
             </div>
 
-            <motion.div
+            <div
               className='mt-10'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.0 }}
             >
               <HackathonTypography
                 variant='caption'
@@ -202,13 +180,10 @@ const HederaAIDemoDayHero: React.FC = () => {
                   </h3>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
+            <div
               className='mt-8'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.2 }}
             >
               <HackathonTypography
                 variant='caption'
@@ -224,8 +199,8 @@ const HederaAIDemoDayHero: React.FC = () => {
                   className='h-8 w-auto'
                 />
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           <div className='lg:w-1/2 mt-8 lg:mt-0'>
             <DemoDayVisualCard />

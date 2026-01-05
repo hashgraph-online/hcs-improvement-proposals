@@ -1,4 +1,3 @@
-import { motion, useInView } from 'motion/react';
 import { useRef } from 'react';
 import HackathonTypography from './HackathonTypography';
 
@@ -20,18 +19,11 @@ export const TimelineItem: React.FC<{
   isHighlighted = false,
 }) => {
   const itemRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(itemRef, { once: true, amount: 0.3 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={itemRef}
-      initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-      animate={isInView ? { opacity: 1, x: 0 } : {}}
-      transition={{
-        duration: 0.7,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
       className={`mb-16 last:mb-0 relative ${
         isHighlighted ? 'z-50' : 'z-40'
       } ${
@@ -93,6 +85,6 @@ export const TimelineItem: React.FC<{
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };

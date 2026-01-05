@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   FaCode,
   FaRobot,
@@ -172,15 +171,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
     <>
       <section className='pb-12 sm:pb-16 relative bg-white dark:bg-gray-900 overflow-hidden'>
         <div className='absolute inset-0'>
-          <motion.div
-            animate={{
-              backgroundPosition: ['0% 0%', '100% 100%'],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              repeatType: 'reverse',
-            }}
+          <div
             className='absolute inset-0 opacity-[0.02] dark:opacity-[0.05]'
             style={{
               backgroundImage: `radial-gradient(circle at 30% 20%, rgba(166, 121, 240, 0.1) 0%, transparent 50%),
@@ -192,25 +183,17 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
         </div>
 
         <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-          <motion.div
+          <div
             className='text-center mb-16 pt-8'
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+            <div
               className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#48df7b]/10 to-[#a679f0]/10 dark:from-[#48df7b]/20 dark:to-[#a679f0]/20 border border-[#48df7b]/20 dark:border-[#48df7b]/30 mb-6'
             >
               <FaCheckCircle className='text-[#48df7b] mr-2' />
               <span className='text-sm font-bold text-[#48df7b] dark:text-[#a679f0]'>
                 SUBMISSION REQUIREMENTS
               </span>
-            </motion.div>
+            </div>
 
             <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
               <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -222,17 +205,13 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
               Ensure your AI solution meets all requirements to qualify for evaluation.
               Submit your project before the deadline on DoraHacks.
             </p>
-          </motion.div>
+          </div>
 
           <div className='max-w-5xl mx-auto mb-16'>
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {requirements.map((req, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
                 >
                   <TransformCard
                     rotation={`rotate-[${index % 2 === 0 ? '-0.5' : '0.5'}deg]`}
@@ -265,15 +244,11 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                       </div>
                     </div>
                   </TransformCard>
-                </motion.div>
+                </div>
               ))}
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
+            <div
               className='mt-8 space-y-6'
             >
               <TransformCard
@@ -301,60 +276,33 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                   </PrimaryButton>
                 </div>
               </TransformCard>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
 
       <section className='pt-8 sm:pt-12 pb-24 sm:pb-32 relative bg-gray-50 dark:bg-black overflow-hidden'>
       <div className='absolute inset-0'>
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.1, 0.2, 0.1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+        <div
           className='absolute top-0 left-1/4 w-96 h-96 bg-[#a679f0]/10 rounded-full blur-3xl'
         />
-        <motion.div
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.1, 0.2, 0.1],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 2,
-          }}
+        <div
           className='absolute bottom-0 right-1/4 w-96 h-96 bg-[#5599fe]/10 rounded-full blur-3xl'
         />
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-        <motion.div
+        <div
           className='text-center mb-16'
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
         >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+          <div
             className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#a679f0]/10 to-[#5599fe]/10 dark:from-[#a679f0]/20 dark:to-[#5599fe]/20 border border-[#a679f0]/20 dark:border-[#a679f0]/30 mb-6'
           >
             <FaGavel className='text-[#a679f0] mr-2' />
             <span className='text-sm font-bold text-[#a679f0] dark:text-[#48df7b]'>
               EVALUATION FRAMEWORK
             </span>
-          </motion.div>
+          </div>
 
           <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
             <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -366,13 +314,9 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
             Your project will be evaluated by industry experts based on these
             weighted criteria. Focus on areas with higher percentages for maximum impact.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
           className='max-w-6xl mx-auto'
         >
           <div className='bg-white dark:bg-gray-900 rounded-3xl shadow-2xl ring-1 ring-gray-200 dark:ring-gray-700 overflow-hidden'>
@@ -405,7 +349,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                       const isHovered = hoveredSegment === index;
                       
                       return (
-                        <motion.button
+                        <button
                           key={index}
                           className={`absolute top-0 bottom-0 cursor-pointer focus:outline-none border-0 p-0 m-0 ${
                             index === 0 ? 'rounded-l-xl' : ''
@@ -425,69 +369,41 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                           onClick={() => setActiveCriterion(index)}
                           onMouseEnter={() => setHoveredSegment(index)}
                           onMouseLeave={() => setHoveredSegment(null)}
-                          animate={{ 
-                            scaleY: 1,
-                            y: '0px',
-                            zIndex: isActive ? 20 : isHovered ? 10 : 1,
-                            boxShadow: isActive ? '0 0 20px rgba(0,0,0,0.2)' : '0 0 0 rgba(0,0,0,0)',
-                          }}
-                          transition={{ 
-                            type: 'spring',
-                            stiffness: 300,
-                            damping: 30,
-                          }}
                         >
                           {(isActive || isHovered) && (
-                            <motion.div
-                              animate={{
-                                opacity: [0.3, 0.6, 0.3],
-                              }}
-                              transition={{
-                                duration: 2,
-                                repeat: Infinity,
-                                ease: 'easeInOut',
-                              }}
+                            <div
                               className='absolute inset-0 bg-white/20 pointer-events-none'
                             />
                           )}
                           
                           <div className='absolute inset-0 flex flex-col items-center justify-center pointer-events-none'>
                             <div className='text-white text-center flex flex-col items-center gap-2'>
-                              <motion.div
-                                animate={{
-                                  scale: isActive ? 1.2 : 1,
-                                  opacity: isActive ? 1 : 0.8,
-                                }}
-                                transition={{ type: 'spring' }}
+                              <div
                                 className='text-3xl'
                               >
                                 {criterion.icon}
-                              </motion.div>
+                              </div>
                               
                               <div className='font-bold drop-shadow-lg text-base'>
                                 {criterion.percentage}%
                               </div>
                               
                               {isActive && criterion.percentage > 5 && (
-                                <motion.div
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
+                                <div
                                   className='text-xs text-center font-medium px-1'
                                 >
                                   {criterion.title}
-                                </motion.div>
+                                </div>
                               )}
                             </div>
                           </div>
                           
                           {isActive && (
-                            <motion.div
-                              initial={{ scaleX: 0 }}
-                              animate={{ scaleX: 1 }}
+                            <div
                               className='absolute bottom-0 left-0 right-0 h-2 bg-white/60 pointer-events-none'
                             />
                           )}
-                        </motion.button>
+                        </button>
                       );
                     })}
                   </div>
@@ -496,7 +412,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                 {/* Mobile: Grid of cards */}
                 <div className='md:hidden grid grid-cols-2 gap-3 mb-6'>
                   {criteria.map((criterion, index) => (
-                    <motion.button
+                    <button
                       key={index}
                       onClick={() => setActiveCriterion(index)}
                       className={`p-3 rounded-xl border-2 transition-all ${
@@ -512,8 +428,6 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                             ? 'linear-gradient(135deg, #48df7b, #54ae70)'
                             : 'linear-gradient(135deg, #5599fe, #48df7b)',
                       }}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
                     >
                       <div className='text-white text-center'>
                         <div className='flex items-center justify-center gap-2 mb-2'>
@@ -528,18 +442,15 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                           {criterion.title}
                         </div>
                       </div>
-                    </motion.button>
+                    </button>
                   ))}
                 </div>
                 
               </div>
               
               {/* Active criterion details */}
-              <motion.div
+              <div
                 key={activeCriterion}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
                 className='mt-8 md:mt-16 mb-12'
               >
                 <TransformCard
@@ -550,10 +461,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                   className='p-4 md:p-8'
                 >
                   <div className='flex flex-col md:flex-row items-start gap-4 md:gap-6'>
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', delay: 0.1 }}
+                    <div
                       className='w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center text-white text-2xl md:text-3xl flex-shrink-0 mx-auto md:mx-0'
                       style={{
                         background:
@@ -565,7 +473,7 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                       }}
                     >
                       {criteria[activeCriterion].icon}
-                    </motion.div>
+                    </div>
                     
                     <div className='flex-1 text-center md:text-left'>
                       <div className='flex flex-col md:flex-row md:items-baseline justify-between mb-4'>
@@ -587,40 +495,33 @@ const HAHJudgingCriteriaSection: React.FC<HAHJudgingCriteriaSectionProps> = ({ o
                         </h4>
                         <div className='grid grid-cols-1 gap-3'>
                           {criteria[activeCriterion].details.map((detail, index) => (
-                            <motion.div
+                            <div
                               key={index}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.1 }}
                               className='flex items-start gap-3'
                             >
                               <div className='w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#a679f0] to-[#5599fe] mt-2 flex-shrink-0' />
                               <span className='text-xs md:text-sm text-gray-700 dark:text-white/80'>
                                 {detail}
                               </span>
-                            </motion.div>
+                            </div>
                           ))}
                         </div>
                       </div>
                     </div>
                   </div>
                 </TransformCard>
-              </motion.div>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+        <div
           className='mt-12 text-center'
         >
           <p className='text-sm text-gray-600 dark:text-white/60'>
             Judging will be conducted by industry experts from Hashgraph Online, The Hashgraph Association, and Exponential Science
           </p>
-        </motion.div>
+        </div>
       </div>
       </section>
     </>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import { FiMail, FiCheck } from 'react-icons/fi';
 
@@ -89,13 +88,10 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
   };
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
-        <motion.div
+        <div
           className='fixed inset-0 bg-black/80 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-20'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
           data-umami-event='newsletter-modal-backdrop-click'
           data-umami-event-category='engagement'
           onClick={(e) => {
@@ -104,11 +100,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
             }
           }}
         >
-          <motion.div
+          <div
             className='relative w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 my-2 sm:my-4'
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
           >
             <div className='flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-[#a679f0]/10 via-[#5599fe]/10 to-[#48df7b]/10'>
               <div className='flex items-center gap-3'>
@@ -150,9 +143,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
 
             <div className='p-6 bg-gradient-to-r from-[#a679f0]/5 via-[#5599fe]/5 to-[#48df7b]/5 dark:bg-gray-800 text-center border-t border-gray-200 dark:border-gray-700 mt-4'>
               {showSuccessMessage ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                <div
                   className='text-center'
                 >
                   <div className='flex items-center justify-center gap-2 text-green-600 mb-2'>
@@ -164,7 +155,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                   <p className='text-sm text-gray-600 dark:text-gray-400'>
                     Closing in {countdown} second{countdown !== 1 ? 's' : ''}...
                   </p>
-                </motion.div>
+                </div>
               ) : (
                 <div className='space-y-3'>
                   <p className='text-sm text-gray-600 dark:text-gray-400 mb-3'>
@@ -172,34 +163,30 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                     continue:
                   </p>
                   <div className='flex gap-3 justify-center'>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    <button
                       onClick={handleSuccess}
                       className='px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2'
                       data-umami-event='newsletter-modal-confirm-submission'
                       data-umami-event-category='engagement'
                     >
                       <FiCheck className='text-sm' />I submitted the form
-                    </motion.button>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                    </button>
+                    <button
                       onClick={onClose}
                       className='px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors'
                       data-umami-event='newsletter-modal-close-bottom'
                       data-umami-event-category='engagement'
                     >
                       Close
-                    </motion.button>
+                    </button>
                   </div>
                 </div>
               )}
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

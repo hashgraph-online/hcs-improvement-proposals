@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { motion, useAnimation, useInView } from 'motion/react';
 import Link from '@docusaurus/Link';
 import {
   FaCalendarAlt,
@@ -25,25 +24,13 @@ const FloatingParticle: React.FC<{
   x: number;
   y: number;
 }> = ({ size, delay, duration, x, y }) => (
-  <motion.div
+  <div
     className='absolute rounded-full bg-hedera-purple/20 dark:bg-hedera-purple/30'
     style={{
       width: `${size}px`,
       height: `${size}px`,
       left: `${x}%`,
       top: `${y}%`,
-    }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{
-      opacity: [0, 0.8, 0],
-      scale: [0, 1, 0.8],
-      y: [-20, 20],
-    }}
-    transition={{
-      repeat: Infinity,
-      duration,
-      delay,
-      ease: 'easeInOut',
     }}
   />
 );
@@ -58,8 +45,8 @@ const aiMessages = [
 
 const HeroSection: React.FC = () => {
   const agentContainerRef = useRef(null);
-  const isAgentInView = useInView(agentContainerRef, { once: true });
-  const agentControls = useAnimation();
+  const isAgentInView = true;
+  const agentControls = { start: () => {} };
 
   useEffect(() => {
     if (isAgentInView) {
@@ -110,20 +97,14 @@ const HeroSection: React.FC = () => {
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
         <div className='flex flex-col lg:flex-row items-start gap-8 sm:gap-12 lg:gap-16'>
-          <motion.div
+          <div
             className='lg:w-1/2 text-center lg:text-left lg:pt-0'
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.div
+            <div
               className='inline-flex items-center rounded-full border border-red-500/20 px-2.5 py-0.5 text-xs font-medium bg-gradient-to-r from-red-500/10 to-red-600/10 mb-4'
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <span className='text-red-500 font-semibold'>EVENT ENDED</span>
-            </motion.div>
+            </div>
 
             <div className='mb-3 sm:mb-4 md:mb-6'>
               <HackathonTypography
@@ -135,10 +116,7 @@ const HeroSection: React.FC = () => {
                 Hedera OpenConvAI
               </HackathonTypography>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.7 }}
+              <div
               >
                 <span className='relative'>
                   <HackathonTypography
@@ -148,14 +126,11 @@ const HeroSection: React.FC = () => {
                   >
                     & Agents Hackathon
                   </HackathonTypography>
-                  <motion.span
+                  <span
                     className='absolute bottom-1 sm:bottom-2 left-0 w-full h-2 sm:h-3 bg-hedera-green/20 -z-10'
-                    initial={{ width: 0 }}
-                    animate={{ width: '100%' }}
-                    transition={{ duration: 1, delay: 1.2 }}
                   />
                 </span>
-              </motion.div>
+              </div>
             </div>
 
             <HackathonTypography
@@ -224,11 +199,8 @@ const HeroSection: React.FC = () => {
               </div>
             </div>
 
-            <motion.div
+            <div
               className='mt-6 sm:mt-8 lg:mt-10'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.2 }}
             >
               <HackathonTypography
                 variant='caption'
@@ -263,13 +235,11 @@ const HeroSection: React.FC = () => {
                   />
                 </div>
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          <motion.div
+          <div
             ref={agentContainerRef}
-            animate={agentControls}
-            initial={{ opacity: 0, y: 50 }}
             className='lg:w-1/2 relative mt-8 lg:mt-0 w-full max-w-md sm:max-w-lg mx-auto lg:max-w-none'
           >
             <div className='relative'>
@@ -383,11 +353,8 @@ const HeroSection: React.FC = () => {
                     </HackathonTypography>
                   </div>
 
-                  <motion.div
+                  <div
                     className='p-2 sm:p-3 rounded-xl border border-hedera-blue/20 bg-white dark:bg-gray-700'
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 1.5, duration: 0.8 }}
                   >
                     <div className='text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-mono overflow-x-auto'>
                       <span className='text-hedera-blue'>const agent = </span>
@@ -400,11 +367,11 @@ const HeroSection: React.FC = () => {
                       <span className='text-green-600'>"HackathonAgent"</span>
                       <span>)</span>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

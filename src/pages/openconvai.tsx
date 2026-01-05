@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'motion/react';
 import {
   FaRobot, FaIdCard, FaBrain, FaNetworkWired, FaExchangeAlt, 
   FaShieldAlt, FaDollarSign, FaRegTimesCircle, FaGlobe, 
@@ -16,9 +15,9 @@ import Link from '@docusaurus/Link';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" />;
 };
 
 const NeuralNetworkVisual = () => {
@@ -27,22 +26,12 @@ const NeuralNetworkVisual = () => {
             {/* BRAIN NODES */}
             <div className="absolute inset-0 pointer-events-none">
                 {[...Array(40)].map((_, i) => (
-                    <motion.div
+                    <div
                         key={i}
                         className="absolute w-3 h-3 bg-[#5599fe] rounded-full shadow-[0_0_15px_#5599fe]"
                         style={{
                             left: `${Math.random() * 100}%`,
                             top: `${Math.random() * 100}%`,
-                        }}
-                        animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.2, 0.6, 0.2],
-                            z: [0, 100, 0]
-                        }}
-                        transition={{
-                            duration: 3 + Math.random() * 2,
-                            repeat: Infinity,
-                            delay: Math.random() * 2,
                         }}
                     />
                 ))}
@@ -50,14 +39,10 @@ const NeuralNetworkVisual = () => {
             
             {/* CENTRAL CORE */}
             <div className="relative z-10 w-[500px] h-[500px] rounded-full border border-[#5599fe]/30 bg-[#5599fe]/5 backdrop-blur-3xl flex items-center justify-center shadow-[0_0_150px_rgba(85,153,254,0.15)]">
-                <motion.div 
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                <div
                     className="absolute inset-0 rounded-full border border-dashed border-[#5599fe]/30"
                 />
-                <motion.div 
-                    animate={{ rotate: -360 }}
-                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                <div
                     className="absolute inset-12 rounded-full border border-dotted border-[#a679f0]/30"
                 />
                 <FaBrain className="text-9xl text-[#5599fe] opacity-80 filter drop-shadow-[0_0_20px_rgba(85,153,254,0.5)]" />
@@ -84,68 +69,51 @@ const MessageFlowVisual = () => {
 
             {/* Packets */}
             <div className="absolute inset-0 pointer-events-none">
-                <motion.div 
+                <div 
                     className="absolute top-[30%] left-[15%] px-6 py-3 bg-[#5599fe] text-white text-sm font-mono font-bold rounded-xl shadow-[0_0_20px_#5599fe]"
-                    animate={{ x: ['0%', '350%', '0%'], opacity: [0, 1, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                 >
                     SYN: Connection Request
-                </motion.div>
-                <motion.div 
+                </div>
+                <div 
                     className="absolute top-[50%] right-[15%] px-6 py-3 bg-[#a679f0] text-white text-sm font-mono font-bold rounded-xl shadow-[0_0_20px_#a679f0]"
-                    animate={{ x: ['0%', '-350%', '0%'], opacity: [0, 1, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 3 }}
                 >
                     ACK: Connection Created
-                </motion.div>
-                <motion.div 
+                </div>
+                <div 
                     className="absolute top-[70%] left-[15%] px-6 py-3 bg-[#48df7b] text-black text-sm font-mono font-bold rounded-xl shadow-[0_0_20px_#48df7b]"
-                    animate={{ x: ['0%', '350%', '0%'], opacity: [0, 1, 0] }}
-                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 6 }}
                 >
                     MSG: Encrypted Payload
-                </motion.div>
+                </div>
             </div>
         </div>
     )
 }
 
 const FeatureCard = ({ icon, title, description, color = "#5599fe", delay = 0 }) => (
-    <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.8, delay }}
+    <div
         className="p-10 h-full bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 backdrop-blur-sm rounded-[2rem] hover:border-[#5599fe]/50 transition-all shadow-xl dark:shadow-none group"
     >
         <div className="w-16 h-16 mb-8 rounded-2xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform duration-500" style={{ backgroundColor: `${color}15`, color }}>{icon}</div>
         <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{title}</h3>
         <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
-    </motion.div>
+    </div>
 );
 
 const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, subtitle: string, color?: "blue" | "purple" | "green" }) => {
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-4 mb-6"
             >
                 <span className="w-16 h-1 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -174,10 +142,7 @@ const OpenConvAIPage: React.FC = () => {
         <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    <motion.div 
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
+                    <div
                     >
                         <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-[#5599fe]/10 border border-[#5599fe]/30 text-[#5599fe] text-sm font-mono font-bold tracking-[0.2em] mb-12">
                             <span className="w-2 h-2 rounded-full bg-[#5599fe] animate-pulse" />
@@ -202,7 +167,7 @@ const OpenConvAIPage: React.FC = () => {
                                 READ SPECS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="relative hidden lg:flex items-center justify-center">
                         <NeuralNetworkVisual />
@@ -211,13 +176,11 @@ const OpenConvAIPage: React.FC = () => {
              </div>
              
              {/* Scroll Indicator */}
-             <motion.div 
-                animate={{ y: [0, 15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+             <div
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#5599fe] text-3xl opacity-50"
              >
                  <FaArrowDown />
-             </motion.div>
+             </div>
         </section>
 
         {/* 2. THE PROBLEM / SOLUTION - Split View */}
@@ -272,26 +235,26 @@ const OpenConvAIPage: React.FC = () => {
                 <SectionHeader title="Topic Architecture." subtitle="THE PROTOCOL" color="blue" />
                 
                 <div className="grid xl:grid-cols-3 gap-16 mt-32">
-                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
+                    <div className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative">
                         <div className="absolute -top-10 left-12 w-20 h-20 bg-[#a679f0] rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">1</div>
                         <h3 className="text-4xl font-bold mb-6 mt-4">Registry Topic</h3>
                         <code className="block w-full p-6 bg-gray-100 dark:bg-gray-900 rounded-2xl font-mono text-lg text-[#a679f0] mb-8">hcs-10:0:86400:3</code>
                         <p className="text-gray-600 dark:text-gray-400 text-xl leading-relaxed">The global phonebook. Agents announce their existence here. It can be fee-gated via HIP-991 to prevent spam.</p>
-                    </motion.div>
+                    </div>
 
-                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-24">
+                    <div className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-24">
                         <div className="absolute -top-10 left-12 w-20 h-20 bg-[#5599fe] rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">2</div>
                         <h3 className="text-4xl font-bold mb-6 mt-4">Inbound Topic</h3>
                         <code className="block w-full p-6 bg-gray-100 dark:bg-gray-900 rounded-2xl font-mono text-lg text-[#5599fe] mb-8">hcs-10:0:86400:0:{`{id}`}</code>
                         <p className="text-gray-600 dark:text-gray-400 text-xl leading-relaxed">The agent's public inbox. Other agents send <code>connection_request</code> messages here. Think of it as a DM request.</p>
-                    </motion.div>
+                    </div>
 
-                    <motion.div whileHover={{ y: -20 }} className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-48">
+                    <div className="p-16 bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 shadow-2xl relative top-48">
                         <div className="absolute -top-10 left-12 w-20 h-20 bg-[#48df7b] rounded-3xl flex items-center justify-center text-white text-3xl font-bold shadow-xl">3</div>
                         <h3 className="text-4xl font-bold mb-6 mt-4">Connection Topic</h3>
                         <code className="block w-full p-6 bg-gray-100 dark:bg-gray-900 rounded-2xl font-mono text-lg text-[#48df7b] mb-8">hcs-10:1:86400:2:{`{id}`}</code>
                         <p className="text-gray-600 dark:text-gray-400 text-xl leading-relaxed">A private, encrypted channel for the actual conversation. Created on-demand for each session.</p>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -487,10 +450,7 @@ const OpenConvAIPage: React.FC = () => {
         {/* 8. CTA */}
         <section className="py-24 text-center relative z-10">
             <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                <div
                     className="max-w-5xl mx-auto bg-gradient-to-br from-[#5599fe]/10 to-[#a679f0]/10 p-24 rounded-[4rem] border border-[#5599fe]/20 backdrop-blur-md"
                 >
                     <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Deploy Your Agent.</h2>
@@ -505,7 +465,7 @@ const OpenConvAIPage: React.FC = () => {
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
 

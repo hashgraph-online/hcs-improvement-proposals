@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { FaCode, FaCopy, FaCheck } from 'react-icons/fa';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import {
@@ -139,13 +138,9 @@ const TabbedCodeBlock: React.FC<TabbedCodeBlockProps> = ({
           )}
         </button>
 
-        <AnimatePresence mode='wait'>
-          <motion.div
+        <>
+          <div
             key={activeTabId}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
             className='relative p-0 overflow-x-auto max-h-[500px] code-backdrop'
             ref={codeRef}
           >
@@ -167,8 +162,8 @@ const TabbedCodeBlock: React.FC<TabbedCodeBlockProps> = ({
             >
               {activeTab?.code || ''}
             </SyntaxHighlighter>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        </>
 
         <div className='absolute inset-0 pointer-events-none overflow-hidden'>
           <div className='absolute inset-0 bg-gradient-to-br from-transparent via-hedera-purple/5 to-transparent'></div>

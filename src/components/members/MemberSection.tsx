@@ -1,4 +1,3 @@
-import { motion, AnimatePresence } from 'motion/react';
 import { useState, useEffect, useRef } from 'react';
 import {
   FiTerminal,
@@ -435,10 +434,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
 
   return (
     <>
-      <motion.div
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: index * 0.1, duration: 0.6 }}
+      <div
         onClick={(e) => {
           e.preventDefault();
           onClick();
@@ -512,10 +508,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
 
             {/* Brand elements as visual tags */}
             {isActive && theme.brandElements && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: 0.1 }}
+              <div
                 className='flex flex-wrap gap-1 mt-3'
               >
                 {theme.brandElements.slice(0, 2).map((element, idx) => (
@@ -534,17 +527,14 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
                     {element}
                   </span>
                 ))}
-              </motion.div>
+              </div>
             )}
           </div>
         </div>
 
         {/* Enhanced metrics display */}
         {member.metrics && isActive && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            transition={{ duration: 0.3, delay: 0.2 }}
+          <div
             className='mt-4 p-3 rounded-xl transition-all duration-500 relative overflow-hidden'
             style={{ backgroundColor: `${theme.primary}10` }}
           >
@@ -568,7 +558,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
             <Typography className='text-xs mt-1 text-gray-700 dark:text-gray-300 opacity-80'>
               {member.metrics.description}
             </Typography>
-          </motion.div>
+          </div>
         )}
 
         {/* Subtle hover effect line */}
@@ -578,7 +568,7 @@ const TeamMemberCard: React.FC<TeamMemberCardProps> = ({
           }`}
           style={{ backgroundColor: theme.primary }}
         />
-      </motion.div>
+      </div>
 
       {showModal && (
         <Modal
@@ -859,21 +849,15 @@ export const MemberSection: React.FC = () => {
                         onClick={() => setExpandedMobile(expandedMobile === index ? null : index)}
                       />
                       <div className='absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none'>
-                        <motion.div
-                          animate={{ rotate: expandedMobile === index ? 180 : 0 }}
-                          transition={{ duration: 0.3 }}
+                        <div
                         >
                           <FiChevronDown className='w-5 h-5 text-gray-500' />
-                        </motion.div>
+                        </div>
                       </div>
                     </div>
-                    <AnimatePresence>
+                    <>
                       {expandedMobile === index && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
+                        <div
                           className='overflow-hidden'
                         >
                           <div className='p-4 border-t border-gray-200 dark:border-gray-700'>
@@ -940,9 +924,9 @@ export const MemberSection: React.FC = () => {
                               </div>
                             </div>
                           </div>
-                        </motion.div>
+                        </div>
                       )}
-                    </AnimatePresence>
+                    </>
                   </div>
                 ))}
               </div>
@@ -980,9 +964,7 @@ export const MemberSection: React.FC = () => {
                 {/* Scroll indicator */}
                 {scrollPosition !== 'middle' && (
                   <div className={`absolute ${scrollPosition === 'bottom' ? 'top-14' : 'bottom-2'} left-1/2 transform -translate-x-1/2 pointer-events-none z-10`}>
-                    <motion.div
-                      animate={{ y: scrollPosition === 'bottom' ? [0, -5, 0] : [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
+                    <div
                       className='text-gray-400 dark:text-gray-600'
                     >
                       {scrollPosition === 'bottom' ? (
@@ -990,19 +972,15 @@ export const MemberSection: React.FC = () => {
                       ) : (
                         <FiChevronDown className='w-5 h-5' />
                       )}
-                    </motion.div>
+                    </div>
                   </div>
                 )}
               </div>
 
               <div className='flex-1 p-8 flex items-start'>
-                <AnimatePresence mode='wait'>
-                  <motion.div
+                <>
+                  <div
                     key={activeIndex}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4 }}
                     className={`bg-gradient-to-br ${activeTheme.background} rounded-2xl p-4 border transition-all duration-500 w-full`}
                     style={{ borderColor: `${activeTheme.primary}30` }}
                   >
@@ -1129,8 +1107,8 @@ export const MemberSection: React.FC = () => {
                         </PrimaryButton>
                       </div>
                     </div>
-                  </motion.div>
-                </AnimatePresence>
+                  </div>
+                </>
               </div>
             </div>
           </div>

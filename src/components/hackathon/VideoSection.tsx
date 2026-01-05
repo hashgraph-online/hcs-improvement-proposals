@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import HackathonTypography from './HackathonTypography';
 
 const VideoSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = true;
 
   return (
     <section
@@ -19,11 +18,8 @@ const VideoSection: React.FC = () => {
 
       <div className='container mx-auto px-3 sm:px-4 relative z-10'>
         <div className='max-w-5xl mx-auto'>
-          <motion.div
+          <div
             className='text-center mb-8'
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
           >
             <HackathonTypography
               variant='h2'
@@ -41,12 +37,9 @@ const VideoSection: React.FC = () => {
             >
               Prefer a video? Turn up your volume and hit play.
             </HackathonTypography>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
+          <div
             className='rounded-2xl overflow-hidden relative bg-gradient-to-r p-[2px] from-hedera-purple via-hedera-blue to-hedera-green shadow-xl'
           >
             <div className='bg-white dark:bg-gray-900 rounded-[calc(1rem-2px)]'>
@@ -79,7 +72,7 @@ const VideoSection: React.FC = () => {
                 ></iframe>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import PrimaryButton from './PrimaryButton';
 import SecondaryButton from './SecondaryButton';
@@ -142,13 +141,9 @@ const UseCaseSection: React.FC = () => {
             <div className='relative lg:col-span-7 transform scale-90 sm:scale-100 lg:scale-110 origin-left ml-2 sm:ml-4'>
               <LaptopMockup>
                 {/* Dynamic Screen Content */}
-                <AnimatePresence mode='wait'>
-                  <motion.div
+                <>
+                  <div
                     key={`laptop-${currentIndex}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.4 }}
                     className='relative w-full h-full'
                   >
                     {useCases[currentIndex]?.image ? (
@@ -166,8 +161,8 @@ const UseCaseSection: React.FC = () => {
                         <span className='text-white text-sm'>No Image</span>
                       </div>
                     )}
-                  </motion.div>
-                </AnimatePresence>
+                  </div>
+                </>
               </LaptopMockup>
             </div>
 
@@ -194,13 +189,9 @@ const UseCaseSection: React.FC = () => {
 
               {/* Dynamic Browser Content */}
               <div className='p-6' style={{ height: '360px' }}>
-                <AnimatePresence mode='wait'>
-                  <motion.div
+                <>
+                  <div
                     key={`browser-${currentIndex}`}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.4 }}
                     className='h-full flex flex-col justify-between'
                   >
                     <div className='flex-1 space-y-3'>
@@ -246,8 +237,8 @@ const UseCaseSection: React.FC = () => {
                         {isPlaying ? 'Pause' : 'Play'}
                       </SecondaryButton>
                     </div>
-                  </motion.div>
-                </AnimatePresence>
+                  </div>
+                </>
               </div>
             </div>
           </div>
