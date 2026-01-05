@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import Typography from '../ui/Typography';
 import Terminal from '../ui/Terminal';
 import CLITerminal from '../ui/CLITerminal';
@@ -15,11 +14,7 @@ const DesktopShowcase: React.FC = () => {
     <section className='py-20 bg-gray-50 dark:bg-gray-900/50'>
       <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
         <div className='max-w-7xl mx-auto'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+          <div
             className='text-center mb-12'
           >
             <Typography variant='h2' className='text-3xl sm:text-4xl font-bold mb-4'>
@@ -55,14 +50,10 @@ const DesktopShowcase: React.FC = () => {
                 CLI Tool
               </button>
             </div>
-          </motion.div>
+          </div>
           
           <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center'>
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
+            <div
               className='relative order-2 lg:order-1'
             >
               {activeView === 'desktop' ? (
@@ -111,13 +102,9 @@ const DesktopShowcase: React.FC = () => {
                   </div>
                 </CLITerminal>
               )}
-            </motion.div>
+            </div>
             
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+            <div
               className='order-1 lg:order-2'
             >
               <div className='space-y-6'>
@@ -260,7 +247,7 @@ pnpm cli`;
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaProjectDiagram, FaDatabase, FaCodeBranch, FaSearch, FaHistory, FaClock, FaArrowRight, FaNetworkWired, FaSitemap, FaGlobe, FaServer, FaCogs, FaArrowDown } from 'react-icons/fa';
@@ -11,39 +10,32 @@ import Terminal from '../components/ui/Terminal';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#a679f0] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#a679f0] origin-left z-[100]" />;
 };
 
 const RegistryNode = ({ x, y, size, delay, color }: { x: number, y: number, size: number, delay: number, color: string }) => (
-    <motion.div
+    <div
         className="absolute rounded-full flex items-center justify-center z-10 shadow-2xl"
         style={{ left: `${x}%`, top: `${y}%`, width: size, height: size, border: `2px solid ${color}` }}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 1, delay, ease: "backOut" }}
     >
         <div className="absolute inset-0 bg-white dark:bg-[#1a1f3a] rounded-full opacity-90 backdrop-blur-sm" />
-        <motion.div 
+        <div 
             className="w-[40%] h-[40%] rounded-full relative z-20"
             style={{ backgroundColor: color }}
-            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay }}
         />
-        <motion.div 
+        <div 
             className="absolute inset-[-10px] border border-dashed rounded-full"
             style={{ borderColor: color, opacity: 0.3 }}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20 + Math.random() * 10, repeat: Infinity, ease: "linear" }}
         />
-    </motion.div>
+    </div>
 );
 
 const ConnectionLine = ({ x1, y1, x2, y2, color, delay }: { x1: number, y1: number, x2: number, y2: number, color: string, delay: number }) => {
     return (
         <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
-            <motion.line
+            <line
                 x1={`${x1}%`}
                 y1={`${y1}%`}
                 x2={`${x2}%`}
@@ -51,9 +43,6 @@ const ConnectionLine = ({ x1, y1, x2, y2, color, delay }: { x1: number, y1: numb
                 stroke={color}
                 strokeWidth="2"
                 strokeOpacity="0.3"
-                initial={{ pathLength: 0 }}
-                animate={{ pathLength: 1 }}
-                transition={{ duration: 1.5, delay, ease: "easeInOut" }}
             />
         </svg>
     )
@@ -65,9 +54,7 @@ const RegistriesHeroVisual = () => {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(166,121,240,0.1),transparent_70%)] blur-3xl" />
       
       {/* 3D Container */}
-      <motion.div 
-        animate={{ rotateY: [0, 10, 0], rotateX: [0, 5, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+      <div
         className="relative w-[800px] h-[600px] [transform-style:preserve-3d]"
       >
           <RegistryNode x={50} y={50} size={100} delay={0} color="#a679f0" /> 
@@ -93,7 +80,7 @@ const RegistriesHeroVisual = () => {
                 color={i % 2 === 0 ? "#48df7b" : "#5599fe"} 
               />
           ))}
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -117,24 +104,17 @@ const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, s
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-24">
-            <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-4 mb-6"
             >
                 <span className="w-16 h-1 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -160,10 +140,7 @@ export default function RegistriesPage() {
         <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-24 items-center">
-                    <motion.div 
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
+                    <div
                     >
                         {/* DROPDOWN MENU */}
                         <div className="relative inline-block text-left mb-12 z-50">
@@ -214,7 +191,7 @@ export default function RegistriesPage() {
                                 COLLECT POINTS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="relative hidden lg:flex items-center justify-center">
                         <RegistriesHeroVisual />
@@ -223,13 +200,11 @@ export default function RegistriesPage() {
              </div>
 
              {/* Scroll Indicator */}
-             <motion.div 
-                animate={{ y: [0, 15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+             <div
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#a679f0] text-3xl opacity-50"
              >
                  <FaArrowDown />
-             </motion.div>
+             </div>
         </section>
 
         {/* 2. THE CONCEPT - Split View */}
@@ -253,16 +228,13 @@ export default function RegistriesPage() {
                              { title: "Verifiable History", desc: "Every change is timestamped and signed. You can prove exactly when a user updated their profile or deleted a file." },
                              { title: "Lightweight Indexing", desc: "Mirror nodes do the heavy lifting. Clients just query the topic messages and apply the HCS-2 rules." }
                          ].map((item, i) => (
-                             <motion.div 
+                             <div 
                                 key={i}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-100px" }}
                                 className="p-16 rounded-[3rem] bg-gray-50 dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#a679f0]/50 transition-colors group shadow-xl"
                              >
                                  <h3 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">{item.title}</h3>
                                  <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
-                             </motion.div>
+                             </div>
                          ))}
                      </div>
                  </div>
@@ -486,10 +458,7 @@ export default function RegistriesPage() {
         {/* 9. CTA */}
         <section className="py-64 text-center relative z-10">
             <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                <div
                     className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Start Indexing.</h2>
@@ -501,7 +470,7 @@ export default function RegistriesPage() {
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
 

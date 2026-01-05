@@ -35,12 +35,28 @@ module.exports = function (context, options) {
           },
           {
             tagName: 'script',
-            attributes: {
-              defer: true,
-              src: 'https://stats.tier.bot/script.js',
-              'data-website-id': '09a60445-7371-492c-9d75-c17be79fa569',
-              'data-domains': 'hol.org',
-            },
+            innerHTML: `
+              // Defer analytics (tier.bot) loading until after page is interactive
+              function loadAnalytics() {
+                if (window.analyticsLoaded) return;
+                window.analyticsLoaded = true;
+                var s = document.createElement('script');
+                s.defer = true;
+                s.src = 'https://stats.tier.bot/script.js';
+                s.setAttribute('data-website-id', '09a60445-7371-492c-9d75-c17be79fa569');
+                s.setAttribute('data-domains', 'hol.org');
+                document.head.appendChild(s);
+              }
+              // Load after first interaction or idle
+              if (typeof requestIdleCallback !== 'undefined') {
+                requestIdleCallback(function() { setTimeout(loadAnalytics, 2000); });
+              } else {
+                setTimeout(loadAnalytics, 4000);
+              }
+              ['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(function(e) {
+                document.addEventListener(e, loadAnalytics, { once: true, passive: true });
+              });
+            `,
           },
         ],
         preBodyTags: [

@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
 import {
   FaBrain,
   FaRobot,
@@ -13,13 +12,10 @@ import { PrimaryButton } from '../ui/primary-button';
 
 const HeroSection: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end start'],
-  });
+  
 
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  
+  
 
   return (
     <div
@@ -63,69 +59,42 @@ const HeroSection: React.FC = () => {
         ></div>
       </div>
 
-      <motion.div
-        style={{ y, opacity }}
+      <div
         className='container mx-auto relative z-10'
       >
         <div className='max-w-5xl mx-auto'>
           <div className='text-center'>
             {/* Animated Icons */}
-            <motion.div
+            <div
               className='flex justify-center mb-6 gap-4 sm:gap-6'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.1 }}
             >
               <div className='relative w-16 h-16 sm:w-20 sm:h-20'>
-                <motion.div
+                <div
                   className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 flex items-center justify-center'
-                  animate={{ rotate: [0, 10, 0] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 4,
-                    ease: 'easeInOut',
-                  }}
                 >
                   <FaBrain className='text-3xl sm:text-4xl text-[#8259ef]' />
-                </motion.div>
+                </div>
               </div>
 
               <div className='relative w-16 h-16 sm:w-20 sm:h-20'>
-                <motion.div
+                <div
                   className='absolute inset-0 rounded-2xl bg-[#2d84eb]/10 flex items-center justify-center'
-                  animate={{ rotate: [0, -10, 0] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 4,
-                    ease: 'easeInOut',
-                    delay: 0.5,
-                  }}
                 >
                   <SiHiveBlockchain className='text-3xl sm:text-4xl text-[#2d84eb]' />
-                </motion.div>
+                </div>
               </div>
 
               <div className='relative w-16 h-16 sm:w-20 sm:h-20'>
-                <motion.div
+                <div
                   className='absolute inset-0 rounded-2xl bg-[#3ec878]/10 flex items-center justify-center'
-                  animate={{ rotate: [0, 10, 0] }}
-                  transition={{
-                    repeat: Infinity,
-                    duration: 4,
-                    ease: 'easeInOut',
-                    delay: 1,
-                  }}
                 >
                   <FaRobot className='text-3xl sm:text-4xl text-[#3ec878]' />
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Title */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
+            <div
             >
               <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878]'>
                 Hashgraph Online
@@ -134,26 +103,20 @@ const HeroSection: React.FC = () => {
                   Sprint Series
                 </span>
               </h1>
-            </motion.div>
+            </div>
 
             {/* Subtitle */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
+            <div
             >
               <p className='text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-8'>
                 Build AI agents on Hedera through focused, time-boxed challenges
                 utilizing HCS Standards. Earn rewards by creating innovative
                 solutions to real-world problems.
               </p>
-            </motion.div>
+            </div>
 
             {/* Action Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
+            <div
               className='flex flex-col sm:flex-row gap-4 justify-center'
             >
               <PrimaryButton
@@ -170,13 +133,10 @@ const HeroSection: React.FC = () => {
               >
                 Current Challenge
               </PrimaryButton>
-            </motion.div>
+            </div>
 
             {/* Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
+            <div
               className='mt-16 grid grid-cols-2 sm:grid-cols-3 gap-6 max-w-3xl mx-auto'
             >
               <div className='bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-xl p-5 shadow-sm border border-gray-100 dark:border-gray-700'>
@@ -214,10 +174,10 @@ const HeroSection: React.FC = () => {
                   Agent Challenges
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };

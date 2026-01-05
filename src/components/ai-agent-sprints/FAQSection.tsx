@@ -1,7 +1,5 @@
 import React, { useRef } from 'react';
 import { FAQItem } from '../hackathon/FAQSection';
-import { useInView } from 'react-intersection-observer';
-import { motion } from 'motion/react';
 import {
   FaInfoCircle,
   FaUserPlus,
@@ -13,10 +11,9 @@ import {
 } from 'react-icons/fa';
 
 const FAQSection: React.FC = () => {
-  const [ref, isInView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  });
+  const ref = useRef<HTMLElement>(null);
+  const isInView = true;
+
 
   const faqs = [
     {
@@ -75,10 +72,7 @@ const FAQSection: React.FC = () => {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+        <div
           className='text-center max-w-3xl mx-auto mb-16'
         >
           <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
@@ -87,7 +81,7 @@ const FAQSection: React.FC = () => {
           <p className='text-lg text-gray-600 dark:text-gray-300'>
             Common questions about the Hashgraph Online AI Agent Sprints
           </p>
-        </motion.div>
+        </div>
 
         <div className='max-w-3xl mx-auto'>
           {faqs.map((faq, index) => (

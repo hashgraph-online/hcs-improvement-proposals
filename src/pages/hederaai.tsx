@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import Layout from '@theme/Layout';
-import { motion, useInView, AnimatePresence } from 'motion/react';
+
 import {
   FaMicrophone,
   FaCalendarAlt,
@@ -51,20 +51,10 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
   description,
   index,
 }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(itemRef, { once: true, amount: 0.3 });
-
   return (
-    <motion.div
-      ref={itemRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.05,
-        ease: 'easeOut',
-      }}
-      className='relative pl-8 pb-8 last:pb-0'
+    <div
+      className='relative pl-8 pb-8 last:pb-0 hero-slide-up'
+      style={{ animationDelay: `${index * 0.05}s` }}
     >
       <div className='absolute left-0 top-[5px] w-4 h-4 rounded-full bg-gradient-to-br from-[#8259ef] to-[#3ec878] ring-4 ring-white dark:ring-gray-900' />
       <div className='absolute left-[7px] top-[20px] bottom-0 w-px bg-gray-200 dark:bg-gray-700 -z-10'></div>
@@ -80,7 +70,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
       >
         {description}
       </HackathonTypography>
-    </motion.div>
+    </div>
   );
 };
 
@@ -99,19 +89,11 @@ const JudgingCriteria: React.FC<JudgingCriteriaProps> = ({
   icon,
   index,
 }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, amount: 0.3 });
 
   return (
-    <motion.div
-      ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
+    <div
+      
+      
       className='relative p-8 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm h-full'
     >
       <div className='absolute -top-4 -left-4 w-12 h-12 rounded-xl bg-gradient-to-br from-[#8259ef] to-[#3ec878] flex items-center justify-center transform -rotate-6'>
@@ -128,13 +110,11 @@ const JudgingCriteria: React.FC<JudgingCriteriaProps> = ({
       <HackathonTypography variant='body1' color='muted' className='font-light'>
         {description}
       </HackathonTypography>
-    </motion.div>
+    </div>
   );
 };
 
 const DemoDay: React.FC = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
   const [selectedPerson, setSelectedPerson] = useState<Judge | null>(null);
 
   const EVENT_DATE = new Date('2025-05-20T10:00:00-04:00');
@@ -318,10 +298,9 @@ const DemoDay: React.FC = () => {
 
           <div className='container mx-auto px-6 relative z-10'>
             <div className='max-w-5xl mx-auto'>
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7, delay: 0.2 }}
+              <div
+                
+                
                 className='rounded-2xl overflow-hidden relative bg-gradient-to-r p-[2px] from-[#8259ef] via-[#2d84eb] to-[#3ec878] shadow-xl'
               >
                 <div className='bg-white dark:bg-gray-900 rounded-[calc(1rem-2px)]'>
@@ -354,14 +333,14 @@ const DemoDay: React.FC = () => {
                     ></iframe>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
 
         <section
           id='schedule'
-          ref={sectionRef}
+          
           className='py-16 sm:py-24 relative bg-gradient-to-b from-white via-gray-50 to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden'
         >
           <div className='absolute inset-0 z-0 overflow-hidden opacity-50'>
@@ -370,47 +349,23 @@ const DemoDay: React.FC = () => {
           </div>
 
           <div className='container mx-auto px-4 sm:px-6 relative z-10'>
-            <motion.div
+            <div
               className='max-w-4xl mx-auto text-center mb-16'
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7 }}
+              
+              
             >
               <div className='relative w-24 h-24 mx-auto mb-8 group'>
-                <motion.div
+                <div
                   className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform group-hover:rotate-45 transition-transform duration-500'
-                  initial={{ rotate: 0 }}
-                  animate={isInView ? { rotate: [0, 45, 0] } : {}}
-                  transition={{
-                    duration: 1.5,
-                    ease: 'easeInOut',
-                    repeat: Infinity,
-                    repeatType: 'mirror',
-                  }}
+                  
                 />
-                <motion.div
+                <div
                   className='absolute inset-[8px] rounded-xl bg-[#2d84eb]/10 transform group-hover:-rotate-45 transition-transform duration-500'
-                  initial={{ rotate: 0 }}
-                  animate={isInView ? { rotate: [0, -45, 0] } : {}}
-                  transition={{
-                    duration: 1.5,
-                    ease: 'easeInOut',
-                    delay: 0.2,
-                    repeat: Infinity,
-                    repeatType: 'mirror',
-                  }}
+                  
                 />
-                <motion.div
+                <div
                   className='absolute inset-[16px] rounded-lg bg-[#3ec878]/10 transform group-hover:rotate-45 transition-transform duration-500'
-                  initial={{ rotate: 0 }}
-                  animate={isInView ? { rotate: [0, 45, 0] } : {}}
-                  transition={{
-                    duration: 1.5,
-                    ease: 'easeInOut',
-                    delay: 0.4,
-                    repeat: Infinity,
-                    repeatType: 'mirror',
-                  }}
+                  
                 />
                 <div className='absolute inset-0 flex items-center justify-center text-4xl text-[#8259ef] group-hover:scale-110 transition-transform duration-500'>
                   <FaCalendarAlt />
@@ -435,13 +390,12 @@ const DemoDay: React.FC = () => {
                 give each team the spotlight they deserve while maintaining an
                 efficient judging process.
               </HackathonTypography>
-            </motion.div>
+            </div>
 
             <div className='grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-16'>
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+              <div
+                
+                
                 className='bg-white dark:bg-gray-800/50 overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm'
               >
                 <div className='px-6 py-4 border-b border-gray-100 dark:border-gray-700/50 bg-gradient-to-r from-[#8259ef]/5 to-transparent'>
@@ -463,12 +417,11 @@ const DemoDay: React.FC = () => {
                     />
                   ))}
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={isInView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2, ease: 'easeOut' }}
+              <div
+                
+                
                 className='bg-white dark:bg-gray-800/50 overflow-hidden rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700/50 backdrop-blur-sm'
               >
                 <div className='px-6 py-4 border-b border-gray-100 dark:border-gray-700/50 bg-gradient-to-r from-[#3ec878]/5 to-transparent'>
@@ -490,7 +443,7 @@ const DemoDay: React.FC = () => {
                     />
                   ))}
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -506,11 +459,10 @@ const DemoDay: React.FC = () => {
 
           <div className='container mx-auto px-6 relative z-10'>
             <div className='max-w-7xl mx-auto'>
-              <motion.div
+              <div
                 className='text-center mb-16'
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7 }}
+                
+                
               >
                 <div className='relative w-24 h-24 mx-auto mb-6'>
                   <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
@@ -539,7 +491,7 @@ const DemoDay: React.FC = () => {
                   presentations and select the winners. Each judge brings unique
                   expertise and perspective to the evaluation process.
                 </HackathonTypography>
-              </motion.div>
+              </div>
 
               <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12 mt-10'>
                 {allDemoDayPanelists.map((judge, index) => (
@@ -573,11 +525,10 @@ const DemoDay: React.FC = () => {
 
           <div className='container mx-auto px-6 relative z-10'>
             <div className='max-w-7xl mx-auto'>
-              <motion.div
+              <div
                 className='text-center mb-16'
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7 }}
+                
+                
               >
                 <div className='relative w-24 h-24 mx-auto mb-6'>
                   <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
@@ -606,7 +557,7 @@ const DemoDay: React.FC = () => {
                   following criteria, which together make up your final Hedera x
                   AI score.
                 </HackathonTypography>
-              </motion.div>
+              </div>
 
               <div className='grid grid-cols-1 md:grid-cols-2 gap-10 mb-20'>
                 {judgingCriteria.map((criteria, index) => (
@@ -632,11 +583,10 @@ const DemoDay: React.FC = () => {
 
           <div className='container mx-auto px-6 relative z-10'>
             <div className='max-w-4xl mx-auto'>
-              <motion.div
+              <div
                 className='text-center mb-16'
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7 }}
+                
+                
               >
                 <HackathonTypography
                   variant='h2'
@@ -655,13 +605,12 @@ const DemoDay: React.FC = () => {
                   Maximize your impact during the 3-minute pitch window with
                   these essential tips and technical requirements.
                 </HackathonTypography>
-              </motion.div>
+              </div>
 
               <div className='grid grid-cols-1 gap-8 mb-12'>
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.1 }}
+                <div
+                  
+                  
                   className='bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg border-l-4 border-[#8259ef]'
                 >
                   <HackathonTypography
@@ -735,13 +684,12 @@ const DemoDay: React.FC = () => {
                       </li>
                     </ul>
                   </div>
-                </motion.div>
+                </div>
               </div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={isInView ? { opacity: 1 } : {}}
-                transition={{ duration: 0.6, delay: 0.1 }}
+              <div
+                
+                
                 className='mb-8 max-w-3xl mx-auto'
               >
                 <HackathonTypography
@@ -753,14 +701,13 @@ const DemoDay: React.FC = () => {
                   While you have full flexibility in how you use your 3 minutes,
                   the following sections offer suggestions and requirements:
                 </HackathonTypography>
-              </motion.div>
+              </div>
 
               <div className='bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg'>
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-8'>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.1 }}
+                  <div
+                    
+                    
                   >
                     <HackathonTypography
                       variant='h4'
@@ -809,11 +756,10 @@ const DemoDay: React.FC = () => {
                         </HackathonTypography>
                       </li>
                     </ul>
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.2 }}
+                  </div>
+                  <div
+                    
+                    
                   >
                     <HackathonTypography
                       variant='h4'
@@ -873,13 +819,12 @@ const DemoDay: React.FC = () => {
                         </HackathonTypography>
                       </li>
                     </ul>
-                  </motion.div>
+                  </div>
                 </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 }}
+                <div
+                  
+                  
                   className='mt-10 p-4 bg-gradient-to-r from-[#8259ef]/10 to-[#3ec878]/10 dark:from-[#8259ef]/20 dark:to-[#3ec878]/20 rounded-xl'
                 >
                   <HackathonTypography
@@ -895,7 +840,7 @@ const DemoDay: React.FC = () => {
                     potential and technical merits. Be prepared to explain your
                     technical choices and business strategy in detail.
                   </HackathonTypography>
-                </motion.div>
+                </div>
               </div>
 
               <div className='mt-12 text-center'>
@@ -918,11 +863,10 @@ const DemoDay: React.FC = () => {
 
           <div className='container mx-auto px-6 relative z-10'>
             <div className='max-w-4xl mx-auto'>
-              <motion.div
+              <div
                 className='text-center mb-16'
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7 }}
+                
+                
               >
                 <div className='relative w-24 h-24 mx-auto mb-6'>
                   <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
@@ -950,12 +894,11 @@ const DemoDay: React.FC = () => {
                   Take advantage of additional development time to refine your
                   project before Hedera x AI.
                 </HackathonTypography>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.2 }}
+              <div
+                
+                
                 className='bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg'
               >
                 <div className='flex flex-col md:flex-row gap-8 items-center'>
@@ -1008,7 +951,7 @@ const DemoDay: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -1024,11 +967,10 @@ const DemoDay: React.FC = () => {
 
           <div className='container mx-auto px-6 relative z-10'>
             <div className='max-w-4xl mx-auto'>
-              <motion.div
+              <div
                 className='text-center mb-16'
-                initial={{ opacity: 0, y: 20 }}
-                animate={isInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.7 }}
+                
+                
               >
                 <div className='relative w-24 h-24 mx-auto mb-6'>
                   <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
@@ -1056,7 +998,7 @@ const DemoDay: React.FC = () => {
                   Get answers to common questions about the Hedera x AI event
                   and presentation process.
                 </HackathonTypography>
-              </motion.div>
+              </div>
 
               <div className='space-y-4'>
                 <FAQItem

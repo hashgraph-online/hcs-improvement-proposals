@@ -1,5 +1,5 @@
 import Layout from '@theme/Layout';
-import { motion } from 'motion/react';
+
 import { Typography, PrimaryButton } from '../components/ui';
 import {
   FaCalendarAlt,
@@ -138,22 +138,22 @@ export default function PatchworkPage() {
           ></div>
 
           <div className='container mx-auto px-6 lg:px-16 relative z-10'>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+            <div
+              
+              
+              
               className='text-center max-w-5xl mx-auto'
             >
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
+              <div
+                
+                
+                
                 className='inline-block mb-6 px-6 py-2 bg-gradient-to-r from-brand-blue/20 to-brand-purple/20 rounded-full border border-brand-blue/30'
               >
                 <Typography className='text-sm font-mono font-normal text-brand-blue dark:text-blue-400 !mb-0'>
                   Virtual Conference • December 10, 2025
                 </Typography>
-              </motion.div>
+              </div>
 
               <h1 className='text-5xl lg:text-7xl font-mono font-bold mb-6'>
                 <span className='text-gray-700 dark:text-white'>
@@ -176,10 +176,10 @@ export default function PatchworkPage() {
                 agentic internet.
               </Typography>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
+              <div
+                
+                
+                
                 className='relative inline-block mb-8 px-10 py-6 rounded-2xl shadow-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
               >
                 <div className='absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-brand-purple/20 to-brand-blue/10 rounded-full blur-3xl'></div>
@@ -200,12 +200,12 @@ export default function PatchworkPage() {
                     </span>
                   </Typography>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6, duration: 0.6 }}
+              <div
+                
+                
+                
               >
                 <PrimaryButton
                   href='https://luma.com/rutu7j4a'
@@ -213,19 +213,19 @@ export default function PatchworkPage() {
                 >
                   Register Now
                 </PrimaryButton>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Event Details */}
         <section className='py-16 lg:py-24 bg-white dark:bg-gray-900'>
           <div className='container mx-auto px-6 lg:px-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            <div
+              
+              
+              
+              
               className='max-w-6xl mx-auto'
             >
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
@@ -263,13 +263,13 @@ export default function PatchworkPage() {
                     iconColor: 'text-brand-blue',
                   },
                 ].map((detail, index) => (
-                  <motion.div
+                  <div
                     key={detail.title}
-                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true }}
-                    whileHover={{ scale: 1.03, y: -4 }}
-                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    
+                    
+                    
+                    
+                    
                     className={`text-center p-6 bg-gradient-to-br ${detail.colors} rounded-2xl border-2 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden`}
                   >
                     <div className='absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-50'></div>
@@ -286,21 +286,21 @@ export default function PatchworkPage() {
                         {detail.text}
                       </Typography>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Purpose & Objectives */}
         <section className='py-16 lg:py-24'>
           <div className='container mx-auto px-6 lg:px-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            <div
+              
+              
+              
+              
               className='max-w-5xl mx-auto'
             >
               <div className='text-center mb-12'>
@@ -350,12 +350,12 @@ export default function PatchworkPage() {
                       color: 'green',
                     },
                   ].map((objective, index) => (
-                    <motion.div
+                    <div
                       key={objective.title}
-                      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                      viewport={{ once: true }}
-                      whileHover={{ scale: 1.02, y: -4 }}
+                      
+                      
+                      
+                      
                       transition={{
                         delay: index * 0.15,
                         duration: 0.6,
@@ -402,7 +402,7 @@ export default function PatchworkPage() {
 
                         {/* Content */}
                         <div className='relative z-10 flex flex-col items-center'>
-                          <motion.div
+                          <div
                             className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-4 shadow-lg ${
                               objective.color === 'blue'
                                 ? 'bg-brand-blue text-white'
@@ -410,11 +410,11 @@ export default function PatchworkPage() {
                                 ? 'bg-brand-purple text-white'
                                 : 'bg-brand-green text-white'
                             }`}
-                            whileHover={{ rotate: 5, scale: 1.1 }}
-                            transition={{ duration: 0.3 }}
+                            
+                            
                           >
                             <div className='text-3xl'>{objective.icon}</div>
-                          </motion.div>
+                          </div>
                           <Typography className='text-lg font-mono font-bold text-gray-700 dark:text-white mb-3 text-center'>
                             {objective.title}
                           </Typography>
@@ -423,22 +423,22 @@ export default function PatchworkPage() {
                           </Typography>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Confirmed Presenters */}
         <section className='py-16 lg:py-24 bg-white dark:bg-gray-900'>
           <div className='container mx-auto px-6 lg:px-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            <div
+              
+              
+              
+              
               className='max-w-6xl mx-auto'
             >
               <div className='text-center mb-12'>
@@ -459,11 +459,11 @@ export default function PatchworkPage() {
 
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 {presenters.map((presenter, index) => (
-                  <motion.div
+                  <div
                     key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    
+                    
+                    
                     transition={{
                       delay: index * 0.05,
                       duration: 0.5,
@@ -475,21 +475,21 @@ export default function PatchworkPage() {
                     <Typography className='text-sm text-gray-700 dark:text-white font-medium !mb-0'>
                       {presenter}
                     </Typography>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Who Should Join */}
         <section className='py-16 lg:py-24'>
           <div className='container mx-auto px-6 lg:px-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            <div
+              
+              
+              
+              
               className='max-w-5xl mx-auto'
             >
               <div className='text-center mb-12'>
@@ -507,11 +507,11 @@ export default function PatchworkPage() {
 
               <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {targetAudience.map((audience, index) => (
-                  <motion.div
+                  <div
                     key={index}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    
+                    
+                    
                     transition={{
                       delay: index * 0.1,
                       duration: 0.6,
@@ -521,7 +521,7 @@ export default function PatchworkPage() {
                   >
                     <div className='absolute inset-0 bg-gradient-to-br from-brand-blue/10 via-brand-purple/10 to-brand-green/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500'></div>
                     <div className='relative p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1'>
-                      <motion.div
+                      <div
                         className={`w-14 h-14 rounded-xl flex items-center justify-center mb-4 shadow-md ${
                           audience.color === 'blue'
                             ? 'bg-brand-blue text-white'
@@ -529,11 +529,11 @@ export default function PatchworkPage() {
                             ? 'bg-brand-purple text-white'
                             : 'bg-brand-green text-white'
                         }`}
-                        whileHover={{ rotate: 5, scale: 1.05 }}
-                        transition={{ duration: 0.3 }}
+                        
+                        
                       >
                         <div className='text-2xl'>{audience.icon}</div>
-                      </motion.div>
+                      </div>
                       <Typography className='text-lg font-mono font-bold text-gray-700 dark:text-white mb-2'>
                         {audience.title}
                       </Typography>
@@ -541,21 +541,21 @@ export default function PatchworkPage() {
                         {audience.description}
                       </Typography>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Host Organizations */}
         <section className='py-16 lg:py-24 bg-white dark:bg-gray-900'>
           <div className='container mx-auto px-6 lg:px-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
+            <div
+              
+              
+              
+              
               className='max-w-5xl mx-auto text-center'
             >
               <Typography
@@ -618,18 +618,18 @@ export default function PatchworkPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* About Hashgraph Online */}
         <section className='py-16 lg:py-24 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-950 dark:to-black'>
           <div className='container mx-auto px-6 lg:px-16'>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
+              
+              
+              
+              
               className='max-w-4xl mx-auto text-center'
             >
               <Typography
@@ -650,7 +650,7 @@ export default function PatchworkPage() {
               <div className='mt-8 flex justify-center gap-6'>
                 <PrimaryButton href='/'>Learn More About HOL</PrimaryButton>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>

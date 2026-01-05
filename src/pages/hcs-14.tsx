@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaIdCard, FaGlobe, FaServer, FaShieldAlt, FaKey, FaArrowDown, FaCheckCircle, FaProjectDiagram, FaFingerprint, FaNetworkWired, FaDatabase, FaExchangeAlt, FaRobot, FaHandshake, FaBolt } from 'react-icons/fa';
@@ -11,9 +10,9 @@ import Terminal from '../components/ui/Terminal';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" />;
 };
 
 const UAIDHeroVisual = () => {
@@ -24,17 +23,7 @@ const UAIDHeroVisual = () => {
 
       {/* FLOATING ID CARD */}
       <div className="relative z-10 [transform-style:preserve-3d] flex items-center justify-center">
-        <motion.div 
-            animate={{ 
-                y: [-20, 20, -20],
-                rotateX: [5, -5, 5],
-                rotateY: [-5, 5, -5]
-            }}
-            transition={{ 
-                duration: 8, 
-                repeat: Infinity, 
-                ease: "easeInOut" 
-            }}
+        <div
             className="relative w-[500px] h-[300px] rounded-[2rem] border-2 border-[#5599fe]/50 bg-white/10 dark:bg-[#1a1f3a]/80 backdrop-blur-2xl shadow-[0_0_100px_rgba(85,153,254,0.3)] flex flex-col p-8 justify-between [transform-style:preserve-3d]"
         >
             <div className="flex justify-between items-start [transform:translateZ(40px)]">
@@ -59,7 +48,7 @@ const UAIDHeroVisual = () => {
                     uaid:aid:QmX4fB9XpS3yKqP8MHTbcQW7R6wN4PrGHz
                 </div>
             </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
@@ -69,24 +58,17 @@ const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, sub
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-3 mb-4"
             >
                 <span className="w-12 h-0.5 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -108,10 +90,7 @@ export default function HCS14Page() {
         <section className="relative min-h-screen flex items-center pt-32 pb-20 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-12 items-center">
-                    <motion.div 
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
+                    <div
                     >
                         {/* DROPDOWN MENU */}
                         <div className="relative inline-block text-left mb-12 z-50">
@@ -161,7 +140,7 @@ export default function HCS14Page() {
                                 COLLECT POINTS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="hidden lg:block relative">
                         <UAIDHeroVisual />
@@ -169,13 +148,11 @@ export default function HCS14Page() {
                  </div>
              </div>
 
-             <motion.div 
-                animate={{ y: [0, 15, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+             <div
                 className="absolute bottom-12 left-1/2 -translate-x-1/2 text-[#5599fe] text-3xl opacity-50"
              >
                  <FaArrowDown />
-             </motion.div>
+             </div>
         </section>
 
         {/* 2. THE FRAGMENTATION PROBLEM */}
@@ -200,11 +177,8 @@ export default function HCS14Page() {
                              { icon: <FaHandshake />, title: "Trust Bridging", desc: "Carry reputation and verification proofs across protocol boundaries. Your Hedera agent is trusted on Ethereum." },
                              { icon: <FaGlobe />, title: "Self-Describing", desc: "The ID itself contains routing info (registry, protocol, native endpoint). No central lookup table required." }
                          ].map((item, i) => (
-                             <motion.div 
+                             <div 
                                 key={i}
-                                initial={{ opacity: 0, y: 50 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-100px" }}
                                 className="p-12 rounded-[3rem] bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/5 hover:border-[#a679f0]/50 transition-colors group shadow-xl"
                              >
                                  <div className="w-20 h-20 rounded-2xl bg-[#a679f0]/10 text-[#a679f0] flex items-center justify-center text-4xl mb-8 group-hover:scale-110 transition-transform">
@@ -212,7 +186,7 @@ export default function HCS14Page() {
                                  </div>
                                  <h3 className="text-3xl font-bold mb-4 text-gray-900 dark:text-white">{item.title}</h3>
                                  <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed">{item.desc}</p>
-                             </motion.div>
+                             </div>
                          ))}
                      </div>
                  </div>
@@ -404,10 +378,7 @@ export default function HCS14Page() {
         {/* 7. CTA */}
         <section className="py-24 text-center relative z-10 bg-gradient-to-b from-transparent to-[#0a0b10]">
             <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                <div
                     className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-16 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Unify Your Agents.</h2>
@@ -419,7 +390,7 @@ export default function HCS14Page() {
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
 

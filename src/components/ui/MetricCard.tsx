@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 
 interface MetricCardProps {
   value: string;
@@ -49,23 +48,17 @@ const MetricCard: React.FC<MetricCardProps> = ({
   };
 
   return (
-    <motion.div
+    <div
       className={`p-6 rounded-xl border ${getVariantClasses()} ${className}`}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      whileHover={{ scale: 1.02 }}
     >
       {icon && <div className={`mb-4 ${getColorClasses()}`}>{icon}</div>}
 
-      <motion.div
+      <div
         className={`text-3xl lg:text-4xl font-bold mb-2 ${getColorClasses()}`}
         initial={animateValue ? { scale: 0 } : {}}
-        animate={animateValue ? { scale: 1 } : {}}
-        transition={{ duration: 0.8, delay: 0.2, type: 'spring' }}
       >
         {value}
-      </motion.div>
+      </div>
 
       <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-2'>
         {label}
@@ -76,7 +69,7 @@ const MetricCard: React.FC<MetricCardProps> = ({
           {description}
         </p>
       )}
-    </motion.div>
+    </div>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { FaArrowRight } from 'react-icons/fa';
 
 type PrimaryButtonProps = {
@@ -38,31 +37,27 @@ const PrimaryButton = ({
 
   if (onClick) {
     return (
-      <motion.button
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+      <button
         className={combinedClassName}
         onClick={onClick}
         {...dataAttributes}
       >
         <span className='text-white'>{children}</span> {icon}
-      </motion.button>
+      </button>
     );
   }
 
   return (
-    <motion.a
+    <a
       href={href}
       target={isExternalLink ? '_blank' : undefined}
       rel={isExternalLink ? 'noopener noreferrer' : undefined}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
       className={combinedClassName}
       style={{ textDecoration: 'none' }}
       {...dataAttributes}
     >
       <span className='text-white'>{children}</span> {icon}
-    </motion.a>
+    </a>
   );
 };
 

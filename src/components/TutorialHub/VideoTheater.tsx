@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { motion } from 'motion/react';
 import type { Tutorial } from './types';
 import { Typography } from '../ui';
 import YouTube from '../YouTube';
@@ -84,15 +83,13 @@ const VideoTheater: React.FC<VideoTheaterProps> = ({ tutorial }) => {
                                     <p className="text-gray-400 font-mono text-sm">Coming Soon</p>
                                 </div>
                             ) : (
-                                <motion.div
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.95 }}
+                                <div
                                     className="w-20 h-20 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-2xl group-hover:bg-brand-blue/90 group-hover:border-brand-blue transition-colors duration-300"
                                 >
                                     <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
                                         <path d="M8 5v14l11-7z" />
                                     </svg>
-                                </motion.div>
+                                </div>
                             )}
                         </div>
 

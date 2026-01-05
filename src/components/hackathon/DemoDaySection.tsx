@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import { FaTrophy, FaVideo, FaCalendarAlt, FaUsers } from 'react-icons/fa';
 import HackathonTypography from './HackathonTypography';
 import PrimaryButton from './PrimaryButton';
@@ -18,18 +17,11 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
   index,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, amount: 0.3 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 30 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.1,
-        ease: [0.25, 0.1, 0.25, 1],
-      }}
       className='relative p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm h-full'
     >
       <div className='absolute -top-3 -left-3 w-10 h-10 rounded-xl bg-gradient-to-br from-[#8259ef] to-[#3ec878] flex items-center justify-center transform -rotate-6'>
@@ -45,13 +37,13 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
       <HackathonTypography variant='body1' color='muted' className='font-light'>
         {description}
       </HackathonTypography>
-    </motion.div>
+    </div>
   );
 };
 
 const DemoDaySection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = true;
 
   const features = [
     {
@@ -100,11 +92,8 @@ const DemoDaySection: React.FC = () => {
 
       <div className='container mx-auto px-3 relative z-10'>
         <div className='max-w-7xl mx-auto'>
-          <motion.div
+          <div
             className='text-center mb-10'
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
           >
             <div className='relative w-16 h-16 mx-auto mb-4'>
               <div className='absolute inset-0 rounded-2xl bg-[#8259ef]/10 transform rotate-45'></div>
@@ -135,7 +124,7 @@ const DemoDaySection: React.FC = () => {
               and the community while gaining valuable exposure for your
               project.
             </HackathonTypography>
-          </motion.div>
+          </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mb-12'>
             {features.map((feature, index) => (
@@ -149,10 +138,7 @@ const DemoDaySection: React.FC = () => {
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
+          <div
             className='rounded-2xl overflow-hidden relative bg-gradient-to-r p-[2px] from-[#8259ef] via-[#2d84eb] to-[#3ec878] shadow-xl'
           >
             <div className='bg-white dark:bg-gray-900 rounded-[calc(1rem-2px)]'>
@@ -185,18 +171,15 @@ const DemoDaySection: React.FC = () => {
                 ></iframe>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.3 }}
+          <div
             className='mt-8 text-center'
           >
             <PrimaryButton href='/demo-day' size='lg'>
               Learn More About Demo Day
             </PrimaryButton>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

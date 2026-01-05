@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import Layout from '@theme/Layout';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
-import { motion, useInView } from 'motion/react';
 import Link from '@docusaurus/Link';
 import TransformCard from '../components/ui/TransformCard';
 import PrimaryButton from '../components/PrimaryButton';
@@ -119,14 +118,11 @@ const UseCaseCard: React.FC<{ useCase: UseCase; index: number }> = ({
   index,
 }) => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
       className='w-full'
     >
       <TransformCard className='p-6 md:p-8 h-full' shadow='xl'>
@@ -171,7 +167,7 @@ const UseCaseCard: React.FC<{ useCase: UseCase; index: number }> = ({
           </div>
         </div>
       </TransformCard>
-    </motion.div>
+    </div>
   );
 };
 
@@ -187,10 +183,7 @@ const UseCasesPage: React.FC = () => {
       <div className='py-20 md:py-32 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900'>
         <div className='container mx-auto px-4 md:px-6'>
           <div className='max-w-4xl mx-auto text-center'>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+            <div
             >
               <h1 className='text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6'>
                 Hashgraph in{' '}
@@ -202,7 +195,7 @@ const UseCasesPage: React.FC = () => {
                 Witness how companies are leveraging Hashgraph Online standards
                 to shape the future of decentralized technology.
               </p>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>
@@ -222,11 +215,7 @@ const UseCasesPage: React.FC = () => {
       {/* CTA Section */}
       <div className='py-20 bg-gray-50 dark:bg-gray-800'>
         <div className='container mx-auto px-4 md:px-6 text-center'>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+          <div
             className='max-w-4xl mx-auto'
           >
             <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6'>
@@ -242,7 +231,7 @@ const UseCasesPage: React.FC = () => {
                 Join Community
               </SecondaryButton>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </Layout>

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 
 interface TransformCardProps {
   children: React.ReactNode;
@@ -75,14 +74,11 @@ const TransformCard: React.FC<TransformCardProps> = ({
   `.trim();
 
   return (
-    <motion.div
+    <div
       className={cardClasses}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 };
 

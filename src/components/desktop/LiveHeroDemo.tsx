@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'motion/react';
 import {
   FaPlay,
   FaStop,
@@ -173,15 +172,7 @@ console.log('Response:', response.response);`;
     <section className="relative min-h-screen bg-gradient-to-b from-white via-gray-50 to-white dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0">
-        <motion.div
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%'],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
+        <div
           className="absolute inset-0 opacity-[0.03] dark:opacity-[0.08]"
           style={{
             backgroundImage: `radial-gradient(circle at 20% 20%, rgba(166, 121, 240, 0.4) 0%, transparent 50%),
@@ -195,23 +186,17 @@ console.log('Response:', response.response);`;
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[80vh]">
           {/* Left Column - Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
+          <div
             className="flex flex-col justify-center"
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5 }}
+            <div
               className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#a679f0]/10 to-[#5599fe]/10 dark:from-[#a679f0]/20 dark:to-[#5599fe]/20 border border-[#a679f0]/20 dark:border-[#a679f0]/30 mb-8 max-w-fit"
             >
               <FaRocket className="text-[#a679f0] mr-2" />
               <span className="text-sm font-bold text-[#a679f0] dark:text-[#a679f0]">
                 AI + BLOCKCHAIN + SYSTEM INTEGRATION
               </span>
-            </motion.div>
+            </div>
 
             <Typography variant="h1" className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
               <span className="bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent">
@@ -253,10 +238,7 @@ console.log('Response:', response.response);`;
 
             {/* Key Value Props */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+              <div
                 className="text-center sm:text-left"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-r from-[#a679f0] to-[#5599fe] text-white mb-4">
@@ -266,12 +248,9 @@ console.log('Response:', response.response);`;
                 <Typography variant="body2" className="text-gray-600 dark:text-white/70">
                   Skip months of Hedera SDK documentation. Just describe what you want.
                 </Typography>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
+              <div
                 className="text-center sm:text-left"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-r from-[#5599fe] to-[#48df7b] text-white mb-4">
@@ -281,12 +260,9 @@ console.log('Response:', response.response);`;
                 <Typography variant="body2" className="text-gray-600 dark:text-white/70">
                   AI reads your files, databases, and APIs to create smart blockchain workflows.
                 </Typography>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
+              <div
                 className="text-center sm:text-left"
               >
                 <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-gradient-to-r from-[#48df7b] to-[#a679f0] text-white mb-4">
@@ -296,15 +272,12 @@ console.log('Response:', response.response);`;
                 <Typography variant="body2" className="text-gray-600 dark:text-white/70">
                   Cross-platform apps, enterprise security, and comprehensive TypeScript support.
                 </Typography>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Right Column - Interactive Demo */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+          <div
             className="relative"
           >
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -321,11 +294,9 @@ console.log('Response:', response.response);`;
                       Live Blockchain Demo
                     </Typography>
                   </div>
-                  <motion.button
+                  <button
                     onClick={copyCode}
                     className="flex items-center gap-2 px-3 py-1 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
                   >
                     {copied ? (
                       <>
@@ -338,7 +309,7 @@ console.log('Response:', response.response);`;
                         <span>Copy Code</span>
                       </>
                     )}
-                  </motion.button>
+                  </button>
                 </div>
               </div>
 
@@ -375,33 +346,26 @@ console.log('Response:', response.response);`;
                   <div className="text-green-400 mb-2">$ npm run demo</div>
                   
                   {demoState.output.map((line, index) => (
-                    <motion.div
+                    <div
                       key={index}
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.3 }}
                       className={`text-gray-300 ${line.includes('✅') ? 'text-green-400' : ''} ${line.includes('📝') || line.includes('🌐') || line.includes('💰') ? 'text-blue-400' : ''}`}
                     >
                       {line}
-                    </motion.div>
+                    </div>
                   ))}
                   
                   {demoState.isRunning && (
-                    <motion.div
-                      animate={{ opacity: [1, 0.3, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
+                    <div
                       className="text-yellow-400"
                     >
                       Processing...
-                    </motion.div>
+                    </div>
                   )}
                 </div>
 
                 {/* Success State */}
                 {demoState.transactionId && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                  <div
                     className="mt-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg"
                   >
                     <div className="flex items-center gap-2 text-green-700 dark:text-green-400 mb-2">
@@ -414,27 +378,18 @@ console.log('Response:', response.response);`;
                       This demo shows real blockchain interaction on Hedera Testnet. 
                       Your applications can have the same simplicity.
                     </Typography>
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </div>
 
             {/* Floating elements */}
-            <motion.div
-              animate={{
-                y: [-10, 10, -10],
-                rotate: [0, 5, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                repeatType: 'reverse',
-              }}
+            <div
               className="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-r from-[#a679f0] to-[#5599fe] rounded-full flex items-center justify-center text-white shadow-lg"
             >
               <FaRocket className="text-2xl" />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
   FaChevronDown,
   FaRobot,
@@ -39,7 +38,7 @@ export const FAQItem: React.FC<FAQItemProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const itemRef = useRef<HTMLDivElement>(null);
-  const itemIsInView = useInView(itemRef, { once: true, amount: 0.1 });
+  const itemIsInView = true;
   const inView = isInView && itemIsInView;
 
   const hederaPurple = {
@@ -69,15 +68,8 @@ export const FAQItem: React.FC<FAQItemProps> = ({
   }
 
   return (
-    <motion.div
+    <div
       ref={itemRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: 'easeOut',
-      }}
       className={`rounded-lg overflow-hidden border dark:border-${colorName}/30 hover:border-${colorName}/40 dark:hover:border-${colorName}/50 transition-all duration-300 hover:-translate-y-1 mb-3 sm:mb-4 bg-white dark:bg-[#222222]`}
     >
       <div className='relative z-10'>
@@ -104,22 +96,16 @@ export const FAQItem: React.FC<FAQItemProps> = ({
               {question}
             </HackathonTypography>
           </div>
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+          <div
             style={{ color: color.bg }}
             className='flex-shrink-0 ml-4'
           >
             <FaChevronDown />
-          </motion.div>
+          </div>
         </button>
-        <AnimatePresence>
+        <>
           {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+            <div
             >
               <div
                 style={{
@@ -133,17 +119,17 @@ export const FAQItem: React.FC<FAQItemProps> = ({
               >
                 {answer}
               </div>
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const FAQSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = true;
 
   const faqs = [
     {

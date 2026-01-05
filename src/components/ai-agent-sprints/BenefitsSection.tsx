@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import {
   FaTrophy,
   FaUserGraduate,
@@ -17,18 +16,11 @@ const BenefitItem: React.FC<{
   index: number;
 }> = ({ icon, title, description, index }) => {
   const itemRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(itemRef, { once: true, amount: 0.2 });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={itemRef}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{
-        duration: 0.5,
-        delay: index * 0.1,
-        ease: 'easeOut',
-      }}
       className='bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md border border-gray-100 dark:border-gray-700'
     >
       <div className='w-12 h-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-4'>
@@ -38,13 +30,13 @@ const BenefitItem: React.FC<{
         {title}
       </h3>
       <p className='text-gray-600 dark:text-gray-300'>{description}</p>
-    </motion.div>
+    </div>
   );
 };
 
 const BenefitsSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.1 });
+  const isInView = true;
 
   const benefits = [
     {
@@ -112,10 +104,7 @@ const BenefitsSection: React.FC = () => {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.1 }}
+        <div
           className='max-w-4xl mx-auto text-center mb-16'
         >
           <div className='inline-block mb-6 px-4 py-1 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 text-sm font-medium'>
@@ -129,7 +118,7 @@ const BenefitsSection: React.FC = () => {
             Accelerate your development skills and earn rewards by participating
             in our time-boxed AI agent challenges.
           </p>
-        </motion.div>
+        </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
           {benefits.map((benefit, index) => (
@@ -143,16 +132,13 @@ const BenefitsSection: React.FC = () => {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
+        <div
           className='mt-16 text-center'
         >
           <PrimaryButton href='/sprint#sprints' variant='primary'>
             Join Current Challenge
           </PrimaryButton>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { FaPaperPlane } from 'react-icons/fa';
 import { Section } from '../hackathon/Section';
 
@@ -39,11 +38,7 @@ const FormSection: React.FC = () => {
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
         <div className='max-w-4xl mx-auto'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+          <div
             className='text-center mb-12'
           >
             <Section
@@ -55,13 +50,9 @@ const FormSection: React.FC = () => {
               The Bonzo Finance AI Agent Challenge has ended. Thank you to all participants
               who built innovative AI agents on Hedera.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <div
             className='bg-gray-100 dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 p-12 text-center'
           >
             <h3 className='text-2xl font-bold text-gray-900 dark:text-white mb-4'>
@@ -76,7 +67,7 @@ const FormSection: React.FC = () => {
             >
               Visit Bonzo Finance →
             </a>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

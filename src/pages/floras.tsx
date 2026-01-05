@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaSitemap, FaFingerprint, FaExchangeAlt, FaBolt, FaKey, FaShieldAlt, FaVoteYea, FaNetworkWired, FaUsers, FaCoins, FaCheckDouble, FaTrashAlt, FaArrowDown, FaDatabase, FaCogs, FaProjectDiagram, FaLayerGroup } from 'react-icons/fa';
@@ -11,9 +10,9 @@ import Terminal from '../components/ui/Terminal';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#48df7b] origin-left z-[100]" />;
 };
 
 const FloraHeroOrb = () => {
@@ -39,21 +38,9 @@ const FloraHeroOrb = () => {
             return (
                <g key={i}>
                   <line x1="50%" y1="50%" x2={`${cx}%`} y2={`${cy}%`} stroke="#5599fe" strokeWidth="1" strokeDasharray="4 4" opacity="0.2" />
-                  <motion.circle r="3" fill="#5599fe"
-                     animate={{ 
-                        cx: ["50%", `${cx}%`],
-                        cy: ["50%", `${cy}%`],
-                        opacity: [0, 1, 0]
-                     }}
-                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5, ease: "linear" }}
+                  <circle r="3" fill="#5599fe"
                   />
-                  <motion.circle r="3" fill="#a679f0"
-                     animate={{ 
-                        cx: [`${cx}%`, "50%"],
-                        cy: [`${cy}%`, "50%"],
-                        opacity: [0, 1, 0]
-                     }}
-                     transition={{ duration: 3, repeat: Infinity, delay: i * 0.5 + 1.5, ease: "linear" }}
+                  <circle r="3" fill="#a679f0"
                   />
                </g>
             );
@@ -67,13 +54,10 @@ const FloraHeroOrb = () => {
          const y = 160 * Math.sin(rad);
          
          return (
-            <motion.div
+            <div
                key={i}
                className="absolute z-10"
                style={{ x, y }}
-               initial={{ scale: 0 }}
-               animate={{ scale: 1 }}
-               transition={{ delay: i * 0.2 }}
             >
                <div className="relative group">
                   <div className="w-16 h-16 bg-white dark:bg-[#1a1f3a] rounded-2xl border border-gray-200 dark:border-white/10 flex flex-col items-center justify-center shadow-xl group-hover:scale-110 transition-transform duration-300">
@@ -85,16 +69,13 @@ const FloraHeroOrb = () => {
                      0.0.{1000 + i}
                   </div>
                </div>
-            </motion.div>
+            </div>
          );
       })}
 
       {/* CENTRAL FLORA CORE (The Network) */}
-      <motion.div 
+      <div 
          className="relative z-20"
-         initial={{ scale: 0.8, opacity: 0 }}
-         animate={{ scale: 1, opacity: 1 }}
-         transition={{ delay: 0.5, duration: 0.8 }}
       >
          <div className="absolute inset-0 rounded-full border border-[#5599fe]/20 animate-ping-slow" />
          <div className="absolute -inset-4 rounded-full border border-[#a679f0]/20 animate-ping-slow delay-75" />
@@ -114,7 +95,7 @@ const FloraHeroOrb = () => {
                  </div>
              </div>
          </div>
-      </motion.div>
+      </div>
 
     </div>
   );
@@ -126,15 +107,12 @@ const AnatomyVisual = () => {
             {/* 1. MEMBERS LAYER */}
             <div className="flex gap-8 mb-8 relative z-10">
                 {[1, 2, 3].map(i => (
-                    <motion.div 
+                    <div 
                         key={i}
-                        initial={{ y: -20, opacity: 0 }}
-                        whileInView={{ y: 0, opacity: 1 }}
-                        transition={{ delay: i * 0.1 }}
                         className="w-16 h-16 rounded-2xl bg-white dark:bg-[#1a1f3a] border border-gray-200 dark:border-white/20 flex items-center justify-center text-xl text-[#a679f0] shadow-lg"
                     >
                         <FaFingerprint />
-                    </motion.div>
+                    </div>
                 ))}
             </div>
 
@@ -146,10 +124,7 @@ const AnatomyVisual = () => {
             </div>
 
             {/* 2. FLORA LAYER */}
-            <motion.div 
-                initial={{ scale: 0.9, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                viewport={{ once: true }}
+            <div
                 className="w-full max-w-lg bg-white dark:bg-[#1a1f3a] rounded-[2.5rem] border-2 border-[#5599fe]/20 p-8 shadow-2xl relative z-10"
             >
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#5599fe] text-white px-4 py-1 rounded-full text-xs font-bold font-mono tracking-widest flex items-center gap-2">
@@ -173,7 +148,7 @@ const AnatomyVisual = () => {
                         <div className="text-[10px] text-gray-500">Threshold Key</div>
                     </div>
                 </div>
-            </motion.div>
+            </div>
         </div>
     )
 }
@@ -196,53 +171,34 @@ const StateHashVisual = () => {
       <div className="relative flex-1 w-full flex justify-center items-center">
           {/* Beams */}
           <div className="absolute top-0 w-full h-1/2 flex justify-center">
-              <motion.div 
+              <div 
                 className="w-0.5 h-full bg-gradient-to-b from-[#5599fe] to-[#a679f0] absolute left-[20%] md:left-[30%] origin-top"
-                initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} transition={{ duration: 1 }}
               />
-              <motion.div 
+              <div 
                 className="w-0.5 h-full bg-gradient-to-b from-[#a679f0] to-[#a679f0] absolute left-1/2 -translate-x-1/2 origin-top"
-                initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} transition={{ duration: 1, delay: 0.2 }}
               />
-              <motion.div 
+              <div 
                 className="w-0.5 h-full bg-gradient-to-b from-[#48df7b] to-[#a679f0] absolute right-[20%] md:right-[30%] origin-top"
-                initial={{ scaleY: 0 }} whileInView={{ scaleY: 1 }} transition={{ duration: 1, delay: 0.4 }}
               />
           </div>
 
           {/* Central Processor */}
           <div className="relative z-20 mt-12">
-              <motion.div 
-                  animate={{ 
-                      boxShadow: ["0 0 60px rgba(166,121,240,0.2)", "0 0 100px rgba(166,121,240,0.4)", "0 0 60px rgba(166,121,240,0.2)"],
-                      borderColor: ["rgba(255,255,255,0.1)", "rgba(255,255,255,0.3)", "rgba(255,255,255,0.1)"]
-                  }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              <div
                   className="w-48 h-48 rounded-full border border-white/10 border-t-[#a679f0] border-r-[#5599fe] border-b-[#48df7b] flex items-center justify-center backdrop-blur-md"
               >
                   <div className="text-center">
                       <div className="text-[10px] tracking-[0.3em] font-mono text-gray-500 mb-2">HASHING</div>
                       <div className="text-3xl font-bold text-white">SHA-384</div>
                   </div>
-              </motion.div>
+              </div>
               
               {/* Particles Flowing In */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                   {[...Array(6)].map((_, i) => (
-                      <motion.div
+                      <div
                           key={i}
                           className="absolute w-2 h-2 bg-white rounded-full"
-                          animate={{ 
-                              y: [-100, 0], 
-                              opacity: [0, 1, 0],
-                              scale: [0.5, 1.5, 0]
-                          }}
-                          transition={{ 
-                              duration: 2, 
-                              repeat: Infinity, 
-                              delay: i * 0.3,
-                              ease: "circIn" 
-                          }}
                       />
                   ))}
               </div>
@@ -251,21 +207,16 @@ const StateHashVisual = () => {
 
       {/* BOTTOM: OUTPUT */}
       <div className="z-10 flex flex-col items-center gap-4">
-          <motion.div 
-            initial={{ height: 0 }} 
-            whileInView={{ height: 60 }} 
+          <div 
             className="w-0.5 bg-gradient-to-b from-[#a679f0] to-[#48df7b]" 
           />
           
-          <motion.div 
-            initial={{ scale: 0.8, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
+          <div
             className="px-10 py-5 bg-[#48df7b]/10 border border-[#48df7b]/30 rounded-2xl backdrop-blur-xl shadow-[0_0_30px_rgba(72,223,123,0.15)] text-center"
           >
               <div className="text-xs font-bold text-[#48df7b] tracking-widest mb-1">STATE ROOT</div>
               <code className="text-white font-mono text-lg">0x7f3a...9c2b</code>
-          </motion.div>
+          </div>
       </div>
 
     </div>
@@ -273,17 +224,14 @@ const StateHashVisual = () => {
 }
 
 const InputNode = ({ icon, label, color, delay }) => (
-    <motion.div 
-        initial={{ y: -20, opacity: 0 }}
-        whileInView={{ y: 0, opacity: 1 }}
-        transition={{ delay }}
+    <div
         className="flex flex-col items-center gap-3"
     >
         <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl shadow-lg border border-white/10" style={{ backgroundColor: `${color}15`, color }}>
             {icon}
         </div>
         <div className="text-xs font-bold text-gray-400 tracking-wider">{label}</div>
-    </motion.div>
+    </div>
 )
 
 const KeyArchitectureVisual = () => {
@@ -306,9 +254,8 @@ const KeyArchitectureVisual = () => {
             {/* Petals */}
             <div className="flex gap-8 justify-center w-full relative z-10">
                 {[1, 2, 3].map((i) => (
-                    <motion.div 
+                    <div 
                         key={i}
-                        whileHover={{ y: -10 }}
                         className="flex flex-col items-center p-6 bg-gray-50 dark:bg-[#1a1f3a]/50 rounded-2xl border border-gray-200 dark:border-white/10"
                     >
                         <div className="w-16 h-16 bg-[#5599fe]/20 rounded-full flex items-center justify-center text-[#5599fe] text-2xl mb-4">
@@ -316,7 +263,7 @@ const KeyArchitectureVisual = () => {
                         </div>
                         <div className="text-sm font-mono text-gray-500">PETAL {i}</div>
                         <div className="text-xs text-gray-400 mt-1">Auth: Base Key</div>
-                    </motion.div>
+                    </div>
                 ))}
             </div>
         </div>
@@ -324,8 +271,7 @@ const KeyArchitectureVisual = () => {
 }
 
 const TriadCard = ({ color, title, code, desc, icon }) => (
-    <motion.div 
-        whileHover={{ y: -20, rotateX: 5 }}
+    <div
         className="p-12 h-full bg-white dark:bg-[#1a1f3a] rounded-[3rem] border-t-8 shadow-2xl relative overflow-hidden group"
         style={{ borderColor: color }}
     >
@@ -340,31 +286,24 @@ const TriadCard = ({ color, title, code, desc, icon }) => (
         <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed relative z-10">
             {desc}
         </p>
-    </motion.div>
+    </div>
 );
 
 const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, subtitle: string, color?: "blue" | "purple" | "green" }) => {
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-12">
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-3 mb-4"
             >
                 <span className="w-12 h-0.5 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -373,10 +312,7 @@ const ConsensusVisual = () => {
     return (
         <div className="w-full h-full min-h-[500px] bg-white dark:bg-[#1a1f3a] rounded-[3rem] border border-gray-200 dark:border-white/10 p-12 relative overflow-hidden flex flex-col justify-center items-center shadow-2xl">
             {/* Transaction Proposal */}
-            <motion.div 
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
+            <div
                 className="w-full max-w-md bg-gray-50 dark:bg-[#1a1f3a] rounded-2xl border-2 border-[#5599fe] p-6 mb-12 relative z-10"
             >
                 <div className="flex justify-between items-center mb-4">
@@ -385,28 +321,22 @@ const ConsensusVisual = () => {
                 </div>
                 <div className="text-lg font-bold mb-2">Transfer 100 ℏ</div>
                 <div className="w-full h-2 bg-gray-200 dark:bg-white/10 rounded-full overflow-hidden">
-                    <motion.div 
+                    <div 
                         className="h-full bg-[#5599fe]"
-                        initial={{ width: "0%" }}
-                        whileInView={{ width: "66%" }}
-                        transition={{ duration: 1.5, delay: 0.5 }}
                     />
                 </div>
                 <div className="text-right text-xs mt-2 text-[#5599fe] font-bold">2/3 SIGNED</div>
-            </motion.div>
+            </div>
 
             {/* Signers */}
             <div className="flex gap-8 relative z-10">
                 {[1, 2, 3].map(i => (
                     <div key={i} className="flex flex-col items-center gap-3">
-                        <motion.div 
-                            initial={{ scale: 0 }}
-                            whileInView={{ scale: 1 }}
-                            transition={{ delay: i * 0.2 }}
+                        <div
                             className={`w-16 h-16 rounded-2xl flex items-center justify-center text-2xl border-2 shadow-lg transition-colors duration-500 ${i <= 2 ? 'bg-[#48df7b]/10 border-[#48df7b] text-[#48df7b]' : 'bg-gray-100 dark:bg-white/5 border-gray-300 dark:border-white/10 text-gray-400'}`}
                         >
                             <FaFingerprint />
-                        </motion.div>
+                        </div>
                         <div className={`text-xs font-mono font-bold ${i <= 2 ? 'text-[#48df7b]' : 'text-gray-400'}`}>
                             {i <= 2 ? 'SIGNED' : 'PENDING'}
                         </div>
@@ -415,11 +345,8 @@ const ConsensusVisual = () => {
             </div>
 
             {/* Execution Line */}
-            <motion.div 
+            <div 
                 className="absolute top-1/2 left-0 w-full h-0.5 bg-[#48df7b]"
-                initial={{ scaleX: 0 }}
-                whileInView={{ scaleX: 1 }}
-                transition={{ duration: 1, delay: 1.5 }}
                 style={{ originX: 0 }}
             />
         </div>
@@ -443,11 +370,8 @@ export default function FlorasPage() {
         <section className="relative min-h-[60vh] flex items-start pt-4 md:pt-8 pb-16 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-12 items-start">
-                    <motion.div 
+                    <div 
                         className="pl-4 md:pl-8"
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
                     >
                         {/* DROPDOWN MENU */}
                         <div className="relative inline-block text-left mb-8 z-50">
@@ -498,7 +422,7 @@ export default function FlorasPage() {
                                 COLLECT POINTS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="hidden lg:block relative">
                         <FloraHeroOrb />
@@ -507,13 +431,11 @@ export default function FlorasPage() {
              </div>
 
              {/* Scroll Indicator */}
-             <motion.div 
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
+             <div
                 className="absolute bottom-4 left-1/2 -translate-x-1/2 text-[#a679f0] text-2xl opacity-50"
              >
                  <FaArrowDown />
-             </motion.div>
+             </div>
         </section>
 
         {/* 2. HCS-15: PETALS (The Foundation) */}
@@ -784,7 +706,6 @@ export default function FlorasPage() {
                         </Terminal>
                     </div>
 
-
                     <div>
                         <h4 className="text-xl font-bold mb-4 text-[#5599fe]">Propose Transaction</h4>
                         <Terminal title="propose-tx.ts">
@@ -910,10 +831,7 @@ export default function FlorasPage() {
         {/* 10. CTA */}
         <section className="py-24 text-center relative z-10">
             <div className="container mx-auto px-6">
-                <motion.div
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
+                <div
                     className="max-w-4xl mx-auto bg-white dark:bg-[#1a1f3a] p-12 rounded-3xl border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
                     <h2 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Form Your Network.</h2>
@@ -925,7 +843,7 @@ export default function FlorasPage() {
                             COLLECT POINTS
                         </SecondaryButton>
                     </div>
-                </motion.div>
+                </div>
             </div>
         </section>
 

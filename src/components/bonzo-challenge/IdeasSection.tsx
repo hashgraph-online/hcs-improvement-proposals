@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import {
   FaChartLine,
   FaShieldAlt,
@@ -28,11 +27,7 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
   index,
 }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7, delay: index * 0.1 }}
+    <div
       className='group relative'
     >
       <div className='relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 border border-purple-100 dark:border-gray-700 h-full flex flex-col'>
@@ -66,7 +61,7 @@ const IdeaCard: React.FC<IdeaCardProps> = ({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
@@ -178,11 +173,7 @@ const IdeasSection: React.FC = () => {
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
           className='max-w-4xl mx-auto text-center mb-16'
         >
           <Section icon={<FaLightbulb />} title='AI Agent Ideas' />
@@ -192,7 +183,7 @@ const IdeasSection: React.FC = () => {
             Finance ecosystem. Use these as starting points or create your own
             groundbreaking solution!
           </Typography>
-        </motion.div>
+        </div>
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto'>
           {ideas.map((idea, index) => (
@@ -207,11 +198,7 @@ const IdeasSection: React.FC = () => {
           ))}
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+        <div
           className='mt-16 max-w-3xl mx-auto bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl overflow-hidden border border-purple-100 dark:border-purple-800/20 p-8 text-center'
         >
           <div className='flex flex-col items-center'>
@@ -226,7 +213,7 @@ const IdeasSection: React.FC = () => {
               Submit Your Idea
             </PrimaryButton>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

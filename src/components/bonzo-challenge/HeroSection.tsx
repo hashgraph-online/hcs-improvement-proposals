@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useAnimation, useInView } from 'motion/react';
 import Link from '@docusaurus/Link';
 import {
   FaCalendarAlt,
@@ -19,7 +18,7 @@ const FloatingParticle: React.FC<{
   x: number;
   y: number;
 }> = ({ size, delay, duration, x, y }) => (
-  <motion.div
+  <div
     className='absolute rounded-full bg-green-400/20 dark:bg-green-400/30'
     style={{
       width: `${size}px`,
@@ -27,25 +26,13 @@ const FloatingParticle: React.FC<{
       left: `${x}%`,
       top: `${y}%`,
     }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{
-      opacity: [0, 0.8, 0],
-      scale: [0, 1, 0.8],
-      y: [-20, 20],
-    }}
-    transition={{
-      repeat: Infinity,
-      duration,
-      delay,
-      ease: 'easeInOut',
-    }}
   />
 );
 
 const HeroSection: React.FC<Props> = () => {
   const agentContainerRef = useRef(null);
-  const isAgentInView = useInView(agentContainerRef, { once: true });
-  const agentControls = useAnimation();
+  const isAgentInView = true;
+  const agentControls = { start: () => {} };
 
   useEffect(() => {
     if (isAgentInView) {
@@ -96,55 +83,37 @@ const HeroSection: React.FC<Props> = () => {
 
       <div className='container mx-auto px-4 sm:px-6 relative z-10'>
         <div className='flex flex-col lg:flex-row items-center gap-8 sm:gap-12 lg:gap-16'>
-          <motion.div
+          <div
             className='lg:w-1/2 text-center lg:text-left'
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.div
+            <div
               className='inline-flex items-center rounded-full border border-green-400/20 px-2.5 py-0.5 text-xs font-medium bg-gradient-to-r from-blue-500/5 to-purple-500/5 mb-4'
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
             >
               <span className='text-green-500'>May 2nd - May 13th, 2025</span>
-            </motion.div>
+            </div>
 
             <div className='mb-3 sm:mb-4 md:mb-6'>
-              <motion.h1
+              <h1
                 className='text-4xl md:text-5xl lg:text-5xl font-extrabold text-center lg:text-left mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-blue-600 leading-tight'
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
               >
                 Hashgraph Online Sprint
-              </motion.h1>
+              </h1>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.7 }}
+              <div
               >
                 <span className='relative'>
                   <h1 className='text-4xl md:text-5xl lg:text-6xl font-extrabold text-center lg:text-left text-gray-800 dark:text-white leading-tight'>
                     Bonzo Finance
                   </h1>
-                  <motion.span
+                  <span
                     className='absolute bottom-1 sm:bottom-2 left-0 w-full h-2 sm:h-3 bg-green-400/20 -z-10'
-                    initial={{ width: 0 }}
-                    animate={{ width: '100%' }}
-                    transition={{ duration: 1, delay: 1.2 }}
                   />
                 </span>
-              </motion.div>
+              </div>
             </div>
 
-            <motion.p
+            <p
               className='text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-xl mx-auto lg:mx-0 text-center lg:text-left'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.0 }}
             >
               Join us to build the future of DeFi AI on Hedera. Create an
               innovative AI agent that leverages the{' '}
@@ -156,13 +125,10 @@ const HeroSection: React.FC<Props> = () => {
                 15,000 $BONZO
               </span>{' '}
               in prizes.
-            </motion.p>
+            </p>
 
-            <motion.div
+            <div
               className='flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-6 sm:mb-8'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.3 }}
             >
               <button 
                 className='px-6 py-3 rounded-lg font-bold text-white bg-gray-400 cursor-not-allowed opacity-60'
@@ -178,14 +144,11 @@ const HeroSection: React.FC<Props> = () => {
                 <span>See Project Ideas</span>
                 <FaArrowRight className='ml-2 text-sm' />
               </Link>
-            </motion.div>
+            </div>
 
             <div className='mt-8 flex flex-wrap align-middle justify-center lg:justify-start gap-4 sm:gap-6'>
-              <motion.div
+              <div
                 className='flex items-center gap-2 sm:gap-3'
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 1.6 }}
               >
                 <div className='flex items-center'>
                   <div className='w-8 h-8 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500'>
@@ -195,12 +158,9 @@ const HeroSection: React.FC<Props> = () => {
                     May 2nd - May 13th
                   </span>
                 </div>
-              </motion.div>
-              <motion.div
+              </div>
+              <div
                 className='flex items-center gap-2 sm:gap-3'
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 1.7 }}
               >
                 <div className='flex items-center'>
                   <div className='w-8 h-8 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-500'>
@@ -210,12 +170,9 @@ const HeroSection: React.FC<Props> = () => {
                     Virtual Event
                   </span>
                 </div>
-              </motion.div>
-              <motion.div
+              </div>
+              <div
                 className='flex items-center gap-2 sm:gap-3'
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 1.8 }}
               >
                 <div className='flex items-center'>
                   <div className='w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center text-green-500'>
@@ -225,14 +182,11 @@ const HeroSection: React.FC<Props> = () => {
                     15,000 $BONZO Prize
                   </span>
                 </div>
-              </motion.div>
+              </div>
             </div>
 
-            <motion.div
+            <div
               className='mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6'
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 1.9 }}
             >
               <div className='text-sm text-gray-500 dark:text-gray-400'>
                 Powered by
@@ -244,15 +198,12 @@ const HeroSection: React.FC<Props> = () => {
                   className='h-8'
                 />
               </div>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
           <div className='lg:w-1/2' ref={agentContainerRef}>
-            <motion.div
+            <div
               className='relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700'
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
             >
               <div className='absolute top-0 inset-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 dark:from-purple-500/10 dark:to-blue-500/10 z-0'></div>
 
@@ -272,10 +223,8 @@ const HeroSection: React.FC<Props> = () => {
                 </div>
 
                 <div className='space-y-4'>
-                  <motion.div
+                  <div
                     className='flex items-start'
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={agentControls}
                     custom={0}
                   >
                     <div className='flex-shrink-0 mt-1'>
@@ -292,12 +241,10 @@ const HeroSection: React.FC<Props> = () => {
                         strategies or automate liquidation monitoring
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
 
-                  <motion.div
+                  <div
                     className='flex items-start'
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={agentControls}
                     custom={1}
                   >
                     <div className='flex-shrink-0 mt-1'>
@@ -314,12 +261,10 @@ const HeroSection: React.FC<Props> = () => {
                         predictive insights, or assist with risk management
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
 
-                  <motion.div
+                  <div
                     className='flex items-start'
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={agentControls}
                     custom={2}
                   >
                     <div className='flex-shrink-0 mt-1'>
@@ -336,14 +281,11 @@ const HeroSection: React.FC<Props> = () => {
                         rebalancing or cross-protocol strategies
                       </p>
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
 
-                <motion.div
+                <div
                   className='mt-8 pt-6 border-t border-gray-200 dark:border-gray-700'
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.5 }}
                 >
                   <Link
                     to='#requirements'
@@ -352,9 +294,9 @@ const HeroSection: React.FC<Props> = () => {
                     View Challenge Requirements
                     <FaArrowRight className='ml-2 text-xs' />
                   </Link>
-                </motion.div>
+                </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import PrimaryButton from '../components/PrimaryButton';
 import SecondaryButton from '../components/SecondaryButton';
 import {
@@ -101,51 +100,35 @@ const HeroSection: React.FC = () => {
       {/* Floating prize icons */}
       <div className='absolute inset-0 pointer-events-none'>
         {[...Array(8)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
             className='absolute text-brand-purple/20 dark:text-brand-purple/30'
             style={{
               left: `${10 + i * 10}%`,
               top: `${15 + (i % 3) * 25}%`,
             }}
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 10, -10, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 4 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.8,
-            }}
           >
             {i % 4 === 0 && <FiAward size={24} />}
             {i % 4 === 1 && <FiGift size={24} />}
             {i % 4 === 2 && <FiStar size={24} />}
             {i % 4 === 3 && <FiZap size={24} />}
-          </motion.div>
+          </div>
         ))}
       </div>
 
       <div className='relative z-10 container mx-auto px-6 lg:px-8 min-h-screen'>
         <div className='grid lg:grid-cols-2 gap-16 items-center min-h-screen py-20'>
-          <motion.div
+          <div
             className='space-y-8'
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
           >
             <div className='space-y-6'>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+              <div
               >
                 <StatusBadge variant='success' animated className='mb-4'>
                   <FiZap className='inline mr-1' size={14} />
                   WEEKLY GIVEAWAY
                 </StatusBadge>
-              </motion.div>
+              </div>
 
               <Typography
                 variant='h1'
@@ -199,14 +182,11 @@ const HeroSection: React.FC = () => {
                 </SecondaryButton>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Countdown and Next Event Card */}
-          <motion.div
+          <div
             className='space-y-8'
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
           >
             <TransformCard
               rotation='rotate-[2deg]'
@@ -221,12 +201,10 @@ const HeroSection: React.FC = () => {
               
               <div className='relative z-10 space-y-6'>
                 <div className='flex items-center gap-3 mb-4'>
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                  <div
                   >
                     <FiClock className='text-brand-purple' size={24} />
-                  </motion.div>
+                  </div>
                   <Typography variant='h3' className='text-xl font-black text-gray-900 dark:text-white'>
                     Next Competition
                   </Typography>
@@ -239,15 +217,9 @@ const HeroSection: React.FC = () => {
                     { label: 'Min', value: countdown.minutes },
                     { label: 'Sec', value: countdown.seconds },
                   ].map((item, index) => (
-                    <motion.div
+                    <div
                       key={item.label}
                       className='text-center'
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{
-                        duration: 1,
-                        repeat: Infinity,
-                        delay: index * 0.2,
-                      }}
                     >
                       <div className='bg-white/80 dark:bg-gray-800/80 rounded-xl p-3 border border-brand-blue/20'>
                         <div className='text-2xl font-mono font-black text-brand-blue'>
@@ -257,7 +229,7 @@ const HeroSection: React.FC = () => {
                           {item.label}
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
 
@@ -277,7 +249,7 @@ const HeroSection: React.FC = () => {
                 </div>
               </div>
             </TransformCard>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
@@ -350,12 +322,8 @@ const HowToParticipateSection: React.FC = () => {
 
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8'>
           {steps.map((step, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-              viewport={{ once: true }}
             >
               <TransformCard
                 rotation={`rotate-[${index % 2 === 0 ? '' : '-'}${0.5 + index * 0.3}deg]`}
@@ -367,13 +335,11 @@ const HowToParticipateSection: React.FC = () => {
               >
                 <div className='space-y-4'>
                   <div className='flex items-center gap-3'>
-                    <motion.div
+                    <div
                       className='p-3 rounded-xl bg-gradient-to-r from-brand-blue/10 to-brand-purple/10'
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ type: 'spring', stiffness: 400 }}
                     >
                       {step.icon}
-                    </motion.div>
+                    </div>
                     <div className='text-2xl font-mono font-black text-brand-purple'>
                       0{index + 1}
                     </div>
@@ -403,7 +369,7 @@ const HowToParticipateSection: React.FC = () => {
                   </div>
                 </div>
               </TransformCard>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>
@@ -506,12 +472,8 @@ const RulesAndTipsSection: React.FC = () => {
             
             <div className='space-y-4'>
               {rulesItems.map((rule, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
                   className='flex items-start gap-4 p-4 bg-white/80 dark:bg-gray-800/80 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-brand-blue/50 transition-colors'
                 >
                   <div className='p-2 rounded-lg bg-gradient-to-r from-brand-blue/10 to-brand-purple/10'>
@@ -531,7 +493,7 @@ const RulesAndTipsSection: React.FC = () => {
                       {rule.description}
                     </Typography>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -550,12 +512,8 @@ const RulesAndTipsSection: React.FC = () => {
             
             <div className='space-y-4'>
               {tipsItems.map((tip, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
                   className='flex items-start gap-4 p-4 bg-white/80 dark:bg-gray-800/80 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-brand-green/50 transition-colors'
                 >
                   <div className='p-2 rounded-lg bg-gradient-to-r from-brand-green/10 to-brand-purple/10'>
@@ -575,7 +533,7 @@ const RulesAndTipsSection: React.FC = () => {
                       {tip.description}
                     </Typography>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -662,26 +620,14 @@ const CallToActionSection: React.FC = () => {
             <div className='absolute -inset-4 bg-gradient-to-r from-brand-blue via-brand-purple to-brand-green rounded-3xl blur-2xl opacity-30 group-hover:opacity-50 transition duration-1000 animate-pulse'></div>
             
             <div className='relative bg-white/95 dark:bg-gray-900/95 border border-brand-blue/30 shadow-2xl rounded-3xl p-12 backdrop-blur-sm'>
-              <motion.div
+              <div
                 className='space-y-8'
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
               >
                 <div className='flex justify-center mb-6'>
-                  <motion.div
-                    animate={{ 
-                      rotateY: [0, 360],
-                      scale: [1, 1.1, 1] 
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'easeInOut'
-                    }}
+                  <div
                   >
                     <FiAward className='text-brand-purple' size={64} />
-                  </motion.div>
+                  </div>
                 </div>
 
                 <Typography
@@ -741,7 +687,7 @@ const CallToActionSection: React.FC = () => {
                     </Typography>
                   </Typography>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </div>

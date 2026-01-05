@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   AnimatedBackground,
   Terminal,
@@ -53,10 +52,7 @@ const TutorialShowcaseUltimate: React.FC = () => {
         </div>
         
         <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+          <div
             className='text-center'
           >
             <Typography
@@ -82,12 +78,9 @@ const TutorialShowcaseUltimate: React.FC = () => {
                 Hedera Consensus Service
               </Typography>
             </Typography>
-          </motion.div>
+          </div>
           
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <div
             className='max-w-2xl mx-auto mb-6 sm:mb-8 px-4 sm:px-0'
           >
             <Terminal title='quick-start.sh'>
@@ -96,25 +89,19 @@ const TutorialShowcaseUltimate: React.FC = () => {
                 clickable
                 onClick={handleCopy}
               />
-              <AnimatePresence>
+              <>
                 {copied && (
-                  <motion.div
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0 }}
+                  <div
                     className='font-mono text-xs sm:text-sm pl-4 text-green-500'
                   >
                     ✓ Copied to clipboard!
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
+              </>
             </Terminal>
-          </motion.div>
+          </div>
           
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+          <div
             className='text-center px-4'
           >
             <div className='inline-flex flex-col sm:flex-row items-center gap-3 sm:gap-8 px-4 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 rounded-xl sm:rounded-2xl lg:rounded-full'>
@@ -132,7 +119,7 @@ const TutorialShowcaseUltimate: React.FC = () => {
                 </Typography>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
       

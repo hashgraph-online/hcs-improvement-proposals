@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Layout from '@theme/Layout';
-import { motion } from 'motion/react';
 import { FiDownload, FiCopy, FiCheck } from 'react-icons/fi';
 import { FaPalette, FaFont, FaImage, FaCode } from 'react-icons/fa';
 import Typography from '../components/ui/Typography';
@@ -57,10 +56,7 @@ const BrandPage: React.FC = () => {
           </div>
 
           <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+            <div
               className='text-center max-w-3xl mx-auto'
             >
               <Typography
@@ -78,38 +74,30 @@ const BrandPage: React.FC = () => {
                 Official brand guidelines, colors, logos, and assets.<br/>
                 Everything you need to represent Hashgraph Online consistently and professionally.
               </Typography>
-              <motion.button
+              <button
                 onClick={() => copyToClipboard('reinventing:("the_internet")', 'slogan')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 className='text-[#5599fe] bg-gray-100/50 dark:bg-gray-800/50 hover:bg-gray-200/50 dark:hover:bg-gray-700/50 px-4 py-2 rounded-lg mb-4 inline-block font-mono text-base transition-colors cursor-pointer border-none'
               >
                 reinventing:("the_internet")
                 {copiedColor === 'slogan' && (
                   <span className='ml-2 text-green-500'>✓</span>
                 )}
-              </motion.button>
-            </motion.div>
+              </button>
+            </div>
           </div>
         </section>
 
         {/* Color Palette Section */}
         <section className='py-12 '>
           <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
             >
               <div className='flex items-center gap-3 mb-6'>
-                <motion.div 
-                  whileHover={{ rotate: 360, scale: 1.1 }}
-                  transition={{ duration: 0.6 }}
+                <div
                   className='h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#a679f0]/20 to-[#5599fe]/20'
                 >
                   <FaPalette className='text-xl text-[#5599fe]' />
-                </motion.div>
+                </div>
                 <Typography variant='h2' className='text-3xl mt-3' noDefaultSize>
                   Color Palette
                 </Typography>
@@ -123,12 +111,8 @@ const BrandPage: React.FC = () => {
                     </Typography>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
                       {categoryColors.map((color) => (
-                        <motion.div
+                        <div
                           key={color.hex}
-                          initial={{ opacity: 0, y: 20 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.5, delay: 0.1 * categoryColors.indexOf(color) }}
-                          whileHover={{ scale: 1.05, y: -5 }}
                           className='bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl overflow-hidden transition-shadow duration-300'
                         >
                           <div
@@ -140,10 +124,8 @@ const BrandPage: React.FC = () => {
                               {color.name}
                             </Typography>
                             <div className='space-y-2'>
-                              <motion.button
+                              <button
                                 onClick={() => copyToClipboard(color.hex, color.name + '-hex')}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
                                 className='flex items-center justify-between w-full px-3 py-2 bg-gray-50/20 dark:bg-gray-600/20 backdrop-blur-sm rounded-lg hover:bg-gray-100/30 dark:hover:bg-gray-500/30 transition-all duration-200 border border-gray-200/20 dark:border-gray-500/15'
                               >
                                 <code className='text-sm font-mono text-gray-700 dark:text-gray-200'>{color.hex}</code>
@@ -152,11 +134,9 @@ const BrandPage: React.FC = () => {
                                 ) : (
                                   <FiCopy className='text-gray-400' />
                                 )}
-                              </motion.button>
-                              <motion.button
+                              </button>
+                              <button
                                 onClick={() => copyToClipboard(color.rgb, color.name + '-rgb')}
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
                                 className='flex items-center justify-between w-full px-3 py-2 bg-gray-50/20 dark:bg-gray-600/20 backdrop-blur-sm rounded-lg hover:bg-gray-100/30 dark:hover:bg-gray-500/30 transition-all duration-200 border border-gray-200/20 dark:border-gray-500/15'
                               >
                                 <code className='text-sm font-mono text-gray-700 dark:text-gray-200'>{color.rgb}</code>
@@ -165,27 +145,23 @@ const BrandPage: React.FC = () => {
                                 ) : (
                                   <FiCopy className='text-gray-400' />
                                 )}
-                              </motion.button>
+                              </button>
                             </div>
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
                   </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Typography Section */}
         <section className='py-10 '>
           <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
             >
               <div className='flex items-center gap-3 mb-6'>
                 <div className='h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#5599fe]/20 to-[#48df7b]/20'>
@@ -239,18 +215,14 @@ const BrandPage: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Logos Section */}
         <section className='py-10 '>
           <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
             >
               <div className='flex items-center gap-3 mb-6'>
                 <div className='h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#48df7b]/20 to-[#a679f0]/20'>
@@ -263,12 +235,8 @@ const BrandPage: React.FC = () => {
 
               <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
                 {logos.map((logo) => (
-                  <motion.div
+                  <div
                     key={logo.name}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: logos.indexOf(logo) * 0.1 }}
-                    whileHover={{ scale: 1.03 }}
                     className='bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden '
                   >
                     <div className='p-4 pb-2'>
@@ -305,21 +273,17 @@ const BrandPage: React.FC = () => {
                         </a>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
         {/* Usage Guidelines */}
         <section className='py-10'>
           <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
             >
               <div className='flex items-center gap-3 mb-6'>
                 <div className='h-10 w-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#a679f0]/20 to-[#5599fe]/20'>
@@ -388,7 +352,7 @@ const BrandPage: React.FC = () => {
                 </div>
               </div>
 
-            </motion.div>
+            </div>
           </div>
         </section>
       </div>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, buttonVariants } from './button';
-import { motion } from 'motion/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { cn } from '../../lib/utils';
 import Link from '@docusaurus/Link';
@@ -65,13 +64,11 @@ const PrimaryButton = React.forwardRef<HTMLButtonElement, PrimaryButtonProps>(
     );
 
     const MotionWrapper = ({ children }: { children: React.ReactNode }) => (
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+      <div
         className='inline-block'
       >
         {children}
-      </motion.div>
+      </div>
     );
 
     if (onClick) {

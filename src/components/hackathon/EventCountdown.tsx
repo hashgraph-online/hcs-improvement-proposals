@@ -1,5 +1,4 @@
 import React from 'react';
-import { AnimatePresence, motion } from 'motion/react';
 import { FaPlay } from 'react-icons/fa';
 import { TimeLeft } from './types';
 import PrimaryButton from './PrimaryButton';
@@ -18,25 +17,13 @@ const FloatingParticle: React.FC<{
   x: number;
   y: number;
 }> = ({ size, delay, duration, x, y }) => (
-  <motion.div
+  <div
     className='absolute rounded-full bg-[#8259ef]/20 dark:bg-[#8259ef]/30'
     style={{
       width: `${size}px`,
       height: `${size}px`,
       left: `${x}%`,
       top: `${y}%`,
-    }}
-    initial={{ opacity: 0, scale: 0 }}
-    animate={{
-      opacity: [0, 0.8, 0],
-      scale: [0, 1, 0.8],
-      y: [-10, 10],
-    }}
-    transition={{
-      repeat: Infinity,
-      duration,
-      delay,
-      ease: 'easeInOut',
     }}
   />
 );
@@ -64,23 +51,17 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
         ))}
       </div>
 
-      <AnimatePresence mode='wait'>
+      <>
         {timeLeft ? (
-          <motion.div
+          <div
             key='countdown'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
             className='flex flex-col items-center relative z-10'
           >
-            <motion.h3
+            <h3
               className='text-[#2d84eb] text-xl font-bold mb-6'
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
             >
               {title}
-            </motion.h3>
+            </h3>
 
             <div className='flex justify-between items-center w-full max-w-md'>
               <TimeUnit
@@ -117,13 +98,10 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
                 delay={0.4}
               />
             </div>
-          </motion.div>
+          </div>
         ) : (
-          <motion.div
+          <div
             key='stream-button'
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
             className='flex justify-center relative z-10'
           >
             <div className='relative'>
@@ -137,9 +115,9 @@ export const EventCountdown: React.FC<EventCountdownProps> = ({
                 {streamButtonText}
               </PrimaryButton>
             </div>
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
+      </>
     </div>
   );
 };
@@ -153,29 +131,18 @@ type TimeUnitProps = {
 
 const TimeUnit: React.FC<TimeUnitProps> = ({ value, label, color, delay }) => {
   return (
-    <motion.div
+    <div
       className='flex flex-col items-center'
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay }}
     >
-      <motion.div
+      <div
         className='text-4xl font-mono font-bold'
         style={{ color }}
-        initial={{ scale: 0.5 }}
-        animate={{ scale: 1 }}
-        transition={{
-          type: 'spring',
-          stiffness: 100,
-          damping: 10,
-          delay,
-        }}
       >
         {String(value).padStart(2, '0')}
-      </motion.div>
+      </div>
       <div className='mt-1 text-xs font-medium text-gray-600 dark:text-gray-400'>
         {label}
       </div>
-    </motion.div>
+    </div>
   );
 };

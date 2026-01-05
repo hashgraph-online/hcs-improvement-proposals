@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { motion, useInView } from 'motion/react';
 import HackathonTypography from './HackathonTypography';
 
 type RequirementCardProps = {
@@ -20,26 +19,11 @@ const RequirementCard: React.FC<RequirementCardProps> = ({
   borderColor,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, margin: '-50px' });
+  const isInView = true;
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
-      initial={{ opacity: 0, y: 50 }}
-      animate={
-        isInView
-          ? {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.6,
-                delay: index * 0.1,
-                type: 'spring',
-                stiffness: 50,
-              },
-            }
-          : {}
-      }
       className='group relative'
     >
       <div
@@ -84,7 +68,7 @@ const RequirementCard: React.FC<RequirementCardProps> = ({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

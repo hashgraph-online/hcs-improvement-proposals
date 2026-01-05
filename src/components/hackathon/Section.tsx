@@ -1,4 +1,3 @@
-import { motion } from 'motion/react';
 import Typography from '../Typography';
 
 interface SectionProps {
@@ -8,11 +7,7 @@ interface SectionProps {
 
 export const Section: React.FC<SectionProps> = ({ icon, title }) => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.8 }}
+    <div
       className='relative mb-8'
     >
       <div className='relative w-16 h-16 mx-auto mb-4'>
@@ -30,6 +25,6 @@ export const Section: React.FC<SectionProps> = ({ icon, title }) => {
       >
         {title}
       </Typography>
-    </motion.div>
+    </div>
   );
 };

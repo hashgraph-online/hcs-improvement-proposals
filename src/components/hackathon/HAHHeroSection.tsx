@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useAnimation, useInView } from 'motion/react';
 import Link from '@docusaurus/Link';
 import {
   FaCalendarAlt,
@@ -57,16 +56,8 @@ const HAHHeroSection: React.FC = () => {
     <section className='relative overflow-hidden bg-white dark:bg-gray-900'>
       {/* Animated background */}
       <div className='absolute inset-0 opacity-[0.02] dark:opacity-[0.05] pointer-events-none'>
-        <motion.div
+        <div
           className='absolute inset-0'
-          animate={{
-            backgroundPosition: ['0% 0%', '100% 100%'],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            repeatType: 'reverse',
-          }}
           style={{
             backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(166, 121, 240, 0.1) 35px, rgba(166, 121, 240, 0.1) 70px)`,
             backgroundSize: '200% 200%',
@@ -77,18 +68,9 @@ const HAHHeroSection: React.FC = () => {
       {/* Floating particles */}
       <div className='absolute inset-0 pointer-events-none'>
         {[...Array(5)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
             className='absolute w-2 h-2 bg-gradient-to-r from-[#a679f0] to-[#5599fe] rounded-full opacity-40'
-            animate={{
-              x: [0, 100, -50, 0],
-              y: [0, -100, 50, 0],
-            }}
-            transition={{
-              duration: 10 + i * 2,
-              repeat: Infinity,
-              delay: i * 0.5,
-            }}
             style={{
               left: `${20 + i * 15}%`,
               top: `${10 + i * 20}%`,
@@ -100,43 +82,24 @@ const HAHHeroSection: React.FC = () => {
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-32'>
         <div className='grid lg:grid-cols-2 gap-12 lg:gap-20 items-center'>
           <div className='space-y-8'>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+            <div
               className='space-y-4'
             >
               <div className='space-y-2'>
-                <motion.div
+                <div
                   className='text-sm font-medium text-[#a679f0] dark:text-[#48df7b] uppercase tracking-wide'
-                  animate={{
-                    opacity: [0.6, 1, 0.6],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
                 >
                   Hedera Africa Hackathon
-                </motion.div>
+                </div>
                 <h1 className='text-5xl sm:text-6xl lg:text-7xl font-bold leading-tight'>
-                  <motion.span
+                  <span
                     className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent inline-block'
-                    animate={{
-                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
-                    }}
-                    transition={{
-                      duration: 5,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }}
                     style={{
                       backgroundSize: '200% 200%',
                     }}
                   >
                     AI Track
-                  </motion.span>
+                  </span>
                 </h1>
               </div>
 
@@ -150,12 +113,9 @@ const HAHHeroSection: React.FC = () => {
                 Science. Join developers worldwide to create innovative AI
                 solutions on Hedera.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+            <div
               className='flex flex-wrap gap-6'
             >
               <div className='flex items-center gap-3'>
@@ -185,12 +145,9 @@ const HAHHeroSection: React.FC = () => {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
+            <div
               className='flex flex-col sm:flex-row gap-4'
             >
               <PrimaryButton
@@ -218,63 +175,47 @@ const HAHHeroSection: React.FC = () => {
               >
                 View Main Event
               </PrimaryButton>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <div
             className='relative z-10'
-            whileHover={{ scale: 1.02 }}
           >
             <div className='bg-gray-50 dark:bg-gray-800 rounded-3xl p-8 lg:p-12 border border-gray-200 dark:border-gray-700 min-h-[520px] flex flex-col'>
               <div className='text-center flex-1 flex flex-col justify-center'>
                 <div>
-                  <motion.div
+                  <div
                     key={activeFeature}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
                     className='inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#a679f0] to-[#5599fe] text-white text-3xl mb-4 mx-auto'
                   >
                     {features[activeFeature].icon}
-                  </motion.div>
+                  </div>
 
-                  <motion.h3
+                  <h3
                     key={`title-${activeFeature}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
                     className='text-2xl font-bold text-gray-900 dark:text-white mb-2'
                   >
                     {features[activeFeature].title}
-                  </motion.h3>
+                  </h3>
 
-                  <motion.p
+                  <p
                     key={`desc-${activeFeature}`}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
                     className='text-gray-600 dark:text-gray-400 mb-4'
                   >
                     {features[activeFeature].description}
-                  </motion.p>
+                  </p>
 
                   <div className='h-6 mt-2'>
                     {features[activeFeature].link && (
-                      <motion.a
+                      <a
                         href={features[activeFeature].link}
                         target='_blank'
                         rel='noopener noreferrer'
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3, delay: 0.2 }}
                         className='inline-flex items-center gap-2 text-sm text-[#5599fe] hover:text-[#5599fe]/80 transition-colors mx-auto'
                       >
                         Learn more
                         <FaArrowRight className='w-3 h-3' />
-                      </motion.a>
+                      </a>
                     )}
                   </div>
 
@@ -300,10 +241,7 @@ const HAHHeroSection: React.FC = () => {
                 </div>
               </div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
+              <div
                 className='mt-8'
               >
                 <p className='text-xs text-gray-500 dark:text-gray-400 mb-4 text-center'>
@@ -365,7 +303,7 @@ const HAHHeroSection: React.FC = () => {
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
               <div className='mt-6 p-4 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700'>
                 <div className='flex items-center gap-2 mb-2'>
@@ -390,32 +328,13 @@ const HAHHeroSection: React.FC = () => {
               </div>
             </div>
 
-            <motion.div
+            <div
               className='absolute -top-4 -right-4 w-32 h-32 bg-[#a679f0]/10 rounded-full blur-3xl'
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.1, 0.2, 0.1],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
             />
-            <motion.div
+            <div
               className='absolute -bottom-4 -left-4 w-32 h-32 bg-[#48df7b]/10 rounded-full blur-3xl'
-              animate={{
-                scale: [1.2, 1, 1.2],
-                opacity: [0.1, 0.2, 0.1],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: 'easeInOut',
-                delay: 2,
-              }}
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

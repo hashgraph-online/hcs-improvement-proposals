@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import { motion, useInView, useScroll } from 'motion/react';
 import {
   FaCode,
   FaRobot,
@@ -22,10 +21,7 @@ import { TimelineItem } from './TimelineItem';
 
 const ToolsTimelineSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -195,11 +191,7 @@ const ToolsTimelineSection: React.FC = () => {
       <div className='container mx-auto px-3 relative'>
         <div className='mb-16'>
           <div className='flex flex-col items-center text-center mb-12'>
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
+            <div
               className='relative mb-6'
             >
               <div className='relative w-16 h-16 mx-auto mb-4'>
@@ -217,13 +209,9 @@ const ToolsTimelineSection: React.FC = () => {
               >
                 Build with Hedera
               </HackathonTypography>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+            <div
               className='max-w-2xl'
             >
               <HackathonTypography
@@ -236,7 +224,7 @@ const ToolsTimelineSection: React.FC = () => {
                 accelerate your development process and build innovative AI
                 agents on Hedera.
               </HackathonTypography>
-            </motion.div>
+            </div>
           </div>
 
           <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-6'>
@@ -255,11 +243,7 @@ const ToolsTimelineSection: React.FC = () => {
           </div>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+        <div
           className='relative max-w-5xl mx-auto mb-16 perspective'
         >
           <div className='relative'>
@@ -312,7 +296,7 @@ const ToolsTimelineSection: React.FC = () => {
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
 
         <div className='mt-20' id='schedule'>
           <HackathonTypography

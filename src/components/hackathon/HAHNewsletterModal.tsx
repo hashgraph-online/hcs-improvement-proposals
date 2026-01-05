@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import PrimaryButton from './PrimaryButton';
 
@@ -24,24 +23,18 @@ const HAHNewsletterModal: React.FC<HAHNewsletterModalProps> = ({
   }, [isOpen]);
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
-        <motion.div
+        <div
           className='fixed inset-0 bg-black/80 backdrop-blur-sm z-[1000] flex items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-20'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
           onClick={(e) => {
             if (e.target === e.currentTarget) {
               onClose();
             }
           }}
         >
-          <motion.div
+          <div
             className='relative w-full max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 my-2 sm:my-4'
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
           >
             <div className='flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-[#a679f0]/10 via-[#5599fe]/10 to-[#48df7b]/10'>
               <div>
@@ -77,10 +70,10 @@ const HAHNewsletterModal: React.FC<HAHNewsletterModalProps> = ({
             <div className='p-4 bg-gradient-to-r from-[#a679f0]/5 via-[#5599fe]/5 to-[#48df7b]/5 dark:bg-gray-800 text-center border-t border-gray-200 dark:border-gray-700'>
               <PrimaryButton onClick={onClose} className='bg-gray-600 hover:bg-gray-700'>Close</PrimaryButton>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       )}
-    </AnimatePresence>
+    </>
   );
 };
 

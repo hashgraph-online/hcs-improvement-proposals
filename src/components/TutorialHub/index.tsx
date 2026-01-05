@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { motion } from 'motion/react';
 import { AnimatedBackground } from '../ui';
 import { tutorials } from './data';
 import VideoTheater from './VideoTheater';
@@ -71,12 +70,7 @@ const TutorialHub: React.FC = () => {
                     opacity={0.05}
                 />
                 <div className="container mx-auto px-4 max-w-7xl relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-center"
-                    >
+                    <div className="text-center">
                         <h1 className="text-4xl sm:text-5xl md:text-6xl font-mono font-black tracking-tight text-gray-900 dark:text-white mb-3">
                             Learning
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600"> Paths_</span>
@@ -84,7 +78,7 @@ const TutorialHub: React.FC = () => {
                         <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
                             Master Hedera Consensus Service through our curated, hands-on video series.
                         </p>
-                    </motion.div>
+                    </div>
                 </div>
             </section>
 
@@ -92,14 +86,11 @@ const TutorialHub: React.FC = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
 
                     <div className="lg:col-span-8 space-y-12">
-                        <motion.div
+                        <div
                             key={activeTutorialId}
-                            initial={{ opacity: 0, scale: 0.98 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.4 }}
                         >
                             <VideoTheater tutorial={activeTutorial} />
-                        </motion.div>
+                        </div>
 
                         <TutorialWaterfall tutorial={activeTutorial} />
                     </div>

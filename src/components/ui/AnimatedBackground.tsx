@@ -55,7 +55,7 @@ const BlobsBackground: React.FC<BlobsProps> = ({
         }/10 to-transparent rounded-full blur-3xl ${getIntensityClasses()} ${getDelayClass(
           0
         )}`}
-        style={{ opacity }}
+        
       ></div>
       <div
         className={`absolute bottom-40 left-40 w-80 h-80 bg-gradient-to-tr from-${
@@ -63,7 +63,7 @@ const BlobsBackground: React.FC<BlobsProps> = ({
         }/10 to-transparent rounded-full blur-3xl ${getIntensityClasses()} ${getDelayClass(
           1
         )}`}
-        style={{ opacity }}
+        
       ></div>
       <div
         className={`absolute top-1/2 right-1/4 w-64 h-64 bg-gradient-to-r from-${
@@ -71,7 +71,7 @@ const BlobsBackground: React.FC<BlobsProps> = ({
         }/10 to-transparent rounded-full blur-xl ${getIntensityClasses()} ${getDelayClass(
           2
         )}`}
-        style={{ opacity }}
+        
       ></div>
     </>
   );
@@ -81,15 +81,15 @@ const LinesBackground: React.FC<LinesProps> = ({ colors, opacity }) => (
   <>
     <div
       className={`absolute top-20 left-20 w-1 h-32 bg-gradient-to-b from-${colors[0]}/30 to-transparent`}
-      style={{ opacity }}
+      
     ></div>
     <div
       className={`absolute bottom-40 right-32 w-1 h-24 bg-gradient-to-b from-${colors[1]}/30 to-transparent`}
-      style={{ opacity }}
+      
     ></div>
     <div
       className={`absolute top-1/2 right-20 w-1 h-20 bg-gradient-to-b from-${colors[2]}/30 to-transparent`}
-      style={{ opacity }}
+      
     ></div>
   </>
 );
@@ -97,7 +97,7 @@ const LinesBackground: React.FC<LinesProps> = ({ colors, opacity }) => (
 const GradientBackground: React.FC<GradientProps> = ({ colors, opacity }) => (
   <div
     className={`absolute inset-0 bg-gradient-to-br from-${colors[0]}/5 via-transparent to-${colors[1]}/5`}
-    style={{ opacity }}
+    
   ></div>
 );
 

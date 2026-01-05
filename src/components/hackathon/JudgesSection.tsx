@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence, useInView } from 'motion/react';
 import {
   FaTwitter,
   FaLinkedin,
@@ -56,34 +55,16 @@ export const Person: React.FC<PersonProps> = ({
   isSelected,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(cardRef, { once: true, margin: '-100px' });
+  const isInView = true;
 
   const isHashgraphLogo = person.image.includes('/logo.png');
 
   return (
-    <motion.div
+    <div
       ref={cardRef}
       className={`relative cursor-pointer transition-all duration-500 ${
         isSelected ? 'scale-105 z-10' : ''
       }`}
-      initial={{ opacity: 0, y: 50 }}
-      animate={
-        isInView
-          ? {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.5,
-                delay: index * 0.1,
-                ease: [0.43, 0.13, 0.23, 0.96],
-              },
-            }
-          : {}
-      }
-      whileHover={{
-        y: -10,
-        transition: { duration: 0.3, ease: 'easeOut' },
-      }}
       onClick={onClick}
     >
       <div className='group relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-white to-gray-100 dark:from-gray-900 dark:to-black shadow-xl'>
@@ -96,7 +77,7 @@ export const Person: React.FC<PersonProps> = ({
         <div className='absolute inset-0 overflow-hidden'>
           <div className='absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-300'></div>
 
-          <motion.div
+          <div
             className='absolute bottom-0 left-0 right-0 p-4 translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 ease-out'
             initial={false}
           >
@@ -115,7 +96,7 @@ export const Person: React.FC<PersonProps> = ({
                 </a>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
 
         <img
@@ -140,14 +121,8 @@ export const Person: React.FC<PersonProps> = ({
         )}
       </div>
 
-      <motion.div
+      <div
         className='mt-2 text-center px-1'
-        initial={{ opacity: 0 }}
-        animate={
-          isInView
-            ? { opacity: 1, transition: { delay: 0.3 + index * 0.1 } }
-            : {}
-        }
       >
         <HackathonTypography
           variant='body2'
@@ -164,8 +139,8 @@ export const Person: React.FC<PersonProps> = ({
         <HackathonTypography variant='caption' color='green' className='text-xs'>
           {person.company}
         </HackathonTypography>
-      </motion.div>
-    </motion.div>
+      </div>
+    </div>
   );
 };
 
@@ -184,21 +159,14 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
   const isHashgraphLogo = person.image.includes('/logo.png');
 
   return (
-    <AnimatePresence>
-      <motion.div
+    <>
+      <div
         className='fixed inset-0 bg-black/70 backdrop-blur-lg z-50 flex items-center justify-center p-4'
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
         onClick={onClose}
       >
-        <motion.div
+        <div
           ref={modalRef}
           className='relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-2xl overflow-hidden shadow-2xl'
-          initial={{ scale: 0.9, y: 20, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.9, y: 20, opacity: 0 }}
-          transition={{ type: 'spring', damping: 30, stiffness: 400 }}
           onClick={(e) => e.stopPropagation()}
         >
           <div className='absolute top-0 left-0 right-0 h-48 bg-gradient-to-r from-hedera-blue/10 to-hedera-purple/10 opacity-50'></div>
@@ -232,10 +200,7 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                 )}
 
                 <div className='absolute bottom-0 left-0 right-0 p-6 z-20'>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
+                  <div
                   >
                     <HackathonTypography
                       variant='h2'
@@ -243,12 +208,9 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                     >
                       {person.name}
                     </HackathonTypography>
-                  </motion.div>
+                  </div>
 
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
+                  <div
                     className='flex flex-col'
                   >
                     <HackathonTypography
@@ -260,13 +222,10 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                     <HackathonTypography variant='caption' color='green'>
                       {person.company}
                     </HackathonTypography>
-                  </motion.div>
+                  </div>
 
-                  <motion.div
+                  <div
                     className='flex gap-4 mt-4'
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
                   >
                     {person.socials.map((social, idx) => (
                       <a
@@ -280,18 +239,15 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                         <SocialIcon type={social.type} />
                       </a>
                     ))}
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className='md:w-3/5 p-4 md:p-6 md:pl-8'>
               <div className='h-full flex flex-col'>
-                <motion.div
+                <div
                   className='mb-4'
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
                 >
                   <HackathonTypography
                     variant='h3'
@@ -305,14 +261,11 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                   >
                     {person.bio}
                   </HackathonTypography>
-                </motion.div>
+                </div>
 
                 {person.expertise && (
-                  <motion.div
+                  <div
                     className='mt-3'
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
                   >
                     <HackathonTypography
                       variant='subtitle1'
@@ -323,11 +276,8 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
 
                     <div className='flex flex-wrap gap-2'>
                       {person.expertise.map((skill, index) => (
-                        <motion.span
+                        <span
                           key={index}
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: 0.4 + index * 0.05 }}
                           className={`px-3 py-1.5 text-xs rounded-full ${
                             index % 3 === 0
                               ? 'bg-hedera-blue/10 text-hedera-blue dark:bg-hedera-blue/20 dark:text-blue-300'
@@ -337,18 +287,15 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                           }`}
                         >
                           {skill}
-                        </motion.span>
+                        </span>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
 
                 {person.isAI && (
-                  <motion.div
+                  <div
                     className='mt-4 p-3 border border-blue-300/20 dark:border-blue-500/20 rounded-xl bg-gradient-to-r from-blue-50/30 to-purple-50/30 dark:from-blue-900/10 dark:to-purple-900/10'
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
                   >
                     <div className='flex items-center gap-2'>
                       <div className='relative'>
@@ -369,14 +316,14 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                         </HackathonTypography>
                       </div>
                     </div>
-                  </motion.div>
+                  </div>
                 )}
               </div>
             </div>
           </div>
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -398,23 +345,19 @@ const GlowingButton: React.FC<{
       }`}
     >
       {active && (
-        <motion.div
+        <div
           layoutId='activeTabIndicator'
           className={`absolute inset-0 rounded-full ${
             color === 'purple' ? 'bg-hedera-purple' : 'bg-hedera-green'
           }`}
           initial={false}
-          transition={{ type: 'spring', bounce: 0.15, duration: 0.6 }}
         />
       )}
       <span className='relative z-10'>{children}</span>
 
       {active && (
-        <motion.div
+        <div
           className='absolute -inset-px rounded-full opacity-50 blur-sm'
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 2, repeat: Infinity }}
           style={{
             background: `linear-gradient(to right, ${
               color === 'purple' ? '#8A5CF5' : '#10B981'
@@ -453,11 +396,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
     return (
       <div className='min-h-[400px] bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-black relative overflow-hidden py-16'>
         <div className='container mx-auto px-3 text-center'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div
           >
             <h2 className='text-3xl font-bold text-gray-900 dark:text-white mb-4'>
               Judges & Mentors
@@ -465,7 +404,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
             <p className='text-lg text-gray-600 dark:text-gray-400'>
               To Be Announced
             </p>
-          </motion.div>
+          </div>
         </div>
       </div>
     );
@@ -488,11 +427,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
 
       <div className='container mx-auto px-3 relative z-10'>
         <div className='max-w-4xl mx-auto text-center mb-10'>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+          <div
           >
             <span className='inline-block bg-gradient-to-r from-hedera-blue/10 to-hedera-purple/10 dark:from-hedera-blue/20 dark:to-hedera-purple/20 px-3 py-1 rounded-full text-xs font-medium text-hedera-green border border-hedera-green/20 mb-4'>
               Expert Advisors
@@ -514,14 +449,10 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
               the hackathon. Connect with leaders in the Hedera ecosystem to
               help you succeed.
             </HackathonTypography>
-          </motion.div>
+          </div>
 
-          <motion.div
+          <div
             className='flex flex-wrap justify-center mt-10 mb-8 gap-3'
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.5 }}
           >
             <GlowingButton
               active={activeTab === 'mentors'}
@@ -538,25 +469,18 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
             >
               Judges
             </GlowingButton>
-          </motion.div>
+          </div>
         </div>
 
-        <AnimatePresence mode='wait'>
+        <>
           {activeTab === 'judges' ? (
-            <motion.div
+            <div
               key='judges'
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -40 }}
-              transition={{ duration: 0.5 }}
             >
               {filteredJudges.length === 0 ? (
                 <div>
                   <div className='mt-8 flex items-center justify-center'>
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5 }}
+                    <div
                       className='text-center max-w-lg'
                     >
                       <div className='relative inline-block'>
@@ -581,7 +505,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
                           </HackathonTypography>
                         </div>
                       </div>
-                    </motion.div>
+                    </div>
                   </div>
                   {/* Spacer to maintain consistent height */}
                   <div className='mt-16'></div>
@@ -599,11 +523,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
                       />
                     ))}
                   </div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
+                  <div
                     className='mt-16 text-center'
                   >
                     <div className='inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
@@ -613,17 +533,13 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
                         </span>
                       </span>
                     </div>
-                  </motion.div>
+                  </div>
                 </>
               )}
-            </motion.div>
+            </div>
           ) : (
-            <motion.div
+            <div
               key='mentors'
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -40 }}
-              transition={{ duration: 0.5 }}
             >
               <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 gap-y-6'>
                 {filteredMentors.map((mentor, index) => (
@@ -637,11 +553,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
                 ))}
               </div>
               {filteredMentors.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, delay: 0.3 }}
+                <div
                   className='mt-16 text-center'
                 >
                   <div className='inline-flex items-center justify-center px-6 py-2 bg-gradient-to-r from-hedera-purple/10 to-hedera-blue/10 dark:from-hedera-purple/20 dark:to-hedera-blue/20 rounded-full border border-hedera-purple/20 dark:border-hedera-purple/30'>
@@ -651,11 +563,11 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
                       </span>
                     </span>
                   </div>
-                </motion.div>
+                </div>
               )}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
+        </>
 
         {selectedPerson && (
           <SelectedPerson

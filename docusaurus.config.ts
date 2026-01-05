@@ -65,6 +65,14 @@ const config: Config = {
         .bg-brand-blue{background:#5599fe}
         .text-brand-purple{color:#a679f0}
         .text-brand-green{color:#48df7b}
+        /* Hero skeleton critical styles */
+        @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+        .animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}
+        .bg-gradient-to-r{background-image:linear-gradient(to right,var(--tw-gradient-stops))}
+        .from-gray-200{--tw-gradient-from:#e5e7eb;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to)}
+        .to-gray-100{--tw-gradient-to:#f3f4f6}
+        [data-theme='dark'] .dark\\:from-gray-700{--tw-gradient-from:#374151}
+        [data-theme='dark'] .dark\\:to-gray-800{--tw-gradient-to:#1f2937}
       `,
     },
   ],
@@ -89,6 +97,11 @@ const config: Config = {
     locales: ['en'],
   },
   onBrokenAnchors: 'ignore',
+
+  // Client modules for post-hydration effects
+  clientModules: [
+    './src/clientModules/hydration-marker.ts',
+  ],
 
   presets: [
     [

@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'motion/react';
 import { HashgraphConsensus } from '../HashgraphConsensus';
 import { Typography } from '../ui';
 import { FaNetworkWired, FaRocket, FaCoins } from 'react-icons/fa';
@@ -39,11 +38,7 @@ const AutonomousInfrastructureSection: React.FC = () => {
 
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
             {/* Card 1: Websites */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
+            <div
               className='relative group'
             >
               <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
@@ -61,14 +56,10 @@ const AutonomousInfrastructureSection: React.FC = () => {
                   <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">web servers</span>
                 </h3>
               </div>
-            </motion.div>
+            </div>
 
             {/* Card 2: AI Agents */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
+            <div
               className='relative group'
             >
               <div className="absolute inset-0 bg-gradient-to-br from-brand-green/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
@@ -86,14 +77,10 @@ const AutonomousInfrastructureSection: React.FC = () => {
                   <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">autonomously</span>
                 </h3>
               </div>
-            </motion.div>
+            </div>
 
             {/* Card 3: Economic Systems */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
+            <div
               className='relative group'
             >
               <div className="absolute inset-0 bg-gradient-to-br from-brand-purple/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl blur-xl" />
@@ -111,7 +98,7 @@ const AutonomousInfrastructureSection: React.FC = () => {
                   <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/60">themselves</span>
                 </h3>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </div>

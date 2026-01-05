@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, useScroll, useSpring } from 'motion/react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import { FaNetworkWired, FaServer, FaSearch, FaBolt, FaArrowRight, FaCube, FaCheckCircle, FaDatabase, FaLayerGroup, FaArrowDown, FaGlobe, FaShieldAlt, FaExchangeAlt, FaRobot, FaBrain, FaCode } from 'react-icons/fa';
@@ -10,33 +9,26 @@ import Terminal from '../components/ui/Terminal';
 // --- VISUAL COMPONENTS ---
 
 const ScrollProgress = () => {
-    const { scrollYProgress } = useScroll();
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    return <motion.div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] origin-left z-[100]" style={{ scaleX }} />;
+    
+    
+    return <div className="fixed top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] origin-left z-[100]" />;
 };
 
 const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, subtitle: string, color?: "blue" | "purple" | "green" }) => {
     const colorHex = color === "blue" ? "#5599fe" : color === "purple" ? "#a679f0" : "#48df7b";
     return (
         <div className="mb-16">
-            <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            <div
                 className="flex items-center gap-3 mb-4"
             >
                 <div className="w-8 h-1 rounded-full" style={{ backgroundColor: colorHex }} />
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
-            </motion.div>
-            <motion.h2 
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
+            </div>
+            <h2
                 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-[0.9]"
             >
                 {title}
-            </motion.h2>
+            </h2>
         </div>
     );
 };
@@ -66,16 +58,13 @@ const AdapterVisual = () => {
                     const y = Math.sin((angle * Math.PI) / 180) * radius;
                     
                     return (
-                        <motion.div 
+                        <div 
                             key={i}
                             className="absolute left-1/2 top-1/2 w-20 h-20 -ml-10 -mt-10 bg-white dark:bg-[#0f0f16] rounded-2xl border flex flex-col items-center justify-center shadow-2xl z-20"
                             style={{ 
                                 transform: `translate(${x}px, ${y}px)`,
                                 borderColor: `${p.color}40`
                             }}
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: i * 0.1 }}
                         >
                             <div className="text-xl mb-1" style={{ color: p.color }}>{p.icon}</div>
                             <div className="text-[10px] font-bold text-gray-500">{p.name}</div>
@@ -86,12 +75,10 @@ const AdapterVisual = () => {
                                 transform: `translate(-50%, -50%) rotate(${-angle}deg)` 
                             }}>
                                 <line x1="50%" y1="50%" x2="100%" y2="50%" stroke={p.color} strokeWidth="1" strokeDasharray="4 4" opacity="0.3" />
-                                <motion.circle r="2" fill={p.color}
-                                    animate={{ cx: ["100%", "50%"], cy: ["50%", "50%"] }}
-                                    transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: i * 0.5 }}
+                                <circle r="2" fill={p.color}
                                 />
                             </svg>
-                        </motion.div>
+                        </div>
                     );
                 })}
             </div>
@@ -138,10 +125,7 @@ export default function RegistryBrokerPage() {
         <section className="relative min-h-[90vh] flex items-center pt-24 md:pt-32 pb-20 overflow-hidden">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px] relative z-10">
                  <div className="grid lg:grid-cols-2 gap-16 items-center">
-                    <motion.div 
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, ease: "easeOut" }}
+                    <div
                         className="pl-4 md:pl-8"
                     >
                         {/* DROPDOWN MENU */}
@@ -186,7 +170,7 @@ export default function RegistryBrokerPage() {
                                 SEARCH AGENTS
                             </SecondaryButton>
                         </div>
-                    </motion.div>
+                    </div>
 
                     <div className="relative hidden lg:block">
                         <AdapterVisual />
@@ -201,8 +185,7 @@ export default function RegistryBrokerPage() {
                 <SectionHeader title="The Universal Index." subtitle="ARCHITECTURE" color="blue" />
                 
                 <div className="grid md:grid-cols-3 gap-8">
-                    <motion.div 
-                        whileHover={{ y: -10 }}
+                    <div
                         className="p-10 bg-white dark:bg-[#0f0f16] rounded-3xl border border-gray-200 dark:border-white/10 shadow-xl"
                     >
                         <div className="w-14 h-14 bg-[#5599fe]/10 rounded-2xl flex items-center justify-center text-[#5599fe] text-2xl mb-6">
@@ -212,10 +195,9 @@ export default function RegistryBrokerPage() {
                         <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                             Modular ingestion engines for Virtuals, Olas, NANDA, and MCP. We normalize diverse agent metadata into a single, queryable schema.
                         </p>
-                    </motion.div>
+                    </div>
 
-                    <motion.div 
-                        whileHover={{ y: -10 }}
+                    <div
                         className="p-10 bg-white dark:bg-[#0f0f16] rounded-3xl border border-gray-200 dark:border-white/10 shadow-xl"
                     >
                         <div className="w-14 h-14 bg-[#a679f0]/10 rounded-2xl flex items-center justify-center text-[#a679f0] text-2xl mb-6">
@@ -225,10 +207,9 @@ export default function RegistryBrokerPage() {
                         <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                             HCS-backed reputation. We index on-chain trust scores, ensuring that query results prioritize verified, safe agents.
                         </p>
-                    </motion.div>
+                    </div>
 
-                    <motion.div 
-                        whileHover={{ y: -10 }}
+                    <div
                         className="p-10 bg-white dark:bg-[#0f0f16] rounded-3xl border border-gray-200 dark:border-white/10 shadow-xl"
                     >
                         <div className="w-14 h-14 bg-[#48df7b]/10 rounded-2xl flex items-center justify-center text-[#48df7b] text-2xl mb-6">
@@ -238,7 +219,7 @@ export default function RegistryBrokerPage() {
                         <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
                             Powered by <strong>EmbeddingGemma</strong>. Search for agents by capabilities, "financial analysis", "image generation", not just keywords.
                         </p>
-                    </motion.div>
+                    </div>
                 </div>
             </div>
         </section>

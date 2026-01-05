@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { motion } from 'motion/react';
 import {
   FaCode,
   FaRobot,
@@ -523,55 +522,30 @@ const result = await tools.registerAgentTool.invoke({
       id='tools-section'
     >
       <div className='absolute inset-0'>
-        <motion.div
-          animate={{
-            rotate: [0, 360],
-          }}
-          transition={{
-            duration: 100,
-            repeat: Infinity,
-            ease: 'linear',
-          }}
+        <div
           className='absolute -top-1/2 -right-1/2 w-full h-full'
         >
           <div className='w-full h-full bg-gradient-conic from-[#a679f0]/20 via-transparent to-[#5599fe]/20 blur-3xl' />
-        </motion.div>
+        </div>
 
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
+        <div
           className='absolute bottom-0 left-0 w-96 h-96 bg-[#48df7b]/20 rounded-full blur-3xl'
         />
       </div>
 
       <div className='container mx-auto px-4 sm:px-6 lg:px-8 relative z-10'>
         <div className='mb-24'>
-          <motion.div
+          <div
             className='text-center mb-16'
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
           >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+            <div
               className='inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-[#48df7b]/10 to-[#a679f0]/10 dark:from-[#48df7b]/20 dark:to-[#a679f0]/20 border border-[#48df7b]/20 dark:border-[#48df7b]/30 mb-6'
             >
               <FaCode className='text-[#48df7b] mr-2' />
               <span className='text-sm font-bold text-[#48df7b] dark:text-[#a679f0]'>
                 DEVELOPER RESOURCES
               </span>
-            </motion.div>
+            </div>
 
             <h2 className='text-3xl sm:text-4xl font-bold mb-4'>
               <span className='bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#48df7b] bg-clip-text text-transparent'>
@@ -583,13 +557,9 @@ const result = await tools.registerAgentTool.invoke({
               Everything you need to build innovative solutions on Hedera.
               From SDKs to integration plugins, we've got you covered.
             </p>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+          <div
             className='max-w-5xl mx-auto mb-16'
           >
             <div className='bg-white dark:bg-gray-900 rounded-xl lg:rounded-3xl shadow-2xl ring-1 ring-gray-200/50 dark:ring-gray-600 overflow-hidden backdrop-blur-xl'>
@@ -679,11 +649,8 @@ const result = await tools.registerAgentTool.invoke({
                 </div>
 
                 <div className='flex-1 min-w-0 max-w-full p-4 lg:p-6 xl:p-8 bg-white dark:bg-gray-900 overflow-auto'>
-                  <motion.div
+                  <div
                     key={activeToolIndex}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3 }}
                   >
                     <div className='mb-6'>
                       <div className='flex items-center gap-2 mb-2'>
@@ -737,9 +704,7 @@ const result = await tools.registerAgentTool.invoke({
                               </div>
                               <div className='flex items-start gap-2'>
                                 {copied ? (
-                                  <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
+                                  <div
                                     className='flex items-center gap-1.5 px-2 py-0.5 rounded bg-green-500/20 text-green-500'
                                   >
                                     <svg
@@ -756,7 +721,7 @@ const result = await tools.registerAgentTool.invoke({
                                     <span className='text-xs font-medium'>
                                       Copied!
                                     </span>
-                                  </motion.div>
+                                  </div>
                                 ) : (
                                   <div className='flex items-center gap-1.5 px-2 py-0.5 rounded text-gray-500 hover:text-gray-400 hover:bg-gray-800/50 transition-all'>
                                     <svg
@@ -787,12 +752,7 @@ const result = await tools.registerAgentTool.invoke({
                                 <code className='text-gray-900 dark:text-white/80'>
                                   {tools[activeToolIndex].installCommand}
                                 </code>
-                                <motion.span
-                                  animate={{ opacity: [1, 0] }}
-                                  transition={{
-                                    duration: 0.8,
-                                    repeat: Infinity,
-                                  }}
+                                <span
                                   className='inline-block w-2 h-4 bg-gray-600 dark:bg-white/70'
                                 />
                               </div>
@@ -899,11 +859,11 @@ const result = await tools.registerAgentTool.invoke({
                           </PrimaryButton>
                         )}
                     </div>
-                  </motion.div>
+                  </div>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           <div className='mt-8 text-center'>
             <a

@@ -144,7 +144,9 @@
   padding-right: 0.75rem;
 }
 
-/* Smooth transitions for expand/collapse */
+/* Transitions disabled by default to prevent CLS during hydration */
+/* Animations are enabled by custom.css after hydration via html.hydrated class */
 .menu__list-item-collapsible .menu__list {
-  transition: all 0.3s ease-in-out;
+  transition: none;
 }
+

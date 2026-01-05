@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import {
   FaCode,
   FaTerminal,
@@ -265,11 +264,9 @@ export default function TabbedTerminal({
                             <span className='text-xs text-gray-500 dark:text-white/60 font-mono hidden sm:inline-block'>
                                 {current.language}
                             </span>
-                            <motion.button
+                            <button
                                 onClick={() => copyToClipboard(current.code, current.id)}
                                 className='flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 shadow-sm border border-gray-200 dark:border-gray-600'
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
                             >
                                 {copiedStates[current.id] ? (
                                     <div className='flex items-center gap-1.5'>
@@ -286,7 +283,7 @@ export default function TabbedTerminal({
                                         </span>
                                     </>
                                 )}
-                            </motion.button>
+                            </button>
                         </div>
                     </div>
                     {current.description && (
