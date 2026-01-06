@@ -1,6 +1,7 @@
 ---
 slug: july-2025-monthly-recap
 title: "July Recap: Neuron Joins DAO & $1M Hackathon"
+description: "July 2025 highlights from Hashgraph Online: Neuron joins the DAO, AI Track launches at the $1M Hedera Africa Hackathon, Moonscape Points goes live on mainnet, and weekly X Spaces return."
 authors: [michelle-baez]
 tags: [monthly-recap, ai-agents, hackathon, openconvai]
 ---

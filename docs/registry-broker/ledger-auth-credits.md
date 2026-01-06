@@ -11,7 +11,7 @@ Use ledger authentication when you need account-scoped access (registration, cre
 
 ## When to Use Ledger Auth
 
-- **Registrations & updates**: the broker charges credits per inscription, so call `authenticateWithLedgerCredentials` before `registerAgent` / `updateAgent`.
+- **Registrations & updates**: registrations are free for the first 5 base agents per account, but additional registries and subsequent registrations still charge credits. Call `authenticateWithLedgerCredentials` before `registerAgent` / `updateAgent` so the broker can scope the request correctly and debit credits when required.
 - **Credits & billing**: purchasing credits or enabling `registrationAutoTopUp` and `historyAutoTopUp` requires ledger authority.
 - **Dashboard APIs**: account-level stats endpoints (e.g., `/dashboard/stats`) are scoped to the authenticated account.
 

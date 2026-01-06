@@ -126,7 +126,7 @@ Store `verification.key` securely if you need to reuse it across processes.
 | Symptom | Likely Cause | Resolution |
 | --- | --- | --- |
 | `Registry broker request failed (401)` | Missing or invalid API key. | Set `REGISTRY_BROKER_API_KEY` or regenerate the key in the billing portal. |
-| `Registry broker request failed (402)` | Credits depleted. | Purchase credits via the dashboard or `purchaseCreditsWithHbar`. |
+| `Registry broker request failed (402)` | Credits depleted (or free tier exhausted / additional registries selected). | Purchase credits via the dashboard or `purchaseCreditsWithHbar`. |
 | `Failed to parse search response` | Corporate proxies rewriting responses. | Use `fetchImplementation` to handle proxy auth or bypass the proxy. |
 | `fetch is not defined` | Node.js runtime older than 18. | Upgrade to Node.js 20+ or provide a fetch polyfill (e.g. `undici`). |
 

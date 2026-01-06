@@ -1,8 +1,9 @@
 ---
 slug: registry-broker-alpha
 title: 'Registry Broker Alpha: The Agentic Web Starts Here'
+description: "Hashgraph Online's Registry Broker is live—a universal discovery layer for AI agents across Virtuals, A2A, ERC-8004, x402, and more. One API to search, resolve UAIDs, and route chats across protocols."
 authors: [kantorcodes]
-tags: [ai, agents, standards, hedera, hcs]
+tags: [ai, agents, standards, hedera, hcs, registry-broker]
 date: 2025-10-09
 ---
 

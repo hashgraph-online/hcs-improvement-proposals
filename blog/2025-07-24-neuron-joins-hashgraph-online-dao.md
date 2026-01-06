@@ -1,6 +1,7 @@
 ---
 slug: neuron-joins-hashgraph-online-dao
 title: "Neuron Joins Hashgraph Online DAO: Powering a New Era of AI and Machine Commerce"
+description: "Neuron, the decentralized machine-to-machine commerce network, joins Hashgraph Online DAO. Learn how their expertise in agent design, real-time coordination, and drone deployments strengthens the on-chain internet."
 authors: [kantorcodes]
 tags: [dao, neuron, ai-agents, machine-commerce, partnership]
 ---

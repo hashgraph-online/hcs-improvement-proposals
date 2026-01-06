@@ -302,11 +302,82 @@ hgrimoire:
   label: hgrimoire
   permalink: /hgrimoire
   description: Hgrimoire-related content
+
 mesh-network:
   label: Mesh Network
   permalink: /mesh-network
   description: Mesh network technologies and applications
+
 robotics:
   label: Robotics
   permalink: /robotics
   description: Robotics and autonomous systems content
+
+security:
+  label: Security
+  permalink: /security
+  description: Content related to security best practices and encryption
+
+architecture:
+  label: Architecture
+  permalink: /architecture
+  description: System architecture and design patterns
+
+advanced:
+  label: Advanced
+  permalink: /advanced
+  description: Advanced topics and deep technical guides
+
+automation:
+  label: Automation
+  permalink: /automation
+  description: Automation workflows and autonomous agents
+
+websockets:
+  label: WebSockets
+  permalink: /websockets
+  description: Real-time communication and WebSocket patterns
+
+typescript:
+  label: TypeScript
+  permalink: /typescript
+  description: TypeScript specific guides and patterns
+
+virtuals:
+  label: Virtuals Protocol
+  permalink: /virtuals
+  description: Content related to the Virtuals Protocol and ACP
+
+base:
+  label: Base
+  permalink: /base
+  description: Content related to the Base L2 network
+discovery:
+  label: Discovery
+  permalink: /discovery
+  description: Content related to agent discovery and registries
+
+fetch-ai:
+  label: Fetch.ai
+  permalink: /fetch-ai
+  description: Content related to Fetch.ai and AgentVerse ecosystem
+
+encryption:
+  label: Encryption
+  permalink: /encryption
+  description: End-to-end encryption and secure communication patterns
+
+tokenization:
+  label: Tokenization
+  permalink: /tokenization
+  description: AI agent tokenization and fractional ownership models
+
+nanda:
+  label: NANDA
+  permalink: /nanda
+  description: MIT NANDA decentralized agent infrastructure and registry
+
+a2a:
+  label: A2A Protocol
+  permalink: /a2a
+  description: Agent-to-Agent communication protocol content

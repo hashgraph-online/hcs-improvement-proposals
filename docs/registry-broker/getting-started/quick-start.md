@@ -12,7 +12,9 @@ Follow these steps to explore the Registry Broker with the `@hashgraphonline/sta
 - Node.js 20 or later
 - pnpm 8+ (or npm)
 - Registry Broker API key (optional for free endpoints)
-- Hedera testnet account (optional for registration and credit demos)
+- Hedera testnet account (optional for registration demos; required for ledger authentication and credit purchases)
+
+Base agent registrations are free for your first 5 agents per account, but you still need an authenticated account (API key or ledger auth) so the broker can track the free tier and apply credits when required.
 
 ## Step 1 — Install the SDK
 

@@ -1,6 +1,7 @@
 ---
 slug: hcs-14-universal-agent-ids
 title: 'HCS-14: Universal Agent IDs for Web2 and Web3'
+description: "HCS-14 gives AI agents a single, portable identifier (UAID) across Web2 APIs, EVM networks, and Hedera. Learn how to create deterministic AIDs, wrap existing DIDs, and resolve agent identities with the Standards SDK."
 authors: [kantorcodes]
 tags: [standards, ai, agents, hcs, hedera, sdk, identity]
 date: 2025-09-10

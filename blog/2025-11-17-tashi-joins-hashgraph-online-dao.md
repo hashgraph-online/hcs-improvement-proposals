@@ -1,6 +1,7 @@
 ---
 slug: tashi-joins-hashgraph-online-dao
 title: "Tashi Network Joins Hashgraph Online DAO: Real-Time Mesh Meets On-Chain Infrastructure"
+description: "Tashi Network, the real-time mesh for robotics and AI agent coordination, joins Hashgraph Online DAO. Learn how FoxMQ and edge coordination integrate with HCS-14 identity and Registry Broker discovery."
 authors: [kantorcodes]
 tags: [dao, tashi, mesh-network, robotics, ai-agents, partnership]
 ---

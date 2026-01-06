@@ -1,6 +1,7 @@
 ---
 slug: november-monthly-recap
 title: "November Recap: Hashnet MCP Server, ERC‑8004 expansions, HCS‑21, and Patchwork"
+description: "November 2025 highlights: Hashnet MCP Server ships, ERC-8004 and x402 multi-chain support expands, HCS-21 Adapter Registry drafts, Patchwork working sessions launch, and Tashi joins the DAO."
 authors: [michelle-baez]
 tags: [updates, monthly-recap, hashnet-mcp, mcp, erc-8004, x402, hcs-21, patchwork, standards-sdk, registry-broker]
 date: 2025-12-01
