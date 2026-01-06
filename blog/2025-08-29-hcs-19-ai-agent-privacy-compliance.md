@@ -1,6 +1,7 @@
 ---
 slug: hcs-19-ai-agent-privacy-compliance
 title: "HCS-19: A New Privacy Standard for AI Agents"
+description: "HCS-19 defines how AI agents log consent, data processing, and privacy rights on Hedera. Learn how PrivacyCheq's aiCheq implements GDPR and CCPA compliance with verifiable on-chain auditing."
 authors: [michelle-baez]
 tags: [standards, privacy, ai, compliance, hcs-19, privacycheq]
 date: 2025-09-04

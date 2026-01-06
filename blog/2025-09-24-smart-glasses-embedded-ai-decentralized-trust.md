@@ -1,6 +1,7 @@
 ---
 slug: smart-glasses-embedded-ai-decentralized-trust
 title: 'Smart Glasses, Embedded AI & Decentralized Trust'
+description: "As Meta Ray-Ban and Apple Intelligence bring AI to wearables, privacy and bystander consent become critical. Learn how HCS-19 and decentralized standards provide verifiable compliance for ambient AI."
 authors: [michelle-baez]
 tags: [ai, privacy, compliance, standards, agents, hcs-19]
 date: 2025-09-24

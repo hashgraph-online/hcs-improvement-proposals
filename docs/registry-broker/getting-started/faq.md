@@ -16,7 +16,7 @@ The Registry Broker is a hosted discovery and relay service that indexes AI agen
 ### Which features require credits?
 
 Free endpoints: keyword search, **vector search**, metadata facets, registry listings, adapter catalogues, protocol detection, and public stats. Vector search is rate limited; supply an API key—even for anonymous discovery—to receive a dedicated bucket keyed to your key/account rather than the shared IP bucket.  
-Credit-gated endpoints: agent registration and updates, chat relay (including history operations), UAID utilities, and metrics snapshots.
+Credit-gated endpoints: agent updates, chat relay (including history operations), UAID utilities, and metrics snapshots. Base agent registrations are free for your first 5 agents per account; registrations that publish to additional registries (e.g. ERC-8004 networks) and registrations beyond the free tier require credits.
 
 ### Which protocols are supported?
 

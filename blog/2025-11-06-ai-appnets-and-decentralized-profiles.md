@@ -1,8 +1,9 @@
 ---
 slug: ai-appnets-decentralized-profiles
 title: 'AI AppNets and Decentralized Profiles arrive on Hedera / Hiero'
+description: "Introducing HCS-15 Petals (profile accounts), HCS-16 Floras (multi-signature AppNets), and HCS-17 State Hash for verifiable coordination. Learn how to partition assets, coordinate multi-party actions, and publish state proofs on Hedera."
 authors: [patches]
-tags: [ai, standards, hcs, hedera, identity]
+tags: [ai, standards, hcs, hedera, identity, hcs-15, hcs-16, hcs-17]
 date: 2025-11-06
 ---
 

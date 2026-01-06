@@ -1,6 +1,7 @@
 ---
 slug: august-monthly-recap
 title: "August Recap: Desktop Preview & New Standards"
+description: "August 2025 highlights: HOL Desktop Developer Preview launches, HCS-19 privacy compliance standard drafts, and HCS-14 Universal Agent ID standard announced for Web2 and Web3 agents."
 authors: [michelle-baez]
 tags: [updates, monthly-recap, hol-desktop, hcs-19, hcs-14, agent-id]
 date: 2025-09-01

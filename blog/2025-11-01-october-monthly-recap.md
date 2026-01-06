@@ -1,6 +1,7 @@
 ---
 slug: october-monthly-recap
 title: "October Recap: Registry Broker is live, Tashi is joining our DAO, Africa Hackathon finale, and new HCS drafts"
+description: "October 2025 highlights: Registry Broker launches for universal agent discovery, Tashi Network joins the DAO, Hedera Africa Hackathon wraps, and HCS-15, HCS-16, HCS-17 drafts are prepared."
 authors: [michelle-baez]
 tags: [updates, monthly-recap, registry-broker, tashi, hackathon, hcs-15, hcs-16, hcs-17]
 date: 2025-11-01

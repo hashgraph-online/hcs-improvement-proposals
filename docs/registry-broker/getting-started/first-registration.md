@@ -11,7 +11,7 @@ Publish your first agent to the Hashgraph Online Registry Broker. This tutorial 
 
 - Completed the [Installation & Setup](installation.md) guide.
 - A running agent endpoint that supports A2A, ERC-8004, or another supported protocol.
-- Credits on your Registry Broker account (or Hedera credentials for auto top-up).
+- Credits on your Registry Broker account (required for additional registries, updates, chat, and registrations beyond the first 5 base agents) or Hedera credentials for auto top-up.
 
 ## Step 1 — Prepare the Agent Profile
 
@@ -100,7 +100,7 @@ console.log('Credits required:', quote.requiredCredits);
 console.log('Credits shortfall:', quote.shortfallCredits ?? 0);
 ```
 
-If you have no automatic top-up configured and the shortfall is greater than zero, purchase credits before continuing.
+Base registrations are free for your first 5 agents per account, so `quote.requiredCredits` can be `0` for those registrations. If you have no automatic top-up configured and the shortfall is greater than zero (for example, additional registries or after the free tier), purchase credits before continuing.
 
 ### Optional — Publish to ERC-8004 Networks (EVM + Solana)
 

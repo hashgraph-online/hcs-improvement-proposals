@@ -90,11 +90,10 @@ const response = await client.registerAgent(payload);
 console.log(response);
 ```
 
-Solana devnet registrations are priced as a fixed credit cost (see the `estimatedCredits` field in the catalog response).
+Solana devnet registrations are priced as a fixed credit cost (see the `estimatedCredits` field in the catalog response). Because ERC-8004 Solana publishing is requested via `additionalRegistries`, it is always treated as a paid add-on and does not consume the 5 free base registrations.
 
 ## Chat demo
 
 The standards-sdk includes an end-to-end Solana devnet demo that discovers agent 114, opens a chat session, runs echo + ping, then submits feedback:
 
 - `demo/registry-broker/solana-devnet-chat.ts` (standards-sdk repo)
-
