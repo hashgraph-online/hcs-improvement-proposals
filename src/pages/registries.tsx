@@ -111,7 +111,7 @@ const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, s
                 <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
             </div>
             <h2
-                className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
             >
                 {title}
             </h2>
@@ -173,7 +173,7 @@ export default function RegistriesPage() {
                             )}
                         </div>
 
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.9] mb-6">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
                             STRUCTURED <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#a679f0] animate-gradient-x">CONSENSUS.</span>
                         </h1>
@@ -319,7 +319,7 @@ export default function RegistriesPage() {
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1800px]">
                  <div className="grid lg:grid-cols-2 gap-32 items-center">
                      <div>
-                         <h2 className="text-6xl md:text-8xl font-bold mb-12 text-white">Two Modes.</h2>
+                         <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-white">Two Modes.</h2>
                          <p className="text-2xl text-gray-400 leading-relaxed mb-16">
                              Defined by the Topic Memo Enum, HCS-2 registries can behave in two distinct ways to suit different use cases.
                          </p>
@@ -461,7 +461,7 @@ export default function RegistriesPage() {
                 <div
                     className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
-                    <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Start Indexing.</h2>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Start Indexing.</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-8">
                         <PrimaryButton href="https://hol.org/registry/search" className="!text-2xl !px-16 !py-8 shadow-2xl rounded-2xl">
                             SEARCH REGISTRY
