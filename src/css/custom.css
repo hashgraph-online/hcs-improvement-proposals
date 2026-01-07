@@ -287,15 +287,16 @@ article header h1,
   }
 }
 
-/* Blog tags - limit to one line with view more */
+/* Blog tags - limit to one line with view more - prevents CLS */
 [class*='tagsListInline'],
 .margin-vert--sm,
 ul.tags {
   position: relative;
-  max-height: 2.5rem !important;
+  min-height: 2rem;
+  max-height: 2.5rem;
   overflow: hidden;
-  transition: max-height 0.3s ease;
   white-space: nowrap;
+  contain: layout style;
 }
 
 [class*='tagsListInline'].expanded,
@@ -305,13 +306,15 @@ ul.tags.expanded {
   white-space: normal;
 }
 
-/* Style individual tags to be inline */
+/* Style individual tags to be inline - fixed dimensions to prevent CLS */
 [class*='tagsListInline'] > *,
 .margin-vert--sm > *,
 ul.tags > * {
   display: inline-block !important;
   margin-right: 0.5rem !important;
   margin-bottom: 0 !important;
+  line-height: 1.5;
+  vertical-align: middle;
 }
 
 /* Show view more when there's overflow */
