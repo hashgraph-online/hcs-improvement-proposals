@@ -65,7 +65,7 @@ const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, sub
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
             </div>
             <h2
-                className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-[0.9]"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
             >
                 {title}
             </h2>
@@ -122,7 +122,7 @@ export default function HCS14Page() {
                             )}
                         </div>
 
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.85] mb-6">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
                             ONE ID. <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#5599fe] animate-gradient-x">EVERY PROTOCOL.</span>
                         </h1>

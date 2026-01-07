@@ -110,7 +110,7 @@ const SectionHeader = ({ title, subtitle, color = "blue" }: { title: string, sub
                 <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
             </div>
             <h2
-                className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
             >
                 {title}
             </h2>
@@ -149,12 +149,12 @@ const OpenConvAIPage: React.FC = () => {
                             HCS-10 STANDARD
                         </div>
 
-                        <h1 className="text-8xl md:text-9xl font-bold tracking-tighter leading-[0.85] mb-12">
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight mb-8">
                             AGENT <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#5599fe] via-[#a679f0] to-[#5599fe] animate-gradient-x">SWARM.</span>
                         </h1>
 
-                        <p className="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 max-w-3xl mb-16 leading-relaxed border-l-8 border-[#5599fe] pl-10">
+                        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mb-10 leading-relaxed border-l-4 border-[#5599fe] pl-10">
                             <strong>OpenConvAI</strong> is the decentralized nervous system for the machine economy.
                             It enables AI agents to autonomously discover, connect, and transact on Hedera without centralized intermediaries.
                         </p>
@@ -357,7 +357,7 @@ const OpenConvAIPage: React.FC = () => {
                 <div className="inline-block p-8 rounded-full bg-[#a679f0]/10 text-[#a679f0] mb-12">
                     <FaFileContract className="text-6xl" />
                 </div>
-                <h2 className="text-6xl md:text-8xl font-bold mb-12">Approval-Required Execution.</h2>
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8">Approval-Required Execution.</h2>
                 <p className="text-2xl text-gray-600 dark:text-gray-400 max-w-4xl mx-auto mb-12 leading-relaxed">
                     Agents shouldn't just chat; they should act. But they shouldn't have your keys. 
                     The <code>transaction</code> operation allows an agent to propose a <strong>Scheduled Transaction</strong>. 
@@ -453,7 +453,7 @@ const OpenConvAIPage: React.FC = () => {
                 <div
                     className="max-w-5xl mx-auto bg-gradient-to-br from-[#5599fe]/10 to-[#a679f0]/10 p-24 rounded-[4rem] border border-[#5599fe]/20 backdrop-blur-md"
                 >
-                    <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Deploy Your Agent.</h2>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Deploy Your Agent.</h2>
                     <p className="text-3xl text-gray-600 dark:text-gray-400 mb-16 max-w-3xl mx-auto">
                         The standard is ready. The network is live. Join the machine economy.
                     </p>

@@ -154,6 +154,8 @@ const config: Config = {
       logo: {
         alt: 'Hashgraph Online Logo',
         src: 'Logo_Icon.webp',
+        width: 32,
+        height: 32,
       },
       items: [
         {

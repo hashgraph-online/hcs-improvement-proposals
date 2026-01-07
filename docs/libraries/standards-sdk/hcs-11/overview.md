@@ -15,11 +15,11 @@ Note: UAID (HCS‑14) is network‑agnostic and works for Web2/EVM as well. HCS�
 flowchart LR
   subgraph Identity
     P[Build Profile JSON]
-    U[Add UAID (HCS‑14)]
+    U[Add UAID HCS-14]
   end
   subgraph Hedera
-    I[Inscribe Profile (HCS‑1)]
-    M[Update Account Memo<br/>hcs-11:hcs://1/<topicId>]
+    I[Inscribe Profile HCS-1]
+    M[Update Account Memo]
   end
   P --> U
   U --> I

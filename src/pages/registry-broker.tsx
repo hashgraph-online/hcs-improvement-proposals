@@ -25,7 +25,7 @@ const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, s
                 <span className="text-sm font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
             </div>
             <h2
-                className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 dark:text-white leading-[0.9]"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
             >
                 {title}
             </h2>
@@ -152,7 +152,7 @@ export default function RegistryBrokerPage() {
                             )}
                         </div>
 
-                        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] mb-8">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
                             UNIVERSAL <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#a679f0] animate-gradient-x">DISCOVERY.</span>
                         </h1>

@@ -61,7 +61,7 @@ const SectionHeader = ({ title, subtitle, color = "purple" }: { title: string, s
                 <span className="text-lg font-mono tracking-[0.2em] font-bold uppercase" style={{ color: colorHex }}>{subtitle}</span>
             </div>
             <h2
-                className="text-6xl md:text-7xl lg:text-8xl font-bold text-gray-900 dark:text-white leading-[0.9]"
+                className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight"
             >
                 {title}
             </h2>
@@ -121,12 +121,12 @@ export default function ProfilesPage() {
                             )}
                         </div>
 
-                        <h1 className="text-8xl md:text-9xl font-bold tracking-tighter leading-[0.85] mb-12">
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight leading-tight mb-8">
                             UNIVERSAL <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#a679f0] via-[#5599fe] to-[#a679f0] animate-gradient-x">IDENTITY.</span>
                         </h1>
 
-                        <p className="text-2xl md:text-3xl text-gray-600 dark:text-gray-400 max-w-3xl mb-16 leading-relaxed border-l-8 border-[#a679f0] pl-10">
+                        <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mb-10 leading-relaxed border-l-4 border-[#a679f0] pl-6">
                             <strong>HCS-11 Profiles</strong> define a standardized way to store identity metadata on Hedera. 
                             From AI Agents to MCP Servers, one schema unifies them all.
                         </p>
@@ -317,7 +317,7 @@ export default function ProfilesPage() {
         <section className="py-24 bg-gray-50 dark:bg-[#1a1f3a] text-gray-900 dark:text-white">
              <div className="container mx-auto px-6 2xl:px-0 max-w-[1400px]">
                  <div className="text-center max-w-5xl mx-auto mb-16">
-                     <h2 className="text-6xl md:text-8xl font-bold mb-12 text-[#a679f0]">Privacy Built-In.</h2>
+                     <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-[#a679f0]">Privacy Built-In.</h2>
                      <p className="text-2xl text-gray-600 dark:text-gray-400 leading-relaxed">
                          HCS-11 integrates seamlessly with <strong>HCS-19</strong> for privacy compliance. 
                          Declare your jurisdiction, link to your privacy policy, and reference your Consent Management topics directly in your profile.
@@ -422,7 +422,7 @@ export default function ProfilesPage() {
                 <div
                     className="max-w-5xl mx-auto bg-white dark:bg-[#1a1f3a] p-24 rounded-[4rem] border border-gray-200 dark:border-white/10 shadow-2xl"
                 >
-                    <h2 className="text-7xl md:text-9xl font-bold mb-12 text-gray-900 dark:text-white">Claim Your Identity.</h2>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-8 text-gray-900 dark:text-white">Claim Your Identity.</h2>
                     <div className="flex flex-col sm:flex-row justify-center gap-8">
                         <PrimaryButton href="/docs/libraries/standards-sdk" className="!text-2xl !px-16 !py-8 shadow-2xl rounded-2xl">
                             START BUILDING

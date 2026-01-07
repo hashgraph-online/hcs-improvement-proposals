@@ -268,7 +268,7 @@ export default function HashinalsPage() {
                             )}
                         </div>
 
-                        <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[0.9] mb-6">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6">
                             TRUE <br/>
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#48df7b] via-[#5599fe] to-[#48df7b] animate-gradient-x">ON-GRAPH.</span>
                         </h1>
