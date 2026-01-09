@@ -132,6 +132,10 @@ const UseCaseCard: React.FC<{ useCase: UseCase; index: number }> = ({
               src={useCase.image}
               alt={useCase.name}
               className='w-full h-48 md:h-64 object-cover rounded-lg shadow-md'
+              loading={index === 0 ? 'eager' : 'lazy'}
+              width={400}
+              height={256}
+              {...(index === 0 ? { fetchPriority: 'high' as const } : {})}
             />
           </div>
 
