@@ -247,7 +247,7 @@ const BrandPage: React.FC = () => {
                     <div className='grid grid-cols-2'>
                       <div>
                         <div className='h-28 flex items-center justify-center p-4' style={{ backgroundColor: '#2d2f56' }}>
-                          <img src={logo.light} alt={`${logo.name} White`} className='max-h-full max-w-full object-contain' />
+                          <img src={logo.light} alt={`${logo.name} White`} className='max-h-full max-w-full object-contain' loading='lazy' width={150} height={80} />
                         </div>
                         <a
                           href={logo.light}
@@ -261,7 +261,7 @@ const BrandPage: React.FC = () => {
                       </div>
                       <div>
                         <div className='h-28 flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-100'>
-                          <img src={logo.dark || logo.light} alt={`${logo.name} Dark`} className='max-h-full max-w-full object-contain' />
+                          <img src={logo.dark || logo.light} alt={`${logo.name} Dark`} className='max-h-full max-w-full object-contain' loading='lazy' width={150} height={80} />
                         </div>
                         <a
                           href={logo.dark || logo.light}

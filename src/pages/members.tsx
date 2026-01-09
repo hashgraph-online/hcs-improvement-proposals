@@ -141,6 +141,9 @@ const RepeatingLogosBackground: React.FC = () => {
               src={logo.src}
               alt={logo.alt}
               className="w-10 h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 object-contain"
+              loading="lazy"
+              width={56}
+              height={56}
               style={{
                 opacity: opacity,
                 filter: 'brightness(1.2) contrast(0.8)',

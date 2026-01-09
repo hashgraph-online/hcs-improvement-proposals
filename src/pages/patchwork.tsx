@@ -180,7 +180,7 @@ export default function PatchworkPage() {
                 
                 
                 
-                className='relative inline-block mb-8 px-10 py-6 rounded-2xl shadow-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'
+                className='relative inline-block mb-8 px-10 py-6 rounded-2xl shadow-2xl overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 min-w-[320px] md:min-w-[520px] lg:min-w-[600px] min-h-[72px]'
               >
                 <div className='absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br from-brand-purple/20 to-brand-blue/10 rounded-full blur-3xl'></div>
                 <div className='absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-tr from-brand-blue/20 to-brand-green/10 rounded-full blur-3xl'></div>
@@ -586,6 +586,9 @@ export default function PatchworkPage() {
                     src='/Logo_Icon.png'
                     alt='Hashgraph Online'
                     className='h-12 w-12 dark:invert'
+                    loading='lazy'
+                    width={48}
+                    height={48}
                     style={{
                       filter:
                         'brightness(0) saturate(100%) invert(9%) sepia(5%) saturate(1298%) hue-rotate(202deg) brightness(95%) contrast(92%)',

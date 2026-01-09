@@ -55,9 +55,15 @@ const VideoTheater: React.FC<VideoTheaterProps> = ({ tutorial }) => {
                     <>
                         {/* Poster Image */}
                         {!isPlaceholder && (
-                            <div
-                                className="absolute inset-0 bg-cover bg-center transition-opacity duration-500"
-                                style={{ backgroundImage: `url(https://img.youtube.com/vi/${tutorial.videoId}/maxresdefault.jpg)` }}
+                            <img
+                                src={`https://img.youtube.com/vi/${tutorial.videoId}/maxresdefault.jpg`}
+                                alt={`${tutorial.title} video thumbnail`}
+                                className="absolute inset-0 w-full h-full object-cover transition-opacity duration-500"
+                                loading="eager"
+                                fetchPriority="high"
+                                decoding="async"
+                                width={1280}
+                                height={720}
                             />
                         )}
 
