@@ -25,7 +25,8 @@
   "scripts": {
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
-    "prebuild": "node scripts/generate-legal.js",
+    "prebuild": "node scripts/sync-hiero-standards.js && node scripts/generate-legal.js",
+    "sync-standards": "node scripts/sync-hiero-standards.js",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

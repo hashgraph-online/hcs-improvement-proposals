@@ -46,6 +46,8 @@ See the [HCS-14 UAID specification](../../standards/hcs-14.md) for the normative
 4. Compact history if needed: `client.chat.compactHistory({ sessionId, preserveEntries })`.  
 5. End the session: `client.chat.endSession(sessionId)`.
 
+> `agentUrl` is intended for local development and will be deprecated for most production integrations. Prefer UAIDs.
+
 ## Billing & Credits
 
 ### How do I add credits?

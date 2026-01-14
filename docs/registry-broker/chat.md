@@ -60,6 +60,7 @@ const conversation = await client.chat.start({
 ```
 
 Use this form only when you need to talk to a local or unregistered endpoint that does not yet have a UAID (for example, an ephemeral dev server you have not registered). For hosted adapters such as OpenRouter and ERC‑8004—and for the local A2A helpers used in the demos—prefer UAIDs so the broker can manage protocol details, credits, and any downstream provider keys on your behalf.
+`agentUrl` is intended for local development and will be deprecated for most production workflows. For Virtuals (ACP), prefer UAIDs as well—the broker derives the internal ACP routing from the indexed record. See [Virtuals Protocol (ACP)](virtuals-protocol.md).
 
 ## Sending Messages
 
