@@ -28,6 +28,42 @@ const SYNC_PATHS = [
 const PRESERVE_PATTERNS = [/-old\.md$/];
 const SKIP_PATTERNS = [/^_category_\.json$/];
 
+/**
+ * Escape angle brackets that MDX would interpret as JSX tags.
+ * Matches patterns like <placeholder>, <topicId>, <long title>, etc.
+ * but NOT valid HTML tags like <div>, <code>, <a>, etc.
+ * Uses HTML entities to escape, which works in both YAML and MDX.
+ */
+function escapeMdxAngleBrackets(content) {
+  const validHtmlTags = new Set([
+    'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio',
+    'b', 'base', 'bdi', 'bdo', 'blockquote', 'body', 'br', 'button',
+    'canvas', 'caption', 'cite', 'code', 'col', 'colgroup',
+    'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt',
+    'em', 'embed',
+    'fieldset', 'figcaption', 'figure', 'footer', 'form',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html',
+    'i', 'iframe', 'img', 'input', 'ins',
+    'kbd', 'label', 'legend', 'li', 'link',
+    'main', 'map', 'mark', 'menu', 'meta', 'meter',
+    'nav', 'noscript',
+    'object', 'ol', 'optgroup', 'option', 'output',
+    'p', 'param', 'picture', 'pre', 'progress',
+    'q', 'rp', 'rt', 'ruby',
+    's', 'samp', 'script', 'section', 'select', 'slot', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'svg',
+    'table', 'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track',
+    'u', 'ul', 'var', 'video', 'wbr',
+  ]);
+
+  return content.replace(/<([a-zA-Z][a-zA-Z0-9\s_-]*)>/g, (match, tagContent) => {
+    const tagName = tagContent.trim().split(/\s/)[0].toLowerCase();
+    if (validHtmlTags.has(tagName)) {
+      return match;
+    }
+    return `&lt;${tagContent}&gt;`;
+  });
+}
+
 function shouldPreserve(filename) {
   return PRESERVE_PATTERNS.some((pattern) => pattern.test(filename));
 }
@@ -68,7 +104,14 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
         stats.skipped++;
         continue;
       }
-      fs.copyFileSync(srcPath, destPath);
+
+      if (entry.name.endsWith('.md') || entry.name.endsWith('.mdx')) {
+        const content = fs.readFileSync(srcPath, 'utf8');
+        const escapedContent = escapeMdxAngleBrackets(content);
+        fs.writeFileSync(destPath, escapedContent, 'utf8');
+      } else {
+        fs.copyFileSync(srcPath, destPath);
+      }
       stats.copied++;
     }
   }
