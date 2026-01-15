@@ -2227,10 +2227,10 @@ main .theme-doc-generated-index-item::before {
   )::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -50vh;
+  left: -50vw;
+  width: 200vw;
+  height: 200vh;
   background-image: radial-gradient(
       circle at 20% 50%,
       rgba(85, 153, 254, 0.03) 0%,
@@ -2854,10 +2854,10 @@ main .theme-doc-generated-index-item:hover::after,
 .elaborate-standards-page::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -50vh;
+  left: -50vw;
+  width: 200vw;
+  height: 200vh;
   background-image: radial-gradient(
       circle at 20% 50%,
       rgba(85, 153, 254, 0.03) 0%,
@@ -3698,10 +3698,10 @@ main .theme-doc-generated-index-item::before {
   )::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -50vh;
+  left: -50vw;
+  width: 200vw;
+  height: 200vh;
   background-image: radial-gradient(
       circle at 20% 50%,
       rgba(85, 153, 254, 0.03) 0%,
@@ -4325,10 +4325,10 @@ main .theme-doc-generated-index-item:hover::after,
 .elaborate-standards-page::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
+  top: -50vh;
+  left: -50vw;
+  width: 200vw;
+  height: 200vh;
   background-image: radial-gradient(
       circle at 20% 50%,
       rgba(85, 153, 254, 0.03) 0%,
