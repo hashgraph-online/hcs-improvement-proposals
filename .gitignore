@@ -15,10 +15,11 @@
 /src/pages/terms-of-service.mdx
 
 # Standards synced from hiero-consensus-specifications at build time
-# Keep: _category_.json (Docusaurus sidebar config) and *-old.md (legacy local docs)
+# Keep: _category_.json (Docusaurus sidebar config), index.mdx (custom showcase), and *-old.md (legacy local docs)
 /docs/standards/*.md
 !/docs/standards/*-old.md
 /docs/standards/*.mdx
+!/docs/standards/index.mdx
 /docs/standards/*.png
 /docs/standards/*/*.md
 /docs/standards/*/*.png

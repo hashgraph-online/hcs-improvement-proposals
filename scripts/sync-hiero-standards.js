@@ -26,7 +26,7 @@ const SYNC_PATHS = [
 ];
 
 const PRESERVE_PATTERNS = [/-old\.md$/];
-const SKIP_PATTERNS = [/^_category_\.json$/];
+const SKIP_PATTERNS = [/^_category_\.json$/, /^index\.mdx$/];
 
 /**
  * Escape angle brackets that MDX would interpret as JSX tags.
