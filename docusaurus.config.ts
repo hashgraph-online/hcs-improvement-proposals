@@ -52,15 +52,18 @@ const config: Config = {
       tagName: 'style',
       attributes: {},
       innerHTML: `
+        /* Font fallbacks with size-adjust to prevent CLS during font loading */
+        @font-face{font-family:'Roboto Fallback';src:local('Arial');size-adjust:100.3%;ascent-override:92%;descent-override:22%;line-gap-override:0%}
+        @font-face{font-family:'Roboto Mono Fallback';src:local('Courier New');size-adjust:106%;ascent-override:85%;descent-override:22%;line-gap-override:0%}
         /* Critical CSS for above-the-fold content */
-        body{margin:0;font-family:'Roboto',system-ui,-apple-system,sans-serif;background:#fff}
+        body{margin:0;font-family:'Roboto','Roboto Fallback',system-ui,-apple-system,sans-serif;background:#fff}
         .navbar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.95);backdrop-filter:blur(8px)}
         [data-theme='dark'] body{background:#111827;color:#f3f4f6}
         [data-theme='dark'] .navbar{background:rgba(17,24,39,.95)}
         main{min-height:100vh}
         section{position:relative;overflow:hidden}
         .container{max-width:1280px;margin:0 auto;padding:0 1rem}
-        h1,h2,h3{font-family:'Roboto Mono',monospace;font-weight:500}
+        h1,h2,h3{font-family:'Roboto Mono','Roboto Mono Fallback',monospace;font-weight:500}
         .text-brand-blue{color:#5599fe}
         .bg-brand-blue{background:#5599fe}
         .text-brand-purple{color:#a679f0}
@@ -73,6 +76,8 @@ const config: Config = {
         .to-gray-100{--tw-gradient-to:#f3f4f6}
         [data-theme='dark'] .dark\\:from-gray-700{--tw-gradient-from:#374151}
         [data-theme='dark'] .dark\\:to-gray-800{--tw-gradient-to:#1f2937}
+        /* Reserve space for standards page header to prevent CLS */
+        .standards-main-title{min-height:3.5rem}
       `,
     },
   ],

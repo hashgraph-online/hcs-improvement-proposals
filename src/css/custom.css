@@ -829,7 +829,7 @@ textarea {
 /* Force mono font and gradient on standards page title */
 .elaborate-standards-page h1:first-of-type,
 .elaborate-standards-header > h1 {
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   background: linear-gradient(
     90deg,
     #5599fe 0%,
@@ -2248,7 +2248,7 @@ main .theme-doc-generated-index-item::before {
     );
   pointer-events: none;
   z-index: 0;
-  animation: floatBackground 30s ease-in-out infinite;
+  animation: floatBackground 30s ease-in-out infinite;will-change: transform;contain: strict;
 }
 
 /* Recursion SDK specific card styling */
@@ -2875,7 +2875,7 @@ main .theme-doc-generated-index-item:hover::after,
     );
   pointer-events: none;
   z-index: 0;
-  animation: floatBackground 30s ease-in-out infinite;
+  animation: floatBackground 30s ease-in-out infinite;will-change: transform;contain: strict;
 }
 
 @keyframes floatBackground {
@@ -2988,7 +2988,7 @@ main .theme-doc-generated-index-item:hover::after,
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
   letter-spacing: -0.02em !important;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   color: transparent !important;
   display: inline-block !important;
 }
@@ -3011,7 +3011,7 @@ main .theme-doc-generated-index-item:hover::after,
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
   letter-spacing: -0.02em !important;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   color: transparent !important;
   display: inline-block !important;
 }
@@ -3719,7 +3719,7 @@ main .theme-doc-generated-index-item::before {
     );
   pointer-events: none;
   z-index: 0;
-  animation: floatBackground 30s ease-in-out infinite;
+  animation: floatBackground 30s ease-in-out infinite;will-change: transform;contain: strict;
 }
 
 /* Recursion SDK specific card styling */
@@ -4346,7 +4346,7 @@ main .theme-doc-generated-index-item:hover::after,
     );
   pointer-events: none;
   z-index: 0;
-  animation: floatBackground 30s ease-in-out infinite;
+  animation: floatBackground 30s ease-in-out infinite;will-change: transform;contain: strict;
 }
 
 @keyframes floatBackground {
@@ -4459,7 +4459,7 @@ main .theme-doc-generated-index-item:hover::after,
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
   letter-spacing: -0.02em !important;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   color: transparent !important;
   display: inline-block !important;
 }
@@ -4482,7 +4482,7 @@ main .theme-doc-generated-index-item:hover::after,
   -webkit-text-fill-color: transparent !important;
   background-clip: text !important;
   letter-spacing: -0.02em !important;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   color: transparent !important;
   display: inline-block !important;
 }
@@ -5337,7 +5337,7 @@ main .theme-doc-generated-index-item:hover::after,
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
   border-radius: 0.375rem !important;
   color: rgba(255, 255, 255, 0.95) !important;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   font-size: 0.875rem !important;
   padding: 0.625rem 1rem !important;
   width: 100% !important;
@@ -5362,7 +5362,7 @@ main .theme-doc-generated-index-item:hover::after,
   padding: 0.5rem 0.75rem !important;
   margin: 0 1rem !important;
   transition: all 150ms !important;
-  font-family: 'Roboto Mono', monospace !important;
+  font-family: 'Roboto Mono', 'Roboto Mono Fallback', monospace !important;
   font-size: 0.875rem !important;
   color: rgba(255, 255, 255, 0.95) !important;
 }
