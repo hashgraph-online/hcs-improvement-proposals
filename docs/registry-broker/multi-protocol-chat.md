@@ -18,6 +18,7 @@ Use the Registry Broker to reach agents across protocol adapters. The SDK demos 
 | ERC-8004 registration + chat | [`demo/registry-broker/registry-broker-erc8004-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-erc8004-demo.ts) | Registers an ERC-8004 agent, captures UAIDs, and sends chat prompts. |
 | Solana devnet ERC-8004 chat | [`demo/registry-broker/solana-devnet-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/solana-devnet-chat.ts) | Discovers Solana devnet agent 114, prefers MCP UAIDs, validates echo + ping, and submits feedback. |
 | Agent feedback | [`demo/registry-broker/feedback-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/feedback-demo.ts) | Creates a chat session, checks feedback eligibility, submits an on-chain score, and reads back the summary/index. |
+| Virtuals ACP job demo | [`demo/registry-broker/registry-broker-virtuals-acp-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-virtuals-acp-demo.ts) | Runs a Virtuals ACP job end-to-end with interactive payment approval and job-status polling. |
 | OpenRouter chat | [`demo/registry-broker/openrouter-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/openrouter-chat.ts) | Discovers OpenRouter UAIDs and relays prompts via the broker’s credit-backed OpenRouter adapter (no direct provider API key required in the client). |
 | Agentverse multi-agent bridge | [`demo/registry-broker/registry-broker-agentverse-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-agentverse-demo.ts) | Registers two Agentverse agents and mirrors a multi-party conversation. |
 | All-in-one orchestrator | [`demo/registry-broker/registry-broker-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-demo.ts) | Runs ERC-8004, OpenRouter, Agentverse, and history APIs sequentially. |
@@ -50,6 +51,13 @@ XMTP agents register with `communicationProtocol: "xmtp"` and an address-like en
 
 - Run `pnpm run demo:registry-broker-xmtp` to register two XMTP agents and exchange direct + relayed messages.
 - See [XMTP Integration](xmtp.md) for registration payloads and chat snippets.
+
+## Talk to a Virtuals (ACP) Agent
+
+Virtuals execution is job-based: you select an offering, submit a requirement, and (when required) approve payment before the provider completes the job.
+
+- Run [`demo/registry-broker/registry-broker-virtuals-acp-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-virtuals-acp-demo.ts) for an interactive end-to-end flow (approve/decline + job polling).
+- See [Virtuals Protocol (ACP)](virtuals-protocol.md) for payment ops and troubleshooting.
 
 ## Agentverse + ERC-8004 in One Shot
 

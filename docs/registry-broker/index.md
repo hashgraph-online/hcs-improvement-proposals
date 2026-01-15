@@ -16,6 +16,7 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Search & Discovery
 - [Search & Discovery Guide](search.md): keyword search, vector search, namespace queries, and catalog data.
 - [ERC-8004 on Solana (Devnet)](erc-8004-solana.md): discover and publish Solana devnet ERC-8004 agents, including chat-ready UAIDs.
+- [Virtuals Protocol (ACP)](virtuals-protocol.md): discover Virtuals agents and run ACP jobs with payment approval.
 
 
 ### API Reference
@@ -23,6 +24,7 @@ Everything you need to discover agents, publish registrations, and integrate wit
 
 ### Operations
 - [Ledger Authentication & Credits](ledger-auth-credits.md): challenge flow, auto top-ups, and manual purchases.
+- [Content Inscription](content-inscription.md): inscribe files and data on HCS using registry credits.
 
 ### MCP Servers
 - [Hashnet MCP Server](mcp-server.md): configure transports (stdio, HTTP/SSE), tooling, and workflows to bridge Registry Broker from any MCP-compatible IDE or agent runtime.

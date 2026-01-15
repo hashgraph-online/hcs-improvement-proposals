@@ -20,17 +20,31 @@ export default function Root({ children }: { children: React.ReactNode }) {
       });
     };
 
-    const observer = new MutationObserver(() => {
-      enablePrimaryDrawer();
-    });
+    // Only observe the navbar sidebar container, not the entire body
+    // This dramatically reduces INP by limiting mutation observer scope
+    const navbarSidebar = document.querySelector('.navbar-sidebar');
+    let observer: MutationObserver | null = null;
+    
+    if (navbarSidebar) {
+      observer = new MutationObserver(() => {
+        enablePrimaryDrawer();
+      });
+      observer.observe(navbarSidebar, { childList: true, subtree: true, attributes: true, attributeFilter: ['inert'] });
+    }
 
-    observer.observe(document.body, { childList: true, subtree: true });
-
-    document.addEventListener('click', enablePrimaryDrawer, true);
+    // Use a delegated event listener on navbar-sidebar only, not document
+    const handleSidebarClick = (e: Event) => {
+      const target = e.target as Element;
+      if (target.closest('.navbar-sidebar')) {
+        enablePrimaryDrawer();
+      }
+    };
+    
+    document.addEventListener('click', handleSidebarClick, { passive: true, capture: true });
 
     return () => {
-      observer.disconnect();
-      document.removeEventListener('click', enablePrimaryDrawer, true);
+      observer?.disconnect();
+      document.removeEventListener('click', handleSidebarClick, true);
     };
   }, []);
 

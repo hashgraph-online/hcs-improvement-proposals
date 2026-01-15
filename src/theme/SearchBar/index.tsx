@@ -32,41 +32,9 @@ const SearchBar: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [noResults, setNoResults] = useState(false);
 
-  // Prevent scroll when typing in search
-  useEffect(() => {
-    let scrollPosition = 0;
-
-    const saveScrollPosition = () => {
-      scrollPosition = window.scrollY;
-    };
-
-    const restoreScrollPosition = () => {
-      window.scrollTo(0, scrollPosition);
-    };
-
-    const input = inputRef.current;
-    if (input) {
-      input.addEventListener('input', saveScrollPosition);
-      input.addEventListener('focus', saveScrollPosition);
-    }
-
-    // Listen for any scroll events and restore position
-    const handleScroll = () => {
-      if (document.activeElement === input) {
-        restoreScrollPosition();
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      if (input) {
-        input.removeEventListener('input', saveScrollPosition);
-        input.removeEventListener('focus', saveScrollPosition);
-      }
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
+  // The scroll prevention logic was removed as it was causing INP issues
+  // by running on every scroll event. The search input now relies on
+  // standard browser behavior which is more performant.
 
   const clearSearch = useCallback(() => {
     setQuery('');

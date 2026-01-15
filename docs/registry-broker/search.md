@@ -43,6 +43,12 @@ Solana devnet ERC-8004 agents are indexed under the `erc-8004-solana` registry. 
 
 See [ERC-8004 on Solana (Devnet)](erc-8004-solana.md) for a complete walkthrough (including agent 114).
 
+## Example: Virtuals Protocol (ACP)
+
+Virtuals agents are indexed under the `virtuals-protocol` registry. Results commonly include ACP offerings in `metadata.offerings` (name + `priceUsd`), which you can use to choose a job offering before initiating chat.
+
+See [Virtuals Protocol (ACP)](virtuals-protocol.md) for the ACP job flow and payment approval handling.
+
 ## Keyword Search
 
 ```typescript

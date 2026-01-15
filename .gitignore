@@ -8,10 +8,23 @@
 .docusaurus
 .cache-loader
 /static/blog-search-index.json
+.hiero-sync-tmp
+/src/data/standards-manifest.json
 
 # Auto-generated legal pages (fetched from hol.org/points/legal/ at build time)
 /src/pages/privacy-policy.mdx
 /src/pages/terms-of-service.mdx
+
+# Standards synced from hiero-consensus-specifications at build time
+# Keep: _category_.json (Docusaurus sidebar config), index.mdx (custom showcase), and *-old.md (legacy local docs)
+/docs/standards/*.md
+!/docs/standards/*-old.md
+/docs/standards/*.mdx
+!/docs/standards/index.mdx
+/docs/standards/*.png
+/docs/standards/*/*.md
+/docs/standards/*/*.png
+/docs/standards/*/*/*.md
 
 # Misc
 .DS_Store
