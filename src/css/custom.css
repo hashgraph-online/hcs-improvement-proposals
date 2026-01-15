@@ -5569,3 +5569,13 @@ svg {
 [style*="opacity"] {
   contain: layout;
 }
+
+/* Hide decorative background until after hydration to prevent CLS from font loading */
+.elaborate-standards-page::before {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+html.hydrated .elaborate-standards-page::before {
+  opacity: 1;
+}
