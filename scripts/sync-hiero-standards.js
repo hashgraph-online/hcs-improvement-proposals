@@ -140,6 +140,125 @@ function getLocalOnlyFiles(srcDir, destDir) {
   return localOnly;
 }
 
+/**
+ * Parse frontmatter from markdown content.
+ */
+function parseFrontmatter(content) {
+  const match = content.match(/^---\n([\s\S]*?)\n---/);
+  if (!match) return {};
+
+  const frontmatter = {};
+  const lines = match[1].split('\n');
+  for (const line of lines) {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx > 0) {
+      const key = line.slice(0, colonIdx).trim();
+      let value = line.slice(colonIdx + 1).trim();
+      if ((value.startsWith('"') && value.endsWith('"')) ||
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      frontmatter[key] = value;
+    }
+  }
+  return frontmatter;
+}
+
+/**
+ * Extract status from markdown body (looks for "### Status: Published" or similar).
+ */
+function extractStatus(content) {
+  const match = content.match(/###?\s*\*?\*?Status:?\*?\*?\s*(\w+)/i);
+  if (match) {
+    const status = match[1].toLowerCase();
+    if (status === 'published' || status === 'draft') {
+      return status;
+    }
+  }
+  return 'draft';
+}
+
+/**
+ * Local category and feature mappings for standards.
+ * This supplements the synced data with display metadata.
+ */
+const CATEGORY_MAP = {
+  'hcs-1': { category: 'Core Data Management', features: ['Data chunking', 'File reconstruction', 'Consensus-based storage'] },
+  'hcs-2': { category: 'Core Data Management', features: ['Topic organization', 'Registry management', 'Data indexing'] },
+  'hcs-3': { category: 'Core Data Management', features: ['Recursive references', 'Resource loading', 'Standardized linking'] },
+  'hcs-4': { category: 'Governance & Process', features: ['Lifecycle', 'Last Call', 'Conformance'] },
+  'hcs-5': { category: 'Digital Assets & NFTs', features: ['NFT creation', 'File tokenization', 'HTS integration'] },
+  'hcs-6': { category: 'Digital Assets & NFTs', features: ['Mutable metadata', 'Dynamic updates', 'Flexible NFTs'] },
+  'hcs-7': { category: 'Digital Assets & NFTs', features: ['Smart contracts', 'WASM processing', 'State-reactive NFTs'] },
+  'hcs-8': { category: 'Governance & Polling', features: ['Decentralized voting', 'Poll management', 'Result aggregation'] },
+  'hcs-9': { category: 'Governance & Polling', features: ['Poll schemas', 'Metadata standards', 'Execution framework'] },
+  'hcs-10': { category: 'AI & Communication', features: ['AI communication', 'Agent discovery', 'Decentralized registry'] },
+  'hcs-11': { category: 'Identity & Profiles', features: ['Profile metadata', 'Identity standards', 'Cross-app compatibility'] },
+  'hcs-12': { category: 'Application Composition', features: ['WASM actions', 'Gutenberg blocks', 'Assembly composition'] },
+  'hcs-13': { category: 'Infrastructure', features: ['Schema validation', 'Type-safe data', 'JSON Schema support'] },
+  'hcs-14': { category: 'AI & Communication', features: ['Agent identification', 'Cross-protocol routing', 'DID compatibility'] },
+  'hcs-15': { category: 'Identity & Profiles', features: ['Multiple profiles', 'Account isolation', 'Same-key management'] },
+  'hcs-16': { category: 'AI & Communication', features: ['Multi-party coordination', 'Shared escrow', 'Agent consensus'] },
+  'hcs-17': { category: 'Infrastructure', features: ['State verification', 'Hash calculation', 'Audit trails'] },
+  'hcs-18': { category: 'AI & Communication', features: ['Agent discovery', 'Formation protocol', 'Autonomous coordination'] },
+  'hcs-19': { category: 'AI & Communication', features: ['Privacy compliance', 'Consent management', 'Data processing records', 'GDPR/CCPA support'] },
+  'hcs-20': { category: 'Points & Rewards', features: ['Point management', 'Audit trails', 'Reward systems'] },
+  'hcs-21': { category: 'Infrastructure', features: ['Adapter declarations', 'HCS-1 manifest pointers', 'Registry-of-registries support'] },
+};
+
+const DEFAULT_CATEGORY = { category: 'Uncategorized', features: [] };
+
+/**
+ * Generate standards manifest from synced markdown files.
+ */
+function generateStandardsManifest(standardsDir) {
+  const manifest = [];
+  const entries = fs.readdirSync(standardsDir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    let filePath;
+    let hcsId;
+
+    if (entry.isFile() && entry.name.match(/^hcs-\d+\.md$/)) {
+      filePath = path.join(standardsDir, entry.name);
+      hcsId = entry.name.replace('.md', '');
+    } else if (entry.isDirectory() && entry.name.match(/^hcs-\d+$/)) {
+      const indexPath = path.join(standardsDir, entry.name, 'index.md');
+      if (fs.existsSync(indexPath)) {
+        filePath = indexPath;
+        hcsId = entry.name;
+      }
+    }
+
+    if (!filePath || !hcsId) continue;
+    if (hcsId === 'hcs-XX') continue;
+
+    const content = fs.readFileSync(filePath, 'utf8');
+    const frontmatter = parseFrontmatter(content);
+    const status = extractStatus(content);
+    const categoryData = CATEGORY_MAP[hcsId] || DEFAULT_CATEGORY;
+
+    const hcsNumber = parseInt(hcsId.replace('hcs-', ''), 10);
+    const title = frontmatter.title || `HCS-${hcsNumber}`;
+    const description = frontmatter.description || '';
+
+    manifest.push({
+      id: hcsId,
+      number: hcsNumber,
+      title,
+      description,
+      status,
+      category: categoryData.category,
+      features: categoryData.features,
+      href: `/docs/standards/${hcsId}`,
+      icon: hcsId.toUpperCase(),
+    });
+  }
+
+  manifest.sort((a, b) => a.number - b.number);
+  return manifest;
+}
+
 async function main() {
   console.log('Syncing standards from hiero-consensus-specifications...\n');
   console.log(`Repository: ${HIERO_REPO}`);
@@ -181,6 +300,14 @@ async function main() {
     }
 
     console.log(`\nSync complete. Total files copied: ${totalCopied}`);
+
+    console.log('\nGenerating standards manifest...');
+    const standardsDir = path.join(LOCAL_ROOT, 'docs/standards');
+    const manifest = generateStandardsManifest(standardsDir);
+    const manifestPath = path.join(LOCAL_ROOT, 'src/data/standards-manifest.json');
+    ensureDir(path.dirname(manifestPath));
+    fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
+    console.log(`  Generated manifest with ${manifest.length} standards`);
   } finally {
     cleanupTmp();
   }
