@@ -29,6 +29,14 @@ async function main() {
   const absolutizeLinks = (text) =>
     text.replace(/\]\(\/points\//g, '](https://hol.org/points/');
 
+  const normalizeLegacyPointsPrivacyLinks = (text) =>
+    text
+      .replace(/\(\/points\/privacy-policy\)/g, '(https://hol.org/points/legal/privacy)')
+      .replace(
+        /\(https:\/\/hol\.org\/points\/privacy-policy\)/g,
+        '(https://hol.org/points/legal/privacy)',
+      );
+
   try {
     const [terms, privacy] = await Promise.all([
       resolveContent({ inlineVar: 'TERMS_MD', urlVar: 'TERMS_URL', fallbackUrl: DEFAULT_TERMS_URL, name: 'terms' }),
@@ -37,13 +45,13 @@ async function main() {
 
     fs.writeFileSync(
       path.join(pagesDir, 'terms-of-service.mdx'),
-      `# Terms of Service\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${absolutizeLinks(sanitizeLinks(terms))}\n`,
+      `# Terms of Service\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(terms)))}\n`,
       'utf8',
     );
 
     fs.writeFileSync(
       path.join(pagesDir, 'privacy-policy.mdx'),
-      `# Privacy Policy\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${absolutizeLinks(sanitizeLinks(privacy))}\n`,
+      `# Privacy Policy\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(privacy)))}\n`,
       'utf8',
     );
 
