@@ -135,12 +135,6 @@ const config: Config = {
             '/sdk/**',
             '/hackathon/**',
             '/blog/updates/**',
-            '/analytics/**',
-            '/search/**',
-            '/patchwork-speaker/**',
-            '/patchwork-sessions-intake/**',
-            '/pitch-competitions/**',
-            '/hedera-ai-speakers/**',
           ],
         },
         theme: {
