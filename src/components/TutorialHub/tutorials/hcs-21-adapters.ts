@@ -185,6 +185,6 @@ await hcs21.publishCategoryEntry({
     { label: "HCS-21 SDK Overview", url: "/docs/libraries/standards-sdk/hcs-21/overview" },
     { label: "HCS-21 SDK API", url: "/docs/libraries/standards-sdk/hcs-21/api" },
     { label: "HCS-21 Transactions", url: "/docs/libraries/standards-sdk/hcs-21/tx" },
-    { label: "HCS-16 Floras", url: "/docs/standards/hcs-16" },
+    { label: "HCS-16 Floras", url: "/docs/standards/hcs-16/" },
   ],
 };

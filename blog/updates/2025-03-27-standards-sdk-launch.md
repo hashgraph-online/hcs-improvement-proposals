@@ -206,7 +206,7 @@ The project follows standard GitHub workflows with pull requests, code reviews, 
 
 ## Perfect for the Hedera Agents Hackathon
 
-If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hol.org/hackathon), this SDK gives you a massive head start. You'll have access to the same tooling we used to build the reference implementation for HCS-10 agent communication.
+If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hol.org/hackathon/), this SDK gives you a massive head start. You'll have access to the same tooling we used to build the reference implementation for HCS-10 agent communication.
 
 The hackathon focuses on building AI agents that communicate using Hedera, and our SDK provides everything you need to:
 

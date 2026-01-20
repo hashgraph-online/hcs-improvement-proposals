@@ -44,7 +44,7 @@ export default function HackathonRedirect(): JSX.Element {
       <main className="container margin-vert--xl">
         <h1>Redirecting to Hedera Africa Hackathon…</h1>
         <p>
-          If you are not redirected, <a href={target}>click here</a>.
+          If you are not redirected, <a href={target}>open the Hedera Africa Hackathon page</a>.
         </p>
       </main>
     </>

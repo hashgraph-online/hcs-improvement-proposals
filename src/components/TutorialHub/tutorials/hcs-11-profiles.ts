@@ -176,6 +176,6 @@ logger.info('Fetched profile', {
     { label: "HCS-11 SDK Overview", url: "/docs/libraries/standards-sdk/hcs-11/overview" },
     { label: "HCS-11 SDK API", url: "/docs/libraries/standards-sdk/hcs-11/api" },
     { label: "HCS-11 Server Guide", url: "/docs/libraries/standards-sdk/hcs-11/server" },
-    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1" },
+    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1/" },
   ],
 };

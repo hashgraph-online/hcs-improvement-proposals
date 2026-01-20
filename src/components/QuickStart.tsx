@@ -64,7 +64,7 @@ console.log('Topic ID:', result.topicId);`;
         </Typography>
         <div className='flex space-x-4'>
           <a
-            href='/docs/standards/hcs-1'
+            href='/docs/standards/hcs-1/'
             className='text-brand-blue hover:text-brand-purple font-mono text-sm font-medium'
           >
             View Docs →

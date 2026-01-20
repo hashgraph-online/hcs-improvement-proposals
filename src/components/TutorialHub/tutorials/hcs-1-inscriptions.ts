@@ -187,7 +187,7 @@ logger.info('Quote details', response.result);`,
     },
   ],
   resources: [
-    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1" },
+    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1/" },
     { label: "Inscribe SDK Guide", url: "/docs/libraries/standards-sdk/inscribe" },
     { label: "Standards SDK Overview", url: "/docs/libraries/standards-sdk/overview" },
     { label: "Utilities & Services", url: "/docs/libraries/standards-sdk/utils-services" },

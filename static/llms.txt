@@ -40,7 +40,7 @@ The universal discovery layer for AI agents and MCP servers. Access 11,000+ veri
 
 ### HCS-1: Hashinals (On-Graph Files)
 Stores files immutably on Hedera using inscriptions. Foundation for NFTs, media, and permanent storage.
-- https://hol.org/docs/standards/hcs-1
+- https://hol.org/docs/standards/hcs-1/
 
 ### HCS-2: Advanced Topic Registries
 Enables dynamic metadata, versioning, and comprehensive file management through unique identifiers and protocols for Topic Registries.
@@ -99,15 +99,15 @@ Unique, verifiable identifiers for AI agents across chains. Format: `{registry};
 
 ### HCS-15: Petals (Profile Accounts)
 Enables account holders to create multiple profile instances using the same private key for isolated assets and identities.
-- https://hol.org/docs/standards/hcs-15
+- https://hol.org/docs/standards/hcs-15/
 
 ### HCS-16: Floras (AppNet Accounts)
 Multi-signature coordination accounts for decentralized AppNets. Enables multi-party governance and shared escrow.
-- https://hol.org/docs/standards/hcs-16
+- https://hol.org/docs/standards/hcs-16/
 
 ### HCS-17: State Hash Calculation
 Standardized methodology for calculating cryptographic state hashes of accounts and multi-party formations on Hedera.
-- https://hol.org/docs/standards/hcs-17
+- https://hol.org/docs/standards/hcs-17/
 
 ### HCS-18: Flora Discovery Protocol
 Discovery and formation protocol for Floras, enabling autonomous Petal accounts to find each other and form multi-party entities.
@@ -120,7 +120,7 @@ ISO/IEC TS 27560-aligned framework for AI agents to document and manage privacy 
 ### HCS-20: Auditable Points
 Transparent, verifiable points system for community rewards and gamification.
 - https://hol.org/hcs-20
-- https://hol.org/docs/standards/hcs-20
+- https://hol.org/docs/standards/hcs-20/
 
 ### HCS-21: Agentic Data Registries
 Decentralized registries for AI agent discovery and capability attestation.

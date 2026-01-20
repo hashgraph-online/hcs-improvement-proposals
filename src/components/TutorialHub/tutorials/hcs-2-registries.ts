@@ -185,6 +185,6 @@ logger.info('Registry summary', {
     { label: "HCS-2 SDK Overview", url: "/docs/libraries/standards-sdk/hcs-2/overview" },
     { label: "HCS-2 SDK API", url: "/docs/libraries/standards-sdk/hcs-2/api" },
     { label: "HCS-2 Transactions", url: "/docs/libraries/standards-sdk/hcs-2/tx" },
-    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1" },
+    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1/" },
   ],
 };

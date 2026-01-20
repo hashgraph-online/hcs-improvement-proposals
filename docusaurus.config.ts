@@ -218,7 +218,7 @@ const config: Config = {
             { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
           ],
         },
-        { to: '/members', label: 'DAO', position: 'left' },
+        { to: '/members/', label: 'DAO', position: 'left' },
         {
           type: 'dropdown',
           label: 'Registry',
@@ -245,7 +245,7 @@ const config: Config = {
             },
             {
               label: 'Standards',
-              to: '/docs/standards/hcs-1',
+              to: '/docs/standards/hcs-1/',
             },
             {
               label: 'Brand Kit',
