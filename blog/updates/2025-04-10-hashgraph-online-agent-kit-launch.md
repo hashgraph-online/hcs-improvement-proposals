@@ -370,7 +370,7 @@ This architecture enables:
 
 ## Perfect Timing for the Hedera OpenConvAI Hackathon
 
-If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hol.org/hackathon), the Standards Agent Kit gives you a significant head start. Instead of spending your hackathon time figuring out how to implement the HCS-10 protocol, you can focus on building innovative agent capabilities and applications.
+If you're planning to participate in the upcoming [Hedera OpenConvAI Hackathon](https://hol.org/hackathon/), the Standards Agent Kit gives you a significant head start. Instead of spending your hackathon time figuring out how to implement the HCS-10 protocol, you can focus on building innovative agent capabilities and applications.
 
 The hackathon focuses on building AI agents that communicate using Hedera, and our toolkit provides everything you need to:
 

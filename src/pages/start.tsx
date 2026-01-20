@@ -38,7 +38,7 @@ const StartPage: React.FC = () => {
       title: "I'm a Developer",
       description: 'Start coding with our SDKs, Agent Kit, and standards.',
       links: [
-        { label: '$1M Hackathon', href: 'https://hol.org/hackathon' },
+        { label: '$1M Hackathon', href: 'https://hol.org/hackathon/' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
         { label: 'Documentation', href: '/docs/libraries' },
         { label: 'Conversational Agent', href: '/docs/libraries/conversational-agent' },
@@ -52,7 +52,7 @@ const StartPage: React.FC = () => {
       title: "I'm a Hacker",
       description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
       links: [
-        { label: '$1M Hackathon', href: 'https://hol.org/hackathon' },
+        { label: '$1M Hackathon', href: 'https://hol.org/hackathon/' },
         { label: 'Register Now', href: 'https://click.hol.org/hederahacks' },
         { label: 'Tools', href: '/tools' },
         { label: 'GitHub', href: 'https://github.com/hashgraph-online' },
@@ -89,7 +89,7 @@ const StartPage: React.FC = () => {
         name: '$1M Hackathon',
         description: 'Win from $1 Million in prizes in the Hedera Africa Hackathon',
         icon: <FiDollarSign />,
-        link: 'https://hol.org/hackathon',
+        link: 'https://hol.org/hackathon/',
         color: '#14b8a6',
       },
     ];

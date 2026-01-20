@@ -177,6 +177,6 @@ logger.info('Minted from existing metadata topic', result);`,
     { label: "HCS-5 SDK API", url: "/docs/libraries/standards-sdk/hcs-5/api" },
     { label: "HCS-5 Transactions", url: "/docs/libraries/standards-sdk/hcs-5/tx" },
     { label: "Inscribe SDK Guide", url: "/docs/libraries/standards-sdk/inscribe" },
-    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1" },
+    { label: "HCS-1 Spec", url: "/docs/standards/hcs-1/" },
   ],
 };

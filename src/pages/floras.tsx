@@ -415,7 +415,7 @@ export default function FlorasPage() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <PrimaryButton href="/docs/standards/hcs-16" className="!text-sm !px-6 !py-3 shadow-2xl shadow-purple-500/20 rounded-xl flex items-center justify-center gap-2">
+                            <PrimaryButton href="/docs/standards/hcs-16/" className="!text-sm !px-6 !py-3 shadow-2xl shadow-purple-500/20 rounded-xl flex items-center justify-center gap-2">
                                 READ SPEC <FaBolt />
                             </PrimaryButton>
                             <SecondaryButton href="https://hol.org/points" className="!text-sm !px-6 !py-3 !border-[#48df7b] !text-[#48df7b] hover:!bg-[#48df7b] hover:!text-white rounded-xl">
@@ -451,7 +451,7 @@ export default function FlorasPage() {
                          <p className="text-base text-gray-500 leading-relaxed mb-6">
                              This "Shared Key Architecture" eliminates wallet fatigue. One master key controls your Gaming Petal, your DeFi Petal, and your Social Petal.
                          </p>
-                         <PrimaryButton href="/docs/standards/hcs-15" size="medium" className="rounded-xl">READ HCS-15 SPEC</PrimaryButton>
+                         <PrimaryButton href="/docs/standards/hcs-15/" size="medium" className="rounded-xl">READ HCS-15 SPEC</PrimaryButton>
                      </div>
                      
                      <KeyArchitectureVisual />

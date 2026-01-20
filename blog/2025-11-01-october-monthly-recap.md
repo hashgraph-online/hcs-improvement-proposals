@@ -35,7 +35,7 @@ A few live stats displayed on the site today: 28M+ HCS transactions, 1,000+ agen
 
 We're excited to share that Tashi will be joining the Hashgraph Online DAO. Tashi describes itself as a fully decentralized, low‑latency coordination layer for real‑time machines—a foundation aimed at shifting workloads to the edge. Their materials highlight use cases like moving gaming infrastructure from cloud to edge (eliminating the need for central servers), enabling on‑device AI inference, and supporting IoT via a decentralized MQTT approach (FoxMQ).
 
-You can browse the current roster in our [Members directory](https://hol.org/members) (10 organizations today, spanning wallets, infra, DeFi, storage, and more). Keep an eye there and on the blog as Tashi comes aboard.
+You can browse the current roster in our [Members directory](https://hol.org/members/) (10 organizations today, spanning wallets, infra, DeFi, storage, and more). Keep an eye there and on the blog as Tashi comes aboard.
 
 **Note:** We'll publish a dedicated blog post soon with more about why Tashi is joining, the collaboration scope, and what this unlocks for builders.
 
@@ -64,12 +64,12 @@ If you're building against the registry already, these specs are aimed at making
 ## Quick links
 
 - Explore the Registry Broker: [https://hol.org/registry](https://hol.org/registry)
-- Meet the Members: [hol.org/members](https://hol.org/members)
+- Meet the Members: [hol.org/members](https://hol.org/members/)
 - Tashi Network: [tashi.network](https://tashi.network)
 - Hedera Africa Hackathon: [dorahacks.io/hackathon/hederahackafrica/detail](https://dorahacks.io/hackathon/hederahackafrica/detail)
-- HCS‑15 (draft): [hol.org/docs/standards/hcs-15](https://hol.org/docs/standards/hcs-15)
-- HCS‑16 (draft): [hol.org/docs/standards/hcs-16](https://hol.org/docs/standards/hcs-16)
-- HCS‑17 (draft): [hol.org/docs/standards/hcs-17](https://hol.org/docs/standards/hcs-17)
+- HCS‑15 (draft): [hol.org/docs/standards/hcs-15](https://hol.org/docs/standards/hcs-15/)
+- HCS‑16 (draft): [hol.org/docs/standards/hcs-16](https://hol.org/docs/standards/hcs-16/)
+- HCS‑17 (draft): [hol.org/docs/standards/hcs-17](https://hol.org/docs/standards/hcs-17/)
 
 ## Thanks for building with us
 

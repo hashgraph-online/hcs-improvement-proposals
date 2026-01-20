@@ -116,7 +116,7 @@ export default function HCS20Page() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4">
-                            <PrimaryButton href="/docs/standards/hcs-20" className="!text-base !px-8 !py-4 shadow-2xl shadow-blue-500/20 rounded-2xl flex items-center justify-center gap-3">
+                            <PrimaryButton href="/docs/standards/hcs-20/" className="!text-base !px-8 !py-4 shadow-2xl shadow-blue-500/20 rounded-2xl flex items-center justify-center gap-3">
                                 READ SPEC <FaCheckDouble />
                             </PrimaryButton>
                             <SecondaryButton href="https://hol.org/points" className="!text-base !px-8 !py-4 !border-[#48df7b] !text-[#48df7b] hover:!bg-[#48df7b] hover:!text-white rounded-2xl">
