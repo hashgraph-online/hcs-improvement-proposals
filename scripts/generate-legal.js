@@ -59,13 +59,13 @@ async function main() {
 
     fs.writeFileSync(
       path.join(pagesDir, 'terms-of-service.mdx'),
-      `# Terms of Service\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(terms)))))}\n`,
+      `---\ntitle: Terms of Service\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(terms)))))}\n`,
       'utf8',
     );
 
     fs.writeFileSync(
       path.join(pagesDir, 'privacy-policy.mdx'),
-      `# Privacy Policy\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(privacy)))))}\n`,
+      `---\ntitle: Privacy Policy\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(privacy)))))}\n`,
       'utf8',
     );
 

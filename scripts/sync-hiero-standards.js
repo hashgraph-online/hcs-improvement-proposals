@@ -72,6 +72,15 @@ function escapeNumericOperatorIdAtSign(content) {
   return content.replace(/\b(\d+\.\d+\.\d+)@(\d+\.\d+\.\d+)\b/g, '$1&#64;$2');
 }
 
+function replaceEmptyIdAnchors(content) {
+  const emptyAnchorTag = /<a\s+id=(["'])([^"']+)\1\s*><\/a>/g;
+  const selfClosingAnchorTag = /<a\s+id=(["'])([^"']+)\1\s*\/>/g;
+
+  return content
+    .replace(emptyAnchorTag, '<span id="$2"></span>')
+    .replace(selfClosingAnchorTag, '<span id="$2"></span>');
+}
+
 function fixHcs25InternalLinks(content) {
   let updated = content;
 
@@ -177,6 +186,7 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
         }
 
         escapedContent = escapeNumericOperatorIdAtSign(escapedContent);
+        escapedContent = replaceEmptyIdAnchors(escapedContent);
 
         fs.writeFileSync(destPath, escapedContent, 'utf8');
       } else {

@@ -1,0 +1,16 @@
+:global(.hash-link) {
+  opacity: 0;
+  padding-left: 0.5rem;
+  transition: opacity var(--ifm-transition-fast);
+  user-select: none;
+}
+
+:global(.hash-link::before) {
+  content: '#';
+}
+
+:global(.hash-link:focus),
+:global(*:hover > .hash-link) {
+  opacity: 1;
+}
+

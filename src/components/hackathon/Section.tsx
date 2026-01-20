@@ -20,7 +20,7 @@ export const Section: React.FC<SectionProps> = ({ icon, title }) => {
       </div>
 
       <Typography
-        variant='h1'
+        variant='h2'
         className='text-center bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878]'
       >
         {title}

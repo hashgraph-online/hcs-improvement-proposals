@@ -93,6 +93,7 @@ export const Person: React.FC<PersonProps> = ({
                   aria-label={`${social.type} profile`}
                 >
                   <SocialIcon type={social.type} />
+                  <span className='sr-only'>{social.type} profile</span>
                 </a>
               ))}
             </div>
@@ -237,6 +238,7 @@ export const SelectedPerson: React.FC<SelectedPersonProps> = ({
                         aria-label={`${social.type} profile`}
                       >
                         <SocialIcon type={social.type} />
+                        <span className='sr-only'>{social.type} profile</span>
                       </a>
                     ))}
                   </div>
@@ -434,7 +436,7 @@ export const JudgesSection: React.FC<JudgesSectionProps> = ({ event, showTBA = f
             </span>
 
             <HackathonTypography
-              variant='h1'
+              variant='h2'
               className='text-center bg-gradient-to-r from-gray-700 to-gray-800 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4'
             >
               Meet Our <span className='text-hedera-green'>Experts</span>

@@ -130,6 +130,13 @@ const config: Config = {
           blogSidebarCount: 'ALL',
           blogSidebarTitle: 'All posts',
         },
+        sitemap: {
+          ignorePatterns: [
+            '/sdk/**',
+            '/hackathon/**',
+            '/blog/updates/**',
+          ],
+        },
         theme: {
           customCss: './src/css/custom.css',
         },

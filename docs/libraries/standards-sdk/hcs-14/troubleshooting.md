@@ -16,9 +16,8 @@ sidebar_position: 7
 - Empty resolution
   - Register a resolver and provide enough context (`proto`, `nativeId`, and/or `src`).
 
-# Security Notes
+## Security Notes
 
 - Do not include secrets in canonical data.
 - Store Hedera private keys in environment variables.
 - UAIDs are stable identifiers; use profiles (HCS‑11, A2A) for mutable metadata.
-

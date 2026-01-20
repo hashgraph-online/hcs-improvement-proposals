@@ -140,10 +140,10 @@ All features are available via command-line arguments for automation and CI/CD.
 ### List All Demos
 
 ```bash
-# Human-readable table
+## Human-readable table
 pnpm run cli -- demo list
 
-# JSON output for parsing
+## JSON output for parsing
 pnpm run cli -- demo list --json
 ```
 
@@ -177,19 +177,19 @@ Returns:
 ### Run a Demo
 
 ```bash
-# Execute a specific demo
+## Execute a specific demo
 pnpm run cli -- demo run hcs-2:create
 
-# Dry run (validate environment only)
+## Dry run (validate environment only)
 pnpm run cli -- demo run hcs-2:create --dry-run
 
-# Dry run with environment printout
+## Dry run with environment printout
 pnpm run cli -- demo run registry-broker --dry-run --print-env
 
-# Forward additional flags to the demo script
+## Forward additional flags to the demo script
 pnpm run cli -- demo run registry-broker -- --profile=mcp
 
-# Suppress progress UI (for logging)
+## Suppress progress UI (for logging)
 pnpm run cli -- demo run hcs-10:create-registry --no-progress
 ```
 
@@ -526,13 +526,13 @@ The interactive dashboard highlights missing prerequisites in yellow.
 The CLI bundles the full suite of registry-broker demos from `standards-sdk/demo/registry-broker`. Run them end-to-end with ledger authentication, Cloudflare tunneling, and ERC-8004 publishing:
 
 ```bash
-# 1. Inspect configuration requirements
+## 1. Inspect configuration requirements
 pnpm run cli -- demo info registry-broker:register-agent-erc8004
 
-# 2. Dry run to view missing env vars (does not execute remote calls)
+## 2. Dry run to view missing env vars (does not execute remote calls)
 pnpm run cli -- demo run registry-broker:register-agent-erc8004 --dry-run --print-env
 
-# 3. Execute against mainnet (auto top-up enabled by default)
+## 3. Execute against mainnet (auto top-up enabled by default)
 pnpm run cli -- demo run registry-broker:register-agent-erc8004 \
   --env HEDERA_NETWORK=mainnet \
   --env MAINNET_HEDERA_ACCOUNT_ID=0.0.123456 \
@@ -549,15 +549,15 @@ The CLI automatically:
 
 Other useful flags:
 
-# Force local tunnel (useful when corporate networks block Cloudflare)
+## Force local tunnel (useful when corporate networks block Cloudflare)
 pnpm run cli -- demo run registry-broker:register-agent-erc8004 \
   --env REGISTRY_BROKER_DEMO_TUNNEL=localtunnel
 
-# Disable auto top-up and rely on a pre-funded account
+## Disable auto top-up and rely on a pre-funded account
 pnpm run cli -- demo run registry-broker:register-agent-erc8004 \
   --env REGISTRY_BROKER_DEMO_AUTO_TOP_UP=0
 
-# Run the basic registration flow without ERC-8004 updates
+## Run the basic registration flow without ERC-8004 updates
 pnpm run cli -- demo run registry-broker:register-agent \
   --env REGISTRY_BROKER_DEMO_ENABLE_ERC8004=0 \
   --env REGISTRY_BROKER_DEMO_SKIP_UPDATE=1
@@ -570,18 +570,18 @@ Tip: copy `.env.example` to `.env` and populate `TESTNET_HEDERA_ACCOUNT_ID`, `TE
 Configure credentials for all networks, then switch with `--network`:
 
 ```bash
-# Setup
+## Setup
 pnpm run cli -- config \
   --testnet-account-id 0.0.111111 \
   --testnet-private-key 302e... \
   --mainnet-account-id 0.0.999999 \
   --mainnet-private-key 302e...
 
-# Run on testnet
+## Run on testnet
 pnpm run cli -- config --network testnet
 pnpm run cli -- demo run hcs-2:create
 
-# Switch to mainnet
+## Switch to mainnet
 pnpm run cli -- config --network mainnet
 pnpm run cli -- demo run hcs-2:create
 ```
@@ -591,7 +591,7 @@ pnpm run cli -- demo run hcs-2:create
 Non-interactive mode auto-activates when stdin is not a TTY:
 
 ```yaml
-# GitHub Actions example
+## GitHub Actions example
 - name: Run HCS-2 demo
   run: pnpm run cli -- demo run hcs-2:create --no-progress
   env:
@@ -668,15 +668,15 @@ pnpm run cli -- agent check --install
 If installation fails, manually install cloudflared:
 
 ```bash
-# macOS
+## macOS
 brew install cloudflare/cloudflare/cloudflared
 
-# Linux
+## Linux
 wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64
 chmod +x cloudflared-linux-amd64
 sudo mv cloudflared-linux-amd64 /usr/local/bin/cloudflared
 
-# Set path
+## Set path
 export CLOUDFLARED_BIN=/usr/local/bin/cloudflared
 ```
 
