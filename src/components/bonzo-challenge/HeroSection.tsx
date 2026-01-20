@@ -102,9 +102,9 @@ const HeroSection: React.FC<Props> = () => {
               <div
               >
                 <span className='relative'>
-                  <h1 className='text-4xl md:text-5xl lg:text-6xl font-extrabold text-center lg:text-left text-gray-800 dark:text-white leading-tight'>
+                  <h2 className='text-4xl md:text-5xl lg:text-6xl font-extrabold text-center lg:text-left text-gray-800 dark:text-white leading-tight'>
                     Bonzo Finance
-                  </h1>
+                  </h2>
                   <span
                     className='absolute bottom-1 sm:bottom-2 left-0 w-full h-2 sm:h-3 bg-green-400/20 -z-10'
                   />

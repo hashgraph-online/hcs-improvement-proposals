@@ -20,7 +20,7 @@ This guide shows how to integrate Hashinal Wallet Connect SDK with Vite for a li
 - Basic knowledge of JavaScript/HTML
 - WalletConnect project ID ([get one here](https://cloud.walletconnect.com/))
 
-Before you begin, see the [installation guide](./installation.md) for package details.
+Before you begin, see the [installation guide](../installation) for package details.
 
 ## Step 1: Project Setup
 
@@ -214,7 +214,6 @@ This will create optimized files in the `dist` directory.
 
 ## Next Steps
 
-- Explore [API Methods](./methods) for advanced SDK features
-- Learn about [HCS Topics](./topics) for message handling
-- Check out [React Integration](./usage-with-react) for component-based apps
-
+- Explore [API Methods](../methods) for advanced SDK features
+- Learn about [HCS Topics](../topics) for message handling
+- Check out [React Integration](../usage-with-react) for component-based apps

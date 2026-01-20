@@ -16,7 +16,7 @@ Learn how to integrate Hashinal Wallet Connect SDK with your Next.js application
 - Basic knowledge of Next.js and React
 - WalletConnect project ID ([get one here](https://cloud.walletconnect.com/))
 
-Before you begin, see the [installation guide](./installation.md) for package details.
+Before you begin, see the [installation guide](../installation) for package details.
 
 ## Setup
 
@@ -397,9 +397,9 @@ export function UpdateTopicComponent() {
 
 ## Next Steps
 
-- Explore [API Methods](./methods) for complete SDK reference
-- Learn about [HCS Topics](./topics) for messaging features
-- Check out [React Integration](./usage-with-react) for pure React apps
-- Review the [Hashinals Guide](./usage-with-recursion) for inscribed applications
+- Explore [API Methods](../methods) for complete SDK reference
+- Learn about [HCS Topics](../topics) for messaging features
+- Check out [React Integration](../usage-with-react) for pure React apps
+- Review the [Hashinals Guide](../usage-with-recursion) for inscribed applications
 
 > **Important**: Remember to replace `your_project_id_here` with your actual WalletConnect project ID from the [WalletConnect Dashboard](https://cloud.walletconnect.com/)!

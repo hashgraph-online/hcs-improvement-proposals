@@ -64,7 +64,7 @@ const RequirementsSection: React.FC = () => {
             className='relative inline-block pb-2'
           >
             <Typography
-              variant='h1'
+              variant='h2'
               align='center'
               className='inline-block'
               underline={true}
@@ -211,7 +211,7 @@ const RequirementsSection: React.FC = () => {
               </div>
 
               <Typography
-                variant='h1'
+                variant='h2'
                 className='text-center bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878]'
               >
                 Judging Criteria

@@ -17,6 +17,10 @@ const path = require('path');
 
 const HIERO_REPO = 'https://github.com/hiero-ledger/hiero-consensus-specifications.git';
 const HIERO_BRANCH = process.env.HIERO_BRANCH || 'main';
+const HIERO_LOCAL_PATH =
+  process.env.HIERO_LOCAL_PATH ||
+  path.resolve(__dirname, '..', '..', 'hiero-consensus-specifications');
+const HIERO_SYNC_SOURCE = (process.env.HIERO_SYNC_SOURCE || '').toLowerCase();
 const LOCAL_ROOT = path.resolve(__dirname, '..');
 const TMP_DIR = path.join(LOCAL_ROOT, '.hiero-sync-tmp');
 
@@ -64,6 +68,66 @@ function escapeMdxAngleBrackets(content) {
   });
 }
 
+function escapeNumericOperatorIdAtSign(content) {
+  return content.replace(/\b(\d+\.\d+\.\d+)@(\d+\.\d+\.\d+)\b/g, '$1&#64;$2');
+}
+
+function replaceEmptyIdAnchors(content) {
+  const emptyAnchorTag = /<a\s+id=(["'])([^"']+)\1\s*><\/a>/g;
+  const selfClosingAnchorTag = /<a\s+id=(["'])([^"']+)\1\s*\/>/g;
+
+  return content
+    .replace(emptyAnchorTag, '<span id="$2"></span>')
+    .replace(selfClosingAnchorTag, '<span id="$2"></span>');
+}
+
+function fixHcs25InternalLinks(content) {
+  let updated = content;
+
+  updated = updated.replace(
+    /^\s*-\s*`\.\/hcs-25\/signals\/index\.md`\s*\([^)]+\)\s*$/m,
+    '- [Signal catalog](./hcs-25/signals/index.md) — index + per-signal docs',
+  );
+  updated = updated.replace(
+    /^\s*-\s*`\.\/hcs-25\/adapters\/index\.md`\s*\([^)]+\)\s*$/m,
+    '- [Adapter catalog](./hcs-25/adapters/index.md) — index + per-adapter docs',
+  );
+  updated = updated.replace(
+    /^\s*-\s*`\.\/hcs-25\/simple-evals\.md`\s*\([^)]+\)\s*$/m,
+    '- [Simple eval methodology](./hcs-25/signals/simple-evals.md) — detailed SimpleMath/SimpleScience rubric',
+  );
+  updated = updated.replace(
+    /^\s*-\s*`\.\/hcs-25\/signals\/simple-evals\.md`\s*\([^)]+\)\s*$/m,
+    '- [Simple eval methodology](./hcs-25/signals/simple-evals.md) — detailed SimpleMath/SimpleScience rubric',
+  );
+
+  updated = updated.replace(
+    /SimpleMath\/SimpleScience eval results \(see `\.\/hcs-25\/simple-evals\.md`\)\./g,
+    'SimpleMath/SimpleScience eval results (see [Simple eval methodology](./hcs-25/signals/simple-evals.md)).',
+  );
+  updated = updated.replace(
+    /SimpleMath\/SimpleScience eval results \(see `\.\/hcs-25\/signals\/simple-evals\.md`\)\./g,
+    'SimpleMath/SimpleScience eval results (see [Simple eval methodology](./hcs-25/signals/simple-evals.md)).',
+  );
+
+  updated = updated.replace(
+    /^-\s*Poll topic:\s*hcs:\/\/8\/<topicId>\s*\(or Mirror Node link\)\s*$/m,
+    '- Poll topic: `hcs://8/<topicId>` (or Mirror Node link)',
+  );
+  updated = updated.replace(
+    /^-\s*Reference:\s*<txn id or final tally link>\s*$/m,
+    '- Reference: (txn id or final tally link)',
+  );
+
+  return updated;
+}
+
+function fixHcs9InternalLinks(content) {
+  return content
+    .replace(/\]\(base-schema\)/g, '](../base-schema)')
+    .replace(/\]\(base-schema\/\)/g, '](../base-schema/)');
+}
+
 function shouldPreserve(filename) {
   return PRESERVE_PATTERNS.some((pattern) => pattern.test(filename));
 }
@@ -107,7 +171,23 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
 
       if (entry.name.endsWith('.md') || entry.name.endsWith('.mdx')) {
         const content = fs.readFileSync(srcPath, 'utf8');
-        const escapedContent = escapeMdxAngleBrackets(content);
+        let escapedContent = escapeMdxAngleBrackets(content);
+
+        if (destPath.endsWith(path.join('docs', 'standards', 'hcs-25.md'))) {
+          escapedContent = fixHcs25InternalLinks(escapedContent);
+        }
+
+        if (
+          destPath.endsWith(
+            path.join('docs', 'standards', 'hcs-9', 'specification', 'overview.md'),
+          )
+        ) {
+          escapedContent = fixHcs9InternalLinks(escapedContent);
+        }
+
+        escapedContent = escapeNumericOperatorIdAtSign(escapedContent);
+        escapedContent = replaceEmptyIdAnchors(escapedContent);
+
         fs.writeFileSync(destPath, escapedContent, 'utf8');
       } else {
         fs.copyFileSync(srcPath, destPath);
@@ -262,27 +342,45 @@ function generateStandardsManifest(standardsDir) {
 async function main() {
   console.log('Syncing standards from hiero-consensus-specifications...\n');
   console.log(`Repository: ${HIERO_REPO}`);
-  console.log(`Branch: ${HIERO_BRANCH}\n`);
+  console.log(`Branch: ${HIERO_BRANCH}`);
+
+  const localStandardsDir = path.join(HIERO_LOCAL_PATH, 'docs', 'standards');
+  const localAssetsDir = path.join(HIERO_LOCAL_PATH, 'docs', 'assets');
+  const localSourceAvailable =
+    fs.existsSync(localStandardsDir) && fs.existsSync(localAssetsDir);
+  const useLocalSource =
+    HIERO_SYNC_SOURCE !== 'remote' && localSourceAvailable;
+
+  if (useLocalSource) {
+    console.log(`Source: local (${HIERO_LOCAL_PATH})`);
+    console.log('  (set HIERO_SYNC_SOURCE=remote to force GitHub)\n');
+  } else {
+    console.log('Source: GitHub (sparse checkout)\n');
+  }
 
   cleanupTmp();
 
   try {
-    console.log('Cloning repository (sparse checkout)...');
-    execSync(
-      `git clone --depth 1 --filter=blob:none --sparse --branch ${HIERO_BRANCH} ${HIERO_REPO} "${TMP_DIR}"`,
-      { stdio: 'pipe' }
-    );
+    if (!useLocalSource) {
+      console.log('Cloning repository (sparse checkout)...');
+      execSync(
+        `git clone --depth 1 --filter=blob:none --sparse --branch ${HIERO_BRANCH} ${HIERO_REPO} "${TMP_DIR}"`,
+        { stdio: 'pipe' }
+      );
 
-    execSync('git sparse-checkout set docs/standards docs/assets', {
-      cwd: TMP_DIR,
-      stdio: 'pipe',
-    });
+      execSync('git sparse-checkout set docs/standards docs/assets', {
+        cwd: TMP_DIR,
+        stdio: 'pipe',
+      });
+    }
 
     let totalCopied = 0;
     const preservedFiles = [];
 
+    const sourceRoot = useLocalSource ? HIERO_LOCAL_PATH : TMP_DIR;
+
     for (const { src, dest } of SYNC_PATHS) {
-      const srcDir = path.join(TMP_DIR, src);
+      const srcDir = path.join(sourceRoot, src);
       const destDir = path.join(LOCAL_ROOT, dest);
 
       const localOnly = getLocalOnlyFiles(srcDir, destDir);

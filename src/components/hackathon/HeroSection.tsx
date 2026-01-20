@@ -113,24 +113,12 @@ const HeroSection: React.FC = () => {
                 align='left'
                 className='leading-tight text-center lg:text-left'
               >
-                Hedera OpenConvAI
-              </HackathonTypography>
-
-              <div
-              >
-                <span className='relative'>
-                  <HackathonTypography
-                    variant='display'
-                    align='left'
-                    className='relative z-10 leading-tight text-center lg:text-left'
-                  >
-                    & Agents Hackathon
-                  </HackathonTypography>
-                  <span
-                    className='absolute bottom-1 sm:bottom-2 left-0 w-full h-2 sm:h-3 bg-hedera-green/20 -z-10'
-                  />
+                <span className='block'>Hedera OpenConvAI</span>
+                <span className='relative inline-block'>
+                  & Agents Hackathon
+                  <span className='absolute bottom-1 sm:bottom-2 left-0 w-full h-2 sm:h-3 bg-hedera-green/20 -z-10' />
                 </span>
-              </div>
+              </HackathonTypography>
             </div>
 
             <HackathonTypography

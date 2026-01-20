@@ -57,4 +57,4 @@ Notes
 - Prefer helpers for clean intent; fall back to `enabledPlugins` for advanced mixes.
 - Use `toolFilter` to exclude sensitive operations in production.
 
-Up next: [MCP Servers](./mcp-servers) — connect files, GitHub, and databases
+Up next: [MCP Servers](../mcp-servers) — connect files, GitHub, and databases

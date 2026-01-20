@@ -64,4 +64,4 @@ Notes
 - In `returnBytes` mode, many write tools support bytes; others may execute directly (see tool docs). The agent’s system prompt already instructs tools accordingly.
 - `scheduleUserTransactionsInBytesMode: true` makes the agent schedule user actions when bytes are requested and a `userAccountId` is set; the returned payload includes a ScheduleId.
 
-Up next: [Factory Helpers & Plugins](./factory-helpers-and-plugins) — choose exactly which abilities your agent has
+Up next: [Factory Helpers & Plugins](../factory-helpers-and-plugins) — choose exactly which abilities your agent has

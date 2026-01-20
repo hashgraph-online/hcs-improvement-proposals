@@ -105,4 +105,4 @@ flowchart LR
   G -->|HashLink block| I[Renderer shows pretty card]
 ```
 
-Up next: [Operational Modes & Transactions](./operational-modes-and-transactions) — who signs and how bytes flow
+Up next: [Operational Modes & Transactions](../operational-modes-and-transactions) — who signs and how bytes flow

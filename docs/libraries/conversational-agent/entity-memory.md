@@ -99,4 +99,4 @@ flowchart TD
   G --> H[Resolve to ID/HRL]
 ```
 
-Up next: [Content References & HashLinks](./content-references-and-hashlinks) — keep messages small but powerful
+Up next: [Content References & HashLinks](../content-references-and-hashlinks) — keep messages small but powerful

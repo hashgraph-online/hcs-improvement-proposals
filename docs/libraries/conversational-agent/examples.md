@@ -664,10 +664,10 @@ async function combinedOperations() {
 
 ## See Also
 
-- Up next: [Plugin Development Guide](./plugin-development) — create your own tools
-- [Getting Started](./getting-started) - Quick start guide
-- [Available Tools](./tools) - Complete tool documentation
-- [MCP Servers](./mcp-servers) - External tool integration guide
+- Up next: [Plugin Development Guide](../plugin-development) — create your own tools
+- [Getting Started](../getting-started) - Quick start guide
+- [Available Tools](../tools) - Complete tool documentation
+- [MCP Servers](../mcp-servers) - External tool integration guide
 - [Plugin Development Guide](https://github.com/hashgraph-online/conversational-agent/blob/main/docs/PLUGIN_DEVELOPMENT.md) - Create custom plugins
 - [HCS-10 Standard](/docs/standards/hcs-10) - OpenConvAI specification
 - [HCS-2 Standard](/docs/standards/hcs-2) - Registry specification

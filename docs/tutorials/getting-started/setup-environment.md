@@ -184,10 +184,9 @@ Now that your environment is set up, continue with:
 
 ## Additional Resources
 
-- [HCS Standards Documentation](../../standards)
+- [HCS Standards Documentation](../../../standards)
 - [Standards SDK GitHub](https://github.com/hashgraph-online/standards-sdk)
 - [Community Discord](https://discord.gg/hashgraph)
 - [Hedera Documentation](https://docs.hedera.com)
-
 
 

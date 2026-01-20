@@ -6,6 +6,7 @@ const config: Config = {
   title: 'Hashgraph Online',
   tagline: 'Building the future of the internet, on-graph.',
   favicon: 'img/favicon.ico',
+  trailingSlash: true,
 
   markdown: {
     mermaid: true,
@@ -128,6 +129,13 @@ const config: Config = {
           onUntruncatedBlogPosts: 'warn',
           blogSidebarCount: 'ALL',
           blogSidebarTitle: 'All posts',
+        },
+        sitemap: {
+          ignorePatterns: [
+            '/sdk/**',
+            '/hackathon/**',
+            '/blog/updates/**',
+          ],
         },
         theme: {
           customCss: './src/css/custom.css',

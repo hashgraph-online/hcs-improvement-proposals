@@ -97,11 +97,10 @@ export default function CategoryShowcase({
     <div className="elaborate-standards-page">
       <div className="container margin-vert--lg">
         <div className="elaborate-standards-header">
-          <h1 className="standards-main-title">{title}</h1>
+          <h2 className="standards-main-title">{title}</h2>
           <p className="elaborate-standards-subtitle">{subtitle}</p>
         </div>
         
-        {/* Filters Section */}
         {(showSearch || showCategoryFilter || showStatusFilter) && (
           <div className="standards-filters">
             {showSearch && (

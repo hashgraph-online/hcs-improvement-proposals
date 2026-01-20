@@ -105,7 +105,7 @@ const DemoDaySection: React.FC = () => {
             </div>
 
             <HackathonTypography
-              variant='h1'
+              variant='h2'
               className='bg-clip-text text-transparent bg-gradient-to-r from-[#8259ef] via-[#2d84eb] to-[#3ec878] mb-3'
               underline={true}
               underlineColor='gradient'

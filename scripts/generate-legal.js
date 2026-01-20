@@ -25,6 +25,32 @@ async function main() {
   const sanitizeLinks = (text) =>
     text.replace(/<([^\s>]+)>/g, (_match, url) => `[${url}](${url})`);
 
+  const CONTACT_URL = 'https://hol.org/contact/';
+
+  /** Convert relative /points/ links to absolute hol.org URLs */
+  const absolutizeLinks = (text) =>
+    text.replace(/\]\(\/points\//g, '](https://hol.org/points/');
+
+  const rewriteMailtoLinks = (text) =>
+    text.replace(/\[([^\]]+)\]\(mailto:[^)]+\)/g, (_match, label) => {
+      const safeLabel = label.replace(/@/g, '&#64;');
+      return `[${safeLabel}](${CONTACT_URL})`;
+    });
+
+  const escapeEmailAddresses = (text) =>
+    text.replace(
+      /\b([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g,
+      '$1&#64;$2',
+    );
+
+  const normalizeLegacyPointsPrivacyLinks = (text) =>
+    text
+      .replace(/\(\/points\/privacy-policy\)/g, '(https://hol.org/points/legal/privacy)')
+      .replace(
+        /\(https:\/\/hol\.org\/points\/privacy-policy\)/g,
+        '(https://hol.org/points/legal/privacy)',
+      );
+
   try {
     const [terms, privacy] = await Promise.all([
       resolveContent({ inlineVar: 'TERMS_MD', urlVar: 'TERMS_URL', fallbackUrl: DEFAULT_TERMS_URL, name: 'terms' }),
@@ -33,13 +59,13 @@ async function main() {
 
     fs.writeFileSync(
       path.join(pagesDir, 'terms-of-service.mdx'),
-      `# Terms of Service\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${sanitizeLinks(terms)}\n`,
+      `---\ntitle: Terms of Service\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(terms)))))}\n`,
       'utf8',
     );
 
     fs.writeFileSync(
       path.join(pagesDir, 'privacy-policy.mdx'),
-      `# Privacy Policy\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${sanitizeLinks(privacy)}\n`,
+      `---\ntitle: Privacy Policy\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(privacy)))))}\n`,
       'utf8',
     );
 

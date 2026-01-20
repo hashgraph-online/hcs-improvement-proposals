@@ -410,8 +410,8 @@ Your MCP configuration is saved to the directory set by `CONVERSATIONAL_AGENT_RO
 
 ## Next Steps
 
-- Up next: [Available Tools](./tools) — what you can ask the agent to do
-- Try [example scripts](./examples) - Real-world usage examples
+- Up next: [Available Tools](../tools) — what you can ask the agent to do
+- Try [example scripts](../examples) - Real-world usage examples
 - Read about [HCS-10 Standard](/docs/standards/hcs-10) - Agent communication protocol
 - Learn about [HCS-2 Standard](/docs/standards/hcs-2) - Registry management
 - Build [custom plugins](https://github.com/hashgraph-online/conversational-agent/blob/main/docs/PLUGIN_DEVELOPMENT.md)

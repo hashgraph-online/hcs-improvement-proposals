@@ -153,7 +153,7 @@ const metadata = await res.json();
 ```
 
 - Static assets (GLBs, MP4s, JSON, etc.) are returned with the original MIME type. Set the `Accept` header accordingly.
-- The HCS-7 toolkit uses this exact pattern when it hydrates the WASM router and example metadata cards—see [`src/examples/index.ts`](https://github.com/HashgraphOnline/hcs-7-toolkit/blob/main/src/examples/index.ts).
+- The HCS-7 toolkit uses this exact pattern when it hydrates the WASM router and example metadata cards—see [`src/examples/index.ts`](https://github.com/hashgraph-online/hcs-7-toolkit/blob/main/src/examples/index.ts).
 - Replace `application/json` with `application/wasm` to stream the router binary from topic `0.0.5269810`, mirroring the `kiloscribe.com/api/inscription-cdn/{topicId}` calls in the toolkit demo.
 
 If you prefer to fetch directly from Hedera topics, parse the HCS-1 messages per the HCS-1 standard and build the HRL by hand.
