@@ -1,0 +1,11 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Email protection helper</title>
+  </head>
+  <body>
+    <p>This endpoint exists for crawler compatibility with Cloudflare email protection links.</p>
+  </body>
+</html>

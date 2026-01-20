@@ -478,8 +478,8 @@ await dataAgent.processMessage(
 
 ## Next Steps
 
-- Up next: [Examples](./examples) — end‑to‑end flows to copy/paste
-- Explore [available tools](./tools) including MCP-provided tools
-- See [practical examples](./examples) using MCP servers
+- Up next: [Examples](../examples) — end‑to‑end flows to copy/paste
+- Explore [available tools](../tools) including MCP-provided tools
+- See [practical examples](../examples) using MCP servers
 - Read the [MCP Integration Guide](https://github.com/hashgraph-online/conversational-agent/blob/main/docs/MCP_INTEGRATION.md)
-- Learn about [plugin development](./plugin-development) to extend functionality
+- Learn about [plugin development](../plugin-development) to extend functionality

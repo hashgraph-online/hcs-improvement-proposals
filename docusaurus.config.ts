@@ -6,6 +6,7 @@ const config: Config = {
   title: 'Hashgraph Online',
   tagline: 'Building the future of the internet, on-graph.',
   favicon: 'img/favicon.ico',
+  trailingSlash: true,
 
   markdown: {
     mermaid: true,

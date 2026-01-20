@@ -359,7 +359,6 @@ import { DocsLink, ExternalLink } from '@site/src/components/MDXComponents';
 
 - [HCS Documentation](https://docs.hedera.com/guides/docs/sdks/consensus) - Official Hedera documentation
 - [Topic Explorer](https://hashscan.io/testnet) - View topics on HashScan
-- [HCS Standards](../../standards) - All HCS specifications
-
+- [HCS Standards](../../../standards) - All HCS specifications
 
 

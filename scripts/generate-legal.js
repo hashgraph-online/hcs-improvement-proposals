@@ -25,6 +25,10 @@ async function main() {
   const sanitizeLinks = (text) =>
     text.replace(/<([^\s>]+)>/g, (_match, url) => `[${url}](${url})`);
 
+  /** Convert relative /points/ links to absolute hol.org URLs */
+  const absolutizeLinks = (text) =>
+    text.replace(/\]\(\/points\//g, '](https://hol.org/points/');
+
   try {
     const [terms, privacy] = await Promise.all([
       resolveContent({ inlineVar: 'TERMS_MD', urlVar: 'TERMS_URL', fallbackUrl: DEFAULT_TERMS_URL, name: 'terms' }),
@@ -33,13 +37,13 @@ async function main() {
 
     fs.writeFileSync(
       path.join(pagesDir, 'terms-of-service.mdx'),
-      `# Terms of Service\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${sanitizeLinks(terms)}\n`,
+      `# Terms of Service\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${absolutizeLinks(sanitizeLinks(terms))}\n`,
       'utf8',
     );
 
     fs.writeFileSync(
       path.join(pagesDir, 'privacy-policy.mdx'),
-      `# Privacy Policy\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${sanitizeLinks(privacy)}\n`,
+      `# Privacy Policy\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${absolutizeLinks(sanitizeLinks(privacy))}\n`,
       'utf8',
     );
 

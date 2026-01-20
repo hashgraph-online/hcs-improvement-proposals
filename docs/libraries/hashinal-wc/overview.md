@@ -195,10 +195,10 @@ The SDK supports all Hedera networks:
 
 ## Next Steps
 
-- [Installation Guide](./installation) - Set up the SDK for your project
-- [API Methods](./methods) - Complete method documentation
-- [React Integration](./usage-with-react) - Build React apps with wallet connectivity
-- [Next.js Integration](./usage-with-nextjs) - Server-side rendering with wallets
-- [Vite Integration](./usage-with-vite) - Fast development with Vite
-- [Hashinals Guide](./usage-with-recursion) - Build inscribed HTML applications
-- [HCS Topics](./topics) - Work with Hedera Consensus Service
+- [Installation Guide](../installation) - Set up the SDK for your project
+- [API Methods](../methods) - Complete method documentation
+- [React Integration](../usage-with-react) - Build React apps with wallet connectivity
+- [Next.js Integration](../usage-with-nextjs) - Server-side rendering with wallets
+- [Vite Integration](../usage-with-vite) - Fast development with Vite
+- [Hashinals Guide](../usage-with-recursion) - Build inscribed HTML applications
+- [HCS Topics](../topics) - Work with Hedera Consensus Service

@@ -117,7 +117,7 @@ Tips
 - Prefer rendering `jsonSchema/uiSchema` where convenient; fall back to `formConfig.fields` for custom UIs.
 - Pre‑fill from Smart Memory (recent entities, prior values) to reduce user effort.
 
-Up next: [Entity Memory](./entity-memory) — how the agent remembers IDs and context
+Up next: [Entity Memory](../entity-memory) — how the agent remembers IDs and context
 
 Diagram
 ```mermaid

@@ -212,12 +212,12 @@ When MCP servers are configured, additional tools become available based on the 
 "Show the schema for the products table"
 ```
 
-For detailed MCP configuration and usage, see the [MCP Servers Guide](./mcp-servers).
+For detailed MCP configuration and usage, see the [MCP Servers Guide](../mcp-servers).
 
 ## See Also
 
-- Up next: [Forms & Parameters](./forms-and-parameters) — when the agent asks for details
-- [Getting Started](./getting-started) - Quick start guide
-- [Examples](./examples) - Practical usage examples
-- [Plugin Development Guide](./plugin-development) - Create custom tools
-- [MCP Servers](./mcp-servers) - External tool integration
+- Up next: [Forms & Parameters](../forms-and-parameters) — when the agent asks for details
+- [Getting Started](../getting-started) - Quick start guide
+- [Examples](../examples) - Practical usage examples
+- [Plugin Development Guide](../plugin-development) - Create custom tools
+- [MCP Servers](../mcp-servers) - External tool integration
