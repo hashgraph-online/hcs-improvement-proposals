@@ -68,6 +68,10 @@ function escapeMdxAngleBrackets(content) {
   });
 }
 
+function escapeNumericOperatorIdAtSign(content) {
+  return content.replace(/\b(\d+\.\d+\.\d+)@(\d+\.\d+\.\d+)\b/g, '$1&#64;$2');
+}
+
 function fixHcs25InternalLinks(content) {
   let updated = content;
 
@@ -171,6 +175,8 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
         ) {
           escapedContent = fixHcs9InternalLinks(escapedContent);
         }
+
+        escapedContent = escapeNumericOperatorIdAtSign(escapedContent);
 
         fs.writeFileSync(destPath, escapedContent, 'utf8');
       } else {
