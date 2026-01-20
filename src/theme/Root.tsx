@@ -78,7 +78,7 @@ export default function Root({ children }: { children: React.ReactNode }) {
             "url": "https://hol.org",
             "potentialAction": {
               "@type": "SearchAction",
-              "target": "https://hol.org/search?q={search_term_string}",
+              "target": "https://hol.org/search/?q={search_term_string}",
               "query-input": "required name=search_term_string"
             }
           })
