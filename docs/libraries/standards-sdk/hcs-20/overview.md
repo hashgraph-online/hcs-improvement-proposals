@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-20 Points SDK Overview
 sidebar_position: 1
 ---
 

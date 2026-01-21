@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FaRegTimesCircle } from 'react-icons/fa';
-import { FiMail, FiCheck } from 'react-icons/fi';
+import { FiMail } from 'react-icons/fi';
+import MailerooEmbedForm from './MailerooEmbedForm';
 
 type NewsletterModalProps = {
   isOpen: boolean;
@@ -11,81 +12,17 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-  const [countdown, setCountdown] = useState(0);
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      setShowSuccessMessage(false);
-      setCountdown(0);
     } else {
       document.body.style.overflow = 'unset';
     }
+
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);
-
-  // Listen for messages from iframe (form submission)
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data && typeof event.data === 'string') {
-        if (
-          event.data.includes('success') ||
-          event.data.includes('thank') ||
-          event.data.includes('submitted')
-        ) {
-          handleSuccess();
-        }
-      }
-      if (event.data && typeof event.data === 'object') {
-        if (
-          event.data.type === 'form_submitted' ||
-          event.data.status === 'success'
-        ) {
-          handleSuccess();
-        }
-      }
-    };
-
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [isOpen]);
-
-  // Fallback: Auto-trigger success after reasonable time if user is still on modal
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const fallbackTimer = setTimeout(() => {
-      if (isOpen && !showSuccessMessage) {
-        // hint area (no-op)
-      }
-    }, 30000);
-
-    return () => clearTimeout(fallbackTimer);
-  }, [isOpen, showSuccessMessage]);
-
-  // Auto-close timer after showing success message
-  useEffect(() => {
-    if (showSuccessMessage && countdown > 0) {
-      const timer = setTimeout(() => {
-        if (countdown === 1) {
-          onClose();
-        } else {
-          setCountdown(countdown - 1);
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [showSuccessMessage, countdown, onClose]);
-
-  const handleSuccess = () => {
-    setShowSuccessMessage(true);
-    setCountdown(3);
-  };
 
   return (
     <>
@@ -129,59 +66,8 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
               </button>
             </div>
 
-            <iframe
-              src='https://abf8595d.sibforms.com/serve/MUIFAPkTSu_LF4xv1Skm7IXZKSZankgAHr4d_KC7h5yIchx0FB-dG1J9tNuIK2eeAVn2AIMogqljB9LV1UnRTKoc-8xGGgBzbul2oxJOqJg_aY1HDcV0f3IiMeMPT6zjaezAO5S7sbG6CD_j7sLEwbktzsOmtj1_laBmMsIETe9d1-soMdj37nr1JH1Cjyiw81jAO6pa9MnhYLCL'
-              frameBorder='0'
-              scrolling='auto'
-              allowFullScreen
-              className='w-full h-[600px] md:h-[700px]'
-              style={{
-                maxWidth: '100%',
-                border: 'none',
-              }}
-            />
-
-            <div className='p-6 bg-gradient-to-r from-[#a679f0]/5 via-[#5599fe]/5 to-[#48df7b]/5 dark:bg-gray-800 text-center border-t border-gray-200 dark:border-gray-700 mt-4'>
-              {showSuccessMessage ? (
-                <div
-                  className='text-center'
-                >
-                  <div className='flex items-center justify-center gap-2 text-green-600 mb-2'>
-                    <FiCheck className='text-xl' />
-                    <span className='font-medium'>
-                      Successfully subscribed!
-                    </span>
-                  </div>
-                  <p className='text-sm text-gray-600 dark:text-gray-400'>
-                    Closing in {countdown} second{countdown !== 1 ? 's' : ''}...
-                  </p>
-                </div>
-              ) : (
-                <div className='space-y-3'>
-                  <p className='text-sm text-gray-600 dark:text-gray-400 mb-3'>
-                    After submitting the form above, click the button below to
-                    continue:
-                  </p>
-                  <div className='flex gap-3 justify-center'>
-                    <button
-                      onClick={handleSuccess}
-                      className='px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors flex items-center gap-2'
-                      data-umami-event='newsletter-modal-confirm-submission'
-                      data-umami-event-category='engagement'
-                    >
-                      <FiCheck className='text-sm' />I submitted the form
-                    </button>
-                    <button
-                      onClick={onClose}
-                      className='px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors'
-                      data-umami-event='newsletter-modal-close-bottom'
-                      data-umami-event-category='engagement'
-                    >
-                      Close
-                    </button>
-                  </div>
-                </div>
-              )}
+            <div className='p-6'>
+              <MailerooEmbedForm />
             </div>
           </div>
         </div>

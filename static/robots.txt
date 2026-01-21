@@ -9,7 +9,6 @@ Allow: /
 
 # Disallow build artifacts and sensitive paths
 Disallow: /build/
-Disallow: /search
 Disallow: /.docusaurus/
 
 # Crawl-delay for politeness
@@ -19,7 +18,6 @@ Crawl-delay: 1
 Sitemap: https://hol.org/sitemap-index.xml
 Sitemap: https://hol.org/sitemap.xml
 
-# Allow AI/LLM crawlers for Answer Engine Optimization (AEO)
 User-agent: GPTBot
 Allow: /
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   FaTrophy,
   FaArrowRight,
@@ -13,10 +13,29 @@ type NewsletterModalProps = {
   onClose: () => void;
 };
 
+const REACLE_FORM_ID = 'ac327b5768122432279ed0a9';
+
 const NewsletterModal: React.FC<NewsletterModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const scriptLoadedRef = useRef(false);
+
+  useEffect(() => {
+    if (isOpen && !scriptLoadedRef.current) {
+      (window as unknown as Record<string, string>).reacleFormId = REACLE_FORM_ID;
+
+      const existingScript = document.querySelector('script[src="https://reacle.com/static/form.js"]');
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = 'https://reacle.com/static/form.js';
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+      scriptLoadedRef.current = true;
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -52,17 +71,9 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           </p>
         </div>
 
-        <iframe
-          src='https://abf8595d.sibforms.com/serve/MUIFAFOh0_qO6OntUHoDlZoTAwNDz7dIC7zTMveLKftES2Ku1z5WNKcJuiMLBTATRQD3WBVXkID6XDI72mQHAe3_TfTbT0_gvKjGw6cujid9M64jKctPYIkt3uYEJXbItqwTmIJjHSEWPoxKteE3S8U9MG-KMVsIss96koZT9CbICG5kL0jBqtSAa9VsSVYT4du9d-S0jKrK069h'
-          frameBorder='0'
-          scrolling='auto'
-          allowFullScreen
-          className='w-full h-[400px] md:h-[500px]'
-          style={{
-            maxWidth: '100%',
-            border: 'none',
-          }}
-        />
+        <div className='px-4 py-6 min-h-[350px]'>
+          <div id='form-root-publish' className='min-h-[300px]' />
+        </div>
 
         <div className='p-3 bg-[#8259ef]/30 dark:bg-[#8259ef]/50 text-center'>
           <button

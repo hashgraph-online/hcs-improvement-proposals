@@ -1,8 +1,9 @@
 ---
 sidebar_position: 5
+description: Transaction builder helpers for HCS-17 state hashing in the Standards SDK (`tx.ts`).
 ---
 
-# Transactions (tx.ts)
+# HCS-17 Transactions (tx.ts)
 
 Note
 - These builders are for direct transaction construction (e.g., with the Standards Agent Kit or custom pipelines).

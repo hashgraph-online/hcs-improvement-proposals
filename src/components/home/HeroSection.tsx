@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, Suspense, lazy, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, Suspense, lazy, useMemo, useRef } from 'react';
 
 import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
@@ -11,7 +11,26 @@ import { FaNetworkWired, FaFingerprint, FaCoins, FaRocket, FaServer, FaLayerGrou
 
 const HashgraphConsensusLazy = lazy(() => import('../HashgraphConsensus').then(m => ({ default: m.HashgraphConsensus })));
 
+const REACLE_FORM_ID = 'ac327b5768122432279ed0a9';
+
 const NewsletterOverlay: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const scriptLoadedRef = useRef(false);
+
+  useEffect(() => {
+    if (!scriptLoadedRef.current) {
+      (window as unknown as Record<string, string>).reacleFormId = REACLE_FORM_ID;
+
+      const existingScript = document.querySelector('script[src="https://reacle.com/static/form.js"]');
+      if (!existingScript) {
+        const script = document.createElement('script');
+        script.src = 'https://reacle.com/static/form.js';
+        script.defer = true;
+        document.body.appendChild(script);
+      }
+      scriptLoadedRef.current = true;
+    }
+  }, []);
+
   return (
     <div className='fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4'>
       <div className='relative w-full max-w-3xl mx-auto bg-white rounded-lg overflow-hidden'>
@@ -34,18 +53,9 @@ const NewsletterOverlay: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             />
           </svg>
         </button>
-        <iframe
-          src='https://abf8595d.sibforms.com/serve/MUIFAFOh0_qO6OntUHoDlZoTAwNDz7dIC7zTMveLKftES2Ku1z5WNKcJuiMLBTATRQD3WBVXkID6XDI72mQHAe3_TfTbT0_gvKjGw6cujid9M64jKctPYIkt3uYEJXbItqwTmIJjHSEWPoxKteE3S8U9MG-KMVsIss96koZT9CbICG5kL0jBqtSAa9VsSVYT4du9d-S0jKrK069h'
-          frameBorder='0'
-          scrolling='auto'
-          allowFullScreen
-          className='w-full h-full py-8 overflow-auto'
-          style={{
-            width: '100%',
-            height: '80vh',
-            border: 'none',
-          }}
-        />
+        <div className='p-8 min-h-[400px]'>
+          <div id='form-root-publish' className='min-h-[350px]' />
+        </div>
       </div>
     </div>
   );

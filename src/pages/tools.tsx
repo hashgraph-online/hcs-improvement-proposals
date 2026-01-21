@@ -12,6 +12,15 @@ const ToolsPage: React.FC = () => {
       description='Explore the complete suite of developer tools and SDKs for building on Hedera. From AI agent frameworks to blockchain integrations, find everything you need to build innovative solutions.'
     >
       <div className='min-h-screen bg-white dark:bg-gray-900'>
+        <header className='container mx-auto px-4 pt-10 pb-6'>
+          <h1 className='text-4xl font-mono font-bold text-gray-900 dark:text-white'>
+            Developer Tools
+          </h1>
+          <p className='mt-3 max-w-3xl text-base text-gray-700 dark:text-gray-300'>
+            Browse SDKs, frameworks, and reference implementations for building on Hedera
+            with Hashgraph Consensus Standards.
+          </p>
+        </header>
         <div id='tools'>
           <ToolsSection />
         </div>

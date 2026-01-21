@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-5 Hashinals SDK Overview
 sidebar_position: 1
 description: Mint NFTs whose on-chain metadata points to an HCS‑1 HRL (hcs://1/<topicId>)
 ---

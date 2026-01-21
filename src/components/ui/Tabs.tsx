@@ -127,20 +127,25 @@ interface TabsContentProps {
   value: string
   children: React.ReactNode
   className?: string
+  forceMount?: boolean
 }
 
-export function TabsContent({ value, children, className }: TabsContentProps) {
+export function TabsContent({ value, children, className, forceMount }: TabsContentProps) {
   const context = React.useContext(TabsContext)
   if (!context) throw new Error("TabsContent must be used within Tabs")
 
-  if (context.activeTab !== value) return null
+  const isActive = context.activeTab === value
+
+  if (!forceMount && !isActive) return null
 
   return (
     <div
       className={cn(
         "mt-2 ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 focus-visible:ring-offset-2 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-300 w-full animate-fade-in",
+        !isActive && "hidden",
         className
       )}
+      data-state={isActive ? "active" : "inactive"}
     >
       {children}
     </div>

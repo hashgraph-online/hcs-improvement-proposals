@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-2 Topic Registry SDK Overview
 sidebar_position: 1
 ---
 
@@ -514,4 +514,3 @@ interface MigrateTopicOptions {
   memo?: string;
 }
 ```
-

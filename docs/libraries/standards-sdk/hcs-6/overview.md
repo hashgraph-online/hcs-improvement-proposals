@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-6 Dynamic Hashinals SDK Overview
 sidebar_position: 1
 ---
 

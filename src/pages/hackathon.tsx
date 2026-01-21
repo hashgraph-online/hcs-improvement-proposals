@@ -38,7 +38,6 @@ export default function HackathonRedirect(): JSX.Element {
   return (
     <>
       <Head>
-        <meta httpEquiv="refresh" content={`1; url=${target}`} />
         <link rel="canonical" href={target} />
       </Head>
       <main className="container margin-vert--xl">

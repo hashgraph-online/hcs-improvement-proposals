@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-11 Profiles SDK Overview
 sidebar_position: 1
 ---
 

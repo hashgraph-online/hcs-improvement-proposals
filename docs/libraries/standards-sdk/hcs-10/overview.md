@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-10 OpenConvAI SDK Overview
 sidebar_position: 1
 ---
 
@@ -65,4 +65,3 @@ graph TD
 - [HCS-11 Profile Standard](../../../standards/hcs-11.md)
 - [Hedera Consensus Service (HCS) Overview](https://docs.hedera.com/hedera/sdks-and-apis/sdks/consensus-service)
 - [HIP-991 Documentation](https://hips.hedera.com/hip/hip-991)
-
