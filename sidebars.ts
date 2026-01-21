@@ -155,7 +155,7 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'standards/hcs-14',
+          id: 'standards/hcs-14/index',
           label: 'HCS-14: Universal Agent ID Standard',
         },
         {
