@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaEnvelope, FaBell, FaCalendarAlt, FaNewspaper, FaUsers, FaCode } from 'react-icons/fa';
 import Layout from '@theme/Layout';
 import { TransformCard } from '../components/ui';
 import Typography from '../components/ui/Typography';
+import MailerooEmbedForm from '../components/ui/MailerooEmbedForm';
 
 type NewsletterPageProps = {};
 
@@ -55,7 +56,6 @@ const NewsletterPage: React.FC<NewsletterPageProps> = () => {
       
       // Use setTimeout to let snap scrolling finish before calculating
       setTimeout(() => {
-        const finalScrollLeft = container.scrollLeft;
         const containerLeft = container.getBoundingClientRect().left;
         const containerCenter = containerLeft + container.clientWidth / 2;
         
@@ -76,7 +76,6 @@ const NewsletterPage: React.FC<NewsletterPageProps> = () => {
           }
         }
         
-        console.log('Closest card to center:', closestIndex, 'Final Scroll Left:', finalScrollLeft);
         setCurrentCard(closestIndex);
       }, 100);
     }
@@ -137,6 +136,7 @@ const NewsletterPage: React.FC<NewsletterPageProps> = () => {
         <section className='relative py-12 lg:py-16'>
           <div className='container mx-auto px-4 sm:px-6 lg:px-8'>
             <div className='max-w-7xl mx-auto'>
+              <h1 className='sr-only'>Newsletter</h1>
               <div className='grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start'>
                 {/* Left Column - Information */}
                 <div
@@ -342,24 +342,7 @@ const NewsletterPage: React.FC<NewsletterPageProps> = () => {
 
                     {/* Browser Content */}
                     <div className='bg-white dark:bg-gray-900'>
-                      {/* SibForms Newsletter Signup */}
-                      <iframe
-                        width='540'
-                        height='700'
-                        src='https://abf8595d.sibforms.com/serve/MUIFAPkTSu_LF4xv1Skm7IXZKSZankgAHr4d_KC7h5yIchx0FB-dG1J9tNuIK2eeAVn2AIMogqljB9LV1UnRTKoc-8xGGgBzbul2oxJOqJg_aY1HDcV0f3IiMeMPT6zjaezAO5S7sbG6CD_j7sLEwbktzsOmtj1_laBmMsIETe9d1-soMdj37nr1JH1Cjyiw81jAO6pa9MnhYLCL'
-                        frameBorder='0'
-                        scrolling='no'
-                        allowFullScreen
-                        className='w-full h-[700px]'
-                        style={{
-                          display: 'block',
-                          marginLeft: 'auto',
-                          marginRight: 'auto',
-                          maxWidth: '100%',
-                          border: 'none',
-                        }}
-                        title='Newsletter Signup Form'
-                      />
+                      <MailerooEmbedForm />
                     </div>
                   </div>
 

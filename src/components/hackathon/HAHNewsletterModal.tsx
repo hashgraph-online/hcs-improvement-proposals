@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FaRegTimesCircle } from 'react-icons/fa';
 import PrimaryButton from './PrimaryButton';
 
@@ -7,13 +7,30 @@ type HAHNewsletterModalProps = {
   onClose: () => void;
 };
 
+const REACLE_FORM_ID = 'ac327b5768122432279ed0a9';
+
 const HAHNewsletterModal: React.FC<HAHNewsletterModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const scriptLoadedRef = useRef(false);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+
+      if (!scriptLoadedRef.current) {
+        (window as unknown as Record<string, string>).reacleFormId = REACLE_FORM_ID;
+
+        const existingScript = document.querySelector('script[src="https://reacle.com/static/form.js"]');
+        if (!existingScript) {
+          const script = document.createElement('script');
+          script.src = 'https://reacle.com/static/form.js';
+          script.defer = true;
+          document.body.appendChild(script);
+        }
+        scriptLoadedRef.current = true;
+      }
     } else {
       document.body.style.overflow = 'unset';
     }
@@ -55,17 +72,9 @@ const HAHNewsletterModal: React.FC<HAHNewsletterModalProps> = ({
               </button>
             </div>
 
-            <iframe
-              src='https://abf8595d.sibforms.com/serve/MUIFAFOh0_qO6OntUHoDlZoTAwNDz7dIC7zTMveLKftES2Ku1z5WNKcJuiMLBTATRQD3WBVXkID6XDI72mQHAe3_TfTbT0_gvKjGw6cujid9M64jKctPYIkt3uYEJXbItqwTmIJjHSEWPoxKteE3S8U9MG-KMVsIss96koZT9CbICG5kL0jBqtSAa9VsSVYT4du9d-S0jKrK069h'
-              frameBorder='0'
-              scrolling='auto'
-              allowFullScreen
-              className='w-full h-[500px] md:h-[600px]'
-              style={{
-                maxWidth: '100%',
-                border: 'none',
-              }}
-            />
+            <div className='p-6 min-h-[400px]'>
+              <div id='form-root-publish' className='min-h-[350px]' />
+            </div>
 
             <div className='p-4 bg-gradient-to-r from-[#a679f0]/5 via-[#5599fe]/5 to-[#48df7b]/5 dark:bg-gray-800 text-center border-t border-gray-200 dark:border-gray-700'>
               <PrimaryButton onClick={onClose} className='bg-gray-600 hover:bg-gray-700'>Close</PrimaryButton>

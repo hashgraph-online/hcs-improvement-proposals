@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-14 UAID SDK Overview
 sidebar_position: 1
 ---
 
@@ -39,4 +39,3 @@ flowchart LR
   B -->|Yes| E["Sanitize DID id"]
   E --> D["uaid:did + routing"]
 ```
-

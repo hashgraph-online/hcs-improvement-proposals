@@ -1,5 +1,6 @@
 ---
 sidebar_position: 5
+description: Reference for the Standards Agent Kit LangChain-compatible tools (HCS-10 agent registration, discovery, and messaging).
 ---
 
 # LangChain Tools Reference

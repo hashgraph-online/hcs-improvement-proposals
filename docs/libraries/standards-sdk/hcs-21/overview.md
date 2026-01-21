@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-21 Adapter Registry SDK Overview
 sidebar_position: 2
 ---
 

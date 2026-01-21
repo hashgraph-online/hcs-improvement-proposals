@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: Hashinal Wallet Connect Overview
 sidebar_position: 1
 description: Powerful abstraction layer for Hedera Wallet Connect
 pagination_prev: null

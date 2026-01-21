@@ -2,7 +2,7 @@
 sidebar_position: 8
 ---
 
-# Examples
+# Standards Agent Kit Examples
 
 This section provides practical examples of how to use the Standards Agent Kit to build agents that can communicate over the Hedera network. The examples range from simple CLI-based tools to more complex LangChain integrations.
 

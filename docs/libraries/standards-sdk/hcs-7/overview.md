@@ -1,5 +1,5 @@
 ---
-title: Overview
+title: HCS-7 Smart Hashinals SDK Overview
 sidebar_position: 1
 ---
 
