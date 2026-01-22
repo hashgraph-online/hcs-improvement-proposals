@@ -38,12 +38,15 @@ function BlogTagsPostsPageMetadata({ tag, listMetadata }: Pick<Props, 'tag' | 'l
   const baseTitle = useBlogTagsPostsPageTitle(tag);
   const pageNumber = listMetadata?.page ?? 1;
   const titleSuffix = buildTitleSuffix(pageNumber, listMetadata?.totalPages);
+  const baseDescription =
+    tag.description ??
+    `Posts tagged with "${tag.label}".`;
 
   return (
     <>
       <PageMetadata
         title={`${baseTitle}${titleSuffix}`}
-        description={buildDescription(tag.description, pageNumber)}
+        description={buildDescription(baseDescription, pageNumber)}
       />
       <SearchMetadata tag="blog_tags_posts" />
     </>
@@ -97,4 +100,3 @@ export default function BlogTagsPostsPage(props: Props): ReactNode {
     </HtmlClassNameProvider>
   );
 }
-
