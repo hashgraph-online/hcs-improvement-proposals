@@ -201,6 +201,35 @@ function getDescriptionOverride(destPath) {
   return match?.description;
 }
 
+function extractHcsContextFromContent(content) {
+  const match = content.match(/^\s*####\s*\[\s*(hcs-\d+)\s*-\s*([^\]]+)\s*\]\s*$/im);
+  if (!match) return undefined;
+  return { id: match[1].toLowerCase(), label: match[2].trim() };
+}
+
+function extractHcsIdFromPath(destPath) {
+  const normalized = String(destPath).replace(/\\/g, '/');
+  const match = normalized.match(/\/docs\/standards\/(hcs-\d+)(?:\/|\.md)/);
+  return match?.[1]?.toLowerCase();
+}
+
+function buildAutoDescription(destPath, content) {
+  const frontmatter = parseFrontmatter(content);
+  if (frontmatter.description) return undefined;
+  if (!frontmatter.title) return undefined;
+
+  const ctx = extractHcsContextFromContent(content);
+  const idFromPath = extractHcsIdFromPath(destPath);
+  const id = ctx?.id || idFromPath;
+  if (!id) return undefined;
+
+  const readableId = id.toUpperCase();
+  const label = ctx?.label ? ` ${ctx.label}` : '';
+  const raw = `${frontmatter.title} for ${readableId}${label}.`;
+  if (raw.length <= 160) return raw;
+  return `${raw.slice(0, 157).trimEnd()}...`;
+}
+
 function getSlugOverride(destPath) {
   const overrides = [
     {
@@ -322,6 +351,11 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
         const descriptionOverride = getDescriptionOverride(destPath);
         if (descriptionOverride) {
           escapedContent = ensureDescriptionFrontmatter(escapedContent, descriptionOverride);
+        } else {
+          const autoDescription = buildAutoDescription(destPath, escapedContent);
+          if (autoDescription) {
+            escapedContent = ensureDescriptionFrontmatter(escapedContent, autoDescription);
+          }
         }
 
         if (destPath.endsWith(path.join('docs', 'standards', 'hcs-25.md'))) {
