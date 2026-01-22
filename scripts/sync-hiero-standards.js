@@ -128,9 +128,11 @@ function fixHcs9InternalLinks(content) {
     .replace(/\]\(base-schema\/\)/g, '](../base-schema/)');
 }
 
-function fixHcs9SchemaDefinitionAssetLinks(content) {
-  // Docusaurus will fingerprint and "prettify" internal asset links, which can
-  // incorrectly append a trailing slash to `.json` URLs on some hosts.
+function fixStaticJsonSchemaLinks(content) {
+  // Docusaurus fingerprints some static assets referenced from markdown, turning
+  // `/assets/schema/*.json` into `/assets/files/<hash>.json`. With trailing slashes
+  // enabled, those can become `/assets/files/<hash>.json/` and 404 on Pages.
+  //
   // Use absolute HTTPS links so they remain stable and are not rewritten.
   return content.replace(
     /\]\(\/assets\/schema\/([^)]+\.json)\)/g,
@@ -244,11 +246,11 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
         }
 
         if (
-          destPath.endsWith(
-            path.join('docs', 'standards', 'hcs-9', 'schema-definitions.md'),
+          destPath.includes(
+            path.join('docs', 'standards', 'hcs-9') + path.sep,
           )
         ) {
-          escapedContent = fixHcs9SchemaDefinitionAssetLinks(escapedContent);
+          escapedContent = fixStaticJsonSchemaLinks(escapedContent);
         }
 
         escapedContent = escapeNumericOperatorIdAtSign(escapedContent);
