@@ -142,19 +142,35 @@ function fixStaticJsonSchemaLinks(content) {
 
 function ensureDescriptionFrontmatter(content, description) {
   const quotedDescription = JSON.stringify(description);
+  const replaceExisting = arguments.length > 2 ? Boolean(arguments[2]?.replace) : false;
 
   if (content.startsWith('---\n')) {
     const match = content.match(/^---\n([\s\S]*?)\n---\n?/);
     if (!match) return content;
 
     const frontmatterBody = match[1];
-    if (/^description:/m.test(frontmatterBody)) return content;
+    if (/^description:/m.test(frontmatterBody)) {
+      if (!replaceExisting) return content;
+      const updatedFrontmatterBody = frontmatterBody.replace(
+        /^description:.*$/m,
+        `description: ${quotedDescription}`,
+      );
+      return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
+    }
 
     const updatedFrontmatterBody = `${frontmatterBody}\ndescription: ${quotedDescription}`;
     return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
   }
 
   return `---\ndescription: ${quotedDescription}\n---\n\n${content}`;
+}
+
+function isPlaceholderDescription(description) {
+  const trimmed = String(description ?? '').trim();
+  if (!trimmed) {
+    return true;
+  }
+  return /^\[\s*hcs-\d+\s*-\s*.+\]\s*$/i.test(trimmed);
 }
 
 function ensureSlugFrontmatter(content, slug) {
@@ -215,7 +231,6 @@ function extractHcsIdFromPath(destPath) {
 
 function buildAutoDescription(destPath, content) {
   const frontmatter = parseFrontmatter(content);
-  if (frontmatter.description) return undefined;
   if (!frontmatter.title) return undefined;
 
   const ctx = extractHcsContextFromContent(content);
@@ -342,6 +357,10 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
       if (entry.name.endsWith('.md') || entry.name.endsWith('.mdx')) {
         const content = fs.readFileSync(srcPath, 'utf8');
         let escapedContent = escapeMdxAngleBrackets(content);
+        const parsedFrontmatter = parseFrontmatter(escapedContent);
+        const existingDescription = parsedFrontmatter.description;
+        const shouldReplaceDescription =
+          existingDescription && isPlaceholderDescription(existingDescription);
 
         const slugOverride = getSlugOverride(destPath);
         if (slugOverride) {
@@ -350,11 +369,15 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
 
         const descriptionOverride = getDescriptionOverride(destPath);
         if (descriptionOverride) {
-          escapedContent = ensureDescriptionFrontmatter(escapedContent, descriptionOverride);
+          escapedContent = ensureDescriptionFrontmatter(escapedContent, descriptionOverride, {
+            replace: shouldReplaceDescription,
+          });
         } else {
           const autoDescription = buildAutoDescription(destPath, escapedContent);
-          if (autoDescription) {
-            escapedContent = ensureDescriptionFrontmatter(escapedContent, autoDescription);
+          if (autoDescription && (!existingDescription || shouldReplaceDescription)) {
+            escapedContent = ensureDescriptionFrontmatter(escapedContent, autoDescription, {
+              replace: shouldReplaceDescription,
+            });
           }
         }
 

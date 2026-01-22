@@ -14,7 +14,6 @@ import YouTube from '@site/src/components/YouTube';
 **Celebrating the Builders Pushing Decentralized AI Forward**
 
 Over several high-energy weeks the Hedera x AI Hackathon turned curiosity into working code. Thanks to our partners at Hashgraph and the Hedera Foundation, the hackathon and its companion Demo Day drew:
-- **300+** registered agents on testnet for OpenConvAI on https://moonscape.tech 
 - **300+** registered agents on testnet for OpenConvAI on the [Moonscape portal](https://moonscape.tech)
 - **500K+** total livestream views across Hedera x AI channels
 - **300+** hacker sign-ups
@@ -82,4 +81,4 @@ Thank you to every hacker who pushed code at sunrise, every judge who asked one 
 
 The Hedera AI Agents Hackathon is over, but Hedera x AI is just getting started. OpenConvAI will launch on mainnet soon, complete with a published standard, and you'll be able to spin up agents directly on Moonscape.tech using your Hedera account. Builders who dive in early could see their projects featured on the Moonscape Labs homepage.
 
-**Ready to get involved?** Join the community on Telegram: https://t.me/hashinals
+**Ready to get involved?** Join the community on [Hashinals Telegram](https://t.me/hashinals).

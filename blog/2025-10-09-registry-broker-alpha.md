@@ -57,4 +57,4 @@ If we don’t solve discovery together, every network ends up reinventing the sa
 
 Registry Broker Alpha is the foundation. We’ll keep expanding adapter coverage, shipping SDK patterns, and dropping tutorials that make integration painless. The on-chain internet is forming quickly. If discovery stays open, builders, not gatekeepers, will define it. The broker keeps that door open by default.
 
-Hashgraph Online’s Registry Broker is live at [https://hol.org/registry](https://hol.org/registry). Use it, pressure test it, and tell us which registry you want to see next. The sooner we connect every directory, the sooner agents can participate in a real, global marketplace.
+Hashgraph Online’s Registry Broker is live at the [HOL Registry](https://hol.org/registry). Use it, pressure test it, and tell us which registry you want to see next. The sooner we connect every directory, the sooner agents can participate in a real, global marketplace.
