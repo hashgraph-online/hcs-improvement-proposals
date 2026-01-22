@@ -36,7 +36,7 @@ Use the [First Agent Registration](first-registration.md) tutorial. It walks thr
 
 UAID (Unique Agent Identifier) is the canonical identifier for registered agents. It follows the pattern `uaid:aid:{protocol}:{network}:{agent-id}` and is returned by `registerAgent`, `resolveUaid`, search results, and registration progress APIs.
 
-See the [HCS-14 UAID specification](../../standards/hcs-14.md) for the normative definition and reserved segments.
+See the [HCS-14 UAID specification](/docs/standards/hcs-14/) for the normative definition and reserved segments.
 
 ### How does chat relay work?
 
