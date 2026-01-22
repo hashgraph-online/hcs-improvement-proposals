@@ -128,6 +128,16 @@ function fixHcs9InternalLinks(content) {
     .replace(/\]\(base-schema\/\)/g, '](../base-schema/)');
 }
 
+function fixHcs9SchemaDefinitionAssetLinks(content) {
+  // Docusaurus will fingerprint and "prettify" internal asset links, which can
+  // incorrectly append a trailing slash to `.json` URLs on some hosts.
+  // Use absolute HTTPS links so they remain stable and are not rewritten.
+  return content.replace(
+    /\]\(\/assets\/schema\/([^)]+\.json)\)/g,
+    '](https://hol.org/assets/schema/$1)',
+  );
+}
+
 function shouldPreserve(filename) {
   return PRESERVE_PATTERNS.some((pattern) => pattern.test(filename));
 }
@@ -146,6 +156,54 @@ function cleanupTmp() {
   if (fs.existsSync(TMP_DIR)) {
     fs.rmSync(TMP_DIR, { recursive: true, force: true });
   }
+}
+
+function parseGitMajorMinor(versionLine) {
+  // Example: "git version 2.39.5 (Apple Git-154)"
+  const match = String(versionLine || '').match(/git version (\d+)\.(\d+)/i);
+  if (!match) return undefined;
+  return { major: Number(match[1]), minor: Number(match[2]) };
+}
+
+function supportsSparseCheckout() {
+  try {
+    const versionLine = execSync('git --version', { stdio: 'pipe' }).toString();
+    const parsed = parseGitMajorMinor(versionLine);
+    if (!parsed) return false;
+    // `git clone --sparse` was introduced in git 2.25.
+    if (parsed.major > 2) return true;
+    return parsed.major === 2 && parsed.minor >= 25;
+  } catch {
+    return false;
+  }
+}
+
+function cloneHieroRepo() {
+  const allowSparse = supportsSparseCheckout();
+
+  if (allowSparse) {
+    try {
+      execSync(
+        `git clone --depth 1 --filter=blob:none --sparse --branch ${HIERO_BRANCH} ${HIERO_REPO} "${TMP_DIR}"`,
+        { stdio: 'pipe' },
+      );
+      execSync('git sparse-checkout set docs/standards docs/assets', {
+        cwd: TMP_DIR,
+        stdio: 'pipe',
+      });
+      return;
+    } catch (err) {
+      const msg = err?.message ? String(err.message) : String(err);
+      console.warn(
+        `Sparse checkout failed (${msg.trim() || 'unknown error'}). Retrying with a full clone...`,
+      );
+      cleanupTmp();
+    }
+  }
+
+  execSync(`git clone --depth 1 --branch ${HIERO_BRANCH} ${HIERO_REPO} "${TMP_DIR}"`, {
+    stdio: 'pipe',
+  });
 }
 
 function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
@@ -183,6 +241,14 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
           )
         ) {
           escapedContent = fixHcs9InternalLinks(escapedContent);
+        }
+
+        if (
+          destPath.endsWith(
+            path.join('docs', 'standards', 'hcs-9', 'schema-definitions.md'),
+          )
+        ) {
+          escapedContent = fixHcs9SchemaDefinitionAssetLinks(escapedContent);
         }
 
         escapedContent = escapeNumericOperatorIdAtSign(escapedContent);
@@ -362,16 +428,8 @@ async function main() {
 
   try {
     if (!useLocalSource) {
-      console.log('Cloning repository (sparse checkout)...');
-      execSync(
-        `git clone --depth 1 --filter=blob:none --sparse --branch ${HIERO_BRANCH} ${HIERO_REPO} "${TMP_DIR}"`,
-        { stdio: 'pipe' }
-      );
-
-      execSync('git sparse-checkout set docs/standards docs/assets', {
-        cwd: TMP_DIR,
-        stdio: 'pipe',
-      });
+      console.log('Cloning repository...');
+      cloneHieroRepo();
     }
 
     let totalCopied = 0;
