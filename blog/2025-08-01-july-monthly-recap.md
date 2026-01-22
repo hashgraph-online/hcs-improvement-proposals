@@ -78,7 +78,7 @@ It's official: **Moonscape Points** and the **OpenConvAI Portal** are now live o
 - **Moonscape Points** (built using HCS-20) let users collect rewards for participation — including building, testing agents, and contributing feedback
 - **The OpenConvAI Portal** (using HCS-10) allows anyone to discover, test, and interact with conversational agents running entirely on Hedera
 
-Explore the portal at: https://moonscape.tech
+Explore the portal at the [Moonscape portal](https://moonscape.tech).
 
 ## Metrics & Milestones
 

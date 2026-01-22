@@ -140,6 +140,87 @@ function fixStaticJsonSchemaLinks(content) {
   );
 }
 
+function ensureDescriptionFrontmatter(content, description) {
+  const quotedDescription = JSON.stringify(description);
+
+  if (content.startsWith('---\n')) {
+    const match = content.match(/^---\n([\s\S]*?)\n---\n?/);
+    if (!match) return content;
+
+    const frontmatterBody = match[1];
+    if (/^description:/m.test(frontmatterBody)) return content;
+
+    const updatedFrontmatterBody = `${frontmatterBody}\ndescription: ${quotedDescription}`;
+    return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
+  }
+
+  return `---\ndescription: ${quotedDescription}\n---\n\n${content}`;
+}
+
+function ensureSlugFrontmatter(content, slug) {
+  const quotedSlug = JSON.stringify(slug);
+
+  if (content.startsWith('---\n')) {
+    const match = content.match(/^---\n([\s\S]*?)\n---\n?/);
+    if (!match) return content;
+
+    const frontmatterBody = match[1];
+    if (/^slug:/m.test(frontmatterBody)) return content;
+
+    const updatedFrontmatterBody = `${frontmatterBody}\nslug: ${quotedSlug}`;
+    return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
+  }
+
+  return `---\nslug: ${quotedSlug}\n---\n\n${content}`;
+}
+
+function getDescriptionOverride(destPath) {
+  const overrides = [
+    {
+      suffix: path.join('docs', 'standards', 'hcs-12', 'actions.md'),
+      description:
+        'HCS‑12 Actions layer specification: deterministic WASM modules for HashLinks computation and transactions.',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-12', 'blocks.md'),
+      description: 'HCS‑12 Blocks layer specification: composable UI components for HashLinks.',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-12', 'assembly.md'),
+      description:
+        'HCS‑12 Assembly layer specification: patterns for composing actions and blocks into complete HashLinks.',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-20', 'registry.md'),
+      description:
+        'HCS‑20 Topic Registry specification: a standard way to register and discover Hedera topic IDs and protocols.',
+    },
+  ];
+
+  const match = overrides.find((override) => destPath.endsWith(override.suffix));
+  return match?.description;
+}
+
+function getSlugOverride(destPath) {
+  const overrides = [
+    {
+      suffix: path.join('docs', 'standards', 'hcs-14.md'),
+      slug: '/standards/hcs-14-single',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-25', 'adapters.md'),
+      slug: '/standards/hcs-25/adapters-overview',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-25', 'signals.md'),
+      slug: '/standards/hcs-25/signals-overview',
+    },
+  ];
+
+  const match = overrides.find((override) => destPath.endsWith(override.suffix));
+  return match?.slug;
+}
+
 function shouldPreserve(filename) {
   return PRESERVE_PATTERNS.some((pattern) => pattern.test(filename));
 }
@@ -232,6 +313,16 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
       if (entry.name.endsWith('.md') || entry.name.endsWith('.mdx')) {
         const content = fs.readFileSync(srcPath, 'utf8');
         let escapedContent = escapeMdxAngleBrackets(content);
+
+        const slugOverride = getSlugOverride(destPath);
+        if (slugOverride) {
+          escapedContent = ensureSlugFrontmatter(escapedContent, slugOverride);
+        }
+
+        const descriptionOverride = getDescriptionOverride(destPath);
+        if (descriptionOverride) {
+          escapedContent = ensureDescriptionFrontmatter(escapedContent, descriptionOverride);
+        }
 
         if (destPath.endsWith(path.join('docs', 'standards', 'hcs-25.md'))) {
           escapedContent = fixHcs25InternalLinks(escapedContent);

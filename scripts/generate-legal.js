@@ -32,15 +32,12 @@ async function main() {
     text.replace(/\]\(\/points\//g, '](https://hol.org/points/');
 
   const rewriteMailtoLinks = (text) =>
-    text.replace(/\[([^\]]+)\]\(mailto:[^)]+\)/g, (_match, label) => {
-      const safeLabel = label.replace(/@/g, '&#64;');
-      return `[${safeLabel}](${CONTACT_URL})`;
-    });
+    text.replace(/\[([^\]]+)\]\(mailto:[^)]+\)/g, () => `[Contact us](${CONTACT_URL})`);
 
-  const escapeEmailAddresses = (text) =>
+  const rewriteEmailAddresses = (text) =>
     text.replace(
       /\b([A-Za-z0-9._%+-]+)@([A-Za-z0-9.-]+\.[A-Za-z]{2,})\b/g,
-      '$1&#64;$2',
+      () => `[Contact us](${CONTACT_URL})`,
     );
 
   const normalizeLegacyPointsPrivacyLinks = (text) =>
@@ -59,13 +56,13 @@ async function main() {
 
     fs.writeFileSync(
       path.join(pagesDir, 'terms-of-service.mdx'),
-      `---\ntitle: Terms of Service\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(terms)))))}\n`,
+      `---\ntitle: Terms of Service\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${rewriteEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(terms)))))}\n`,
       'utf8',
     );
 
     fs.writeFileSync(
       path.join(pagesDir, 'privacy-policy.mdx'),
-      `---\ntitle: Privacy Policy\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${escapeEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(privacy)))))}\n`,
+      `---\ntitle: Privacy Policy\n---\n\n<!-- auto-generated at build time; source not stored in repo -->\n\n${rewriteEmailAddresses(rewriteMailtoLinks(normalizeLegacyPointsPrivacyLinks(absolutizeLinks(sanitizeLinks(privacy)))))}\n`,
       'utf8',
     );
 

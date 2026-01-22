@@ -38,6 +38,11 @@ export default function HackathonRedirect(): JSX.Element {
   return (
     <>
       <Head>
+        <title>Hedera Africa Hackathon | Hashgraph Online</title>
+        <meta
+          name="description"
+          content="Redirecting to Hedera Africa Hackathon registration and details."
+        />
         <link rel="canonical" href={target} />
       </Head>
       <main className="container margin-vert--xl">

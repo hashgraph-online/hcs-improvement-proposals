@@ -9,7 +9,7 @@ date: 2025-09-10
 
 Hashgraph Online has published HCS-14 (Universal Agent Identifier), a draft standard and SDK that gives AI agents a single, portable identifier across Web2 APIs, Web3 networks, and hybrid systems. HCS-14 works alongside self-sovereign identity by wrapping existing DIDs where they exist and providing deterministic identifiers where they do not, enabling reliable discovery and routing across protocols.
 
-Status: Draft. We welcome feedback from the community at https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135.
+Status: Draft. We welcome feedback from the community in the [HCS‑14 discussion](https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135).
 
 HCS‑14 is network‑agnostic. It works across Web2 (A2A/REST), EVM/ETH, and more. Hedera support is optional. We start with Web2 and EVM, then cover Hedera.
 
@@ -120,7 +120,7 @@ Current stance (separation of concerns):
 - DID Documents carry keys and verification methods; profiles (HCS‑11) and agent.json (A2A) carry descriptive metadata and endpoints.
 - Trust and provenance should be expressed with credentials and proofs layered on top of identifiers, not baked into them.
 
-We invite feedback on these questions in the HCS‑14 discussion: https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135
+We invite feedback on these questions in the [HCS‑14 discussion](https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135).
 
 ## Who Should Use This Now
 
@@ -147,13 +147,13 @@ We welcome contributions across DID methods and CAIP namespaces.
 How to contribute an Issuer (quick path)
 
 - Fork the Standards SDK and add a file under `standards-sdk/src/hcs-14/issuers/` (for example, `foo.ts`).
-  - GitHub: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-14/issuers
+  - GitHub: [HCS‑14 issuers](https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-14/issuers)
 - Implement `DidIssuer` with two methods and minimal metadata:
   - `supports(method: string): boolean`
   - `issue(request: DidIssueRequest): Promise<string>` returning a `did:<method>:...`
   - `meta` with `id` and `didMethods` so tools can list your adapter
 - Export it from `standards-sdk/src/hcs-14/index.ts` so apps can import it.
-  - GitHub: https://github.com/hashgraph-online/standards-sdk/blob/main/src/hcs-14/index.ts
+  - GitHub: [HCS‑14 entrypoint](https://github.com/hashgraph-online/standards-sdk/blob/main/src/hcs-14/index.ts)
 - Add small tests to prove `supports` and `issue` work and handle basic errors.
 - Open a PR linking to any public spec or docs for your method.
 
@@ -163,13 +163,13 @@ Reference: adapter guide in the SDK docs
 
 For Resolver adapters, see:
 
-- GitHub: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-14/resolvers
+- GitHub: [HCS‑14 resolvers](https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-14/resolvers)
 
 ## Get Involved
 
 - Read the HCS-14 Draft: [docs/standards/hcs-14](/docs/standards/hcs-14)
 - SDK Guide: [docs/libraries/standards-sdk/hcs-14](/docs/libraries/standards-sdk/hcs-14)
-- Join the Discussion: https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135
+- Join the Discussion: [HCS‑14 discussion](https://github.com/hashgraph-online/hcs-improvement-proposals/discussions/135)
 
 We invite developers, operators, and standards practitioners to review the draft, try the SDK, and share feedback.
 
