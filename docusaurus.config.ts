@@ -2,6 +2,41 @@ import { themes as prismThemes } from 'prism-react-renderer';
 import type { Config } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
 
+type MarkdownNode = {
+  type?: string;
+  value?: string;
+  url?: string;
+  children?: MarkdownNode[];
+};
+
+const remarkRewriteGithubAutolinks = () => {
+  const visit = (node: MarkdownNode | undefined) => {
+    if (!node) return;
+
+    if (
+      node.type === 'link' &&
+      typeof node.url === 'string' &&
+      node.url.startsWith('https://github.com/') &&
+      Array.isArray(node.children) &&
+      node.children.length === 1 &&
+      node.children[0]?.type === 'text' &&
+      node.children[0]?.value === node.url
+    ) {
+      node.children[0].value = 'GitHub';
+    }
+
+    if (Array.isArray(node.children)) {
+      for (const child of node.children) {
+        visit(child);
+      }
+    }
+  };
+
+  return (tree: MarkdownNode) => {
+    visit(tree);
+  };
+};
+
 const config: Config = {
   title: 'Hashgraph Online',
   tagline: 'Building the future of the internet, on-graph.',
@@ -117,6 +152,7 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           sidebarCollapsible: true,
           sidebarCollapsed: true,
+          remarkPlugins: [remarkRewriteGithubAutolinks],
         },
         blog: {
           showReadingTime: true,
@@ -129,6 +165,7 @@ const config: Config = {
           onUntruncatedBlogPosts: 'warn',
           blogSidebarCount: 'ALL',
           blogSidebarTitle: 'All posts',
+          remarkPlugins: [remarkRewriteGithubAutolinks],
         },
         sitemap: {
           ignorePatterns: [

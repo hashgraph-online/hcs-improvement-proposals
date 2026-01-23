@@ -140,6 +140,131 @@ function fixStaticJsonSchemaLinks(content) {
   );
 }
 
+function ensureDescriptionFrontmatter(content, description) {
+  const quotedDescription = JSON.stringify(description);
+  const replaceExisting = arguments.length > 2 ? Boolean(arguments[2]?.replace) : false;
+
+  if (content.startsWith('---\n')) {
+    const match = content.match(/^---\n([\s\S]*?)\n---\n?/);
+    if (!match) return content;
+
+    const frontmatterBody = match[1];
+    if (/^description:/m.test(frontmatterBody)) {
+      if (!replaceExisting) return content;
+      const updatedFrontmatterBody = frontmatterBody.replace(
+        /^description:.*$/m,
+        `description: ${quotedDescription}`,
+      );
+      return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
+    }
+
+    const updatedFrontmatterBody = `${frontmatterBody}\ndescription: ${quotedDescription}`;
+    return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
+  }
+
+  return `---\ndescription: ${quotedDescription}\n---\n\n${content}`;
+}
+
+function isPlaceholderDescription(description) {
+  const trimmed = String(description ?? '').trim();
+  if (!trimmed) {
+    return true;
+  }
+  return /^\[\s*hcs-\d+\s*-\s*.+\]\s*$/i.test(trimmed);
+}
+
+function ensureSlugFrontmatter(content, slug) {
+  const quotedSlug = JSON.stringify(slug);
+
+  if (content.startsWith('---\n')) {
+    const match = content.match(/^---\n([\s\S]*?)\n---\n?/);
+    if (!match) return content;
+
+    const frontmatterBody = match[1];
+    if (/^slug:/m.test(frontmatterBody)) return content;
+
+    const updatedFrontmatterBody = `${frontmatterBody}\nslug: ${quotedSlug}`;
+    return content.replace(match[0], `---\n${updatedFrontmatterBody}\n---\n`);
+  }
+
+  return `---\nslug: ${quotedSlug}\n---\n\n${content}`;
+}
+
+function getDescriptionOverride(destPath) {
+  const overrides = [
+    {
+      suffix: path.join('docs', 'standards', 'hcs-12', 'actions.md'),
+      description:
+        'HCS‑12 Actions layer specification: deterministic WASM modules for HashLinks computation and transactions.',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-12', 'blocks.md'),
+      description: 'HCS‑12 Blocks layer specification: composable UI components for HashLinks.',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-12', 'assembly.md'),
+      description:
+        'HCS‑12 Assembly layer specification: patterns for composing actions and blocks into complete HashLinks.',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-20', 'registry.md'),
+      description:
+        'HCS‑20 Topic Registry specification: a standard way to register and discover Hedera topic IDs and protocols.',
+    },
+  ];
+
+  const match = overrides.find((override) => destPath.endsWith(override.suffix));
+  return match?.description;
+}
+
+function extractHcsContextFromContent(content) {
+  const match = content.match(/^\s*####\s*\[\s*(hcs-\d+)\s*-\s*([^\]]+)\s*\]\s*$/im);
+  if (!match) return undefined;
+  return { id: match[1].toLowerCase(), label: match[2].trim() };
+}
+
+function extractHcsIdFromPath(destPath) {
+  const normalized = String(destPath).replace(/\\/g, '/');
+  const match = normalized.match(/\/docs\/standards\/(hcs-\d+)(?:\/|\.md)/);
+  return match?.[1]?.toLowerCase();
+}
+
+function buildAutoDescription(destPath, content) {
+  const frontmatter = parseFrontmatter(content);
+  if (!frontmatter.title) return undefined;
+
+  const ctx = extractHcsContextFromContent(content);
+  const idFromPath = extractHcsIdFromPath(destPath);
+  const id = ctx?.id || idFromPath;
+  if (!id) return undefined;
+
+  const readableId = id.toUpperCase();
+  const label = ctx?.label ? ` ${ctx.label}` : '';
+  const raw = `${frontmatter.title} for ${readableId}${label}.`;
+  if (raw.length <= 160) return raw;
+  return `${raw.slice(0, 157).trimEnd()}...`;
+}
+
+function getSlugOverride(destPath) {
+  const overrides = [
+    {
+      suffix: path.join('docs', 'standards', 'hcs-14.md'),
+      slug: '/standards/hcs-14-single',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-25', 'adapters.md'),
+      slug: '/standards/hcs-25/adapters-overview',
+    },
+    {
+      suffix: path.join('docs', 'standards', 'hcs-25', 'signals.md'),
+      slug: '/standards/hcs-25/signals-overview',
+    },
+  ];
+
+  const match = overrides.find((override) => destPath.endsWith(override.suffix));
+  return match?.slug;
+}
+
 function shouldPreserve(filename) {
   return PRESERVE_PATTERNS.some((pattern) => pattern.test(filename));
 }
@@ -232,6 +357,29 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
       if (entry.name.endsWith('.md') || entry.name.endsWith('.mdx')) {
         const content = fs.readFileSync(srcPath, 'utf8');
         let escapedContent = escapeMdxAngleBrackets(content);
+        const parsedFrontmatter = parseFrontmatter(escapedContent);
+        const existingDescription = parsedFrontmatter.description;
+        const shouldReplaceDescription =
+          existingDescription && isPlaceholderDescription(existingDescription);
+
+        const slugOverride = getSlugOverride(destPath);
+        if (slugOverride) {
+          escapedContent = ensureSlugFrontmatter(escapedContent, slugOverride);
+        }
+
+        const descriptionOverride = getDescriptionOverride(destPath);
+        if (descriptionOverride) {
+          escapedContent = ensureDescriptionFrontmatter(escapedContent, descriptionOverride, {
+            replace: shouldReplaceDescription,
+          });
+        } else {
+          const autoDescription = buildAutoDescription(destPath, escapedContent);
+          if (autoDescription && (!existingDescription || shouldReplaceDescription)) {
+            escapedContent = ensureDescriptionFrontmatter(escapedContent, autoDescription, {
+              replace: shouldReplaceDescription,
+            });
+          }
+        }
 
         if (destPath.endsWith(path.join('docs', 'standards', 'hcs-25.md'))) {
           escapedContent = fixHcs25InternalLinks(escapedContent);

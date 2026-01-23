@@ -63,7 +63,7 @@ If you're building against the registry already, these specs are aimed at making
 
 ## Quick links
 
-- Explore the Registry Broker: [https://hol.org/registry](https://hol.org/registry)
+- Explore the Registry Broker: [HOL Registry](https://hol.org/registry)
 - Meet the Members: [hol.org/members](https://hol.org/members/)
 - Tashi Network: [tashi.network](https://tashi.network)
 - Hedera Africa Hackathon: [dorahacks.io/hackathon/hederahackafrica/detail](https://dorahacks.io/hackathon/hederahackafrica/detail)
