@@ -1,13 +1,20 @@
-// Re-export components for easy use in MDX files
-export { HashScanLink } from './HashScanLink';
-export { HashScanViewer } from './HashScanViewer';
-export { ExternalLink } from './ExternalLink';
-export { PrimaryButton } from './ui/primary-button';
-
-// Quick access components for common use cases
 import React from 'react';
-import { HashScanLink } from './HashScanLink';
-import { ExternalLink } from './ExternalLink';
+import Link from '@docusaurus/Link';
+
+// Simple fallback for HashScanLink
+export const HashScanLink = ({ type, id, network = 'mainnet' }: any) => {
+  const baseUrl = network === 'mainnet' ? 'https://hashscan.io/mainnet' : 'https://hashscan.io/testnet';
+  const path = type === 'token' ? 'token' : type === 'topic' ? 'topic' : 'transaction';
+  return <a href={`${baseUrl}/${path}/${id}`} target="_blank" rel="noopener noreferrer">{id}</a>;
+};
+
+export const HashScanViewer = () => null;
+
+export const ExternalLink = ({ href, children, ...props }: any) => (
+  <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>
+);
+
+export { PrimaryButton } from './ui/primary-button';
 
 export const ViewOnHashScan = ({ 
   tokenId, 
@@ -33,19 +40,19 @@ export const ViewOnHashScan = ({
 };
 
 export const GitHubLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <ExternalLink href={href} type="github" variant="outline" size="sm">
+  <ExternalLink href={href}>
     {children}
   </ExternalLink>
 );
 
 export const DiscordLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <ExternalLink href={href} type="discord" variant="outline" size="sm">
+  <ExternalLink href={href}>
     {children}
   </ExternalLink>
 );
 
 export const DocsLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <ExternalLink href={href} type="docs" variant="outline" size="sm">
+  <ExternalLink href={href}>
     {children}
   </ExternalLink>
 );

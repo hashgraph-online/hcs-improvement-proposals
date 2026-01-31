@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { FaArrowRight } from 'react-icons/fa';
-import PrimaryButton from '../hackathon/PrimaryButton';
-import HackathonTypography from '../hackathon/HackathonTypography';
+import { PrimaryButton } from './primary-button';
+import Typography from './Typography';
 
 type ToolCardProps = {
   icon: React.ReactNode;
@@ -91,9 +91,9 @@ const ToolCard: React.FC<ToolCardProps> = ({
 
         <div className='relative z-50 px-8 pt-4 pb-8 bg-white dark:bg-gray-900'>
           <div className='flex items-center mb-3'>
-            <HackathonTypography variant='h4' className={`${colorStyle.text}`}>
+            <Typography variant='h4' className={`${colorStyle.text}`}>
               {title}
-            </HackathonTypography>
+            </Typography>
             {isNew && (
               <div className='ml-3 bg-gradient-to-r from-[#a679f0]/20 to-[#48df7b]/20 rounded-full px-3 py-1'>
                 <span className='text-xs font-semibold text-[#48df7b]'>
@@ -103,13 +103,13 @@ const ToolCard: React.FC<ToolCardProps> = ({
             )}
           </div>
 
-          <HackathonTypography
+          <Typography
             variant='body1'
             color='muted'
             className='mb-6 font-light'
           >
             {description}
-          </HackathonTypography>
+          </Typography>
 
           <PrimaryButton
             href={link}
