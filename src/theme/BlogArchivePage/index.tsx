@@ -6,6 +6,7 @@ import {useDateTimeFormat} from '@docusaurus/theme-common/internal';
 import Layout from '@theme/Layout';
 import type {ArchiveBlogPost, Props} from '@theme/BlogArchivePage';
 import Heading from '@theme/Heading';
+import CanonicalUrl from '@site/src/components/CanonicalUrl';
 
 type MonthProp = {
   month: string;
@@ -133,6 +134,7 @@ export default function BlogArchive({archive}: Props): ReactNode {
   return (
     <>
       <PageMetadata title={title} description={description} />
+      <CanonicalUrl path="/blog/archive/" />
       <Layout>
         <header className="hero hero--primary">
           <div className="container">

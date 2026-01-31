@@ -204,10 +204,36 @@ const config: Config = {
       logo: {
         alt: 'Hashgraph Online Logo',
         src: 'Logo_Icon.webp',
+        href: 'https://hol.org',
+        target: '_self',
         width: 32,
         height: 32,
       },
       items: [
+        {
+          type: 'dropdown',
+          label: 'Platform',
+          position: 'left',
+          items: [
+            { label: 'Agent Registry', href: 'https://hol.org/registry' },
+            { label: 'Hashnet MCP', to: '/mcp' },
+            { label: 'Points Portal', href: 'https://hol.org/points' },
+            { label: 'Use Cases', to: '/use-cases' },
+          ],
+        },
+        {
+          type: 'dropdown',
+          label: 'Developers',
+          position: 'left',
+          items: [
+            { label: 'API Docs', href: 'https://hol.org/registry/docs' },
+            { label: 'Standards SDK', to: '/docs/libraries/standards-sdk' },
+            { label: 'Tutorials', to: '/tutorials' },
+            { label: 'Getting Started', to: '/start' },
+            { label: 'Conversational Agent', to: '/docs/libraries/conversational-agent' },
+            { label: 'Explore All Tools', to: '/tools' },
+          ],
+        },
         {
           type: 'dropdown',
           label: 'Standards',
@@ -215,7 +241,6 @@ const config: Config = {
           items: [
             { label: 'Standards Overview', to: '/standards' },
             { label: 'Standards Library', to: '/docs/standards/' },
-            { label: 'Tutorials', to: '/tutorials' },
             { label: 'Files & Hashinals', to: '/hashinals' },
             { label: 'Data Registries', to: '/registries' },
             { label: 'Universal Agent Identity', to: '/hcs-14' },
@@ -227,66 +252,93 @@ const config: Config = {
         },
         {
           type: 'dropdown',
-          label: 'Tools',
+          label: 'Ecosystem',
           position: 'left',
           items: [
-            { label: 'Standards SDK', to: '/docs/libraries/standards-sdk' },
-            { label: 'Conversational Agent', to: '/docs/libraries/conversational-agent' },
-            { label: 'Standards Agent Kit', to: '/docs/standards/hcs-10' },
-            { label: 'Hashnet MCP', to: '/mcp' },
-            { label: 'Explore All', to: '/tools' },
+            { label: 'DAO Members', to: '/members/' },
+            { label: 'Patchwork Event', to: '/patchwork' },
+            { label: 'Africa Hackathon (Ended)', to: '/hackathon' },
+            { label: 'OpenConvAI Hackathon (Ended)', to: '/hedera-ai-agents-hackathon' },
+            { label: 'Hedera x AI Demo Day (Ended)', to: '/hederaai' },
+            { label: 'Newsletter', to: '/newsletter' },
           ],
         },
         {
           type: 'dropdown',
-          label: 'Events',
+          label: 'Company',
           position: 'left',
           items: [
-            { to: '/patchwork', label: 'Patchwork' },
-            {
-              to: '/hackathon',
-              label: 'Africa Hackathon (Ended)',
-              className: 'dropdown__link--parent',
-            },
-            {
-              to: '/hedera-ai-agents-hackathon',
-              label: 'OpenConvAI Hackathon (Ended)',
-            },
-            { to: '/hederaai', label: 'Hedera x AI Demo Day (Ended)' },
+            { label: 'About', to: '/overview' },
+            { label: 'Careers', to: '/careers' },
+            { label: 'Blog', to: '/blog' },
+            { label: 'Contact', to: '/contact' },
           ],
         },
-        { to: '/members/', label: 'DAO', position: 'left' },
-        {
-          type: 'dropdown',
-          label: 'Registry',
-          position: 'left',
-          items: [
-            { label: 'Browse Agents', href: 'https://hol.org/registry/search' },
-            { label: 'Register Agent', href: 'https://hol.org/registry/register' },
-            { label: 'API Docs', href: 'https://hol.org/registry/docs' },
-          ],
-        },
-        { href: 'https://hol.org/points', label: 'Points', position: 'left' },
-        { to: '/blog', label: 'Blog', position: 'left' },
       ],
     },
     footer: {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Platform',
           items: [
             {
-              label: 'Overview',
+              label: 'Agent Registry',
+              href: 'https://hol.org/registry',
+            },
+            {
+              label: 'Hashnet MCP',
+              to: '/mcp',
+            },
+            {
+              label: 'Points Portal',
+              href: 'https://hol.org/points',
+            },
+            {
+              label: 'Use Cases',
+              to: '/use-cases',
+            },
+          ],
+        },
+        {
+          title: 'Developers',
+          items: [
+            {
+              label: 'Getting Started',
+              to: '/start',
+            },
+            {
+              label: 'Standards SDK',
+              to: '/docs/libraries/standards-sdk',
+            },
+            {
+              label: 'API Docs',
+              href: 'https://hol.org/registry/docs',
+            },
+            {
+              label: 'GitHub',
+              href: 'https://github.com/hashgraph-online',
+            },
+          ],
+        },
+        {
+          title: 'Company',
+          items: [
+            {
+              label: 'About',
               to: '/overview',
             },
             {
-              label: 'Standards',
-              to: '/docs/standards/hcs-1/',
+              label: 'Blog',
+              to: '/blog',
             },
             {
-              label: 'Brand Kit',
-              to: '/brand',
+              label: 'Careers',
+              to: '/careers',
+            },
+            {
+              label: 'Contact',
+              to: '/contact',
             },
           ],
         },
@@ -294,8 +346,8 @@ const config: Config = {
           title: 'Community',
           items: [
             {
-              label: 'Newsletter',
-              to: '/newsletter',
+              label: 'DAO Members',
+              to: '/members/',
             },
             {
               label: 'Telegram',
@@ -305,35 +357,14 @@ const config: Config = {
               label: 'X',
               href: 'https://x.com/HashgraphOnline',
             },
-          ],
-        },
-        {
-          title: 'More',
-          items: [
             {
-              label: 'Blog',
-              to: '/blog',
-            },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/hashgraph-online',
-            },
-            {
-              label: 'Privacy Policy',
-              to: '/privacy-policy',
-            },
-            {
-              label: 'Terms of Service',
-              to: '/terms-of-service',
-            },
-            {
-              label: 'Use Cases',
-              to: '/use-cases',
+              label: 'Newsletter',
+              to: '/newsletter',
             },
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} Hashgraph Online DAO LLC.`,
+      copyright: `Built on Hedera Hashgraph. Open-source standards. 28M+ transactions processed. Copyright © ${new Date().getFullYear()} Hashgraph Online DAO LLC.`,
     },
     prism: {
       theme: prismThemes.oneLight,
@@ -371,25 +402,6 @@ const config: Config = {
       };
     },
     require.resolve('./injectScriptPlugin.js'),
-    [
-      '@docusaurus/plugin-client-redirects',
-      {
-        redirects: [
-          {
-            to: '/openconvai',
-            from: '/convai',
-          },
-          {
-            from: '/hedera-ai',
-            to: '/hederaai',
-          },
-          {
-            from: '/blog/updates/standards-sdk-launch',
-            to: '/blog/standards-sdk-launch',
-          },
-        ],
-      },
-    ],
   ],
 };
 

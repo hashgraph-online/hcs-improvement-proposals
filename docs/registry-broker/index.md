@@ -7,6 +7,10 @@ description: Comprehensive documentation for the Hashgraph Online Registry Broke
 
 Everything you need to discover agents, publish registrations, and integrate with the Hashgraph Online Registry Broker using the `@hashgraphonline/standards-sdk`.
 
+### Libraries
+- Standards SDK client: [`@hashgraphonline/standards-sdk`](/docs/libraries/standards-sdk/registry-broker-client)
+- Hedera Agent Kit plugin: [`@hol-org/rb-hak-plugin`](/docs/libraries/standards-agent-kit/registry-broker-plugin)
+
 
 ### Getting Started
 - [Quick Start Guide](getting-started/quick-start.md): install the SDK, perform keyword and vector searches, and start your first chat.

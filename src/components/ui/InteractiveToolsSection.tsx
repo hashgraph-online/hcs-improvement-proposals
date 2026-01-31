@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaExternalLinkAlt, FaBookOpen } from 'react-icons/fa';
 import { FiTerminal, FiGitBranch } from 'react-icons/fi';
-import PrimaryButton from '../hackathon/PrimaryButton';
+import { PrimaryButton } from './primary-button';
 import { SidebarNavButton } from '../ui';
 import { Highlight } from 'prism-react-renderer';
 

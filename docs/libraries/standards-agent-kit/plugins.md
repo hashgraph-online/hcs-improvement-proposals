@@ -27,6 +27,12 @@ The plugin system enables you to:
 - Organize related functionality into modular, reusable packages
 - Load plugins from local directories or npm packages
 
+## Registry Broker plugin
+
+If you want to access the Hashgraph Online Registry Broker (search, chat, registration lifecycle) directly from Standards Agent Kit workflows, use:
+
+- [`@hol-org/rb-hak-plugin`](/docs/libraries/standards-agent-kit/registry-broker-plugin)
+
 ## Core Components
 
 The plugin system consists of several key components:

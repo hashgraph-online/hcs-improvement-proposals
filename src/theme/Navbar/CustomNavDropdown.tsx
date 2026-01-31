@@ -1,6 +1,6 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from '@docusaurus/Link';
-import {useLocation} from '@docusaurus/router';
+import { useLocation } from '@docusaurus/router';
 
 interface DropdownItem {
   label: string;
@@ -14,16 +14,18 @@ interface NavDropdownProps {
   items: DropdownItem[];
 }
 
-/**
- * Custom navbar dropdown component with pure Tailwind styling
- * Replaces Docusaurus's NavbarItem for dropdown menus
- */
-export default function CustomNavDropdown({label, items}: NavDropdownProps) {
+function isDocusaurusPath(path: string): boolean {
+  return path.startsWith('/docs') || path.startsWith('/blog');
+}
+
+export default function CustomNavDropdown({ label, items }: NavDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
-  const isActive = items.some((item) => item.to && pathname.startsWith(item.to));
+  const isActive = items.some(
+    (item) => item.to && pathname.startsWith(item.to),
+  );
 
   const handleMouseEnter = () => setIsOpen(true);
   const handleMouseLeave = () => setIsOpen(false);
@@ -46,12 +48,12 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
   return (
     <div
       ref={dropdownRef}
-      className="relative flex items-center h-full"
+      className='relative flex items-center h-full'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <button
-        type="button"
+        type='button'
         onClick={() => setIsOpen(!isOpen)}
         className={`
           flex items-center px-3 py-1.5 gap-1 rounded-md
@@ -62,25 +64,27 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
           hover:text-white hover:bg-white/10
           focus:outline-none outline-none
           ${isActive ? 'text-white bg-white/15' : ''}
-        `.trim().replace(/\s+/g, ' ')}
+        `
+          .trim()
+          .replace(/\s+/g, ' ')}
       >
         {label}
         <svg
           className={`w-4 h-4 text-white transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-          fill="currentColor"
-          viewBox="0 0 20 20"
+          fill='currentColor'
+          viewBox='0 0 20 20'
         >
           <path
-            fillRule="evenodd"
-            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-            clipRule="evenodd"
+            fillRule='evenodd'
+            d='M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'
+            clipRule='evenodd'
           />
         </svg>
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 pt-1 -mt-1 z-50">
-          <div className="min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden">
+        <div className='absolute top-full left-0 pt-1 -mt-1 z-50'>
+          <div className='min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden'>
             {items.map((item, index) => {
               const linkClass = `
                 block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
@@ -89,16 +93,32 @@ export default function CustomNavDropdown({label, items}: NavDropdownProps) {
                 hover:bg-white/10 hover:text-white
                 border-b border-white/10 last:border-b-0
                 ${item.className || ''}
-              `.trim().replace(/\s+/g, ' ');
+              `
+                .trim()
+                .replace(/\s+/g, ' ');
 
               if (item.href) {
+                const isExternal = item.href.startsWith('http');
                 return (
                   <a
                     key={index}
                     href={item.href}
                     className={linkClass}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    target={isExternal ? '_blank' : '_self'}
+                    rel={isExternal ? 'noopener noreferrer' : undefined}
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                );
+              }
+
+              if (item.to && !isDocusaurusPath(item.to)) {
+                return (
+                  <a
+                    key={index}
+                    href={`https://hol.org${item.to}`}
+                    className={linkClass}
                     onClick={() => setIsOpen(false)}
                   >
                     {item.label}

@@ -483,6 +483,7 @@ const sidebars: SidebarsConfig = {
             'libraries/standards-agent-kit/hashlink-blocks-authoring',
             'libraries/standards-agent-kit/core-client',
             'libraries/standards-agent-kit/plugins',
+            'libraries/standards-agent-kit/registry-broker-plugin',
             'libraries/standards-agent-kit/examples',
           ],
         },

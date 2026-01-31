@@ -15,6 +15,7 @@ import BlogPostItems from '@theme/BlogPostItems';
 import Unlisted from '@theme/ContentVisibility/Unlisted';
 import Heading from '@theme/Heading';
 import type { Props } from '@theme/BlogTagsPostsPage';
+import CanonicalUrl from '@site/src/components/CanonicalUrl';
 
 function buildTitleSuffix(pageNumber: number, totalPages: number | undefined): string {
   if (pageNumber <= 1) {
@@ -88,6 +89,11 @@ function BlogTagsPostsPageContent({
 }
 
 export default function BlogTagsPostsPage(props: Props): ReactNode {
+  const pageNumber = props.listMetadata?.page ?? 1;
+  const canonicalPath = pageNumber > 1
+    ? `${props.tag.permalink}/page/${pageNumber}/`
+    : `${props.tag.permalink}/`;
+
   return (
     <HtmlClassNameProvider
       className={clsx(
@@ -95,6 +101,7 @@ export default function BlogTagsPostsPage(props: Props): ReactNode {
         ThemeClassNames.page.blogTagPostListPage,
       )}
     >
+      <CanonicalUrl path={canonicalPath} />
       <BlogTagsPostsPageMetadata {...props} />
       <BlogTagsPostsPageContent {...props} />
     </HtmlClassNameProvider>

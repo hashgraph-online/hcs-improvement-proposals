@@ -1,7 +1,7 @@
 'use client';
 import { cn } from '@site/src/lib/utils';
 import { forwardRef, HTMLAttributes, useState } from 'react';
-import Typography from '../Typography';
+import Typography from './Typography';
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
   image?: string;

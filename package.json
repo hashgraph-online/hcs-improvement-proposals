@@ -24,9 +24,9 @@
   "license": "Apache-2.0",
   "scripts": {
     "docusaurus": "docusaurus",
-    "prestart": "node scripts/sync-hiero-standards.js && node scripts/generate-legal.js",
+    "prestart": "node scripts/sync-hiero-standards.js",
     "start": "docusaurus start",
-    "prebuild": "node scripts/sync-hiero-standards.js && node scripts/generate-legal.js",
+    "prebuild": "node scripts/sync-hiero-standards.js",
     "sync-standards": "node scripts/sync-hiero-standards.js",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
