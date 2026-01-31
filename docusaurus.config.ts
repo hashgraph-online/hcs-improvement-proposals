@@ -402,25 +402,6 @@ const config: Config = {
       };
     },
     require.resolve('./injectScriptPlugin.js'),
-    [
-      '@docusaurus/plugin-client-redirects',
-      {
-        redirects: [
-          {
-            to: '/openconvai',
-            from: '/convai',
-          },
-          {
-            from: '/hedera-ai',
-            to: '/hederaai',
-          },
-          {
-            from: '/blog/updates/standards-sdk-launch',
-            to: '/blog/standards-sdk-launch',
-          },
-        ],
-      },
-    ],
   ],
 };
 
