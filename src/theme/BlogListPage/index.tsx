@@ -13,6 +13,7 @@ import BlogPostItems from '@theme/BlogPostItems';
 import Heading from '@theme/Heading';
 import SearchMetadata from '@theme/SearchMetadata';
 import type { Props } from '@theme/BlogListPage';
+import CanonicalUrl from '@site/src/components/CanonicalUrl';
 import styles from './styles.module.css';
 
 function parsePageNumberFromPermalink(permalink: string | undefined): number | undefined {
@@ -109,6 +110,11 @@ function BlogListPageContent({
 }
 
 export default function BlogListPage(props: Props): ReactNode {
+  const pageNumber = resolvePageNumber(props.metadata);
+  const canonicalPath = pageNumber > 1
+    ? `/blog/page/${pageNumber}/`
+    : '/blog/';
+
   return (
     <HtmlClassNameProvider
       className={clsx(
@@ -116,6 +122,7 @@ export default function BlogListPage(props: Props): ReactNode {
         ThemeClassNames.page.blogListPage,
       )}
     >
+      <CanonicalUrl path={canonicalPath} />
       <BlogListPageMetadata {...props} />
       <BlogListPageStructuredData {...props} />
       <BlogListPageContent {...props} />

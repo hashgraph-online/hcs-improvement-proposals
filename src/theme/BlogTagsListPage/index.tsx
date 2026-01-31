@@ -11,6 +11,7 @@ import TagsListByLetter from '@theme/TagsListByLetter';
 import type { Props } from '@theme/BlogTagsListPage';
 import SearchMetadata from '@theme/SearchMetadata';
 import Heading from '@theme/Heading';
+import CanonicalUrl from '@site/src/components/CanonicalUrl';
 
 export default function BlogTagsListPage({ tags, sidebar }: Props): ReactNode {
   const title = translateTagsPageTitle();
@@ -23,6 +24,7 @@ export default function BlogTagsListPage({ tags, sidebar }: Props): ReactNode {
       )}
     >
       <PageMetadata title={title} description="Browse Hashgraph Online blog tags." />
+      <CanonicalUrl path="/blog/tags/" />
       <SearchMetadata tag="blog_tags_list" />
       <BlogLayout sidebar={sidebar}>
         <Heading as="h1">{title}</Heading>
