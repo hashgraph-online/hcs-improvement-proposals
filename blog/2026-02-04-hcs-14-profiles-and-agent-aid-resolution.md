@@ -12,11 +12,11 @@ keywords: [HCS-14, Universal Agent ID, UAID, Agent Identity, AID Resolution, DNS
 
 ## The Agent Community and the AID Standard
 
-The Agent Community is an open standards initiative focused on defining shared infrastructure for agent identity, discovery, and interoperability.
+The [Agent Community](https://agentcommunity.org/) is an open standards initiative focused on defining shared infrastructure for agent identity, discovery, and interoperability.
 
 At the center of its work is the **Agent Identity & Discovery (AID) standard**, a simple, open mechanism that uses DNS to enable agents to be discovered and optionally verified.
 
-This work intersects with the Hashgraph Online standards stack, where HCS-14 defines the **Universal Agent ID (UAID)**.
+This work intersects with the Hashgraph Online standards stack, where [HCS-14](/docs/standards/hcs-14) defines the **Universal Agent ID (UAID)**.
 
 <!--truncate-->
 

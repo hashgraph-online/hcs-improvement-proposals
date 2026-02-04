@@ -10,6 +10,7 @@
 /static/blog-search-index.json
 .hiero-sync-tmp
 /src/data/standards-manifest.json
+/src/data/standards-sidebar.json
 
 # Auto-generated legal pages (fetched from hol.org/points/legal/ at build time)
 /src/pages/privacy-policy.mdx
