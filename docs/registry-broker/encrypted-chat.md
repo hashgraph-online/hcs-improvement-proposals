@@ -39,7 +39,7 @@ Use the static `RegistryBrokerClient.initializeAgent()` helper to create a clien
 const { client } = await RegistryBrokerClient.initializeAgent({
   baseUrl: process.env.REGISTRY_BROKER_BASE_URL!,
   defaultHeaders: {
-    'x-ledger-api-key': ledgerApiKey,
+    'x-api-key': ledgerApiKey,
   },
   uaid: 'uaid:aid:…',
   encryption: { autoDecryptHistory: true },

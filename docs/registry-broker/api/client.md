@@ -354,7 +354,7 @@ const intent = await fetch(`${baseUrl}/credits/payments/intent`, {
   method: 'POST',
   headers: {
     'content-type': 'application/json',
-    'x-ledger-api-key': ledgerApiKey,
+    'x-api-key': ledgerApiKey,
   },
   body: JSON.stringify({
     accountId: '0.0.123456',

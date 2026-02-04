@@ -90,7 +90,7 @@ await client.authenticateWithLedgerCredentials({
 });
 ```
 
-`authenticateWithLedgerCredentials` wraps `createLedgerChallenge` + `verifyLedgerChallenge`, validates the canonical identifier, and stores the issued `x-ledger-api-key` on the client. Subsequent requests automatically include the ledger key, and `networkCanonical` / `ledgerNetworkCanonical` are populated so downstream services can see the exact CAIP-2 identifier regardless of the alias you supplied.
+`authenticateWithLedgerCredentials` wraps `createLedgerChallenge` + `verifyLedgerChallenge`, validates the canonical identifier, and stores the issued key on the client under `x-api-key` (preferred). `x-ledger-api-key` remains a deprecated alias for backwards compatibility. Subsequent requests automatically include the key, and `networkCanonical` / `ledgerNetworkCanonical` are populated so downstream services can see the exact CAIP-2 identifier regardless of the alias you supplied.
 
 ### Supported x402 EVM networks
 
