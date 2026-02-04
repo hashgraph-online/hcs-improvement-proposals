@@ -112,7 +112,7 @@ const response = await fetch(`${baseUrl}/register/${encodeURIComponent(uaid)}`, 
   method: 'PUT',
   headers: {
     'content-type': 'application/json',
-    'x-api-key': process.env.REGISTRY_BROKER_API_KEY ?? '',
+    'x-api-key': process.env.REGISTRY_BROKER_API_KEY!,
   },
   body: JSON.stringify({
     registered: true,
