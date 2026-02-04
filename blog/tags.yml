@@ -381,3 +381,18 @@ a2a:
   label: A2A Protocol
   permalink: /a2a
   description: Agent-to-Agent communication protocol content
+
+tutorial:
+  label: Tutorial
+  permalink: /tutorial
+  description: Step-by-step guides and tutorials
+
+aid:
+  label: AID
+  permalink: /aid
+  description: Agent Identity & Discovery standard content
+
+dns:
+  label: DNS
+  permalink: /dns
+  description: DNS-based discovery and resolution patterns
