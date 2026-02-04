@@ -607,13 +607,24 @@ async function main() {
 
     console.log(`\nSync complete. Total files copied: ${totalCopied}`);
 
-    console.log('\nGenerating standards manifest...');
+    console.log('\\nGenerating standards manifest...');
     const standardsDir = path.join(LOCAL_ROOT, 'docs/standards');
     const manifest = generateStandardsManifest(standardsDir);
     const manifestPath = path.join(LOCAL_ROOT, 'src/data/standards-manifest.json');
     ensureDir(path.dirname(manifestPath));
     fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2), 'utf8');
     console.log(`  Generated manifest with ${manifest.length} standards`);
+
+    // Generate sidebar configuration
+    console.log('\\nGenerating standards sidebar...');
+    try {
+      execSync('node scripts/generate-standards-sidebar.js', {
+        cwd: LOCAL_ROOT,
+        stdio: 'inherit',
+      });
+    } catch (err) {
+      console.warn('  Sidebar generation failed (non-fatal):', err?.message || err);
+    }
   } finally {
     cleanupTmp();
   }

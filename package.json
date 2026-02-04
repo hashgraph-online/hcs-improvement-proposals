@@ -28,6 +28,7 @@
     "start": "docusaurus start",
     "prebuild": "node scripts/sync-hiero-standards.js",
     "sync-standards": "node scripts/sync-hiero-standards.js",
+    "generate-sidebar": "node scripts/generate-standards-sidebar.js",
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",

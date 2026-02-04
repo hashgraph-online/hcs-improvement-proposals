@@ -154,9 +154,26 @@ const sidebars: SidebarsConfig = {
           label: 'HCS-13: Schema Registry',
         },
         {
-          type: 'doc',
-          id: 'standards/hcs-14/index',
+          type: 'category',
           label: 'HCS-14: Universal Agent ID Standard',
+          link: { type: 'doc', id: 'standards/hcs-14/index' },
+          items: [
+            {
+              type: 'doc',
+              id: 'standards/hcs-14/profiles/registry',
+              label: 'Profile Registry',
+            },
+            {
+              type: 'doc',
+              id: 'standards/hcs-14/profiles/aid-dns-web',
+              label: 'AID Resolution via Web/DNS',
+            },
+            {
+              type: 'doc',
+              id: 'standards/hcs-14/profiles/uaid-did-resolution',
+              label: 'UAID DID Resolution',
+            },
+          ],
         },
         {
           type: 'doc',
