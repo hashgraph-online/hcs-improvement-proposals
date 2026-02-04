@@ -70,7 +70,7 @@ await client.authenticateWithLedgerCredentials({
 const ledgerApiKey = client.getLedgerApiKey();
 ```
 
-After authentication, use the `x-ledger-api-key` header for all inscription requests.
+After authentication, use the `x-api-key` header for all inscription requests. (`x-ledger-api-key` remains a deprecated alias.)
 
 ## Purchasing Credits with EVM Wallet
 
@@ -150,7 +150,7 @@ const quote = await fetch('https://hol.org/registry/api/v1/inscribe/content/quot
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'x-ledger-api-key': ledgerApiKey,
+    'x-api-key': ledgerApiKey,
   },
   body: JSON.stringify({
     inputType: 'base64',
@@ -174,7 +174,7 @@ const job = await fetch('https://hol.org/registry/api/v1/inscribe/content', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'x-ledger-api-key': ledgerApiKey,
+    'x-api-key': ledgerApiKey,
   },
   body: JSON.stringify({
     inputType: 'base64',
@@ -200,7 +200,7 @@ async function pollJob(jobId: string): Promise<string> {
     const response = await fetch(
       `https://hol.org/registry/api/v1/inscribe/content/${jobId}`,
       {
-        headers: { 'x-ledger-api-key': ledgerApiKey },
+        headers: { 'x-api-key': ledgerApiKey },
       }
     );
     const job = await response.json();
@@ -290,7 +290,7 @@ Retrieve all inscriptions for your account:
 const response = await fetch(
   'https://hol.org/registry/api/v1/inscribe/content?limit=10',
   {
-    headers: { 'x-ledger-api-key': ledgerApiKey },
+    headers: { 'x-api-key': ledgerApiKey },
   }
 );
 

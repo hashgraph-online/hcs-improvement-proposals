@@ -9,12 +9,12 @@ Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and ex
 
 ## Example: ERC-8004 Agents
 
-ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` to query those records. The snippet below mirrors a real request to `https://hol.org/api/v1/search?registries=erc-8004&limit=3`, which currently returns agents with UAIDs such as:
+ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` to query those records. The snippet below mirrors a real request to `https://hol.org/registry/api/v1/search?registries=erc-8004&limit=3`, which currently returns agents with UAIDs such as:
 
 ```json
 {
-  "name": "Agent 0x1059Ed65AD58ffc83642C9Be3f24C250905a28FB",
-  "uaid": "uaid:aid:8sMXrrsZonyfZsmUMMSEhbUJhDBrSHqoQevXa1nVn9mQ8MogoGEbC1zhqbj7ZD2vGR;uid=11155111:1668;registry=erc-8004;proto=erc-8004;nativeId=11155111:1668"
+  "name": "Minara AI",
+  "uaid": "uaid:aid:...;uid=1:6888;registry=erc-8004;proto=erc-8004;nativeId=1:6888"
 }
 ```
 
@@ -36,6 +36,33 @@ erc8004Agents.hits.forEach(hit => {
 ```
 
 Because this example uses the live `/search` endpoint, you can run the curl command above before referencing it in demos to ensure you are showing the latest data.
+
+### Search by on-chain `agentId` (via `nativeId`)
+
+ERC-8004 registrations are indexed on-chain by an integer `agentId` (the registration order). In Registry Broker results, that identifier is exposed as `metadata.nativeId` formatted as:
+
+`<chainId>:<agentId>` (for Ethereum mainnet, `chainId` is `1`).
+
+Use the generic metadata filter to look up a specific ERC-8004 agent:
+
+```typescript
+const minera = await client.search({
+  registries: ['erc-8004'],
+  metadata: {
+    nativeId: ['1:6888'],
+  },
+  limit: 1,
+});
+
+console.log(minera.hits[0]?.profile.display_name, minera.hits[0]?.metadata?.nativeId);
+```
+
+For raw HTTP calls, you can also pass the same filter as a query parameter:
+
+- `https://hol.org/registry/api/v1/search?registries=erc-8004&meta.nativeId=1:6888` (shorthand)
+- `https://hol.org/registry/api/v1/search?registries=erc-8004&metadata.nativeId=1:6888`
+
+> **Mainnet-only:** the Registry Broker ERC-8004 adapter currently targets mainnet EVM networks (Ethereum `1`, Base `8453`, Polygon `137`, BSC `56`, Monad `143`). Testnet networks are not indexed going forward.
 
 ## Example: ERC-8004 Solana (Devnet)
 
@@ -80,7 +107,7 @@ result.hits.forEach(hit => {
 | `registries` | `['erc-8004']`, `['coinbase-x402-bazaar']` | Leave empty for broad coverage. `hashgraph-online` only returns direct registrations, so expect a narrow set. |
 | `protocols` | `['a2a']`, `['mcp']`, `['openrouter']` | Communication protocols extracted from agent endpoints (normalized to lowercase). |
 | `capabilities` | `['messaging']`, `['financial-services']` | Canonical labels derived from HCS-11 profiles, adapter metadata, and OASF capability maps. |
-| `metadata.<key>` | `metadata.provider=ledger-labs`, `metadata.industry=finance` | Repeat the parameter to OR multiple values. Keys accept dot-notation. |
+| `meta.<key>` / `metadata.<key>` | `meta.industry=finance`, `metadata.provider=ledger-labs` | Repeat the parameter to OR multiple values. Keys accept dot-notation. |
 | Payments metadata | `metadata.payments.supported=x402`, `metadata.payments.protocols.x402.paymentNetwork=base` | Set by ERC-8004/A2A adapters when you advertise payment rails during registration. |
 | Pricing flags | `metadata.isFree=true`, `metadata.paymentRequiredProtocols=x402` | Distinguish free agents from those that require payment headers. |
 | Quality filters | `minTrust=80`, `verified=true`, `online=true` | Filter by trust scores, verification, or online status. |
@@ -103,12 +130,14 @@ Probe metadata includes:
 
 ### Example: Agents with x402 Payments
 
-Many ERC-8004 agents publish metadata describing which payment rails they support. You can query for x402-enabled agents by filtering on `metadata.payments.supported`. The curl request below (`https://hol.org/api/v1/search?metadata.payments.supported=x402&limit=3`) currently returns Deep42 agents that advertise x402 support:
+Many ERC-8004 agents publish metadata describing which payment rails they support. You can query for x402-enabled agents by filtering on `metadata.payments.supported`:
+
+`https://hol.org/registry/api/v1/search?registries=erc-8004&metadata.payments.supported=x402&limit=3`
 
 ```json
 {
   "name": "Deep42",
-  "uaid": "uaid:aid:d65a9TpAgvTsWUsg6UeWKPaJVc5WAh2t39insoiTw1jxUWzE37sbb8F53joFEZzJp;uid=11155111:1033;registry=erc-8004;proto=erc-8004;nativeId=11155111:1033",
+  "uaid": "uaid:aid:...;uid=1:<agentId>;registry=erc-8004;proto=erc-8004;nativeId=1:<agentId>",
   "payments": {
     "supported": ["x402"],
     "protocols": {
@@ -124,6 +153,7 @@ Many ERC-8004 agents publish metadata describing which payment rails they suppor
 
 ```typescript
 const x402Agents = await client.search({
+  registries: ['erc-8004'],
   metadata: {
     'payments.supported': ['x402'],
   },

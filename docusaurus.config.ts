@@ -216,9 +216,9 @@ const config: Config = {
           position: 'left',
           items: [
             { label: 'Agent Registry', href: 'https://hol.org/registry' },
-            { label: 'Hashnet MCP', to: '/mcp' },
+            { label: 'Hashnet MCP', href: 'https://hol.org/mcp' },
             { label: 'Points Portal', href: 'https://hol.org/points' },
-            { label: 'Use Cases', to: '/use-cases' },
+            { label: 'Use Cases', href: 'https://hol.org/use-cases' },
           ],
         },
         {
@@ -229,7 +229,7 @@ const config: Config = {
             { label: 'API Docs', href: 'https://hol.org/registry/docs' },
             { label: 'Standards SDK', to: '/docs/libraries/standards-sdk' },
             { label: 'Tutorials', to: '/tutorials' },
-            { label: 'Getting Started', to: '/start' },
+            { label: 'Getting Started', href: 'https://hol.org/start' },
             { label: 'Conversational Agent', to: '/docs/libraries/conversational-agent' },
             { label: 'Explore All Tools', to: '/tools' },
           ],
@@ -255,12 +255,12 @@ const config: Config = {
           label: 'Ecosystem',
           position: 'left',
           items: [
-            { label: 'DAO Members', to: '/members/' },
+            { label: 'DAO Members', href: 'https://hol.org/members' },
             { label: 'Patchwork Event', to: '/patchwork' },
             { label: 'Africa Hackathon (Ended)', to: '/hackathon' },
             { label: 'OpenConvAI Hackathon (Ended)', to: '/hedera-ai-agents-hackathon' },
             { label: 'Hedera x AI Demo Day (Ended)', to: '/hederaai' },
-            { label: 'Newsletter', to: '/newsletter' },
+            { label: 'Newsletter', href: 'https://hol.org/newsletter' },
           ],
         },
         {
@@ -268,10 +268,10 @@ const config: Config = {
           label: 'Company',
           position: 'left',
           items: [
-            { label: 'About', to: '/overview' },
-            { label: 'Careers', to: '/careers' },
+            { label: 'About', href: 'https://hol.org/overview' },
+            { label: 'Careers', href: 'https://hol.org/careers' },
             { label: 'Blog', to: '/blog' },
-            { label: 'Contact', to: '/contact' },
+            { label: 'Contact', href: 'https://hol.org/contact' },
           ],
         },
       ],
@@ -288,7 +288,7 @@ const config: Config = {
             },
             {
               label: 'Hashnet MCP',
-              to: '/mcp',
+              href: 'https://hol.org/mcp',
             },
             {
               label: 'Points Portal',
@@ -296,7 +296,7 @@ const config: Config = {
             },
             {
               label: 'Use Cases',
-              to: '/use-cases',
+              href: 'https://hol.org/use-cases',
             },
           ],
         },
@@ -305,7 +305,7 @@ const config: Config = {
           items: [
             {
               label: 'Getting Started',
-              to: '/start',
+              href: 'https://hol.org/start',
             },
             {
               label: 'Standards SDK',
@@ -326,7 +326,7 @@ const config: Config = {
           items: [
             {
               label: 'About',
-              to: '/overview',
+              href: 'https://hol.org/overview',
             },
             {
               label: 'Blog',
@@ -334,11 +334,11 @@ const config: Config = {
             },
             {
               label: 'Careers',
-              to: '/careers',
+              href: 'https://hol.org/careers',
             },
             {
               label: 'Contact',
-              to: '/contact',
+              href: 'https://hol.org/contact',
             },
           ],
         },
@@ -347,7 +347,7 @@ const config: Config = {
           items: [
             {
               label: 'DAO Members',
-              to: '/members/',
+              href: 'https://hol.org/members',
             },
             {
               label: 'Telegram',
@@ -359,7 +359,7 @@ const config: Config = {
             },
             {
               label: 'Newsletter',
-              to: '/newsletter',
+              href: 'https://hol.org/newsletter',
             },
           ],
         },

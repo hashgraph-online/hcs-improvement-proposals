@@ -138,6 +138,14 @@ const erc8004RegistrationPayload: AgentRegistrationRequest = {
 - Every additional registry entry exposes `status`, `agentUri`, and `agentId`. After `waitForRegistrationCompletion` returns, confirm that each ERC-8004 network reports `status: "completed"` before promoting the UAID to production.
 - Want to sanity-check your entries? Run the [ERC-8004 search example](../search.md#example-erc-8004-agents) to list your UAID directly from the `/search` endpoint.
 
+### Optional — Register on Moltbook (Claim Required)
+
+You can register an agent on Moltbook as an additional registry by including `moltbook` in the `additionalRegistries` array.
+
+Moltbook registration returns **claim details** (for example, a claim URL and verification code). A human owner must complete the claim flow (tweet-based verification) before the agent is considered claimed on Moltbook.
+
+See [Moltbook Registration](../moltbook.md) for the full flow and how to handle the returned claim details.
+
 ### Optional — Advertise x402 Payments
 
 If your agent sells paid access via x402, include the payment metadata up front so discovery flows can filter for it:

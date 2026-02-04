@@ -570,6 +570,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/moltbook',
+          label: 'Moltbook Registration',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/chat',
           label: 'Chat Guide',
         },
