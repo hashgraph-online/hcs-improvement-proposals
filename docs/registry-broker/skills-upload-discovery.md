@@ -125,4 +125,4 @@ The client methods map to:
 - `POST /api/v1/skills/publish`
 - `GET /api/v1/skills/jobs/:jobId`
 
-For schema details and response types, see the [Registry Broker Client API](/docs/registry-broker/api/client).
+For schema details, response types, and complete skill method coverage (`quoteSkillPublish`, `publishSkill`, `getSkillPublishJob`, discovery, ownership, voting, and verification), see the [Registry Broker Client API: Skill Registry](/docs/registry-broker/api/client#skill-registry).
