@@ -7,6 +7,8 @@ description: Learn how to query the registry, filter results, and explore catalo
 
 Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and explore catalog information. This guide highlights the core search workflows and the supporting catalog endpoints.
 
+For HCS-26 skill package publishing and skill-specific discovery routes (`/skills`, `/skills/versions`, `/skills/mine`), use [Skills Upload & Discovery](skills-upload-discovery.md).
+
 ## Example: ERC-8004 Agents
 
 ERC-8004 agents live in an on-chain registry. Filter by `registries: ['erc-8004']` to query those records. The snippet below mirrors a real request to `https://hol.org/registry/api/v1/search?registries=erc-8004&limit=3`, which currently returns agents with UAIDs such as:

@@ -318,6 +318,82 @@ if (registration.attemptId) {
 }
 ```
 
+## Skill Registry
+
+The `RegistryBrokerClient` also includes skill-specific APIs for quote/publish, discovery, ownership, voting, and verification workflows.
+
+### Quote and Publish
+
+```typescript
+const quote = await client.quoteSkillPublish({
+  files: [
+    { name: 'SKILL.md', mimeType: 'text/markdown', base64: skillMdBase64, role: 'skill-md' },
+    { name: 'SKILL.json', mimeType: 'application/json', base64: skillJsonBase64, role: 'skill-json' },
+  ],
+  directoryTopicId: '0.0.123456',
+  accountId: '0.0.78910',
+});
+
+const publish = await client.publishSkill({
+  files: [
+    { name: 'SKILL.md', mimeType: 'text/markdown', base64: skillMdBase64, role: 'skill-md' },
+    { name: 'SKILL.json', mimeType: 'application/json', base64: skillJsonBase64, role: 'skill-json' },
+  ],
+  directoryTopicId: '0.0.123456',
+  quoteId: quote.quoteId,
+});
+
+if (publish.jobId) {
+  const job = await client.getSkillPublishJob(publish.jobId);
+  console.log(job.status);
+}
+```
+
+### Discovery and Ownership
+
+```typescript
+const skills = await client.listSkills({ limit: 25, includeFiles: false });
+const versions = await client.listSkillVersions({ name: 'demo-skill' });
+const mine = await client.listMySkills({ limit: 25 });
+const myList = await client.getMySkillsList({ limit: 25 });
+const ownership = await client.getSkillOwnership({ name: 'demo-skill' });
+```
+
+### Voting and Verification
+
+```typescript
+const vote = await client.setSkillVote({
+  name: 'demo-skill',
+  upvoted: true,
+});
+
+const voteStatus = await client.getSkillVoteStatus({ name: 'demo-skill' });
+const verification = await client.getSkillVerificationStatus({ name: 'demo-skill' });
+
+await client.requestSkillVerification({
+  name: 'demo-skill',
+  tier: 'verified',
+});
+```
+
+### Skill Routes
+
+Client methods above map to:
+
+- `GET /api/v1/skills/config`
+- `GET /api/v1/skills`
+- `GET /api/v1/skills/versions`
+- `GET /api/v1/skills/mine`
+- `GET /api/v1/skills/my-list`
+- `POST /api/v1/skills/quote`
+- `POST /api/v1/skills/publish`
+- `GET /api/v1/skills/jobs/:jobId`
+- `GET /api/v1/skills/ownership`
+- `GET /api/v1/skills/vote`
+- `POST /api/v1/skills/vote`
+- `POST /api/v1/skills/verification/request`
+- `GET /api/v1/skills/verification/status`
+
 ## Credits and Ledger Authentication
 
 ### Manual Credit Purchase (HBAR)
