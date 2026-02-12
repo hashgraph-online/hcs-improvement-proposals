@@ -114,10 +114,26 @@ List account-curated “My Skills List” entries:
 const myList = await client.getMySkillsList({ limit: 25 });
 ```
 
+## Generate skill badges
+
+Use the badge endpoint with Shields to display live skill metadata in README files and docs:
+
+```ts
+const endpointUrl =
+  'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=version&style=flat';
+
+const imageUrl = `https://img.shields.io/endpoint?url=${encodeURIComponent(endpointUrl)}`;
+```
+
+Supported metrics: `version`, `status`, `trust`, `upvotes`, `updated`.
+
+For complete examples and embed snippets, see [Skill Badges](skill-badges.md).
+
 ## HTTP routes
 
 The client methods map to:
 - `GET /api/v1/skills`
+- `GET /api/v1/skills/badge`
 - `GET /api/v1/skills/versions`
 - `GET /api/v1/skills/mine`
 - `GET /api/v1/skills/my-list`
