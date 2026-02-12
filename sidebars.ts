@@ -399,6 +399,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/agent-badges',
+          label: 'Agent Badges',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/skills-upload-discovery',
           label: 'Skills Upload & Discovery',
         },

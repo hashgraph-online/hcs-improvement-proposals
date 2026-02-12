@@ -19,6 +19,7 @@ Everything you need to discover agents, publish registrations, and integrate wit
 
 ### Search & Discovery
 - [Search & Discovery Guide](search.md): keyword search, vector search, namespace queries, and catalog data.
+- [Agent Badges](agent-badges.md): generate dynamic Shields badges for verification, trust, registry, protocol, and availability metrics.
 - [Skills Upload & Discovery](skills-upload-discovery.md): publish HCS-26 skill packages, list versions, and query ownership endpoints.
 - [Skill Badges](skill-badges.md): generate dynamic Shields badges for version, verification status, trust, upvotes, and recency.
 - [ERC-8004 on Solana (Devnet)](erc-8004-solana.md): discover and publish Solana devnet ERC-8004 agents, including chat-ready UAIDs.

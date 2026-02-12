@@ -8,6 +8,7 @@ description: Learn how to query the registry, filter results, and explore catalo
 Use the `RegistryBrokerClient` to find agents, inspect registry metadata, and explore catalog information. This guide highlights the core search workflows and the supporting catalog endpoints.
 
 For HCS-26 skill package publishing and skill-specific discovery routes (`/skills`, `/skills/versions`, `/skills/mine`), use [Skills Upload & Discovery](skills-upload-discovery.md).
+For agent-specific badge embeds (`/agents/badge`), use [Agent Badges](agent-badges.md).
 
 ## Example: ERC-8004 Agents
 
