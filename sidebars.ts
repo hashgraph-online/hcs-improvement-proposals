@@ -404,6 +404,11 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/skill-badges',
+          label: 'Skill Badges',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/erc-8004-solana',
           label: 'ERC-8004 on Solana',
         },
