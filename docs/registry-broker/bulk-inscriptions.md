@@ -82,7 +82,17 @@ await client.authenticateWithLedgerCredentials({
 });
 
 const files = [
-  // Include SKILL.md, skill.json, and any other package artifacts
+  {
+    name: 'SKILL.md',
+    mimeType: 'text/markdown',
+    base64: Buffer.from('# My Awesome Skill\n\nThis skill does awesome things.').toString('base64'),
+  },
+  {
+    name: 'skill.json',
+    mimeType: 'application/json',
+    base64: Buffer.from(JSON.stringify({ name: 'my-awesome-skill', version: '1.0.0' })).toString('base64'),
+  },
+  // ... and other files
 ];
 
 const quote = await client.quoteSkillPublish({ accountId: '0.0.1234', files });
