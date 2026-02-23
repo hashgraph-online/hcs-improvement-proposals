@@ -411,6 +411,8 @@ const sidebars: SidebarsConfig = {
           type: 'doc',
           id: 'registry-broker/skill-badges',
           label: 'Skill Badges',
+          id: 'registry-broker/bulk-inscriptions',
+          label: 'Bulk Inscriptions (bulk-files)',
         },
         {
           type: 'doc',

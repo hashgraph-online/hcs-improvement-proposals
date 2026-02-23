@@ -186,6 +186,39 @@ console.log('Buffer inscription successful!');
 console.log('Topic ID:', bufferResult.inscription.topic_id);
 ```
 
+### Bulk Files (ZIP) Inscription
+
+Use `mode: 'bulk-files'` to inscribe a ZIP archive where each entry should become its own standalone inscription topic.
+
+This is useful for multi-file packages like HCS-26 skills, where a manifest (for example `skill.json`) needs to reference many file HRLs.
+
+```ts
+import fs from 'node:fs';
+import { inscribe } from '@hashgraphonline/standards-sdk';
+
+const zipBuffer = fs.readFileSync('./my-package.zip');
+
+const bulkResult = await inscribe(
+  {
+    type: 'buffer',
+    buffer: zipBuffer,
+    fileName: 'my-package.zip',
+    mimeType: 'application/zip',
+  },
+  clientConfig,
+  {
+    ...options,
+    mode: 'bulk-files',
+    waitForConfirmation: true,
+  },
+);
+
+const bulkUploads = bulkResult.inscription?.files?.bulkUploads ?? [];
+for (const file of bulkUploads) {
+  console.log(file?.name, file?.topicId, file?.uri);
+}
+```
+
 ## Progress Tracking
 
 The Inscribe module now supports real-time progress tracking during the inscription process, which is particularly useful for large files and user interfaces:
@@ -248,7 +281,7 @@ The inscribe function supports a variety of options to control the inscription p
 
 ```typescript
 const advancedOptions = {
-  // Inscription mode ('file', 'upload', 'hashinal', 'hashinal-collection')
+  // Inscription mode ('file', 'upload', 'hashinal', 'hashinal-collection', 'bulk-files')
   mode: 'file',
 
   // Network selection
@@ -525,7 +558,7 @@ interface InscriptionOptions {
   metadata?: Record<string, unknown>;
   tags?: string[];
   chunkSize?: number;
-  mode?: 'file' | 'upload' | 'hashinal' | 'hashinal-collection';
+  mode?: 'file' | 'upload' | 'hashinal' | 'hashinal-collection' | 'bulk-files';
   jsonFileURL?: string;
 }
 

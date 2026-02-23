@@ -33,6 +33,7 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Operations
 - [Ledger Authentication & Credits](ledger-auth-credits.md): challenge flow, auto top-ups, and manual purchases.
 - [Content Inscription](content-inscription.md): inscribe files and data on HCS using registry credits.
+- [Bulk Inscriptions (bulk-files)](bulk-inscriptions.md): inscribe many independent files (ZIP) in one job, producing one topic per file.
 
 ### MCP Servers
 - [Hashnet MCP Server](mcp-server.md): configure transports (stdio, HTTP/SSE), tooling, and workflows to bridge Registry Broker from any MCP-compatible IDE or agent runtime.
