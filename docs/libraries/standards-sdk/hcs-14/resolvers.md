@@ -46,7 +46,7 @@ const aidDnsProfile = await hcs14.resolveUaidProfile(uaid, {
 });
 
 const didResolutionProfile = await hcs14.resolveUaidProfile(
-  'uaid:did:z6Mk...;uid=0;proto=hcs-10;nativeId=agent.example.com',
+  'uaid:did:z6Mk...;uid=0;proto=hcs-10;nativeId=hedera:testnet:0.0.1234',
   { profileId: UAID_DID_RESOLUTION_PROFILE_ID },
 );
 ```
