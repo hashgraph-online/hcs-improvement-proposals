@@ -399,11 +399,18 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/agent-badges',
+          label: 'Agent Badges',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/skills-upload-discovery',
           label: 'Skills Upload & Discovery',
         },
         {
           type: 'doc',
+          id: 'registry-broker/skill-badges',
+          label: 'Skill Badges',
           id: 'registry-broker/bulk-inscriptions',
           label: 'Bulk Inscriptions (bulk-files)',
         },
