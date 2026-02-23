@@ -6,6 +6,12 @@ sidebar_position: 3
 
 Adapters let you add DID methods without forking the SDK.
 
+Resolver DX is adapter-first:
+
+- register with `registerAdapter(...)`
+- discover with `listAdapters()` / `filterAdapters(...)`
+- resolve with `resolveDidProfile(...)` / `resolveUaidProfile(...)`
+
 ## Issuers
 
 Register issuers to create new DIDs. The SDK ships with a Hedera issuer.
@@ -43,12 +49,30 @@ hcs14.getIssuerRegistry().register(new WebDidIssuer());
 Resolvers map DIDs to DID Documents. The SDK includes a Hedera resolver.
 
 ```ts
-import { HCS14Client, HieroDidResolver } from '@hashgraphonline/standards-sdk';
+import {
+  HCS14Client,
+  HieroDidResolver,
+  isUaidProfileResolverAdapter,
+} from '@hashgraphonline/standards-sdk';
 const hcs14 = new HCS14Client();
 
-hcs14.getResolverRegistry().register(new HieroDidResolver());
-const doc = await hcs14.getResolverRegistry().resolveUaid('uaid:did:...');
+hcs14.registerAdapter(new HieroDidResolver());
+
+const didResolverIds = hcs14
+  .filterAdapters({ capability: 'did-resolver' })
+  .map(record => record.adapter.meta?.id || 'unknown');
+
+const uaidProfileIds = hcs14
+  .filterAdapters({ capability: 'uaid-profile-resolver' })
+  .map(record => record.adapter)
+  .filter(isUaidProfileResolverAdapter)
+  .map(adapter => adapter.profile);
+
+const didProfile = await hcs14.resolveDidProfile('did:hedera:testnet:0.0.1234');
+const uaidProfile = await hcs14.resolveUaidProfile('uaid:did:z6Mk...;uid=0;proto=hcs-10;nativeId=hedera:testnet:0.0.1234');
 ```
+
+For full resolver and profile resolver coverage, see [Resolvers](./resolvers.md).
 
 ## Built‑in Adapters
 
