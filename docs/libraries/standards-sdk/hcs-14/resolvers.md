@@ -85,6 +85,7 @@ Current built-ins do not include an ANS-specific HCS-14 profile resolver.
 ## Custom Resolver Registration (Adapter API)
 
 ```ts
+import { HCS14Client } from '@hashgraphonline/standards-sdk';
 import type { DidResolver, UaidProfileResolver } from '@hashgraphonline/standards-sdk';
 
 const hcs14 = new HCS14Client();
