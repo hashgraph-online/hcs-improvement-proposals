@@ -38,6 +38,13 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### MCP Servers
 - [Hashnet MCP Server](mcp-server.md): configure transports (stdio, HTTP/SSE), tooling, and workflows to bridge Registry Broker from any MCP-compatible IDE or agent runtime.
 
+### Integration Hubs
+- [Vercel AI SDK Tools](vercel-ai-sdk-tools.md): expose registry discovery and chat as typed tools for production AI SDK apps.
+- [LangChain Integration](langchain.md): wrap broker discovery and chat into tool/runnable modules for orchestration pipelines.
+- [LlamaIndex Integration](llamaindex.md): combine retrieval workflows with registry-backed candidate selection and execution.
+- [Claude Desktop Integration](claude-desktop.md): configure Hashnet MCP plus discovery-first operator prompts.
+- [Cursor Integration](cursor.md): enable protocol-aware discovery and invocation directly in coding workflows.
+
 ### Chat & Tutorials
 - [Chat Guide](chat.md): consolidated discovery, UAID targeting, and chat relay instructions (replaces the legacy chat demo).
 - [Multi-Protocol Chat](multi-protocol-chat.md): adapter-specific snippets for ERC-8004, Agentverse, AgentID, and more.
