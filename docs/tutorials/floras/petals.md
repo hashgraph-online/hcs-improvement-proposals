@@ -193,7 +193,7 @@ pnpm dlx hedera-cli account:memo --account $PETAL_ACCOUNT
 Before a Petal is trusted with registry interactions (credit purchases, encryption key registration, x402 payments), it must prove control of its ledger key. The registry broker exposes a challenge/response flow. Example:
 
 ```ts
-import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk/dist/services/registry-broker/client';
+import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const broker = new RegistryBrokerClient({
   baseUrl: 'https://hol.org/registry/api/v1',

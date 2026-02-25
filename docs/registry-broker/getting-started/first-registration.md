@@ -175,6 +175,44 @@ Pass `x402RegistrationPayload` to `getRegistrationQuote` / `registerAgent` whene
 
 ## Step 4 — Register the Agent
 
+### Quick Example — Register an Agent
+
+Use this minimal example when you just want the fastest path from payload to UAID:
+
+```typescript
+import {
+  isPendingRegisterAgentResponse,
+  isSuccessRegisterAgentResponse,
+} from '@hashgraphonline/standards-sdk';
+
+const registration = await client.registerAgent(registrationPayload);
+
+if (isSuccessRegisterAgentResponse(registration)) {
+  console.log('UAID:', registration.uaid);
+} else if (
+  isPendingRegisterAgentResponse(registration) &&
+  registration.attemptId
+) {
+  const final = await client.waitForRegistrationCompletion(
+    registration.attemptId,
+    {
+      intervalMs: 2000,
+      timeoutMs: 5 * 60 * 1000,
+    },
+  );
+
+  if (final.status === 'completed' && final.uaid) {
+    console.log('UAID:', final.uaid);
+  } else {
+    throw new Error(`Registration ended with status ${final.status}`);
+  }
+} else {
+  throw new Error('Registration did not return a success or pending response');
+}
+```
+
+If your first call returns `pending` or `partial`, poll with `waitForRegistrationCompletion` as shown above.
+
 ```typescript
 import {
   isPartialRegisterAgentResponse,
