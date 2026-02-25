@@ -24,7 +24,7 @@ import * as HCS20 from '@hashgraphonline/standards-sdk';
 
 - types (all canonical types)
 - errors
-  - `HCS20Error`, `HCS20ErrorCodes`
+  - `HCS20Error`, `PointsDeploymentError`, `PointsMintError`, `PointsTransferError`, `PointsBurnError`, `PointsValidationError`, `PointsNotFoundError`, `TopicRegistrationError`, `InsufficientBalanceError`, `SupplyLimitExceededError`, `MintLimitExceededError`, `InvalidMessageFormatError`, `InvalidAccountFormatError`, `InvalidTickFormatError`, `InvalidNumberFormatError`
 - base-client
   - `HCS20BaseClient`
 - browser
@@ -34,14 +34,14 @@ import * as HCS20 from '@hashgraphonline/standards-sdk';
 - points-indexer
   - `HCS20PointsIndexer` (helper to compute balances from topic messages)
 - tx
-  - All HCS‑20 deploy/mint/transfer/burn builders
+  - `buildHcs20SubmitMessageTx`, `buildHcs20DeployTx`, `buildHcs20MintTx`, `buildHcs20TransferTx`, `buildHcs20BurnTx`, `buildHcs20RegisterTx`
 
 ## Clients
 
 ```ts
 class HCS20BaseClient { /* shared config/mirror/logger */ }
-class HCS20Client extends HCS20BaseClient { /* Node: deploy, mint, transfer, burn */ }
-class BrowserHCS20Client { /* Wallet-signed equivalents */ }
+class HCS20Client extends HCS20BaseClient { /* Node: createPublicTopic, createRegistryTopic, deployPoints, mintPoints, transferPoints, burnPoints, registerTopic */ }
+class BrowserHCS20Client extends HCS20BaseClient { /* Browser: createRegistryTopic, deployPoints, mintPoints, transferPoints, burnPoints, registerTopic */ }
 ```
 
 Source
@@ -68,8 +68,12 @@ Source
 
 ```ts
 // Example signature pattern
+function buildHcs20SubmitMessageTx(params: { topicId: string; payload: object | string; transactionMemo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 function buildHcs20DeployTx(params: { topicId: string; name: string; tick: string; max: string; lim?: string; metadata?: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 function buildHcs20MintTx(params: { topicId: string; tick: string; amt: string; to: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs20TransferTx(params: { topicId: string; tick: string; amt: string; from: string; to: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs20BurnTx(params: { topicId: string; tick: string; amt: string; from: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs20RegisterTx(params: { registryTopicId: string; name: string; topicId: string; isPrivate: boolean; metadata?: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 ```
 
 Notes

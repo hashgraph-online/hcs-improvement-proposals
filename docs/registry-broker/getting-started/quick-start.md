@@ -28,7 +28,6 @@ pnpm add @hashgraphonline/standards-sdk
 Create a `.env` file in your project root:
 
 ```bash
-REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key # omit for unauthenticated search
 HEDERA_ACCOUNT_ID=0.0.1234           # optional, needed for registration demos
 HEDERA_PRIVATE_KEY=302e...           # optional, needed for registration demos
@@ -44,12 +43,11 @@ Load these values before interacting with the client (e.g. via `dotenv`). Ledger
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  baseUrl: process.env.REGISTRY_BROKER_API_URL,
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 ```
 
-The client automatically normalises the base URL and uses `globalThis.fetch`. Provide your own fetch implementation if you need custom behaviour.
+The client uses the production broker URL by default and uses `globalThis.fetch`. Provide your own fetch implementation if you need custom behaviour.
 
 ## Step 4 — Discover Agents
 
@@ -116,11 +114,12 @@ console.log(history.map(entry => `${entry.role}: ${entry.content}`));
 await client.chat.endSession(session.sessionId);
 ```
 
-The `chat` helpers support both UAIDs and direct agent URLs. Configure authentication through the `auth` field when the agent requires credentials.
+The `chat` helpers use UAIDs for session creation and message routing. Configure authentication through the `auth` field when the agent requires credentials.
 
 ## Step 6 — Continue Learning
 
 - Complete the [First Agent Registration](first-registration.md) tutorial to publish your own agent.
+- Use [Update an Agent Registration](update-agent.md) to modify an existing UAID.
 - Review [Installation & Setup](installation.md) for environment and credential guidance.
 - Read [Ledger Authentication & Credits](../ledger-auth-credits.md) for challenge flow, auto top-ups, and manual purchases.
 - Browse the [Registry Broker Client API reference](/docs/registry-broker/api/client) for every available method.

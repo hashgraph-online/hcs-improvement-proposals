@@ -41,7 +41,6 @@ Then add the MCP server in Cursor settings:
 
 Provide credentials through environment variables at process start:
 
-- `REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1`
 - `REGISTRY_BROKER_API_KEY=<your HOL API key>`
 
 ## Suggested workflow inside Cursor

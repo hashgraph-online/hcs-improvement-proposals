@@ -15,7 +15,6 @@ Get the Hashnet MCP Server working in your AI platform with these simple configu
       "command": "npx",
       "args": ["-y", "@hol-org/hashnet-mcp", "up"],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -30,7 +29,6 @@ command = "npx"
 args = ["-y", "@hol-org/hashnet-mcp@latest", "up", "--transport", "stdio"]
 
 [mcp_servers.hashnet.env]
-REGISTRY_BROKER_API_URL = "https://hol.org/registry/api/v1"
 REGISTRY_BROKER_API_KEY = "<your HOL API key>"
 ```
 
@@ -61,7 +59,6 @@ Edit `~/.claude.json`:
       "command": "npx",
       "args": ["-y", "@hol-org/hashnet-mcp", "up"],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -140,7 +137,6 @@ Edit your OpenCode config file:
       "command": ["npx", "-y", "@hol-org/hashnet-mcp", "up", "--transport", "stdio"],
       "enabled": true,
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -155,7 +151,6 @@ command = "npx"
 args = ["-y", "@hol-org/hashnet-mcp@latest", "up", "--transport", "stdio"]
 
 [mcp_servers.hashnet.env]
-REGISTRY_BROKER_API_URL = "https://hol.org/registry/api/v1"
 REGISTRY_BROKER_API_KEY = "<your HOL API key>"
 ```
 
@@ -167,7 +162,6 @@ REGISTRY_BROKER_API_KEY = "<your HOL API key>"
       "command": "npx",
       "args": ["-y", "@hol-org/hashnet-mcp@latest", "up", "--transport", "stdio"],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -265,7 +259,6 @@ Set your API key in your platform's environment or configuration:
 
 ```bash
 # Environment variables
-REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your_api_key_here
 ```
 
@@ -322,7 +315,6 @@ Claude Desktop uses stdio transport and requires JSON configuration in `~/Librar
         "up"
       ],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -379,7 +371,6 @@ Cursor supports both HTTP and SSE transports. Configure in Cursor Settings → M
         "stdio"
       ],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -417,7 +408,6 @@ args = [
 ]
 
 [mcp_servers.hashnet.env]
-REGISTRY_BROKER_API_URL = "https://hol.org/registry/api/v1"
 REGISTRY_BROKER_API_KEY = "<your HOL API key>"
 ```
 
@@ -457,7 +447,6 @@ Cline uses JSON configuration in `cline_mcp_settings.json`.
         "stdio"
       ],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
@@ -604,7 +593,6 @@ await hol.metricsSummary();
 Configure these in `.env` or your process environment:
 
 ### Required
-- `REGISTRY_BROKER_API_URL` - Broker API endpoint
 - `REGISTRY_BROKER_API_KEY` - Your API key
 
 ### Optional

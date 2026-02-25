@@ -73,6 +73,9 @@ const assemblyRegistration = assemblyBuilder
   .setAuthor('0.0.123456')
   .build();
 
+client.initializeRegistries();
+await client.createAssemblyTopic();
+
 // Register the assembly
 const assemblyResult = await client.registerAssembly(assemblyRegistration);
 console.log('Assembly registered:', assemblyResult.id);
@@ -134,10 +137,12 @@ assemblyBuilder.addBlock(counterBlockBuilder);
 The complete process for creating an assembly:
 
 ```typescript
-// Step 1: Create assembly topic
-const assemblyTopicId = await client.createRegistryTopic(
-  RegistryType.ASSEMBLY
+client.initializeRegistries();
+
+const actionRegistryTopicId = await client.createRegistryTopic(
+  RegistryType.ACTION
 );
+const assemblyTopicId = await client.createAssemblyTopic();
 
 // Step 2: Register assembly metadata
 const assemblyRegistration = new AssemblyBuilder(logger)
@@ -197,6 +202,11 @@ await client.addBlockToAssembly(assemblyTopicId, {
 Assemblies are loaded and resolved from their topic IDs:
 
 ```typescript
+client.initializeRegistries({
+  action: '0.0.1234501',
+  assembly: '0.0.1234502',
+});
+
 // Load assembly state
 const assembly = await client.loadAssembly('0.0.987654');
 
@@ -265,8 +275,12 @@ await client.updateAssembly(assemblyTopicId, {
 The SDK manages assembly state incrementally:
 
 ```typescript
+client.initializeRegistries({
+  assembly: '0.0.1234502',
+});
+
 // Get current assembly state
-const currentState = await client.getAssemblyState(assemblyTopicId);
+const currentState = await client.getAssemblyState('0.0.1234502');
 ```
 
 ---
@@ -277,6 +291,11 @@ The assembly engine handles complex assembly operations:
 
 ```typescript
 import { assemblyMessageSchema, safeValidate } from '@hashgraphonline/standards-sdk';
+
+client.initializeRegistries({
+  action: '0.0.1234501',
+  assembly: '0.0.1234502',
+});
 
 // Load and resolve assembly in one operation
 const assembly = await client.loadAssembly('0.0.987654');
@@ -294,6 +313,11 @@ console.log(validation.success);
 The SDK provides comprehensive error handling for assemblies:
 
 ```typescript
+client.initializeRegistries({
+  action: '0.0.1234501',
+  assembly: '0.0.1234502',
+});
+
 try {
   const assembly = await client.loadAssembly('0.0.987654');
   const actionErrors = assembly.actions.filter(a => !!a.error);

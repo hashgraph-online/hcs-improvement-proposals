@@ -28,9 +28,8 @@ The SDK ships with TypeScript definitions—no additional typings are required.
 Create `.env` in your project root:
 
 ```bash
-REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key                     # optional for search-only usage
-REGISTRY_BROKER_LEDGER_KEY=                               # populated after ledger verification
+HEDERA_NETWORK=testnet                                    # optional: mainnet | testnet
 HEDERA_ACCOUNT_ID=0.0.1234                                # optional, needed for registrations
 HEDERA_PRIVATE_KEY=302e...                                # optional, needed for credits or ledger auth
 MAINNET_HEDERA_ACCOUNT_ID=0.0.1001                        # optional scoped creds
@@ -43,9 +42,8 @@ EVM_LEDGER_NETWORK=base-sepolia                           # or eip155:<chainId>
 
 | Variable | Purpose |
 | --- | --- |
-| `REGISTRY_BROKER_API_URL` | Overrides the base URL (defaults to production). |
 | `REGISTRY_BROKER_API_KEY` | Authorises paid endpoints such as registration, chat, and UAID utilities. |
-| `REGISTRY_BROKER_LEDGER_KEY` | Populated after completing ledger verification; see [Ledger Authentication & Credits](../ledger-auth-credits.md). |
+| `HEDERA_NETWORK` | Optional network selector for scoped credentials (`mainnet` or `testnet`). |
 | `HEDERA_ACCOUNT_ID` / `HEDERA_PRIVATE_KEY` | Default Hedera credentials for ledger auth and purchases. |
 | `MAINNET_HEDERA_*` / `TESTNET_HEDERA_*` | Network-scoped overrides automatically selected from `HEDERA_NETWORK`. |
 | `ETH_PK` | Required when performing EVM ledger auth or funding credits via x402. |
@@ -61,16 +59,27 @@ import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 config();
 
+const hederaAccountId = process.env.HEDERA_ACCOUNT_ID;
+const hederaPrivateKey = process.env.HEDERA_PRIVATE_KEY;
+const historyAutoTopUp =
+  hederaAccountId && hederaPrivateKey
+    ? {
+        accountId: hederaAccountId,
+        privateKey: hederaPrivateKey,
+        hbarAmount: 0.25,
+      }
+    : undefined;
+
 export const registryBrokerClient = new RegistryBrokerClient({
-  baseUrl: process.env.REGISTRY_BROKER_API_URL,
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
+  historyAutoTopUp,
   defaultHeaders: {
     'x-app-id': 'registry-broker-docs-demo',
   },
 });
 ```
 
-Use `setApiKey`, `setLedgerApiKey`, and `setDefaultHeader` at runtime if credentials are refreshed.
+Use `setApiKey` and `setDefaultHeader` at runtime if credentials are refreshed.
 
 ## Step 4 — Validate Connectivity
 
@@ -89,44 +98,34 @@ verifyConnection().catch(error => {
 
 If the call succeeds you can proceed with discovery, chat, and registration tutorials.
 
-## Step 5 — Optional: Prepare Ledger Credentials
+## Step 5 — Optional: Authenticate with Ledger Credentials
 
-Ledger verification upgrades the client with a short-lived ledger API key. Complete this step when you intend to perform credit purchases or ledger-gated registrations.
+Use the helper method instead of manually calling `createLedgerChallenge` + `verifyLedgerChallenge`.
 
 ```typescript
-import { PrivateKey } from '@hashgraph/sdk';
-
 async function setupLedgerAuthentication() {
-  const challenge = await registryBrokerClient.createLedgerChallenge({
+  if (!process.env.HEDERA_ACCOUNT_ID || !process.env.HEDERA_PRIVATE_KEY) {
+    throw new Error('Set HEDERA_ACCOUNT_ID and HEDERA_PRIVATE_KEY first');
+  }
+
+  await registryBrokerClient.authenticateWithLedgerCredentials({
     accountId: process.env.HEDERA_ACCOUNT_ID,
     network: 'hedera:testnet',
+    hederaPrivateKey: process.env.HEDERA_PRIVATE_KEY,
+    expiresInMinutes: 30,
+    label: 'installation-guide',
   });
-
-  const operatorKey = PrivateKey.fromString(process.env.HEDERA_PRIVATE_KEY ?? '');
-  const signature = Buffer.from(
-    operatorKey.sign(Buffer.from(challenge.message, 'utf8')),
-  ).toString('base64');
-
-  const verification = await registryBrokerClient.verifyLedgerChallenge({
-    challengeId: challenge.challengeId,
-    accountId: process.env.HEDERA_ACCOUNT_ID,
-    network: 'hedera:testnet',
-    signature,
-    publicKey: operatorKey.publicKey.toString(),
-  });
-
-  registryBrokerClient.setLedgerApiKey(verification.key);
 }
 ```
 
-Store `verification.key` securely if you need to reuse it across processes.
+`authenticateWithLedgerCredentials` performs the challenge/verify flow and stores the issued key on the client automatically. Combined with `historyAutoTopUp`, this gives you the simplest production-ready path for chat history billing. For network-scoped credential patterns and advanced top-up strategies, see [Ledger Authentication & Credits](../ledger-auth-credits.md).
 
 ## Common Setup Issues
 
 | Symptom | Likely Cause | Resolution |
 | --- | --- | --- |
 | `Registry broker request failed (401)` | Missing or invalid API key. | Set `REGISTRY_BROKER_API_KEY` or regenerate the key in the billing portal. |
-| `Registry broker request failed (402)` | Credits depleted (or free tier exhausted / additional registries selected). | Purchase credits via the dashboard or `purchaseCreditsWithHbar`. |
+| `Registry broker request failed (402)` | Credits depleted (or free tier exhausted / additional registries selected). | Purchase credits via the dashboard or `purchaseCreditsWithHbar`, or configure `historyAutoTopUp` / `registrationAutoTopUp`. |
 | `Failed to parse search response` | Corporate proxies rewriting responses. | Use `fetchImplementation` to handle proxy auth or bypass the proxy. |
 | `fetch is not defined` | Node.js runtime older than 18. | Upgrade to Node.js 20+ or provide a fetch polyfill (e.g. `undici`). |
 

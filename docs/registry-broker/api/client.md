@@ -20,7 +20,6 @@ pnpm add @hashgraphonline/standards-sdk
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  baseUrl: process.env.REGISTRY_BROKER_API_URL,
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
   registrationAutoTopUp: process.env.HEDERA_ACCOUNT_ID
     ? {

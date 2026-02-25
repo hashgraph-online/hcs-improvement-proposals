@@ -1,17 +1,135 @@
 ---
 title: First Agent Registration
-description: Learn how to register your first agent with the Registry Broker
+description: One-shot minimal example for registering an agent with Registry Broker
 ---
 
 # First Agent Registration
 
-Publish your first agent to the Hashgraph Online Registry Broker. This tutorial covers profile preparation, credit management, registration, updates, and validation.
+This page starts with a copy-paste one-shot script that registers an agent end-to-end with minimal code.
 
 ## Prerequisites
 
 - Completed the [Installation & Setup](installation.md) guide.
 - A running agent endpoint that supports A2A, ERC-8004, or another supported protocol.
 - Credits on your Registry Broker account (required for additional registries, updates, chat, and registrations beyond the first 5 base agents) or Hedera credentials for auto top-up.
+
+## One-Shot Registration (Minimal Code)
+
+If you only need one working registration flow, use this script as-is and replace the environment variables.
+
+```typescript
+import { config } from 'dotenv';
+import {
+  AIAgentCapability,
+  AIAgentType,
+  HCS11Profile,
+  ProfileType,
+  RegistryBrokerClient,
+  isPendingRegisterAgentResponse,
+  isSuccessRegisterAgentResponse,
+  type AgentRegistrationRequest,
+} from '@hashgraphonline/standards-sdk';
+
+config();
+
+async function main(): Promise<void> {
+  const apiKey = process.env.REGISTRY_BROKER_API_KEY;
+  const endpoint = process.env.AGENT_ENDPOINT;
+  const displayName = process.env.AGENT_DISPLAY_NAME ?? 'One Shot Agent';
+
+  if (!apiKey) {
+    throw new Error('REGISTRY_BROKER_API_KEY is required');
+  }
+
+  if (!endpoint) {
+    throw new Error('AGENT_ENDPOINT is required');
+  }
+
+  const client = new RegistryBrokerClient({
+    apiKey,
+  });
+
+  const profile: HCS11Profile = {
+    version: '1.0.0',
+    type: ProfileType.AI_AGENT,
+    display_name: displayName,
+    bio: 'Minimal one-shot registration example.',
+    aiAgent: {
+      type: AIAgentType.MANUAL,
+      model: 'gpt-4o-mini',
+      capabilities: [AIAgentCapability.DATA_ANALYSIS],
+    },
+  };
+
+  const payload: AgentRegistrationRequest = {
+    profile,
+    registry: 'hashgraph-online',
+    communicationProtocol: 'a2a',
+    endpoint,
+  };
+
+  const quote = await client.getRegistrationQuote(payload);
+  console.log('Required credits:', quote.requiredCredits);
+  console.log('Shortfall:', quote.shortfallCredits ?? 0);
+
+  if ((quote.shortfallCredits ?? 0) > 0) {
+    throw new Error(`Insufficient credits. Shortfall: ${quote.shortfallCredits}`);
+  }
+
+  const registration = await client.registerAgent(payload);
+
+  if (isSuccessRegisterAgentResponse(registration)) {
+    console.log('UAID:', registration.uaid);
+    return;
+  }
+
+  if (!isPendingRegisterAgentResponse(registration) || !registration.attemptId) {
+    throw new Error(`Unexpected registration status: ${registration.status}`);
+  }
+
+  const final = await client.waitForRegistrationCompletion(registration.attemptId, {
+    intervalMs: 2000,
+    timeoutMs: 5 * 60 * 1000,
+  });
+
+  if (final.status !== 'completed' || !final.uaid) {
+    throw new Error(`Registration ended with status: ${final.status}`);
+  }
+
+  const resolved = await client.resolveUaid(final.uaid);
+
+  console.log('UAID:', final.uaid);
+  console.log('Resolved name:', resolved.agent.profile.display_name);
+}
+
+main().catch(error => {
+  console.error(error);
+  process.exitCode = 1;
+});
+```
+
+### Run the Script
+
+1. Save the code as `register-agent.ts`.
+2. Add this to your `.env`:
+
+```bash
+REGISTRY_BROKER_API_KEY=your-api-key
+AGENT_ENDPOINT=https://your-agent.example.com/a2a
+AGENT_DISPLAY_NAME=One Shot Agent
+```
+
+3. Install and run:
+
+```bash
+pnpm add @hashgraphonline/standards-sdk dotenv
+pnpm add -D tsx typescript @types/node
+pnpm tsx register-agent.ts
+```
+
+If this script prints a UAID, your registration flow is complete. The rest of this page is optional detail.
+
+## Advanced Registration Flow (Optional)
 
 ## Step 1 — Prepare the Agent Profile
 
@@ -175,43 +293,7 @@ Pass `x402RegistrationPayload` to `getRegistrationQuote` / `registerAgent` whene
 
 ## Step 4 — Register the Agent
 
-### Quick Example — Register an Agent
-
-Use this minimal example when you just want the fastest path from payload to UAID:
-
-```typescript
-import {
-  isPendingRegisterAgentResponse,
-  isSuccessRegisterAgentResponse,
-} from '@hashgraphonline/standards-sdk';
-
-const registration = await client.registerAgent(registrationPayload);
-
-if (isSuccessRegisterAgentResponse(registration)) {
-  console.log('UAID:', registration.uaid);
-} else if (
-  isPendingRegisterAgentResponse(registration) &&
-  registration.attemptId
-) {
-  const final = await client.waitForRegistrationCompletion(
-    registration.attemptId,
-    {
-      intervalMs: 2000,
-      timeoutMs: 5 * 60 * 1000,
-    },
-  );
-
-  if (final.status === 'completed' && final.uaid) {
-    console.log('UAID:', final.uaid);
-  } else {
-    throw new Error(`Registration ended with status ${final.status}`);
-  }
-} else {
-  throw new Error('Registration did not return a success or pending response');
-}
-```
-
-If your first call returns `pending` or `partial`, poll with `waitForRegistrationCompletion` as shown above.
+Use `registerAgent` with your payload. If the broker returns `pending` or `partial`, poll using `waitForRegistrationCompletion`.
 
 ```typescript
 import {
@@ -254,113 +336,12 @@ if (!registeredUaid) {
 console.log('UAID:', registeredUaid);
 ```
 
-## Step 5 — Update the Registration
+## Advanced Scenarios
 
-Use `updateAgent` to change metadata, endpoints, or additional registries.
-
-```typescript
-const updated = await client.updateAgent(registeredUaid, {
-  ...registrationPayload,
-  metadata: {
-    ...registrationPayload.metadata,
-    uptime: 99.95,
-  },
-});
-
-console.log('Update status:', updated.status);
-
-if (isPendingRegisterAgentResponse(updated) && updated.attemptId) {
-  await client.waitForRegistrationCompletion(updated.attemptId, {
-    throwOnFailure: false,
-  });
-}
-
-if (isPartialRegisterAgentResponse(updated)) {
-  console.log('Partial update message:', updated.message);
-}
-
-if (isSuccessRegisterAgentResponse(updated)) {
-  console.log('Updated UAID:', updated.uaid);
-}
-```
-
-## Example — Registering an XMTP communication endpoint
-
-XMTP agents use an Ethereum address as the communication endpoint. Register the agent with `communicationProtocol: "xmtp"` and an `xmtp://0x...` endpoint:
-
-```ts
-const xmtpRegistrationPayload = {
-  ...registrationPayload,
-  communicationProtocol: 'xmtp',
-  endpoint: 'xmtp://0x1234567890abcdef1234567890abcdef12345678',
-};
-
-const registration = await client.registerAgent(xmtpRegistrationPayload);
-```
-
-Once registered, chat through the broker using the returned UAID (`proto=xmtp`). See [XMTP Integration](../xmtp.md) for end-to-end chat and encrypted-history examples.
-
-`updateAgent` shares the same asynchronous behaviour as `registerAgent`. Reuse `waitForRegistrationCompletion` if `updated.attemptId` is present and handle partial results with the helper guards.
-
-## Step 6 — Verify the Agent
-
-### Resolve the UAID
-
-```typescript
-const resolved = await client.resolveUaid(registeredUaid);
-console.log(resolved.agent.profile.display_name);
-```
-
-### Confirm Search Visibility
-
-```typescript
-const searchResults = await client.search({
-  q: 'ledger guard',
-  registry: 'hashgraph-online',
-  limit: 5,
-});
-
-const match = searchResults.hits.find(hit => hit.uaid === registeredUaid);
-if (!match) {
-  console.log('Search index may take a few minutes to refresh.');
-}
-```
-
-## Step 7 — Test Chat Relay
-
-```typescript
-const session = await client.chat.createSession({
-  uaid: registeredUaid,
-  historyTtlSeconds: 900,
-});
-
-const response = await client.chat.sendMessage({
-  sessionId: session.sessionId,
-  message: 'Hello! Confirm you can reach the Ledger Guard endpoint.',
-});
-
-console.log(response.content);
-
-await client.chat.endSession(session.sessionId);
-```
-
-## Step 8 — Manage Credits
-
-Purchase credits programmatically when needed.
-
-```typescript
-const purchase = await client.purchaseCreditsWithHbar({
-  accountId: process.env.HEDERA_ACCOUNT_ID,
-  privateKey: process.env.HEDERA_PRIVATE_KEY,
-  hbarAmount: 0.5,
-  memo: 'ledger-guard-registration',
-  metadata: {
-    reason: 'initial-registration',
-  },
-});
-
-console.log('Credits purchased:', purchase.purchasedCredits);
-```
+- Update registrations end to end: [Update an Agent Registration](update-agent.md).
+- Register XMTP endpoints and chat via UAID: [XMTP Integration](../xmtp.md).
+- Purchase credits or configure ledger top-up: [Ledger Authentication & Credits](../ledger-auth-credits.md).
+- Add extra registries like Moltbook and ERC-8004: [Moltbook Registration](../moltbook.md) and [Search & Discovery](../search.md).
 
 ## Troubleshooting
 

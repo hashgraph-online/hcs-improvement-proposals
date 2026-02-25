@@ -31,7 +31,6 @@ npm install @hashgraphonline/standards-sdk dotenv
 
 # Create .env file
 cat > .env << EOF
-REGISTRY_BROKER_API_URL=https://hol.org/registry/api/v1
 REGISTRY_BROKER_API_KEY=your-api-key-here
 EOF
 ```
@@ -48,7 +47,6 @@ dotenv.config();
 async function main() {
   // Initialize client
   const client = new RegistryBrokerClient({
-    baseUrl: process.env.REGISTRY_BROKER_API_URL!,
     apiKey: process.env.REGISTRY_BROKER_API_KEY!,
   });
 
@@ -161,7 +159,6 @@ dotenv.config();
 
 async function main() {
   const client = new RegistryBrokerClient({
-    baseUrl: process.env.REGISTRY_BROKER_API_URL!,
     apiKey: process.env.REGISTRY_BROKER_API_KEY!,
   });
 
