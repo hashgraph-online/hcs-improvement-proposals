@@ -24,11 +24,11 @@ The security system operates on multiple layers to provide defense in depth:
 
 ```typescript
 interface SecurityContext {
-  permissions: PermissionSystem;        // Capability-based permissions
-  contentVerifier: HashVerifier;        // Content integrity verification  
-  signatureVerifier: SignatureVerifier; // Digital signature validation
-  wasmValidator: WasmValidator;         // WASM security validation
-  auditLogger: AuditLogger;            // Security event logging
+  permissions: AppPermissionEngine;     // Application-layer permission engine
+  contentVerifier: AppHashVerifier;     // Application-layer integrity verifier
+  signatureVerifier: AppSignatureVerifier; // Application-layer signature verifier
+  wasmValidator: WasmValidator;         // SDK WASM validator
+  auditLogger: AppAuditLogger;          // Application-layer audit logger
 }
 
 enum SecurityLevel {
@@ -55,8 +55,8 @@ const SecurityLevel = {
   CRITICAL: 'critical',
 } as const;
 
-// Initialize permission system
-const permissionSystem = new PermissionSystem({
+// Application-specific permission engine (not exported by standards-sdk)
+const permissionSystem = createPermissionEngine({
   defaultPolicy: 'deny',           // Deny by default
   auditLog: true,                  // Log all permission checks
   complianceMode: 'strict',        // Strict compliance checking
@@ -151,7 +151,7 @@ Implement comprehensive permission checking:
 
 ```typescript
 // Check permissions before action execution
-async function executeAction(
+async function executeProtectedAction(
   userId: string, 
   actionId: string, 
   operation: string, 
@@ -724,24 +724,7 @@ Implement strict WASM security validation:
 ```typescript
 import { WasmValidator } from '@hashgraphonline/standards-sdk';
 
-const wasmValidator = new WasmValidator({
-  maxMemoryPages: 256,              // 16MB memory limit
-  maxTableSize: 1024,               // Max table entries
-  maxModuleSize: 10 * 1024 * 1024,  // 10MB module size limit
-  maxFunctions: 1000,               // Max function count
-  maxExecutionTime: 5000,           // 5 second timeout
-  allowedImports: [
-    'wasi_snapshot_preview1',       // WASI imports
-    'env.memory',                   // Memory imports
-    'env.abort'                     // Abort function
-  ],
-  forbiddenOpcodes: [
-    'memory.grow',                  // Prevent memory growth
-    'unreachable'                   // Prevent unreachable code
-  ],
-  validateExports: true,            // Validate required exports
-  sandboxed: true                   // Run in sandbox mode
-});
+const wasmValidator = new WasmValidator(logger);
 
 // Validate WASM module security
 async function validateWasmSecurity(

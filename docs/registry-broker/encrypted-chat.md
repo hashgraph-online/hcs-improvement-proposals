@@ -59,9 +59,9 @@ const { client } = await RegistryBrokerClient.initializeAgent({
 Prefer a one-off CLI flow? Run the initialization script with your UAID:
 
 ```bash
-pnpm -C standards-sdk exec \\
-  tsx scripts/registry-broker/init-encrypted-agent.ts \\
-  --uaid uaid:aid:example;uid=my-agent;registry=hashgraph-online
+pnpm -C standards-sdk exec \
+  tsx scripts/registry-broker/init-encrypted-agent.ts \
+  --uaid 'uaid:aid:example;uid=my-agent;registry=hashgraph-online'
 ```
 
 Optional flags:

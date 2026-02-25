@@ -51,8 +51,13 @@ Source
 
 ```ts
 class HCS20PointsIndexer {
-  constructor(mirrorNodeUrl?: string)
-  indexTopic(topicId: string, options?: { fromSeq?: number }): Promise<{ balances: Map<string, number> }>
+  constructor(network: import('@hashgraphonline/standards-sdk').NetworkType, logger?: import('@hashgraphonline/standards-sdk').Logger, mirrorNodeUrl?: string)
+  startIndexing(options?: { publicTopicId?: string; registryTopicId?: string; includePublicTopic?: boolean; includeRegistryTopic?: boolean; privateTopics?: string[]; pollInterval?: number }): Promise<void>
+  indexOnce(options?: { publicTopicId?: string; registryTopicId?: string; includePublicTopic?: boolean; includeRegistryTopic?: boolean; privateTopics?: string[] }): Promise<void>
+  getState(): import('@hashgraphonline/standards-sdk').PointsState
+  getPointsInfo(tick: string): import('@hashgraphonline/standards-sdk').PointsInfo | undefined
+  getBalance(tick: string, accountId: string): string
+  stopIndexing(): void
 }
 ```
 
@@ -63,8 +68,8 @@ Source
 
 ```ts
 // Example signature pattern
-function buildHcs20DeployTx(params: { name: string; symbol: string; decimals?: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs20MintTx(params: { topicId: string; account: string; amount: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs20DeployTx(params: { topicId: string; name: string; tick: string; max: string; lim?: string; metadata?: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs20MintTx(params: { topicId: string; tick: string; amt: string; to: string; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 ```
 
 Notes

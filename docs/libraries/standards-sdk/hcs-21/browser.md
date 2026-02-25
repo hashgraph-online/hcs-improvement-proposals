@@ -103,6 +103,7 @@ const publishResult = await browserClient.publishDeclaration({
     manifest: 'ipfs://bafy...adapter-manifest',
     manifestSequence: 15, // optional when HCS-1
     config: {
+      type: 'flora',
       account: '0.0.700001',
       threshold: '2/3',
       ctopic: '0.0.700101',

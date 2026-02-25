@@ -29,13 +29,13 @@ The Standards SDK provides all the tools you need to work with HCS standards.
 
 ```bash
 # Using npm
-npm install @hashgraph-online/standards-sdk
+npm install @hashgraphonline/standards-sdk
 
 # Using pnpm
-pnpm add @hashgraph-online/standards-sdk
+pnpm add @hashgraphonline/standards-sdk
 
 # Using yarn
-yarn add @hashgraph-online/standards-sdk
+yarn add @hashgraphonline/standards-sdk
 ```
 
 ***
@@ -131,10 +131,10 @@ The Standards SDK provides implementations for various HCS standards:
 ```javascript
 import { 
   inscribe,           // HCS-1 & HCS-5: Inscriptions
-  createRegistry,     // HCS-2: Topic Registries
-  deployAgent,        // HCS-10: OpenConvAI Agents
-  createPointsSystem  // HCS-20: Auditable Points
-} from '@hashgraph-online/standards-sdk';
+  HCS2Client,         // HCS-2: Topic Registries
+  HCS10Client,        // HCS-10: OpenConvAI Agents
+  HCS20Client         // HCS-20: Auditable Points
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ***
@@ -188,5 +188,4 @@ Now that your environment is set up, continue with:
 - [Standards SDK GitHub](https://github.com/hashgraph-online/standards-sdk)
 - [Community Discord](https://discord.gg/hashgraph)
 - [Hedera Documentation](https://docs.hedera.com)
-
 

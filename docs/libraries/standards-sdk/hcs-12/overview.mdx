@@ -28,26 +28,25 @@ npm install @hashgraphonline/standards-sdk
 ### Basic Setup
 
 ```ts
-import { HCS12Client, NetworkType, Logger } from '@hashgraphonline/standards-sdk';
+import { HCS12Client, Logger } from '@hashgraphonline/standards-sdk';
 
 const client = new HCS12Client({
-  network: NetworkType.TESTNET,
-  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  network: 'testnet',
   logger: new Logger({ module: 'HCS12' }),
-  hcs12: { operatorId: '0.0.123456', operatorPrivateKey: 'your-private-key' },
+  operatorId: '0.0.123456',
+  operatorPrivateKey: 'your-private-key',
 });
 
-await client.initializeRegistries();
+client.initializeRegistries();
 ```
 
 ### Browser Setup
 
 ```ts
-import { HCS12BrowserClient, NetworkType } from '@hashgraphonline/standards-sdk';
+import { HCS12BrowserClient } from '@hashgraphonline/standards-sdk';
 
 const browserClient = new HCS12BrowserClient({
-  network: NetworkType.TESTNET,
-  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  network: 'testnet',
   hwc: hashinalsWalletConnectSDK,
 });
 ```

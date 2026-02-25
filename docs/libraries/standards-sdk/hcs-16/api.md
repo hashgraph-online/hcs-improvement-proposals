@@ -34,23 +34,30 @@ import {
 
 ```ts
 enum FloraTopicType { COMMUNICATION=0, TRANSACTION=1, STATE=2 }
-enum FloraOperation { FLORA_CREATE_REQUEST, FLORA_CREATE_ACCEPTED, FLORA_CREATED, TRANSACTION, STATE_UPDATE, FLORA_JOIN_REQUEST, FLORA_JOIN_VOTE, FLORA_JOIN_ACCEPTED }
+enum FloraOperation {
+  FLORA_CREATED = 'flora_created',
+  TRANSACTION = 'transaction',
+  STATE_UPDATE = 'state_update',
+  FLORA_JOIN_REQUEST = 'flora_join_request',
+  FLORA_JOIN_VOTE = 'flora_join_vote',
+  FLORA_JOIN_ACCEPTED = 'flora_join_accepted',
+}
 ```
 
 ## Message Schema (canonical)
 
-All messages share `p: 'hcs-16'` and an `op` from `FloraOperation` with op‑specific fields in `data`.
+All messages share `p: 'hcs-16'` and an `op` from `FloraOperation` with op-specific fields at the top level.
 
 ```json
-{ "p":"hcs-16", "op":"flora_created", "data": { "flora_account":"0.0.x" }, "timestamp":"…", "m":"optional" }
+{ "p":"hcs-16", "op":"flora_created", "operator_id":"0.0.x", "flora_account_id":"0.0.x", "topics": { "communication":"0.0.1", "transaction":"0.0.2", "state":"0.0.3" } }
 ```
 
 ## Node Client (HCS16Client)
 
 ```ts
-constructor(config: { network: 'mainnet'|'testnet'; operatorId: string; operatorKey: string|import('@hashgraph/sdk').PrivateKey; keyType?: 'ed25519'|'ecdsa' })
+constructor(config: { network: 'mainnet'|'testnet'; operatorId: string; operatorKey: string; keyType?: 'ed25519'|'ecdsa' })
 
-createFloraTopic(params: { floraAccountId: string; topicType: FloraTopicType; adminKey?: boolean|string|import('@hashgraph/sdk').PublicKey|import('@hashgraph/sdk').KeyList; submitKey?: boolean|string|import('@hashgraph/sdk').PublicKey|import('@hashgraph/sdk').KeyList }): Promise<{ topicId: string }>
+createFloraTopic(params: { floraAccountId: string; topicType: FloraTopicType; adminKey?: import('@hashgraph/sdk').PublicKey|import('@hashgraph/sdk').KeyList; submitKey?: import('@hashgraph/sdk').PublicKey|import('@hashgraph/sdk').KeyList; autoRenewAccountId?: string; signerKeys?: import('@hashgraph/sdk').PrivateKey[] }): Promise<string>
 
 getRecentMessages(topicId: string, options?: { limit?: number; order?: 'asc'|'desc'; opFilter?: FloraOperation|string }): Promise<Array<{ message: any; consensus_timestamp?: string; sequence_number: number }>>
 getLatestMessage(topicId: string, opFilter?: FloraOperation|string): Promise<(any & { consensus_timestamp?: string; sequence_number: number }) | null>
@@ -61,9 +68,9 @@ getLatestMessage(topicId: string, opFilter?: FloraOperation|string): Promise<(an
 Wallet‑signed equivalents for creating topics and sending messages:
 
 ```ts
-sendFloraCreated({ topicId, floraAccountId }): Promise<void>
-sendTransaction({ topicId, scheduleId, data? }): Promise<void>
-sendStateUpdate({ topicId, stateHash, epoch, memo? }): Promise<void>
+sendFloraCreated({ topicId, operatorId, floraAccountId, topics }): Promise<void>
+sendTransaction({ topicId, operatorId, scheduleId, data? }): Promise<void>
+sendStateUpdate({ topicId, operatorId, hash, epoch?, accountId?, topics?, memo?, transactionMemo? }): Promise<void>
 ```
 
 Source
@@ -92,9 +99,9 @@ function buildHcs16FloraJoinAcceptedTx(params: { topicId: string; operatorId: st
 const c = new HCS16Client({ network: 'testnet', operatorId, operatorKey });
 const cTopic = await c.createFloraTopic({ floraAccountId: '0.0.600', topicType: FloraTopicType.COMMUNICATION });
 await c.sendFloraCreated({
-  topicId: cTopic.topicId,
+  topicId: cTopic,
   operatorId,
   floraAccountId: '0.0.600',
-  topics: { communication: cTopic.topicId, transaction: '0.0.700', state: '0.0.701' },
+  topics: { communication: cTopic, transaction: '0.0.700', state: '0.0.701' },
 });
 ```

@@ -15,6 +15,8 @@ const client = new HCS2Client({
 });
 
 const reg = await client.createRegistry({ registryType: HCS2RegistryType.INDEXED, ttl: 86400 });
-await client.registerEntry(reg.topicId, { key: 'example', value: { url: 'https://…' } });
+await client.registerEntry(reg.topicId!, {
+  targetTopicId: '0.0.700123',
+  metadata: 'https://example.com/meta.json',
+});
 ```
-

@@ -95,9 +95,20 @@ import {
   buildHcs12AddBlockToAssemblyTx,
 } from '@hashgraphonline/standards-sdk';
 
-const reg = buildHcs12RegisterAssemblyTx({ assemblyTopicId: '0.0.500', registration: { p: 'hcs-12', op: 'assembly_register', name: 'Demo', blocks: [] } });
+const reg = buildHcs12RegisterAssemblyTx({
+  assemblyTopicId: '0.0.500',
+  registration: { p: 'hcs-12', op: 'register', name: 'Demo', version: '1.0.0' },
+});
 await (await reg.execute(client)).getReceipt(client);
 
-const addBlock = buildHcs12AddBlockToAssemblyTx({ assemblyTopicId: '0.0.500', operation: { p: 'hcs-12', op: 'assembly_add_block', block: { type: 'text', props: { text: 'Hello' } } } });
+const addBlock = buildHcs12AddBlockToAssemblyTx({
+  assemblyTopicId: '0.0.500',
+  operation: {
+    p: 'hcs-12',
+    op: 'add-block',
+    block_t_id: '0.0.501',
+    attributes: { text: 'Hello' },
+  },
+});
 await (await addBlock.execute(client)).getReceipt(client);
 ```

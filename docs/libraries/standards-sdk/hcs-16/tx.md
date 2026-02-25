@@ -79,7 +79,7 @@ Signature
 buildHcs16MessageTx(params: {
   topicId: string;
   operatorId: string;
-  op: FloraOperation | string;
+  op: FloraOperation;
   body?: Record<string, unknown>;
   transactionMemo?: string;
 }): TopicMessageSubmitTransaction
@@ -88,7 +88,14 @@ buildHcs16MessageTx(params: {
 Example
 
 ```ts
-const tx = buildHcs16MessageTx({ topicId: '0.0.600', operatorId: '0.0.123', op: 'custom', body: { hello: 'world' } });
+import { FloraOperation, buildHcs16MessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs16MessageTx({
+  topicId: '0.0.600',
+  operatorId: '0.0.123',
+  op: FloraOperation.TRANSACTION,
+  body: { schedule_id: '0.0.12345' },
+});
 ```
 
 ## Flora Created — buildHcs16FloraCreatedTx
@@ -100,7 +107,7 @@ buildHcs16FloraCreatedTx({ topicId, operatorId, floraAccountId, topics }): Topic
 ## Transaction — buildHcs16TransactionTx (preferred)
 
 ```ts
-buildHcs16TransactionTx({ topicId, operatorId, scheduleId, data?, transactionMemo? }): TopicMessageSubmitTransaction
+buildHcs16TransactionTx({ topicId, operatorId, scheduleId, data? }): TopicMessageSubmitTransaction
 ```
 
 Notes

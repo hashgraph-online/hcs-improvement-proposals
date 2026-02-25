@@ -175,7 +175,6 @@ Example code:
 const response = await client.createRegistry({
   registryType: HCS2RegistryType.INDEXED,
   ttl: 3600, // Time-to-live in seconds
-  memo: 'My Indexed Registry',
   adminKey: true, // Use operator key as admin key
 });
 
@@ -189,7 +188,6 @@ if (response.success) {
 const nonIndexedResponse = await client.createRegistry({
   registryType: HCS2RegistryType.NON_INDEXED,
   ttl: 3600,
-  memo: 'My Non-Indexed Registry',
 });
 ```
 

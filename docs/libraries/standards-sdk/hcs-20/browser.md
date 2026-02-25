@@ -127,8 +127,9 @@ Use the optional indexer to aggregate balances from a topic’s message history.
 ```ts
 import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk';
 
-const indexer = new HCS20PointsIndexer();
-const state = await indexer.query(points.topicId);
+const indexer = new HCS20PointsIndexer('testnet');
+await indexer.indexOnce({ privateTopics: [points.topicId] });
+const state = indexer.getState();
 console.log(state.balances);
 ```
 

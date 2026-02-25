@@ -275,27 +275,38 @@ const registered2 = await client.registerBlock(blockBuilder2);
 The SDK provides a `BlockRenderer` for displaying blocks:
 
 ```typescript
-import { BlockRenderer } from '@hashgraphonline/standards-sdk';
+import {
+  BlockRenderer,
+  GutenbergBridge,
+  TemplateEngine,
+  BlockStateManager,
+} from '@hashgraphonline/standards-sdk';
 
 // Create renderer instance
+const gutenbergBridge = new GutenbergBridge(logger);
+const templateEngine = new TemplateEngine(logger);
+const blockStateManager = new BlockStateManager(logger);
 const renderer = new BlockRenderer(
   logger,
-  client.gutenbergBridge,
-  client.templateEngine,
-  client.blockStateManager
+  gutenbergBridge,
+  templateEngine,
+  blockStateManager
 );
 
 // Render a block
 const result = await renderer.render(block, {
   container: document.getElementById('app'),  // Or selector string
   initialState: {
-    count: 5,
-    step: 2,
-    label: 'Demo Counter',
+    attributes: {
+      count: 5,
+      step: 2,
+      label: 'Demo Counter',
+    },
+    actionResults: {},
   },
   assembly,           // Optional: assembly context
   actionRegistry,     // Optional: for action execution
-  network: NetworkType.TESTNET,
+  network: 'testnet',
   theme: 'light',     // Optional: 'light' or 'dark'
   responsive: true,   // Optional: enable responsive design
 });
@@ -454,21 +465,24 @@ import { BlockStateManager } from '@hashgraphonline/standards-sdk';
 const stateManager = new BlockStateManager(logger);
 
 // Subscribe to state changes
-stateManager.subscribe('block-123', (newState) => {
+const subscriberCallback = (newState: any) => {
   console.log('Block state updated:', newState);
-});
+};
+stateManager.onStateChange('block-123', subscriberCallback);
 
 // Update block state
-stateManager.updateState('block-123', {
-  count: 42,
-  lastAction: 'increment',
+stateManager.updateBlockState('block-123', {
+  attributes: {
+    count: 42,
+    lastAction: 'increment',
+  },
 });
 
 // Get current state
-const currentState = stateManager.getState('block-123');
+const currentState = stateManager.getBlockState('block-123');
 
 // Unsubscribe when done
-stateManager.unsubscribe('block-123', subscriberCallback);
+stateManager.removeStateChangeListener('block-123', subscriberCallback);
 ```
 
 ---

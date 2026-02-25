@@ -74,7 +74,7 @@ interface RegistryEntry {
 ```ts
 enum HCS2RegistryType { INDEXED = 0, NON_INDEXED = 1 }
 
-enum HCS2Operation { REGISTER = 0, UPDATE = 1, DELETE = 2, MIGRATE = 3 }
+enum HCS2Operation { REGISTER = 'register', UPDATE = 'update', DELETE = 'delete', MIGRATE = 'migrate' }
 ```
 
 ## Message Schema (canonical)
@@ -83,16 +83,16 @@ All HCS‑2 registry messages share `p: 'hcs-2'` and an `op` from `HCS2Operation
 
 ```json
 // REGISTER
-{ "p": "hcs-2", "op": 0, "t_id": "0.0.123", "metadata": "...", "m": "optional" }
+{ "p": "hcs-2", "op": "register", "t_id": "0.0.123", "metadata": "...", "m": "optional" }
 
 // UPDATE (indexed only)
-{ "p": "hcs-2", "op": 1, "uid": "abc123", "t_id": "0.0.456", "metadata": "...", "m": "..." }
+{ "p": "hcs-2", "op": "update", "uid": "abc123", "t_id": "0.0.456", "metadata": "...", "m": "..." }
 
 // DELETE (indexed only)
-{ "p": "hcs-2", "op": 2, "uid": "abc123", "m": "..." }
+{ "p": "hcs-2", "op": "delete", "uid": "abc123", "m": "..." }
 
 // MIGRATE (both types)
-{ "p": "hcs-2", "op": 3, "t_id": "0.0.789", "metadata": "...", "m": "..." }
+{ "p": "hcs-2", "op": "migrate", "t_id": "0.0.789", "metadata": "...", "m": "..." }
 ```
 
 ## Node Client (HCS2Client)

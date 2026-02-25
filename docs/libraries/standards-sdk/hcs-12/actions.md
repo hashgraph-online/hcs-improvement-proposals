@@ -32,7 +32,7 @@ interface WasmInterface {
     action: string,
     params: string,
     network: 'mainnet' | 'testnet',
-    hashLinkMemo: string
+    memo: string
   ): Promise<string>;
 
   // Retrieves information without modifying state
@@ -71,7 +71,7 @@ async POST(
   action: string,
   params: string,
   network: 'mainnet' | 'testnet',
-  hashLinkMemo: string
+  memo: string
 ): Promise<string> {
   const parsedParams = JSON.parse(params);
   
@@ -157,11 +157,9 @@ import { readFile } from 'fs/promises';
 // Initialize client and logger
 const logger = new Logger({ module: 'ActionRegistration' });
 const client = new HCS12Client({
-  network: NetworkType.TESTNET,
-  hcs12: {
-    operatorId: process.env.HEDERA_OPERATOR_ID!,
-    operatorPrivateKey: process.env.HEDERA_OPERATOR_KEY!
-  },
+  network: 'testnet',
+  operatorId: process.env.HEDERA_OPERATOR_ID!,
+  operatorPrivateKey: process.env.HEDERA_OPERATOR_KEY!,
   logger
 });
 
@@ -213,21 +211,19 @@ const jsHash = await actionBuilder.calculateHash(jsWrapper);
 // Inscribe WASM and JS files via HCS-1
 const wasmInscription = await client.inscribeFile(
   wasmBuffer, 
-  'token-swap.wasm',
-  'application/wasm'
+  'token-swap.wasm'
 );
 const jsInscription = await client.inscribeFile(
   Buffer.from(jsWrapper), 
-  'token-swap.js',
-  'application/javascript'
+  'token-swap.js'
 );
 
 // Build complete action registration
 const actionRegistration = actionBuilder
-  .setTopicId(wasmInscription.topicId)     // WASM module topic ID
+  .setTopicId(wasmInscription.topic_id)    // WASM module topic ID
   .setWasmHash(wasmHash)                   // WASM binary hash
   .setHash(infoHash)                       // INFO method result hash
-  .setJsTopicId(jsInscription.topicId)     // JavaScript wrapper topic ID
+  .setJsTopicId(jsInscription.topic_id)    // JavaScript wrapper topic ID
   .setJsHash(jsHash)                       // JavaScript wrapper hash
   .setInterfaceVersion('0.2.95')           // wasm-bindgen version
   .addValidationRule('swap', {             // Parameter validation
@@ -481,16 +477,18 @@ const actionRegistration = await actionBuilder
 Actions are executed through the WASM executor:
 
 ```typescript
-// Execute an action
-const result = await client.executeAction({
-  actionTopicId: '0.0.123456',
+import { WasmExecutor } from '@hashgraphonline/standards-sdk';
+
+const wasmExecutor = new WasmExecutor(logger, 'testnet');
+
+// Execute an action registration
+const result = await wasmExecutor.execute(actionRegistration, {
   method: 'POST',
-  action: 'transfer',
   params: {
+    operation: 'transfer',
     amount: 100,
-    to: '0.0.987654'
+    to: '0.0.987654',
   },
-  network: 'testnet'
 });
 
 console.log('Action result:', result);
@@ -892,83 +890,62 @@ export function cleanup() {
 ### Basic Action Execution
 
 ```typescript
-import { HCS12Client, NetworkType, Logger } from '@hashgraphonline/standards-sdk';
+import { Logger, WasmExecutor } from '@hashgraphonline/standards-sdk';
 
-// Initialize client
-const client = new HCS12Client({
-  network: NetworkType.TESTNET,
-  hcs12: {
-    operatorId: process.env.HEDERA_OPERATOR_ID!,
-    operatorPrivateKey: process.env.HEDERA_OPERATOR_KEY!
-  },
-  logger: new Logger({ module: 'ActionExecution' })
-});
+const logger = new Logger({ module: 'ActionExecution' });
+const wasmExecutor = new WasmExecutor(logger, 'testnet');
 
-// Execute a token swap
+// Execute a token swap (POST)
 try {
-  const swapResult = await client.executeAction({
-    actionTopicId: '0.0.123456',
+  const swapResult = await wasmExecutor.execute(actionRegistration, {
     method: 'POST',
-    action: 'swap',
     params: {
-      token_in: '0.0.456789',
-      token_out: '0.0.654321', 
-      amount: 1000000,
-      slippage: 2.0
-    },
-    network: NetworkType.TESTNET,
-    memo: 'Swap via HashLinks DEX'
-  });
-  
-  console.log('Swap executed:', {
-    transactionId: swapResult.transaction_id,
-    outputAmount: swapResult.output_amount,
-    exchangeRate: swapResult.exchange_rate
-  });
-} catch (error) {
-  if (error.code === 'VALIDATION_ERROR') {
-    console.error('Parameter validation failed:', error.details);
-  } else if (error.code === 'INSUFFICIENT_BALANCE') {
-    console.error('Insufficient token balance for swap');
-  } else if (error.code === 'SLIPPAGE_EXCEEDED') {
-    console.error('Price moved beyond acceptable slippage');
-  } else {
-    console.error('Unexpected error:', error.message);
-  }
-}
-
-// Get swap quote (GET operation)
-try {
-  const quote = await client.executeAction({
-    actionTopicId: '0.0.123456',
-    method: 'GET',
-    action: 'quote',
-    params: {
+      operation: 'swap',
       token_in: '0.0.456789',
       token_out: '0.0.654321',
-      amount: 1000000
+      amount: 1000000,
+      slippage: 2.0,
     },
-    network: NetworkType.TESTNET
   });
-  
-  console.log('Swap quote:', {
-    inputAmount: quote.input_amount,
-    outputAmount: quote.output_amount,
-    exchangeRate: quote.exchange_rate,
-    priceImpact: quote.price_impact,
-    fees: quote.fees
-  });
+  console.log('Swap executed:', swapResult);
 } catch (error) {
-  console.error('Quote failed:', error.message);
+  console.error('Swap failed:', error);
+}
+
+// Get swap quote (GET)
+try {
+  const quote = await wasmExecutor.execute(actionRegistration, {
+    method: 'GET',
+    params: {
+      operation: 'quote',
+      token_in: '0.0.456789',
+      token_out: '0.0.654321',
+      amount: 1000000,
+    },
+  });
+  console.log('Swap quote:', quote);
+} catch (error) {
+  console.error('Quote failed:', error);
 }
 ```
 
 ### Advanced Error Handling
 
 ```typescript
+import { ActionRegistration, Logger, WasmExecutor } from '@hashgraphonline/standards-sdk';
+
+type ActionExecutionConfig = {
+  method: 'POST' | 'GET' | 'INFO';
+  params: Record<string, unknown>;
+};
+
 // Custom error handler with retry logic
 class ActionExecutor {
-  constructor(private client: HCS12Client, private logger: Logger) {}
+  constructor(
+    private wasmExecutor: WasmExecutor,
+    private action: ActionRegistration,
+    private logger: Logger,
+  ) {}
   
   async executeWithRetry(
     actionConfig: ActionExecutionConfig,
@@ -980,14 +957,13 @@ class ActionExecutor {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         this.logger.info(`Executing action (attempt ${attempt}):`, {
-          action: actionConfig.action,
           method: actionConfig.method
         });
         
-        const result = await this.client.executeAction(actionConfig);
+        const result = await this.wasmExecutor.execute(this.action, actionConfig);
         
         // Validate result structure
-        if (!this.isValidResult(result, actionConfig.action)) {
+        if (!this.isValidResult(result)) {
           throw new Error('Invalid result structure returned by action');
         }
         
@@ -997,16 +973,6 @@ class ActionExecutor {
       } catch (error) {
         lastError = error;
         this.logger.warn(`Action execution failed (attempt ${attempt}):`, error.message);
-        
-        // Don't retry on validation errors
-        if (error.code === 'VALIDATION_ERROR' || error.code === 'INVALID_PARAMS') {
-          throw error;
-        }
-        
-        // Don't retry on insufficient funds
-        if (error.code === 'INSUFFICIENT_BALANCE') {
-          throw error;
-        }
         
         // Wait before retry
         if (attempt < maxRetries) {
@@ -1018,20 +984,8 @@ class ActionExecutor {
     throw new Error(`Action failed after ${maxRetries} attempts: ${lastError.message}`);
   }
   
-  private isValidResult(result: any, action: string): boolean {
-    // Action-specific result validation
-    switch (action) {
-      case 'swap':
-        return result && 
-               typeof result.transaction_id === 'string' && 
-               typeof result.output_amount === 'number';
-      case 'quote':
-        return result && 
-               typeof result.output_amount === 'number' && 
-               typeof result.exchange_rate === 'number';
-      default:
-        return true;
-    }
+  private isValidResult(result: any): boolean {
+    return result && typeof result.success === 'boolean';
   }
   
   private delay(ms: number): Promise<void> {
@@ -1040,15 +994,13 @@ class ActionExecutor {
 }
 
 // Usage
-const executor = new ActionExecutor(client, logger);
+const wasmExecutor = new WasmExecutor(logger, 'testnet');
+const executor = new ActionExecutor(wasmExecutor, actionRegistration, logger);
 
 try {
   const result = await executor.executeWithRetry({
-    actionTopicId: '0.0.123456',
     method: 'POST',
-    action: 'swap',
-    params: { token_in: '0.0.456', token_out: '0.0.789', amount: 1000 },
-    network: NetworkType.TESTNET
+    params: { operation: 'swap', token_in: '0.0.456', token_out: '0.0.789', amount: 1000 },
   });
   
   console.log('Swap completed with retry logic:', result);
@@ -1107,12 +1059,12 @@ Error: Validation failed for action 'swap': amount is required
 ```typescript
 // Debug validation
 try {
-  await client.executeAction(config);
+  await wasmExecutor.execute(actionRegistration, {
+    method: 'POST',
+    params: config,
+  });
 } catch (error) {
-  if (error.code === 'VALIDATION_ERROR') {
-    console.log('Validation details:', error.details);
-    console.log('Expected schema:', error.schema);
-  }
+  console.log('Validation/execution error:', error);
 }
 
 // Test validation independently
@@ -1159,17 +1111,13 @@ Error: Action execution timeout after 5000ms
 
 **Solution**: Implement proper timeout handling
 ```typescript
-// Configure timeouts
-const client = new HCS12Client({
-  // ... other config
-  executionTimeout: 10000,  // 10 seconds
-  networkTimeout: 5000      // 5 seconds for network calls
-});
-
 // Handle timeouts gracefully
 try {
   const result = await Promise.race([
-    client.executeAction(config),
+    wasmExecutor.execute(actionRegistration, {
+      method: 'POST',
+      params: config,
+    }),
     new Promise((_, reject) => 
       setTimeout(() => reject(new Error('Custom timeout')), 8000)
     )

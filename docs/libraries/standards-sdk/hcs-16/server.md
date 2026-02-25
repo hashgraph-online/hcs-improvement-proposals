@@ -22,13 +22,13 @@ const sTopic = await hcs16.createFloraTopic({ floraAccountId, topicType: FloraTo
 
 // Announce to members on the CTopic
 await hcs16.sendFloraCreated({
-  topicId: cTopic.topicId,
+  topicId: cTopic,
   operatorId,
   floraAccountId,
   topics: {
-    communication: cTopic.topicId,
-    transaction: tTopic.topicId,
-    state: sTopic.topicId,
+    communication: cTopic,
+    transaction: tTopic,
+    state: sTopic,
   },
 });
 ```
@@ -43,7 +43,7 @@ Goal: publish a proposal on the Transaction Topic for members to review/sign.
 
 ```ts
 await hcs16.sendTransaction({
-  topicId: tTopic.topicId,
+  topicId: tTopic,
   operatorId,
   scheduleId: '0.0.1234',
   data: 'release funds for invoice #42',
@@ -60,7 +60,7 @@ Goal: emit a compact snapshot to the State Topic after meaningful changes.
 
 ```ts
 await hcs16.sendStateUpdate({
-  topicId: sTopic.topicId,
+  topicId: sTopic,
   operatorId,
   hash: '0x…',
   epoch: 7,
@@ -78,7 +78,7 @@ Goal: run the join handshake on the Communication Topic.
 
 ```ts
 await hcs16.sendFloraJoinRequest({
-  topicId: cTopic.topicId,
+  topicId: cTopic,
   operatorId,
   accountId: '0.0.2468',
   connectionRequestId: 42,
@@ -86,7 +86,7 @@ await hcs16.sendFloraJoinRequest({
   connectionSeq: 7,
 });
 await hcs16.sendFloraJoinVote({
-  topicId: cTopic.topicId,
+  topicId: cTopic,
   operatorId,
   accountId: '0.0.2468',
   approve: true,
@@ -94,7 +94,7 @@ await hcs16.sendFloraJoinVote({
   connectionSeq: 7,
 });
 await hcs16.sendFloraJoinAccepted({
-  topicId: cTopic.topicId,
+  topicId: cTopic,
   operatorId,
   members: ['0.0.111', '0.0.222', '0.0.2468'],
   epoch: 8,
@@ -110,8 +110,8 @@ Notes:
 The client exposes helpers to read and filter messages by operation when processing topics.
 
 ```ts
-const recent = await hcs16.getRecentMessages(cTopic.topicId, { limit: 25, order: 'desc', opFilter: 'flora_created' });
-const latest = await hcs16.getLatestMessage(cTopic.topicId, 'flora_created');
+const recent = await hcs16.getRecentMessages(cTopic, { limit: 25, order: 'desc', opFilter: 'flora_created' });
+const latest = await hcs16.getLatestMessage(cTopic, 'flora_created');
 ```
 
 That’s all you need on Node: build with `tx.ts`, execute with the SDK client, and keep your flows auditable and minimal.
