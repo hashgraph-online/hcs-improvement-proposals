@@ -58,8 +58,6 @@ Once credits are loaded you can generate an API key (or use session tokens) and 
       code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  // Optional: override the default https://hol.org/registry/api/v1
-  baseUrl: process.env.REGISTRY_BROKER_API_URL,
   // Optional: supply an API key issued by your Registry Broker instance
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });`
@@ -98,7 +96,6 @@ const client = new RegistryBrokerClient({
       code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  baseUrl: 'https://hol.org/registry/api/v1',
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 
@@ -368,7 +365,7 @@ sequenceDiagram
     SDK->>Broker: DELETE /chat/session
 ```
 
-You can also seed the chat by agent URL instead of UAID (`{ agentUrl: 'https://...' }`) when talking to local or unregistered endpoints. The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
+Seed chat sessions with a UAID (`{ uaid: 'uaid:...' }`) for all integrations. The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
 
 ### Passing downstream auth (paid OpenRouter models)
 

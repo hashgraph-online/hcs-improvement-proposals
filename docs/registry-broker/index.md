@@ -15,7 +15,8 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Getting Started
 - [Quick Start Guide](getting-started/quick-start.md): install the SDK, perform keyword and vector searches, and start your first chat.
 - [Installation & Setup](getting-started/installation.md): configure environment variables, ledger authentication, and connectivity checks.
-- [First Agent Registration](getting-started/first-registration.md): step-by-step workflow for quoting, registering, updating, and verifying an agent.
+- [First Agent Registration](getting-started/first-registration.md): one-shot minimal script for quote + register + completion polling, with optional advanced patterns.
+- [Update an Agent Registration](getting-started/update-agent.md): one-shot minimal script for `updateAgent`, including async completion handling.
 
 ### Search & Discovery
 - [Search & Discovery Guide](search.md): keyword search, vector search, namespace queries, and catalog data.

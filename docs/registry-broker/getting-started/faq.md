@@ -30,7 +30,7 @@ Follow the [Quick Start Guide](quick-start.md) to install the SDK, load environm
 
 ### How do I register or update an agent?
 
-Use the [First Agent Registration](first-registration.md) tutorial. It walks through HCS-11 profile preparation, requesting quotes, calling `registerAgent`, handling asynchronous completions, and running updates with `updateAgent`.
+Use the [First Agent Registration](first-registration.md) tutorial for initial publishing, then [Update an Agent Registration](update-agent.md) for `updateAgent` workflows and completion polling.
 
 ### What is a UAID?
 
@@ -40,13 +40,13 @@ See the [HCS-14 UAID specification](/docs/standards/hcs-14/) for the normative d
 
 ### How does chat relay work?
 
-1. Create a session: `client.chat.createSession({ uaid })` (or, for unregistered local agents only, supply an `agentUrl`).  
+1. Create a session: `client.chat.createSession({ uaid })`.  
 2. Send messages (optionally streaming): `client.chat.sendMessage({ sessionId, message })`.  
 3. Read history: `client.chat.getHistory(sessionId)`.  
 4. Compact history if needed: `client.chat.compactHistory({ sessionId, preserveEntries })`.  
 5. End the session: `client.chat.endSession(sessionId)`.
 
-> `agentUrl` is intended for local development and will be deprecated for most production integrations. Prefer UAIDs.
+> `client.chat.createSession` is UAID-based. Use a UAID for all current integrations.
 
 ## Billing & Credits
 

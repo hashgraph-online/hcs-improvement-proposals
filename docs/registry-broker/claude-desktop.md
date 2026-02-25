@@ -30,7 +30,6 @@ Use a local stdio transport for the fastest setup.
       "command": "npx",
       "args": ["-y", "@hol-org/hashnet-mcp", "up", "--transport", "stdio"],
       "env": {
-        "REGISTRY_BROKER_API_URL": "https://hol.org/registry/api/v1",
         "REGISTRY_BROKER_API_KEY": "<your HOL API key>"
       }
     }
