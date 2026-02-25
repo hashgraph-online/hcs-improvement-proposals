@@ -24,8 +24,6 @@ import {
   buildHcs16FloraCreatedTx,
   buildHcs16TransactionTx,
   buildHcs16StateUpdateTx,
-  buildHcs16FloraCreateRequestTx,
-  buildHcs16FloraCreateAcceptedTx,
   buildHcs16FloraJoinRequestTx,
   buildHcs16FloraJoinVoteTx,
   buildHcs16FloraJoinAcceptedTx,
@@ -75,14 +73,12 @@ Source
 
 ```ts
 function buildHcs16CreateFloraTopicTx(params: { floraAccountId: string; topicType: FloraTopicType; adminKey?: any; submitKey?: any; operatorPublicKey?: import('@hashgraph/sdk').PublicKey }): import('@hashgraph/sdk').TopicCreateTransaction;
-function buildHcs16FloraCreatedTx(params: { topicId: string; floraAccountId: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16TransactionTx(params: { topicId: string; scheduleId: string; data?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16StateUpdateTx(params: { topicId: string; stateHash: string; epoch: number; memo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16FloraCreateRequestTx(params: { topicId: string; members: string[]; threshold: number; seedHbar?: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16FloraCreateAcceptedTx(params: { topicId: string; proposalSeq: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16FloraJoinRequestTx(params: { topicId: string; candidateAccountId: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16FloraJoinVoteTx(params: { topicId: string; candidateAccountId: string; approve: boolean }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
-function buildHcs16FloraJoinAcceptedTx(params: { topicId: string; members: string[]; epoch: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16FloraCreatedTx(params: { topicId: string; operatorId: string; floraAccountId: string; topics: { communication: string; transaction: string; state: string } }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16TransactionTx(params: { topicId: string; operatorId: string; scheduleId: string; data?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16StateUpdateTx(params: { topicId: string; operatorId: string; hash: string; epoch?: number; accountId?: string; topics?: string[]; memo?: string; transactionMemo?: string }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16FloraJoinRequestTx(params: { topicId: string; operatorId: string; accountId: string; connectionRequestId: number; connectionTopicId: string; connectionSeq: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16FloraJoinVoteTx(params: { topicId: string; operatorId: string; accountId: string; approve: boolean; connectionRequestId: number; connectionSeq: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
+function buildHcs16FloraJoinAcceptedTx(params: { topicId: string; operatorId: string; members: string[]; epoch?: number }): import('@hashgraph/sdk').TopicMessageSubmitTransaction;
 ```
 
 ## Validation
@@ -95,5 +91,10 @@ function buildHcs16FloraJoinAcceptedTx(params: { topicId: string; members: strin
 ```ts
 const c = new HCS16Client({ network: 'testnet', operatorId, operatorKey });
 const cTopic = await c.createFloraTopic({ floraAccountId: '0.0.600', topicType: FloraTopicType.COMMUNICATION });
-await (await buildHcs16FloraCreatedTx({ topicId: cTopic.topicId, floraAccountId: '0.0.600' })).execute(c['client']);
+await c.sendFloraCreated({
+  topicId: cTopic.topicId,
+  operatorId,
+  floraAccountId: '0.0.600',
+  topics: { communication: cTopic.topicId, transaction: '0.0.700', state: '0.0.701' },
+});
 ```

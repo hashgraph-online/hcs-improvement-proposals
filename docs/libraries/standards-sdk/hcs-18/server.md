@@ -69,18 +69,19 @@ await client.respond({
 ## Completion (hand‑off to HCS‑16)
 
 ```ts
-import { FloraAccountManager } from '@hashgraphonline/standards-sdk';
+import { HCS16Client } from '@hashgraphonline/standards-sdk';
 
 // After enough acceptances, create the Flora and emit `complete`
-const floraMgr = new FloraAccountManager(hederaClient, 'testnet');
-const flora = await floraMgr.createFlora({
-  displayName: 'Demo Flora',
-  members: [
-    { accountId: '0.0.123', publicKey: pubA, privateKey: privA },
-    { accountId: '0.0.456', publicKey: pubB },
-  ],
+const hcs16 = new HCS16Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const flora = await hcs16.createFloraAccountWithTopics({
+  members: ['0.0.123', '0.0.456'],
   threshold: 2,
-  initialBalance: 10,
+  initialBalanceHbar: 10,
 });
 
 await client.complete({
@@ -88,12 +89,8 @@ await client.complete({
   data: {
     proposer: '0.0.123',
     proposal_seq: proposalSeq,
-    flora_account: flora.floraAccountId.toString(),
-    topics: {
-      communication: flora.topics.communication.toString(),
-      transaction: flora.topics.transaction.toString(),
-      state: flora.topics.state.toString(),
-    },
+    flora_account: flora.floraAccountId,
+    topics: flora.topics,
   },
 });
 ```
@@ -117,4 +114,3 @@ const ready = client.isProposalReady(proposal);
 - Tolerate mirror‑node lag: retry reads with small backoff windows.
 - Log proposals and responses with timestamps for audits.
 - Avoid hammering mirror‑node: batch reads and limit pages.
-

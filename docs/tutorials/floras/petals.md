@@ -200,7 +200,7 @@ const broker = new RegistryBrokerClient({
   userAgent: '@hol-org/petal',
 });
 
-await broker.verifyLedgerAccess({
+await broker.authenticateWithLedgerCredentials({
   accountId: petalAccountId,
   network: 'hedera:testnet',
   hederaPrivateKey: process.env.PETAL_BASE_KEY!,
@@ -227,11 +227,15 @@ const hcs18 = new HCS18Client({
   operatorKey: process.env.PETAL_BASE_KEY!,
 });
 
-await hcs18.sendPetalAnnouncement({
+await hcs18.announce({
   discoveryTopicId: process.env.HCS18_DISCOVERY_TOPIC!,
-  floraPreferences: {
-    adapterSetUri: process.env.FLORA_CONFIG_URI,
-    minThreshold: 2,
+  data: {
+    account: petalAccountId,
+    petal: { name: 'Demo Petal A', priority: 500 },
+    capabilities: {
+      protocols: ['hcs-16'],
+      group_preferences: { threshold_ratios: [2 / 3] },
+    },
   },
 });
 ```

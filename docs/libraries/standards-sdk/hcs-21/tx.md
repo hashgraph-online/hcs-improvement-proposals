@@ -16,8 +16,8 @@ import {
   buildHcs21CreateRegistryTx,
   HCS21TopicType,
   Logger,
-  MaybeKey,
 } from '@hashgraphonline/standards-sdk';
+import { PublicKey } from '@hashgraph/sdk';
 
 const logger = new Logger({ module: 'hcs-21-tx', level: 'info' });
 
@@ -25,8 +25,8 @@ const tx = buildHcs21CreateRegistryTx({
   ttl: 3600,
   indexed: 0,
   type: HCS21TopicType.ADAPTER_REGISTRY,
-  adminKey: myAdminKey as MaybeKey,
-  submitKey: mySubmitKey as MaybeKey,
+  adminKey: PublicKey.fromString(myAdminKey),
+  submitKey: PublicKey.fromString(mySubmitKey),
 });
 
 const response = await tx.setTransactionMemo('flora adapter registry').execute(client);

@@ -105,8 +105,8 @@ Run the XMTP demos from the `standards-sdk` package:
 
 ```bash
 cd standards-sdk
-pnpm run demo:registry-broker-xmtp
-pnpm run demo:registry-broker-erc8004-xmtp
+pnpm exec tsx demo/registry-broker/registry-broker-xmpt-demo.ts
+pnpm exec tsx demo/registry-broker/register-agent-erc8004-xmpt.ts
 ```
 
 The demos:

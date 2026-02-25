@@ -48,7 +48,12 @@ enum SecurityLevel {
 Implement fine-grained access control with capabilities:
 
 ```typescript
-import { PermissionSystem, Capability, SecurityLevel } from '@hashgraphonline/standards-sdk';
+import { Capability } from '@hashgraphonline/standards-sdk';
+
+const SecurityLevel = {
+  HIGH: 'high',
+  CRITICAL: 'critical',
+} as const;
 
 // Initialize permission system
 const permissionSystem = new PermissionSystem({
@@ -319,7 +324,7 @@ async function delegatePermission(
 Implement comprehensive content verification:
 
 ```typescript
-import { HashVerifier, ContentIntegrityError } from '@hashgraphonline/standards-sdk';
+// HashVerifier and ContentIntegrityError are application-layer helpers.
 
 const hashVerifier = new HashVerifier({
   algorithm: 'sha256',           // Hash algorithm
@@ -555,7 +560,7 @@ async function verifyWasmModule(
 Implement digital signature verification for high-security operations:
 
 ```typescript
-import { SignatureVerifier, SignatureScheme } from '@hashgraphonline/standards-sdk';
+// SignatureVerifier and SignatureScheme are application-layer helpers.
 
 const signatureVerifier = new SignatureVerifier({
   supportedSchemes: [
@@ -717,7 +722,7 @@ async function verifyCertificateChain(
 Implement strict WASM security validation:
 
 ```typescript
-import { WasmValidator, SecurityViolation } from '@hashgraphonline/standards-sdk';
+import { WasmValidator } from '@hashgraphonline/standards-sdk';
 
 const wasmValidator = new WasmValidator({
   maxMemoryPages: 256,              // 16MB memory limit
@@ -971,7 +976,7 @@ class WasmRuntimeMonitor {
 Implement detailed audit logging for compliance and security monitoring:
 
 ```typescript
-import { AuditLogger, ComplianceReporter } from '@hashgraphonline/standards-sdk';
+// AuditLogger and ComplianceReporter are application-layer helpers.
 
 const auditLogger = new AuditLogger({
   storage: 'secure',            // Secure storage backend

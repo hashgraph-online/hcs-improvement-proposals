@@ -1,5 +1,5 @@
 ---
-title: "Browser — HCS‑20BrowserClient"
+title: "Browser — BrowserHCS20Client"
 description: "Build wallet‑first points experiences: deploy, mint, transfer, burn, and register topics in directories — all from the browser."
 sidebar_position: 3
 ---
@@ -26,14 +26,14 @@ sequenceDiagram
 ## Setup
 
 ```ts
-import { HCS20BrowserClient } from '@hashgraphonline/standards-sdk';
+import { BrowserHCS20Client } from '@hashgraphonline/standards-sdk';
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 
 const hwc = new HashinalsWalletConnectSDK();
 await hwc.init();
 await hwc.connect();
 
-const client = new HCS20BrowserClient({
+const client = new BrowserHCS20Client({
   network: 'testnet',
   hwc,
   // Optional: configure a known public topic or registry directory

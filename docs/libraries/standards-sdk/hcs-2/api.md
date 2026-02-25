@@ -17,7 +17,7 @@ Sources
 ```ts
 import {
   HCS2Client,
-  HCS2BrowserClient,
+  BrowserHCS2Client,
   HCS2RegistryType,
   HCS2Operation,
   type HCS2ClientConfig,
@@ -118,7 +118,7 @@ Notes
 - `adminKey`/`submitKey` in `CreateRegistryOptions` accept boolean | string | PublicKey | PrivateKey; boolean defaults to the operator key.
 - Indexed registries support UPDATE/DELETE with `uid`; non‑indexed do not.
 
-## Browser Client (HCS2BrowserClient)
+## Browser Client (BrowserHCS2Client)
 
 Wallet‑signed equivalents of the Node methods; params and results mirror the Node client. Transactions are frozen/executed with the provided signer.
 

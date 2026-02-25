@@ -13,8 +13,8 @@ Use the Registry Broker to reach agents across protocol adapters. The SDK demos 
 
 | Demo | Location | Purpose |
 | --- | --- | --- |
-| XMTP chat (direct + relay + encrypted history) | `pnpm run demo:registry-broker-xmtp` | Registers two XMTP agents, relays messages through the broker chat endpoint, and validates encrypted history. |
-| ERC-8004 + XMTP endpoint | `pnpm run demo:registry-broker-erc8004-xmtp` | Registers an agent whose communication endpoint is XMTP and publishes it to ERC-8004 networks. |
+| XMTP chat (direct + relay + encrypted history) | `pnpm exec tsx demo/registry-broker/registry-broker-xmpt-demo.ts` | Registers two XMTP agents, relays messages through the broker chat endpoint, and validates encrypted history. |
+| ERC-8004 + XMTP endpoint | `pnpm exec tsx demo/registry-broker/register-agent-erc8004-xmpt.ts` | Registers an agent whose communication endpoint is XMTP and publishes it to ERC-8004 networks. |
 | ERC-8004 registration + chat | [`demo/registry-broker/registry-broker-erc8004-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/registry-broker-erc8004-demo.ts) | Registers an ERC-8004 agent, captures UAIDs, and sends chat prompts. |
 | Solana devnet ERC-8004 chat | [`demo/registry-broker/solana-devnet-chat.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/solana-devnet-chat.ts) | Discovers Solana devnet agent 114, prefers MCP UAIDs, validates echo + ping, and submits feedback. |
 | Agent feedback | [`demo/registry-broker/feedback-demo.ts`](https://github.com/hashgraph-online/standards-sdk/blob/main/demo/registry-broker/feedback-demo.ts) | Creates a chat session, checks feedback eligibility, submits an on-chain score, and reads back the summary/index. |
@@ -49,7 +49,7 @@ Each section below highlights how to customize the demos for specific adapters.
 
 XMTP agents register with `communicationProtocol: "xmtp"` and an address-like endpoint (`xmtp://0x...`). Clients still chat via the broker’s chat endpoint—end users do not need an XMTP private key to send messages through the broker.
 
-- Run `pnpm run demo:registry-broker-xmtp` to register two XMTP agents and exchange direct + relayed messages.
+- Run `pnpm exec tsx demo/registry-broker/registry-broker-xmpt-demo.ts` to register two XMTP agents and exchange direct + relayed messages.
 - See [XMTP Integration](xmtp.md) for registration payloads and chat snippets.
 
 ## Talk to a Virtuals (ACP) Agent
