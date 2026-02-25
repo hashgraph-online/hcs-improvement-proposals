@@ -79,28 +79,35 @@ Signature
 buildHcs16MessageTx(params: {
   topicId: string;
   operatorId: string;
-  op: FloraOperation | string;
+  op: FloraOperation;
   body?: Record<string, unknown>;
-  analyticsMemo?: string;
+  transactionMemo?: string;
 }): TopicMessageSubmitTransaction
 ```
 
 Example
 
 ```ts
-const tx = buildHcs16MessageTx({ topicId: '0.0.600', operatorId: '0.0.123', op: 'custom', body: { hello: 'world' } });
+import { FloraOperation, buildHcs16MessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs16MessageTx({
+  topicId: '0.0.600',
+  operatorId: '0.0.123',
+  op: FloraOperation.TRANSACTION,
+  body: { schedule_id: '0.0.12345' },
+});
 ```
 
 ## Flora Created — buildHcs16FloraCreatedTx
 
 ```ts
-buildHcs16FloraCreatedTx({ topicId, operatorId, floraAccountId, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16FloraCreatedTx({ topicId, operatorId, floraAccountId, topics }): TopicMessageSubmitTransaction
 ```
 
 ## Transaction — buildHcs16TransactionTx (preferred)
 
 ```ts
-buildHcs16TransactionTx({ topicId, operatorId, scheduleId, data?, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16TransactionTx({ topicId, operatorId, scheduleId, data? }): TopicMessageSubmitTransaction
 ```
 
 Notes
@@ -109,37 +116,25 @@ Notes
 ## State Update — buildHcs16StateUpdateTx
 
 ```ts
-buildHcs16StateUpdateTx({ topicId, operatorId, stateHash, epoch?, memo?, analyticsMemo? }): TopicMessageSubmitTransaction
-```
-
-## Flora Create Request — buildHcs16FloraCreateRequestTx
-
-```ts
-buildHcs16FloraCreateRequestTx({ topicId, operatorId, members, threshold, purpose?, analyticsMemo? }): TopicMessageSubmitTransaction
-```
-
-## Flora Create Accepted — buildHcs16FloraCreateAcceptedTx
-
-```ts
-buildHcs16FloraCreateAcceptedTx({ topicId, operatorId, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16StateUpdateTx({ topicId, operatorId, hash, epoch?, accountId?, topics?, memo?, transactionMemo? }): TopicMessageSubmitTransaction
 ```
 
 ## Join Request — buildHcs16FloraJoinRequestTx
 
 ```ts
-buildHcs16FloraJoinRequestTx({ topicId, operatorId, candidateAccountId, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16FloraJoinRequestTx({ topicId, operatorId, accountId, connectionRequestId, connectionTopicId, connectionSeq }): TopicMessageSubmitTransaction
 ```
 
 ## Join Vote — buildHcs16FloraJoinVoteTx
 
 ```ts
-buildHcs16FloraJoinVoteTx({ topicId, operatorId, candidateAccountId, approve, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16FloraJoinVoteTx({ topicId, operatorId, accountId, approve, connectionRequestId, connectionSeq }): TopicMessageSubmitTransaction
 ```
 
 ## Join Accepted — buildHcs16FloraJoinAcceptedTx
 
 ```ts
-buildHcs16FloraJoinAcceptedTx({ topicId, operatorId, members, epoch?, analyticsMemo? }): TopicMessageSubmitTransaction
+buildHcs16FloraJoinAcceptedTx({ topicId, operatorId, members, epoch? }): TopicMessageSubmitTransaction
 ```
 
 Source

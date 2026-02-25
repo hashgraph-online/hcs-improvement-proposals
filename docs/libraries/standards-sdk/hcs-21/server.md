@@ -162,6 +162,7 @@ await client.publishDeclaration({
     manifest: manifestPointer.pointer,
     manifestSequence: manifestPointer.manifestSequence,
     config: {
+      type: 'flora',
       account: '0.0.9876',
       threshold: '2/3',
       ctopic: '0.0.700111',

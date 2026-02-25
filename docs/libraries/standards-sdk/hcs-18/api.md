@@ -35,19 +35,25 @@ import {
   buildHcs18RespondMessage,
   buildHcs18CompleteMessage,
   buildHcs18WithdrawMessage,
-} from '@hashgraphonline/standards-sdk/hcs-18';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Enums
 
 ```ts
-enum DiscoveryOperation { ANNOUNCE=0, PROPOSE=1, RESPOND=2, COMPLETE=3, WITHDRAW=4 }
+enum DiscoveryOperation {
+  ANNOUNCE = 'announce',
+  PROPOSE = 'propose',
+  RESPOND = 'respond',
+  COMPLETE = 'complete',
+  WITHDRAW = 'withdraw',
+}
 ```
 
 ## Message Schema (canonical)
 
 ```json
-{ "p":"hcs-18", "op":0, "data": { /* per op */ }, "m":"optional" }
+{ "p":"hcs-18", "op":"announce", "data": { /* per op */ }, "m":"optional" }
 ```
 
 ## Node Client (HCS18Client)
@@ -55,7 +61,7 @@ enum DiscoveryOperation { ANNOUNCE=0, PROPOSE=1, RESPOND=2, COMPLETE=3, WITHDRAW
 ```ts
 constructor(config: SDKHCS18ClientConfig)
 
-createDiscoveryTopic(options?: { ttlSeconds?: number; adminKey?: any; submitKey?: any; memoOverride?: string }): Promise<{ topicId: string }>
+createDiscoveryTopic(options?: { ttlSeconds?: number; adminKey?: any; submitKey?: any; memoOverride?: string }): Promise<{ topicId: string; receipt: import('@hashgraph/sdk').TransactionReceipt }>
 
 announce(params: { discoveryTopicId: string; data: AnnounceData; memo?: string }): Promise<{ receipt: import('@hashgraph/sdk').TransactionReceipt; sequenceNumber?: number }>
 propose(params: { discoveryTopicId: string; data: ProposeData; memo?: string }): Promise<{ receipt: import('@hashgraph/sdk').TransactionReceipt; sequenceNumber?: number }>

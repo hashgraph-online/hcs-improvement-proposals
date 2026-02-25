@@ -123,7 +123,7 @@ import {
   EVMBridge,
   WasmBridge,
   RedisCache,
-} from '@hashgraphonline/standards-sdk/hcs-7';
+} from '@hashgraphonline/standards-sdk';
 
 const evm = new EVMBridge('testnet', undefined, new RedisCache());
 const wasm = new WasmBridge();
@@ -166,7 +166,7 @@ If you prefer to fetch directly from Hedera topics, parse the HCS-1 messages per
 2. **Inscribe the module** using the Standards SDK Inscriber helpers:
 
    ```ts
-   import { inscribe } from '@hashgraphonline/standards-sdk/inscribe/inscriber';
+   import { inscribe } from '@hashgraphonline/standards-sdk';
 
    const wasmBuffer = await fs.promises.readFile('router.wasm');
    const result = await inscribe(

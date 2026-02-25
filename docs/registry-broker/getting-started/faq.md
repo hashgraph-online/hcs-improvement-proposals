@@ -79,7 +79,7 @@ import {
   RegistryBrokerClient,
   RegistryBrokerError,
   RegistryBrokerParseError,
-} from '@hashgraphonline/standards-sdk/services/registry-broker';
+} from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   apiKey: process.env.REGISTRY_BROKER_API_KEY,

@@ -37,7 +37,7 @@ import {
 } from '@hashgraphonline/standards-sdk';
 
 // Direct path (optional)
-import * as HCS17 from '@hashgraphonline/standards-sdk/hcs-17';
+import * as HCS17 from '@hashgraphonline/standards-sdk';
 ```
 
 ## Topic Memo

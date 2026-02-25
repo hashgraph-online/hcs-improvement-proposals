@@ -16,18 +16,20 @@ import {
   validateAssemblyMessage,
   validateAssemblyRegistration,
   validateHashLinksRegistration,
+  actionRegistrationSchema,
   safeValidate,
   validateWithSchema,
-} from '@hashgraphonline/standards-sdk/hcs-12';
+} from '@hashgraphonline/standards-sdk';
 
 // Validate a block definition before registering
-const blockResult = validateBlockRegistration(blockDefinition);
-if (!blockResult.valid) {
-  console.error(blockResult.errors);
+try {
+  validateBlockRegistration(blockDefinition);
+} catch (error) {
+  console.error(error);
 }
 
 // Safer variant that never throws
-const ok = safeValidate(() => validateActionRegistration(actionReg));
+const ok = safeValidate(actionRegistrationSchema, actionReg);
 ```
 
 - `validateActionRegistration` – ensures action registration (WASM mapping + metadata) is well-formed
@@ -47,12 +49,13 @@ HashLinks requires WASM modules to expose a minimal interface so SDKs can intera
 - `GET(...)` → read-only entrypoint for queries
 
 ```ts
-import { WasmValidator } from '@hashgraphonline/standards-sdk/hcs-12';
+import { Logger, WasmValidator } from '@hashgraphonline/standards-sdk';
 
-const validator = new WasmValidator();
+const logger = new Logger({ module: 'WasmValidation' });
+const validator = new WasmValidator(logger);
 const result = await validator.validate(wasmBuffer);
 
-if (!result.valid) {
+if (!result.isValid) {
   console.error(result.errors);
 }
 
@@ -74,4 +77,3 @@ The validator inspects exports/imports, basic signatures, and can report missing
 - Missing `INFO`/`POST`/`GET` export → add required functions to the module.
 - Invalid attribute types in a block → ensure types align with UI/renderer expectations.
 - Assembly references unresolved → register actions/blocks first, then bind in assemblies.
-

@@ -59,9 +59,9 @@ const { client } = await RegistryBrokerClient.initializeAgent({
 Prefer a one-off CLI flow? Run the initialization script with your UAID:
 
 ```bash
-pnpm --filter standards-sdk exec \\
-  tsx scripts/registry-broker/init-encrypted-agent.ts \\
-  --uaid uaid:aid:example;uid=my-agent;registry=hashgraph-online
+pnpm -C standards-sdk exec \
+  tsx scripts/registry-broker/init-encrypted-agent.ts \
+  --uaid 'uaid:aid:example;uid=my-agent;registry=hashgraph-online'
 ```
 
 Optional flags:
@@ -123,7 +123,7 @@ Run the full workflow against the local docker stack:
 
 ```bash
 REGISTRY_BROKER_BASE_URL=http://localhost:4000/api/v1 \
-  pnpm --filter standards-sdk exec \
+  pnpm -C standards-sdk exec \
   tsx demo/registry-broker/encrypted-chat-demo.ts
 ```
 

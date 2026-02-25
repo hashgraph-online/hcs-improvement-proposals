@@ -11,7 +11,7 @@ This page walks through real HCS‑16 flows using the Node client. Each section 
 Goal: create the three topics and share them via `flora_created` on the Communication Topic.
 
 ```ts
-import { HCS16Client, FloraTopicType, buildHcs16FloraCreatedTx } from '@hashgraphonline/standards-sdk';
+import { HCS16Client, FloraTopicType } from '@hashgraphonline/standards-sdk';
 
 const hcs16 = new HCS16Client({ network: 'testnet', operatorId, operatorKey });
 
@@ -21,7 +21,16 @@ const tTopic = await hcs16.createFloraTopic({ floraAccountId, topicType: FloraTo
 const sTopic = await hcs16.createFloraTopic({ floraAccountId, topicType: FloraTopicType.STATE });
 
 // Announce to members on the CTopic
-await (await buildHcs16FloraCreatedTx({ topicId: cTopic.topicId, floraAccountId })).execute(hcs16['client']);
+await hcs16.sendFloraCreated({
+  topicId: cTopic,
+  operatorId,
+  floraAccountId,
+  topics: {
+    communication: cTopic,
+    transaction: tTopic,
+    state: sTopic,
+  },
+});
 ```
 
 Notes:
@@ -33,13 +42,12 @@ Notes:
 Goal: publish a proposal on the Transaction Topic for members to review/sign.
 
 ```ts
-import { buildHcs16TxProposalTx } from '@hashgraphonline/standards-sdk';
-
-await (await buildHcs16TxProposalTx({
-  topicId: tTopic.topicId,
-  scheduledTxId: '0.0.1234@1726357200.000000000',
-  memo: 'release funds for invoice #42',
-})).execute(hcs16['client']);
+await hcs16.sendTransaction({
+  topicId: tTopic,
+  operatorId,
+  scheduleId: '0.0.1234',
+  data: 'release funds for invoice #42',
+});
 ```
 
 Notes:
@@ -51,14 +59,13 @@ Notes:
 Goal: emit a compact snapshot to the State Topic after meaningful changes.
 
 ```ts
-import { buildHcs16StateUpdateTx } from '@hashgraphonline/standards-sdk';
-
-await (await buildHcs16StateUpdateTx({
-  topicId: sTopic.topicId,
-  stateHash: '0x…', // often the HCS‑17 account/composite hash
+await hcs16.sendStateUpdate({
+  topicId: sTopic,
+  operatorId,
+  hash: '0x…',
   epoch: 7,
   memo: 'post‑proposal state',
-})).execute(hcs16['client']);
+});
 ```
 
 Notes:
@@ -70,11 +77,28 @@ Notes:
 Goal: run the join handshake on the Communication Topic.
 
 ```ts
-import { buildHcs16FloraJoinRequestTx, buildHcs16FloraJoinVoteTx, buildHcs16FloraJoinAcceptedTx } from '@hashgraphonline/standards-sdk';
-
-await (await buildHcs16FloraJoinRequestTx({ topicId: cTopic.topicId, candidateAccountId: '0.0.2468' })).execute(hcs16['client']);
-await (await buildHcs16FloraJoinVoteTx({ topicId: cTopic.topicId, candidateAccountId: '0.0.2468', approve: true })).execute(hcs16['client']);
-await (await buildHcs16FloraJoinAcceptedTx({ topicId: cTopic.topicId, members: ['0.0.111','0.0.222','0.0.2468'], epoch: 8 })).execute(hcs16['client']);
+await hcs16.sendFloraJoinRequest({
+  topicId: cTopic,
+  operatorId,
+  accountId: '0.0.2468',
+  connectionRequestId: 42,
+  connectionTopicId: '0.0.9012',
+  connectionSeq: 7,
+});
+await hcs16.sendFloraJoinVote({
+  topicId: cTopic,
+  operatorId,
+  accountId: '0.0.2468',
+  approve: true,
+  connectionRequestId: 42,
+  connectionSeq: 7,
+});
+await hcs16.sendFloraJoinAccepted({
+  topicId: cTopic,
+  operatorId,
+  members: ['0.0.111', '0.0.222', '0.0.2468'],
+  epoch: 8,
+});
 ```
 
 Notes:
@@ -86,9 +110,8 @@ Notes:
 The client exposes helpers to read and filter messages by operation when processing topics.
 
 ```ts
-const recent = await hcs16.getRecentMessages(cTopic.topicId, { limit: 25, order: 'desc', opFilter: 'flora_created' });
-const latest = await hcs16.getLatestMessage(cTopic.topicId, 'flora_created');
+const recent = await hcs16.getRecentMessages(cTopic, { limit: 25, order: 'desc', opFilter: 'flora_created' });
+const latest = await hcs16.getLatestMessage(cTopic, 'flora_created');
 ```
 
 That’s all you need on Node: build with `tx.ts`, execute with the SDK client, and keep your flows auditable and minimal.
-

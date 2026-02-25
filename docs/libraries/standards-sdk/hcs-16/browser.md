@@ -17,7 +17,12 @@ const cTopic = await client.createFloraTopic({ floraAccountId, topicType: FloraT
 const tTopic = await client.createFloraTopic({ floraAccountId, topicType: FloraTopicType.TRANSACTION });
 const sTopic = await client.createFloraTopic({ floraAccountId, topicType: FloraTopicType.STATE });
 
-await client.sendFloraCreated({ topicId: cTopic.topicId, floraAccountId });
+await client.sendFloraCreated({
+  topicId: cTopic,
+  operatorId,
+  floraAccountId,
+  topics: { communication: cTopic, transaction: tTopic, state: sTopic },
+});
 ```
 
 Notes:
@@ -27,10 +32,11 @@ Notes:
 ## 2) Propose a Transaction
 
 ```ts
-await client.sendTxProposal({
-  topicId: tTopic.topicId,
-  scheduledTxId: '0.0.1234@1726357200.000000000',
-  memo: 'release funds for invoice #42',
+await client.sendTransaction({
+  topicId: tTopic,
+  operatorId,
+  scheduleId: '0.0.1234@1726357200.000000000',
+  data: 'release funds for invoice #42',
 });
 ```
 
@@ -38,8 +44,9 @@ await client.sendTxProposal({
 
 ```ts
 await client.sendStateUpdate({
-  topicId: sTopic.topicId,
-  stateHash: '0x…',
+  topicId: sTopic,
+  operatorId,
+  hash: '0x…',
   epoch: 7,
   memo: 'post‑proposal state',
 });
@@ -48,9 +55,8 @@ await client.sendStateUpdate({
 ## Reading Messages
 
 ```ts
-const recent = await client.getRecentMessages(cTopic.topicId, { limit: 10, order: 'desc', opFilter: 'flora_created' });
-const latest = await client.getLatestMessage(cTopic.topicId, 'flora_created');
+const recent = await client.getRecentMessages(cTopic, { limit: 10, order: 'desc', opFilter: 'flora_created' });
+const latest = await client.getLatestMessage(cTopic, 'flora_created');
 ```
 
 Use the browser client when you need on‑device signing and user consent flows; keep logic identical to Node by relying on the same builders and message shapes.
-

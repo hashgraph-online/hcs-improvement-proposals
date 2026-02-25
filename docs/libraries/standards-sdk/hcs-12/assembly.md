@@ -74,7 +74,8 @@ const assemblyRegistration = assemblyBuilder
   .build();
 
 // Register the assembly
-const assemblyTopicId = await client.registerAssembly(assemblyRegistration);
+const assemblyResult = await client.registerAssembly(assemblyRegistration);
+console.log('Assembly registered:', assemblyResult.id);
 ```
 
 ---
@@ -94,14 +95,13 @@ const actionBuilder = new ActionBuilder(logger)
 // Add action to assembly
 assemblyBuilder.addAction(actionBuilder);
 
-// Or add action directly
-assemblyBuilder.addAction({
-  t_id: '0.0.123456',
-  alias: 'transfer-action',
-  config: {
-    defaultFee: 0.1
-  }
-});
+// To add another action, create another ActionBuilder and pass it
+const transferActionBuilder = new ActionBuilder(logger)
+  .setTopicId('0.0.123456')
+  .setAlias('transfer-action')
+  .setWasmHash(wasmHash)
+  .setHash(infoHash);
+assemblyBuilder.addAction(transferActionBuilder);
 ```
 
 ---
@@ -111,33 +111,20 @@ assemblyBuilder.addAction({
 Blocks are added to assemblies with action mappings and attributes:
 
 ```typescript
-// Add a block with action mappings
-assemblyBuilder.addBlock(
-  '0.0.234567',  // Block topic ID
-  {
-    increment: '0.0.123456',  // Map increment action
-    decrement: '0.0.123456',  // Map decrement action
-    reset: '0.0.123456'       // Map reset action
-  },
-  {
-    count: 0,
-    step: 1,
-    label: 'Demo Counter'
-  }
-);
+const counterBlockBuilder = new BlockBuilder()
+  .setName('hashlink/counter')
+  .setTitle('Counter')
+  .setCategory('interactive')
+  .setTemplateTopicId('0.0.234567')
+  .addAttribute('count', 'number', 0)
+  .addAttribute('step', 'number', 1)
+  .addAttribute('label', 'string', 'Demo Counter')
+  .addAction('increment', '0.0.123456')
+  .addAction('decrement', '0.0.123456')
+  .addAction('reset', '0.0.123456')
+  .setTopicId('0.0.234567');
 
-// Add a block without actions
-assemblyBuilder.addBlock(
-  '0.0.234568',  // Block topic ID
-  {},            // No action mappings
-  {
-    title: 'Statistics Display',
-    values: [
-      { label: 'Total Blocks', value: 2 },
-      { label: 'Actions', value: 3 }
-    ]
-  }
-);
+assemblyBuilder.addBlock(counterBlockBuilder);
 ```
 
 ---
@@ -160,35 +147,46 @@ const assemblyRegistration = new AssemblyBuilder(logger)
   .setTags(['demo', 'example'])
   .build();
 
-const registrationId = await client.registerAssembly(assemblyRegistration);
+await client.registerAssemblyDirect(assemblyTopicId, assemblyRegistration);
 
 // Step 3: Add actions
-const actionRegistration = await new ActionBuilder(logger)
+const actionBuilder = new ActionBuilder(logger)
   .setTopicId('0.0.123456')
   .setAlias('my-actions')
   .setWasmHash(wasmHash)
-  .setHash(infoHash)
-  .build();
+  .setHash(infoHash);
 
-const actionId = await client.registerAction(actionRegistration);
+await client.registerAction(actionBuilder);
+const actionId = actionBuilder.getTopicId();
 
 // Step 4: Add blocks
-const blockTopicId = await client.registerBlock(blockDefinition, template);
+const blockBuilder = new BlockBuilder()
+  .setName('hashlink/main')
+  .setTitle('Main Block')
+  .setCategory('widgets')
+  .setTemplate(Buffer.from(template))
+  .addAction('submit', actionId);
+await client.registerBlock(blockBuilder);
+const blockTopicId = blockBuilder.getTopicId();
 
 // Step 5: Compose the assembly
-await client.addAssemblyAction(assemblyTopicId, {
+await client.addActionToAssembly(assemblyTopicId, {
+  p: 'hcs-12',
+  op: 'add-action',
   t_id: actionId,
-  alias: 'main-actions'
+  alias: 'main-actions',
 });
 
-await client.addAssemblyBlock(assemblyTopicId, {
+await client.addBlockToAssembly(assemblyTopicId, {
+  p: 'hcs-12',
+  op: 'add-block',
   block_t_id: blockTopicId,
   actions: {
-    submit: actionId
+    submit: actionId,
   },
   attributes: {
-    title: 'My Block'
-  }
+    title: 'My Block',
+  },
 });
 ```
 
@@ -206,17 +204,14 @@ console.log('Assembly name:', assembly.state.name);
 console.log('Actions count:', assembly.actions.length);
 console.log('Blocks count:', assembly.blocks.length);
 
-// Resolve all references
-const resolvedAssembly = await client.resolveAssemblyReferences(assembly);
-
 // Check for resolution errors
-resolvedAssembly.actions.forEach(action => {
+assembly.actions.forEach(action => {
   if (action.error) {
     console.error(`Action resolution error: ${action.error}`);
   }
 });
 
-resolvedAssembly.blocks.forEach(block => {
+assembly.blocks.forEach(block => {
   if (block.error) {
     console.error(`Block resolution error: ${block.error}`);
   }
@@ -230,10 +225,17 @@ resolvedAssembly.blocks.forEach(block => {
 The SDK provides validation for assembly composition:
 
 ```typescript
-// Validate assembly composition
-const validation = client.validateAssemblyComposition(assembly);
+import { assemblyMessageSchema, safeValidate } from '@hashgraphonline/standards-sdk';
 
-if (!validation.valid) {
+// Validate assembly operation payload
+const validation = safeValidate(assemblyMessageSchema, {
+  p: 'hcs-12',
+  op: 'register',
+  name: 'counter-app',
+  version: '1.0.0',
+});
+
+if (!validation.success) {
   console.error('Assembly validation failed:', validation.errors);
 } else {
   console.log('Assembly is valid and can be composed');
@@ -249,8 +251,10 @@ Assembly metadata can be updated after creation:
 ```typescript
 // Update assembly description and tags
 await client.updateAssembly(assemblyTopicId, {
+  p: 'hcs-12',
+  op: 'update',
   description: 'Updated description',
-  tags: ['demo', 'updated', 'interactive']
+  tags: ['demo', 'updated', 'interactive'],
 });
 ```
 
@@ -263,12 +267,6 @@ The SDK manages assembly state incrementally:
 ```typescript
 // Get current assembly state
 const currentState = await client.getAssemblyState(assemblyTopicId);
-
-// Build complete state from operations
-const completeState = await client.buildAssemblyState(assemblyTopicId);
-
-// Cache assembly state for performance
-client.assemblyEngine.cacheAssembly(assemblyTopicId, completeState);
 ```
 
 ---
@@ -278,14 +276,15 @@ client.assemblyEngine.cacheAssembly(assemblyTopicId, completeState);
 The assembly engine handles complex assembly operations:
 
 ```typescript
+import { assemblyMessageSchema, safeValidate } from '@hashgraphonline/standards-sdk';
+
 // Load and resolve assembly in one operation
-const assembly = await client.assemblyEngine.loadAndResolveAssembly('0.0.987654');
+const assembly = await client.loadAssembly('0.0.987654');
 
-// Resolve references for an assembly state
-const resolved = await client.assemblyEngine.resolveReferences(assemblyState);
-
-// Validate assembly composition
-const validation = client.assemblyEngine.validateComposition(assembly);
+// Validate an assembly message payload before submission
+const candidate = { p: 'hcs-12', op: 'update', description: 'Next release' };
+const validation = safeValidate(assemblyMessageSchema, candidate);
+console.log(validation.success);
 ```
 
 ---
@@ -297,10 +296,10 @@ The SDK provides comprehensive error handling for assemblies:
 ```typescript
 try {
   const assembly = await client.loadAssembly('0.0.987654');
-  const resolved = await client.resolveAssemblyReferences(assembly);
-  
-  if (resolved.errors.length > 0) {
-    console.warn('Assembly has resolution errors:', resolved.errors);
+  const actionErrors = assembly.actions.filter(a => !!a.error);
+  const blockErrors = assembly.blocks.filter(b => !!b.error);
+  if (actionErrors.length > 0 || blockErrors.length > 0) {
+    console.warn('Assembly has resolution errors', { actionErrors, blockErrors });
   }
 } catch (error) {
   console.error('Failed to load assembly:', error.message);

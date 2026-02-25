@@ -20,7 +20,7 @@ interface WasmInterface {
     action: string,
     params: string,
     network: 'mainnet' | 'testnet',
-    hashLinkMemo: string
+    memo: string
   ): Promise<string>;
 
   // Retrieves information without modifying state
@@ -86,10 +86,11 @@ const result = await wasmExecutor.execute(actionRegistration, {
 The SDK can extract module info from WASM binaries:
 
 ```typescript
-import { ActionBuilder } from '@hashgraphonline/standards-sdk';
+import { ActionBuilder, WasmValidator } from '@hashgraphonline/standards-sdk';
 
-// Extract module info from WASM data
-const moduleInfo = await client.wasm.extractModuleInfo(wasmData);
+// Extract metadata from WASM data
+const validator = new WasmValidator(logger);
+const moduleInfo = await validator.extractMetadata(wasmData);
 
 // Generate INFO hash
 const infoHash = await new ActionBuilder(logger).generateInfoHash(moduleInfo);
@@ -127,8 +128,7 @@ interface WasmExecutionContext {
     action: string;
     [key: string]: any;
   };
-  network: 'mainnet' | 'testnet';
-  hashLinkMemo: string;
+  state?: Record<string, any>;
 }
 ```
 
@@ -183,11 +183,8 @@ try {
 The executor handles WASM memory management:
 
 ```typescript
-// Read string from WASM memory
-const stringValue = wasmExecutor.readWasmString(memory, ptr);
-
-// Memory cleanup is handled automatically
-// WASM instances are cached for performance
+// Memory cleanup for cached instances
+wasmExecutor.clearCache();
 ```
 
 ## Validation
@@ -195,11 +192,13 @@ const stringValue = wasmExecutor.readWasmString(memory, ptr);
 The executor validates action parameters and capabilities:
 
 ```typescript
-// Validate action parameters
-const isValid = wasmExecutor.validateParameters(action, params);
+import { WasmValidator } from '@hashgraphonline/standards-sdk';
 
-// Check capabilities
-const hasCapability = wasmExecutor.checkCapabilities(action, requiredCapability);
+const validator = new WasmValidator(logger);
+const report = await validator.validate(wasmData);
+if (!report.isValid) {
+  console.error(report.errors);
+}
 ```
 
 ## Performance Optimization
@@ -207,9 +206,6 @@ const hasCapability = wasmExecutor.checkCapabilities(action, requiredCapability)
 The executor includes performance optimizations:
 
 ```typescript
-// WASM instance caching
-const cachedInstance = wasmExecutor.getFromCache(topicId);
-
 // Concurrent execution
 const results = await Promise.all([
   wasmExecutor.execute(action1, context1),
@@ -226,34 +222,18 @@ wasmExecutor.clearCache();
 The executor includes security features for safe execution:
 
 ```typescript
-// Validate WASM module
-const isValid = wasmExecutor.validateWasmModule(wasmData);
+import { WasmValidator } from '@hashgraphonline/standards-sdk';
 
-// Check hashes
-const hashValid = wasmExecutor.verifyHashes(actionRegistration);
-
-// Capability checking
-const capabilitiesValid = wasmExecutor.validateCapabilities(actionRegistration);
+const validator = new WasmValidator(logger);
+const report = await validator.validate(wasmData);
+console.log(report.isValid, report.errors, report.warnings);
 ```
 
 ## Browser Support
 
 The executor works in both Node.js and browser environments:
 
-```typescript
-// Browser-specific loading
-if (typeof window !== 'undefined') {
-  // Use browser loading mechanism
-  const moduleUrl = URL.createObjectURL(blob);
-  const module = await import(moduleUrl);
-}
-
-// Node.js loading
-if (typeof process !== 'undefined') {
-  // Use Node.js loading mechanism
-  const module = await import(localPath);
-}
-```
+`WasmExecutor` is browser-oriented in the current SDK implementation. In Node.js/SSR contexts it returns an execution error rather than running the module.
 
 ## Best Practices
 

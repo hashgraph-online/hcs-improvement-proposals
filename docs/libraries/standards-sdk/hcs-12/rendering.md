@@ -101,16 +101,16 @@ const blockRenderer = new BlockRenderer(
 
 // Render a block
 const result = await blockRenderer.render(blockDefinition, {
-  attributes: {
-    count: 5,
-    step: 1,
-    label: 'Counter'
+  container: '#block-container',
+  network: 'testnet',
+  initialState: {
+    attributes: {
+      count: 5,
+      step: 1,
+      label: 'Counter',
+    },
+    actionResults: {},
   },
-  actions: {
-    increment: '0.0.123456',
-    decrement: '0.0.123456'
-  },
-  container: '#block-container'
 });
 ```
 
@@ -245,9 +245,11 @@ The rendering system manages block state:
 
 ```typescript
 import { BlockStateManager } from '@hashgraphonline/standards-sdk';
+import { Logger } from '@hashgraphonline/standards-sdk';
 
 // Create state manager
-const stateManager = new BlockStateManager();
+const logger = new Logger({ module: 'RenderState' });
+const stateManager = new BlockStateManager(logger);
 
 // Set block state
 stateManager.setBlockState('0.0.123456', {
@@ -274,14 +276,11 @@ const state = stateManager.getBlockState('0.0.123456');
 The renderer includes built-in security features:
 
 ```typescript
-// XSS protection
-const sanitizedHtml = templateEngine.sanitizeHtml(unsafeHtml);
-
-// Script tag removal
-const cleanHtml = templateEngine.removeScriptTags(htmlWithScripts);
-
-// Attribute validation
-const isValid = templateEngine.validateAttributes(attributes);
+// Built-in sanitization is applied during render/template evaluation
+const rendered = await templateEngine.render(unsafeTemplate, {
+  attributes: { label: '<script>alert(1)</script>' },
+});
+console.log(rendered);
 ```
 
 ---

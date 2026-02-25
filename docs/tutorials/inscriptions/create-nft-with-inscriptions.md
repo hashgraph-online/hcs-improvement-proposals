@@ -31,7 +31,7 @@ Using the `hashinal` mode, you can inscribe both the image and metadata in a sin
 
 ```javascript
 // inscribe-nft.js
-import { inscribe } from '@hashgraph-online/standards-sdk';
+import { inscribe } from '@hashgraphonline/standards-sdk';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 
@@ -188,7 +188,7 @@ Put it all together:
 
 ```javascript
 // create-complete-hashinal.js
-import { inscribe } from '@hashgraph-online/standards-sdk';
+import { inscribe } from '@hashgraphonline/standards-sdk';
 import {
   Client,
   TokenCreateTransaction,
@@ -441,7 +441,7 @@ These components provide:
 
 ```javascript
 // view-hashinal.js
-import { retrieveInscription } from '@hashgraph-online/standards-sdk';
+import { retrieveInscription } from '@hashgraphonline/standards-sdk';
 import * as fs from 'fs';
 
 async function viewHashinal(metadataTransactionId, imageTransactionId) {
@@ -572,6 +572,5 @@ const registry = {
   mint_date: new Date().toISOString()
 };
 ```
-
 
 

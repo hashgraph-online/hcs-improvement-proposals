@@ -5,9 +5,13 @@ sidebar_position: 3
 ---
 
 ```ts
-import { HCS3 } from '@hashgraphonline/standards-sdk';
+import { HCS } from '@hashgraphonline/standards-sdk';
 
-const hcs = new HCS3.HCS({ cdnUrl: 'https://kiloscribe.com/api/inscription-cdn/', network: 'testnet' });
-const img = await hcs.loadImage('hcs://1/0.0.20001');
+const hcs = new HCS();
+hcs.config.network = 'testnet';
+
+const imageElement = document.createElement('img');
+imageElement.setAttribute('data-src', 'hcs://1/0.0.20001');
+
+await hcs.loadImage(imageElement);
 ```
-

@@ -12,8 +12,7 @@ Sources
 ## Import Paths
 
 ```ts
-import { HCS as HCS3 } from '@hashgraphonline/standards-sdk/hcs-3';
-import type { HCSConfig, HCSConfigMapping, LoadQueueItem, LoadType } from '@hashgraphonline/standards-sdk/hcs-3/src/types';
+import { HCS } from '@hashgraphonline/standards-sdk';
 ```
 
 ## Types
@@ -42,7 +41,7 @@ interface HCSConfigMapping {
 }
 ```
 
-## Class: HCS3
+## Class: HCS
 
 ```ts
 constructor();
@@ -67,12 +66,13 @@ retrieveHCS1Data(topicId: string, cdnUrl?: string, network?: string): Promise<Bl
 // Loaders (dom‑oriented)
 loadScript(el: HTMLElement): Promise<void>;
 loadImage(el: HTMLElement): Promise<void>;
-loadVideo(el: HTMLElement): Promise<void>;
-loadAudio(el: HTMLElement): Promise<void>;
+loadStylesheet(el: HTMLElement): Promise<void>;
+loadMedia(el: HTMLElement, mediaType: 'video' | 'audio'): Promise<void>;
 loadGLB(el: HTMLElement): Promise<void>;
+loadResource(el: HTMLElement, type: LoadType, order: number): Promise<void>;
+loadModuleExports(scriptId: string): Promise<any>;
 
 // Queue (batch loading)
-enqueue(item: LoadQueueItem): void;
 processQueue(): Promise<void>;
 ```
 
@@ -83,7 +83,7 @@ Notes
 ## Examples
 
 ```ts
-const h = new HCS3();
+const h = new HCS();
 h.loadConfigFromHTML(); // reads defaults from DOM
 const blob = await h.retrieveHCS1Data('0.0.123', h.config.cdnUrl, h.config.network);
 ```

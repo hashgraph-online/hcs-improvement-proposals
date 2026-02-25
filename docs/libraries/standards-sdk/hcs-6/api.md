@@ -34,7 +34,7 @@ import {
   type HCS6MintResponse,
   buildHcs6CreateRegistryTx,
   buildHcs6RegisterEntryTx,
-} from '@hashgraphonline/standards-sdk/hcs-6';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Types

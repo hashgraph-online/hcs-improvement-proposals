@@ -33,32 +33,28 @@ npm install @hashgraphonline/standards-sdk
 ### Basic Setup
 
 ```typescript
-import { HCS12Client, NetworkType, Logger } from '@hashgraphonline/standards-sdk';
+import { HCS12Client, Logger } from '@hashgraphonline/standards-sdk';
 
 // Server-side client with private key
 const client = new HCS12Client({
-  network: NetworkType.TESTNET,
-  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  network: 'testnet',
   logger: new Logger({ module: 'HCS12' }),
-  hcs12: {
-    operatorId: '0.0.123456',
-    operatorPrivateKey: 'your-private-key'
-  }
+  operatorId: '0.0.123456',
+  operatorPrivateKey: 'your-private-key',
 });
 
 // Initialize all registries
-await client.initializeRegistries();
+client.initializeRegistries();
 ```
 
 ### Browser Setup
 
 ```typescript
-import { HCS12BrowserClient, NetworkType } from '@hashgraphonline/standards-sdk';
+import { HCS12BrowserClient } from '@hashgraphonline/standards-sdk';
 
 // Browser client with HashConnect wallet
 const browserClient = new HCS12BrowserClient({
-  network: NetworkType.TESTNET,
-  mirrorNode: 'https://testnet.mirrornode.hedera.com',
+  network: 'testnet',
   hwc: hashinalsWalletConnectSDK, // Your HashConnect instance
 });
 ```
@@ -156,10 +152,20 @@ import {
   validateAssemblyMessage,
   validateAssemblyRegistration,
   validateHashLinksRegistration,
+  actionRegistrationSchema,
   safeValidate,
-} from '@hashgraphonline/standards-sdk/hcs-12';
+} from '@hashgraphonline/standards-sdk';
 
-const { valid, errors } = validateBlockRegistration(blockDef);
+try {
+  validateBlockRegistration(blockDef);
+} catch (error) {
+  console.error(error);
+}
+
+const checked = safeValidate(actionRegistrationSchema, actionReg);
+if (!checked.success) {
+  console.error(checked.errors);
+}
 ```
 
 To ensure compatibility, WASM modules must export at least:
@@ -183,30 +189,32 @@ import { ActionBuilder } from '@hashgraphonline/standards-sdk';
 
 // First, inscribe your WASM module
 const wasmBuffer = await fs.readFile('./counter.wasm');
-const wasmTopicId = await client.inscribeFile(
-  wasmBuffer,
-  'counter.wasm',
-  { compress: true }
-);
+const wasmInscription = await client.inscribeFile(wasmBuffer, 'counter.wasm');
 
 // Build action registration
-const actionBuilder = new ActionBuilder(logger)
-  .setWasmTopicId(wasmTopicId)
-  .setModuleInfo({
-    name: 'counter-actions',
-    version: '1.0.0',
-    hashlinks_version: '1.0.0',
-    actions: [
-      { name: 'increment', input: 'CounterInput', output: 'CounterOutput' },
-      { name: 'decrement', input: 'CounterInput', output: 'CounterOutput' },
-      { name: 'reset', input: 'Empty', output: 'CounterOutput' }
-    ],
-    capabilities: []
-  });
+const actionBuilder = new ActionBuilder(logger);
+const moduleInfo = {
+  name: 'counter-actions',
+  version: '1.0.0',
+  hashlinks_version: '1.0.0',
+  actions: [
+    { name: 'increment', input: 'CounterInput', output: 'CounterOutput' },
+    { name: 'decrement', input: 'CounterInput', output: 'CounterOutput' },
+    { name: 'reset', input: 'Empty', output: 'CounterOutput' },
+  ],
+  capabilities: [],
+};
+const wasmHash = await actionBuilder.generateWasmHash(wasmBuffer);
+const infoHash = await actionBuilder.generateInfoHash(moduleInfo);
+actionBuilder
+  .setTopicId(wasmInscription.topic_id)
+  .setWasmHash(wasmHash)
+  .setHash(infoHash);
 
 // Register the action
 const actionRegistration = await client.registerAction(actionBuilder);
-console.log('Action registered:', actionRegistration.topicId);
+const actionTopicId = actionRegistration.getTopicId();
+console.log('Action registered:', actionTopicId);
 ```
 
 ### Step 2: Create the Block
@@ -238,13 +246,14 @@ const blockBuilder = new BlockBuilder()
   .addAttribute('step', 'number', 1)
   .addAttribute('label', 'string', 'Counter')
   .setTemplate(Buffer.from(template))
-  .addAction('increment', actionRegistration.topicId)
-  .addAction('decrement', actionRegistration.topicId)
-  .addAction('reset', actionRegistration.topicId);
+  .addAction('increment', actionTopicId)
+  .addAction('decrement', actionTopicId)
+  .addAction('reset', actionTopicId);
 
 // Register the block
 const blockRegistration = await client.registerBlock(blockBuilder);
-console.log('Block registered:', blockRegistration.topicId);
+const blockTopicId = blockRegistration.getTopicId();
+console.log('Block registered:', blockTopicId);
 ```
 
 ### Step 3: Create the Assembly
@@ -257,18 +266,7 @@ const assemblyBuilder = new AssemblyBuilder(logger)
   .setName('counter-app')
   .setVersion('1.0.0')
   .setDescription('Simple counter application')
-  .addBlock(blockRegistration.topicId, {
-    attributes: {
-      count: 0,
-      step: 1,
-      label: 'My Counter'
-    },
-    actions: {
-      increment: actionRegistration.topicId,
-      decrement: actionRegistration.topicId,
-      reset: actionRegistration.topicId
-    }
-  });
+  .addBlock(blockRegistration);
 
 // Create the assembly
 const assemblyTopicId = await client.createAssembly(assemblyBuilder);
@@ -278,21 +276,46 @@ console.log('Assembly created:', assemblyTopicId);
 ### Step 4: Render the HashLink
 
 ```typescript
+import {
+  BlockRenderer,
+  GutenbergBridge,
+  TemplateEngine,
+  BlockStateManager,
+} from '@hashgraphonline/standards-sdk';
+
 // Load and render the assembly
 const assembly = await client.loadAssembly(assemblyTopicId);
+const [firstBlock] = assembly.blocks;
+if (!firstBlock?.definition) throw new Error('No resolved block definition');
+
+const block = {
+  id: firstBlock.block_t_id,
+  p: 'hcs-12',
+  op: 'register',
+  name: firstBlock.definition.name,
+  version: firstBlock.definition.version,
+  template: firstBlock.template || '',
+  attributes: firstBlock.definition.attributes,
+  t_id: firstBlock.block_t_id,
+};
+
+const gutenbergBridge = new GutenbergBridge(logger);
+const templateEngine = new TemplateEngine(logger);
+const stateManager = new BlockStateManager(logger);
 const renderer = new BlockRenderer(
   logger,
-  client.gutenbergBridge,
-  client.assemblyEngine,
-  client.blockStateManager
+  gutenbergBridge,
+  templateEngine,
+  stateManager
 );
 
 // Render to DOM element
 const container = document.getElementById('app');
-const result = await renderer.render(assembly.blocks[0], {
+const result = await renderer.render(block, {
   container,
   assembly,
-  network: NetworkType.TESTNET
+  network: 'testnet',
+  initialState: { attributes: {}, actionResults: {} },
 });
 
 // The counter is now live and interactive!
@@ -311,9 +334,11 @@ const result = await renderer.render(assembly.blocks[0], {
 - Provides public access to HashLinks
 
 ```typescript
+import { RegistryType } from '@hashgraphonline/standards-sdk';
+
 // Create a registry topic
 const registryTopicId = await client.createRegistryTopic(
-  'action',     // Registry type: 'action', 'block', 'assembly', or 'hashlinks'
+  RegistryType.ACTION,
   adminKey,     // Optional admin key for updates
   submitKey     // Optional submit key for submissions
 );
@@ -433,15 +458,17 @@ Blocks can contain other blocks through HashLink references:
 The SDK includes a built-in state manager:
 
 ```typescript
-const stateManager = client.blockStateManager;
+import { BlockStateManager } from '@hashgraphonline/standards-sdk';
+
+const stateManager = new BlockStateManager(logger);
 
 // Subscribe to state changes
-stateManager.subscribe('counter-1', (state) => {
-  console.log('Counter updated:', state.count);
+stateManager.onStateChange('counter-1', state => {
+  console.log('Counter updated:', state.attributes.count);
 });
 
 // Update state after action execution
-stateManager.updateState('counter-1', { count: 42 });
+stateManager.updateBlockState('counter-1', { attributes: { count: 42 } });
 ```
 
 ### Performance Optimization
@@ -459,11 +486,14 @@ stateManager.updateState('counter-1', { count: 42 });
 The SDK provides comprehensive error handling:
 
 ```typescript
+import { WasmExecutor } from '@hashgraphonline/standards-sdk';
+
+const wasmExecutor = new WasmExecutor(logger, 'testnet');
+
 try {
-  const result = await client.executeAction({
-    topicId: '0.0.123456',
-    action: 'transfer',
-    params: { amount: 100, to: '0.0.789' }
+  const result = await wasmExecutor.execute(actionRegistration.build(), {
+    method: 'POST',
+    params: { operation: 'transfer', amount: 100, to: '0.0.789' },
   });
   
   if (result.success) {
@@ -472,13 +502,7 @@ try {
     console.error('Action failed:', result.error);
   }
 } catch (error) {
-  if (error.code === 'VALIDATION_ERROR') {
-    console.error('Invalid parameters:', error.details);
-  } else if (error.code === 'NETWORK_ERROR') {
-    console.error('Network issue:', error.message);
-  } else {
-    console.error('Unexpected error:', error);
-  }
+  console.error('Unexpected error:', error);
 }
 ```
 
@@ -530,10 +554,10 @@ import { HCS12BrowserClient } from '@hashgraphonline/standards-sdk';
 Solution: Ensure the module implements the required interface:
 ```typescript
 // Check module exports
-const validator = new WasmValidator();
+const validator = new WasmValidator(logger);
 const report = await validator.validate(wasmBuffer);
-if (!report.valid) {
-  console.error('Missing exports:', report.missingExports);
+if (!report.isValid) {
+  console.error('Validation errors:', report.errors);
 }
 ```
 

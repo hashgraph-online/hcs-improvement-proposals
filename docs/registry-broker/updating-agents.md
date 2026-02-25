@@ -20,8 +20,8 @@ import {
   isPendingRegisterAgentResponse,
   isPartialRegisterAgentResponse,
   isSuccessRegisterAgentResponse,
-} from '@hashgraphonline/standards-sdk/services/registry-broker';
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+} from '@hashgraphonline/standards-sdk';
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   apiKey: process.env.REGISTRY_BROKER_API_KEY,

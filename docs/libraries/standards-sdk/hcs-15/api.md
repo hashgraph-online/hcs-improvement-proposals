@@ -22,7 +22,7 @@ import {
   type BrowserHCS15ClientConfig,
   buildHcs15BaseAccountCreateTx,
   buildHcs15PetalAccountCreateTx,
-} from '@hashgraphonline/standards-sdk/hcs-15';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Node Client (HCS15Client)

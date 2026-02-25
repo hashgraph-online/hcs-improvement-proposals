@@ -53,10 +53,10 @@ import { ActionRegistry, HCS12Client, Logger } from '@hashgraphonline/standards-
 // Initialize action registry
 const client = new HCS12Client(config);
 const actionRegistry = new ActionRegistry(
+  'testnet',
+  new Logger({ module: 'ActionRegistry' }),
   '0.0.456789',  // Action registry topic ID
-  client.hederaMirrorNode,
-  client.hcs1Client,
-  new Logger({ module: 'ActionRegistry' })
+  client,
 );
 
 // Register a new action
@@ -83,7 +83,7 @@ const actionRegistration = {
 await actionRegistry.register(actionRegistration);
 
 // Query actions by hash
-const action = await actionRegistry.getByHash('abc123...');
+const action = await actionRegistry.getAction('abc123...');
 if (action) {
   console.log('Found action:', {
     topicId: action.t_id,
@@ -93,7 +93,7 @@ if (action) {
 }
 
 // Get all registered actions
-const allActions = await actionRegistry.getAll();
+const allActions = (await actionRegistry.listEntries()).map(entry => entry.data);
 console.log(`Total actions registered: ${allActions.length}`);
 
 // Search actions by capabilities
@@ -114,10 +114,10 @@ import { AssemblyRegistry } from '@hashgraphonline/standards-sdk';
 
 // Initialize assembly registry
 const assemblyRegistry = new AssemblyRegistry(
+  'testnet',
+  logger,
   '0.0.567890',  // Assembly registry topic ID
-  client.hederaMirrorNode,
-  client.hcs1Client,
-  logger
+  client
 );
 
 // Process assembly registration
@@ -135,7 +135,7 @@ const assemblyRegistration = {
 
 await assemblyRegistry.register(assemblyRegistration);
 
-// Process add-action operation
+// Add action operation
 const addActionOp = {
   p: 'hcs-12',
   op: 'add-action',
@@ -143,9 +143,9 @@ const addActionOp = {
   alias: 'swapEngine'
 };
 
-await assemblyRegistry.processOperation(addActionOp);
+await assemblyRegistry.addAction(addActionOp);
 
-// Process add-block operation  
+// Add block operation
 const addBlockOp = {
   p: 'hcs-12',
   op: 'add-block',
@@ -160,10 +160,10 @@ const addBlockOp = {
   }
 };
 
-await assemblyRegistry.processOperation(addBlockOp);
+await assemblyRegistry.addBlock(addBlockOp);
 
 // Get complete assembly state
-const assembly = await assemblyRegistry.getAssemblyState('defi-dashboard', '1.0.0');
+const assembly = await assemblyRegistry.getAssemblyState('0.0.567890');
 if (assembly) {
   console.log('Assembly state:', {
     name: assembly.name,
@@ -176,7 +176,9 @@ if (assembly) {
 }
 
 // Search assemblies by tags
-const defiAssemblies = await assemblyRegistry.searchByTags(['defi']);
+const defiAssemblies = (await assemblyRegistry.listEntries())
+  .map(entry => entry.data)
+  .filter((entry: any) => Array.isArray(entry.tags) && entry.tags.includes('defi'));
 console.log(`Found ${defiAssemblies.length} DeFi assemblies`);
 ```
 
@@ -189,10 +191,10 @@ import { HashLinksRegistry } from '@hashgraphonline/standards-sdk';
 
 // Initialize HashLinks registry
 const hashLinksRegistry = new HashLinksRegistry(
+  'testnet',
+  logger,
   '0.0.678901',  // HashLinks registry topic ID
-  client.hederaMirrorNode,
-  client.hcs1Client,
-  logger
+  client
 );
 
 // Register a HashLink
@@ -206,33 +208,21 @@ const hashLinkRegistration = {
   category: 'defi',
   tags: ['swap', 'defi', 'tokens', 'liquidity'],
   author: '0.0.123456',
-  license: 'MIT',
-  assembly_t_id: '0.0.assembly789',
+  t_id: '0.0.789123',
   icon: 'exchange-alt',
-  screenshots: ['0.0.screenshot1', '0.0.screenshot2'],
   featured: false,
-  rating: 4.8,
-  downloads: 1250,
-  keywords: ['token', 'swap', 'trade', 'exchange']
+  website: 'https://example.com/token-swap'
 };
 
 await hashLinksRegistry.register(hashLinkRegistration);
 
-// Search HashLinks by various criteria
-const searchResults = await hashLinksRegistry.search({
-  query: 'token swap',
-  category: 'defi',
-  tags: ['swap'],
-  minRating: 4.0,
-  limit: 10,
-  sortBy: 'popularity'  // or 'rating', 'recent', 'name'
-});
+// Search HashLinks by name
+const searchResults = await hashLinksRegistry.searchByName('token swap');
 
 console.log('Search results:', searchResults.map(result => ({
   name: result.name,
-  title: result.title,
-  rating: result.rating,
-  downloads: result.downloads
+  category: result.category,
+  featured: result.featured
 })));
 
 // Get featured HashLinks
@@ -246,9 +236,6 @@ console.log(`DeFi HashLinks: ${defiHashLinks.length}`);
 // Get HashLinks by tags
 const swapHashLinks = await hashLinksRegistry.searchByTags(['swap', 'exchange']);
 console.log(`Swap-related HashLinks: ${swapHashLinks.length}`);
-
-// Update HashLink rating (simulated)
-await hashLinksRegistry.updateRating('token-swap-app', 4.9, 1300);
 ```
 
 ---
@@ -260,40 +247,24 @@ await hashLinksRegistry.updateRating('token-swap-app', 4.9, 1300);
 Initialize all registries through the HCS12 client:
 
 ```typescript
-import { HCS12Client, NetworkType, Logger } from '@hashgraphonline/standards-sdk';
+import { HCS12Client, Logger } from '@hashgraphonline/standards-sdk';
 
 const client = new HCS12Client({
-  network: NetworkType.TESTNET,
-  hcs12: {
-    operatorId: process.env.HEDERA_OPERATOR_ID!,
-    operatorPrivateKey: process.env.HEDERA_OPERATOR_KEY!,
-    registryTopics: {
-      action: '0.0.456789',
-      assembly: '0.0.567890', 
-      hashlinks: '0.0.678901'
-    }
-  },
+  network: 'testnet',
+  operatorId: process.env.HEDERA_OPERATOR_ID!,
+  operatorPrivateKey: process.env.HEDERA_OPERATOR_KEY!,
   logger: new Logger({ module: 'HCS12Client' })
 });
 
 // Initialize all registries
-await client.initializeRegistries({
-  cacheStrategy: 'hybrid',      // memory + storage
-  syncInterval: 30000,          // 30 seconds
-  maxCacheSize: 100 * 1024 * 1024, // 100MB
-  auditEnabled: true,
-  preloadFeatured: true        // Preload featured HashLinks
+client.initializeRegistries({
+  action: '0.0.456789',
+  assembly: '0.0.567890',
+  hashlinks: '0.0.678901',
 });
 
-// Verify registries are ready
-const registryStatus = await client.getRegistryStatus();
-console.log('Registry status:', {
-  action: registryStatus.action.ready,
-  assembly: registryStatus.assembly.ready,
-  hashlinks: registryStatus.hashlinks.ready,
-  totalEntries: registryStatus.totalEntries,
-  lastSync: registryStatus.lastSync
-});
+await client.syncRegistries();
+console.log('Registry topics:', client.getRegistryTopicIds());
 ```
 
 ### Manual Registry Synchronization
@@ -302,27 +273,14 @@ Control registry synchronization for optimal performance:
 
 ```typescript
 // Sync specific registry
-await client.syncRegistry('action', {
-  fromSequence: 0,           // Start from beginning
-  batchSize: 100,            // Process 100 messages per batch
-  maxMessages: 1000,         // Limit total messages
-  onProgress: (current, total, registry) => {
-    const percent = Math.round((current / total) * 100);
-    console.log(`Syncing ${registry}: ${percent}% (${current}/${total})`);
-  },
-  onError: (error, registry, sequence) => {
-    console.error(`Sync error in ${registry} at sequence ${sequence}:`, error);
-    return 'continue'; // or 'abort', 'retry'
-  }
-});
+await client.actionRegistry?.sync();
 
 // Sync all registries in parallel
-const syncPromises = ['action', 'assembly', 'hashlinks'].map(type => 
-  client.syncRegistry(type as any, { 
-    maxMessages: 500,
-    batchSize: 50 
-  })
-);
+const syncPromises = [
+  client.actionRegistry?.sync(),
+  client.assemblyRegistry?.sync(),
+  client.hashLinksRegistry?.sync(),
+].filter(Boolean) as Promise<void>[];
 
 try {
   await Promise.all(syncPromises);
@@ -332,7 +290,8 @@ try {
 }
 
 // Force refresh cached data
-await client.refreshRegistryCache('hashlinks');
+client.hashLinksRegistry?.clearCache();
+await client.hashLinksRegistry?.sync();
 ```
 
 ---
@@ -445,16 +404,12 @@ console.log('Advanced search results:', {
 });
 
 // Search assemblies with filters
-const assemblySearch = await assemblyRegistry.search({
-  hasActions: true,           // Must have actions
-  hasBlocks: true,            // Must have blocks
-  minActionsCount: 2,         // At least 2 actions
-  maxBlocksCount: 10,         // At most 10 blocks
-  tags: ['interactive'],      // Must have 'interactive' tag
-  author: '0.0.123456',       // By specific author
-  versionRange: '^1.0.0',     // Version compatibility
-  updatedAfter: new Date('2024-01-01')
-});
+const assemblySearch = (await assemblyRegistry.listEntries())
+  .map(entry => entry.data)
+  .filter((entry: any) =>
+    Array.isArray(entry.tags) &&
+    entry.tags.includes('interactive'),
+  );
 ```
 
 ### Tag-Based Organization
@@ -593,19 +548,15 @@ syncMonitor.on('sync_lag', async (registry, lagMinutes) => {
     console.warn(`Registry ${registry} lag detected: ${lagMinutes} minutes`);
     
     // Force sync
-    await client.syncRegistry(registry, { 
-      priority: 'high',
-      timeout: 30000 
-    });
+    if (registry === 'action') await client.actionRegistry?.sync();
+    if (registry === 'assembly') await client.assemblyRegistry?.sync();
+    if (registry === 'hashlinks') await client.hashLinksRegistry?.sync();
   }
 });
 
 // Auto-sync on network reconnect
 client.on('network_connected', async () => {
-  await client.syncAllRegistries({ 
-    catchUp: true,
-    maxLag: 3600000  // 1 hour max lag
-  });
+  await client.syncRegistries();
 });
 ```
 
