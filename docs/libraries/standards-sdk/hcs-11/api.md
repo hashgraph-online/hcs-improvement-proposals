@@ -28,7 +28,7 @@ import {
   ProfileType,
   AIAgentType,
   AIAgentCapability,
-} from '@hashgraphonline/standards-sdk/hcs-11';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Types (selected)

@@ -21,24 +21,24 @@ import {
   EVMBridge,
   MapCache,
   type EVMConfig,
-} from '@hashgraphonline/standards-sdk/hcs-7/evm-bridge';
+} from '@hashgraphonline/standards-sdk';
 
 import {
   WasmBridge,
   type WASMConfig,
-} from '@hashgraphonline/standards-sdk/hcs-7/wasm-bridge';
+} from '@hashgraphonline/standards-sdk';
 
 import {
   RedisCache,
   type RedisConfig,
-} from '@hashgraphonline/standards-sdk/hcs-7/redis-cache';
+} from '@hashgraphonline/standards-sdk';
 
 import {
   buildHcs7CreateRegistryTx,
   buildHcs7SubmitMessageTx,
   buildHcs7EvmMessageTx,
   buildHcs7WasmMessageTx,
-} from '@hashgraphonline/standards-sdk/hcs-7/tx';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ---

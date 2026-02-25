@@ -89,7 +89,7 @@ setState(registryView.entries);
 When you need live previews (e.g., show the WASM router’s current selection), you can still run the bridges client-side:
 
 ```ts
-import { EVMBridge, WasmBridge } from '@hashgraphonline/standards-sdk/hcs-7';
+import { EVMBridge, WasmBridge } from '@hashgraphonline/standards-sdk';
 
 const evm = new EVMBridge('testnet');
 const wasm = new WasmBridge();

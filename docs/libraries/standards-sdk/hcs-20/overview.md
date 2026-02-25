@@ -224,7 +224,7 @@ Example code:
 ```typescript
 import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk';
 // or import from specific path
-// import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk/hcs-20';
+// import { HCS20PointsIndexer } from '@hashgraphonline/standards-sdk';
 
 const indexer = new HCS20PointsIndexer('testnet');
 

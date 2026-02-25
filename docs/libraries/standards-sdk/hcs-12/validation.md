@@ -18,7 +18,7 @@ import {
   validateHashLinksRegistration,
   safeValidate,
   validateWithSchema,
-} from '@hashgraphonline/standards-sdk/hcs-12';
+} from '@hashgraphonline/standards-sdk';
 
 // Validate a block definition before registering
 const blockResult = validateBlockRegistration(blockDefinition);
@@ -47,7 +47,7 @@ HashLinks requires WASM modules to expose a minimal interface so SDKs can intera
 - `GET(...)` → read-only entrypoint for queries
 
 ```ts
-import { WasmValidator } from '@hashgraphonline/standards-sdk/hcs-12';
+import { WasmValidator } from '@hashgraphonline/standards-sdk';
 
 const validator = new WasmValidator();
 const result = await validator.validate(wasmBuffer);
@@ -74,4 +74,3 @@ The validator inspects exports/imports, basic signatures, and can report missing
 - Missing `INFO`/`POST`/`GET` export → add required functions to the module.
 - Invalid attribute types in a block → ensure types align with UI/renderer expectations.
 - Assembly references unresolved → register actions/blocks first, then bind in assemblies.
-

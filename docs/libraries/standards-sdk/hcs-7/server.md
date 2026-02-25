@@ -107,7 +107,7 @@ topic.entries.forEach(entry => {
 ### EVMBridge
 
 ```ts
-import { EVMBridge } from '@hashgraphonline/standards-sdk/hcs-7/evm-bridge';
+import { EVMBridge } from '@hashgraphonline/standards-sdk';
 
 const evm = new EVMBridge('testnet');
 const { result } = await evm.executeCommand({
@@ -129,14 +129,14 @@ console.log('Minted so far:', result.values?.[0]);
 Swap in `RedisCache` if you need a shared cache across processes:
 
 ```ts
-import { RedisCache } from '@hashgraphonline/standards-sdk/hcs-7/redis-cache';
+import { RedisCache } from '@hashgraphonline/standards-sdk';
 const evm = new EVMBridge('testnet', undefined, new RedisCache({ host: '127.0.0.1' }));
 ```
 
 ### WasmBridge
 
 ```ts
-import { WasmBridge } from '@hashgraphonline/standards-sdk/hcs-7/wasm-bridge';
+import { WasmBridge } from '@hashgraphonline/standards-sdk';
 
 const wasm = new WasmBridge();
 const wasmBytes = await fetch('https://kiloscribe.com/api/inscription-cdn/0.0.5269810?network=testnet').then(r => r.arrayBuffer());

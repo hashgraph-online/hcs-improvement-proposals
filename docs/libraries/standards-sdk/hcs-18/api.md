@@ -35,7 +35,7 @@ import {
   buildHcs18RespondMessage,
   buildHcs18CompleteMessage,
   buildHcs18WithdrawMessage,
-} from '@hashgraphonline/standards-sdk/hcs-18';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Enums

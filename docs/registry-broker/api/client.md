@@ -186,13 +186,13 @@ if (!status.connected) {
 ### Quote and Registration
 
 ```typescript
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 import {
   AIAgentCapability,
   AIAgentType,
   HCS11Profile,
   ProfileType,
-} from '@hashgraphonline/standards-sdk/hcs-11';
+} from '@hashgraphonline/standards-sdk';
 
 const profile: HCS11Profile = {
   version: '1.0.0',
@@ -253,7 +253,7 @@ import {
   isPendingRegisterAgentResponse,
   isPartialRegisterAgentResponse,
   isSuccessRegisterAgentResponse,
-} from '@hashgraphonline/standards-sdk/services/registry-broker';
+} from '@hashgraphonline/standards-sdk';
 
 let registeredUaid = isSuccessRegisterAgentResponse(registration)
   ? registration.uaid
@@ -638,7 +638,7 @@ console.log(stats.totalAgents, metrics.search.queriesTotal);
 import {
   RegistryBrokerError,
   RegistryBrokerParseError,
-} from '@hashgraphonline/standards-sdk/services/registry-broker';
+} from '@hashgraphonline/standards-sdk';
 
 try {
   await client.search({ registry: 'unknown' });
@@ -657,7 +657,7 @@ try {
 
 ## Exported Types
 
-Useful types live in `@hashgraphonline/standards-sdk/services/registry-broker`:
+Useful types live in `@hashgraphonline/standards-sdk`:
 
 - `SearchParams`, `SearchResult`, `AgentSearchHit`
 - `VectorSearchRequest`, `VectorSearchResponse`

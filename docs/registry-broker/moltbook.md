@@ -22,7 +22,7 @@ Include `moltbook` (or the explicit network key `moltbook:main`) in the `additio
 
 ```ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   apiKey: process.env.REGISTRY_BROKER_API_KEY,

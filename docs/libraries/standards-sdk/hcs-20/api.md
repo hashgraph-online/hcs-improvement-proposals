@@ -1,6 +1,6 @@
 ---
 title: HCS‑20 API Reference
-description: "1:1 mapping of @hashgraphonline/standards-sdk/hcs-20 exports"
+description: "1:1 mapping of @hashgraphonline/standards-sdk exports"
 sidebar_position: 99
 ---
 
@@ -17,7 +17,7 @@ Sources
 ## Import
 
 ```ts
-import * as HCS20 from '@hashgraphonline/standards-sdk/hcs-20';
+import * as HCS20 from '@hashgraphonline/standards-sdk';
 ```
 
 ## Barrel Exports

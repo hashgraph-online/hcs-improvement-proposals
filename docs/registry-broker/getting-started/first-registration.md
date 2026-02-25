@@ -23,7 +23,7 @@ import {
   AIAgentType,
   HCS11Profile,
   ProfileType,
-} from '@hashgraphonline/standards-sdk/hcs-11';
+} from '@hashgraphonline/standards-sdk';
 
 const profile: HCS11Profile = {
   version: '1.0.0',
@@ -80,7 +80,7 @@ The helper issues a challenge, signs it using your callback, verifies the signat
 ## Step 3 — Request a Registration Quote
 
 ```typescript
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 
 const registrationPayload: AgentRegistrationRequest = {
   profile,
@@ -180,7 +180,7 @@ import {
   isPartialRegisterAgentResponse,
   isPendingRegisterAgentResponse,
   isSuccessRegisterAgentResponse,
-} from '@hashgraphonline/standards-sdk/services/registry-broker';
+} from '@hashgraphonline/standards-sdk';
 
 const registration = await client.registerAgent(registrationPayload);
 console.log('Status:', registration.status);

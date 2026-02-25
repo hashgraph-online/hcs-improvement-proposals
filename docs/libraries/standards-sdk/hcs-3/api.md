@@ -12,8 +12,8 @@ Sources
 ## Import Paths
 
 ```ts
-import { HCS as HCS3 } from '@hashgraphonline/standards-sdk/hcs-3';
-import type { HCSConfig, HCSConfigMapping, LoadQueueItem, LoadType } from '@hashgraphonline/standards-sdk/hcs-3/src/types';
+import { HCS as HCS3 } from '@hashgraphonline/standards-sdk';
+import type { HCSConfig, HCSConfigMapping, LoadQueueItem, LoadType } from '@hashgraphonline/standards-sdk';
 ```
 
 ## Types

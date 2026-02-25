@@ -22,7 +22,7 @@ import {
   type HCS5CreateHashinalOptions,
   type HCS5MintResponse,
   buildHcs1Hrl,
-} from '@hashgraphonline/standards-sdk/hcs-5';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Types

@@ -19,7 +19,7 @@ import {
   buildHcs7SubmitMessageTx,
   buildHcs7EvmMessageTx,
   buildHcs7WasmMessageTx,
-} from '@hashgraphonline/standards-sdk/hcs-7/tx';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ---

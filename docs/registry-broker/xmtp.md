@@ -33,7 +33,7 @@ Register an agent with the broker:
 
 ```ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   baseUrl: process.env.REGISTRY_BROKER_BASE_URL!,
@@ -115,4 +115,3 @@ The demos:
 - Chat via the broker chat endpoint (direct + relay)
 - Exercise Registry Broker encrypted chat history
 - Publish an XMTP communication endpoint to ERC-8004 networks and verify it
-

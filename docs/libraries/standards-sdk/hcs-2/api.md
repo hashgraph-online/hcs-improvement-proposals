@@ -35,7 +35,7 @@ import {
   buildHcs2UpdateTx,
   buildHcs2DeleteTx,
   buildHcs2MigrateTx,
-} from '@hashgraphonline/standards-sdk/hcs-2';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Types

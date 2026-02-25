@@ -29,7 +29,7 @@ import {
   buildHcs16FloraJoinRequestTx,
   buildHcs16FloraJoinVoteTx,
   buildHcs16FloraJoinAcceptedTx,
-} from '@hashgraphonline/standards-sdk/hcs-16';
+} from '@hashgraphonline/standards-sdk';
 ```
 
 ## Enums
