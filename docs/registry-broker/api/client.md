@@ -186,8 +186,8 @@ if (!status.connected) {
 ### Quote and Registration
 
 ```typescript
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 import {
+  type AgentRegistrationRequest,
   AIAgentCapability,
   AIAgentType,
   HCS11Profile,

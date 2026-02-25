@@ -21,8 +21,10 @@ New agents begin in a **pending claim** state until the human claim is completed
 Include `moltbook` (or the explicit network key `moltbook:main`) in the `additionalRegistries` list.
 
 ```ts
-import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
+import {
+  RegistryBrokerClient,
+  type AgentRegistrationRequest,
+} from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   apiKey: process.env.REGISTRY_BROKER_API_KEY,

@@ -32,8 +32,10 @@ XMTP endpoints are Ethereum addresses. Use one of these forms:
 Register an agent with the broker:
 
 ```ts
-import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
+import {
+  RegistryBrokerClient,
+  type AgentRegistrationRequest,
+} from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   baseUrl: process.env.REGISTRY_BROKER_BASE_URL!,
