@@ -31,12 +31,14 @@ const { did, uaid, parsed } = await hcs14.createDidWithUaid({
 });
 ```
 
-## Resolve UAID → DID
+## Resolve DID / UAID Profiles
 
 The Hedera resolver is registered automatically by `HCS14Client`.
 
 ```ts
-const doc = await hcs14.getResolverRegistry().resolveUaid('uaid:did:...');
+const didProfile = await hcs14.resolveDidProfile('did:hedera:testnet:0.0.1234');
+const uaidProfile = await hcs14.resolveUaidProfile('uaid:did:z6Mk...;uid=0;proto=hcs-10;nativeId=hedera:testnet:0.0.1234');
+const didDocument = await hcs14.getResolverRegistry().resolveUaid('uaid:did:z6Mk...;uid=0;proto=hcs-10;nativeId=hedera:testnet:0.0.1234');
 ```
 
 ## Demos
@@ -52,6 +54,8 @@ HEDERA_PRIVATE_KEY=302e0201003005...
 Commands:
 
 ```
+pnpm run demo:hcs-14:aid-generate
+pnpm run demo:hcs-14:hiero-issue-uaid
 pnpm run demo:hcs-14:issue-resolve
-pnpm exec tsx demo/hcs-14/resolve-did.ts
+pnpm run demo:hcs-14:resolve-profile
 ```
