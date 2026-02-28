@@ -11,7 +11,7 @@ The Go SDK (`standards-sdk-go`) provides a native Go implementation of the Hiero
 
 ## What This SDK Does
 
-- **Implements HCS Protocols** — Full Go implementations of HCS-2, HCS-5, HCS-11, HCS-14, HCS-15, HCS-16, HCS-17, and HCS-27
+- **Implements HCS Protocols** — Full Go implementations of HCS-2, HCS-5, HCS-11, HCS-14, HCS-15, HCS-16, HCS-17, HCS-20, and HCS-27
 - **Inscriber Utilities** — Kiloscribe auth, websocket-based inscription, quote generation, bulk-files, and skill inscription helpers
 - **Registry Broker Client** — Full-featured client for search, agents, credits, verification, ledger auth, chat/encryption, feedback, and skills
 - **Idiomatic Go Patterns** — Context-aware APIs, structured error handling, and familiar Go conventions
@@ -70,6 +70,7 @@ func main() {
 | `pkg/hcs15` | HCS-15 | Base/petal account creation, tx builders, petal/base key verification helpers |
 | `pkg/hcs16` | HCS-16 | Flora account + topic management, message builders/senders, threshold-member key assembly |
 | `pkg/hcs17` | HCS-17 | State-hash topic/message support, deterministic state hash calculators, verification |
+| `pkg/hcs20` | HCS-20 | Auditable points deployment, mint/transfer/burn flows, tx builders, and state indexing |
 | `pkg/hcs27` | HCS-27 | Checkpoint topic creation, publish/retrieval, validation, Merkle/proof helpers |
 | `pkg/inscriber` | — | Kiloscribe auth flow, websocket inscription, quote generation, bulk-files, skill inscription |
 | `pkg/registrybroker` | — | Full Registry Broker client (search, adapters, agents, credits, verification, chat, skills) |
@@ -114,6 +115,11 @@ go test -v ./pkg/hcs2 ./pkg/hcs27 ./pkg/inscriber
 ## TypeScript SDK Comparison
 
 The Go SDK mirrors the TypeScript SDK's structure and capabilities. See the [Standards SDK (TypeScript)](../standards-sdk/overview.mdx) documentation for the TypeScript equivalents. Throughout the per-standard documentation pages, you can switch between TypeScript and Go code snippets using the language tabs.
+
+## Go Specification Guides
+
+- [HCS-20 Auditable Points](/docs/libraries/go-sdk/hcs-20)
+- [HCS-27 Checkpoints](/docs/libraries/go-sdk/hcs-27)
 
 ## Community and Support
 

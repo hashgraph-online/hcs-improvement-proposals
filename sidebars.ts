@@ -290,6 +290,8 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/go-sdk/overview',
+            'libraries/go-sdk/hcs-20',
+            'libraries/go-sdk/hcs-27',
           ],
         },
         {

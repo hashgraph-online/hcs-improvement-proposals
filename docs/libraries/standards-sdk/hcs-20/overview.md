@@ -47,6 +47,64 @@ graph TB
 - Transactions: /docs/libraries/standards-sdk/hcs-20/tx
 - API Reference: /docs/libraries/standards-sdk/hcs-20/api
 
+## Go SDK
+
+The Go SDK provides equivalent HCS-20 functionality for deployment and points operations.
+
+### Installation
+
+```bash
+go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+### Go Quickstart
+
+```go
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs20"
+)
+
+client, err := hcs20.NewClient(hcs20.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+pointsInfo, err := client.DeployPoints(context.Background(), hcs20.DeployPointsOptions{
+	Name:         "Loyalty Points",
+	Tick:         "LOYAL",
+	Max:          "1000000",
+	LimitPerMint: "1000",
+	Metadata:     "https://example.com/points/loyal",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+mintResult, err := client.MintPoints(context.Background(), hcs20.MintPointsOptions{
+	Tick:   "LOYAL",
+	Amount: "250",
+	To:     "0.0.98765",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+fmt.Printf("Points topic: %s\n", pointsInfo.TopicID)
+fmt.Printf("Mint tx: %s\n", mintResult.TransactionID)
+```
+
+:::tip
+See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for package coverage, configuration, and integration testing.
+:::
+
 ## Implementation Workflow
 
 ### 1. Deploy Points
