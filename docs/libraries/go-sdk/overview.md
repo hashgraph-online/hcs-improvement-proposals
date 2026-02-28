@@ -116,11 +116,6 @@ go test -v ./pkg/hcs2 ./pkg/hcs27 ./pkg/inscriber
 
 The Go SDK mirrors the TypeScript SDK's structure and capabilities. See the [Standards SDK (TypeScript)](../standards-sdk/overview.mdx) documentation for the TypeScript equivalents. Throughout the per-standard documentation pages, you can switch between TypeScript and Go code snippets using the language tabs.
 
-## Go Specification Guides
-
-- [HCS-20 Auditable Points](/docs/libraries/go-sdk/hcs-20)
-- [HCS-27 Checkpoints](/docs/libraries/go-sdk/hcs-27)
-
 ## Community and Support
 
 - [Join our Telegram](https://t.me/hashinals) for community discussion

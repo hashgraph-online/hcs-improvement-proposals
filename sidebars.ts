@@ -264,6 +264,16 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'HCS-27: Checkpoints',
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-27/index' },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-27/overview',
+              ],
+            },
+            {
+              type: 'category',
               label: 'HCS-21: Adapter Registry',
               link: { type: 'doc', id: 'libraries/standards-sdk/hcs-21/index' },
               collapsible: true,
@@ -290,8 +300,6 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/go-sdk/overview',
-            'libraries/go-sdk/hcs-20',
-            'libraries/go-sdk/hcs-27',
           ],
         },
         {

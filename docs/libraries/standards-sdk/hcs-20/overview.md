@@ -3,6 +3,9 @@ title: HCS-20 Points SDK Overview
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-20: Auditable Points Standard
 
 The HCS-20 module provides a standard for creating and managing auditable points (like loyalty points or in-game currencies) on the Hedera Consensus Service. It includes clients for both server-side (Node.js) and client-side (browser) environments, along with an indexer for tracking the state of points.
@@ -47,22 +50,39 @@ graph TB
 - Transactions: /docs/libraries/standards-sdk/hcs-20/tx
 - API Reference: /docs/libraries/standards-sdk/hcs-20/api
 
-## Go SDK
+## SDK Quickstart
 
-The Go SDK provides equivalent HCS-20 functionality for deployment and points operations.
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
 
-### Installation
+```typescript
+const deployOptions = {
+  name: 'MyRewardPoints',
+  tick: 'MRP',
+  maxSupply: '1000000',
+  limitPerMint: '1000',
+  metadata: 'https://my-reward-points.com/meta',
+  usePrivateTopic: false,
+};
 
-```bash
-go get github.com/hashgraph-online/standards-sdk-go@latest
+const pointsInfo = await client.deployPoints(deployOptions);
+
+const mintTransaction = await client.mintPoints({
+  tick: 'MRP',
+  amount: '500',
+  to: '0.0.98765',
+});
 ```
 
-### Go Quickstart
+</TabItem>
+<TabItem value="go">
 
 ```go
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs20"
@@ -78,7 +98,7 @@ if err != nil {
 }
 
 pointsInfo, err := client.DeployPoints(context.Background(), hcs20.DeployPointsOptions{
-	Name:         "Loyalty Points",
+	Name:         "LoyaltyPoints",
 	Tick:         "LOYAL",
 	Max:          "1000000",
 	LimitPerMint: "1000",
@@ -90,20 +110,19 @@ if err != nil {
 
 mintResult, err := client.MintPoints(context.Background(), hcs20.MintPointsOptions{
 	Tick:   "LOYAL",
-	Amount: "250",
+	Amount: "500",
 	To:     "0.0.98765",
 })
 if err != nil {
 	log.Fatal(err)
 }
 
-fmt.Printf("Points topic: %s\n", pointsInfo.TopicID)
-fmt.Printf("Mint tx: %s\n", mintResult.TransactionID)
+_ = pointsInfo
+_ = mintResult
 ```
 
-:::tip
-See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for package coverage, configuration, and integration testing.
-:::
+</TabItem>
+</Tabs>
 
 ## Implementation Workflow
 

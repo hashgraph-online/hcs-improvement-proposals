@@ -1,0 +1,108 @@
+---
+title: HCS-27 Checkpoint SDK Overview
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# HCS-27: Transparency Log Checkpoints
+
+HCS-27 anchors append-only transparency logs to Hedera by publishing periodic checkpoint commitments (`tree_size`, `root_hash`, and batch range metadata).
+
+## What HCS-27 Does
+
+- Creates checkpoint topics with standard HCS-27 memo conventions.
+- Publishes checkpoint messages with root commitments and optional overflow metadata pointers.
+- Validates checkpoint message payloads and metadata digests.
+- Resolves and verifies checkpoint streams from mirror-node data.
+
+## Installation
+
+<Tabs groupId="sdk-language" defaultValue="go" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+
+TypeScript HCS-27 support is not yet available in `@hashgraphonline/standards-sdk`.
+
+</TabItem>
+<TabItem value="go">
+
+```bash
+go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+</TabItem>
+</Tabs>
+
+## Quickstart
+
+<Tabs groupId="sdk-language" defaultValue="go" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+// HCS-27 TypeScript client is not yet implemented in standards-sdk.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
+client, err := hcs27.NewClient(hcs27.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+topicID, _, err := client.CreateCheckpointTopic(context.Background(), hcs27.CreateTopicOptions{
+	TTLSeconds:          300,
+	UseOperatorAsAdmin:  true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+metadata := hcs27.CheckpointMetadata{
+	Type:   "ans-checkpoint-v1",
+	Stream: hcs27.StreamID{Registry: "ans", LogID: "default"},
+	Root: hcs27.RootCommitment{
+		TreeSize:    671,
+		RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
+	},
+	BatchRange: hcs27.BatchRange{Start: 661, End: 671},
+}
+
+_, err = client.PublishCheckpoint(context.Background(), topicID, metadata, "go-sdk checkpoint publish", "")
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+</TabItem>
+</Tabs>
+
+## References
+
+- [HCS-27 Standard](/docs/standards/hcs-27)
+- [HCS-27 Merkle Tree Profile](/docs/standards/hcs-27/merkle-tree-profile)
+- [Go SDK Overview](/docs/libraries/go-sdk/overview)
