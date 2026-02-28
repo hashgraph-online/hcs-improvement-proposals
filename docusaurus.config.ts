@@ -53,38 +53,6 @@ const config: Config = {
 
   headTags: [
     {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
-        crossorigin: 'anonymous',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'preload',
-        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap',
-        as: 'style',
-      },
-    },
-    {
-      tagName: 'link',
-      attributes: {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap',
-        media: 'print',
-        onload: "this.media='all'",
-      },
-    },
-    {
       tagName: 'style',
       attributes: {},
       innerHTML: `
@@ -378,6 +346,7 @@ const config: Config = {
         'yaml',
         'solidity',
         'markdown',
+        'go',
       ],
       magicComments: [
         {

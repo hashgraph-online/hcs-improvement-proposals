@@ -3,7 +3,7 @@ title: HCS-11 Profiles SDK Overview
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 
@@ -703,9 +703,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 
 ### Go Quickstart
 
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="go">
 
 ```go
@@ -757,7 +755,7 @@ fmt.Println(jsonStr)
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 :::tip
 See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for environment setup, supported packages, and testing instructions.

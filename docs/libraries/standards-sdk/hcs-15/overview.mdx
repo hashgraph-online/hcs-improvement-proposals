@@ -4,7 +4,7 @@ description: What Petal accounts are, how they work, and how to use the Standard
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 
@@ -63,12 +63,44 @@ graph TD
 
 ## Quickstart (Copy/Paste)
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```ts
 import { HCS15Client } from '@hashgraphonline/standards-sdk';
 const c = new HCS15Client({ network: 'testnet', operatorId, operatorKey });
 const base = await c.createBaseAccount({ initialBalance: 10 });
 await c.createPetalAccount({ basePrivateKey: base.privateKey });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"fmt"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs15"
+)
+
+client, _ := hcs15.NewClient(hcs15.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+
+base, _ := client.CreateBaseAccount(context.Background(), hcs15.BaseAccountCreateOptions{
+	InitialBalanceHbar: 10,
+})
+
+petal, _ := client.CreatePetalAccount(context.Background(), hcs15.PetalAccountCreateOptions{
+	BasePrivateKey: base.PrivateKeyRaw,
+})
+fmt.Printf("Base: %s, Petal: %s\n", base.AccountID, petal.AccountID)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## FAQ
 
@@ -82,69 +114,3 @@ await c.createPetalAccount({ basePrivateKey: base.privateKey });
 3. Transactions: [/docs/libraries/standards-sdk/hcs-15/tx](/docs/libraries/standards-sdk/hcs-15/tx)
 4. API Reference: [/docs/libraries/standards-sdk/hcs-15/api](/docs/libraries/standards-sdk/hcs-15/api)
 
-## Go SDK
-
-The Go SDK provides equivalent functionality for this standard.
-
-### Installation
-
-```bash
-go get github.com/hashgraph-online/standards-sdk-go@latest
-```
-
-### Go Quickstart
-
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🐹 Go', value: 'go' },
-]}>
-<TabItem value="go">
-
-```go
-import (
-	"context"
-	"fmt"
-	"log"
-	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs15"
-)
-
-client, err := hcs15.NewClient(hcs15.ClientConfig{
-	OperatorAccountID:  "0.0.123456",
-	OperatorPrivateKey: "<private-key>",
-	Network:            "testnet",
-})
-if err != nil {
-	log.Fatal(err)
-}
-
-// Create a base account
-base, err := client.CreateBaseAccount(context.Background(), hcs15.BaseAccountCreateOptions{
-	InitialBalanceHbar: 10,
-})
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("Base Account: %s\n", base.AccountID)
-
-// Create a petal account from the base key
-petal, err := client.CreatePetalAccount(context.Background(), hcs15.PetalAccountCreateOptions{
-	BasePrivateKey: base.PrivateKeyRaw,
-})
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("Petal Account: %s\n", petal.AccountID)
-
-// Verify petal belongs to base
-valid, err := client.VerifyPetalAccount(context.Background(), petal.AccountID, base.AccountID)
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("Verified: %v\n", valid)
-```
-
-</TabItem>
-</Tabs>
-
-:::tip
-See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for environment setup, supported packages, and testing instructions.
-:::

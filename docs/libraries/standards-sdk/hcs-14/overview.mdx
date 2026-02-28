@@ -3,7 +3,7 @@ title: HCS-14 UAID SDK Overview
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 
@@ -20,6 +20,9 @@ HCS‑14 gives agents a single, portable identifier that works across Web2 and W
 
 Generate a UAID in three common situations.
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```ts
 import { HCS14Client } from '@hashgraphonline/standards-sdk';
 const hcs14 = new HCS14Client();
@@ -30,6 +33,29 @@ const uaidAid = await hcs14.createUaid(
   { uid: 'support' },
 );
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"fmt"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs14"
+)
+
+client := hcs14.NewClient(hcs14.ClientOptions{})
+
+// Resolve an existing UAID
+result, err := client.Resolve(context.Background(), "uaid:did:example:123")
+if err != nil {
+	panic(err)
+}
+fmt.Printf("Resolved: %v, Profile: %s\n", result.Metadata.Resolved, result.Metadata.Profile)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## Visual Overview
 
@@ -44,51 +70,3 @@ flowchart LR
   E --> D["uaid:did + routing"]
 ```
 
-## Go SDK
-
-The Go SDK provides equivalent functionality for this standard.
-
-### Installation
-
-```bash
-go get github.com/hashgraph-online/standards-sdk-go@latest
-```
-
-### Go Quickstart
-
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🐹 Go', value: 'go' },
-]}>
-<TabItem value="go">
-
-```go
-import (
-	"context"
-	"fmt"
-	"log"
-	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs14"
-)
-
-client := hcs14.NewClient(hcs14.ClientOptions{})
-
-// Resolve a UAID
-result, err := client.Resolve(context.Background(), "uaid:did:example:123")
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("Resolved: %v, Profile: %s\n", result.Metadata.Resolved, result.Metadata.Profile)
-
-// Resolve via specific profile
-dnsResult, err := client.ResolveUAIDDNSWeb(context.Background(), "uaid:did:example:123")
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("DNS Web: %v\n", dnsResult)
-```
-
-</TabItem>
-</Tabs>
-
-:::tip
-See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for environment setup, supported packages, and testing instructions.
-:::

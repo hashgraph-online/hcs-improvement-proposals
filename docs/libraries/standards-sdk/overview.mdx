@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 # Hashgraph Online Standards SDK
@@ -21,10 +21,7 @@ Available in **TypeScript** and **Go** — choose your language below.
 
 ### Installation
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```bash
@@ -46,14 +43,11 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ### Quick Example
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -119,7 +113,7 @@ func main() {
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 import SidebarShowcase from '@site/src/components/SidebarShowcase';
 

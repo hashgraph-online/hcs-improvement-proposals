@@ -3,7 +3,7 @@ title: HCS-2 Topic Registry SDK Overview
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 # HCS-2: Decentralized Topic Registry
@@ -95,10 +95,7 @@ The SDK validates operations based on registry type:
 - GetRegistry operation for non-indexed registries returns only the latest entry per topic
 - Creation allows you to specify which type you need (defaults to indexed):
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -137,16 +134,13 @@ if err != nil {
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ## Getting Started
 
 ### Installation
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```bash
@@ -161,14 +155,11 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ### Basic Setup
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 **Node.js** — For server-side applications, use `HCS2Client`.
@@ -228,7 +219,7 @@ The Go SDK also supports environment variable auto-loading. Set `HEDERA_ACCOUNT_
 :::
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ## Implementation Workflow
 
@@ -251,10 +242,7 @@ sequenceDiagram
     deactivate Client
 ```
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -302,7 +290,7 @@ nonIndexedResult, err := client.CreateRegistry(context.Background(), hcs2.Create
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ### 2. Registering Entries
 
@@ -323,10 +311,7 @@ sequenceDiagram
     deactivate Client
 ```
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -364,7 +349,7 @@ fmt.Printf("Entry registered. Sequence number: %d\n", registerResult.SequenceNum
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ### 3. Updating Entries
 
@@ -385,10 +370,7 @@ sequenceDiagram
     deactivate Client
 ```
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -426,7 +408,7 @@ fmt.Printf("Entry updated. New sequence number: %d\n", updateResult.SequenceNumb
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ### 4. Deleting Entries
 
@@ -447,10 +429,7 @@ sequenceDiagram
     deactivate Client
 ```
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -484,7 +463,7 @@ fmt.Printf("Entry deleted. Sequence number: %d\n", deleteResult.SequenceNumber)
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ### 5. Migrating a Registry
 
@@ -508,10 +487,7 @@ sequenceDiagram
     Note over App,NewRegistry: Consumers will now follow to the new registry
 ```
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -549,7 +525,7 @@ fmt.Printf("Registry migrated to: %s\n", newRegistryTopicID)
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ## Querying Registries
 
@@ -571,10 +547,7 @@ sequenceDiagram
     deactivate Client
 ```
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -602,7 +575,7 @@ for _, entry := range registry.Entries {
 For non-indexed registries, only the latest entry per topic is returned.
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ## Full Lifecycle Example
 
@@ -735,10 +708,7 @@ Retrieves and parses all entries from a registry topic.
 
 ### Types
 
-<Tabs groupId="sdk-language" defaultValue="typescript" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -831,4 +801,4 @@ type ClientConfig struct {
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>

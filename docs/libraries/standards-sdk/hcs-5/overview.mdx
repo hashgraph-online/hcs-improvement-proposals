@@ -4,7 +4,7 @@ sidebar_position: 1
 description: Mint NFTs whose on-chain metadata points to an HCS‑1 HRL (hcs://1/<topicId>)
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 
@@ -15,6 +15,9 @@ HCS‑5 is the simplest way to create a “fully on‑graph” NFT on Hedera. Yo
 In plain English: “Put my image/text on HCS‑1, then mint an NFT that permanently points to it.”
 
 ## TL;DR Quickstart
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```ts
 import { HCS5Client } from '@hashgraphonline/standards-sdk';
@@ -48,6 +51,46 @@ const minted = await client.createHashinal({
 console.log(minted.metadata); // hcs://1/<topicId>
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"fmt"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs5"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/inscriber"
+)
+
+client, err := hcs5.NewClient(hcs5.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	panic(err)
+}
+
+// Inscribe SVG and mint (ModeHashinal is the default)
+result, err := client.CreateHashinal(context.Background(), hcs5.CreateHashinalOptions{
+	TokenID: "0.0.123456",
+	Request: inscriber.StartInscriptionRequest{
+		Content:     "PHN2ZyB4bWxucz0iaHR0cDovL3...", // base64 encoded SVG
+		FileName:    "hashinal.svg",
+		Mimetype:    "image/svg+xml",
+		Name:        "Demo Hashinal",
+		Description: "Minted with standards-sdk-go",
+	},
+})
+if err != nil {
+	panic(err)
+}
+fmt.Printf("Metadata: %s\n", result.Metadata) // hcs://1/<topicId>
+```
+
+</TabItem>
+</LanguageTabs>
+
 ## Visual Overview
 
 Hashinal lifecycle
@@ -78,6 +121,9 @@ The SDK does steps 1–3 for you in one call (`createHashinal`).
 
 Mint from an existing HCS‑1 topic:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```ts
 await client.mint({
   tokenId: '0.0.123456',
@@ -86,7 +132,23 @@ await client.mint({
 });
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+result, err := client.Mint(context.Background(), hcs5.MintOptions{
+	TokenID:         "0.0.123456",
+	MetadataTopicID: "0.0.654321",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
 Or inscribe and mint in one step (recommended):
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```ts
 await client.createHashinal({
@@ -103,6 +165,25 @@ await client.createHashinal({
   },
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+result, err := client.CreateHashinal(context.Background(), hcs5.CreateHashinalOptions{
+	TokenID: "0.0.123456",
+	Request: inscriber.StartInscriptionRequest{
+		Content:     "PHN2ZyB4bWxucz0iaHR0cDovL3...",
+		FileName:    "hashinal.svg",
+		Mimetype:    "image/svg+xml",
+		Name:        "Demo Hashinal",
+		Description: "Minted with standards-sdk-go",
+	},
+})
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Key Handling (No Guesswork)
 
@@ -188,54 +269,3 @@ The demo inscribes an SVG (HIP‑412 attributes included), mints an NFT, and pri
 - SDK Source: [src/hcs-5](https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-5)
 - Inscriber helpers: [src/inscribe](https://github.com/hashgraph-online/standards-sdk/tree/main/src/inscribe)
 
-## Go SDK
-
-The Go SDK provides equivalent functionality for this standard.
-
-### Installation
-
-```bash
-go get github.com/hashgraph-online/standards-sdk-go@latest
-```
-
-### Go Quickstart
-
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🐹 Go', value: 'go' },
-]}>
-<TabItem value="go">
-
-```go
-import (
-	"context"
-	"fmt"
-	"log"
-	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs5"
-)
-
-client, err := hcs5.NewClient(hcs5.ClientConfig{
-	OperatorAccountID:  "0.0.123456",
-	OperatorPrivateKey: "<private-key>",
-	Network:            "testnet",
-})
-if err != nil {
-	log.Fatal(err)
-}
-
-// Mint from an existing HCS-1 topic
-result, err := client.Mint(context.Background(), hcs5.MintOptions{
-	TokenID:         "0.0.123456",
-	MetadataTopicID: "0.0.654321",
-})
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("Serial: %d, Metadata: %s\n", result.SerialNumber, result.Metadata)
-```
-
-</TabItem>
-</Tabs>
-
-:::tip
-See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for environment setup, supported packages, and testing instructions.
-:::

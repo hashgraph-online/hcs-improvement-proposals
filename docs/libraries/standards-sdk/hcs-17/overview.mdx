@@ -4,7 +4,7 @@ description: Why/when to use HCS‑17, how messages are shaped, and how to publi
 sidebar_position: 1
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 
@@ -83,6 +83,9 @@ Anyone can re‑compute the hash from the same ingredients and confirm it matche
 
 ## Quickstart (Copy/Paste)
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```ts
 import { HCS17Client } from '@hashgraphonline/standards-sdk';
 
@@ -95,6 +98,36 @@ const { stateHash } = await c.computeAndPublish({
   publishTopicId: stateTopicId,
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"fmt"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs17"
+)
+
+client, _ := hcs17.NewClient(hcs17.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+
+topicID, _ := client.CreateStateTopic(context.Background(), hcs17.CreateTopicOptions{TTL: 86400})
+
+result, _ := client.ComputeAndPublish(context.Background(), hcs17.ComputeAndPublishOptions{
+	AccountID:      "0.0.123456",
+	Topics:         []string{"0.0.2001", "0.0.2002"},
+	PublishTopicID: topicID,
+	Memo:           "state snapshot",
+})
+fmt.Printf("State Hash: %s\n", result.StateHash)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## FAQ
 
@@ -109,64 +142,3 @@ const { stateHash } = await c.computeAndPublish({
 - Base Client: /docs/libraries/standards-sdk/hcs-17/base-client
 - API Reference: /docs/libraries/standards-sdk/hcs-17/api
 
-## Go SDK
-
-The Go SDK provides equivalent functionality for this standard.
-
-### Installation
-
-```bash
-go get github.com/hashgraph-online/standards-sdk-go@latest
-```
-
-### Go Quickstart
-
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🐹 Go', value: 'go' },
-]}>
-<TabItem value="go">
-
-```go
-import (
-	"context"
-	"fmt"
-	"log"
-	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs17"
-)
-
-client, err := hcs17.NewClient(hcs17.ClientConfig{
-	OperatorAccountID:  "0.0.123456",
-	OperatorPrivateKey: "<private-key>",
-	Network:            "testnet",
-})
-if err != nil {
-	log.Fatal(err)
-}
-
-// Create a state topic
-topicID, err := client.CreateStateTopic(context.Background(), hcs17.CreateTopicOptions{
-	TTL: 86400,
-})
-if err != nil {
-	log.Fatal(err)
-}
-
-// Compute and publish a state hash
-result, err := client.ComputeAndPublish(context.Background(), hcs17.ComputeAndPublishOptions{
-	AccountID:      "0.0.123456",
-	Topics:         []string{"0.0.2001", "0.0.2002"},
-	PublishTopicID: topicID,
-	Memo:           "state snapshot",
-})
-if err != nil {
-	log.Fatal(err)
-}
-fmt.Printf("State Hash: %s\n", result.StateHash)
-```
-
-</TabItem>
-</Tabs>
-
-:::tip
-See the [Go SDK Overview](/docs/libraries/go-sdk/overview) for environment setup, supported packages, and testing instructions.
-:::

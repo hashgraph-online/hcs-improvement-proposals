@@ -1,6 +1,6 @@
 import React from 'react';
 import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
+import { SiTypescript, SiGo } from 'react-icons/si';
 
 interface LanguageTabsProps {
   children: React.ReactNode;
@@ -14,14 +14,15 @@ interface LanguageTabsProps {
  *
  * ```mdx
  * import LanguageTabs from '@site/src/components/LanguageTabs';
+ * import TabItem from '@theme/TabItem'; // Docusaurus core
  *
  * <LanguageTabs>
- *   <TabItem value="typescript" label="TypeScript">
+ *   <TabItem value="typescript">
  *     ```typescript
  *     // TS code here
  *     ```
  *   </TabItem>
- *   <TabItem value="go" label="Go">
+ *   <TabItem value="go">
  *     ```go
  *     // Go code here
  *     ```
@@ -35,8 +36,22 @@ interface LanguageTabsProps {
 export default function LanguageTabs({ children }: LanguageTabsProps) {
   return (
     <Tabs groupId="sdk-language" defaultValue="typescript" values={[
-      { label: '🟦 TypeScript', value: 'typescript' },
-      { label: '🐹 Go', value: 'go' },
+      { 
+        label: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <SiTypescript color="#3178C6" /> TypeScript
+          </div>
+        ), 
+        value: 'typescript' 
+      },
+      { 
+        label: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <SiGo color="#00ADD8" size="1.4em" /> Go
+          </div>
+        ), 
+        value: 'go' 
+      },
     ]}>
       {children}
     </Tabs>

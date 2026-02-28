@@ -3,7 +3,7 @@ title: HCS-27 Checkpoint SDK Overview
 sidebar_position: 2
 ---
 
-import Tabs from '@theme/Tabs';
+import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
 # HCS-27: Transparency Log Checkpoints
@@ -19,10 +19,7 @@ HCS-27 anchors append-only transparency logs to Hedera by publishing periodic ch
 
 ## Installation
 
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```bash
@@ -39,14 +36,11 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ## Quickstart
 
-<Tabs groupId="sdk-language" defaultValue="go" values={[
-  { label: '🟦 TypeScript', value: 'typescript' },
-  { label: '🐹 Go', value: 'go' },
-]}>
+<LanguageTabs>
 <TabItem value="typescript">
 
 ```typescript
@@ -99,7 +93,7 @@ if err != nil {
 ```
 
 </TabItem>
-</Tabs>
+</LanguageTabs>
 
 ## References
 
