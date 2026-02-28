@@ -284,6 +284,16 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'Go SDK',
+          link: { type: 'doc', id: 'libraries/go-sdk/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/go-sdk/overview',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Conversational Agent',
           link: { type: 'doc', id: 'libraries/conversational-agent/index' },
           collapsible: true,
