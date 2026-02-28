@@ -89,6 +89,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/inscriber"
 )
@@ -102,7 +103,7 @@ func main() {
 		inscriber.NetworkTestnet,
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	client, err := inscriber.NewClient(inscriber.Config{
@@ -110,7 +111,7 @@ func main() {
 		Network: inscriber.NetworkTestnet,
 	})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	fmt.Printf("Inscriber client ready: %v\n", client != nil)

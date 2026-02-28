@@ -30,6 +30,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs2"
 )
@@ -41,7 +42,7 @@ func main() {
 		Network:            "testnet",
 	})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	result, err := client.CreateRegistry(context.Background(), hcs2.CreateRegistryOptions{
@@ -51,7 +52,7 @@ func main() {
 		UseOperatorAsSubmit: true,
 	})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	fmt.Printf("Registry created: %s\n", result.TopicID)

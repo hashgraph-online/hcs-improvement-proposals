@@ -6,4 +6,4 @@ unlisted: true
 slug: /libraries/standards-sdk/hcs-11/overview-legacy
 ---
 
-This page has moved. See the updated overview with Go SDK support.
+This page has moved. See the [updated overview with Go SDK support](./overview.mdx).

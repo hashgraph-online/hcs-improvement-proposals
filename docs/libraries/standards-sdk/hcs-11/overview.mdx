@@ -711,6 +711,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 ```go
 import (
 	"fmt"
+	"log"
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs11"
 )
 
@@ -722,7 +723,7 @@ client, err := hcs11.NewClient(hcs11.ClientConfig{
 	},
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 // Create an AI agent profile
@@ -739,13 +740,19 @@ profile, err := client.CreateAIAgentProfile(
 		"creator": "Hashgraph Online",
 	},
 )
+if err != nil {
+	log.Fatal(err)
+}
 
 // Validate the profile
 validationResult := client.ValidateProfile(profile)
 fmt.Printf("Valid: %v, Errors: %v\n", validationResult.Valid, validationResult.Errors)
 
 // Convert to JSON
-jsonStr, _ := client.ProfileToJSONString(profile)
+jsonStr, err := client.ProfileToJSONString(profile)
+if err != nil {
+	log.Fatal(err)
+}
 fmt.Println(jsonStr)
 ```
 

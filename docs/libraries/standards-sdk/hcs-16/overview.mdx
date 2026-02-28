@@ -78,6 +78,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 import (
 	"context"
 	"fmt"
+	"log"
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs16"
 )
 
@@ -87,7 +88,7 @@ client, err := hcs16.NewClient(hcs16.ClientConfig{
 	Network:            "testnet",
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 // Create a Flora account with all three topics
@@ -99,7 +100,7 @@ result, err := client.CreateFloraAccountWithTopics(
 	},
 )
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 fmt.Printf("Flora Account: %s\n", result.FloraAccountID)
 fmt.Printf("CTopic: %s, TTopic: %s, STopic: %s\n",

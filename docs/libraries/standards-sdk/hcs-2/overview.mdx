@@ -115,17 +115,25 @@ const nonIndexedRegistry = await client.createRegistry({
 <TabItem value="go">
 
 ```go
+// import "log"
+
 // Create an indexed registry (default)
-indexedResult, _ := client.CreateRegistry(ctx, hcs2.CreateRegistryOptions{
+indexedResult, err := client.CreateRegistry(ctx, hcs2.CreateRegistryOptions{
 	RegistryType: hcs2.RegistryTypeIndexed,
 	TTL:          86400,
 })
+if err != nil {
+	log.Fatal(err)
+}
 
 // Create a non-indexed registry
-nonIndexedResult, _ := client.CreateRegistry(ctx, hcs2.CreateRegistryOptions{
+nonIndexedResult, err := client.CreateRegistry(ctx, hcs2.CreateRegistryOptions{
 	RegistryType: hcs2.RegistryTypeNonIndexed,
 	TTL:          86400,
 })
+if err != nil {
+	log.Fatal(err)
+}
 ```
 
 </TabItem>
@@ -201,6 +209,7 @@ const browserClient = new BrowserHCS2Client({
 
 ```go
 import (
+	"log"
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs2"
 )
 
@@ -210,7 +219,7 @@ client, err := hcs2.NewClient(hcs2.ClientConfig{
 	Network:            "testnet",
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 ```
 

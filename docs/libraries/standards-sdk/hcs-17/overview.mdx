@@ -130,6 +130,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 import (
 	"context"
 	"fmt"
+	"log"
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs17"
 )
 
@@ -139,13 +140,16 @@ client, err := hcs17.NewClient(hcs17.ClientConfig{
 	Network:            "testnet",
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 // Create a state topic
 topicID, err := client.CreateStateTopic(context.Background(), hcs17.CreateTopicOptions{
 	TTL: 86400,
 })
+if err != nil {
+	log.Fatal(err)
+}
 
 // Compute and publish a state hash
 result, err := client.ComputeAndPublish(context.Background(), hcs17.ComputeAndPublishOptions{
@@ -154,6 +158,9 @@ result, err := client.ComputeAndPublish(context.Background(), hcs17.ComputeAndPu
 	PublishTopicID: topicID,
 	Memo:           "state snapshot",
 })
+if err != nil {
+	log.Fatal(err)
+}
 fmt.Printf("State Hash: %s\n", result.StateHash)
 ```
 

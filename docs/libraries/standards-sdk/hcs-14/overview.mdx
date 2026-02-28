@@ -65,6 +65,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 import (
 	"context"
 	"fmt"
+	"log"
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs14"
 )
 
@@ -73,12 +74,15 @@ client := hcs14.NewClient(hcs14.ClientOptions{})
 // Resolve a UAID
 result, err := client.Resolve(context.Background(), "uaid:did:example:123")
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 fmt.Printf("Resolved: %v, Profile: %s\n", result.Metadata.Resolved, result.Metadata.Profile)
 
 // Resolve via specific profile
-dnsResult, _ := client.ResolveUAIDDNSWeb(context.Background(), "uaid:did:example:123")
+dnsResult, err := client.ResolveUAIDDNSWeb(context.Background(), "uaid:did:example:123")
+if err != nil {
+	log.Fatal(err)
+}
 fmt.Printf("DNS Web: %v\n", dnsResult)
 ```
 

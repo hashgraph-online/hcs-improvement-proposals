@@ -103,6 +103,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 import (
 	"context"
 	"fmt"
+	"log"
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs15"
 )
 
@@ -112,7 +113,7 @@ client, err := hcs15.NewClient(hcs15.ClientConfig{
 	Network:            "testnet",
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 // Create a base account
@@ -120,7 +121,7 @@ base, err := client.CreateBaseAccount(context.Background(), hcs15.BaseAccountCre
 	InitialBalanceHbar: 10,
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 fmt.Printf("Base Account: %s\n", base.AccountID)
 
@@ -129,12 +130,15 @@ petal, err := client.CreatePetalAccount(context.Background(), hcs15.PetalAccount
 	BasePrivateKey: base.PrivateKeyRaw,
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 fmt.Printf("Petal Account: %s\n", petal.AccountID)
 
 // Verify petal belongs to base
-valid, _ := client.VerifyPetalAccount(context.Background(), petal.AccountID, base.AccountID)
+valid, err := client.VerifyPetalAccount(context.Background(), petal.AccountID, base.AccountID)
+if err != nil {
+	log.Fatal(err)
+}
 fmt.Printf("Verified: %v\n", valid)
 ```
 
