@@ -1,0 +1,87 @@
+---
+title: HCS-26 Skill Registry SDK Overview
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+# HCS-26: Skill Registry Resolution
+
+HCS-26 models skill discovery as a two-topic pattern: a directory topic maps `skill_uid` to a version registry, then version registry entries point to immutable manifests (typically HCS-1 HRLs). The Go SDK resolves that graph and verifies manifest integrity constraints.
+
+## What HCS-26 Does
+
+- Builds and parses HCS-26 topic and transaction memo formats.
+- Resolves discovery records from directory topics (including legacy shapes).
+- Resolves active version registers and semantic latest versions.
+- Loads and validates manifests referenced by HCS-1 HRLs.
+- Verifies optional version checksums against manifest bytes.
+
+## Installation
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+
+TypeScript HCS-26 support is not yet available in `@hashgraphonline/standards-sdk`.
+
+</TabItem>
+<TabItem value="go">
+
+```bash
+go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Quickstart
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```typescript
+// HCS-26 TypeScript client is not yet implemented in standards-sdk.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs26"
+)
+
+client, err := hcs26.NewClient(hcs26.ClientConfig{
+	Network: "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+resolved, err := client.ResolveSkill(context.Background(), "0.0.123456", 1, 1000)
+if err != nil {
+	log.Fatal(err)
+}
+if resolved == nil {
+	log.Fatal("skill not found")
+}
+
+log.Printf("resolved skill %d latest version manifest hash=%s", resolved.SkillUID, resolved.ManifestSHA256Hex)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## References
+
+- [HCS-26 Standard](/docs/standards/hcs-26)
+- [Go SDK Overview](/docs/libraries/go-sdk/overview)
+

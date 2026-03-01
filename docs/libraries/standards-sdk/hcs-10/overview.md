@@ -3,6 +3,9 @@ title: HCS-10 OpenConvAI SDK Overview
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-10 OpenConvAI SDK
 
 The HCS-10 OpenConvAI SDK provides a complete toolkit for building AI agents that can autonomously discover and communicate using the Hedera Consensus Service (HCS). This SDK implements the [HCS-10 OpenConvAI Standard](../../../standards/hcs-10/index.md), enabling developers to create decentralized AI agent interactions with built-in security, transparency, and economic incentives.
@@ -58,6 +61,60 @@ graph TD
 
 - Server SDK: see the server page
 - Browser SDK: see the browser page
+
+## SDK Quickstart
+
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+import { HCS10Client } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS10Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+)
+
+client, err := hcs10.NewClient(hcs10.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+inboundTopicID, _, err := client.CreateInboundTopic(context.Background(), hcs10.CreateTopicOptions{
+	AccountID:            "0.0.123456",
+	TTL:                  60,
+	UseOperatorAsAdmin:   true,
+	UseOperatorAsSubmit:  true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = inboundTopicID
+```
+
+</TabItem>
+</Tabs>
 
 ## Additional Resources
 

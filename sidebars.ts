@@ -274,6 +274,16 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'HCS-26: Skill Registry',
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-26/index' },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-26/overview',
+              ],
+            },
+            {
+              type: 'category',
               label: 'HCS-21: Adapter Registry',
               link: { type: 'doc', id: 'libraries/standards-sdk/hcs-21/index' },
               collapsible: true,
