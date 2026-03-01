@@ -52,8 +52,8 @@ import (
 ```ts
 interface HCS5ClientConfig {
   network: 'mainnet' | 'testnet';
-  operatorId: string;                       // Node only
-  operatorKey: string | import('@hashgraph/sdk').PrivateKey; // Node only
+  operatorId: string;                       // Server only
+  operatorKey: string | import('@hashgraph/sdk').PrivateKey; // Server only
   logLevel?: 'debug' | 'info' | 'warn' | 'error';
   silent?: boolean;
   mirrorNodeUrl?: string;
@@ -126,7 +126,7 @@ type MintResponse struct {
 </TabItem>
 </LanguageTabs>
 
-## Node Client (HCS5Client)
+## Server Client (HCS5Client)
 
 <LanguageTabs>
 <TabItem value="typescript">
@@ -159,7 +159,7 @@ Notes
 
 ## Browser Client (HCS5BrowserClient)
 
-Mirrors Node flows but uses wallet signing for inscription and mint. Returns similar responses.
+Mirrors server flows but uses wallet signing for inscription and mint. Returns similar responses.
 
 ## Helper
 

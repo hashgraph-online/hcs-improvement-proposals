@@ -1,0 +1,303 @@
+---
+title: HCS‑27 API Reference
+description: Complete reference for HCS‑27 checkpoint types, client methods, validation, and Merkle utilities.
+sidebar_position: 5
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Sources
+- Go module: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs27
+
+## Import Paths
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// HCS-27 TypeScript support is not yet available.
+// Coming soon to @hashgraphonline/standards-sdk.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Configuration
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+type ClientConfig struct {
+	OperatorAccountID  string // Required – e.g. "0.0.12345"
+	OperatorPrivateKey string // Required – DER-hex or raw Ed25519/ECDSA key
+	Network            string // "mainnet" | "testnet"
+	MirrorBaseURL      string // Optional custom mirror node URL
+	MirrorAPIKey       string // Optional mirror node API key
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Types
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+type StreamID struct {
+	Registry string `json:"registry"`
+	LogID    string `json:"log_id"`
+}
+
+type LogProfile struct {
+	Algorithm string `json:"alg"`    // "sha-256"
+	Leaf      string `json:"leaf"`   // leaf domain separator
+	Merkle    string `json:"merkle"` // node domain separator
+}
+
+type RootCommitment struct {
+	TreeSize    uint64 `json:"treeSize"`
+	RootHashB64 string `json:"rootHashB64u"` // base64url-encoded
+}
+
+type PreviousCommitment struct {
+	TreeSize    uint64 `json:"treeSize"`
+	RootHashB64 string `json:"rootHashB64u"`
+}
+
+type BatchRange struct {
+	Start uint64 `json:"start"`
+	End   uint64 `json:"end"`
+}
+
+type Signature struct {
+	Algorithm string `json:"alg"`
+	KeyID     string `json:"kid"`
+	Signature string `json:"b64u"` // base64url-encoded
+}
+
+type CheckpointMetadata struct {
+	Type       string              `json:"type"`
+	Stream     StreamID            `json:"stream"`
+	Log        *LogProfile         `json:"log,omitempty"`
+	Root       RootCommitment      `json:"root"`
+	Previous   *PreviousCommitment `json:"prev,omitempty"`
+	BatchRange BatchRange          `json:"batch_range"`
+	Signature  *Signature          `json:"sig,omitempty"`
+}
+
+type CheckpointMessage struct {
+	Protocol       string          `json:"p"`
+	Operation      string          `json:"op"`
+	Metadata       json.RawMessage `json:"metadata"`
+	MetadataDigest *MetadataDigest `json:"metadata_digest,omitempty"`
+	Memo           string          `json:"m,omitempty"`
+}
+
+type CheckpointRecord struct {
+	TopicID            string             `json:"topic_id"`
+	Sequence           int64              `json:"sequence"`
+	ConsensusTimestamp string             `json:"consensus_timestamp"`
+	Payer              string             `json:"payer"`
+	Message            CheckpointMessage  `json:"message"`
+	EffectiveMetadata  CheckpointMetadata `json:"effective_metadata"`
+}
+
+type PublishResult struct {
+	TransactionID  string `json:"transaction_id"`
+	SequenceNumber int64  `json:"sequence_number"`
+}
+
+type CreateTopicOptions struct {
+	TTLSeconds          int64
+	UseOperatorAsAdmin  bool
+	UseOperatorAsSubmit bool
+	AdminKey            string
+	SubmitKey           string
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Client Methods
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+func NewClient(config ClientConfig) (*Client, error)
+
+func (c *Client) MirrorClient() *mirror.Client
+
+func (c *Client) CreateCheckpointTopic(
+	ctx context.Context,
+	options CreateTopicOptions,
+) (topicID string, transactionID string, err error)
+
+func (c *Client) PublishCheckpoint(
+	ctx context.Context,
+	topicID string,
+	metadata CheckpointMetadata,
+	messageMemo string,
+	transactionMemo string,
+) (PublishResult, error)
+
+func (c *Client) GetCheckpoints(
+	ctx context.Context,
+	topicID string,
+	resolver HCS1ResolverFunc,
+) ([]CheckpointRecord, error)
+
+func (c *Client) ResolveHCS1Reference(
+	ctx context.Context,
+	hcs1Reference string,
+) ([]byte, error)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Validation Functions
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+type HCS1ResolverFunc func(ctx context.Context, hcs1Reference string) ([]byte, error)
+
+func ValidateCheckpointMessage(
+	ctx context.Context,
+	message CheckpointMessage,
+	resolver HCS1ResolverFunc,
+) (CheckpointMetadata, error)
+
+func ValidateCheckpointChain(records []CheckpointRecord) error
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes
+- `ValidateCheckpointMessage` handles both inline and HCS-1-referenced metadata payloads.
+- When metadata exceeds 1024 bytes, the SDK automatically publishes it via HCS-1 and attaches a `metadata_digest` for integrity verification.
+- `ValidateCheckpointChain` verifies monotonic tree growth and `prev` linkage across a sequence of records.
+
+## Merkle Tree Utilities
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+func EmptyRoot() []byte
+func HashLeaf(canonicalEntry []byte) []byte
+func HashNode(left, right []byte) []byte
+
+func MerkleRootFromCanonicalEntries(entries [][]byte) []byte
+func MerkleRootFromEntries(entries []any) ([]byte, error)
+func LeafHashHexFromEntry(entry any) (string, error)
+
+func VerifyInclusionProof(
+	leafIndex uint64,
+	treeSize uint64,
+	leafHashHex string,
+	path []string,
+	expectedRootB64 string,
+) (bool, error)
+
+func VerifyConsistencyProof(
+	oldTreeSize uint64,
+	newTreeSize uint64,
+	oldRootB64 string,
+	newRootB64 string,
+	consistencyPath []string,
+) (bool, error)
+
+func CanonicalizeJSON(value any) ([]byte, error)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Memo Helpers
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+func BuildTopicMemo(ttlSeconds int64) string
+// => "hcs-27:0:<ttl>:0"
+
+func ParseTopicMemo(memo string) (*TopicMemo, bool)
+// Parses "hcs-27:<indexed>:<ttl>:<type>"
+
+func BuildTransactionMemo() string
+// => "hcs-27:op:0:0"
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Error Conditions
+
+| Error | Cause |
+|---|---|
+| `invalid protocol "…"` | Message `p` field is not `hcs-27` |
+| `metadata.type must be ans-checkpoint-v1` | Unsupported checkpoint type |
+| `metadata.stream.registry is required` | Missing stream identifier |
+| `metadata.root.rootHashB64u must be base64url` | Malformed root hash |
+| `metadata digest does not match resolved payload` | Integrity check failure for HCS-1 overflow metadata |
+| `tree size decreased for stream …` | Chain validation detected non-monotonic growth |
+| `prev.treeSize mismatch for stream …` | Chain linkage broken |

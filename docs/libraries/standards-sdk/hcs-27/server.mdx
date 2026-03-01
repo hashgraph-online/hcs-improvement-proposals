@@ -1,0 +1,191 @@
+---
+title: Server — HCS‑27 Client
+description: Create checkpoint topics and publish Merkle-root commitments using Hedera account credentials.
+sidebar_position: 3
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+# Server Client
+
+The server client uses direct Hedera operator credentials to create checkpoint topics and publish checkpoint commitments.
+
+## Create a Client
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// HCS-27 TypeScript support is not yet available.
+// Coming soon to @hashgraphonline/standards-sdk.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+
+client, err := hcs27.NewClient(hcs27.ClientConfig{
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create a Checkpoint Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+topicID, txID, err := client.CreateCheckpointTopic(ctx, hcs27.CreateTopicOptions{
+	TTLSeconds:          86400,
+	UseOperatorAsAdmin:  true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Printf("Created checkpoint topic: %s (tx: %s)\n", topicID, txID)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Publish a Checkpoint
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+metadata := hcs27.CheckpointMetadata{
+	Type:   "ans-checkpoint-v1",
+	Stream: hcs27.StreamID{Registry: "my-app", LogID: "events"},
+	Log: &hcs27.LogProfile{
+		Algorithm: "sha-256",
+		Leaf:      "rfc6962-leaf",
+		Merkle:    "rfc6962-node",
+	},
+	Root: hcs27.RootCommitment{
+		TreeSize:    150,
+		RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
+	},
+	Previous: &hcs27.PreviousCommitment{
+		TreeSize:    100,
+		RootHashB64: "kZ4L2bPe1sX...",
+	},
+	BatchRange: hcs27.BatchRange{Start: 101, End: 150},
+}
+
+result, err := client.PublishCheckpoint(ctx, topicID, metadata, "batch 101-150", "")
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Printf("Published checkpoint (seq: %d, tx: %s)\n", result.SequenceNumber, result.TransactionID)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes
+- If the serialized checkpoint exceeds **1024 bytes**, the SDK automatically publishes the metadata via HCS-1 and replaces the inline payload with an `hcs://1/<topicId>` reference plus a `metadata_digest` for integrity verification.
+- The message `memo` field must be under 300 characters.
+
+## Retrieve Checkpoints
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+records, err := client.GetCheckpoints(ctx, topicID, nil)
+if err != nil {
+	log.Fatal(err)
+}
+
+for _, record := range records {
+	fmt.Printf("Seq %d: root=%s treeSize=%d\n",
+		record.Sequence,
+		record.EffectiveMetadata.Root.RootHashB64,
+		record.EffectiveMetadata.Root.TreeSize,
+	)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Validate a Checkpoint Chain
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+if err := hcs27.ValidateCheckpointChain(records); err != nil {
+	log.Fatalf("Chain validation failed: %v", err)
+}
+fmt.Println("Checkpoint chain is valid")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Resolve HCS-1 References
+
+When checkpoint metadata overflows, the SDK stores it via HCS-1. You can resolve references manually:
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+payload, err := client.ResolveHCS1Reference(ctx, "hcs://1/0.0.789012")
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Printf("Resolved %d bytes of metadata\n", len(payload))
+```
+
+</TabItem>
+</LanguageTabs>
