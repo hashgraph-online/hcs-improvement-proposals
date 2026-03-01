@@ -71,38 +71,53 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
               {/* Dropdown content */}
               <div className={`overflow-hidden transition-all duration-200 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                 {item.items.map((subItem: any, subIndex: number) => {
-                  const linkClass = "block !px-3 !py-2 !pl-6 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
-
-                  if (subItem.href) {
+                  if (subItem.type === 'html' && subItem.className === 'navbar-dropdown-header') {
                     return (
                       <div
                         key={subIndex}
-                        className={`${linkClass} cursor-pointer`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          window.open(subItem.href, '_blank');
-                          // Small delay to ensure navigation triggers before unmount
-                          setTimeout(() => mobileSidebar.toggle(), 50);
-                        }}
-                        role="button"
-                        tabIndex={0}
+                        className="px-3 py-2 text-xs font-['Roboto_Mono'] font-bold text-white/50 uppercase tracking-wider mt-2 first:mt-0"
                       >
-                        {subItem.label}
+                        {subItem.label || subItem.value}
                       </div>
                     );
                   }
 
-                  return (
-                    <Link
-                      key={subIndex}
-                      to={subItem.to || '/'}
-                      className={linkClass}
-                      onClick={() => mobileSidebar.toggle()}
-                    >
-                      {subItem.label}
-                    </Link>
-                  );
+                  const linkClass = "block !px-3 !py-2 !pl-6 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
+
+                  if (subItem.href) {
+                    const isExternal = subItem.href.startsWith('http') && !subItem.href.includes('hol.org');
+                    return (
+                      <a
+                        key={subIndex}
+                        href={subItem.href}
+                        className={linkClass}
+                        target={isExternal ? '_blank' : undefined}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                        onClick={(e) => {
+                          if (!isExternal) {
+                            setTimeout(() => mobileSidebar.toggle(), 50);
+                          }
+                        }}
+                      >
+                        {subItem.label}
+                      </a>
+                    );
+                  }
+
+                  if (subItem.to && !subItem.to.startsWith('http')) {
+                    return (
+                      <Link
+                        key={subIndex}
+                        to={subItem.to || '/'}
+                        className={linkClass}
+                        onClick={() => mobileSidebar.toggle()}
+                      >
+                        {subItem.label}
+                      </Link>
+                    );
+                  }
+                  
+                  return null;
                 })}
               </div>
             </div>
@@ -113,22 +128,22 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
         const linkClass = "block !px-3 !py-2 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
 
         if (item.href) {
+          const isExternal = item.href.startsWith('http') && !item.href.includes('hol.org');
           return (
-            <div
+            <a
               key={index}
-              className={`${linkClass} cursor-pointer`}
+              href={item.href}
+              className={linkClass}
+              target={isExternal ? '_blank' : undefined}
+              rel={isExternal ? 'noopener noreferrer' : undefined}
               onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                window.open(item.href, '_blank');
-                // Small delay to ensure navigation triggers before unmount
-                setTimeout(() => mobileSidebar.toggle(), 50);
+                if (!isExternal) {
+                  setTimeout(() => mobileSidebar.toggle(), 50);
+                }
               }}
-              role="button"
-              tabIndex={0}
             >
               {item.label}
-            </div>
+            </a>
           );
         }
 
