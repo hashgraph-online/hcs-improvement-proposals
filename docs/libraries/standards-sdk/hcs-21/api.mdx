@@ -49,7 +49,13 @@ import type {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateRegistryTopic / DeclareAdapter / GetRegistry / GetAdaptersByEntity
+BuildRegistryMemo(ttl int64, indexed bool, TopicType, metaTopicID string) (string, error)
+BuildCreateRegistryTopicTx(CreateRegistryTopicTxParams) (*hedera.TopicCreateTransaction, error)
+BuildDeclarationMessageTx(topicID string, AdapterDeclaration, txMemo string) (*hedera.TopicMessageSubmitTransaction, error)
+
+TopicTypes: TopicTypeAdapterRegistry, TopicTypeScopeRegistry, TopicTypeVersionRegistry
 ```
 
 </TabItem>

@@ -4,6 +4,9 @@ description: Build on-chain UI blocks and WebAssembly actions with HCS‑12 Hash
 sidebar_position: 12
 ---
 
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-12: HashLinks SDK
 
 Build interactive, decentralized experiences on Hedera without smart contracts. HashLinks combines WebAssembly logic, Gutenberg UI blocks, and a composition layer to create powerful applications with minimal fees.
@@ -145,6 +148,9 @@ const assembly = {
 
 Use the validation helpers to verify registrations and messages before submission:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```ts
 import {
   validateActionRegistration,
@@ -167,6 +173,16 @@ if (!checked.success) {
   console.error(checked.errors);
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// Go SDK implementation available
+```
+
+</TabItem>
+</LanguageTabs>
 
 To ensure compatibility, WASM modules must export at least:
 

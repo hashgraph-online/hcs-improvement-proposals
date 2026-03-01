@@ -41,7 +41,16 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateAndInscribeProfile(ctx, HCS11Profile, waitForConfirmation bool)
+Client.InscribeProfile(ctx, ...)
+Client.InscribeImage(ctx, ...)
+Client.FetchProfileByAccountID(ctx, ...)
+Client.UpdateAccountMemoWithProfile(ctx, ...)
+NewAgentBuilder() *AgentBuilder
+AgentBuilder.SetName/SetBio/SetAlias/SetDescription/SetCapabilities/SetType/SetModel/SetCreator/AddSocial/AddProperty/SetInboundTopicID/SetOutboundTopicID/SetBaseAccount(...)
+AgentBuilder.Build() (HCS11Profile, error)
+NewPersonBuilder() *PersonBuilder
 ```
 
 </TabItem>
@@ -70,7 +79,7 @@ interface HCS11ClientConfig {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -91,7 +100,7 @@ new MCPServerBuilder();
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -136,7 +145,7 @@ fetchProfileByAccountId(accountId: string, network?: string): Promise<{ success:
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -164,7 +173,7 @@ const res = await client.inscribeProfile(profile, { waitForConfirmation: true })
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>

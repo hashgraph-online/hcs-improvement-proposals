@@ -40,7 +40,20 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateFloraTopic / CreateFloraAccount / CreateFloraAccountWithTopics
+Client.SendFloraCreated / SendTransaction / SendStateUpdate
+Client.SendFloraJoinRequest / SendFloraJoinVote / SendFloraJoinAccepted
+Client.SignSchedule / PublishFloraCreated / CreateFloraProfile
+Client.GetRecentMessages / GetLatestMessage
+Client.AssembleKeyList / AssembleSubmitKeyList / ParseTopicMemo
+BuildCreateFloraTopicTx / BuildCreateTransactionTopicTx / BuildCreateFloraAccountTx
+BuildMessageTx / BuildFloraCreatedTx / BuildTransactionTx / BuildStateUpdateTx
+BuildFloraJoinRequestTx / BuildFloraJoinVoteTx / BuildFloraJoinAcceptedTx
+BuildScheduleAccountKeyUpdateTx / BuildScheduleTopicKeyUpdateTx
+
+FloraTopicTypes: FloraTopicTypeCommunication, FloraTopicTypeTransaction, FloraTopicTypeState
+FloraOperations: FloraOperationFloraCreated, FloraOperationTransaction, FloraOperationStateUpdate, etc.
 ```
 
 </TabItem>
@@ -67,7 +80,7 @@ enum FloraOperation {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -99,7 +112,7 @@ getLatestMessage(topicId: string, opFilter?: FloraOperation|string): Promise<(an
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -122,7 +135,7 @@ sendStateUpdate({ topicId, operatorId, hash, epoch?, accountId?, topics?, memo?,
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -150,7 +163,7 @@ function buildHcs16FloraJoinAcceptedTx(params: { topicId: string; operatorId: st
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -181,7 +194,7 @@ await c.sendFloraCreated({
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>

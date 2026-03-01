@@ -50,7 +50,16 @@ import * as HCS17 from '@hashgraphonline/standards-sdk';
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateStateTopic(ctx, ...)
+Client.SubmitMessage(ctx, ...)
+Client.ComputeAndPublish(ctx, ...)
+Client.ValidateTopic(ctx, topicID string) (bool, *TopicMemo, error)
+Client.GetRecentMessages / GetLatestMessage
+Client.CalculateAccountStateHash(AccountStateInput) (StateHashResult, error)
+Client.CalculateCompositeStateHash(CompositeStateInput) (CompositeStateHashResult, error)
+BuildCreateStateTopicTx(CreateTopicOptions) *hedera.TopicCreateTransaction
+BuildStateHashMessageTx(topicID string, StateHashMessage, txMemo string) (*hedera.TopicMessageSubmitTransaction, error)
 ```
 
 </TabItem>
@@ -75,7 +84,7 @@ function parseHCS17Memo(memo: string): { type: HCS17TopicType; ttl: number } | u
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -148,7 +157,7 @@ interface BrowserHCS17ClientConfig extends HCS17ClientConfig {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -169,7 +178,7 @@ enum HCS17TopicType {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -224,7 +233,7 @@ createStateHashMessage(stateHash: string, accountId: string, topicIds: string[],
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -265,7 +274,7 @@ computeAndPublish(params: {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -295,7 +304,7 @@ const { stateHash } = await c.computeAndPublish({
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -330,7 +339,7 @@ computeAndPublish(params: {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -361,7 +370,7 @@ const out = await c.computeAndPublish({
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -394,7 +403,7 @@ function buildHcs17MessageTx(params: {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -421,7 +430,7 @@ const latest = await client.getLatestMessage('0.0.7777');
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -448,7 +457,7 @@ class StateHashError extends Error {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>

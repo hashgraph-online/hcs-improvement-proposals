@@ -35,7 +35,12 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateBaseAccount(ctx, BaseAccountCreateOptions) (BaseAccountCreateResult, error)
+Client.CreatePetalAccount(ctx, PetalAccountCreateOptions) (PetalAccountCreateResult, error)
+Client.VerifyPetalAccount(ctx, ...)
+BuildBaseAccountCreateTx(BaseAccountCreateTxParams) (*hedera.AccountCreateTransaction, error)
+BuildPetalAccountCreateTx(PetalAccountCreateTxParams) (*hedera.AccountCreateTransaction, error)
 ```
 
 </TabItem>
@@ -62,7 +67,7 @@ createPetalAccount(params: { basePrivateKey: string | import('@hashgraph/sdk').P
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -85,7 +90,7 @@ verifyPetalAccount(petalAccountId: string, baseAccountId: string): Promise<boole
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -106,7 +111,7 @@ function buildHcs15PetalAccountCreateTx(params: { publicKey: import('@hashgraph/
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -132,7 +137,7 @@ await c.createPetalAccount({ basePrivateKey: base.privateKey });
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>

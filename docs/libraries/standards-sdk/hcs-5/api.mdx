@@ -35,7 +35,10 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+import (
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs5"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/inscriber"
+)
 ```
 
 </TabItem>
@@ -85,7 +88,39 @@ interface HCS5MintResponse {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+type ClientConfig struct {
+	OperatorAccountID  string
+	OperatorPrivateKey string
+	Network            string
+	InscriberAuthURL   string
+	InscriberAPIURL    string
+}
+
+type MintOptions struct {
+	TokenID         string
+	MetadataTopicID string
+	SupplyKey       string
+	Memo            string
+}
+
+type CreateHashinalOptions struct {
+	TokenID           string
+	Request           inscriber.StartInscriptionRequest
+	WaitForCompletion bool
+	SupplyKey         string
+	Memo              string
+	InscriberNetwork  inscriber.Network
+	InscriberAuthURL  string
+	InscriberAPIURL   string
+}
+
+type MintResponse struct {
+	Success       bool
+	SerialNumber  int64
+	TransactionID string
+	Metadata      string
+	Error         string
+}
 ```
 
 </TabItem>
@@ -108,7 +143,11 @@ createHashinal(options: HCS5CreateHashinalOptions): Promise<HCS5MintResponse>
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+func NewClient(config ClientConfig) (*Client, error)
+
+func (c *Client) Mint(ctx context.Context, options MintOptions) (MintResponse, error)
+
+func (c *Client) CreateHashinal(ctx context.Context, options CreateHashinalOptions) (MintResponse, error)
 ```
 
 </TabItem>
@@ -135,7 +174,7 @@ function buildHcs1Hrl(topicId: string): string; // e.g., hcs://1/<topicId>
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+func BuildHCS1HRL(topicID string) string // e.g., hcs://1/<topicId>
 ```
 
 </TabItem>
@@ -156,7 +195,9 @@ function buildHcs5MintWithHrlTx(params: { tokenId: string; metadataTopicId: stri
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+func BuildMintTx(tokenID string, metadata string, transactionMemo string) (*hedera.TokenMintTransaction, error)
+
+func BuildMintWithHRLTx(tokenID string, metadataTopicID string, transactionMemo string) (*hedera.TokenMintTransaction, error)
 ```
 
 </TabItem>
@@ -181,7 +222,18 @@ const hr = await c.createHashinal({ tokenId, inscriptionInput: { type: 'url', ur
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+client, _ := hcs5.NewClient(hcs5.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+
+hr, _ := client.CreateHashinal(context.Background(), hcs5.CreateHashinalOptions{
+	TokenID: tokenId,
+	Request: inscriber.StartInscriptionRequest{
+		Content: "https://...",
+	},
+})
 ```
 
 </TabItem>

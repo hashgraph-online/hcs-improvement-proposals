@@ -30,7 +30,15 @@ import * as HCS20 from '@hashgraphonline/standards-sdk';
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.Deploy / Mint / Transfer / Burn / Register
+Client.GetBalance / GetTokenInfo
+BuildHCS20DeployTx(DeployTxParams) (*hedera.TopicMessageSubmitTransaction, error)
+BuildHCS20MintTx(MintTxParams) ...
+BuildHCS20BurnTx(BurnTxParams) ...
+BuildHCS20TransferTx(TransferTxParams) ...
+BuildHCS20RegisterTx(RegisterTxParams) ...
+BuildHCS20SubmitMessageTx(SubmitMessageTxParams) ...
 ```
 
 </TabItem>
@@ -67,7 +75,7 @@ class BrowserHCS20Client extends HCS20BaseClient { /* Browser: createRegistryTop
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -97,7 +105,7 @@ class HCS20PointsIndexer {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -125,7 +133,7 @@ function buildHcs20RegisterTx(params: { registryTopicId: string; name: string; t
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>

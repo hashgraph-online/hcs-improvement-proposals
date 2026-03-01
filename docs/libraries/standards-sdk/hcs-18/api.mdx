@@ -48,7 +48,17 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateDiscoveryTopic / SubmitMessage
+Client.Announce / Propose / Respond / Complete / Withdraw
+Client.GetRecentMessages
+BuildCreateDiscoveryTopicTx(CreateDiscoveryTopicTxParams) *hedera.TopicCreateTransaction
+BuildSubmitDiscoveryMessageTx(topicID, DiscoveryMessage, txMemo) (*hedera.TopicMessageSubmitTransaction, error)
+BuildAnnounceMessage(AnnounceData) DiscoveryMessage
+BuildProposeMessage(ProposeData) DiscoveryMessage
+BuildRespondMessage(RespondData) DiscoveryMessage
+BuildCompleteMessage(CompleteData) DiscoveryMessage
+BuildWithdrawMessage(WithdrawData) DiscoveryMessage
 ```
 
 </TabItem>
@@ -73,7 +83,7 @@ enum DiscoveryOperation {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -109,7 +119,7 @@ isProposalReady(proposal: ProposeData): boolean
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -145,7 +155,7 @@ function buildHcs18WithdrawMessage(data: WithdrawData): DiscoveryMessage;
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -169,7 +179,7 @@ await c.announce({ discoveryTopicId: topicId!, data: { account: '0.0.111', petal
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>

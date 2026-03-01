@@ -51,7 +51,16 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+NewClient(config ClientConfig) (*Client, error)
+Client.CreateRegistry(ctx, CreateRegistryOptions) (CreateRegistryResult, error)
+Client.RegisterConfig(ctx, RegisterConfigOptions) (RegistryOperationResult, error)
+Client.RegisterMetadata(ctx, RegisterMetadataOptions) (RegistryOperationResult, error)
+Client.GetRegistry(ctx, topicID string, QueryRegistryOptions) (RegistryTopic, error)
+BuildCreateRegistryTx(CreateRegistryTxParams) *hedera.TopicCreateTransaction
+BuildSubmitMessageTx(topicID string, Message, transactionMemo string) (*hedera.TopicMessageSubmitTransaction, error)
+
+Types: AbiIO, AbiDefinition, EvmConfigPayload, WasmConfigPayload, Message, ClientConfig
+       RegisterConfigOptions, RegisterMetadataOptions
 ```
 
 </TabItem>
@@ -87,7 +96,7 @@ class HCS7Client {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -146,7 +155,7 @@ interface HCS7RegisterMetadataOptions {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -214,7 +223,7 @@ class RedisCache implements EVMCache { constructor(config?: RedisConfig); }
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
@@ -249,7 +258,7 @@ interface WASMConfig {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+// See standards-sdk-go for full Go API types and methods
 ```
 
 </TabItem>
