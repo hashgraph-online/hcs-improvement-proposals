@@ -1,0 +1,164 @@
+---
+title: Transactions — HCS‑12
+description: Builders for HashLinks registries and assemblies; create topics and submit canonical messages.
+sidebar_position: 3
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- Prefer high‑level clients where possible; use builders for custom flows and agent‑kit integrations.
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-12
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs12
+
+## Create Registry
+
+Registry types: `action` | `assembly` | `hashlinks`.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs12CreateRegistryTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs12CreateRegistryTopicTx({
+  registry: 'assembly',
+  ttl: 3600,
+  adminKey: true,
+  submitKey: true,
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+Memo defaults to `hcs-12:1:<ttl>:<typeEnum>`; type map is action=0, assembly=2, hashlinks=3.
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+tx, err := hcs12.BuildCreateRegistryTopicTx(hcs12.CreateRegistryTopicTxParams{
+	RegistryType: hcs12.RegistryTypeAssembly,
+	TTL:          3600,
+	AdminKey:     operatorPublicKey,
+	SubmitKey:    operatorPublicKey,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+response, _ := tx.Execute(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Submit Message
+
+Generic message submit helper when you already constructed a valid payload.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs12SubmitMessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs12SubmitMessageTx({
+  topicId: '0.0.500',
+  payload: { /* HCS-12 JSON payload */ },
+  transactionMemo: 'optional',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs12.BuildSubmitMessageTx(
+	"0.0.500",
+	map[string]any{"p": "hcs-12", "op": "register", "name": "Demo"},
+	"optional",
+)
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Assembly Operations
+
+### Register Assembly
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs12RegisterAssemblyTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs12RegisterAssemblyTx({
+  assemblyTopicId: '0.0.500',
+  registration: { p: 'hcs-12', op: 'register', name: 'Demo', version: '1.0.0' },
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs12.BuildSubmitMessageTx(
+	"0.0.500",
+	map[string]any{
+		"p": "hcs-12", "op": "register",
+		"name": "Demo", "version": "1.0.0",
+	},
+	"",
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+### Add Block
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs12AddBlockToAssemblyTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs12AddBlockToAssemblyTx({
+  assemblyTopicId: '0.0.500',
+  operation: {
+    p: 'hcs-12',
+    op: 'add-block',
+    block_t_id: '0.0.501',
+    attributes: { text: 'Hello' },
+  },
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs12.BuildSubmitMessageTx(
+	"0.0.500",
+	map[string]any{
+		"p": "hcs-12", "op": "add-block",
+		"block_t_id": "0.0.501",
+		"attributes": map[string]any{"text": "Hello"},
+	},
+	"",
+)
+```
+
+</TabItem>
+</LanguageTabs>

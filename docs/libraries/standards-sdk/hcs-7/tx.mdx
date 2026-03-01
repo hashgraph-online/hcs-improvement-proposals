@@ -1,0 +1,270 @@
+---
+title: Transactions — HCS‑7
+description: Low-level transaction builders for registries, configs, and WASM routers.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+These helpers produce signed-ready Hedera transaction objects. They are useful when you need to integrate HCS‑7 messages into other toolchains (agent schedulers, custom wallets, etc.) without instantiating the full client.
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-7
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs7
+
+## Create Registry
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs7CreateRegistryTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs7CreateRegistryTx({
+  ttl: 86_400,
+  submitKey: operatorPublicKey,
+  adminKey: operatorPublicKey,
+  operatorPublicKey,
+});
+```
+
+- Memo is auto-set to `hcs-7:indexed:{ttl}`.
+- Pass `submitKey: true` / `adminKey: true` to reuse the operator key.
+- Returns a `TopicCreateTransaction` you can sign with the Hedera SDK.
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs7"
+
+tx := hcs7.BuildCreateRegistryTx(hcs7.CreateRegistryTxParams{
+	TTL:       86400,
+	SubmitKey: operatorPublicKey, // hedera.Key
+	AdminKey:  operatorPublicKey,
+})
+```
+
+- Memo is auto-set to `hcs-7:indexed:<ttl>`.
+- Returns a `*hedera.TopicCreateTransaction`.
+
+</TabItem>
+</LanguageTabs>
+
+---
+
+## Submit Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs7SubmitMessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs7SubmitMessageTx({
+  topicId: '0.0.10058300',
+  message: {
+    op: 'register-config',
+    t: 'evm',
+    c: { /* ... */ },
+  },
+  transactionMemo: 'hcs7-config',
+});
+```
+
+Wraps an arbitrary HCS‑7 payload with `p: 'hcs-7'` before serializing and attaching it to the topic message.
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs7.BuildSubmitMessageTx(
+	"0.0.10058300",
+	hcs7.Message{
+		Op:   hcs7.OperationRegisterConfig,
+		Type: hcs7.ConfigTypeEVM,
+		Config: hcs7.EvmConfigPayload{
+			ContractAddress: "0x1d67aaf7...",
+			Abi: hcs7.AbiDefinition{
+				Name:   "minted",
+				Inputs: []hcs7.AbiIO{},
+				Outputs: []hcs7.AbiIO{{Type: "uint64"}},
+				StateMutability: "view",
+				Type: "function",
+			},
+		},
+		Memo: "LaunchPage minted",
+	},
+	"hcs7-config",
+)
+```
+
+Wraps the HCS‑7 payload with `p: "hcs-7"` before serializing.
+
+</TabItem>
+</LanguageTabs>
+
+---
+
+## EVM Config Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs7EvmMessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs7EvmMessageTx({
+  topicId: '0.0.10058300',
+  config: {
+    contractAddress: '0x1d67aaf7f7e8d806bbeba24c4dea24808e1158b8',
+    abi: {
+      name: 'minted',
+      inputs: [],
+      outputs: [{ name: '', type: 'uint64' }],
+      stateMutability: 'view',
+      type: 'function',
+    },
+    m: 'LaunchPage minted',
+  },
+  transactionMemo: 'hcs7-evm',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// In Go, use BuildSubmitMessageTx with ConfigTypeEVM
+tx, err := hcs7.BuildSubmitMessageTx(
+	"0.0.10058300",
+	hcs7.Message{
+		Op:   hcs7.OperationRegisterConfig,
+		Type: hcs7.ConfigTypeEVM,
+		Config: hcs7.EvmConfigPayload{
+			ContractAddress: "0x1d67aaf7f7e8d806bbeba24c4dea24808e1158b8",
+			Abi: hcs7.AbiDefinition{
+				Name:   "minted",
+				Inputs: []hcs7.AbiIO{},
+				Outputs: []hcs7.AbiIO{{Type: "uint64"}},
+				StateMutability: "view",
+				Type: "function",
+			},
+		},
+		Memo: "LaunchPage minted",
+	},
+	"hcs7-evm",
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Produces the canonical `register-config` payload for EVM readers:
+
+```json
+{
+  "p": "hcs-7",
+  "op": "register-config",
+  "t": "evm",
+  "c": { "contractAddress": "…", "abi": { … } },
+  "m": "LaunchPage minted"
+}
+```
+
+---
+
+## WASM Config Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs7WasmMessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs7WasmMessageTx({
+  topicId: '0.0.10058300',
+  config: {
+    wasmTopicId: '0.0.5269810',
+    inputType: {
+      stateData: {
+        minted: 'number',
+        tokensRemaining: 'number',
+      },
+    },
+    outputType: {
+      type: 'string',
+      format: 'topic-id',
+    },
+    m: 'mint router',
+  },
+  transactionMemo: 'hcs7-wasm',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// In Go, use BuildSubmitMessageTx with ConfigTypeWASM
+tx, err := hcs7.BuildSubmitMessageTx(
+	"0.0.10058300",
+	hcs7.Message{
+		Op:   hcs7.OperationRegisterConfig,
+		Type: hcs7.ConfigTypeWASM,
+		Config: hcs7.WasmConfigPayload{
+			WasmTopicID: "0.0.5269810",
+			InputType: map[string]any{
+				"stateData": map[string]any{
+					"minted":          "number",
+					"tokensRemaining": "number",
+				},
+			},
+			OutputType: map[string]any{
+				"type":   "string",
+				"format": "topic-id",
+			},
+		},
+		Memo: "mint router",
+	},
+	"hcs7-wasm",
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+---
+
+## Signing + Sending
+
+Each builder returns a Hedera SDK transaction object. Use the standard pattern to sign and submit:
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const client = Client.forTestnet().setOperator(operatorId, operatorKey);
+await tx.freezeWith(client);
+await tx.sign(operatorKey);
+const receipt = await tx.execute(client).then(res => res.getReceipt(client));
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+hederaClient, _ := hedera.ClientForTestnet()
+hederaClient.SetOperator(operatorID, operatorKey)
+
+frozen, _ := tx.FreezeWith(hederaClient)
+frozen.Sign(operatorKey)
+response, _ := frozen.Execute(hederaClient)
+receipt, _ := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+For multi-sig workflows, sign with multiple keys before calling `.Execute()`.

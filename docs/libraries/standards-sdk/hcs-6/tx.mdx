@@ -1,0 +1,103 @@
+---
+title: Transactions — HCS‑6
+description: HCS‑6 uses non‑indexed registries; messages record only the latest state.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- These builders are for direct transaction construction (e.g., with the Standards Agent Kit or custom pipelines).
+- For most applications, prefer the higher‑level client (Node/Go) or browser client (wallet).
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-6
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs6
+
+HCS‑6 uses a non‑indexed registry memo (`hcs-6:1:<ttl>`) and defines two builders for creating the registry and registering entries.
+
+## Create Registry — buildHcs6CreateRegistryTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs6CreateRegistryTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs6CreateRegistryTx({ ttl: 3600, adminKey: true, submitKey: true });
+// Node
+const receipt = await (await tx.execute(client)).getReceipt(client);
+```
+
+Notes
+- Defaults memo to `hcs-6:1:<ttl>` unless `memoOverride` is provided.
+- `adminKey`/`submitKey` accept boolean (use operator), raw string, or Key.
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs6"
+
+tx := hcs6.BuildCreateRegistryTx(hcs6.CreateRegistryTxParams{
+	TTL:       3600,
+	AdminKey:  operatorPublicKey, // hedera.Key
+	SubmitKey: operatorPublicKey,
+})
+
+response, err := tx.Execute(hederaClient)
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+Notes
+- Memo is automatically set to `hcs-6:1:<ttl>`.
+- Pass `AdminKey`/`SubmitKey` as `hedera.Key` values.
+
+</TabItem>
+</LanguageTabs>
+
+## Register Entry — buildHcs6RegisterEntryTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs6RegisterEntryTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs6RegisterEntryTx({
+  registryTopicId: '0.0.111',
+  targetTopicId: '0.0.222',
+  memo: 'register my dynamic inscription',
+  analyticsMemo: 'hcs-6 register',
+});
+// Node
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs6.BuildRegisterEntryTx(hcs6.RegisterEntryTxParams{
+	RegistryTopicID: "0.0.111",
+	TargetTopicID:   "0.0.222",
+	Memo:            "register my dynamic inscription",
+	AnalyticsMemo:   "hcs-6 register",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+response, err := tx.Execute(hederaClient)
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Payload
+
+```json
+{ "p": "hcs-6", "op": 0, "t_id": "0.0.222", "m": "register my dynamic inscription" }
+```

@@ -1,0 +1,216 @@
+---
+title: Transactions — HCS‑20 Builders
+description: Builders and helpers for HCS‑20 points operations.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- These builders are for direct transaction construction (e.g., with the Standards Agent Kit or custom pipelines).
+- For most applications, prefer the higher‑level client (Node/Go) or browser client (wallet).
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-20
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs20
+
+## Deploy
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs20DeployTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs20DeployTx({
+  topicId: '0.0.100',
+  name: 'Loyalty Points',
+  tick: 'loyal',
+  max: '1000000000',
+  lim: '10000',
+  metadata: 'ipfs://…',
+  memo: 'deploy',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs20"
+
+tx, err := hcs20.BuildHCS20DeployTx(hcs20.DeployTxParams{
+	TopicID:  "0.0.100",
+	Name:     "Loyalty Points",
+	Tick:     "loyal",
+	Max:      "1000000000",
+	Lim:      "10000",
+	Metadata: "ipfs://…",
+	Memo:     "deploy",
+})
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Mint
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs20MintTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs20MintTx({
+  topicId: '0.0.100',
+  tick: 'loyal',
+  amt: '100',
+  to: '0.0.12345',
+  memo: 'reward',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs20.BuildHCS20MintTx(hcs20.MintTxParams{
+	TopicID: "0.0.100",
+	Tick:    "loyal",
+	Amt:     "100",
+	To:      "0.0.12345",
+	Memo:    "reward",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Transfer
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs20TransferTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs20TransferTx({
+  topicId: '0.0.100',
+  tick: 'loyal',
+  amt: '10',
+  from: '0.0.111',
+  to: '0.0.222',
+  memo: 'tip',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs20.BuildHCS20TransferTx(hcs20.TransferTxParams{
+	TopicID: "0.0.100",
+	Tick:    "loyal",
+	Amt:     "10",
+	From:    "0.0.111",
+	To:      "0.0.222",
+	Memo:    "tip",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Burn
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs20BurnTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs20BurnTx({
+  topicId: '0.0.100',
+  tick: 'loyal',
+  amt: '5',
+  from: '0.0.111',
+  memo: 'cleanup',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs20.BuildHCS20BurnTx(hcs20.BurnTxParams{
+	TopicID: "0.0.100",
+	Tick:    "loyal",
+	Amt:     "5",
+	From:    "0.0.111",
+	Memo:    "cleanup",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Register (Directory)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs20RegisterTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs20RegisterTx({
+  registryTopicId: '0.0.999',
+  name: 'Loyalty Points',
+  topicId: '0.0.100',
+  isPrivate: false,
+  metadata: 'ipfs://…',
+  memo: 'register',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs20.BuildHCS20RegisterTx(hcs20.RegisterTxParams{
+	RegistryTopicID: "0.0.999",
+	Name:            "Loyalty Points",
+	TopicID:         "0.0.100",
+	IsPrivate:       false,
+	Metadata:        "ipfs://…",
+	Memo:            "register",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Execution
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+- **Node**: `await tx.execute(client).then(r => r.getReceipt(client))`
+- **Browser**: `await (await tx.freezeWithSigner(signer)).executeWithSigner(signer)` then `getReceiptWithSigner`
+
+</TabItem>
+<TabItem value="go">
+
+```go
+response, err := tx.Execute(hederaClient)
+if err != nil {
+	log.Fatal(err)
+}
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>

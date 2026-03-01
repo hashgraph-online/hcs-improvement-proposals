@@ -1,0 +1,79 @@
+---
+title: Transactions — HCS‑5
+description: HCS‑5 piggybacks on HTS mint transactions; metadata is set to an HCS‑1 HRL.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- These flows are typically orchestrated via higher‑level SDK helpers.
+- Direct transaction construction is common only when integrating with custom minting pipelines.
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-5
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs5
+
+## Mint Hashinal — HTS TokenMint
+
+HCS‑5 uses HTS mint and sets serial metadata to an HCS‑1 HRL.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { TokenMintTransaction, TokenId } from '@hashgraph/sdk';
+import { buildHcs1Hrl } from '@hashgraphonline/standards-sdk';
+
+const metadata = buildHcs1Hrl('0.0.700001');
+const tx = new TokenMintTransaction()
+  .setTokenId(TokenId.fromString('0.0.123456'))
+  .setMetadata([Buffer.from(metadata)]);
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs5"
+
+// BuildHCS1HRL returns "hcs://1/<topicId>"
+hrl := hcs5.BuildHCS1HRL("0.0.700001")
+
+// BuildMintWithHRLTx builds a TokenMintTransaction with the HRL as metadata
+tx, err := hcs5.BuildMintWithHRLTx("0.0.123456", "0.0.700001", "mint hashinal")
+if err != nil {
+	log.Fatal(err)
+}
+
+response, err := tx.Execute(hederaClient)
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Helper — BuildHCS1HRL
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs1Hrl } from '@hashgraphonline/standards-sdk';
+
+const hrl = buildHcs1Hrl('0.0.700001');
+// => "hcs://1/0.0.700001"
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+hrl := hcs5.BuildHCS1HRL("0.0.700001")
+// => "hcs://1/0.0.700001"
+```
+
+</TabItem>
+</LanguageTabs>
