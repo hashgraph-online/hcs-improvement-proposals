@@ -270,6 +270,9 @@ const sidebars: SidebarsConfig = {
               collapsed: true,
               items: [
                 'libraries/standards-sdk/hcs-27/overview',
+                'libraries/standards-sdk/hcs-27/server',
+                'libraries/standards-sdk/hcs-27/tx',
+                'libraries/standards-sdk/hcs-27/api',
               ],
             },
             {
