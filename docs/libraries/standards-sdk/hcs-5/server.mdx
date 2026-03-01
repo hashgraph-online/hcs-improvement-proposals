@@ -1,0 +1,58 @@
+---
+title: Node — HCS‑5 Client
+description: Inscribe content and mint Hashinals (HTS NFTs) pointing to HCS‑1 HRLs.
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import 'dotenv/config';
+import { HCS5Client } from '@hashgraphonline/standards-sdk';
+
+const hcs5 = new HCS5Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const res = await hcs5.createHashinal({
+  tokenId: '0.0.123456',
+  inscriptionInput: {
+    type: 'buffer',
+    buffer: Buffer.from('hello'),
+    fileName: 'note.txt',
+    mimeType: 'text/plain',
+  },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs5"
+
+client, err := hcs5.NewClient(hcs5.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+res, err := client.CreateHashinal(ctx, hcs5.CreateHashinalOptions{
+	TokenID:  "0.0.123456",
+	FileName: "note.txt",
+	MimeType: "text/plain",
+	Data:     []byte("hello"),
+})
+```
+
+</TabItem>
+</LanguageTabs>

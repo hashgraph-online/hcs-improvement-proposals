@@ -1,0 +1,59 @@
+---
+title: Node — HCS‑11 Client
+description: Create and inscribe HCS‑11 profiles from Node (with UAID integration on Hedera).
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import {
+  HCS11Client,
+  AgentBuilder,
+  InboundTopicType,
+  AIAgentCapability,
+} from '@hashgraphonline/standards-sdk';
+
+const client = new HCS11Client({
+  network: 'testnet',
+  auth: { operatorId: '0.0.123', privateKey: '302e…' },
+});
+const builder = new AgentBuilder()
+  .setName('Agent')
+  .setBio('Demo')
+  .setCapabilities([AIAgentCapability.TEXT_GENERATION])
+  .setInboundTopicType(InboundTopicType.PUBLIC);
+const res = await client.createAndInscribeProfile(builder.build(), true);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs11"
+
+client, err := hcs11.NewClient(hcs11.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  "0.0.123",
+	OperatorPrivateKey: "302e…",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+profile := hcs11.NewAgentBuilder().
+	SetName("Agent").
+	SetBio("Demo").
+	SetCapabilities([]string{"text_generation"}).
+	SetInboundTopicType("public").
+	Build()
+
+res, err := client.CreateAndInscribeProfile(ctx, profile, true)
+```
+
+</TabItem>
+</LanguageTabs>

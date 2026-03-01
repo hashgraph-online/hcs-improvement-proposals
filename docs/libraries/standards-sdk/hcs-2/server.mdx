@@ -1,0 +1,60 @@
+---
+title: Node — HCS‑2 Client
+description: Create registries, register/update/delete entries, and query HCS‑2 topics from Node.
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import 'dotenv/config';
+import { HCS2Client, HCS2RegistryType } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS2Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const reg = await client.createRegistry({ registryType: HCS2RegistryType.INDEXED, ttl: 86400 });
+await client.registerEntry(reg.topicId!, {
+  targetTopicId: '0.0.700123',
+  metadata: 'https://example.com/meta.json',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs2"
+
+client, err := hcs2.NewClient(hcs2.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+reg, err := client.CreateRegistry(ctx, hcs2.CreateRegistryOptions{
+	RegistryType: hcs2.RegistryTypeIndexed,
+	TTL:          86400,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_, err = client.RegisterEntry(ctx, reg.TopicID, hcs2.RegisterEntryOptions{
+	TargetTopicID: "0.0.700123",
+	Metadata:      "https://example.com/meta.json",
+}, "")
+```
+
+</TabItem>
+</LanguageTabs>

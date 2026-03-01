@@ -1,0 +1,48 @@
+---
+title: Node — HCS‑6 Client
+description: Manage dynamic hashinals (latest‑state registries) from Node.
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import 'dotenv/config';
+import { HCS6Client } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS6Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const reg = await client.createDynamicRegistry({ ttl: 86400 });
+await client.upsert(reg.topicId, { key: 'latest', value: { version: 1 } });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs6"
+
+client, err := hcs6.NewClient(hcs6.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+reg, err := client.CreateDynamicRegistry(ctx, hcs6.CreateDynamicRegistryOptions{
+	TTL: 86400,
+})
+```
+
+</TabItem>
+</LanguageTabs>
