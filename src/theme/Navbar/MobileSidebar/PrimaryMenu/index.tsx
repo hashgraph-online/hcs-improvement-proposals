@@ -4,6 +4,21 @@ import {useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
 import {useLocation} from '@docusaurus/router';
 
+const HOL_ORIGINS = ['https://hol.org', 'https://www.hol.org'];
+
+function isHolOrigin(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return HOL_ORIGINS.includes(parsed.origin);
+  } catch {
+    return false;
+  }
+}
+
+function isExternalUrl(url: string): boolean {
+  return url.startsWith('http') && !isHolOrigin(url);
+}
+
 export default function NavbarMobilePrimaryMenu(): JSX.Element {
   const mobileSidebar = useNavbarMobileSidebar();
   const items = useThemeConfig().navbar.items;
@@ -84,19 +99,23 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
 
                   const linkClass = "block !px-3 !py-2 !pl-6 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
 
-                  if (subItem.href) {
-                    const isExternal = subItem.href.startsWith('http') && !subItem.href.includes('hol.org');
+                  // Determine the destination URL
+                  const url = subItem.href || subItem.to;
+                  if (!url) return null;
+
+                  const isAbsoluteUrl = url.startsWith('http');
+                  const isExternal = isExternalUrl(url);
+
+                  if (isAbsoluteUrl) {
                     return (
                       <a
                         key={subIndex}
-                        href={subItem.href}
+                        href={url}
                         className={linkClass}
-                        target={isExternal ? '_blank' : undefined}
+                        target={isExternal ? '_blank' : '_self'}
                         rel={isExternal ? 'noopener noreferrer' : undefined}
-                        onClick={(e) => {
-                          if (!isExternal) {
-                            setTimeout(() => mobileSidebar.toggle(), 50);
-                          }
+                        onClick={() => {
+                          setTimeout(() => mobileSidebar.toggle(), 50);
                         }}
                       >
                         {subItem.label}
@@ -104,20 +123,16 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
                     );
                   }
 
-                  if (subItem.to && !subItem.to.startsWith('http')) {
-                    return (
-                      <Link
-                        key={subIndex}
-                        to={subItem.to || '/'}
-                        className={linkClass}
-                        onClick={() => mobileSidebar.toggle()}
-                      >
-                        {subItem.label}
-                      </Link>
-                    );
-                  }
-                  
-                  return null;
+                  return (
+                    <Link
+                      key={subIndex}
+                      to={url}
+                      className={linkClass}
+                      onClick={() => mobileSidebar.toggle()}
+                    >
+                      {subItem.label}
+                    </Link>
+                  );
                 })}
               </div>
             </div>
@@ -127,19 +142,22 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
         // Handle regular link items
         const linkClass = "block !px-3 !py-2 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
 
-        if (item.href) {
-          const isExternal = item.href.startsWith('http') && !item.href.includes('hol.org');
+        const url = item.href || item.to;
+        if (!url) return null;
+
+        const isAbsoluteUrl = url.startsWith('http');
+        const isExternal = isExternalUrl(url);
+
+        if (isAbsoluteUrl) {
           return (
             <a
               key={index}
-              href={item.href}
+              href={url}
               className={linkClass}
-              target={isExternal ? '_blank' : undefined}
+              target={isExternal ? '_blank' : '_self'}
               rel={isExternal ? 'noopener noreferrer' : undefined}
-              onClick={(e) => {
-                if (!isExternal) {
-                  setTimeout(() => mobileSidebar.toggle(), 50);
-                }
+              onClick={() => {
+                setTimeout(() => mobileSidebar.toggle(), 50);
               }}
             >
               {item.label}
@@ -147,20 +165,16 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
           );
         }
 
-        if (item.to) {
-          return (
-            <Link
-              key={index}
-              to={item.to}
-              className={linkClass}
-              onClick={() => mobileSidebar.toggle()}
-            >
-              {item.label}
-            </Link>
-          );
-        }
-
-        return null;
+        return (
+          <Link
+            key={index}
+            to={url}
+            className={linkClass}
+            onClick={() => mobileSidebar.toggle()}
+          >
+            {item.label}
+          </Link>
+        );
       })}
     </div>
   );

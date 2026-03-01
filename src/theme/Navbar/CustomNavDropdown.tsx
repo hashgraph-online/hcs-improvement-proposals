@@ -16,6 +16,21 @@ interface NavDropdownProps {
   items: DropdownItem[];
 }
 
+const HOL_ORIGINS = ['https://hol.org', 'https://www.hol.org'];
+
+function isHolOrigin(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return HOL_ORIGINS.includes(parsed.origin);
+  } catch {
+    return false;
+  }
+}
+
+function isExternalUrl(url: string): boolean {
+  return url.startsWith('http') && !isHolOrigin(url);
+}
+
 function isDocusaurusPath(path: string): boolean {
   return path.startsWith('/docs') || path.startsWith('/blog');
 }
@@ -110,7 +125,7 @@ export default function CustomNavDropdown({ label, items }: NavDropdownProps) {
                 .replace(/\s+/g, ' ');
 
               if (item.href) {
-                const isExternal = item.href.startsWith('http') && !item.href.includes('hol.org');
+                const isExternal = isExternalUrl(item.href);
                 return (
                   <a
                     key={index}
