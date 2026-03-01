@@ -48,7 +48,9 @@ import {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+import (
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs2"
+)
 ```
 
 </TabItem>
@@ -92,7 +94,27 @@ interface RegistryEntry {
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+type ClientConfig struct {
+	OperatorAccountID  string
+	OperatorPrivateKey string
+	Network            string
+	MirrorBaseURL      string
+	MirrorAPIKey       string
+}
+
+type TopicRegistry struct {
+	TopicID string
+	Type    RegistryType
+	TTL     int64
+	Entries []RegistryEntry
+}
+
+type RegistryEntry struct {
+	UID      string
+	TopicID  string
+	Metadata string
+	Sequence int64
+}
 ```
 
 </TabItem>
@@ -113,7 +135,17 @@ enum HCS2Operation { REGISTER = 'register', UPDATE = 'update', DELETE = 'delete'
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+const (
+	RegistryTypeIndexed    RegistryType = "INDEXED"
+	RegistryTypeNonIndexed RegistryType = "NON_INDEXED"
+)
+
+const (
+	OperationRegister RegistryOperation = "register"
+	OperationUpdate   RegistryOperation = "update"
+	OperationDelete   RegistryOperation = "delete"
+	OperationMigrate  RegistryOperation = "migrate"
+)
 ```
 
 </TabItem>
@@ -162,7 +194,19 @@ getRegistry(topicId: string, options?: QueryRegistryOptions): Promise<TopicRegis
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+func NewClient(config ClientConfig) (*Client, error)
+
+func (c *Client) CreateRegistry(ctx context.Context, options CreateRegistryOptions) (CreateRegistryResult, error)
+
+func (c *Client) RegisterEntry(ctx context.Context, topicID string, options RegisterEntryOptions, protocol string) (OperationResult, error)
+
+func (c *Client) UpdateEntry(ctx context.Context, topicID string, options UpdateEntryOptions) (OperationResult, error)
+
+func (c *Client) DeleteEntry(ctx context.Context, topicID string, options DeleteEntryOptions) (OperationResult, error)
+
+func (c *Client) MigrateRegistry(ctx context.Context, topicID string, options MigrateRegistryOptions) (OperationResult, error)
+
+func (c *Client) GetRegistry(ctx context.Context, topicID string, options shared.QueryOptions) (TopicRegistry, error)
 ```
 
 </TabItem>
@@ -205,7 +249,15 @@ function buildHcs2MigrateTx(params: { registryTopicId: string; targetTopicId: st
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+func BuildHCS2CreateRegistryTx(params CreateRegistryTxParams) *hedera.TopicCreateTransaction
+
+func BuildHCS2RegisterTx(params RegisterTxParams) (*hedera.TopicMessageSubmitTransaction, error)
+
+func BuildHCS2UpdateTx(params UpdateTxParams) (*hedera.TopicMessageSubmitTransaction, error)
+
+func BuildHCS2DeleteTx(params DeleteTxParams) (*hedera.TopicMessageSubmitTransaction, error)
+
+func BuildHCS2MigrateTx(params MigrateTxParams) (*hedera.TopicMessageSubmitTransaction, error)
 ```
 
 </TabItem>
@@ -233,7 +285,23 @@ const reg = await c.getRegistry(created.topicId!);
 <TabItem value="go">
 
 ```go
-// TODO: Add Go API reference
+client, _ := hcs2.NewClient(hcs2.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+
+created, _ := client.CreateRegistry(context.Background(), hcs2.CreateRegistryOptions{
+	TTL:                 86400,
+	UseOperatorAsSubmit: true,
+})
+
+client.RegisterEntry(context.Background(), created.TopicID, hcs2.RegisterEntryOptions{
+	TargetTopicID: "0.0.2001",
+	Metadata:      "app=chat",
+}, "hcs-2")
+
+reg, _ := client.GetRegistry(context.Background(), created.TopicID, shared.QueryOptions{})
 ```
 
 </TabItem>
