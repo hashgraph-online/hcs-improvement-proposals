@@ -1,0 +1,233 @@
+---
+title: Server — HCS‑20Client
+description: Deploy and manage points on Hedera using the Node client. Includes deploy, mint, transfer, burn, and indexer usage.
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+## Installation
+
+```bash
+npm install @hashgraphonline/standards-sdk
+```
+
+## Basic Setup
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { HCS20Client } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS20Client({
+  network: 'testnet',
+  operatorId: '0.0.123456',
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+  logLevel: 'info',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"os"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs20"
+)
+
+client, err := hcs20.NewClient(hcs20.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Operations
+
+### 1) Deploy Points
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const deployOptions = {
+  name: 'MyRewardPoints',
+  tick: 'MRP',
+  maxSupply: '1000000',
+  limitPerMint: '1000',
+  metadata: 'https://my-reward-points.com/meta',
+  usePrivateTopic: false,
+  progressCallback: d => console.log(`${d.stage}: ${d.percentage}%`),
+};
+
+const pointsInfo = await client.deployPoints(deployOptions);
+console.log('Points deployed:', pointsInfo);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+pointsInfo, err := client.DeployPoints(ctx, hcs20.DeployPointsOptions{
+	Name:            "MyRewardPoints",
+	Tick:            "MRP",
+	Max:             "1000000",
+	LimitPerMint:    "1000",
+	Metadata:        "https://my-reward-points.com/meta",
+	UsePrivateTopic: false,
+	ProgressCallback: func(progress hcs20.DeployPointsProgress) {
+		fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage)
+	},
+})
+
+fmt.Println("Points deployed:", pointsInfo)
+```
+
+</TabItem>
+</LanguageTabs>
+
+### 2) Mint Points
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const mintOptions = {
+  tick: 'MRP',
+  amount: '500',
+  to: '0.0.98765',
+  memo: 'Initial points for new user',
+  progressCallback: d => console.log(`${d.stage}: ${d.percentage}%`),
+};
+
+const mintTx = await client.mintPoints(mintOptions);
+console.log('Mint transaction:', mintTx);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+mintTx, err := client.MintPoints(ctx, hcs20.MintPointsOptions{
+	Tick:   "MRP",
+	Amount: "500",
+	To:     "0.0.98765",
+	Memo:   "Initial points for new user",
+	ProgressCallback: func(progress hcs20.MintPointsProgress) {
+		fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage)
+	},
+})
+
+fmt.Println("Mint transaction:", mintTx)
+```
+
+</TabItem>
+</LanguageTabs>
+
+### 3) Transfer Points
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const transferOptions = {
+  tick: 'MRP',
+  amount: '100',
+  from: '0.0.12345',
+  to: '0.0.98765',
+  progressCallback: d => console.log(`${d.stage}: ${d.percentage}%`),
+};
+
+const transferTx = await client.transferPoints(transferOptions);
+console.log('Transfer transaction:', transferTx);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+transferTx, err := client.TransferPoints(ctx, hcs20.TransferPointsOptions{
+	Tick:   "MRP",
+	Amount: "100",
+	From:   "0.0.12345",
+	To:     "0.0.98765",
+	ProgressCallback: func(progress hcs20.TransferPointsProgress) {
+		fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage)
+	},
+})
+
+fmt.Println("Transfer transaction:", transferTx)
+```
+
+</TabItem>
+</LanguageTabs>
+
+### 4) Burn Points
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const burnOptions = {
+  tick: 'MRP',
+  amount: '50',
+  from: '0.0.98765',
+  progressCallback: d => console.log(`${d.stage}: ${d.percentage}%`),
+};
+
+const burnTx = await client.burnPoints(burnOptions);
+console.log('Burn transaction:', burnTx);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+burnTx, err := client.BurnPoints(ctx, hcs20.BurnPointsOptions{
+	Tick:   "MRP",
+	Amount: "50",
+	From:   "0.0.98765",
+	ProgressCallback: func(progress hcs20.BurnPointsProgress) {
+		fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage)
+	},
+})
+
+fmt.Println("Burn transaction:", burnTx)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Indexer (Concept)
+
+Use the points indexer to keep a local view of deployed points, balances, and history by processing topic messages.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Pseudocode — wire to your persistence
+// const indexer = new HCS20PointsIndexer({ mirror: 'testnet', topicId: pointsInfo.topicId });
+// await indexer.start();
+// indexer.on('balance', b => save(b));
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// Pseudocode — wire to your persistence
+// indexer := hcs20.NewPointsIndexer("testnet", pointsInfo.TopicID)
+// indexer.Start()
+// indexer.OnBalance(func(b map[string]any) { save(b) })
+```
+
+</TabItem>
+</LanguageTabs>

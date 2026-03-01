@@ -3,6 +3,9 @@ title: HCS-20 Points SDK Overview
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-20: Auditable Points Standard
 
 The HCS-20 module provides a standard for creating and managing auditable points (like loyalty points or in-game currencies) on the Hedera Consensus Service. It includes clients for both server-side (Node.js) and client-side (browser) environments, along with an indexer for tracking the state of points.
@@ -46,6 +49,80 @@ graph TB
 - Browser SDK: /docs/libraries/standards-sdk/hcs-20/browser
 - Transactions: /docs/libraries/standards-sdk/hcs-20/tx
 - API Reference: /docs/libraries/standards-sdk/hcs-20/api
+
+## SDK Quickstart
+
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+const deployOptions = {
+  name: 'MyRewardPoints',
+  tick: 'MRP',
+  maxSupply: '1000000',
+  limitPerMint: '1000',
+  metadata: 'https://my-reward-points.com/meta',
+  usePrivateTopic: false,
+};
+
+const pointsInfo = await client.deployPoints(deployOptions);
+
+const mintTransaction = await client.mintPoints({
+  tick: 'MRP',
+  amount: '500',
+  to: '0.0.98765',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs20"
+)
+
+client, err := hcs20.NewClient(hcs20.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+pointsInfo, err := client.DeployPoints(context.Background(), hcs20.DeployPointsOptions{
+	Name:         "LoyaltyPoints",
+	Tick:         "LOYAL",
+	Max:          "1000000",
+	LimitPerMint: "1000",
+	Metadata:     "https://example.com/points/loyal",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+mintResult, err := client.MintPoints(context.Background(), hcs20.MintPointsOptions{
+	Tick:   "LOYAL",
+	Amount: "500",
+	To:     "0.0.98765",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = pointsInfo
+_ = mintResult
+```
+
+</TabItem>
+</Tabs>
 
 ## Implementation Workflow
 

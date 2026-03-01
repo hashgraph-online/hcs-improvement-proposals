@@ -264,6 +264,29 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'HCS-27: Checkpoints',
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-27/index' },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-27/overview',
+                'libraries/standards-sdk/hcs-27/server',
+                'libraries/standards-sdk/hcs-27/tx',
+                'libraries/standards-sdk/hcs-27/api',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'HCS-26: Skill Registry',
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-26/index' },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-26/overview',
+              ],
+            },
+            {
+              type: 'category',
               label: 'HCS-21: Adapter Registry',
               link: { type: 'doc', id: 'libraries/standards-sdk/hcs-21/index' },
               collapsible: true,
@@ -280,6 +303,16 @@ const sidebars: SidebarsConfig = {
             'libraries/standards-sdk/utils-services',
             'libraries/standards-sdk/registry-broker-client',
             'libraries/standards-sdk/configuration',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Go SDK',
+          link: { type: 'doc', id: 'libraries/go-sdk/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/go-sdk/overview',
           ],
         },
         {

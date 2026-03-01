@@ -2,19 +2,27 @@
 sidebar_position: 1
 ---
 
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
 # Hashgraph Online Standards SDK
 
-The Hashgraph Online Standards SDK provides a complete implementation of the Hashgraph Consensus Standards (HCS) protocols, giving developers all the tools needed to build applications on Hedera.
+The Hashgraph Online Standards SDK provides complete implementations of the Hiero Consensus Specifications (HCS) protocols, giving developers all the tools needed to build applications on Hedera.
+
+Available in **TypeScript** and **Go** — choose your language below.
 
 ## What This SDK Does
 
 - **Implements HCS Protocols** - Provides full implementations of standards at Hashgraph Online
 - **Simplifies Complex Interactions** - Handles protocol details through clean interfaces and developer-friendly APIs
-- **Enables Cross-Platform Development** - Works across Node.js, browsers, and edge runtimes
+- **Enables Cross-Platform Development** - Works across Node.js, browsers, edge runtimes (TypeScript) and server-side Go applications
 
 ## Getting Started
 
 ### Installation
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```bash
 # Using npm
@@ -27,9 +35,20 @@ yarn add @hashgraphonline/standards-sdk
 pnpm add @hashgraphonline/standards-sdk
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```bash
+go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+</TabItem>
+</LanguageTabs>
+
 ### Quick Example
 
-Here's how to inscribe text data on Hedera using the SDK:
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 import { inscribe } from '@hashgraphonline/standards-sdk';
@@ -55,6 +74,47 @@ async function inscribeText() {
 inscribeText().catch(console.error);
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/inscriber"
+)
+
+func main() {
+	authClient := inscriber.NewAuthClient("")
+	authResult, err := authClient.Authenticate(
+		context.Background(),
+		"0.0.123456",
+		"your-private-key",
+		inscriber.NetworkTestnet,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	client, err := inscriber.NewClient(inscriber.Config{
+		APIKey:  authResult.APIKey,
+		Network: inscriber.NetworkTestnet,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("Inscriber client ready: %v\n", client != nil)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
 import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
 ## Key Capabilities
@@ -63,11 +123,16 @@ import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
 - [Registry Broker Client](./registry-broker-client.mdx) – typed access to discovery, chat, registration, metrics, and UAID tooling powered by the Registry Broker service.
 
+## Language-Specific Docs
+
+- **TypeScript**: Navigate the per-standard pages in this section — code snippets include both TypeScript and Go where available.
+- **Go**: See the [Go SDK](/docs/libraries/go-sdk/overview) section for Go-specific overview, packages, and environment setup.
+
 ## Technical Benefits
 
-- **Type Safety** - Full TypeScript support with comprehensive type definitions
-- **Modular Architecture** - Import only the components you need
-- **Consistent Interfaces** - Common patterns across all standards
+- **Type Safety** - Full TypeScript support with comprehensive type definitions; strongly typed Go structs
+- **Modular Architecture** - Import only the components you need (`pkg/*` in Go, tree-shakeable modules in TypeScript)
+- **Consistent Interfaces** - Common patterns across all standards in both languages
 - **Developer Utilities** - Helper functions for common operations
 - **Clean Abstractions** - Implementation details hidden behind intuitive APIs
 - **Custom Mirror Node Support** - Integration with third-party mirror node providers
@@ -76,4 +141,5 @@ import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
 - [Join our Telegram](https://t.me/hashinals) for community discussion
 - [Follow us on Twitter](https://twitter.com/hashgraphonline) for updates
-- [View the source code](https://github.com/hashgraph-online/standards-sdk) on GitHub
+- [TypeScript source code](https://github.com/hashgraph-online/standards-sdk) on GitHub
+- [Go source code](https://github.com/hashgraph-online/standards-sdk-go) on GitHub

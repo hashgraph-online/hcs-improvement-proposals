@@ -3,6 +3,9 @@ title: HCS-12 HashLinks SDK Overview
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-12: HashLinks SDK
 
 Build interactive, decentralized experiences on Hedera without smart contracts. HashLinks combines WebAssembly logic, Gutenberg UI blocks, and a composition layer to create powerful applications with minimal fees.
@@ -39,6 +42,58 @@ const client = new HCS12Client({
 
 client.initializeRegistries();
 ```
+
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+import { HCS12Client } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS12Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorPrivateKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+)
+
+client, err := hcs12.NewClient(hcs12.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+registry, err := client.CreateRegistryTopic(context.Background(), hcs12.CreateRegistryTopicOptions{
+	RegistryType:       hcs12.RegistryTypeAction,
+	TTL:                86400,
+	UseOperatorAsAdmin: true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = registry
+```
+
+</TabItem>
+</Tabs>
 
 ### Browser Setup
 

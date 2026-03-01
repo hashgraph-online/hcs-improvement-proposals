@@ -1,0 +1,279 @@
+---
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+# Node SDK (HCS18Client)
+
+`HCS18Client` is your orchestrator for discovery and formation. It signs with your operator credentials, reads from mirror‑node, and exposes ergonomic helpers for each HCS‑18 operation.
+
+Use it when:
+
+- Your service coordinates multiple petals (e.g., proposing, tracking responses, creating the Flora)
+- You need to poll and build local discovery state reliably
+- You want to trigger HCS‑16 creation once you have a quorum
+
+## Initialize
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { HCS18Client, NetworkType } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS18Client({
+  network: 'testnet' as NetworkType,
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"os"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs18"
+)
+
+client, err := hcs18.NewClient(hcs18.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create Discovery Topic (when you’re bootstrapping)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const { topicId } = await client.createDiscoveryTopic({ ttlSeconds: 300 });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+topicID, _, err := client.CreateDiscoveryTopic(ctx, hcs18.CreateDiscoveryTopicOptions{
+	TTLSeconds: 300,
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Announce (show up on the airwaves)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+await client.announce({
+  discoveryTopicId: topicId,
+  data: {
+    account: process.env.HEDERA_ACCOUNT_ID!,
+    petal: { name: 'Petal-A', priority: 700 },
+    capabilities: { protocols: ['hcs-16', 'hcs-18'] },
+    valid_for: 10000,
+  },
+  memo: 'ready', // transaction memo (optional)
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+_, err = client.Announce(ctx, topicID, hcs18.AnnounceData{
+	Account: os.Getenv("HEDERA_ACCOUNT_ID"),
+	Petal: hcs18.PetalDescriptor{
+		Name:     "Petal-A",
+		Priority: 700,
+	},
+	Capabilities: hcs18.CapabilityDetails{
+		Protocols: []string{"hcs-16", "hcs-18"},
+	},
+	ValidFor: 10000,
+}, "ready")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Propose / Respond (build consent)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const { sequenceNumber: proposalSeq } = await client.propose({
+  discoveryTopicId: topicId,
+  data: {
+    proposer: '0.0.123',
+    members: [
+      { account: '0.0.123', priority: 700 },
+      { account: '0.0.456', priority: 600, announce_seq: 101 },
+    ],
+    config: { name: 'Demo Flora', threshold: 2, purpose: 'testing' },
+  },
+});
+
+await client.respond({
+  discoveryTopicId: topicId,
+  data: { responder: '0.0.456', proposal_seq: proposalSeq, decision: 'accept' },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+receipt, err := client.Propose(ctx, topicID, hcs18.ProposeData{
+	Proposer: "0.0.123",
+	Members: []hcs18.ProposeMember{
+		{Account: "0.0.123", Priority: 700},
+		{Account: "0.0.456", Priority: 600, AnnounceSeq: 101},
+	},
+	Config: hcs18.ProposeConfig{
+		Name:      "Demo Flora",
+		Threshold: 2,
+		Purpose:   "testing",
+	},
+}, "")
+
+// Get proposalSeq from mirror node later or use placeholder
+proposalSeq := int64(42)
+
+_, err = client.Respond(ctx, topicID, hcs18.RespondData{
+	Responder:   "0.0.456",
+	ProposalSeq: proposalSeq,
+	Decision:    "accept",
+}, "")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Completion (hand‑off to HCS‑16)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { HCS16Client } from '@hashgraphonline/standards-sdk';
+
+// After enough acceptances, create the Flora and emit `complete`
+const hcs16 = new HCS16Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+
+const flora = await hcs16.createFloraAccountWithTopics({
+  members: ['0.0.123', '0.0.456'],
+  threshold: 2,
+  initialBalanceHbar: 10,
+});
+
+await client.complete({
+  discoveryTopicId: topicId,
+  data: {
+    proposer: '0.0.123',
+    proposal_seq: proposalSeq,
+    flora_account: flora.floraAccountId,
+    topics: flora.topics,
+  },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs16"
+
+// After enough acceptances, create the Flora and emit `complete`
+hcs16Client, _ := hcs16.NewClient(hcs16.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+
+// Flora creation omitted for brevity, assuming we get back an account and topics:
+floraAccount := "0.0.789"
+cTopic := "0.0.101"
+tTopic := "0.0.102"
+sTopic := "0.0.103"
+
+_, err = client.Complete(ctx, topicID, hcs18.CompleteData{
+	Proposer:     "0.0.123",
+	ProposalSeq:  proposalSeq,
+	FloraAccount: floraAccount,
+	Topics: hcs18.CompleteTopic{
+		Communication: cTopic,
+		Transaction:   tTopic,
+		State:         sTopic,
+	},
+}, "")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Reading Discovery State (keep it tidy)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const messages = await client.getDiscoveryMessages(topicId, { sequenceNumber: 'gt:0', order: 'asc' });
+// Filter by op and track announcements/proposals locally
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+messages, err := client.GetDiscoveryMessages(ctx, topicID, "gt:0", 100, "asc")
+// Filter by Operation and track locally
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Helper: Acceptance (a sensible default)
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// proposal: { data: { members: [...] }, responses: Map<string, RespondData> }
+const ready = client.isProposalReady(proposal);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// Note: State tracking logic is implemented at the application level in Go.
+// You can iterate over members and track respond operations in a local struct.
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Operational Tips
+
+- Persist last seen sequence number per discovery topic.
+- Tolerate mirror‑node lag: retry reads with small backoff windows.
+- Log proposals and responses with timestamps for audits.
+- Avoid hammering mirror‑node: batch reads and limit pages.

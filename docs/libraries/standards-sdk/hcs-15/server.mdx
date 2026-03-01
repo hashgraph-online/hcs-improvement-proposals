@@ -1,0 +1,114 @@
+---
+title: Server — HCS‑15Client
+description: Use HCS15Client to create a base account (ECDSA + EVM alias), create Petal accounts with shared keys, verify linkage, and close resources.
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import 'dotenv/config';
+import { HCS15Client, HCS10Client, AgentBuilder, InboundTopicType, AIAgentCapability } from '@hashgraphonline/standards-sdk';
+
+async function main() {
+  const network = (process.env.HEDERA_NETWORK as 'testnet' | 'mainnet') || 'testnet';
+  const operatorId = process.env.HEDERA_OPERATOR_ID || process.env.HEDERA_ACCOUNT_ID!;
+  const operatorKey = process.env.HEDERA_OPERATOR_KEY || process.env.HEDERA_PRIVATE_KEY!;
+
+  const client = new HCS15Client({ network, operatorId, operatorKey });
+
+  const base = await client.createBaseAccount({ initialBalance: 1, accountMemo: 'HCS-15 Base' });
+  const petal = await client.createPetalAccount({ basePrivateKey: base.privateKey, initialBalance: 0.5, accountMemo: 'HCS-15 Petal' });
+  const linked = await client.verifyPetalAccount(petal.accountId, base.accountId);
+
+  const hcs10 = new HCS10Client({ network, operatorId: base.accountId, operatorPrivateKey: base.privateKey.toString(), keyType: 'ecdsa' });
+  const builder = new AgentBuilder()
+    .setName('Demo Petal')
+    .setBio('Per‑experience identity')
+    .setCapabilities([AIAgentCapability.TEXT_GENERATION])
+    .setInboundTopicType(InboundTopicType.PUBLIC)
+    .setBaseAccount(base.accountId)
+    .setNetwork(network);
+  const profile = await hcs10.createAgent(builder, 60);
+
+  await client.close();
+}
+
+main().catch(console.error);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs11"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs15"
+)
+
+func main() {
+	network := "testnet"
+	operatorID := os.Getenv("HEDERA_ACCOUNT_ID")
+	operatorKey := os.Getenv("HEDERA_PRIVATE_KEY")
+
+	client, err := hcs15.NewClient(hcs15.ClientConfig{
+		Network:            network,
+		OperatorAccountID:  operatorID,
+		OperatorPrivateKey: operatorKey,
+	})
+	if err != nil {
+		panic(err)
+	}
+
+	ctx := context.Background()
+
+	base, _ := client.CreateBaseAccount(ctx, hcs15.BaseAccountCreateOptions{
+		InitialBalanceHbar: 1.0,
+		AccountMemo:        "HCS-15 Base",
+	})
+
+	petal, _ := client.CreatePetalAccount(ctx, hcs15.PetalAccountCreateOptions{
+		BasePrivateKey:     base.PrivateKey,
+		InitialBalanceHbar: 0.5,
+		AccountMemo:        "HCS-15 Petal",
+	})
+
+	linked, _ := client.VerifyPetalAccount(ctx, petal.AccountID, base.AccountID)
+	fmt.Println("Linked:", linked)
+
+	hcs11Client, _ := hcs11.NewClient(hcs11.ClientConfig{
+		Network:            network,
+		OperatorAccountID:  base.AccountID,
+		OperatorPrivateKey: base.PrivateKey,
+	})
+
+	profile, _ := hcs11.NewAgentBuilder().
+		SetName("Demo Petal").
+		SetBio("Per‑experience identity").
+		SetCapabilities([]hcs11.AIAgentCapability{hcs11.AIAgentCapabilityTextGeneration}).
+		SetBaseAccount(base.AccountID).
+		Build()
+
+	hcs11Client.CreateAndInscribeProfile(ctx, profile, true)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+Key methods:
+
+- `createBaseAccount({ initialBalance?, maxAutomaticTokenAssociations?, accountMemo? })`
+- `createPetalAccount({ basePrivateKey, initialBalance?, maxAutomaticTokenAssociations?, accountMemo? })`
+- `verifyPetalAccount(petalAccountId, baseAccountId)`
+- `close()`

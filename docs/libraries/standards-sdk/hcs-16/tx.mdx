@@ -1,0 +1,187 @@
+---
+title: Transactions — HCS‑16 Builders
+description: Canonical builders for Flora topics, accounts, and messages.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+HCS‑16 centralizes all transaction construction in builders to keep payloads canonical across Node, browser, and Go.
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-16
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs16
+
+## Create Flora Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs16CreateFloraTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs16CreateFloraTopicTx({
+  floraAccountId: '0.0.500',
+  topicType: 0,  // 0=communication, 1=transaction, 2=state
+  adminKey: true,
+  submitKey: true,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs16"
+
+tx, err := hcs16.BuildCreateFloraTopicTx(hcs16.CreateFloraTopicOptions{
+	FloraAccountID: "0.0.500",
+	TopicType:      hcs16.FloraTopicTypeCommunication, // 0
+	AdminKey:       operatorPublicKey,
+	SubmitKey:      operatorPublicKey,
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create Flora Account
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs16CreateAccountTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs16CreateAccountTx({
+  keyList,
+  initialBalanceHbar: 5,
+  maxAutomaticTokenAssociations: -1,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+keyList := hedera.KeyListWithThreshold(2).Add(key1.PublicKey()).Add(key2.PublicKey())
+
+tx, err := hcs16.BuildCreateFloraAccountTx(keyList, 5.0, -1, "flora account")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Generic Flora Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { FloraOperation, buildHcs16MessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs16MessageTx({
+  topicId: '0.0.600',
+  operatorId: '0.0.123',
+  op: FloraOperation.TRANSACTION,
+  body: { schedule_id: '0.0.12345' },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs16.BuildMessageTx(
+	"0.0.600",
+	"0.0.123",
+	hcs16.FloraOperationTransaction,
+	map[string]any{"schedule_id": "0.0.12345"},
+	"",
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Flora Created
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+buildHcs16FloraCreatedTx({ topicId, operatorId, floraAccountId, topics });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs16.BuildFloraCreatedTx("0.0.600", "0.0.123", "0.0.500", hcs16.FloraTopics{
+	Communication: "0.0.601",
+	Transaction:   "0.0.602",
+	State:         "0.0.603",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## State Update
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+buildHcs16StateUpdateTx({ topicId, operatorId, hash, epoch, accountId, topics, memo });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+epoch := int64(1)
+tx, err := hcs16.BuildStateUpdateTx(
+	"0.0.603",    // state topic
+	"0.0.123",    // operator
+	"hash123",    // state hash
+	&epoch,       // epoch (optional)
+	"0.0.500",    // account ID
+	[]string{"0.0.601"}, // topics
+	"state memo", // memo
+	"",           // tx memo
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Join Request / Vote / Accepted
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+buildHcs16FloraJoinRequestTx({ topicId, operatorId, accountId, connectionRequestId, connectionTopicId, connectionSeq });
+buildHcs16FloraJoinVoteTx({ topicId, operatorId, accountId, approve, connectionRequestId, connectionSeq });
+buildHcs16FloraJoinAcceptedTx({ topicId, operatorId, members, epoch });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// Join Request
+tx, _ := hcs16.BuildFloraJoinRequestTx("0.0.601", "0.0.123", "0.0.456", 1, "0.0.700", 1)
+
+// Join Vote
+tx, _ := hcs16.BuildFloraJoinVoteTx("0.0.601", "0.0.123", "0.0.456", true, 1, 1)
+
+// Join Accepted
+epoch := int64(2)
+tx, _ := hcs16.BuildFloraJoinAcceptedTx("0.0.601", "0.0.123", []string{"0.0.456"}, &epoch)
+```
+
+</TabItem>
+</LanguageTabs>

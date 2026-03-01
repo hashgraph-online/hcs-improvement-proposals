@@ -1,0 +1,254 @@
+---
+title: Server — HCS‑16Client
+description: Scenario‑driven flows to create topics and exchange Flora messages from Node.
+sidebar_position: 2
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+This page walks through real HCS‑16 flows using the Node client. Each section explains the intent first, then shows a compact code snippet.
+
+## 1) Bootstrap a Flora’s Topics
+
+Goal: create the three topics and share them via `flora_created` on the Communication Topic.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { HCS16Client, FloraTopicType } from '@hashgraphonline/standards-sdk';
+
+const hcs16 = new HCS16Client({ network: 'testnet', operatorId, operatorKey });
+
+// Choose which topic to create first; creation can be parallelized in your app
+const cTopic = await hcs16.createFloraTopic({ floraAccountId, topicType: FloraTopicType.COMMUNICATION });
+const tTopic = await hcs16.createFloraTopic({ floraAccountId, topicType: FloraTopicType.TRANSACTION });
+const sTopic = await hcs16.createFloraTopic({ floraAccountId, topicType: FloraTopicType.STATE });
+
+// Announce to members on the CTopic
+await hcs16.sendFloraCreated({
+  topicId: cTopic,
+  operatorId,
+  floraAccountId,
+  topics: {
+    communication: cTopic,
+    transaction: tTopic,
+    state: sTopic,
+  },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"os"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs16"
+)
+
+client, _ := hcs16.NewClient(hcs16.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
+})
+
+ctx := context.Background()
+floraAccountID := "0.0.12345"
+
+cTopic, _ := client.CreateFloraTopic(ctx, hcs16.CreateFloraTopicOptions{
+	FloraAccountID: floraAccountID,
+	TopicType:      hcs16.FloraTopicTypeCommunication,
+})
+
+tTopic, _ := client.CreateFloraTopic(ctx, hcs16.CreateFloraTopicOptions{
+	FloraAccountID: floraAccountID,
+	TopicType:      hcs16.FloraTopicTypeTransaction,
+})
+
+sTopic, _ := client.CreateFloraTopic(ctx, hcs16.CreateFloraTopicOptions{
+	FloraAccountID: floraAccountID,
+	TopicType:      hcs16.FloraTopicTypeState,
+})
+
+client.SendFloraCreated(ctx, cTopic, os.Getenv("HEDERA_ACCOUNT_ID"), floraAccountID, hcs16.FloraTopics{
+	FloraTopicTypeCommunication: cTopic,
+	FloraTopicTypeTransaction:   tTopic,
+	FloraTopicTypeState:         sTopic,
+}, nil)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes:
+- Topic memos follow the HCS‑16 spec (numeric enum encoding). Indexers can discover them reliably.
+- You can store the topic triplet in your app state, registry, or an HCS‑2 registry for lookup.
+
+## 2) Propose a Transaction
+
+Goal: publish a proposal on the Transaction Topic for members to review/sign.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+await hcs16.sendTransaction({
+  topicId: tTopic,
+  operatorId,
+  scheduleId: '0.0.1234',
+  data: 'release funds for invoice #42',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+client.SendTransaction(
+	ctx,
+	tTopic,
+	os.Getenv("HEDERA_ACCOUNT_ID"),
+	"0.0.1234",
+	"release funds for invoice #42",
+	nil,
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes:
+- The proposal references a scheduled transaction (or your own identifier) that your members will co‑sign.
+- Keep the memo meaningful for auditors and bots consuming the topic.
+
+## 3) Publish a State Update
+
+Goal: emit a compact snapshot to the State Topic after meaningful changes.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+await hcs16.sendStateUpdate({
+  topicId: sTopic,
+  operatorId,
+  hash: '0x…',
+  epoch: 7,
+  memo: 'post‑proposal state',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+epoch := int64(7)
+client.SendStateUpdate(
+	ctx,
+	sTopic,
+	os.Getenv("HEDERA_ACCOUNT_ID"),
+	"0x…",
+	&epoch,
+	"post‑proposal state",
+	nil,
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes:
+- Pairing with HCS‑17 hashes makes verification straightforward for indexers.
+- Epoch is an application counter to help readers process causality.
+
+## 4) Onboarding a New Member
+
+Goal: run the join handshake on the Communication Topic.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+await hcs16.sendFloraJoinRequest({
+  topicId: cTopic,
+  operatorId,
+  accountId: '0.0.2468',
+  connectionRequestId: 42,
+  connectionTopicId: '0.0.9012',
+  connectionSeq: 7,
+});
+await hcs16.sendFloraJoinVote({
+  topicId: cTopic,
+  operatorId,
+  accountId: '0.0.2468',
+  approve: true,
+  connectionRequestId: 42,
+  connectionSeq: 7,
+});
+await hcs16.sendFloraJoinAccepted({
+  topicId: cTopic,
+  operatorId,
+  members: ['0.0.111', '0.0.222', '0.0.2468'],
+  epoch: 8,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+connectionTopicID := "0.0.9012"
+connectionSeq := int64(7)
+epoch := int64(8)
+
+client.SendFloraJoinRequest(
+	ctx, cTopic, os.Getenv("HEDERA_ACCOUNT_ID"), "0.0.2468", 42,
+	&connectionTopicID, &connectionSeq, nil,
+)
+
+client.SendFloraJoinVote(
+	ctx, cTopic, os.Getenv("HEDERA_ACCOUNT_ID"), "0.0.2468", true,
+	42, &connectionSeq, nil,
+)
+
+client.SendFloraJoinAccepted(
+	ctx, cTopic, os.Getenv("HEDERA_ACCOUNT_ID"),
+	[]string{"0.0.111", "0.0.222", "0.0.2468"}, &epoch, nil,
+)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes:
+- Your policy decides who can request, how many votes are required, and how acceptance is signaled.
+- Keep membership lists sorted to avoid accidental hash divergence downstream.
+
+## Reading Messages
+
+The client exposes helpers to read and filter messages by operation when processing topics.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const recent = await hcs16.getRecentMessages(cTopic, { limit: 25, order: 'desc', opFilter: 'flora_created' });
+const latest = await hcs16.getLatestMessage(cTopic, 'flora_created');
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+recent, _ := client.GetRecentMessages(ctx, cTopic, 25, "desc", hcs16.FloraOperationFloraCreated)
+latest, _ := client.GetLatestMessage(ctx, cTopic, hcs16.FloraOperationFloraCreated)
+```
+
+</TabItem>
+</LanguageTabs>
+
+That’s all you need on Node: build with `tx.ts`, execute with the SDK client, and keep your flows auditable and minimal.
