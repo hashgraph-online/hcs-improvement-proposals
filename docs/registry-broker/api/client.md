@@ -367,12 +367,33 @@ const vote = await client.setSkillVote({
 });
 
 const voteStatus = await client.getSkillVoteStatus({ name: 'demo-skill' });
-const verification = await client.getSkillVerificationStatus({ name: 'demo-skill' });
+const verification = await client.getSkillVerificationStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
 
 await client.requestSkillVerification({
   name: 'demo-skill',
-  tier: 'verified',
+  version: '1.0.0',
+  tier: 'basic', // or 'express'
 });
+
+const challenge = await client.createSkillDomainProofChallenge({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+});
+
+const challengeToken = challenge.txtRecordValue.replace(/^hol-skill-verification=/, '');
+
+const domainProof = await client.verifySkillDomainProof({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+  challengeToken,
+});
+
+console.log(domainProof.signal.ok);
 ```
 
 ### Skill Routes
@@ -392,6 +413,8 @@ Client methods above map to:
 - `POST /api/v1/skills/vote`
 - `POST /api/v1/skills/verification/request`
 - `GET /api/v1/skills/verification/status`
+- `POST /api/v1/skills/verification/domain/challenge`
+- `POST /api/v1/skills/verification/domain/verify`
 
 ## Credits and Ledger Authentication
 

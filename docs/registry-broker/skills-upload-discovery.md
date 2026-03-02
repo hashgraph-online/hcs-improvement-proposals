@@ -125,20 +125,54 @@ const endpointUrl =
 const imageUrl = `https://img.shields.io/endpoint?url=${encodeURIComponent(endpointUrl)}`;
 ```
 
-Supported metrics: `version`, `status`, `trust`, `upvotes`, `updated`.
+Supported metrics: `version`, `status`, `trust`, `upvotes`, `updated`, `repo_commit`, `manifest`, `domain`.
 
 For complete examples and embed snippets, see [Skill Badges](skill-badges.md).
+
+## Domain proof (DNS TXT)
+
+Skill verification supports DNS TXT domain proof per skill version.
+
+```ts
+const challenge = await client.createSkillDomainProofChallenge({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com', // optional; homepage domain is used when omitted
+});
+
+console.log(challenge.txtRecordName, challenge.txtRecordValue);
+// Publish challenge.txtRecordValue at challenge.txtRecordName.
+
+const challengeToken = challenge.txtRecordValue.replace(/^hol-skill-verification=/, '');
+
+const verify = await client.verifySkillDomainProof({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+  challengeToken,
+});
+
+console.log(verify.signal.ok);
+```
 
 ## HTTP routes
 
 The client methods map to:
+- `GET /api/v1/skills/config`
 - `GET /api/v1/skills`
 - `GET /api/v1/skills/badge`
 - `GET /api/v1/skills/versions`
 - `GET /api/v1/skills/mine`
 - `GET /api/v1/skills/my-list`
+- `GET /api/v1/skills/ownership`
+- `GET /api/v1/skills/vote`
 - `POST /api/v1/skills/quote`
 - `POST /api/v1/skills/publish`
 - `GET /api/v1/skills/jobs/:jobId`
+- `POST /api/v1/skills/vote`
+- `POST /api/v1/skills/verification/request`
+- `GET /api/v1/skills/verification/status`
+- `POST /api/v1/skills/verification/domain/challenge`
+- `POST /api/v1/skills/verification/domain/verify`
 
 For schema details, response types, and complete skill method coverage (`quoteSkillPublish`, `publishSkill`, `getSkillPublishJob`, discovery, ownership, voting, and verification), see the [Registry Broker Client API: Skill Registry](/docs/registry-broker/api/client#skill-registry).

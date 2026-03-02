@@ -12,7 +12,7 @@ Use `GET /api/v1/skills/badge` to generate Shields-compatible badge payloads for
 - Route: `GET /api/v1/skills/badge`
 - Required query parameter: `name`
 - Optional query parameters:
-  - `metric`: `version | status | trust | upvotes | updated`
+  - `metric`: `version | status | trust | upvotes | updated | repo_commit | manifest | domain`
   - `label`: custom badge label (defaults to `skill`)
   - `style`: `flat | flat-square | for-the-badge | plastic | social`
 
@@ -32,6 +32,9 @@ const imageUrl = `https://img.shields.io/endpoint?url=${encodeURIComponent(endpo
 - `trust`: numeric trust score
 - `upvotes`: total upvotes
 - `updated`: relative time since publish (`5m ago`, `2h ago`, `7d ago`)
+- `repo_commit`: `pass` or `fail` for repository+commit integrity
+- `manifest`: `pass` or `fail` for manifest/file checksum integrity
+- `domain`: `pass` or `fail` for DNS TXT domain proof
 
 ## GitHub README embed
 
@@ -56,5 +59,8 @@ const examples = [
   'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=trust',
   'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=upvotes',
   'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=updated&style=for-the-badge',
+  'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=repo_commit',
+  'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=manifest',
+  'https://hol.org/registry/api/v1/skills/badge?name=demo-skill&metric=domain',
 ];
 ```

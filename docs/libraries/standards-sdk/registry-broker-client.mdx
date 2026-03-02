@@ -498,6 +498,45 @@ When a registration includes additional registries (for example ERC-8004) the br
 
 All progress tracking endpoints are protected by account ownership checks.
 
+## Skill Verification (DNS Domain Proof)
+
+The `RegistryBrokerClient` skill APIs support version-scoped verification requests and DNS TXT domain proof.
+
+```typescript
+// 1) request paid verification for an exact version
+await client.requestSkillVerification({
+  name: 'demo-skill',
+  version: '1.0.0',
+  tier: 'basic', // or 'express'
+});
+
+// 2) check verification status/signals for that version
+const status = await client.getSkillVerificationStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+// 3) create DNS TXT challenge
+const challenge = await client.createSkillDomainProofChallenge({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+});
+
+// publish challenge.txtRecordValue at challenge.txtRecordName
+const challengeToken = challenge.txtRecordValue.replace(/^hol-skill-verification=/, '');
+
+// 4) verify DNS TXT proof
+const domainProof = await client.verifySkillDomainProof({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+  challengeToken,
+});
+
+console.log(status.verified, domainProof.signal.ok);
+```
+
 ## Protocol Discovery
 
 <TabbedTerminal
