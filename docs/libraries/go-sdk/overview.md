@@ -13,7 +13,7 @@ The Go SDK (`standards-sdk-go`) provides a native Go implementation of the Hiero
 
 - **Implements HCS Protocols** — Full Go implementations of HCS-2, HCS-5, HCS-11, HCS-14, HCS-15, HCS-16, HCS-17, HCS-20, and HCS-27
 - **Inscriber Utilities** — Kiloscribe auth, websocket-based inscription, quote generation, bulk-files, and skill inscription helpers
-- **Registry Broker Client** — Full-featured client for search, agents, credits, verification, ledger auth, chat/encryption, feedback, and skills
+- **Registry Broker Client** — Full-featured client for search, agents, credits, verification, ledger auth, chat/encryption, feedback, and skills (including DNS TXT domain proof)
 - **Idiomatic Go Patterns** — Context-aware APIs, structured error handling, and familiar Go conventions
 
 ## Installation
@@ -76,6 +76,85 @@ func main() {
 | `pkg/registrybroker` | — | Full Registry Broker client (search, adapters, agents, credits, verification, chat, skills) |
 | `pkg/mirror` | — | Mirror node client used by HCS and inscriber packages |
 | `pkg/shared` | — | Network normalization, operator env loading, Hedera client/key parsing helpers |
+
+## Registry Broker skill verification (domain proof)
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/registrybroker"
+
+client, _ := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  "<registry-broker-api-key>",
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+
+status, _ := client.GetSkillVerificationStatusWithOptions(
+	context.Background(),
+	"demo-skill",
+	registrybroker.SkillVerificationStatusOptions{Version: "1.0.0"},
+)
+
+challenge, _ := client.CreateSkillDomainProofChallenge(
+	context.Background(),
+	registrybroker.SkillVerificationDomainProofChallengeRequest{
+		Name:    "demo-skill",
+		Version: "1.0.0",
+		Domain:  "example.com",
+	},
+)
+
+_, _ = client.VerifySkillDomainProof(
+	context.Background(),
+	registrybroker.SkillVerificationDomainProofVerifyRequest{
+		Name:           "demo-skill",
+		Version:        "1.0.0",
+		Domain:         "example.com",
+		ChallengeToken: "<token-from-dns-txt-record>",
+	},
+)
+
+_ = status
+_ = challenge
+```
+
+## Registry Broker UAID DNS verification (HCS-14)
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/registrybroker"
+
+client, _ := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  "<registry-broker-api-key>",
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+
+uaid := "uaid:aid:3AUoqGTHnMXv1PB8ATCtkB86Xw2uEEJuqMRNCirGQehhNhnQ1vHuwJfAh5K5Dp6RFE;uid=registry-ping-agent;registry=a2a-registry;proto=a2a-registry;nativeId=hol.org"
+persist := true
+refresh := true
+
+verifyResult, _ := client.VerifyUaidDnsTXT(
+	context.Background(),
+	registrybroker.VerificationDnsVerifyRequest{
+		UAID:    uaid,
+		Persist: &persist,
+	},
+)
+
+dnsStatus, _ := client.GetVerificationDNSStatus(
+	context.Background(),
+	uaid,
+	registrybroker.VerificationDnsStatusQuery{
+		Refresh: &refresh,
+		Persist: &persist,
+	},
+)
+
+_ = verifyResult
+_ = dnsStatus
+```
+
+Client methods map to:
+
+- `POST /api/v1/verification/dns/verify`
+- `GET /api/v1/verification/dns/status/:uaid`
 
 ## Environment Variables
 

@@ -498,6 +498,73 @@ When a registration includes additional registries (for example ERC-8004) the br
 
 All progress tracking endpoints are protected by account ownership checks.
 
+## Skill Verification (DNS Domain Proof)
+
+The `RegistryBrokerClient` skill APIs support version-scoped verification requests and DNS TXT domain proof.
+
+```typescript
+// 1) request paid verification for an exact version
+await client.requestSkillVerification({
+  name: 'demo-skill',
+  version: '1.0.0',
+  tier: 'basic', // or 'express'
+});
+
+// 2) check verification status/signals for that version
+const status = await client.getSkillVerificationStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+// 3) create DNS TXT challenge
+const challenge = await client.createSkillDomainProofChallenge({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+});
+
+// publish challenge.txtRecordValue at challenge.txtRecordName
+const challengeToken = challenge.txtRecordValue.replace(/^hol-skill-verification=/, '');
+
+// 4) verify DNS TXT proof
+const domainProof = await client.verifySkillDomainProof({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+  challengeToken,
+});
+
+console.log(status.verified, domainProof.signal.ok);
+```
+
+## UAID DNS Verification (HCS-14)
+
+Use these methods to validate that a UAID is correctly bound to a DNS TXT record (`_uaid.<nativeId>`).
+
+```typescript
+const uaid =
+  'uaid:aid:3AUoqGTHnMXv1PB8ATCtkB86Xw2uEEJuqMRNCirGQehhNhnQ1vHuwJfAh5K5Dp6RFE;uid=registry-ping-agent;registry=a2a-registry;proto=a2a-registry;nativeId=hol.org';
+
+// 1) live DNS TXT verification (optionally persist signal to agent metadata)
+const verifyResult = await client.verifyUaidDnsTxt({
+  uaid,
+  persist: true,
+});
+
+// 2) read stored status or force live recheck via query flags
+const dnsStatus = await client.getVerificationDnsStatus(uaid, {
+  refresh: true,
+  persist: true,
+});
+
+console.log(verifyResult.verified, dnsStatus.profileId, dnsStatus.dnsName);
+```
+
+These map to:
+
+- `POST /api/v1/verification/dns/verify`
+- `GET /api/v1/verification/dns/status/:uaid`
+
 ## Protocol Discovery
 
 <TabbedTerminal

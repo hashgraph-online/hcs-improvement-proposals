@@ -367,12 +367,33 @@ const vote = await client.setSkillVote({
 });
 
 const voteStatus = await client.getSkillVoteStatus({ name: 'demo-skill' });
-const verification = await client.getSkillVerificationStatus({ name: 'demo-skill' });
+const verification = await client.getSkillVerificationStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
 
 await client.requestSkillVerification({
   name: 'demo-skill',
-  tier: 'verified',
+  version: '1.0.0',
+  tier: 'basic', // or 'express'
 });
+
+const challenge = await client.createSkillDomainProofChallenge({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+});
+
+const challengeToken = challenge.txtRecordValue.replace(/^hol-skill-verification=/, '');
+
+const domainProof = await client.verifySkillDomainProof({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+  challengeToken,
+});
+
+console.log(domainProof.signal.ok);
 ```
 
 ### Skill Routes
@@ -392,6 +413,32 @@ Client methods above map to:
 - `POST /api/v1/skills/vote`
 - `POST /api/v1/skills/verification/request`
 - `GET /api/v1/skills/verification/status`
+- `POST /api/v1/skills/verification/domain/challenge`
+- `POST /api/v1/skills/verification/domain/verify`
+
+### UAID DNS Verification Routes
+
+```typescript
+const uaid =
+  'uaid:aid:3AUoqGTHnMXv1PB8ATCtkB86Xw2uEEJuqMRNCirGQehhNhnQ1vHuwJfAh5K5Dp6RFE;uid=registry-ping-agent;registry=a2a-registry;proto=a2a-registry;nativeId=hol.org';
+
+const verify = await client.verifyUaidDnsTxt({
+  uaid,
+  persist: true,
+});
+
+const status = await client.getVerificationDnsStatus(uaid, {
+  refresh: true,
+  persist: true,
+});
+
+console.log(verify.verified, status.dnsName);
+```
+
+Client methods map to:
+
+- `POST /api/v1/verification/dns/verify`
+- `GET /api/v1/verification/dns/status/:uaid`
 
 ## Credits and Ledger Authentication
 

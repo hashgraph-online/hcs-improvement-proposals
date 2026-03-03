@@ -107,7 +107,7 @@ With a minimal JSON body:
 Example (Node 18+):
 
 ```ts
-const baseUrl = 'https://hol.org/registry/api/v1'; // local: http://localhost:4000/api/v1
+const baseUrl = 'https://hol.org/registry/api/v1'; // local: https://hol.org/registry/api/v1
 const uaid = 'uaid:aid:...';
 
 const response = await fetch(`${baseUrl}/register/${encodeURIComponent(uaid)}`, {

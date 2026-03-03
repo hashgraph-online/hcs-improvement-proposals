@@ -7,11 +7,28 @@ interface DropdownItem {
   to?: string;
   href?: string;
   className?: string;
+  type?: string;
+  value?: string;
 }
 
 interface NavDropdownProps {
   label: string;
   items: DropdownItem[];
+}
+
+const HOL_ORIGINS = ['https://hol.org', 'https://www.hol.org'];
+
+function isHolOrigin(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return HOL_ORIGINS.includes(parsed.origin);
+  } catch {
+    return false;
+  }
+}
+
+function isExternalUrl(url: string): boolean {
+  return url.startsWith('http') && !isHolOrigin(url);
 }
 
 function isDocusaurusPath(path: string): boolean {
@@ -84,21 +101,31 @@ export default function CustomNavDropdown({ label, items }: NavDropdownProps) {
 
       {isOpen && (
         <div className='absolute top-full left-0 pt-1 -mt-1 z-50'>
-          <div className='min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden'>
+          <div className='min-w-[200px] bg-[#6289d5] rounded-md shadow-lg overflow-hidden py-1'>
             {items.map((item, index) => {
+              if (item.type === 'html' && item.className === 'navbar-dropdown-header') {
+                return (
+                  <div
+                    key={index}
+                    className="px-4 py-2 text-xs font-['Roboto_Mono'] font-bold text-white/60 uppercase tracking-wider bg-black/10 mt-1 first:mt-0"
+                  >
+                    {item.label || item.value}
+                  </div>
+                );
+              }
+
               const linkClass = `
                 block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
                 no-underline hover:no-underline
                 transition-all duration-150
                 hover:bg-white/10 hover:text-white
-                border-b border-white/10 last:border-b-0
                 ${item.className || ''}
               `
                 .trim()
                 .replace(/\s+/g, ' ');
 
               if (item.href) {
-                const isExternal = item.href.startsWith('http');
+                const isExternal = isExternalUrl(item.href);
                 return (
                   <a
                     key={index}
