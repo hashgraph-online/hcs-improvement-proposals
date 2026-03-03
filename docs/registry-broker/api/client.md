@@ -416,6 +416,30 @@ Client methods above map to:
 - `POST /api/v1/skills/verification/domain/challenge`
 - `POST /api/v1/skills/verification/domain/verify`
 
+### UAID DNS Verification Routes
+
+```typescript
+const uaid =
+  'uaid:aid:3AUoqGTHnMXv1PB8ATCtkB86Xw2uEEJuqMRNCirGQehhNhnQ1vHuwJfAh5K5Dp6RFE;uid=registry-ping-agent;registry=a2a-registry;proto=a2a-registry;nativeId=hol.org';
+
+const verify = await client.verifyUaidDnsTxt({
+  uaid,
+  persist: true,
+});
+
+const status = await client.getVerificationDnsStatus(uaid, {
+  refresh: true,
+  persist: true,
+});
+
+console.log(verify.verified, status.dnsName);
+```
+
+Client methods map to:
+
+- `POST /api/v1/verification/dns/verify`
+- `GET /api/v1/verification/dns/status/:uaid`
+
 ## Credits and Ledger Authentication
 
 ### Manual Credit Purchase (HBAR)

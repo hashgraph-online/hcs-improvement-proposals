@@ -29,12 +29,16 @@ const imageUrl = `https://img.shields.io/endpoint?url=${encodeURIComponent(endpo
 
 - `version`: `vX.Y.Z · verified|unverified` (changes based on verification state)
 - `status`: `verified` or `unverified`
-- `trust`: numeric trust score
-- `upvotes`: total upvotes
+- `trust`: numeric trust score computed from cohort-relative adapter scores
+- `upvotes`: total upvotes (raw count); trust scoring uses normalized upvote percentile, not raw count cutoffs
 - `updated`: relative time since publish (`5m ago`, `2h ago`, `7d ago`)
 - `repo_commit`: `pass` or `fail` for repository+commit integrity
 - `manifest`: `pass` or `fail` for manifest/file checksum integrity
 - `domain`: `pass` or `fail` for DNS TXT domain proof
+
+### Normalization note
+
+For numeric trust adapters (for example GitHub and upvote-derived signals), scoring is percentile-based against the current peer cohort using bell-curve normalization. Fixed threshold mappings are intentionally avoided.
 
 ## GitHub README embed
 

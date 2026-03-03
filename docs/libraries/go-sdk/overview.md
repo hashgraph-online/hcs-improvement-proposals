@@ -116,6 +116,46 @@ _ = status
 _ = challenge
 ```
 
+## Registry Broker UAID DNS verification (HCS-14)
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/registrybroker"
+
+client, _ := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  "<registry-broker-api-key>",
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+
+uaid := "uaid:aid:3AUoqGTHnMXv1PB8ATCtkB86Xw2uEEJuqMRNCirGQehhNhnQ1vHuwJfAh5K5Dp6RFE;uid=registry-ping-agent;registry=a2a-registry;proto=a2a-registry;nativeId=hol.org"
+persist := true
+refresh := true
+
+verifyResult, _ := client.VerifyUaidDnsTXT(
+	context.Background(),
+	registrybroker.VerificationDnsVerifyRequest{
+		UAID:    uaid,
+		Persist: &persist,
+	},
+)
+
+dnsStatus, _ := client.GetVerificationDNSStatus(
+	context.Background(),
+	uaid,
+	registrybroker.VerificationDnsStatusQuery{
+		Refresh: &refresh,
+		Persist: &persist,
+	},
+)
+
+_ = verifyResult
+_ = dnsStatus
+```
+
+Client methods map to:
+
+- `POST /api/v1/verification/dns/verify`
+- `GET /api/v1/verification/dns/status/:uaid`
+
 ## Environment Variables
 
 The SDK auto-loads `.env` from the current working directory or ancestor directories before resolving credentials.

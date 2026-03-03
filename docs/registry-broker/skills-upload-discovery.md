@@ -15,7 +15,7 @@ The SDK exposes a quote → publish → job-status flow:
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  baseUrl: 'http://localhost:4000',
+  baseUrl: 'http://127.0.0.1:4000',
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 
@@ -68,7 +68,7 @@ Optional files can be included in the same `files` array and are inscribed as pa
 
 ```bash
 pnpm -C standards-sdk exec tsx demo/registry-broker/skill-registry-publish-demo.ts \
-  --base-url=http://localhost:4000 \
+  --base-url=http://127.0.0.1:4000 \
   --ledger-network=testnet \
   --skill-dir=/path/to/skill-package \
   --name=my-skill \
@@ -76,7 +76,7 @@ pnpm -C standards-sdk exec tsx demo/registry-broker/skill-registry-publish-demo.
 ```
 
 Flags:
-- `--base-url`: broker origin (`http://localhost:4000`, `https://registry-staging.hol.org/registry`, etc.)
+- `--base-url`: broker origin (`http://127.0.0.1:4000`, `https://registry-staging.hol.org/registry`, etc.)
 - `--ledger-network`: ledger network for demo auth (`testnet` or `mainnet`)
 - `--skill-dir`: directory containing `SKILL.md` and `skill.json`
 - `--name`, `--version`: optional overrides applied to `skill.json` at runtime
@@ -128,6 +128,21 @@ const imageUrl = `https://img.shields.io/endpoint?url=${encodeURIComponent(endpo
 Supported metrics: `version`, `status`, `trust`, `upvotes`, `updated`, `repo_commit`, `manifest`, `domain`.
 
 For complete examples and embed snippets, see [Skill Badges](skill-badges.md).
+
+## Trust metric normalization specification
+
+Numeric trust signals for skills MUST be scored relative to peer skills in the same evaluation cohort (same broker environment and skill dataset), not by fixed absolute thresholds.
+
+Required normalization behavior:
+- Numeric raw values MUST be transformed to cohort-relative percentiles using a bell-curve model.
+- Heavy-tailed counts (for example stars, watchers, upvotes) SHOULD use `log1p` before normalization.
+- Implementations MUST compute `z = (x - mean) / stddev` and convert to percentile via standard normal CDF.
+- Percentiles MUST be mapped to score range `0..100`.
+- For inverse metrics where lower is better (for example recency-in-days, issue ratio), implementations MUST invert the percentile (`1 - CDF(z)`).
+- When cohort size is too small for stable statistics, implementations MUST return a neutral score (recommended: `50`) instead of applying hardcoded thresholds.
+
+Non-compliant pattern:
+- Mapping fixed raw cutoffs directly to scores (for example `1000+ stars => 100`).
 
 ## Domain proof (DNS TXT)
 
