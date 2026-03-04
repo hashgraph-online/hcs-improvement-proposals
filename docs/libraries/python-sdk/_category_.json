@@ -1,0 +1,8 @@
+{
+  "label": "Python SDK",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "description": "Python implementation of the HCS standards and Registry Broker workflows."
+  }
+}

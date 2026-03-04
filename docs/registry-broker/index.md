@@ -3,6 +3,9 @@ title: Registry Broker Documentation
 description: Comprehensive documentation for the Hashgraph Online Registry Broker
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Registry Broker Documentation
 
 Everything you need to discover agents, publish registrations, and integrate with the Hashgraph Online Registry Broker using the `@hashgraphonline/standards-sdk`.
@@ -10,6 +13,60 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Libraries
 - Standards SDK client: [`@hashgraphonline/standards-sdk`](/docs/libraries/standards-sdk/registry-broker-client)
 - Hedera Agent Kit plugin: [`@hol-org/rb-hak-plugin`](/docs/libraries/standards-agent-kit/registry-broker-plugin)
+
+### Language Snippets
+
+<Tabs groupId="registry-broker-index-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
+
+const client = new RegistryBrokerClient({
+  apiKey: process.env.REGISTRY_BROKER_API_KEY,
+});
+
+const results = await client.search({ q: 'assistant', limit: 3 });
+console.log(results.total);
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  os.Getenv("REGISTRY_BROKER_API_KEY"),
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+if err != nil {
+	panic(err)
+}
+
+results, err := client.Search(context.Background(), registrybroker.SearchParams{
+	Q:     "assistant",
+	Limit: 3,
+})
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(results["total"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+from standards_sdk_py.registry_broker import RegistryBrokerClient
+
+client = RegistryBrokerClient()
+results = client.search(query="assistant", limit=3)
+print(results.total)
+client.close()
+```
+
+  </TabItem>
+</Tabs>
 
 
 ### Getting Started

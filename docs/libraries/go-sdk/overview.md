@@ -9,6 +9,16 @@ The Go SDK (`standards-sdk-go`) provides a native Go implementation of the Hiero
 [![Go Reference](https://pkg.go.dev/badge/github.com/hashgraph-online/standards-sdk-go.svg)](https://pkg.go.dev/github.com/hashgraph-online/standards-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hashgraph-online/standards-sdk-go)](https://goreportcard.com/report/github.com/hashgraph-online/standards-sdk-go)
 
+Canonical SDK docs URL: [https://hol.org/docs/libraries/standards-sdk/](https://hol.org/docs/libraries/standards-sdk/)
+
+## Multi-Language SDK Links
+
+| Language | Package | Source | Documentation |
+| :--- | :--- | :--- | :--- |
+| TypeScript | `@hol-org/standards-sdk` | [hashgraph-online/standards-sdk](https://github.com/hashgraph-online/standards-sdk) | [https://hol.org/docs/libraries/standards-sdk/](https://hol.org/docs/libraries/standards-sdk/) |
+| Go | `github.com/hashgraph-online/standards-sdk-go` | [hashgraph-online/standards-sdk-go](https://github.com/hashgraph-online/standards-sdk-go) | [/docs/libraries/go-sdk/overview](/docs/libraries/go-sdk/overview) |
+| Python | `standards-sdk-py` | [hashgraph-online/standards-sdk-py](https://github.com/hashgraph-online/standards-sdk-py) | [/docs/libraries/python-sdk/overview](/docs/libraries/python-sdk/overview) |
+
 ## What This SDK Does
 
 - **Implements HCS Protocols** — Full Go implementations of HCS-2, HCS-5, HCS-11, HCS-14, HCS-15, HCS-16, HCS-17, HCS-20, and HCS-27

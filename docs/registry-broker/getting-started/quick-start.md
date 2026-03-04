@@ -3,6 +3,9 @@ title: Quick Start Guide
 description: Get up and running with the Registry Broker in minutes
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Quick Start Guide
 
 Follow these steps to explore the Registry Broker with the `@hashgraphonline/standards-sdk`.
@@ -18,10 +21,30 @@ Base agent registrations are free for your first 5 agents per account, but you s
 
 ## Step 1 — Install the SDK
 
+<Tabs groupId="registry-broker-quickstart-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
 ```bash
 pnpm add @hashgraphonline/standards-sdk
 # npm install @hashgraphonline/standards-sdk
 ```
+
+</TabItem>
+<TabItem value="go" label="Go">
+
+```bash
+go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```bash
+pip install standards-sdk-py
+```
+
+</TabItem>
+</Tabs>
 
 ## Step 2 — Configure the Environment
 
@@ -39,7 +62,10 @@ Load these values before interacting with the client (e.g. via `dotenv`). Ledger
 
 ## Step 3 — Initialise the Client
 
-```typescript
+<Tabs groupId="registry-broker-quickstart-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
@@ -47,13 +73,43 @@ const client = new RegistryBrokerClient({
 });
 ```
 
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  os.Getenv("REGISTRY_BROKER_API_KEY"),
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+if err != nil {
+	panic(err)
+}
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+import os
+from standards_sdk_py.registry_broker import RegistryBrokerClient
+
+client = RegistryBrokerClient()
+client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))
+```
+
+  </TabItem>
+</Tabs>
+
 The client uses the production broker URL by default and uses `globalThis.fetch`. Provide your own fetch implementation if you need custom behaviour.
 
 ## Step 4 — Discover Agents
 
 ### Keyword Search
 
-```typescript
+<Tabs groupId="registry-broker-quickstart-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
 const keywordResults = await client.search({
   q: 'customer support',
   limit: 5,
@@ -65,9 +121,43 @@ keywordResults.hits.forEach(hit => {
 });
 ```
 
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+keywordResults, err := client.Search(context.Background(), registrybroker.SearchParams{
+	Q:     "customer support",
+	Limit: 5,
+})
+if err != nil {
+	panic(err)
+}
+fmt.Println(keywordResults["hits"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+keyword_results = client.search(
+    query="customer support",
+    limit=5,
+    verified=True,
+)
+
+for hit in keyword_results.hits:
+    print(hit.get("uaid"))
+```
+
+  </TabItem>
+</Tabs>
+
 ### Vector Search
 
-```typescript
+<Tabs groupId="registry-broker-quickstart-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
 const vectorResults = await client.vectorSearch({
   query: 'treasury risk monitoring assistant',
   limit: 3,
@@ -82,6 +172,44 @@ vectorResults.hits.forEach(hit => {
 });
 ```
 
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+vectorResults, err := client.VectorSearch(context.Background(), registrybroker.VectorSearchRequest{
+	Query: "treasury risk monitoring assistant",
+	Limit: 3,
+	Filter: &registrybroker.VectorSearchFilter{
+		Registry:     "hashgraph-online",
+		Capabilities: []string{"financial-services"},
+	},
+})
+if err != nil {
+	panic(err)
+}
+fmt.Println(vectorResults["hits"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+vector_results = client.vector_search(
+    {
+        "query": "treasury risk monitoring assistant",
+        "limit": 3,
+        "filter": {
+            "registry": "hashgraph-online",
+            "capabilities": ["financial-services"],
+        },
+    }
+)
+print(vector_results)
+```
+
+  </TabItem>
+</Tabs>
+
 Use the [API reference](/docs/registry-broker/api/client) for the full search parameter list, including metadata filters and namespace-specific search.
 
 > ℹ️ Vector search is free but rate limited.
@@ -91,7 +219,10 @@ Use the [API reference](/docs/registry-broker/api/client) for the full search pa
 
 ## Step 5 — Start a Chat Session
 
-```typescript
+<Tabs groupId="registry-broker-quickstart-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
 const firstHit = keywordResults.hits.at(0);
 if (!firstHit) {
   throw new Error('No agents available for chat demo.');
@@ -113,6 +244,58 @@ console.log(history.map(entry => `${entry.role}: ${entry.content}`));
 
 await client.chat.endSession(session.sessionId);
 ```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+hits, _ := keywordResults["hits"].([]any)
+if len(hits) == 0 {
+	panic("no agents available for chat demo")
+}
+
+firstHit := hits[0].(map[string]any)
+uaid, _ := firstHit["uaid"].(string)
+
+session, err := client.CreateSession(context.Background(), registrybroker.CreateSessionRequestPayload{
+	UAID: uaid,
+}, true)
+if err != nil {
+	panic(err)
+}
+
+sessionID, _ := session["sessionId"].(string)
+reply, err := client.SendMessage(context.Background(), registrybroker.SendMessageRequestPayload{
+	SessionID: sessionID,
+	Message:   "Hello! What can you help me with today?",
+})
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(reply)
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+if not keyword_results.hits:
+    raise RuntimeError("No agents available for chat demo.")
+
+first_hit = keyword_results.hits[0]
+session = client.chat.create_session({"uaid": first_hit.get("uaid")})
+reply = client.chat.send_message(
+    {
+        "sessionId": session.session_id,
+        "message": "Hello! What can you help me with today?",
+    }
+)
+print(reply.model_dump())
+```
+
+  </TabItem>
+</Tabs>
 
 The `chat` helpers use UAIDs for session creation and message routing. Configure authentication through the `auth` field when the agent requires credentials.
 

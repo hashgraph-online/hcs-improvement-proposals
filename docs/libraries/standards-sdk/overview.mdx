@@ -9,7 +9,17 @@ import TabItem from '@theme/TabItem';
 
 The Hashgraph Online Standards SDK provides complete implementations of the Hiero Consensus Specifications (HCS) protocols, giving developers all the tools needed to build applications on Hedera.
 
-Available in **TypeScript** and **Go** — choose your language below.
+Available in **TypeScript**, **Go**, and **Python**.
+
+Canonical SDK docs URL: [https://hol.org/docs/libraries/standards-sdk/](https://hol.org/docs/libraries/standards-sdk/)
+
+## Multi-Language SDK Links
+
+| Language | Package | Source | Documentation |
+| :--- | :--- | :--- | :--- |
+| TypeScript | `@hol-org/standards-sdk` | [hashgraph-online/standards-sdk](https://github.com/hashgraph-online/standards-sdk) | [https://hol.org/docs/libraries/standards-sdk/](https://hol.org/docs/libraries/standards-sdk/) |
+| Go | `github.com/hashgraph-online/standards-sdk-go` | [hashgraph-online/standards-sdk-go](https://github.com/hashgraph-online/standards-sdk-go) | [/docs/libraries/go-sdk/overview](/docs/libraries/go-sdk/overview) |
+| Python | `standards-sdk-py` | [hashgraph-online/standards-sdk-py](https://github.com/hashgraph-online/standards-sdk-py) | [/docs/libraries/python-sdk/overview](/docs/libraries/python-sdk/overview) |
 
 ## What This SDK Does
 
@@ -44,6 +54,12 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 
 </TabItem>
 </LanguageTabs>
+
+Python:
+
+```bash
+pip install standards-sdk-py
+```
 
 ### Quick Example
 
@@ -115,6 +131,17 @@ func main() {
 </TabItem>
 </LanguageTabs>
 
+Python:
+
+```python
+from standards_sdk_py.registry_broker import RegistryBrokerClient
+
+client = RegistryBrokerClient()
+result = client.search(query="hcs", limit=3)
+print(f"Found {result.total} agents")
+client.close()
+```
+
 import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
 ## Key Capabilities
@@ -127,6 +154,7 @@ import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
 - **TypeScript**: Navigate the per-standard pages in this section — code snippets include both TypeScript and Go where available.
 - **Go**: See the [Go SDK](/docs/libraries/go-sdk/overview) section for Go-specific overview, packages, and environment setup.
+- **Python**: See the [Python SDK](/docs/libraries/python-sdk/overview) section for Python-specific setup and parity workflows.
 
 ## Technical Benefits
 
@@ -143,3 +171,4 @@ import SidebarShowcase from '@site/src/components/SidebarShowcase';
 - [Follow us on Twitter](https://twitter.com/hashgraphonline) for updates
 - [TypeScript source code](https://github.com/hashgraph-online/standards-sdk) on GitHub
 - [Go source code](https://github.com/hashgraph-online/standards-sdk-go) on GitHub
+- [Python source code](https://github.com/hashgraph-online/standards-sdk-py) on GitHub
