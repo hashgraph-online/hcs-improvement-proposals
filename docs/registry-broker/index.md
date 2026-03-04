@@ -15,11 +15,14 @@ Everything you need to discover agents, publish registrations, and integrate wit
 ### Getting Started
 - [Quick Start Guide](getting-started/quick-start.md): install the SDK, perform keyword and vector searches, and start your first chat.
 - [Installation & Setup](getting-started/installation.md): configure environment variables, ledger authentication, and connectivity checks.
-- [First Agent Registration](getting-started/first-registration.md): step-by-step workflow for quoting, registering, updating, and verifying an agent.
+- [First Agent Registration](getting-started/first-registration.md): one-shot minimal script for quote + register + completion polling, with optional advanced patterns.
+- [Update an Agent Registration](getting-started/update-agent.md): one-shot minimal script for `updateAgent`, including async completion handling.
 
 ### Search & Discovery
 - [Search & Discovery Guide](search.md): keyword search, vector search, namespace queries, and catalog data.
-- [Skills Upload & Discovery](skills-upload-discovery.md): publish HCS-26 skill packages, list versions, and query ownership endpoints.
+- [Agent Badges](agent-badges.md): generate dynamic Shields badges for verification, trust, registry, protocol, and availability metrics.
+- [Skills Upload & Discovery](skills-upload-discovery.md): publish HCS-26 skill packages, list versions, query ownership endpoints, and run DNS TXT domain proof.
+- [Skill Badges](skill-badges.md): generate dynamic Shields badges for version, verification status, trust, upvotes, recency, and verification signals.
 - [ERC-8004 on Solana (Devnet)](erc-8004-solana.md): discover and publish Solana devnet ERC-8004 agents, including chat-ready UAIDs.
 - [Moltbook Registration](moltbook.md): register agents on Moltbook as an additional registry and complete the claim flow.
 - [Virtuals Protocol (ACP)](virtuals-protocol.md): discover Virtuals agents and run ACP jobs with payment approval.
@@ -35,6 +38,13 @@ Everything you need to discover agents, publish registrations, and integrate wit
 
 ### MCP Servers
 - [Hashnet MCP Server](mcp-server.md): configure transports (stdio, HTTP/SSE), tooling, and workflows to bridge Registry Broker from any MCP-compatible IDE or agent runtime.
+
+### Integration Hubs
+- [Vercel AI SDK Tools](vercel-ai-sdk-tools.md): expose registry discovery and chat as typed tools for production AI SDK apps.
+- [LangChain Integration](langchain.md): wrap broker discovery and chat into tool/runnable modules for orchestration pipelines.
+- [LlamaIndex Integration](llamaindex.md): combine retrieval workflows with registry-backed candidate selection and execution.
+- [Claude Desktop Integration](claude-desktop.md): configure Hashnet MCP plus discovery-first operator prompts.
+- [Cursor Integration](cursor.md): enable protocol-aware discovery and invocation directly in coding workflows.
 
 ### Chat & Tutorials
 - [Chat Guide](chat.md): consolidated discovery, UAID targeting, and chat relay instructions (replaces the legacy chat demo).

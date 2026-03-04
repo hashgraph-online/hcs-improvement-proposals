@@ -4,6 +4,9 @@ description: What HCS‑18 does, how discovery messages flow, and how to use the
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 HCS‑18 is the open discovery layer for Petal accounts. Petals announce themselves, propose a Flora, respond, complete, or withdraw — all on a single discovery topic — then hand off to HCS‑16 to actually create the Flora and initialize topics.
 
 ## Why HCS‑18?
@@ -90,6 +93,52 @@ const d = new HCS18Client({ network: 'testnet', operatorId, operatorKey });
 const topicId = (await d.createDiscoveryTopic({ ttlSeconds: 300 })).topicId!;
 await d.announce({ discoveryTopicId: topicId, data: { account: operatorId, petal: { name: 'A', priority: 700 }, capabilities: { protocols: ['hcs-16','hcs-18'] } } });
 ```
+
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+import { HCS18Client } from '@hashgraphonline/standards-sdk';
+const client = new HCS18Client({ network: 'testnet', operatorId, operatorKey });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs18"
+)
+
+client, err := hcs18.NewClient(hcs18.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+topicID, _, err := client.CreateDiscoveryTopic(context.Background(), hcs18.CreateDiscoveryTopicOptions{
+	TTLSeconds:         300,
+	UseOperatorAsAdmin: true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = topicID
+```
+
+</TabItem>
+</Tabs>
 
 ## FAQ
 

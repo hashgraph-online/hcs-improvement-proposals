@@ -265,6 +265,29 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'HCS-27: Checkpoints',
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-27/index' },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-27/overview',
+                'libraries/standards-sdk/hcs-27/server',
+                'libraries/standards-sdk/hcs-27/tx',
+                'libraries/standards-sdk/hcs-27/api',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'HCS-26: Skill Registry',
+              link: { type: 'doc', id: 'libraries/standards-sdk/hcs-26/index' },
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/standards-sdk/hcs-26/overview',
+              ],
+            },
+            {
+              type: 'category',
               label: 'HCS-21: Adapter Registry',
               link: { type: 'doc', id: 'libraries/standards-sdk/hcs-21/index' },
               collapsible: true,
@@ -281,6 +304,16 @@ const sidebars: SidebarsConfig = {
             'libraries/standards-sdk/utils-services',
             'libraries/standards-sdk/registry-broker-client',
             'libraries/standards-sdk/configuration',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Go SDK',
+          link: { type: 'doc', id: 'libraries/go-sdk/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/go-sdk/overview',
           ],
         },
         {
@@ -388,8 +421,46 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'doc',
+              id: 'registry-broker/getting-started/update-agent',
+              label: 'Update Agent Registration',
+            },
+            {
+              type: 'doc',
               id: 'registry-broker/getting-started/faq',
               label: 'FAQ',
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Chat Guides',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'registry-broker/chat',
+              label: 'Chat Guide',
+            },
+            {
+              type: 'doc',
+              id: 'registry-broker/multi-protocol-chat',
+              label: 'Multi-Protocol Chat',
+            },
+            {
+              type: 'doc',
+              id: 'registry-broker/xmtp',
+              label: 'XMTP Integration',
+            },
+            {
+              type: 'doc',
+              id: 'registry-broker/encrypted-chat',
+              label: 'Encrypted Chat',
+            },
+            {
+              type: 'doc',
+              id: 'registry-broker/feedback',
+              label: 'Agent Feedback',
             },
           ],
         },
@@ -400,11 +471,18 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
+          id: 'registry-broker/agent-badges',
+          label: 'Agent Badges',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/skills-upload-discovery',
           label: 'Skills Upload & Discovery',
         },
         {
           type: 'doc',
+          id: 'registry-broker/skill-badges',
+          label: 'Skill Badges',
           id: 'registry-broker/bulk-inscriptions',
           label: 'Bulk Inscriptions (bulk-files)',
         },
@@ -420,28 +498,8 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'doc',
-          id: 'registry-broker/chat',
-          label: 'Chat Guide',
-        },
-        {
-          type: 'doc',
-          id: 'registry-broker/feedback',
-          label: 'Agent Feedback',
-        },
-        {
-          type: 'doc',
-          id: 'registry-broker/xmtp',
-          label: 'XMTP Integration',
-        },
-        {
-          type: 'doc',
           id: 'registry-broker/mcp-server',
           label: 'Hashnet MCP Server',
-        },
-        {
-          type: 'doc',
-          id: 'registry-broker/encrypted-chat',
-          label: 'Encrypted Chat',
         },
         {
           type: 'doc',
@@ -467,11 +525,6 @@ const sidebars: SidebarsConfig = {
           collapsible: true,
           collapsed: true,
           items: [
-            {
-              type: 'doc',
-              id: 'registry-broker/multi-protocol-chat',
-              label: 'Multi-Protocol Chat',
-            },
             {
               type: 'doc',
               id: 'registry-broker/examples/chat-demo',

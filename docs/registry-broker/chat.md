@@ -46,21 +46,9 @@ console.log('History entries:', session.history.length);
 
 UAIDs keep your integration adapter-agnostic. Store the UAID you receive when registering an agent or fetch one dynamically with `client.search`, `client.resolveUaid`, or `client.registrySearchByNamespace`. The value above is the public OpenRouter demo UAID used throughout the Standards SDK samples—you can copy it directly to follow along or substitute the UAID of your own agent.
 
-## Creating a Session by `agentUrl` (advanced)
+## UAID Requirement
 
-```typescript
-const session = await client.chat.createSession({
-  agentUrl: 'http://localhost:3000/.well-known/agent-card.json',
-  historyTtlSeconds: 900,
-});
-
-const conversation = await client.chat.start({
-  agentUrl: 'http://localhost:3000/.well-known/agent-card.json',
-});
-```
-
-Use this form only when you need to talk to a local or unregistered endpoint that does not yet have a UAID (for example, an ephemeral dev server you have not registered). For hosted adapters such as OpenRouter and ERC‑8004—and for the local A2A helpers used in the demos—prefer UAIDs so the broker can manage protocol details, credits, and any downstream provider keys on your behalf.
-`agentUrl` is intended for local development and will be deprecated for most production workflows. For Virtuals (ACP), prefer UAIDs as well—the broker derives the internal ACP routing from the indexed record. See [Virtuals Protocol (ACP)](virtuals-protocol.md).
+`client.chat.createSession` and `client.chat.start` are UAID-first flows. Use a UAID for session creation, including local and advanced workflows. `agentUrl`-based session creation is deprecated and should not be used in new integrations.
 
 ## Sending Messages
 

@@ -1,0 +1,136 @@
+---
+sidebar_position: 5
+description: Transaction builder helpers for HCS-17 state hashing.
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+# HCS-17 Transactions
+
+Note
+- These builders are for direct transaction construction (e.g., with the Standards Agent Kit or custom pipelines).
+- For most applications, prefer the higher‑level client (Node/Go) or browser client (wallet).
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-17
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs17
+
+All transaction construction is centralized in builders. Clients never assemble JSON payloads themselves. Builders return Hedera SDK transaction instances ready to be signed and executed.
+
+## Create Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs17CreateTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs17CreateTopicTx({
+  ttl: 86400,
+  adminKey: true,
+  submitKey: true,
+});
+// Node: await tx.execute(client)
+// Browser: await (await tx.freezeWithSigner(signer)).executeWithSigner(signer)
+```
+
+This builder encodes the memo as `hcs-17:<type>:<ttl>` using numeric enums (`HCS17TopicType.STATE = 0`).
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs17"
+
+tx := hcs17.BuildCreateStateTopicTx(hcs17.CreateTopicOptions{
+	TTLSeconds: 86400,
+	AdminKey:   operatorPublicKey,
+	SubmitKey:  operatorPublicKey,
+})
+
+response, _ := tx.Execute(hederaClient)
+receipt, _ := response.GetReceipt(hederaClient)
+```
+
+Memo is automatically set to `hcs-17:0:<ttl>`.
+
+</TabItem>
+</LanguageTabs>
+
+## Submit State Hash Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs17MessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs17MessageTx({
+  topicId: '0.0.7777',
+  stateHash: 'ab…',
+  accountId: '0.0.1234',
+  topics: ['0.0.2001', '0.0.2002'],
+  memo: 'optional app memo',
+  transactionMemo: 'HCS-17 publish',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := client.CreateStateHashMessage(
+	"ab…",       // state hash
+	"0.0.1234",  // account ID
+	[]string{"0.0.2001", "0.0.2002"}, // topics
+	"optional app memo",
+	nil,         // epoch (optional)
+)
+
+tx, err := hcs17.BuildStateHashMessageTx("0.0.7777", msg, "HCS-17 publish")
+if err != nil {
+	log.Fatal(err)
+}
+
+response, _ := tx.Execute(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+The builder constructs the canonical HCS‑17 payload internally:
+
+```json
+{
+  "p": "hcs-17",
+  "op": "state_hash",
+  "state_hash": "…",
+  "topics": ["…"],
+  "account_id": "…",
+  "timestamp": "ISO8601",
+  "m": "…"
+}
+```
+
+## Execution Patterns
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+- **Node**: `await tx.execute(client).then(r => r.getReceipt(client))`
+- **Browser**: `await (await tx.freezeWithSigner(signer)).executeWithSigner(signer)` then `getReceiptWithSigner`
+
+</TabItem>
+<TabItem value="go">
+
+```go
+response, err := tx.Execute(hederaClient)
+if err != nil {
+	log.Fatal(err)
+}
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>

@@ -1,0 +1,239 @@
+---
+sidebar_position: 5
+description: Transaction builder helpers for HCS-18 Flora discovery.
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+# HCS-18 Transactions
+
+Note
+- These builders are for direct transaction construction (e.g., with the Standards Agent Kit or custom pipelines).
+- For most applications, prefer the higher‑level client (Node/Go) or browser client (wallet).
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-18
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs18
+
+## Create Discovery Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18CreateDiscoveryTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs18CreateDiscoveryTopicTx({
+  ttlSeconds: 300,
+  adminKey: true,
+  submitKey: true,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs18"
+
+tx := hcs18.BuildCreateDiscoveryTopicTx(hcs18.CreateDiscoveryTopicTxParams{
+	TTLSeconds: 300,
+	AdminKey:   operatorPublicKey,
+	SubmitKey:  operatorPublicKey,
+})
+
+response, _ := tx.Execute(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Submit Discovery Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18SubmitDiscoveryMessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs18SubmitDiscoveryMessageTx({
+  topicId: '0.0.555',
+  message: msg, // a DiscoveryMessage from one of the builders below
+  transactionMemo: 'optional',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs18.BuildSubmitDiscoveryMessageTx("0.0.555", msg, "optional")
+if err != nil {
+	log.Fatal(err)
+}
+
+response, _ := tx.Execute(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Announce
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18AnnounceMessage } from '@hashgraphonline/standards-sdk';
+
+const msg = buildHcs18AnnounceMessage({
+  account: '0.0.123',
+  petal: { name: 'A', priority: 700 },
+  capabilities: { protocols: ['hcs-16', 'hcs-18'] },
+  valid_for: 300,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs18.BuildAnnounceMessage(hcs18.AnnounceData{
+	Account:  "0.0.123",
+	Petal:    hcs18.PetalInfo{Name: "A", Priority: 700},
+	Capabilities: hcs18.Capabilities{
+		Protocols: []string{"hcs-16", "hcs-18"},
+	},
+	ValidFor: 300,
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Propose
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18ProposeMessage } from '@hashgraphonline/standards-sdk';
+
+const msg = buildHcs18ProposeMessage({
+  proposer: '0.0.1',
+  members: [{ account: '0.0.2', priority: 500 }],
+  config: { name: 'Demo Flora', threshold: 2 },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs18.BuildProposeMessage(hcs18.ProposeData{
+	Proposer: "0.0.1",
+	Members:  []hcs18.ProposeMember{{Account: "0.0.2", Priority: 500}},
+	Config:   hcs18.ProposeConfig{Name: "Demo Flora", Threshold: 2},
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Respond
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18RespondMessage } from '@hashgraphonline/standards-sdk';
+
+const msg = buildHcs18RespondMessage({
+  responder: '0.0.2',
+  proposal_seq: 10,
+  decision: 'accept',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs18.BuildRespondMessage(hcs18.RespondData{
+	Responder:   "0.0.2",
+	ProposalSeq: 10,
+	Decision:    "accept",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Complete
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18CompleteMessage } from '@hashgraphonline/standards-sdk';
+
+const msg = buildHcs18CompleteMessage({
+  proposer: '0.0.1',
+  proposal_seq: 10,
+  flora_account: '0.0.500',
+  topics: { communication: '0.0.600', transaction: '0.0.601', state: '0.0.602' },
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs18.BuildCompleteMessage(hcs18.CompleteData{
+	Proposer:     "0.0.1",
+	ProposalSeq:  10,
+	FloraAccount: "0.0.500",
+	Topics: hcs18.FloraTopics{
+		Communication: "0.0.600",
+		Transaction:   "0.0.601",
+		State:         "0.0.602",
+	},
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Withdraw
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs18WithdrawMessage } from '@hashgraphonline/standards-sdk';
+
+const msg = buildHcs18WithdrawMessage({
+  account: '0.0.2',
+  announce_seq: 42,
+  reason: 'going offline',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs18.BuildWithdrawMessage(hcs18.WithdrawData{
+	Account:     "0.0.2",
+	AnnounceSeq: 42,
+	Reason:      "going offline",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+Notes
+- Use the builders to ensure the `p: 'hcs-18'` and `op` fields are correct.
+- Builders return typed messages; pair with `BuildSubmitDiscoveryMessageTx` to create a signed transaction.

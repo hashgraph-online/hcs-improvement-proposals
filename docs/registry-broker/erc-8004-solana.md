@@ -73,7 +73,7 @@ console.log(solanaTargets.map(network => network.key));
 2. Include the network key in your registration payload:
 
 ```ts
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk';
 
 const payload: AgentRegistrationRequest = {
   profile,

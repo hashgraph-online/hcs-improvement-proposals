@@ -3,6 +3,9 @@ title: HCS-7 Smart Hashinals SDK Overview
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS‑7 Smart Hashinals in the Standards SDK
 
 The HCS‑7 module in `@hashgraphonline/standards-sdk` lets you register, orchestrate, and consume programmable hashinals that react to EVM smart contracts and WASM routing logic exactly as defined in the [HCS‑7 standard](/docs/standards/hcs-7). This page explains the moving parts exposed by the SDK and how to wire them together.
@@ -72,6 +75,52 @@ await client.registerMetadata({
 client.close();
 ```
 
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+import { HCS7Client } from '@hashgraphonline/standards-sdk';
+const client = new HCS7Client({ network: 'testnet', operatorId, operatorKey });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs7"
+)
+
+client, err := hcs7.NewClient(hcs7.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+registry, err := client.CreateRegistry(context.Background(), hcs7.CreateRegistryOptions{
+	TTL:                 86400,
+	UseOperatorAsAdmin:  true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = registry
+```
+
+</TabItem>
+</Tabs>
+
 ---
 
 ## Quick Start (Browser / WalletConnect)
@@ -123,7 +172,7 @@ import {
   EVMBridge,
   WasmBridge,
   RedisCache,
-} from '@hashgraphonline/standards-sdk/hcs-7';
+} from '@hashgraphonline/standards-sdk';
 
 const evm = new EVMBridge('testnet', undefined, new RedisCache());
 const wasm = new WasmBridge();
@@ -166,7 +215,7 @@ If you prefer to fetch directly from Hedera topics, parse the HCS-1 messages per
 2. **Inscribe the module** using the Standards SDK Inscriber helpers:
 
    ```ts
-   import { inscribe } from '@hashgraphonline/standards-sdk/inscribe/inscriber';
+   import { inscribe } from '@hashgraphonline/standards-sdk';
 
    const wasmBuffer = await fs.promises.readFile('router.wasm');
    const result = await inscribe(

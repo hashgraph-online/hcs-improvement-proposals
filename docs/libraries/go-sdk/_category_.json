@@ -1,0 +1,8 @@
+{
+  "label": "Go SDK",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Go reference implementation of the Hiero Consensus Specifications (HCS) standards."
+  }
+}

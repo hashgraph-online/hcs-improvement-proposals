@@ -33,7 +33,7 @@ The typical flow is:
 5. Fetch the updated summary via `getAgentFeedback(...)`.
 
 ```typescript
-import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   baseUrl: process.env.REGISTRY_BROKER_BASE_URL ?? 'http://127.0.0.1:4000/api/v1',
@@ -106,4 +106,3 @@ These are the underlying routes used by the SDK client:
 - `POST /api/v1/agents/:uaid/feedback/eligibility` → check if a `sessionId` is eligible.
 - `POST /api/v1/agents/:uaid/feedback` → submit feedback on-chain.
 - `GET /api/v1/agents/:uaid/feedback` → fetch summary and entries (supports `summaryOnly`, `preview`, `includeRevoked`, `includeFiles`).
-

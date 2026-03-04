@@ -59,16 +59,16 @@ const { client } = await RegistryBrokerClient.initializeAgent({
 Prefer a one-off CLI flow? Run the initialization script with your UAID:
 
 ```bash
-pnpm --filter standards-sdk exec \\
-  tsx scripts/registry-broker/init-encrypted-agent.ts \\
-  --uaid uaid:aid:example;uid=my-agent;registry=hashgraph-online
+pnpm -C standards-sdk exec \
+  tsx scripts/registry-broker/init-encrypted-agent.ts \
+  --uaid 'uaid:aid:example;uid=my-agent;registry=hashgraph-online'
 ```
 
 Optional flags:
 
 - `--label my-agent` – stored alongside the generated key.
 - `--env-var RB_ENCRYPTION_PRIVATE_KEY --env-path .env.local` – persist the private key locally.
-- `--base-url http://localhost:4000/api/v1` – target a non-production broker.
+- `--base-url https://registry-staging.hol.org/registry/api/v1` – target a non-production broker.
 
 The script automatically authenticates with ledger credentials if `HEDERA_ACCOUNT_ID` / `HEDERA_PRIVATE_KEY` (or `HEDERA_OPERATOR_*`) are present and falls back to API-key auth when `REGISTRY_BROKER_API_KEY` is provided.
 
@@ -122,8 +122,8 @@ When `decrypt` is true the SDK uses the stored conversation context (or an expli
 Run the full workflow against the local docker stack:
 
 ```bash
-REGISTRY_BROKER_BASE_URL=http://localhost:4000/api/v1 \
-  pnpm --filter standards-sdk exec \
+REGISTRY_BROKER_BASE_URL=https://hol.org/registry/api/v1 \
+  pnpm -C standards-sdk exec \
   tsx demo/registry-broker/encrypted-chat-demo.ts
 ```
 

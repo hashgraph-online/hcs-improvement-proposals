@@ -3,6 +3,9 @@ title: HCS-6 Dynamic Hashinals SDK Overview
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-6: Dynamic Hashinals
 
 The HCS-6 module provides support for dynamic hashinals - inscriptions that can be updated over time. It extends the HCS-2 registry standard with specific constraints for managing evolving content on the Hedera network.
@@ -72,6 +75,52 @@ const client = new HCS6Client({
   logLevel: 'info',
 });
 ```
+
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+import { HCS6Client } from '@hashgraphonline/standards-sdk';
+const client = new HCS6Client({ network: 'testnet', operatorId, operatorKey });
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs6"
+)
+
+client, err := hcs6.NewClient(hcs6.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+registry, err := client.CreateRegistry(context.Background(), hcs6.CreateRegistryOptions{
+	TTL:                 86400,
+	UseOperatorAsAdmin:  true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = registry
+```
+
+</TabItem>
+</Tabs>
 
 ### Key Handling (No Guesswork)
 

@@ -58,8 +58,6 @@ Once credits are loaded you can generate an API key (or use session tokens) and 
       code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  // Optional: override the default https://hol.org/registry/api/v1
-  baseUrl: process.env.REGISTRY_BROKER_API_URL,
   // Optional: supply an API key issued by your Registry Broker instance
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });`
@@ -98,7 +96,6 @@ const client = new RegistryBrokerClient({
       code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
-  baseUrl: 'https://hol.org/registry/api/v1',
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 
@@ -368,7 +365,7 @@ sequenceDiagram
     SDK->>Broker: DELETE /chat/session
 ```
 
-You can also seed the chat by agent URL instead of UAID (`{ agentUrl: 'https://...' }`) when talking to local or unregistered endpoints. The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
+Seed chat sessions with a UAID (`{ uaid: 'uaid:...' }`) for all integrations. The `streaming` flag is passed through to the broker; if the backend supports streaming, you can adapt the response accordingly.
 
 ### Passing downstream auth (paid OpenRouter models)
 
@@ -500,6 +497,73 @@ const updateResponse = await client.updateAgent(registration.uaid, updatePayload
 When a registration includes additional registries (for example ERC-8004) the broker returns `202 Accepted` with a `status: "pending"` payload. The primary Hashgraph inscription is committed immediately, while downstream registrars are processed in the background via a work queue.
 
 All progress tracking endpoints are protected by account ownership checks.
+
+## Skill Verification (DNS Domain Proof)
+
+The `RegistryBrokerClient` skill APIs support version-scoped verification requests and DNS TXT domain proof.
+
+```typescript
+// 1) request paid verification for an exact version
+await client.requestSkillVerification({
+  name: 'demo-skill',
+  version: '1.0.0',
+  tier: 'basic', // or 'express'
+});
+
+// 2) check verification status/signals for that version
+const status = await client.getSkillVerificationStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+// 3) create DNS TXT challenge
+const challenge = await client.createSkillDomainProofChallenge({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+});
+
+// publish challenge.txtRecordValue at challenge.txtRecordName
+const challengeToken = challenge.txtRecordValue.replace(/^hol-skill-verification=/, '');
+
+// 4) verify DNS TXT proof
+const domainProof = await client.verifySkillDomainProof({
+  name: 'demo-skill',
+  version: '1.0.0',
+  domain: 'example.com',
+  challengeToken,
+});
+
+console.log(status.verified, domainProof.signal.ok);
+```
+
+## UAID DNS Verification (HCS-14)
+
+Use these methods to validate that a UAID is correctly bound to a DNS TXT record (`_uaid.<nativeId>`).
+
+```typescript
+const uaid =
+  'uaid:aid:3AUoqGTHnMXv1PB8ATCtkB86Xw2uEEJuqMRNCirGQehhNhnQ1vHuwJfAh5K5Dp6RFE;uid=registry-ping-agent;registry=a2a-registry;proto=a2a-registry;nativeId=hol.org';
+
+// 1) live DNS TXT verification (optionally persist signal to agent metadata)
+const verifyResult = await client.verifyUaidDnsTxt({
+  uaid,
+  persist: true,
+});
+
+// 2) read stored status or force live recheck via query flags
+const dnsStatus = await client.getVerificationDnsStatus(uaid, {
+  refresh: true,
+  persist: true,
+});
+
+console.log(verifyResult.verified, dnsStatus.profileId, dnsStatus.dnsName);
+```
+
+These map to:
+
+- `POST /api/v1/verification/dns/verify`
+- `GET /api/v1/verification/dns/status/:uaid`
 
 ## Protocol Discovery
 

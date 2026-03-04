@@ -1,0 +1,264 @@
+---
+title: Transactions — HCS‑10 Transact
+description: Build Hedera topic create and message transactions for inbound, outbound, connection, registry, and scheduled operations.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- High-level HCS‑10 clients orchestrate these builders; use them directly for custom pipelines, migration tooling, or multi-sig workflows.
+- TTL values flow into topic memos for lifecycle tracking.
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-10
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs10
+
+## Create Inbound Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10CreateInboundTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10CreateInboundTopicTx({
+  accountId: '0.0.1204',
+  ttl: 90,
+});
+
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
+	TopicType: hcs10.TopicTypeInbound,
+	AccountID: "0.0.1204",
+	TTL:       90,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+response, err := tx.Execute(hederaClient)
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create Outbound Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10CreateOutboundTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10CreateOutboundTopicTx({ ttl: 90 });
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
+	TopicType: hcs10.TopicTypeOutbound,
+	TTL:       90,
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create Connection Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10CreateConnectionTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10CreateConnectionTopicTx({
+  ttl: 30,
+  inboundTopicId: '0.0.5001',
+  connectionId: 42,
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
+	TopicType:      hcs10.TopicTypeConnection,
+	TTL:            30,
+	InboundTopicID: "0.0.5001",
+	ConnectionID:   42,
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create Registry Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10CreateRegistryTopicTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10CreateRegistryTopicTx({
+  ttl: 365,
+  metadataTopicId: '0.0.6001',
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
+	TopicType:       hcs10.TopicTypeRegistry,
+	TTL:             365,
+	MetadataTopicID: "0.0.6001",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Submit Connection Request
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10SubmitConnectionRequestTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10SubmitConnectionRequestTx({
+  inboundTopicId: '0.0.5001',
+  operatorId: '0.0.5001@0.0.1204',
+  memo: 'Request outbound agent link',
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs10.BuildConnectionRequestMessage("0.0.5001@0.0.1204", "Request outbound agent link")
+
+tx, err := hcs10.BuildSubmitMessageTx("0.0.5001", msg, "")
+if err != nil {
+	log.Fatal(err)
+}
+
+response, err := tx.Execute(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Send Connection Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10SendMessageTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10SendMessageTx({
+  connectionTopicId: '0.0.7001',
+  operatorId: '0.0.5001@0.0.1204',
+  data: JSON.stringify({ subject: 'hello', body: 'invite' }),
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs10.BuildMessagePayload(
+	"0.0.5001@0.0.1204",
+	`{"subject":"hello","body":"invite"}`,
+	"",
+)
+
+tx, err := hcs10.BuildSubmitMessageTx("0.0.7001", msg, "")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Register Account
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10RegistryRegisterTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10RegistryRegisterTx({
+  registryTopicId: '0.0.9601',
+  accountId: '0.0.1204',
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs10.BuildRegistryRegisterMessage("0.0.1204", "0.0.5001", "")
+
+tx, err := hcs10.BuildSubmitMessageTx("0.0.9601", msg, "")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Delete Registry Entry
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs10RegistryDeleteTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs10RegistryDeleteTx({
+  registryTopicId: '0.0.9601',
+  uid: 'connection:42',
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+msg := hcs10.BuildRegistryDeleteMessage("connection:42", "")
+
+tx, err := hcs10.BuildSubmitMessageTx("0.0.9601", msg, "")
+```
+
+</TabItem>
+</LanguageTabs>
+
+## See also
+
+- Examples: [/docs/libraries/standards-sdk/hcs-10/examples](/docs/libraries/standards-sdk/hcs-10/examples)
+- Server SDK: [/docs/libraries/standards-sdk/hcs-10/server](/docs/libraries/standards-sdk/hcs-10/server)
+- Base client: [/docs/libraries/standards-sdk/hcs-10/base-client](/docs/libraries/standards-sdk/hcs-10/base-client)

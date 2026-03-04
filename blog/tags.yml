@@ -396,3 +396,23 @@ dns:
   label: DNS
   permalink: /dns
   description: DNS-based discovery and resolution patterns
+
+report:
+  label: Report
+  permalink: /report
+  description: Data-driven reports and ecosystem analysis
+
+registry:
+  label: Registry
+  permalink: /registry
+  description: Agent registry ecosystem and discovery
+
+weekly:
+  label: Weekly
+  permalink: /weekly
+  description: Weekly roundup posts
+
+statistics:
+  label: Statistics
+  permalink: /statistics
+  description: Registry statistics and data analysis

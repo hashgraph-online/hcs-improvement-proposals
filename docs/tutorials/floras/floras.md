@@ -237,11 +237,11 @@ function writeFloraConfig(floraAccountId: string, topics) {
 ### Publish via HCS-1
 
 ```ts
-import { inscribeMetadata } from '@hashgraphonline/standards-sdk';
+import { inscribe, getTopicId } from '@hashgraphonline/standards-sdk';
 
 async function publishFloraConfig() {
   const buffer = fs.readFileSync('flora.yaml');
-  const inscription = await inscribeMetadata(
+  const inscription = await inscribe(
     {
       type: 'buffer',
       buffer,
@@ -255,8 +255,11 @@ async function publishFloraConfig() {
     },
     { waitForConfirmation: true },
   );
-  console.log('flora.yaml pointer:', inscription.pointer);
-  return inscription.pointer;
+  const topicId = getTopicId(inscription.inscription);
+  if (!topicId) throw new Error('Failed to resolve inscription topic ID');
+  const pointer = `hcs://1/${topicId}`;
+  console.log('flora.yaml pointer:', pointer);
+  return pointer;
 }
 ```
 

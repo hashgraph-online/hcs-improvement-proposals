@@ -3,6 +3,9 @@ title: HCS-21 Adapter Registry SDK Overview
 sidebar_position: 2
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # HCS-21: Adapter Registry
 
 The HCS-21 module in the Standards SDK publishes **adapter declarations** for appnets (including Floras). Each declaration links an adapter ID to its HCS-1 manifest, package fingerprint, appnet context (ctopic/ttopic/stopic), and state model identifier so every participant executes the same deterministic adapter code.
@@ -51,6 +54,61 @@ flowchart LR
 - Memo builder supports adapter registries and registry-of-registries topics (`hcs-21:<indexed>:<ttl>:<type>:<meta>`), plus version pointer topics (`hcs-2:1:<ttl>`).
 - Pointer utilities keep the registry-of-registries entries stable: publish new HCS-21 topics to the pointer, register the pointer once, and resolve it before streaming.
 - Mirror-node streaming filters only `hcs-21` payloads while preserving payer, sequence, and consensus timestamp.
+
+## SDK Quickstart
+
+<Tabs groupId="sdk-language" defaultValue="typescript" values={[
+  { label: '🟦 TypeScript', value: 'typescript' },
+  { label: '🐹 Go', value: 'go' },
+]}>
+<TabItem value="typescript">
+
+```typescript
+import { HCS21Client } from '@hashgraphonline/standards-sdk';
+
+const client = new HCS21Client({
+  network: 'testnet',
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs21"
+)
+
+client, err := hcs21.NewClient(hcs21.ClientConfig{
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "<private-key>",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+topicID, _, err := client.CreateRegistryTopic(context.Background(), hcs21.CreateRegistryTopicOptions{
+	TTL:                 86400,
+	Indexed:             true,
+	Type:                hcs21.TopicTypeAdapterRegistry,
+	UseOperatorAsAdmin:  true,
+	UseOperatorAsSubmit: true,
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+_ = topicID
+```
+
+</TabItem>
+</Tabs>
 
 ## Where to Next
 

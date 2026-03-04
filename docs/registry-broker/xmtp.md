@@ -32,8 +32,10 @@ XMTP endpoints are Ethereum addresses. Use one of these forms:
 Register an agent with the broker:
 
 ```ts
-import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
-import type { AgentRegistrationRequest } from '@hashgraphonline/standards-sdk/services/registry-broker';
+import {
+  RegistryBrokerClient,
+  type AgentRegistrationRequest,
+} from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
   baseUrl: process.env.REGISTRY_BROKER_BASE_URL!,
@@ -105,8 +107,8 @@ Run the XMTP demos from the `standards-sdk` package:
 
 ```bash
 cd standards-sdk
-pnpm run demo:registry-broker-xmtp
-pnpm run demo:registry-broker-erc8004-xmtp
+pnpm exec tsx demo/registry-broker/registry-broker-xmpt-demo.ts
+pnpm exec tsx demo/registry-broker/register-agent-erc8004-xmpt.ts
 ```
 
 The demos:
@@ -115,4 +117,3 @@ The demos:
 - Chat via the broker chat endpoint (direct + relay)
 - Exercise Registry Broker encrypted chat history
 - Publish an XMTP communication endpoint to ERC-8004 networks and verify it
-

@@ -37,7 +37,7 @@ Start with inscribing a simple text message:
 
 ```javascript
 // inscribe-text.js
-import { inscribe } from '@hashgraph-online/standards-sdk';
+import { inscribe } from '@hashgraphonline/standards-sdk';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 
@@ -90,7 +90,7 @@ Inscribe images or any binary files:
 
 ```javascript
 // inscribe-image.js
-import { inscribe } from '@hashgraph-online/standards-sdk';
+import { inscribe } from '@hashgraphonline/standards-sdk';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as dotenv from 'dotenv';
@@ -147,7 +147,7 @@ Inscribe content directly from a URL:
 
 ```javascript
 // inscribe-from-url.js
-import { inscribe } from '@hashgraph-online/standards-sdk';
+import { inscribe } from '@hashgraphonline/standards-sdk';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -193,7 +193,7 @@ Inscribe files directly from the browser without exposing private keys:
 
 ```javascript
 // inscribe-client-side.js
-import { inscribeWithSigner } from '@hashgraph-online/standards-sdk';
+import { inscribeWithSigner } from '@hashgraphonline/standards-sdk';
 import { HashinalsWalletConnectSDK } from '@hashgraphonline/hashinal-wc';
 import { LedgerId } from '@hashgraph/sdk';
 
@@ -278,7 +278,7 @@ Retrieve and verify inscribed content:
 
 ```javascript
 // retrieve-inscription.js
-import { retrieveInscription } from '@hashgraph-online/standards-sdk';
+import { retrieveInscription } from '@hashgraphonline/standards-sdk';
 import * as fs from 'fs';
 import * as dotenv from 'dotenv';
 
@@ -521,6 +521,5 @@ async function batchInscribe(files) {
 - [HCS-1 Standard](../../standards/hcs-1.md)
 - [Standards SDK Documentation](https://github.com/hashgraph-online/standards-sdk)
 - [Inscription Explorer](https://hashscan.io/testnet)
-
 
 

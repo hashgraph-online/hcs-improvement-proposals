@@ -1,0 +1,176 @@
+---
+title: Transactions — HCS‑2 Builders
+description: Build registry creation transactions and message submissions for HCS‑2.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- These builders are for direct transaction construction (e.g., with the Standards Agent Kit or custom pipelines).
+- For most applications, prefer the higher‑level client (Node/Go) or browser client (wallet).
+
+Sources
+- TypeScript: https://github.com/hashgraph-online/standards-sdk/tree/main/src/hcs-2
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs2
+
+## Create Registry — buildHcs2CreateRegistryTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs2CreateRegistryTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs2CreateRegistryTx({ registryType: 0, ttl: 86400, adminKey: true, submitKey: true });
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs2"
+
+tx := hcs2.BuildHCS2CreateRegistryTx(hcs2.CreateRegistryTxParams{
+	RegistryType: hcs2.RegistryTypeIndexed,
+	TTL:          86400,
+	AdminKey:     operatorPublicKey,  // hedera.Key
+	SubmitKey:    operatorPublicKey,
+})
+
+response, err := tx.Execute(hederaClient)
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+Memo
+- Defaults to `hcs-2:<type>:<ttl>` unless `memoOverride` is provided.
+
+## Register Entry — buildHcs2RegisterTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { buildHcs2RegisterTx } from '@hashgraphonline/standards-sdk';
+
+const tx = buildHcs2RegisterTx({
+  registryTopicId: '0.0.111',
+  targetTopicId: '0.0.222',
+  metadata: 'https://example.com/metadata.json',
+  memo: 'register',
+});
+await (await tx.execute(client)).getReceipt(client);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs2.BuildHCS2RegisterTx(hcs2.RegisterTxParams{
+	RegistryTopicID: "0.0.111",
+	TargetTopicID:   "0.0.222",
+	Metadata:        "https://example.com/metadata.json",
+	Memo:            "register",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+response, err := tx.Execute(hederaClient)
+receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Update Entry — buildHcs2UpdateTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+buildHcs2UpdateTx({
+  registryTopicId: '0.0.111',
+  uid: '1',              // sequence number to update
+  targetTopicId: '0.0.333',
+  metadata: 'https://example.com/new.json',
+  memo: 'updated',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs2.BuildHCS2UpdateTx(hcs2.UpdateTxParams{
+	RegistryTopicID: "0.0.111",
+	UID:             "1",
+	TargetTopicID:   "0.0.333",
+	Metadata:        "https://example.com/new.json",
+	Memo:            "updated",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Delete Entry — buildHcs2DeleteTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+buildHcs2DeleteTx({
+  registryTopicId: '0.0.111',
+  uid: '1',              // sequence number to delete
+  memo: 'removed',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs2.BuildHCS2DeleteTx(hcs2.DeleteTxParams{
+	RegistryTopicID: "0.0.111",
+	UID:             "1",
+	Memo:            "removed",
+})
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Migrate Registry — buildHcs2MigrateTx
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+buildHcs2MigrateTx({
+  registryTopicId: '0.0.111',
+  targetTopicId: '0.0.999',    // new registry topic id
+  metadata: 'migration v2',
+  memo: 'migrate',
+});
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+tx, err := hcs2.BuildHCS2MigrateTx(hcs2.MigrateTxParams{
+	RegistryTopicID: "0.0.111",
+	TargetTopicID:   "0.0.999",
+	Metadata:        "migration v2",
+	Memo:            "migrate",
+})
+```
+
+</TabItem>
+</LanguageTabs>

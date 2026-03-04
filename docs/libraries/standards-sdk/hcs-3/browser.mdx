@@ -1,0 +1,34 @@
+---
+title: Browser — HCS‑3
+description: Resolve and render HCS content in the browser.
+sidebar_position: 3
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+import { HCS } from '@hashgraphonline/standards-sdk';
+
+const hcs = new HCS();
+hcs.config.network = 'testnet';
+
+const imageElement = document.createElement('img');
+imageElement.setAttribute('data-src', 'hcs://1/0.0.20001');
+
+await hcs.loadImage(imageElement);
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+// Browser/wallet operations are TypeScript-only.
+// In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+</LanguageTabs>

@@ -1,0 +1,223 @@
+---
+title: Transactions — HCS‑27
+description: Low-level transaction construction for checkpoint topic creation and message submission.
+sidebar_position: 4
+---
+
+import LanguageTabs from '@site/src/components/LanguageTabs';
+import TabItem from '@theme/TabItem';
+
+Note
+- These flows are typically orchestrated by the higher-level SDK client.
+- Direct transaction construction is useful for custom pipelines, batching, or advanced key management.
+
+Sources
+- Go: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs27
+
+## Topic Memo Convention
+
+Checkpoint topics use the memo format `hcs-27:<indexed>:<ttl>:<type>`.
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+
+// Build a topic memo with 1-day TTL
+memo := hcs27.BuildTopicMemo(86400)
+// => "hcs-27:0:86400:0"
+
+// Parse an existing memo
+parsed, ok := hcs27.ParseTopicMemo("hcs-27:0:86400:0")
+if ok {
+	fmt.Printf("TTL: %d seconds\n", parsed.TTLSeconds)
+}
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Create Checkpoint Topic
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import hedera "github.com/hashgraph/hedera-sdk-go/v2"
+
+memo := hcs27.BuildTopicMemo(86400)
+tx := hedera.NewTopicCreateTransaction().
+	SetTopicMemo(memo).
+	SetAdminKey(operatorKey.PublicKey()).
+	SetSubmitKey(operatorKey.PublicKey())
+
+response, err := tx.Execute(hederaClient)
+if err != nil {
+	log.Fatal(err)
+}
+
+receipt, err := response.GetReceipt(hederaClient)
+topicID := receipt.TopicID.String()
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Publish Checkpoint Message
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "encoding/json"
+
+metadata := hcs27.CheckpointMetadata{
+	Type:   "ans-checkpoint-v1",
+	Stream: hcs27.StreamID{Registry: "my-app", LogID: "events"},
+	Log: &hcs27.LogProfile{
+		Algorithm: "sha-256",
+		Leaf:      "rfc6962-leaf",
+		Merkle:    "rfc6962-node",
+	},
+	Root: hcs27.RootCommitment{
+		TreeSize:    50,
+		RootHashB64: "base64url-encoded-root-hash",
+	},
+	BatchRange: hcs27.BatchRange{Start: 1, End: 50},
+}
+
+metadataBytes, _ := json.Marshal(metadata)
+
+message := hcs27.CheckpointMessage{
+	Protocol:  "hcs-27",
+	Operation: "register",
+	Metadata:  metadataBytes,
+	Memo:      "initial checkpoint",
+}
+
+payload, _ := json.Marshal(message)
+txMemo := hcs27.BuildTransactionMemo() // => "hcs-27:op:0:0"
+
+topic, _ := hedera.TopicIDFromString(topicID)
+response, err := hedera.NewTopicMessageSubmitTransaction().
+	SetTopicID(topic).
+	SetMessage(payload).
+	SetTransactionMemo(txMemo).
+	Execute(hederaClient)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Merkle Root Construction
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+entries := []any{
+	map[string]any{"id": 1, "action": "create", "value": "foo"},
+	map[string]any{"id": 2, "action": "update", "value": "bar"},
+	map[string]any{"id": 3, "action": "delete", "value": "baz"},
+}
+
+rootHash, err := hcs27.MerkleRootFromEntries(entries)
+if err != nil {
+	log.Fatal(err)
+}
+
+rootB64 := base64.RawURLEncoding.EncodeToString(rootHash)
+fmt.Printf("Root: %s (tree size: %d)\n", rootB64, len(entries))
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Inclusion Proof Verification
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+leafHash, _ := hcs27.LeafHashHexFromEntry(entries[1])
+
+valid, err := hcs27.VerifyInclusionProof(
+	1,                   // leafIndex
+	3,                   // treeSize
+	leafHash,            // leaf hash (hex)
+	auditPath,           // []string of base64 sibling hashes
+	expectedRootB64,     // expected root (base64)
+)
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Printf("Inclusion proof valid: %v\n", valid)
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Consistency Proof Verification
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+// Not yet available.
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+consistent, err := hcs27.VerifyConsistencyProof(
+	50,              // old tree size
+	150,             // new tree size
+	oldRootB64,      // old root (base64)
+	newRootB64,      // new root (base64)
+	consistencyPath, // []string of base64 proof nodes
+)
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Printf("Trees are consistent: %v\n", consistent)
+```
+
+</TabItem>
+</LanguageTabs>
