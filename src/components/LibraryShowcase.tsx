@@ -21,6 +21,18 @@ const libraryData = [
     icon: '📦',
   },
   {
+    title: 'Go SDK',
+    href: '/docs/libraries/go-sdk',
+    description: 'Go reference implementation for HCS standards and Registry Broker workflows',
+    icon: '🐹',
+  },
+  {
+    title: 'Python SDK',
+    href: '/docs/libraries/python-sdk',
+    description: 'Python implementation of Standards SDK workflows, mirror-node, and inscriber flows',
+    icon: '🐍',
+  },
+  {
     title: 'Standards Agent Kit',
     href: '/docs/libraries/standards-agent-kit',
     description: 'AI agent toolkit for interacting with HCS standards',

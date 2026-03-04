@@ -318,6 +318,16 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
+          label: 'Python SDK',
+          link: { type: 'doc', id: 'libraries/python-sdk/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/python-sdk/overview',
+          ],
+        },
+        {
+          type: 'category',
           label: 'Conversational Agent',
           link: { type: 'doc', id: 'libraries/conversational-agent/index' },
           collapsible: true,
@@ -483,6 +493,9 @@ const sidebars: SidebarsConfig = {
           type: 'doc',
           id: 'registry-broker/skill-badges',
           label: 'Skill Badges',
+        },
+        {
+          type: 'doc',
           id: 'registry-broker/bulk-inscriptions',
           label: 'Bulk Inscriptions (bulk-files)',
         },

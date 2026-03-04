@@ -77,6 +77,28 @@ const client = new RegistryBrokerClient({
   ]}
 />
 
+Go:
+
+```go
+client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  os.Getenv("REGISTRY_BROKER_API_KEY"),
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+if err != nil {
+	panic(err)
+}
+```
+
+Python:
+
+```python
+import os
+from standards_sdk_py.registry_broker import RegistryBrokerClient
+
+client = RegistryBrokerClient()
+client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))
+```
+
 - **`baseUrl`** – defaults to the production broker (`https://hol.org/registry/api/v1`). Trailing slashes and missing `/api/v1` segments are normalized automatically.
 - **`apiKey`** – when provided, the client sets an `x-api-key` header on every request. You can update it later with `client.setApiKey(newKey)`.
 - **`defaultHeaders`** – use `client.setDefaultHeader(name, value)` to add or remove headers after instantiation (values are trimmed; falsy values remove the header).
@@ -112,6 +134,46 @@ console.log(reply.message);`
     }
   ]}
 />
+
+Go:
+
+```go
+session, err := client.CreateSession(context.Background(), registrybroker.CreateSessionRequestPayload{
+	UAID: "uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet",
+}, true)
+if err != nil {
+	panic(err)
+}
+
+sessionID, _ := session["sessionId"].(string)
+reply, err := client.SendMessage(context.Background(), registrybroker.SendMessageRequestPayload{
+	SessionID: sessionID,
+	Message:   "Give me a one-line summary of your pricing.",
+})
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(reply)
+```
+
+Python:
+
+```python
+session = client.chat.create_session(
+    {
+        "uaid": "uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet"
+    }
+)
+
+reply = client.chat.send_message(
+    {
+        "sessionId": session.session_id,
+        "message": "Give me a one-line summary of your pricing.",
+    }
+)
+print(reply.model_dump())
+```
 
 For the hosted Registry Broker, the OpenRouter adapter is configured with its own API key and uses your credit balance, so you do **not** need to pass an OpenRouter token from the client for standard flows. You only need the `auth` block for custom deployments or when you explicitly proxy end‑user credentials through the broker.
 

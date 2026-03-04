@@ -10,3 +10,55 @@ import SidebarShowcase from '@site/src/components/SidebarShowcase';
 <h1 className="sr-only">Standards SDK</h1>
 
 <SidebarShowcase title="Standards SDK" subtitle="Core SDK for Hashgraph Online Standards" />
+
+## Quick Snippets
+
+TypeScript:
+
+```typescript
+import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
+
+const client = new RegistryBrokerClient();
+const result = await client.search({ q: 'hcs', limit: 3 });
+console.log(result.total);
+```
+
+Go:
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/registrybroker"
+)
+
+func main() {
+client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{})
+if err != nil {
+	panic(err)
+}
+
+result, err := client.Search(context.Background(), registrybroker.SearchParams{
+	Q:     "hcs",
+	Limit: 3,
+})
+if err != nil {
+	panic(err)
+}
+fmt.Println(result["total"])
+}
+```
+
+Python:
+
+```python
+from standards_sdk_py.registry_broker import RegistryBrokerClient
+
+client = RegistryBrokerClient()
+result = client.search(query="hcs", limit=3)
+print(result.total)
+client.close()
+```

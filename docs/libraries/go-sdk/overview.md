@@ -2,12 +2,20 @@
 sidebar_position: 1
 ---
 
+import MultiLanguageSdkLinksTable from '@site/src/components/MultiLanguageSdkLinksTable';
+
 # Hashgraph Online Go SDK
 
 The Go SDK (`standards-sdk-go`) provides a native Go implementation of the Hiero Consensus Specifications (HCS) and Registry Broker utilities, offering the same capabilities as the TypeScript SDK for Go developers.
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/hashgraph-online/standards-sdk-go.svg)](https://pkg.go.dev/github.com/hashgraph-online/standards-sdk-go)
 [![Go Report Card](https://goreportcard.com/badge/github.com/hashgraph-online/standards-sdk-go)](https://goreportcard.com/report/github.com/hashgraph-online/standards-sdk-go)
+
+Canonical SDK docs URL: [https://hol.org/docs/libraries/standards-sdk/](https://hol.org/docs/libraries/standards-sdk/)
+
+## Multi-Language SDK Links
+
+<MultiLanguageSdkLinksTable />
 
 ## What This SDK Does
 

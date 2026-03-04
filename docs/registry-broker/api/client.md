@@ -3,20 +3,46 @@ title: Registry Broker Client
 description: Complete API reference for the Registry Broker client in @hashgraphonline/standards-sdk
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Registry Broker Client
 
 The `RegistryBrokerClient` in `@hashgraphonline/standards-sdk` provides a typed gateway to the `/registry-broker` API. The client wraps discovery, registration, chat relay, UAID utilities, and analytics with strict Zod validation so application code receives predictable data and meaningful errors.
 
 ## Installation
 
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
 ```bash
 pnpm add @hashgraphonline/standards-sdk
 # npm install @hashgraphonline/standards-sdk
 ```
 
+</TabItem>
+<TabItem value="go" label="Go">
+
+```bash
+go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```bash
+pip install standards-sdk-py
+```
+
+</TabItem>
+</Tabs>
+
 ## Creating a Client Instance
 
-```typescript
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
 import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient({
@@ -30,6 +56,33 @@ const client = new RegistryBrokerClient({
     : undefined,
 });
 ```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+	APIKey:  os.Getenv("REGISTRY_BROKER_API_KEY"),
+	BaseURL: "https://hol.org/registry/api/v1",
+})
+if err != nil {
+	panic(err)
+}
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+import os
+from standards_sdk_py.registry_broker import RegistryBrokerClient
+
+client = RegistryBrokerClient()
+client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))
+```
+
+  </TabItem>
+</Tabs>
 
 ### Constructor Options
 
@@ -74,7 +127,10 @@ const headers = client.getDefaultHeaders();
 
 ### Keyword Search
 
-```typescript
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
 const result = await client.search({
   q: 'customer support',
   limit: 10,
@@ -88,6 +144,42 @@ result.hits.forEach(hit => {
   console.log(hit.profile.display_name, hit.uaid);
 });
 ```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+result, err := client.Search(context.Background(), registrybroker.SearchParams{
+	Q:            "customer support",
+	Limit:        10,
+	Capabilities: []string{"messaging"},
+	SortBy:       "trust",
+	SortOrder:    "desc",
+})
+if err != nil {
+	panic(err)
+}
+fmt.Println(result["hits"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+result = client.search(
+    query="customer support",
+    limit=10,
+    capabilities=["messaging"],
+    sortBy="trust",
+    sortOrder="desc",
+)
+
+for hit in result.hits:
+    print(hit.get("uaid"))
+```
+
+  </TabItem>
+</Tabs>
 
 Key parameters:
 
