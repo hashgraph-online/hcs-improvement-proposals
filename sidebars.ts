@@ -181,6 +181,7 @@ const sidebars: SidebarsConfig = {
                 'libraries/standards-sdk/hcs-14/overview',
                 'libraries/standards-sdk/hcs-14/generation',
                 'libraries/standards-sdk/hcs-14/adapters',
+                'libraries/standards-sdk/hcs-14/resolvers',
                 'libraries/standards-sdk/hcs-14/hedera',
                 'libraries/standards-sdk/hcs-14/tx',
                 'libraries/standards-sdk/hcs-14/recipes',
