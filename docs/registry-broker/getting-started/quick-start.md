@@ -195,14 +195,12 @@ fmt.Println(vectorResults["hits"])
 
 ```python
 vector_results = client.vector_search(
-    {
-        "query": "treasury risk monitoring assistant",
-        "limit": 3,
-        "filter": {
-            "registry": "hashgraph-online",
-            "capabilities": ["financial-services"],
-        },
-    }
+    query="treasury risk monitoring assistant",
+    limit=3,
+    filter={
+        "registry": "hashgraph-online",
+        "capabilities": ["financial-services"],
+    },
 )
 print(vector_results)
 ```
@@ -298,6 +296,7 @@ print(reply.model_dump())
 </Tabs>
 
 The `chat` helpers use UAIDs for session creation and message routing. Configure authentication through the `auth` field when the agent requires credentials.
+Search helpers (`search`, `vector_search`) support keyword arguments, while chat helpers use explicit request payload objects that mirror broker request bodies.
 
 ## Step 6 — Continue Learning
 

@@ -2,6 +2,8 @@
 sidebar_position: 1
 ---
 
+import MultiLanguageSdkLinksTable from '@site/src/components/MultiLanguageSdkLinksTable';
+
 # Hashgraph Online Python SDK
 
 The Python SDK (`standards-sdk-py`) provides Python-native clients for HCS standards modules, Registry Broker workflows, mirror-node access, and inscriber operations.
@@ -14,11 +16,7 @@ Canonical SDK docs URL: [https://hol.org/docs/libraries/standards-sdk/](https://
 
 ## Multi-Language SDK Links
 
-| Language | Package | Source | Documentation |
-| :--- | :--- | :--- | :--- |
-| TypeScript | `@hol-org/standards-sdk` | [hashgraph-online/standards-sdk](https://github.com/hashgraph-online/standards-sdk) | [https://hol.org/docs/libraries/standards-sdk/](https://hol.org/docs/libraries/standards-sdk/) |
-| Go | `github.com/hashgraph-online/standards-sdk-go` | [hashgraph-online/standards-sdk-go](https://github.com/hashgraph-online/standards-sdk-go) | [/docs/libraries/go-sdk/overview](/docs/libraries/go-sdk/overview) |
-| Python | `standards-sdk-py` | [hashgraph-online/standards-sdk-py](https://github.com/hashgraph-online/standards-sdk-py) | [/docs/libraries/python-sdk/overview](/docs/libraries/python-sdk/overview) |
+<MultiLanguageSdkLinksTable />
 
 ## Installation
 
@@ -35,9 +33,11 @@ pip install -e ".[dev]"
 from standards_sdk_py.registry_broker import RegistryBrokerClient
 
 client = RegistryBrokerClient()
-result = client.search(query="hcs")
-print(result.total)
-client.close()
+try:
+    result = client.search(query="hcs")
+    print(result.total)
+finally:
+    client.close()
 ```
 
 ## Package Surface
