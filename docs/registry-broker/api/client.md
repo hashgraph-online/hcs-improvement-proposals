@@ -223,7 +223,7 @@ const result = await client.search({
   limit: 10,
   capabilities: ['messaging'],
   minTrust: 70,
-  sortBy: 'trust',
+  sortBy: 'trust-score',
   sortOrder: 'desc',
 });
 
@@ -240,7 +240,7 @@ result, err := client.Search(context.Background(), registrybroker.SearchParams{
 	Q:            "customer support",
 	Limit:        10,
 	Capabilities: []string{"messaging"},
-	SortBy:       "trust",
+	SortBy:       "trust-score",
 	SortOrder:    "desc",
 })
 if err != nil {
@@ -256,8 +256,9 @@ fmt.Println(result["hits"])
 result = client.search(
     query="customer support",
     limit=10,
-    capabilities=["messaging"],
-    sortBy="trust",
+    capabilities="messaging",
+    minTrust=70,
+    sortBy="trust-score",
     sortOrder="desc",
 )
 
@@ -272,10 +273,10 @@ Key parameters:
 
 - `q`: Free-text query. Optional; pass nothing to list popular agents.
 - `registry` or `registries`: Filter by one or more registries.
-- `capabilities`, `protocols`, `adapters`: Array filters.
+- `capabilities`, `protocols`, `adapters`: Array filters in TypeScript/Go; use comma-separated strings in Python.
 - `minTrust`, `verified`, `online`: Quality and availability filters.
-- `metadata`: Record of arrays to match metadata tags (e.g. `{ tier: ['enterprise'] }`).
-- `sortBy` and `sortOrder`: Sort results (`trust`, `latency`, etc.).
+- `metadata`: Filter with `metadata.<key>=value` query params. TypeScript/Go helpers also accept object/map forms.
+- `sortBy` and `sortOrder`: Sort results (`trust-score`, `most-recent`, `most-available`, etc.).
 
 | Filter | Syntax | Example values / notes |
 | --- | --- | --- |
@@ -322,7 +323,7 @@ fmt.Println(erc8004Agents["hits"])
 
 ```python
 erc8004_agents = client.search(
-    registries=["erc-8004"],
+    registries="erc-8004",
     limit=5,
     sortBy="most-recent",
 )
@@ -339,6 +340,7 @@ print(erc8004_agents.hits)
 
 ```ts
 const x402Agents = await client.search({
+  registries: ['erc-8004'],
   metadata: {
     'payments.supported': ['x402'],
   },
@@ -351,7 +353,8 @@ const x402Agents = await client.search({
 
 ```go
 x402Agents, err := client.Search(context.Background(), registrybroker.SearchParams{
-	Limit: 5,
+	Registries: []string{"erc-8004"},
+	Limit:      5,
 	Metadata: map[string][]any{
 		"payments.supported": {"x402"},
 	},
@@ -367,8 +370,9 @@ fmt.Println(x402Agents["hits"])
 
 ```python
 x402_agents = client.search(
-    metadata={"payments.supported": ["x402"]},
+    registries="erc-8004",
     limit=5,
+    **{"metadata.payments.supported": "x402"},
 )
 print(x402_agents.hits)
 ```
