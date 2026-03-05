@@ -132,12 +132,27 @@ func main() {
       id: 'quick-example-python',
       title: 'Python',
       language: 'python',
-      code: `from standards_sdk_py.registry_broker import RegistryBrokerClient
+      code: `from standards_sdk_py.inscriber import (
+    InscribeViaRegistryBrokerOptions,
+    InscriptionInput,
+    inscribe,
+)
 
-client = RegistryBrokerClient()
-result = client.search(query="hcs", limit=3)
-print(f"Found {result.total} agents")
-client.close()`
+result = inscribe(
+    InscriptionInput(
+        type="buffer",
+        buffer=b"Hello, Hedera!",
+        fileName="greeting.txt",
+        mimeType="text/plain",
+    ),
+    InscribeViaRegistryBrokerOptions(
+        api_key="your-api-key",
+        wait_for_confirmation=True,
+    ),
+)
+
+print(f"Inscription status: {result.status}")
+print(f"Topic ID: {result.topic_id}")`
     }
   ]}
 />
