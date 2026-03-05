@@ -51,8 +51,8 @@ Once credits are loaded you can generate an API key (or use session tokens) and 
   className="mt-4 mb-8"
   examples={[
     {
-      id: 'client-init',
-      title: 'client.ts',
+      id: 'client-init-ts',
+      title: 'TypeScript',
       language: 'typescript',
       icon: <FaCode />,
       code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
@@ -63,40 +63,41 @@ const client = new RegistryBrokerClient({
 });`
     },
     {
-      id: 'custom-fetch',
-      title: 'Custom Fetch',
-      language: 'typescript',
+      id: 'client-init-go',
+      title: 'Go',
+      language: 'go',
       icon: <FaCode />,
-      code: `const client = new RegistryBrokerClient({
-  fetchImplementation: (input, init) => myInstrumentationFetch(input, init),
-  defaultHeaders: {
-    'x-trace-id': crypto.randomUUID(),
-  },
-});`
-    }
-  ]}
-/>
-
-Go:
-
-```go
-client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
+      code: `client, err := registrybroker.NewRegistryBrokerClient(registrybroker.RegistryBrokerClientOptions{
 	APIKey:  os.Getenv("REGISTRY_BROKER_API_KEY"),
 	BaseURL: "https://hol.org/registry/api/v1",
 })
 if err != nil {
 	panic(err)
-}
-```
-
-Python:
-
-```python
-import os
+}`
+    },
+    {
+      id: 'client-init-python',
+      title: 'Python',
+      language: 'python',
+      icon: <FaCode />,
+      code: `import os
 from standards_sdk_py.registry_broker import RegistryBrokerClient
 
 client = RegistryBrokerClient()
-client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))
+client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))`
+    }
+  ]}
+/>
+
+#### TypeScript custom fetch override
+
+```typescript
+const client = new RegistryBrokerClient({
+  fetchImplementation: (input, init) => myInstrumentationFetch(input, init),
+  defaultHeaders: {
+    'x-trace-id': crypto.randomUUID(),
+  },
+});
 ```
 
 - **`baseUrl`** – defaults to the production broker (`https://hol.org/registry/api/v1`). Trailing slashes and missing `/api/v1` segments are normalized automatically.
@@ -111,8 +112,8 @@ client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))
   className="mt-4 mb-8"
   examples={[
     {
-      id: 'quickstart',
-      title: 'openrouter-chat.ts',
+      id: 'quickstart-ts',
+      title: 'TypeScript',
       language: 'typescript',
       icon: <FaBolt />,
       code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
@@ -131,14 +132,13 @@ const reply = await client.chat.sendMessage({
 });
 
 console.log(reply.message);`
-    }
-  ]}
-/>
-
-Go:
-
-```go
-session, err := client.CreateSession(context.Background(), registrybroker.CreateSessionRequestPayload{
+    },
+    {
+      id: 'quickstart-go',
+      title: 'Go',
+      language: 'go',
+      icon: <FaBolt />,
+      code: `session, err := client.CreateSession(context.Background(), registrybroker.CreateSessionRequestPayload{
 	UAID: "uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet",
 }, true)
 if err != nil {
@@ -154,13 +154,14 @@ if err != nil {
 	panic(err)
 }
 
-fmt.Println(reply)
-```
-
-Python:
-
-```python
-session = client.chat.create_session(
+fmt.Println(reply)`
+    },
+    {
+      id: 'quickstart-python',
+      title: 'Python',
+      language: 'python',
+      icon: <FaBolt />,
+      code: `session = client.chat.create_session(
     {
         "uaid": "uaid:aid:2bnewJwP95isoCUkT5mee5gm212WS76tphHwBQvbWoquRa9kt89UanrBqHXpaSh4AN;uid=anthropic/claude-3.5-sonnet;registry=openrouter;proto=openrouter;nativeId=anthropic/claude-3.5-sonnet"
     }
@@ -172,8 +173,10 @@ reply = client.chat.send_message(
         "message": "Give me a one-line summary of your pricing.",
     }
 )
-print(reply.model_dump())
-```
+print(reply.model_dump())`
+    }
+  ]}
+/>
 
 For the hosted Registry Broker, the OpenRouter adapter is configured with its own API key and uses your credit balance, so you do **not** need to pass an OpenRouter token from the client for standard flows. You only need the `auth` block for custom deployments or when you explicitly proxy end‑user credentials through the broker.
 

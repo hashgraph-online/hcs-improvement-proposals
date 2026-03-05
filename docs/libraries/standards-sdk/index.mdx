@@ -6,6 +6,7 @@ hide_table_of_contents: true
 ---
 
 import SidebarShowcase from '@site/src/components/SidebarShowcase';
+import { TabbedTerminal } from '@site/src/components/ui';
 
 <h1 className="sr-only">Standards SDK</h1>
 
@@ -13,20 +14,25 @@ import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
 ## Quick Snippets
 
-TypeScript:
-
-```typescript
-import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
+<TabbedTerminal
+  title="Quick Snippets"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'quick-snippet-typescript',
+      title: 'TypeScript',
+      language: 'typescript',
+      code: `import { RegistryBrokerClient } from '@hashgraphonline/standards-sdk';
 
 const client = new RegistryBrokerClient();
 const result = await client.search({ q: 'hcs', limit: 3 });
-console.log(result.total);
-```
-
-Go:
-
-```go
-package main
+console.log(result.total);`
+    },
+    {
+      id: 'quick-snippet-go',
+      title: 'Go',
+      language: 'go',
+      code: `package main
 
 import (
 	"context"
@@ -49,16 +55,18 @@ if err != nil {
 	panic(err)
 }
 fmt.Println(result["total"])
-}
-```
-
-Python:
-
-```python
-from standards_sdk_py.registry_broker import RegistryBrokerClient
+}`
+    },
+    {
+      id: 'quick-snippet-python',
+      title: 'Python',
+      language: 'python',
+      code: `from standards_sdk_py.registry_broker import RegistryBrokerClient
 
 client = RegistryBrokerClient()
 result = client.search(query="hcs", limit=3)
 print(result.total)
-client.close()
-```
+client.close()`
+    }
+  ]}
+/>

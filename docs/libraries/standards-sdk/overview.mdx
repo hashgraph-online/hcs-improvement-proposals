@@ -2,9 +2,8 @@
 sidebar_position: 1
 ---
 
-import LanguageTabs from '@site/src/components/LanguageTabs';
 import MultiLanguageSdkLinksTable from '@site/src/components/MultiLanguageSdkLinksTable';
-import TabItem from '@theme/TabItem';
+import { TabbedTerminal } from '@site/src/components/ui';
 
 # Hashgraph Online Standards SDK
 
@@ -28,43 +27,49 @@ Canonical SDK docs URL: [https://hol.org/docs/libraries/standards-sdk/](https://
 
 ### Installation
 
-<LanguageTabs>
-<TabItem value="typescript">
-
-```bash
-# Using npm
+<TabbedTerminal
+  title="Installation"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'install-typescript',
+      title: 'TypeScript',
+      language: 'bash',
+      code: `# Using npm
 npm install @hashgraphonline/standards-sdk
 
 # Using yarn
 yarn add @hashgraphonline/standards-sdk
 
 # Using pnpm
-pnpm add @hashgraphonline/standards-sdk
-```
-
-</TabItem>
-<TabItem value="go">
-
-```bash
-go get github.com/hashgraph-online/standards-sdk-go@latest
-```
-
-</TabItem>
-</LanguageTabs>
-
-Python:
-
-```bash
-pip install standards-sdk-py
-```
+pnpm add @hashgraphonline/standards-sdk`
+    },
+    {
+      id: 'install-go',
+      title: 'Go',
+      language: 'bash',
+      code: `go get github.com/hashgraph-online/standards-sdk-go@latest`
+    },
+    {
+      id: 'install-python',
+      title: 'Python',
+      language: 'bash',
+      code: `pip install standards-sdk-py`
+    }
+  ]}
+/>
 
 ### Quick Example
 
-<LanguageTabs>
-<TabItem value="typescript">
-
-```typescript
-import { inscribe } from '@hashgraphonline/standards-sdk';
+<TabbedTerminal
+  title="Quick Example"
+  className="mt-4 mb-8"
+  examples={[
+    {
+      id: 'quick-example-typescript',
+      title: 'TypeScript',
+      language: 'typescript',
+      code: `import { inscribe } from '@hashgraphonline/standards-sdk';
 
 async function inscribeText() {
   const result = await inscribe(
@@ -80,18 +85,17 @@ async function inscribeText() {
     }
   );
 
-  console.log(`Inscription successful on topic ${result.topicId}`);
-  console.log(`Transaction ID: ${result.transactionId}`);
+  console.log(\`Inscription successful on topic \${result.topicId}\`);
+  console.log(\`Transaction ID: \${result.transactionId}\`);
 }
 
-inscribeText().catch(console.error);
-```
-
-</TabItem>
-<TabItem value="go">
-
-```go
-package main
+inscribeText().catch(console.error);`
+    },
+    {
+      id: 'quick-example-go',
+      title: 'Go',
+      language: 'go',
+      code: `package main
 
 import (
 	"context"
@@ -122,22 +126,36 @@ func main() {
 	}
 
 	fmt.Printf("Inscriber client ready: %v\n", client != nil)
-}
-```
+}`
+    },
+    {
+      id: 'quick-example-python',
+      title: 'Python',
+      language: 'python',
+      code: `from standards_sdk_py.inscriber import (
+    InscribeViaRegistryBrokerOptions,
+    InscriptionInput,
+    inscribe,
+)
 
-</TabItem>
-</LanguageTabs>
+result = inscribe(
+    InscriptionInput(
+        type="buffer",
+        buffer=b"Hello, Hedera!",
+        fileName="greeting.txt",
+        mimeType="text/plain",
+    ),
+    InscribeViaRegistryBrokerOptions(
+        api_key="your-api-key",
+        wait_for_confirmation=True,
+    ),
+)
 
-Python:
-
-```python
-from standards_sdk_py.registry_broker import RegistryBrokerClient
-
-client = RegistryBrokerClient()
-result = client.search(query="hcs", limit=3)
-print(f"Found {result.total} agents")
-client.close()
-```
+print(f"Inscription status: {result.status}")
+print(f"Topic ID: {result.topic_id}")`
+    }
+  ]}
+/>
 
 import SidebarShowcase from '@site/src/components/SidebarShowcase';
 
