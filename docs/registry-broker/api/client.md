@@ -142,22 +142,24 @@ if err != nil {
 <TabItem value="python" label="Python">
 
 ```python
+import os
+
 from standards_sdk_py.registry_broker import RegistryBrokerClient
 
 client = RegistryBrokerClient(
     registration_auto_top_up={
-        "accountId": "0.0.123456",
-        "privateKey": "302e0201003005...",
+        "accountId": os.getenv("HEDERA_ACCOUNT_ID"),
+        "privateKey": os.getenv("HEDERA_PRIVATE_KEY"),
         "memo": "registry-broker-auto-topup",
     },
     history_auto_top_up={
-        "accountId": "0.0.123456",
-        "privateKey": "302e0201003005...",
+        "accountId": os.getenv("HEDERA_ACCOUNT_ID"),
+        "privateKey": os.getenv("HEDERA_PRIVATE_KEY"),
         "hbarAmount": 0.25,
         "memo": "registry-broker-history-topup",
     },
 )
-client.set_api_key("your-api-key")
+client.set_api_key(os.getenv("REGISTRY_BROKER_API_KEY"))
 client.set_default_header("x-trace-id", "trace-123")
 ```
 
@@ -547,8 +549,14 @@ if err != nil {
 	panic(err)
 }
 
-agent, _ := resolved["agent"].(map[string]any)
-uaid, _ := agent["uaid"].(string)
+agent, ok := resolved["agent"].(map[string]any)
+if !ok {
+	panic("invalid agent data in resolved response")
+}
+uaid, ok := agent["uaid"].(string)
+if !ok {
+	panic("invalid uaid in agent data")
+}
 validation, _ := client.ValidateUaid(context.Background(), uaid)
 status, _ := client.GetUaidConnectionStatus(context.Background(), uaid)
 
@@ -564,7 +572,9 @@ fmt.Println(validation, status)
 
 ```python
 resolved = client.resolve_uaid("uaid:aid:a2a:hashgraph-online:agent123")
-uaid = resolved["agent"]["uaid"]
+uaid = resolved.get("agent", {}).get("uaid")
+if not uaid:
+    raise RuntimeError("uaid not found in resolved response")
 validation = client.validate_uaid(uaid)
 status = client.get_uaid_connection_status(uaid)
 
@@ -1174,6 +1184,8 @@ console.log(domainProof.signal.ok);
 <TabItem value="go" label="Go">
 
 ```go
+import "strings"
+
 vote, _ := client.SetSkillVote(context.Background(), registrybroker.SkillRegistryVoteRequest{
 	"name":    "demo-skill",
 	"upvoted": true,
@@ -1200,7 +1212,11 @@ challenge, _ := client.CreateSkillDomainProofChallenge(
 	},
 )
 
-challengeToken := strings.TrimPrefix(challenge["txtRecordValue"].(string), "hol-skill-verification=")
+txtRecordValue, ok := challenge["txtRecordValue"].(string)
+if !ok {
+	panic("txtRecordValue not found or not a string in challenge response")
+}
+challengeToken := strings.TrimPrefix(txtRecordValue, "hol-skill-verification=")
 domainProof, _ := client.VerifySkillDomainProof(
 	context.Background(),
 	registrybroker.SkillVerificationDomainProofVerifyRequest{
@@ -1450,6 +1466,12 @@ console.log(intent.intentId, intent.credits, intent.clientSecret);
 <TabItem value="go" label="Go">
 
 ```go
+import (
+	"bytes"
+	"encoding/json"
+	"net/http"
+)
+
 payload := map[string]any{
 	"accountId":   "0.0.123456",
 	"usdAmount":   5.00,
@@ -1625,6 +1647,8 @@ await client.authenticateWithLedgerCredentials({
 <TabItem value="go" label="Go">
 
 ```go
+import "encoding/hex"
+
 operatorKey, err := hedera.PrivateKeyFromString(os.Getenv("HEDERA_PRIVATE_KEY"))
 if err != nil {
 	panic(err)
@@ -1638,8 +1662,14 @@ if err != nil {
 	panic(err)
 }
 
-message, _ := challenge["message"].(string)
-challengeID, _ := challenge["challengeId"].(string)
+message, ok := challenge["message"].(string)
+if !ok {
+	panic("message not found in challenge response")
+}
+challengeID, ok := challenge["challengeId"].(string)
+if !ok {
+	panic("challengeId not found in challenge response")
+}
 signature := hex.EncodeToString(operatorKey.Sign([]byte(message)))
 
 _, err = client.VerifyLedgerChallenge(context.Background(), registrybroker.LedgerVerifyRequest{
@@ -1700,6 +1730,8 @@ console.log(verification.key);
 <TabItem value="go" label="Go">
 
 ```go
+import "encoding/hex"
+
 verification, err := client.AuthenticateWithLedger(
 	context.Background(),
 	registrybroker.LedgerAuthenticationOptions{
@@ -1834,7 +1866,10 @@ if err != nil {
 	panic(err)
 }
 
-sessionID, _ := session["sessionId"].(string)
+sessionID, ok := session["sessionId"].(string)
+if !ok {
+	panic("sessionId not found in session response")
+}
 
 reply, _ := client.SendMessage(context.Background(), registrybroker.SendMessageRequestPayload{
 	SessionID: sessionID,
@@ -1951,7 +1986,10 @@ if err != nil {
 	panic(err)
 }
 
-sessionID, _ := session["sessionId"].(string)
+sessionID, ok := session["sessionId"].(string)
+if !ok {
+	panic("sessionId not found in session response")
+}
 _, _ = client.SendMessage(context.Background(), registrybroker.SendMessageRequestPayload{
 	SessionID: sessionID,
 	UAID:      uaid,
@@ -1979,7 +2017,12 @@ if err != nil {
 	panic(err)
 }
 
-if eligible, _ := eligibility["eligible"].(bool); !eligible {
+eligible, ok := eligibility["eligible"].(bool)
+if !ok {
+	_ = client.EndSession(context.Background(), sessionID)
+	panic("eligibility response missing eligible flag")
+}
+if !eligible {
 	_ = client.EndSession(context.Background(), sessionID)
 	panic("feedback submission not eligible")
 }
@@ -2119,7 +2162,7 @@ protocols = client.list_protocols()
 detection = client.detect_protocol('{"ping":"pong"}')
 adapters = client.adapters()
 detailed = client.adapters_detailed()
-facets = client.facets({"adapter": "openconvai"})
+facets = client.facets(adapter="openconvai")
 
 print(protocols.protocols, detection, adapters, detailed, facets)
 ```
