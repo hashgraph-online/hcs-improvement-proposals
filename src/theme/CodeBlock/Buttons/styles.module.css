@@ -1,0 +1,52 @@
+.buttonGroup {
+  align-items: center;
+  column-gap: 0.4rem;
+  display: flex;
+  position: static;
+}
+
+.buttonGroup button {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  border-radius: 999px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  color: #475569;
+  display: flex;
+  justify-content: center;
+  line-height: 0;
+  opacity: 1;
+  padding: 0.42rem;
+  transition:
+    background-color var(--ifm-transition-fast) ease-in-out,
+    border-color var(--ifm-transition-fast) ease-in-out,
+    color var(--ifm-transition-fast) ease-in-out,
+    transform var(--ifm-transition-fast) ease-in-out;
+}
+
+.buttonGroup button:focus-visible,
+.buttonGroup button:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #111827;
+  opacity: 1 !important;
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .buttonGroup button {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(71, 85, 105, 0.72);
+  box-shadow: none;
+  color: rgba(226, 232, 240, 0.92);
+}
+
+[data-theme='dark'] .buttonGroup button:focus-visible,
+[data-theme='dark'] .buttonGroup button:hover {
+  background: rgba(30, 41, 59, 0.94);
+  border-color: rgba(96, 165, 250, 0.42);
+  color: #ffffff;
+}
+
+:global(.theme-code-block:hover) .buttonGroup button {
+  opacity: 1;
+}

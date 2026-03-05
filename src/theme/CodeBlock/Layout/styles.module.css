@@ -1,0 +1,94 @@
+.terminalFrame {
+  --terminal-border: rgba(148, 163, 184, 0.28);
+  --terminal-content-background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+  --terminal-header-background:
+    linear-gradient(180deg, rgba(248, 250, 252, 0.98) 0%, rgba(241, 245, 249, 0.98) 100%);
+  --terminal-header-text: #475569;
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid var(--terminal-border);
+  border-radius: 1.25rem;
+  box-shadow: 0 22px 44px rgba(15, 23, 42, 0.12);
+  overflow: hidden;
+}
+
+[data-theme='dark'] .terminalFrame {
+  --terminal-border: rgba(71, 85, 105, 0.7);
+  --terminal-content-background:
+    linear-gradient(180deg, rgba(2, 6, 23, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%);
+  --terminal-header-background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.98) 100%);
+  --terminal-header-text: rgba(226, 232, 240, 0.92);
+  background: rgba(2, 6, 23, 0.92) !important;
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.5);
+}
+
+.chrome {
+  align-items: center;
+  background: var(--terminal-header-background);
+  border-bottom: 1px solid var(--terminal-border);
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+}
+
+.titleRow {
+  align-items: center;
+  display: flex;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.controls {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.45rem;
+}
+
+.controlDot {
+  border-radius: 999px;
+  display: block;
+  height: 0.72rem;
+  width: 0.72rem;
+}
+
+.controlClose {
+  background: linear-gradient(135deg, #f97316 0%, #f43f5e 100%);
+}
+
+.controlMinimize {
+  background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
+}
+
+.controlExpand {
+  background: linear-gradient(135deg, #34d399 0%, #22c55e 100%);
+}
+
+.title {
+  color: var(--terminal-header-text);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.85rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.actions {
+  flex-shrink: 0;
+}
+
+.content {
+  background: var(--terminal-content-background);
+  position: relative;
+}
+
+.content :global(pre) {
+  background: transparent !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.content :global(code) {
+  font-family: var(--ifm-font-family-monospace);
+}
