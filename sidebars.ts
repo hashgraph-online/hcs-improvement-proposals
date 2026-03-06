@@ -495,9 +495,22 @@ const sidebars: SidebarsConfig = {
           label: 'Skill Badges',
         },
         {
-          type: 'doc',
-          id: 'registry-broker/bulk-inscriptions',
-          label: 'Bulk Inscriptions (bulk-files)',
+          type: 'category',
+          label: 'Storing Files',
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: 'doc',
+              id: 'registry-broker/content-inscription',
+              label: 'Single File Inscription',
+            },
+            {
+              type: 'doc',
+              id: 'registry-broker/bulk-inscriptions',
+              label: 'Bulk Inscriptions (bulk-files)',
+            },
+          ],
         },
         {
           type: 'doc',
