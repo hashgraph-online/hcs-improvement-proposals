@@ -45,6 +45,20 @@ receipt, err := response.GetReceipt(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+tx = Hcs2Client.build_create_registry_tx(
+    registry_type=0,  # 0 = Indexed
+    ttl=86400,
+    admin_key=True,
+    submit_key=True,
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 Memo
@@ -86,6 +100,16 @@ receipt, err := response.GetReceipt(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs2.build_hcs2_register_tx(registry_topic_id="0.0.111", target_topic_id="0.0.222", metadata="https://example.com/metadata.json", memo="register")
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Update Entry — buildHcs2UpdateTx
@@ -117,6 +141,13 @@ tx, err := hcs2.BuildHCS2UpdateTx(hcs2.UpdateTxParams{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs2.build_hcs2_update_tx(registry_topic_id="0.0.111", uid="1", target_topic_id="0.0.333", metadata="https://example.com/new.json", memo="updated")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Delete Entry — buildHcs2DeleteTx
@@ -141,6 +172,13 @@ tx, err := hcs2.BuildHCS2DeleteTx(hcs2.DeleteTxParams{
 	UID:             "1",
 	Memo:            "removed",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs2.build_hcs2_delete_tx(registry_topic_id="0.0.111", uid="1", memo="removed")
 ```
 
 </TabItem>
@@ -170,6 +208,13 @@ tx, err := hcs2.BuildHCS2MigrateTx(hcs2.MigrateTxParams{
 	Metadata:        "migration v2",
 	Memo:            "migrate",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs2.build_hcs2_migrate_tx(registry_topic_id="0.0.111", target_topic_id="0.0.999", metadata="migration v2", memo="migrate")
 ```
 
 </TabItem>

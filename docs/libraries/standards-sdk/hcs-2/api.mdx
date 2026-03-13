@@ -54,6 +54,15 @@ import (
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Types
@@ -118,6 +127,15 @@ type RegistryEntry struct {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Enums
@@ -146,6 +164,15 @@ const (
 	OperationDelete   RegistryOperation = "delete"
 	OperationMigrate  RegistryOperation = "migrate"
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -210,6 +237,15 @@ func (c *Client) GetRegistry(ctx context.Context, topicID string, options shared
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes
@@ -261,6 +297,15 @@ func BuildHCS2MigrateTx(params MigrateTxParams) (*hedera.TopicMessageSubmitTrans
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Validation Rules
@@ -302,6 +347,21 @@ client.RegisterEntry(context.Background(), created.TopicID, hcs2.RegisterEntryOp
 }, "hcs-2")
 
 reg, _ := client.GetRegistry(context.Background(), created.TopicID, shared.QueryOptions{})
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+client = Hcs2Client(network="testnet", operator_id=os.environ["HEDERA_ACCOUNT_ID"], operator_private_key=os.environ["HEDERA_PRIVATE_KEY"])
+
+created = client.create_registry(ttl=86400, use_operator_as_submit=True)
+
+client.register_entry(created.topic_id, target_topic_id="0.0.2001", metadata="app=chat", "hcs-2")
+
+reg = client.get_registry(created.topic_id)
 ```
 
 </TabItem>

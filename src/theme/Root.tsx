@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 /**
  * Ensures the mobile navbar drawer remains interactive on markdown pages
@@ -6,48 +6,6 @@ import React, { useEffect } from 'react';
  * the secondary docs/blog panel.
  */
 export default function Root({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const enablePrimaryDrawer = () => {
-      const itemsContainer = document.querySelector('.navbar-sidebar__items');
-      if (!itemsContainer) {
-        return;
-      }
-      const inertPanels = itemsContainer.querySelectorAll(
-        '.navbar-sidebar__item[inert]'
-      );
-      inertPanels.forEach((el) => {
-        el.removeAttribute('inert');
-      });
-    };
-
-    // Only observe the navbar sidebar container, not the entire body
-    // This dramatically reduces INP by limiting mutation observer scope
-    const navbarSidebar = document.querySelector('.navbar-sidebar');
-    let observer: MutationObserver | null = null;
-    
-    if (navbarSidebar) {
-      observer = new MutationObserver(() => {
-        enablePrimaryDrawer();
-      });
-      observer.observe(navbarSidebar, { childList: true, subtree: true, attributes: true, attributeFilter: ['inert'] });
-    }
-
-    // Use a delegated event listener on navbar-sidebar only, not document
-    const handleSidebarClick = (e: Event) => {
-      const target = e.target as Element;
-      if (target.closest('.navbar-sidebar')) {
-        enablePrimaryDrawer();
-      }
-    };
-    
-    document.addEventListener('click', handleSidebarClick, { passive: true, capture: true });
-
-    return () => {
-      observer?.disconnect();
-      document.removeEventListener('click', handleSidebarClick, true);
-    };
-  }, []);
-
   return (
     <>
       <script

@@ -755,6 +755,36 @@ fmt.Println(jsonStr)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs11 import Hcs11Client
+from standards_sdk_py.shared.http import SyncHttpTransport
+
+transport = SyncHttpTransport(base_url="https://moonscape.tech")
+client = Hcs11Client(transport)
+
+# Create an AI agent profile
+profile = client.create_ai_agent_profile(
+    name="Market Analysis Agent",
+    agent_type="autonomous",
+    capabilities=["market_intelligence", "data_integration"],
+    model="GPT-4",
+    bio="Advanced AI for market analysis",
+    creator="Hashgraph Online",
+)
+
+# Validate the profile
+validation_result = client.validate_profile(profile)
+print(f"Valid: {validation_result['valid']}, Errors: {validation_result['errors']}")
+
+# Convert to JSON
+import json
+json_str = json.dumps(profile, indent=2)
+print(json_str)
+```
+
+</TabItem>
 </LanguageTabs>
 
 :::tip

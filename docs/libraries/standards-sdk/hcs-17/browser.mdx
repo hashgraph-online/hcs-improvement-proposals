@@ -40,6 +40,14 @@ const client = new HCS17BrowserClient({
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 Or provide a signer directly if your app manages it:
@@ -63,6 +71,14 @@ const client = new HCS17BrowserClient({
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create a State Topic
@@ -82,6 +98,14 @@ const topicId = await client.createStateTopic({ ttl: 86400 });
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>
@@ -109,6 +133,14 @@ await client.submitMessage(topicId, msg);
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>
@@ -140,6 +172,14 @@ const { stateHash } = await client.computeAndPublish({
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Read Latest Messages
@@ -158,6 +198,14 @@ const latest = await client.getLatestMessage(topicId);
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>

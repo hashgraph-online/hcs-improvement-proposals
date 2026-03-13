@@ -43,6 +43,21 @@ if ok {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+# Build a topic memo with 1-day TTL
+memo = hcs27.build_topic_memo(86400)
+# => "hcs-27:0:86400:0"
+
+# Parse an existing memo
+ok = hcs27.parse_topic_memo("hcs-27:0:86400:0")
+# if ok {
+fmt.printf("TTL: %d seconds\n", parsed.T_T_L_SECONDS)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create Checkpoint Topic
@@ -73,6 +88,23 @@ if err != nil {
 
 receipt, err := response.GetReceipt(hederaClient)
 topicID := receipt.TopicID.String()
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+
+memo = hcs27.build_topic_memo(86400)
+tx = hedera.new_topic_create_transaction().)
+# SetTopicMemo(memo).
+# SetAdminKey(operatorKey.PublicKey()).
+# SetSubmitKey(operatorKey.PublicKey())
+
+response = tx.execute(hederaClient)
+
+receipt = response.get_receipt(hederaClient)
+topic_id = receipt.TopicID.String()
 ```
 
 </TabItem>
@@ -129,6 +161,42 @@ response, err := hedera.NewTopicMessageSubmitTransaction().
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+metadata = hcs27.CheckpointMetadata{
+# Type:   "ans-checkpoint-v1",
+# Stream: {"registry": "my-app", "log_id": "events"},
+# Log: &hcs27.LogProfile{
+# Algorithm: "sha-256",
+# Leaf:      "rfc6962-leaf",
+# Merkle:    "rfc6962-node",
+# Root: hcs27.RootCommitment{
+# TreeSize:    50,
+# RootHashB64: "base64url-encoded-root-hash",
+# BatchRange: {"start": 1, "end": 50},
+
+metadataBytes = json.marshal(metadata)
+
+message = hcs27.CheckpointMessage{
+# Protocol:  "hcs-27",
+# Operation: "register",
+# Metadata:  metadataBytes,
+# Memo:      "initial checkpoint",
+
+payload = json.marshal(message)
+txMemo = hcs27.build_transaction_memo()"hcs-27:op:0:0")
+
+topic = hedera.topic_id_from_string(topicID)
+response = hedera.new_topic_message_submit_transaction().)
+# SetTopicID(topic).
+# SetMessage(payload).
+# SetTransactionMemo(txMemo).
+# Execute(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Merkle Root Construction
@@ -157,6 +225,21 @@ if err != nil {
 
 rootB64 := base64.RawURLEncoding.EncodeToString(rootHash)
 fmt.Printf("Root: %s (tree size: %d)\n", rootB64, len(entries))
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+entries = []any{
+# map[string]any{"id": 1, "action": "create", "value": "foo"},
+# map[string]any{"id": 2, "action": "update", "value": "bar"},
+# map[string]any{"id": 3, "action": "delete", "value": "baz"},
+
+rootHash = hcs27.merkle_root_from_entries(entries)
+
+root_b64 = base64.RawURLEncoding.EncodeToString(rootHash)
+fmt.printf("Root: %s (tree size: %d)\n", rootB64, len(entries))
 ```
 
 </TabItem>
@@ -191,6 +274,16 @@ fmt.Printf("Inclusion proof valid: %v\n", valid)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+leafHash = hcs27.leaf_hash_hex_from_entry(entries[1])
+
+valid = hcs27.verify_inclusion_proof(1,
+fmt.printf("Inclusion proof valid: %v\n", valid)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Consistency Proof Verification
@@ -217,6 +310,14 @@ if err != nil {
 	log.Fatal(err)
 }
 fmt.Printf("Trees are consistent: %v\n", consistent)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+consistent = hcs27.verify_consistency_proof(50,
+fmt.printf("Trees are consistent: %v\n", consistent)
 ```
 
 </TabItem>

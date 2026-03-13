@@ -123,6 +123,9 @@ const result = await blockRenderer.render(blockDefinition, {
 
 The rendering system injects various contexts into templates:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 interface TemplateContext {
   attributes?: Record<string, any>;
@@ -133,6 +136,27 @@ interface TemplateContext {
   network: 'mainnet' | 'testnet';
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -278,6 +302,9 @@ const state = stateManager.getBlockState('0.0.123456');
 
 The renderer includes built-in security features:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Built-in sanitization is applied during render/template evaluation
 const rendered = await templateEngine.render(unsafeTemplate, {
@@ -286,11 +313,39 @@ const rendered = await templateEngine.render(unsafeTemplate, {
 console.log(rendered);
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Built-in sanitization is applied during render/template evaluation
+rendered, err := templateEngine.Render(ctx, unsafeTemplate, { attributes: { label: "<script>alert(1)</script>" }, })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+// console.Log(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Built-in sanitization is applied during render/template evaluation
+rendered = template_engine.render(...)
+print(rendered)
+```
+
+</TabItem>
+</LanguageTabs>
+
 ---
 
 ## Custom Helpers
 
 The template engine supports custom helper functions:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 // Register custom helper
@@ -305,11 +360,43 @@ templateEngine.registerHelper('formatCurrency', (amount, currency) => {
 <span>{{formatCurrency attributes.amount "USD"}}</span>
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Register custom helper
+// templateEngine.RegisterHelper(ctx, ...)
+// Intl.NumberFormat(ctx, ...)
+// style: 'currency',
+// currency: currency || 'USD'
+// }).format(amount);
+// });
+
+// Use in template
+// <span>{{formatCurrency attributes.amount "USD"}}</span>
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
+
 ---
 
 ## Performance Optimization
 
 The renderer includes performance optimizations:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 // Template caching
@@ -327,6 +414,43 @@ const results = await Promise.all([
   blockRenderer.render(block3, options3)
 ]);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Template caching
+// templateEngine.ClearCache(ctx, ...)
+cacheSize, err := templateEngine.GetCacheSize(ctx, ); // Monitor cache size)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// Precompilation
+// templateEngine.Precompile(ctx, ...)
+html, err := templateEngine.RenderCompiled(ctx, "counter-template", context)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// Batch rendering
+results, err := Promise.All(ctx, [ blockRenderer.render(block1, options1), blockRenderer.render(block2, options2), blockRenderer.render(block3, options3) ])
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Template caching
+# templateEngine.clearCache()
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 

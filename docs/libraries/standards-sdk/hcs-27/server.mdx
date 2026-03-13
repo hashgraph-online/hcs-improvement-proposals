@@ -38,6 +38,21 @@ if err != nil {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs27 import Hcs27Client
+
+
+client = Hcs27Client(
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+    network="testnet",
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create a Checkpoint Topic
@@ -62,6 +77,14 @@ if err != nil {
 	log.Fatal(err)
 }
 fmt.Printf("Created checkpoint topic: %s (tx: %s)\n", topicID, txID)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+txID = client.create_checkpoint_topic(ttl_seconds=86400, use_operator_as_admin=True, use_operator_as_submit=True)
+fmt.printf("Created checkpoint topic: %s (tx: %s)\n", topicID, txID)
 ```
 
 </TabItem>
@@ -107,6 +130,29 @@ fmt.Printf("Published checkpoint (seq: %d, tx: %s)\n", result.SequenceNumber, re
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+metadata = hcs27.CheckpointMetadata{
+# Type:   "ans-checkpoint-v1",
+# Stream: {"registry": "my-app", "log_id": "events"},
+# Log: &hcs27.LogProfile{
+# Algorithm: "sha-256",
+# Leaf:      "rfc6962-leaf",
+# Merkle:    "rfc6962-node",
+# Root: hcs27.RootCommitment{
+# TreeSize:    150,
+# RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
+# Previous: &hcs27.PreviousCommitment{
+# TreeSize:    100,
+# RootHashB64: "kZ4L2bPe1sX...",
+# BatchRange: {"start": 101, "end": 150},
+
+result = client.publish_checkpoint(topicID, metadata, "batch 101-150")
+fmt.printf("Published checkpoint (seq: %d, tx: %s)\n", result.SEQUENCE_NUMBER, result.TRANSACTION_I_D)
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes
@@ -141,6 +187,16 @@ for _, record := range records {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+records = client.get_checkpoints(topicID, None)
+
+for record in records :
+fmt.printf("Seq %d: root=%s treeSize=%d\n", record.SEQUENCE, record.EffectiveMetadata.Root.RootHashB64, record.EffectiveMetadata.Root.TreeSize)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Validate a Checkpoint Chain
@@ -160,6 +216,15 @@ if err := hcs27.ValidateCheckpointChain(records); err != nil {
 	log.Fatalf("Chain validation failed: %v", err)
 }
 fmt.Println("Checkpoint chain is valid")
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+err = hcs27.validate_checkpoint_chain(records); err != nil {)
+log.fatalf("Chain validation failed: %v", err)
+fmt.println("Checkpoint chain is valid")
 ```
 
 </TabItem>
@@ -185,6 +250,14 @@ if err != nil {
 	log.Fatal(err)
 }
 fmt.Printf("Resolved %d bytes of metadata\n", len(payload))
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+payload = client.resolve_h_c_s1_reference("hcs://1/0.0.789012")
+fmt.printf("Resolved %d bytes of metadata\n", len(payload))
 ```
 
 </TabItem>

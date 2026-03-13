@@ -36,6 +36,13 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+pip install standards-sdk-py
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Quickstart
@@ -90,6 +97,34 @@ _, err = client.PublishCheckpoint(context.Background(), topicID, metadata, "go-s
 if err != nil {
 	log.Fatal(err)
 }
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs27 import Hcs27Client
+
+
+
+client = Hcs27Client(
+    operator_id="0.0.123456",
+    operator_private_key="<private-key>",
+    network="testnet",
+)
+
+client.create_checkpoint_topic(ttl_seconds=300, use_operator_as_admin=True, use_operator_as_submit=True)
+
+metadata = hcs27.CheckpointMetadata{
+# Type:   "ans-checkpoint-v1",
+# Stream: {"registry": "ans", "log_id": "default"},
+# Root: hcs27.RootCommitment{
+# TreeSize:    671,
+# RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
+# BatchRange: {"start": 661, "end": 671},
+
+client.publish_checkpoint(topicID, metadata, "go-sdk checkpoint publish")
 ```
 
 </TabItem>

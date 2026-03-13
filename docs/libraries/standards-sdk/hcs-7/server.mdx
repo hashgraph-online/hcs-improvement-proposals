@@ -39,6 +39,21 @@ client, err := hcs7.NewClient(hcs7.ClientConfig{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs7 import Hcs7Client
+
+
+client = Hcs7Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 The client wraps all topic/transaction plumbing: memo generation (`hcs-7:indexed:{ttl}`), signing, and receipt handling. Call `hcs7.close()` when you finish.
@@ -68,6 +83,15 @@ if err != nil || !registry.Success {
 }
 
 fmt.Println("Registry Topic:", registry.TopicID)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+registry = client.create_registry(ttl=86400, use_operator_as_submit=True)
+
+fmt.println("Registry Topic:", registry.topic_id)
 ```
 
 </TabItem>
@@ -159,6 +183,15 @@ _, err = client.RegisterConfig(ctx, hcs7.RegisterConfigOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+client.register_config(registry_topic_id=registry.topic_id, memo="LaunchPage minted", type=hcs7.CONFIG_TYPE_E_V_M, e_v_m=&{"contract_address": "0x1d67aaf7f7e8d806bbeba24c4dea24808e1158b8", "abi": hcs7.AbiDefinition{ Name: "minted", "inputs": []hcs7.AbiIO{}, Outputs: []{"name": "", "type": "uint64"}}, StateMutability: "view", Type: "function", }, })
+
+client.register_config(registry_topic_id=registry.topic_id, memo="mint router", type=hcs7.CONFIG_TYPE_W_A_S_M, w_a_s_m=&{"wasm_topic_id": "0.0.5269810", "input_type": map[string]any{ "stateData": map[string]string{ "minted": "number", "tokensRemaining": "number"}, }, OutputType: map[string]any{ "type": "string", "format": "topic-id", }, })
+```
+
+</TabItem>
 </LanguageTabs>
 
 Each registration writes a `register-config` message into the same HCS‑7 topic the toolkit polls.
@@ -208,6 +241,15 @@ _, err = client.RegisterMetadata(ctx, hcs7.RegisterMetadataOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+client.register_metadata(registry_topic_id=registry.topic_id, metadata_topic_id="0.0.3717738", weight=1, tags=[][], memo="odd artwork")
+
+client.register_metadata(registry_topic_id=registry.topic_id, metadata_topic_id="0.0.3717746", weight=1, tags=[][], memo="even artwork")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## 5. Query the Registry
@@ -232,6 +274,16 @@ if err == nil {
 		fmt.Println(entry.SequenceNumber, entry.Message.Op, entry.Message.M)
 	}
 }
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+topic = client.get_registry(registry.topic_id, limit=50)
+# if err == nil {
+for entry in topic.Entries :
+fmt.println(entry.SEQUENCE_NUMBER, entry.Message.Op, entry.Message.M)
 ```
 
 </TabItem>
@@ -277,6 +329,15 @@ console.log('Minted so far:', result.values?.[0]);
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Swap in `RedisCache` if you need a shared cache across processes:
@@ -294,6 +355,15 @@ const evm = new EVMBridge('testnet', undefined, new RedisCache({ host: '127.0.0.
 
 ```go
 // Note: EVMBridge is available in the TypeScript SDK.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -327,6 +397,15 @@ console.log('Selected metadata topic:', topicId);
 ```go
 // Note: WasmBridge is available in the TypeScript SDK.
 // See the TypeScript tab for examples.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -380,6 +459,23 @@ if err == nil {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+topic_id = "0.0.3717746"
+url = fmt.sprintf("https://kiloscribe.com/api/inscription-cdn/%s?network=testnet", topicID)
+
+req = http.new_request("GET", url, None)
+# req.Header.Set("Accept", "application/json")
+
+# res, err := http.DefaultClient.Do(req)
+# if err == nil {
+# defer res.Body.Close()
+# var metadata map[string]any
+json.new_decoder(res.Body).Decode(&metadata)
+```
+
+</TabItem>
 </LanguageTabs>
 
 For WASM binaries:
@@ -410,6 +506,22 @@ if err == nil {
 	defer res.Body.Close()
 	wasmBytes, _ := io.ReadAll(res.Body)
 }
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+wasm_topic_id = "0.0.5269810"
+url = fmt.sprintf("https://kiloscribe.com/api/inscription-cdn/%s?network=testnet", wasmTopicID)
+
+req = http.new_request("GET", url, None)
+# req.Header.Set("Accept", "application/wasm")
+
+# res, err := http.DefaultClient.Do(req)
+# if err == nil {
+# defer res.Body.Close()
+wasmBytes = io.read_all(res.BODY)
 ```
 
 </TabItem>

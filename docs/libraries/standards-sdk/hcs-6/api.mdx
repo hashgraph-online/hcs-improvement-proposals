@@ -53,6 +53,15 @@ import (
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs6 import Hcs6Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Types
@@ -114,6 +123,15 @@ type RegistryEntry struct {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs6 import Hcs6Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Enums
@@ -138,6 +156,15 @@ const (
 	RegistryTypeIndexed    RegistryType = 0
 	RegistryTypeNonIndexed RegistryType = 1
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs6 import Hcs6Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -182,6 +209,15 @@ func (c *Client) GetRegistry(ctx context.Context, topicID string, options QueryR
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs6 import Hcs6Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Browser Client (HCS6BrowserClient)
@@ -208,6 +244,15 @@ function buildHcs6RegisterEntryTx(params: { registryTopicId: string; targetTopic
 func BuildCreateRegistryTx(params CreateRegistryTxParams) *hedera.TopicCreateTransaction
 
 func BuildRegisterEntryTx(params RegisterEntryTxParams) (*hedera.TopicMessageSubmitTransaction, error)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs6 import Hcs6Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -247,6 +292,19 @@ reg, _ := client.CreateRegistry(context.Background(), hcs6.CreateRegistryOptions
 client.RegisterEntry(context.Background(), reg.TopicID, hcs6.RegisterEntryOptions{
 	TargetTopicID: "0.0.1234",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+client = Hcs6Client(network="testnet", operator_id=os.environ["HEDERA_ACCOUNT_ID"], operator_private_key=os.environ["HEDERA_PRIVATE_KEY"])
+
+reg = client.create_registry(ttl=86400, use_operator_as_submit=True)
+
+client.register_entry(reg.topic_id, target_topic_id="0.0.1234")
 ```
 
 </TabItem>

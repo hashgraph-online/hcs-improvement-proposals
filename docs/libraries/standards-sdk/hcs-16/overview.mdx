@@ -106,6 +106,26 @@ fmt.Printf("CTopic: %s, TTopic: %s, STopic: %s\n",
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs16 import Hcs16Client
+
+
+client = Hcs16Client(
+    operator_id="0.0.123456",
+    operator_private_key="<private-key>",
+    network="testnet",
+)
+
+# Create a Flora account with all three topics
+result = client.create_flora_account_with_topics(members=[][], threshold=2)
+fmt.printf("Flora Account: %s\n", result.FLORA_ACCOUNT_I_D)
+fmt.printf("CTopic: %s, TTopic: %s, STopic: %s\n", result.Topics.Communication, result.Topics.Transaction, result.Topics.State)
+```
+
+</TabItem>
 </LanguageTabs>
 
 :::tip

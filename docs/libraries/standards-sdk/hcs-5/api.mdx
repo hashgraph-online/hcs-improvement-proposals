@@ -42,6 +42,15 @@ import (
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs5 import Hcs5Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Types
@@ -124,6 +133,15 @@ type MintResponse struct {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs5 import Hcs5Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Server Client (HCS5Client)
@@ -148,6 +166,15 @@ func NewClient(config ClientConfig) (*Client, error)
 func (c *Client) Mint(ctx context.Context, options MintOptions) (MintResponse, error)
 
 func (c *Client) CreateHashinal(ctx context.Context, options CreateHashinalOptions) (MintResponse, error)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs5 import Hcs5Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -178,6 +205,15 @@ func BuildHCS1HRL(topicID string) string // e.g., hcs://1/<topicId>
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs5 import Hcs5Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Builders (tx.ts)
@@ -198,6 +234,15 @@ function buildHcs5MintWithHrlTx(params: { tokenId: string; metadataTopicId: stri
 func BuildMintTx(tokenID string, metadata string, transactionMemo string) (*hedera.TokenMintTransaction, error)
 
 func BuildMintWithHRLTx(tokenID string, metadataTopicID string, transactionMemo string) (*hedera.TokenMintTransaction, error)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs5 import Hcs5Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -234,6 +279,17 @@ hr, _ := client.CreateHashinal(context.Background(), hcs5.CreateHashinalOptions{
 		Content: "https://...",
 	},
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+client = Hcs5Client(network="testnet", operator_id=os.environ["HEDERA_ACCOUNT_ID"], operator_private_key=os.environ["HEDERA_PRIVATE_KEY"])
+
+hr = client.create_hashinal(token_id=tokenId, request={"content": "https://..."})
 ```
 
 </TabItem>

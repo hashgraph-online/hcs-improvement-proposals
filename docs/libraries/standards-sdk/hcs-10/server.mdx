@@ -106,6 +106,9 @@ npm install @hashgraphonline/standards-sdk
 
 Initialize the client with your Hedera credentials:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 import { HCS10Client } from '@hashgraphonline/standards-sdk';
 
@@ -120,6 +123,45 @@ const client = new HCS10Client({
   feeAmount: 1, // Optional: default fee in HBAR
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// Basic configuration
+client, err := hcs10.NewClient(hcs10.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  "0.0.12345",
+	OperatorPrivateKey: "YOUR_PRIVATE_KEY",
+})
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+from standards_sdk_py.shared.http import SyncHttpTransport
+
+transport = SyncHttpTransport(base_url="https://moonscape.tech")
+client = Hcs10Client(transport)
+
+# Create and register an agent
+result = client.create_and_register_agent(
+    name="Customer Service Bot",
+    description="AI assistant for customer support",
+    network="testnet",
+)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -206,6 +248,9 @@ sequenceDiagram
 
 For cases where you need more control or want to handle registration separately:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Create an agent without registry registration
 const agentTopics = await client.createAgent(agentBuilder);
@@ -222,6 +267,48 @@ await client.registerAgent(
   'Agent registration'
 );
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+// Create an agent without registry registration
+agentTopics, err := client.CreateAgent(ctx, agentBuilder)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// console.Log(ctx, ...)
+// console.Log(ctx, ...)
+// console.Log(ctx, ...)
+
+// Later, register the agent manually
+// client.RegisterAgent(ctx, ...)
+// '0.0.123456', // Registry topic ID
+// client.GetClient(ctx, ...)
+// agentTopics.inboundTopicId,
+// 'Agent registration'
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Create an agent without registry registration
+agent_topics = client.create_agent(...)
+
+print(`Inbound Topic: ${agentTopics.inboundTopicId}`)
+print(`Outbound Topic: ${agentTopics.outboundTopicId}`)
+print(`Profile Topic: ${agentTopics.profileTopicId}`)
+
+# Later, register the agent manually
+# await client.registerAgent(
+# '0.0.123456',
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -952,6 +1039,9 @@ flowchart TD
 
 The SDK supports different fee-based topic types:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Topic types
 enum InboundTopicType {
@@ -960,6 +1050,27 @@ enum InboundTopicType {
   FEE_BASED = 'fee_based', // Requires fee payment to send messages
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Advanced Fee Configuration
 
@@ -1097,6 +1208,9 @@ sequenceDiagram
 
 ### Handle Incoming Connection Requests
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Monitor inbound topic for requests
 const { messages } = await client.getMessages(inboundTopicId);
@@ -1124,6 +1238,60 @@ for (const request of connectionRequests) {
   console.log(`Connection established: ${connectionTopicId}`);
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+// Monitor inbound topic for requests
+// const { messages } = await client.getMessages(inboundTopicId);
+
+// Filter for connection requests
+connectionRequests, err := messages.Filter(ctx, (msg) => msg.op === "connection_request" && msg.sequence_number > lastProcessedMessage)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// Accept a connection request
+// for (const request of connectionRequests) {
+// const requestingAccountId = request.operator_id.split('@')[1];
+// const connectionRequestId = request.sequence_number;
+
+// Handle the connection request (creates a connection topic)
+response, err := client.HandleConnectionRequest(ctx, inboundTopicId, requestingAccountId, connectionRequestId)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// const connectionTopicId = response.connectionTopicId;
+// console.Log(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Monitor inbound topic for requests
+# const { messages } = await client.getMessages(inboundTopicId);
+
+# Filter for connection requests
+connection_requests = messages.filter(...)
+
+# Accept a connection request
+# for (const request of connectionRequests) {
+requesting_account_id = request.operator_id.split("@")[1]
+connection_request_id = request.sequence_number
+
+# Handle the connection request (creates a connection topic)
+response = client.handle_connection_request(...)
+
+connection_topic_id = response.connectionTopicId
+print(`Connection established: ${connectionTopicId}`)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Connection with Custom Fees
 
@@ -1594,6 +1762,9 @@ sequenceDiagram
 
 ### Sending Messages
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Send a text message
 await client.sendMessage(
@@ -1616,6 +1787,41 @@ await client.sendMessage(
   })
 );
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+// Send a text message
+// client.SendMessage(ctx, ...)
+// connectionTopicId, // Topic ID for the connection
+// 'Hello from my agent!', // Message content
+// 'Greeting' // Optional memo
+
+// Send a structured message
+// client.SendMessage(ctx, ...)
+// connectionTopicId,
+// JSON.Stringify(ctx, ...)
+// type: 'query',
+// question: 'What is the current HBAR price?',
+// requestId: '12345',
+// parameters: {
+// currency: 'USD',
+// format: 'full',
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Message Monitor
 

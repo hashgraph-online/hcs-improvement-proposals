@@ -55,6 +55,14 @@ if err != nil {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs20.build_hcs20_deploy_tx(topic_id="0.0.100", name="Loyalty Points", tick="loyal", max="1000000000", lim="10000", metadata="ipfs://…", memo="deploy")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Mint
@@ -85,6 +93,13 @@ tx, err := hcs20.BuildHCS20MintTx(hcs20.MintTxParams{
 	To:      "0.0.12345",
 	Memo:    "reward",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs20.build_hcs20_mint_tx(topic_id="0.0.100", tick="loyal", amt="100", to="0.0.12345", memo="reward")
 ```
 
 </TabItem>
@@ -123,6 +138,13 @@ tx, err := hcs20.BuildHCS20TransferTx(hcs20.TransferTxParams{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs20.build_hcs20_transfer_tx(topic_id="0.0.100", tick="loyal", amt="10", from="0.0.111", to="0.0.222", memo="tip")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Burn
@@ -153,6 +175,13 @@ tx, err := hcs20.BuildHCS20BurnTx(hcs20.BurnTxParams{
 	From:    "0.0.111",
 	Memo:    "cleanup",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs20.build_hcs20_burn_tx(topic_id="0.0.100", tick="loyal", amt="5", from="0.0.111", memo="cleanup")
 ```
 
 </TabItem>
@@ -191,6 +220,13 @@ tx, err := hcs20.BuildHCS20RegisterTx(hcs20.RegisterTxParams{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs20.build_hcs20_register_tx(registry_topic_id="0.0.999", name="Loyalty Points", topic_id="0.0.100", is_private=False, metadata="ipfs://…", memo="register")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Execution
@@ -210,6 +246,14 @@ if err != nil {
 	log.Fatal(err)
 }
 receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
 ```
 
 </TabItem>

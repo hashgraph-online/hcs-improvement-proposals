@@ -28,11 +28,12 @@ export default function StandardsShowcase(): React.ReactElement {
   return (
     <CategoryShowcase
       title='HCS Standards'
-      subtitle='Discover the comprehensive collection of Hashgraph Consensus Standards (HCS) authored by Hashgraph Online — enabling interoperable agent communication, registries, content inscription, and application composition.'
+      subtitle='Browse Hashgraph Consensus Standards for agent communication, registries, inscriptions, and application composition.'
       items={standardsData}
       showSearch={true}
       showCategoryFilter={true}
       showStatusFilter={true}
+      preferCriticalAboveFoldStyles={true}
     />
   );
 }

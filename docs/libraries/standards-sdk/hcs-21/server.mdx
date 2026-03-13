@@ -50,6 +50,22 @@ client, err := hcs21.NewClient(hcs21.ClientConfig{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs21 import Hcs21Client
+
+
+
+client = Hcs21Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_OPERATOR_ID"],
+    operator_private_key=os.environ["HEDERA_OPERATOR_KEY"],
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Inscribe an Adapter Manifest (HCS-1)
@@ -129,6 +145,19 @@ manifest := map[string]any{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Note: Inscription of adapter manifests uses the HCS-1 protocol.
+# In the Go SDK, use the `inscriber` package to write JSON metadata to HCS-1.
+
+manifest = map[string]any{
+# ... fill in other fields
+
+# manifestPointer := inscribeToHCS1(manifest)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create an Adapter Registry Topic
@@ -153,6 +182,13 @@ registryTopicID, _, err := client.CreateRegistryTopic(ctx, hcs21.CreateRegistryT
 	Indexed:         false,
 	TransactionMemo: "flora adapter registry",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+client.create_registry_topic(ttl=3600, indexed=False, transaction_memo="flora adapter registry")
 ```
 
 </TabItem>
@@ -200,6 +236,19 @@ _, _, err = client.RegisterCategoryTopic(
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+# Create a new category discovery topic if you don't already have one
+client.create_registry_discovery_topic(86400, True, True, "adapter-registry:price:category")
+
+# Register it to an upstream discovery topic
+client.register_category_topic(ctx, os.environ["HCS21_DISCOVERY_TOPIC_ID"], categoryTopicID, os.environ["HCS21_REGISTRY_METADATA_POINTER"], "adapter-registry:price")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create a Version Pointer Topic (HCS-2 Non-Indexed)
@@ -230,6 +279,13 @@ versionPointerTopicID, _, err := client.CreateAdapterVersionPointerTopic(
 	true, 
 	"adapter-registry:pointer",
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+client.create_adapter_version_pointer_topic(ctx, 3600, True, True, "adapter-registry:pointer")
 ```
 
 </TabItem>
@@ -276,6 +332,17 @@ _, _, err = client.PublishCategoryEntry(
 	versionPointerTopicID,
 	os.Getenv("HCS21_REGISTRY_METADATA_POINTER"),
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+client.publish_version_pointer(ctx, versionPointerTopicID, registryTopicID, "adapter:npm/@hashgraphonline/x402-bazaar-adapter")
+
+client.publish_category_entry(ctx, categoryTopicID, "npm/@hashgraphonline/x402-bazaar-adapter", versionPointerTopicID, os.environ["HCS21_REGISTRY_METADATA_POINTER"])
 ```
 
 </TabItem>
@@ -349,6 +416,13 @@ _, _, err = client.PublishDeclaration(ctx, hcs21.PublishDeclarationOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+client.publish_declaration(topic_id=registryTopicID, declaration={"op": "register", "adapter_id": "npm/@hashgraphonline/x402-bazaar-adapter@1.3.2", "entity": "agent", "adapter_package": hcs21.AdapterPackage{ Registry: "npm", "name": "@hashgraphonline/x402-bazaar-adapter", "version": "1.3.2", "integrity": "sha384-demo-digest"}, Manifest: "hcs://1/0.0.1234", ManifestSequence: 1, Config: map[string]any{ "type": "flora", "account": "0.0.9876", "threshold": "2/3", "ctopic": "0.0.700111", "ttopic": "0.0.700112", "stopic": "0.0.700113", }, StateModel: "hcs-21.entity-consensus@1", })
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Resolve the Active Registry Topic
@@ -369,6 +443,13 @@ const activeRegistryTopicId =
 
 ```go
 activeTopicID, seq, payer, err := client.ResolveLatestVersionPointer(ctx, versionPointerTopicID)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+payer = client.resolve_latest_version_pointer(versionPointerTopicID)
 ```
 
 </TabItem>
@@ -411,6 +492,16 @@ for _, envelope := range latest {
 		envelope.Declaration.AdapterID,
 	)
 }
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+latest = client.fetch_declarations(activeTopicID, limit=10, order="desc")
+
+for envelope in latest :
+fmt.printf("hcs-21 declaration seq: %d, payer: %s, adapter: %s\n", envelope.SEQUENCE_NUMBER, envelope.PAYER, envelope.Declaration.AdapterID)
 ```
 
 </TabItem>

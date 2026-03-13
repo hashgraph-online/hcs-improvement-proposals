@@ -47,6 +47,16 @@ response, _ := tx.Execute(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs18.build_create_discovery_topic_tx(ttl_seconds=300, admin_key=operatorPublicKey, submit_key=operatorPublicKey)
+
+response = tx.execute(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Submit Discovery Message
@@ -74,6 +84,15 @@ if err != nil {
 }
 
 response, _ := tx.Execute(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs18.build_submit_discovery_message_tx("0.0.555", msg, "optional")
+
+response = tx.execute(hederaClient)
 ```
 
 </TabItem>
@@ -110,6 +129,13 @@ msg := hcs18.BuildAnnounceMessage(hcs18.AnnounceData{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs18.build_announce_message(account="0.0.123", petal={"name": "A", "priority": 700}, capabilities={"protocols": [][], }, valid_for=300)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Propose
@@ -139,6 +165,13 @@ msg := hcs18.BuildProposeMessage(hcs18.ProposeData{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs18.build_propose_message(proposer="0.0.1", members=[]{"account": "0.0.2", "priority": 500}}, config={"name": "Demo Flora", "threshold": 2})
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Respond
@@ -165,6 +198,13 @@ msg := hcs18.BuildRespondMessage(hcs18.RespondData{
 	ProposalSeq: 10,
 	Decision:    "accept",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs18.build_respond_message(responder="0.0.2", proposal_seq=10, decision="accept")
 ```
 
 </TabItem>
@@ -203,6 +243,13 @@ msg := hcs18.BuildCompleteMessage(hcs18.CompleteData{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs18.build_complete_message(proposer="0.0.1", proposal_seq=10, flora_account="0.0.500", topics={"communication": "0.0.600", "transaction": "0.0.601", "state": "0.0.602"})
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Withdraw
@@ -229,6 +276,13 @@ msg := hcs18.BuildWithdrawMessage(hcs18.WithdrawData{
 	AnnounceSeq: 42,
 	Reason:      "going offline",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs18.build_withdraw_message(account="0.0.2", announce_seq=42, reason="going offline")
 ```
 
 </TabItem>

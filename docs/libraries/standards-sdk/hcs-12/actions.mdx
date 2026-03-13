@@ -51,6 +51,9 @@ interface WasmInterface {
 
 The INFO method provides metadata about the module's capabilities:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 type ModuleInfo = {
   name: string;
@@ -63,6 +66,27 @@ type ModuleInfo = {
   plugins: Array<PluginDefinition>;
 };
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### POST Method
 
@@ -131,6 +155,9 @@ async GET(
 
 Actions are registered with metadata and verification hashes:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 interface ActionRegistration {
   p: 'hcs-12';
@@ -146,6 +173,27 @@ interface ActionRegistration {
   m?: string;          // Memo
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -461,6 +509,9 @@ const capabilities: Capability[] = [
 
 For wasm-bindgen generated modules, JavaScript wrappers are supported:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Register action with JavaScript wrapper
 const actionRegistration = await actionBuilder
@@ -473,11 +524,35 @@ const actionRegistration = await actionBuilder
   .build();
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
+
 ---
 
 ## Action Execution
 
 Actions are executed through the WASM executor:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 import { WasmExecutor } from '@hashgraphonline/standards-sdk';
@@ -496,6 +571,39 @@ const result = await wasmExecutor.execute(actionRegistration, {
 
 console.log('Action result:', result);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// const wasmExecutor = new WasmExecutor(logger, 'testnet');
+
+// Execute an action registration
+result, err := wasmExecutor.Execute(ctx, actionRegistration, { method: "POST", params: { operation: "transfer", amount: 100, to: "0.0.987654", }, })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// console.Log(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+
+wasm_executor = new WasmExecutor(logger, "testnet")
+
+# Execute an action registration
+result = wasm_executor.execute(...)
+
+print('Action result:', result)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -1022,6 +1130,9 @@ Error: WebAssembly instantiation failed: Import resolution error
 ```
 
 **Solution**: Check JavaScript wrapper compatibility
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Ensure wasm-bindgen versions match
 // In ActionBuilder:
@@ -1031,6 +1142,35 @@ actionBuilder.setInterfaceVersion('0.2.95'); // Must match Cargo.toml
 const wasmModule = await WebAssembly.instantiateStreaming(wasmResponse);
 console.log('WASM imports:', wasmModule.instance.exports);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Ensure wasm-bindgen versions match
+// In ActionBuilder:
+// actionBuilder.SetInterfaceVersion(ctx, ...)
+
+// Verify imports in WASM module
+wasmModule, err := WebAssembly.InstantiateStreaming(ctx, wasmResponse)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+// console.Log(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Ensure wasm-bindgen versions match
+# In ActionBuilder:
+# actionBuilder.setInterfaceVersion('0.2.95');
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### 2. Hash Mismatch During Registration
 

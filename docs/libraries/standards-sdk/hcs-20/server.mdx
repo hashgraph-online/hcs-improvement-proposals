@@ -47,6 +47,22 @@ client, err := hcs20.NewClient(hcs20.ClientConfig{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs20 import Hcs20Client
+
+
+
+client = Hcs20Client(
+    network="testnet",
+    operator_id="0.0.123456",
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Operations
@@ -91,6 +107,15 @@ fmt.Println("Points deployed:", pointsInfo)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+pointsInfo = client.deploy_points(name="MyRewardPoints", tick="MRP", max="1000000", limit_per_mint="1000", metadata="https://my-reward-points.com/meta", use_private_topic=False, progress_callback=func(progress hcs20.DeployPointsProgress) { fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage) })
+
+fmt.println("Points deployed:", pointsInfo)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ### 2) Mint Points
@@ -126,6 +151,15 @@ mintTx, err := client.MintPoints(ctx, hcs20.MintPointsOptions{
 })
 
 fmt.Println("Mint transaction:", mintTx)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+mintTx = client.mint_points(tick="MRP", amount="500", to="0.0.98765", memo="Initial points for new user", progress_callback=func(progress hcs20.MintPointsProgress) { fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage) })
+
+fmt.println("Mint transaction:", mintTx)
 ```
 
 </TabItem>
@@ -167,6 +201,15 @@ fmt.Println("Transfer transaction:", transferTx)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+transferTx = client.transfer_points(tick="MRP", amount="100", from="0.0.12345", to="0.0.98765", progress_callback=func(progress hcs20.TransferPointsProgress) { fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage) })
+
+fmt.println("Transfer transaction:", transferTx)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ### 4) Burn Points
@@ -203,6 +246,15 @@ fmt.Println("Burn transaction:", burnTx)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+burnTx = client.burn_points(tick="MRP", amount="50", from="0.0.98765", progress_callback=func(progress hcs20.BurnPointsProgress) { fmt.Printf("%s: %d%%\n", progress.Stage, progress.Percentage) })
+
+fmt.println("Burn transaction:", burnTx)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Indexer (Concept)
@@ -227,6 +279,15 @@ Use the points indexer to keep a local view of deployed points, balances, and hi
 // indexer := hcs20.NewPointsIndexer("testnet", pointsInfo.TopicID)
 // indexer.Start()
 // indexer.OnBalance(func(b map[string]any) { save(b) })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs20 import Hcs20Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

@@ -27,6 +27,9 @@ This abstract class is extended by the [`HCS10Client`](./server.mdx) for server 
 
 ### Configuration
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 export interface HCS10Config {
   network: 'mainnet' | 'testnet';
@@ -35,6 +38,27 @@ export interface HCS10Config {
   feeAmount?: number;
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 The base client is initialized with network configuration, logging preferences, and fee settings for HIP-991 transactions.
 
@@ -87,6 +111,9 @@ export enum Hcs10MemoType {
 
 Fetch and validate messages from HCS topics:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Get filtered messages from a connection topic
 const { messages } = await client.getMessageStream(connectionTopicId);
@@ -94,6 +121,27 @@ const { messages } = await client.getMessageStream(connectionTopicId);
 // Get all messages from any topic
 const { messages } = await client.getMessages(topicId);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Topic Access Verification
 
@@ -232,6 +280,9 @@ client.clearCache();
 
 The following methods must be implemented by subclasses:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Submit payload to a topic
 abstract submitPayload(
@@ -245,9 +296,33 @@ abstract submitPayload(
 abstract getAccountAndSigner(): { accountId: string; signer: any };
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
+
 ## HCS10Cache
 
 The base client includes a built-in caching mechanism for topic information:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 export class HCS10Cache {
@@ -265,9 +340,33 @@ export class HCS10Cache {
 }
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
+
 ## Usage Pattern
 
 The base client is not used directly but is extended by environment-specific implementations:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 // Server implementation
@@ -280,6 +379,27 @@ export class BrowserHCSClient extends HCS10BaseClient {
   // Browser-specific implementation
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## Best Practices
 

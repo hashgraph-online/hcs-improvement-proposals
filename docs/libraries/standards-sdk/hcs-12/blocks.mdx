@@ -28,6 +28,9 @@ Blocks consist of two parts stored separately via HCS-1:
 1. **Block Definition**: JSON metadata following Gutenberg standards
 2. **Block Template**: HTML template with Handlebars-style placeholders
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 interface BlockDefinition {
   apiVersion: number;           // API version (default: 3)
@@ -42,6 +45,27 @@ interface BlockDefinition {
   template_t_id: string;        // Template topic ID (HCS-1)
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -198,6 +222,9 @@ blockBuilder.setActions({
 
 ### 2. During Assembly Composition
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Map actions when adding block to assembly
 const assemblyBuilder = new AssemblyBuilder(logger)
@@ -214,6 +241,27 @@ const assemblyBuilder = new AssemblyBuilder(logger)
     },
   });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -247,6 +295,9 @@ Blocks support template-based composition through nested references:
 
 Blocks are registered using the SDK's `registerBlock` method:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Method 1: Register with template buffer
 const blockBuilder = new BlockBuilder()
@@ -270,6 +321,58 @@ const blockBuilder2 = new BlockBuilder()
 
 const registered2 = await client.registerBlock(blockBuilder2);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Method 1: Register with template buffer
+// const blockBuilder = new BlockBuilder()
+// .setName('hashlink/my-block')
+// .setTitle('My Block')
+// .setCategory('widgets')
+// Buffer.From(ctx, ...)
+
+// Register block (template is automatically inscribed via HCS-1)
+registeredBuilder, err := client.RegisterBlock(ctx, blockBuilder)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+blockTopicId, err := registeredBuilder.GetTopicId(ctx, )
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// console.Log(ctx, ...)
+
+// Method 2: Register with existing template topic ID
+// const blockBuilder2 = new BlockBuilder()
+// .setName('hashlink/another-block')
+// .setTitle('Another Block')
+// .setCategory('formatting')
+// .setTemplateTopicId('0.0.789012');  // Use existing template
+
+registered2, err := client.RegisterBlock(ctx, blockBuilder2)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Method 1: Register with template buffer
+# const blockBuilder = new BlockBuilder()
+# .setName('hashlink/my-block')
+# .setTitle('My Block')
+# .setCategory('widgets')
+# .setTemplate(Buffer.from(templateHtml)); 
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 

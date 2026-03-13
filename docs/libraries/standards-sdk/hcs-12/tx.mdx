@@ -55,6 +55,16 @@ response, _ := tx.Execute(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs12.build_create_registry_topic_tx(registry_type=hcs12.REGISTRY_TYPE_ASSEMBLY, ttl=3600, admin_key=operatorPublicKey, submit_key=operatorPublicKey)
+
+response = tx.execute(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Submit Message
@@ -89,6 +99,13 @@ if err != nil {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs12.build_submit_message_tx("0.0.500", map[string]any{"p": "hcs-12", "op": "register", "name": "Demo"}, "optional")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Assembly Operations
@@ -120,6 +137,13 @@ tx, err := hcs12.BuildSubmitMessageTx(
 	},
 	"",
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs12.build_submit_message_tx("0.0.500", map[string]any{ "p": "hcs-12", "op": "register", "name": "Demo", "version": "1.0.0", })
 ```
 
 </TabItem>
@@ -158,6 +182,13 @@ tx, err := hcs12.BuildSubmitMessageTx(
 	},
 	"",
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs12.build_submit_message_tx("0.0.500", map[string]any{ "p": "hcs-12", "op": "add-block", "block_t_id": "0.0.501", "attributes": map[string]any{"text": "Hello"}, })
 ```
 
 </TabItem>

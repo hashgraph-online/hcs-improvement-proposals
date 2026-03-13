@@ -60,6 +60,18 @@ receipt, _ := response.GetReceipt(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+key = hedera.private_key_generate_ecdsa()
+tx = hcs15.build_base_account_create_tx(public_key=public_key, initial_balance=1.0,"HCS-15 Base")
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Petal Account
@@ -95,6 +107,16 @@ if err != nil {
 
 response, _ := tx.Execute(hederaClient)
 receipt, _ := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs15.build_petal_account_create_tx(public_key=baseKey.PublicKey(), initial_balance=0.5, account_memo="HCS-15 Petal")
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
 ```
 
 </TabItem>

@@ -25,6 +25,9 @@ Assemblies in HCS-12 provide the composition layer that combines actions and blo
 
 Assemblies maintain their state through incremental operations stored in HCS-2 topics:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 interface AssemblyState {
   topicId: string;
@@ -40,6 +43,27 @@ interface AssemblyState {
 }
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
+
 ---
 
 ## Assembly Operations
@@ -51,15 +75,38 @@ Assemblies support four types of operations:
 3. **add-block**: Add a block to the assembly
 4. **update**: Update assembly metadata
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 type AssemblyOperation = 'register' | 'add-action' | 'add-block' | 'update';
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
 ## Using AssemblyBuilder
 
 The SDK provides an `AssemblyBuilder` for creating assemblies:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 import { AssemblyBuilder } from '@hashgraphonline/standards-sdk';
@@ -83,6 +130,63 @@ await client.createAssemblyTopic();
 const assemblyResult = await client.registerAssembly(assemblyRegistration);
 console.log('Assembly registered:', assemblyResult.id);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// Create assembly builder
+// const assemblyBuilder = new AssemblyBuilder(logger);
+
+// Set basic properties
+// const assemblyRegistration = assemblyBuilder
+// .setName('demo-app')
+// .setVersion('1.0.0')
+// .setDescription('Demo application showcasing HashLinks')
+// .setTags(['demo', 'counter', 'interactive'])
+// .setAuthor('0.0.123456')
+// .build();
+
+// client.InitializeRegistries(ctx, ...)
+// client.CreateAssemblyTopic(ctx, ...)
+
+// Register the assembly
+assemblyResult, err := client.RegisterAssembly(ctx, assemblyRegistration)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+// console.Log(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+
+# Create assembly builder
+assembly_builder = new AssemblyBuilder(logger)
+
+# Set basic properties
+# const assemblyRegistration = assemblyBuilder
+# .setName('demo-app')
+# .setVersion('1.0.0')
+# .setDescription('Demo application showcasing HashLinks')
+# .setTags(['demo', 'counter', 'interactive'])
+# .setAuthor('0.0.123456')
+# .build();
+
+# client.initializeRegistries();
+# await client.createAssemblyTopic();
+
+# Register the assembly
+assembly_result = client.register_assembly(...)
+print('Assembly registered:', assemblyResult.id)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -116,6 +220,9 @@ assemblyBuilder.addAction(transferActionBuilder);
 
 Blocks are added to assemblies with action mappings and attributes:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 const counterBlockBuilder = new BlockBuilder()
   .setName('hashlink/counter')
@@ -132,6 +239,39 @@ const counterBlockBuilder = new BlockBuilder()
 
 assemblyBuilder.addBlock(counterBlockBuilder);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// const counterBlockBuilder = new BlockBuilder()
+// .setName('hashlink/counter')
+// .setTitle('Counter')
+// .setCategory('interactive')
+// .setTemplateTopicId('0.0.234567')
+// .addAttribute('count', 'number', 0)
+// .addAttribute('step', 'number', 1)
+// .addAttribute('label', 'string', 'Demo Counter')
+// .addAction('increment', '0.0.123456')
+// .addAction('decrement', '0.0.123456')
+// .addAction('reset', '0.0.123456')
+// .setTopicId('0.0.234567');
+
+// assemblyBuilder.AddBlock(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -204,6 +344,9 @@ await client.addBlockToAssembly(assemblyTopicId, {
 
 Assemblies are loaded and resolved from their topic IDs:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 client.initializeRegistries({
   action: '0.0.1234501',
@@ -230,6 +373,69 @@ assembly.blocks.forEach(block => {
   }
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// client.InitializeRegistries(ctx, ...)
+// action: '0.0.1234501',
+// assembly: '0.0.1234502',
+// });
+
+// Load assembly state
+assembly, err := client.LoadAssembly(ctx, "0.0.987654")
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// console.Log(ctx, ...)
+// console.Log(ctx, ...)
+// console.Log(ctx, ...)
+
+// Check for resolution errors
+// actions.ForEach(ctx, ...)
+// if (action.error) {
+// console.Error(ctx, ...)
+// });
+
+// blocks.ForEach(ctx, ...)
+// if (block.error) {
+// console.Error(ctx, ...)
+// });
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# client.initializeRegistries({
+# action: '0.0.1234501',
+# assembly: '0.0.1234502',
+# });
+
+# Load assembly state
+assembly = client.load_assembly(...)
+
+print('Assembly name:', assembly.state.name)
+print('Actions count:', assembly.actions.length)
+print('Blocks count:', assembly.blocks.length)
+
+# Check for resolution errors
+# assembly.actions.forEach(action => {
+if action.error:
+# console.error(`Action resolution error: ${action.error}`);
+# });
+
+# assembly.blocks.forEach(block => {
+if block.error:
+# console.error(`Block resolution error: ${block.error}`);
+# });
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 

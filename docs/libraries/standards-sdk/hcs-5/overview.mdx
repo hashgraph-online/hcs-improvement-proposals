@@ -89,6 +89,34 @@ fmt.Printf("Metadata: %s\n", result.Metadata) // hcs://1/<topicId>
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs5 import Hcs5Client
+
+
+client = Hcs5Client(
+    operator_id="0.0.123456",
+    operator_private_key="<private-key>",
+    network="testnet",
+)
+
+# Inscribe SVG and mint (ModeHashinal is the default)
+result = client.create_hashinal(
+    token_id="0.0.123456",
+    request={
+        "content": "PHN2ZyB4bWxucz0iaHR0cDovL3...",
+        "file_name": "hashinal.svg",
+        "mimetype": "image/svg+xml",
+        "name": "Demo Hashinal",
+        "description": "Minted with standards-sdk",
+    },
+)
+print(f"Metadata: {result['metadata']}")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Visual Overview
@@ -143,6 +171,13 @@ result, err := client.Mint(context.Background(), hcs5.MintOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+result = client.mint(token_id="0.0.123456", metadata_topic_id="0.0.654321")
+```
+
+</TabItem>
 </LanguageTabs>
 
 Or inscribe and mint in one step (recommended):
@@ -180,6 +215,13 @@ result, err := client.CreateHashinal(context.Background(), hcs5.CreateHashinalOp
 		Description: "Minted with standards-sdk-go",
 	},
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+result = client.create_hashinal(token_id="0.0.123456", request={"content": "PHN2ZyB4bWxucz0iaHR0cDovL3...", "file_name": "hashinal.svg", "mimetype": "image/svg+xml", "name": "Demo Hashinal", "description": "Minted with standards-sdk-go"})
 ```
 
 </TabItem>

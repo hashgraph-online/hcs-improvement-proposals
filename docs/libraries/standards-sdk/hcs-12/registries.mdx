@@ -25,6 +25,9 @@ The HCS-12 registry system provides decentralized discovery and management of ac
 
 Each registry type serves a specific purpose in the HashLinks ecosystem:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 enum RegistryType {
   ACTION = 0,        // WASM action modules
@@ -41,6 +44,27 @@ interface RegistryConfig {
   auditEnabled: boolean;        // Enable audit logging
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -249,6 +273,9 @@ console.log(`Swap-related HashLinks: ${swapHashLinks.length}`);
 
 Initialize all registries through the HCS12 client:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 import { HCS12Client, Logger } from '@hashgraphonline/standards-sdk';
 
@@ -269,6 +296,63 @@ client.initializeRegistries({
 await client.syncRegistries();
 console.log('Registry topics:', client.getRegistryTopicIds());
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+client, err := hcs12.NewClient(hcs12.ClientConfig{
+	Network: "testnet",
+	OperatorAccountID: os.Getenv("HEDERA_OPERATOR_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_OPERATOR_KEY"),
+	Logger: new Logger({ module: 'HCS12Client' }),
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+// Initialize all registries
+// client.InitializeRegistries(ctx, ...)
+// action: '0.0.456789',
+// assembly: '0.0.567890',
+// hashlinks: '0.0.678901',
+// });
+
+// client.SyncRegistries(ctx, ...)
+// console.Log(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs12 import Hcs12Client
+
+
+client = Hcs12Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_OPERATOR_ID"],
+    operator_private_key=os.environ["HEDERA_OPERATOR_KEY"],
+    logger=new Logger({ module: 'HCS12Client' }),
+)
+
+# Initialize all registries
+# client.initializeRegistries({
+# action: '0.0.456789',
+# assembly: '0.0.567890',
+# hashlinks: '0.0.678901',
+# });
+
+# await client.syncRegistries();
+print('Registry topics:', client.getRegistryTopicIds())
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Manual Registry Synchronization
 
@@ -305,6 +389,9 @@ await client.hashLinksRegistry?.sync();
 
 Optimal for frequently accessed data:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Configure memory-first strategy
 const cacheConfig = {
@@ -332,6 +419,52 @@ console.log('Cache statistics:', {
   missCount: cacheStats.missCount
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Configure memory-first strategy
+// const cacheConfig = {
+// strategy: 'memory-first',
+// memoryLimit: 50 * 1024 * 1024,  // 50MB memory cache
+// storageLimit: 200 * 1024 * 1024, // 200MB storage cache
+// ttl: {
+// action: 3600000,      // 1 hour
+// assembly: 1800000,    // 30 minutes
+// hashlinks: 7200000    // 2 hours
+// evictionPolicy: 'lru',  // Least Recently Used
+// compressionEnabled: true
+
+// Apply cache configuration
+// client.ConfigureRegistryCache(ctx, ...)
+
+// Cache statistics
+cacheStats, err := client.GetRegistryCacheStats(ctx, )
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+// console.Log(ctx, ...)
+// memoryUsage: cacheStats.memoryUsage,
+// storageUsage: cacheStats.storageUsage,
+// hitRate: cacheStats.hitRate,
+// missCount: cacheStats.missCount
+// });
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Configure memory-first strategy
+# const cacheConfig = {
+# strategy: 'memory-first',
+# memoryLimit: 50 * 1024 * 1024, 
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Hybrid Caching
 
@@ -455,6 +588,9 @@ const recommendations = await hashLinksRegistry.getRecommendations({
 
 Track all registry operations for compliance:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Enable comprehensive auditing
 const auditConfig = {
@@ -497,6 +633,57 @@ const complianceReport = await client.generateComplianceReport({
   format: 'pdf'
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Enable comprehensive auditing
+// const auditConfig = {
+// enabled: true,
+// logLevel: 'detailed',      // or 'basic', 'minimal'
+// includeContent: false,     // Don't log full content for privacy
+// retentionDays: 365,        // Keep audit logs for 1 year
+// exportFormat: 'json',      // or 'csv', 'xml'
+
+// client.ConfigureRegistryAudit(ctx, ...)
+
+// Query audit logs
+auditLogs, err := client.GetRegistryAuditLogs(ctx, { registry: "hashlinks", operation: ["register", "update"], dateRange: { from: new Date("2024-01-01"), to: new Date("2024-12-31") }, author: "0.0.123456", limit: 100 })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// console.Log(ctx, ...)
+// timestamp: log.timestamp,
+// operation: log.operation,
+// registry: log.registry,
+// itemId: log.itemId,
+// author: log.author,
+// success: log.success,
+// changes: log.changes
+// })));
+
+// Generate compliance report
+complianceReport, err := client.GenerateComplianceReport(ctx, { startDate: new Date("2024-01-01"), endDate: new Date("2024-12-31"), includeMetrics: true, format: "pdf" })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Enable comprehensive auditing
+# const auditConfig = {
+# enabled: true,
+# logLevel: 'detailed',     
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### Registry Analytics
 
@@ -543,6 +730,9 @@ Warning: Registry last sync was 2 hours ago, data may be stale
 ```
 
 **Solution**: Implement proper sync monitoring and retry logic
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Monitor sync health
 const syncMonitor = new RegistrySyncMonitor(client);
@@ -562,6 +752,54 @@ client.on('network_connected', async () => {
   await client.syncRegistries();
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Monitor sync health
+// const syncMonitor = new RegistrySyncMonitor(client);
+// syncMonitor.On(ctx, ...)
+// if (lagMinutes > 60) {
+// console.Warn(ctx, ...)
+
+// Force sync
+// if (registry === 'action') await client.actionRegistry?.sync();
+// if (registry === 'assembly') await client.assemblyRegistry?.sync();
+// if (registry === 'hashlinks') await client.hashLinksRegistry?.sync();
+// });
+
+// Auto-sync on network reconnect
+// client.On(ctx, ...)
+// client.SyncRegistries(ctx, ...)
+// });
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Monitor sync health
+sync_monitor = new RegistrySyncMonitor(client)
+# syncMonitor.on('sync_lag', async (registry, lagMinutes) => {
+if lagMinutes > 60:
+# console.warn(`Registry ${registry} lag detected: ${lagMinutes} minutes`);
+
+# Force sync
+# if (registry === 'action') await client.actionRegistry?.sync();
+# if (registry === 'assembly') await client.assemblyRegistry?.sync();
+# if (registry === 'hashlinks') await client.hashLinksRegistry?.sync();
+# });
+
+# Auto-sync on network reconnect
+# client.on('network_connected', async () => {
+# await client.syncRegistries();
+# });
+```
+
+</TabItem>
+</LanguageTabs>
 
 ### 2. Cache Memory Issues
 

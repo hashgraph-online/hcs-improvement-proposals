@@ -51,6 +51,17 @@ receipt, err := response.GetReceipt(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs10.build_create_topic_tx(topic_type=hcs10.TOPIC_TYPE_INBOUND, account_id="0.0.1204", ttl=90)
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create Outbound Topic
@@ -73,6 +84,13 @@ tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
 	TopicType: hcs10.TopicTypeOutbound,
 	TTL:       90,
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs10.build_create_topic_tx(topic_type=hcs10.TOPIC_TYPE_OUTBOUND, ttl=90)
 ```
 
 </TabItem>
@@ -107,6 +125,13 @@ tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs10.build_create_topic_tx(topic_type=hcs10.TOPIC_TYPE_CONNECTION, ttl=30, inbound_topic_id="0.0.5001", connection_id=42)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create Registry Topic
@@ -133,6 +158,13 @@ tx, err := hcs10.BuildCreateTopicTx(hcs10.CreateTopicTxParams{
 	TTL:             365,
 	MetadataTopicID: "0.0.6001",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs10.build_create_topic_tx(topic_type=hcs10.TOPIC_TYPE_REGISTRY, ttl=365, metadata_topic_id="0.0.6001")
 ```
 
 </TabItem>
@@ -169,6 +201,17 @@ response, err := tx.Execute(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs10.build_connection_request_message("0.0.5001@0.0.1204", "Request outbound agent link")
+
+tx = hcs10.build_submit_message_tx("0.0.5001", msg)
+
+response = tx.execute(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Send Connection Message
@@ -201,6 +244,15 @@ tx, err := hcs10.BuildSubmitMessageTx("0.0.7001", msg, "")
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs10.build_message_payload("0.0.5001@0.0.1204", `{"subject":"hello","body":"invite"}`)
+
+tx = hcs10.build_submit_message_tx("0.0.7001", msg)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Register Account
@@ -228,6 +280,15 @@ tx, err := hcs10.BuildSubmitMessageTx("0.0.9601", msg, "")
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs10.build_registry_register_message("0.0.1204", "0.0.5001")
+
+tx = hcs10.build_submit_message_tx("0.0.9601", msg)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Delete Registry Entry
@@ -252,6 +313,15 @@ await (await tx.execute(client)).getReceipt(client);
 msg := hcs10.BuildRegistryDeleteMessage("connection:42", "")
 
 tx, err := hcs10.BuildSubmitMessageTx("0.0.9601", msg, "")
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+msg = hcs10.build_registry_delete_message("connection:42")
+
+tx = hcs10.build_submit_message_tx("0.0.9601", msg)
 ```
 
 </TabItem>

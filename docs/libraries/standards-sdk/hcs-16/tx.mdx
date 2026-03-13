@@ -44,6 +44,14 @@ tx, err := hcs16.BuildCreateFloraTopicTx(hcs16.CreateFloraTopicOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs16.build_create_flora_topic_tx(flora_account_id="0.0.500", topic_type=hcs16.FLORA_TOPIC_TYPE_COMMUNICATION,
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create Flora Account
@@ -68,6 +76,15 @@ const tx = buildHcs16CreateAccountTx({
 keyList := hedera.KeyListWithThreshold(2).Add(key1.PublicKey()).Add(key2.PublicKey())
 
 tx, err := hcs16.BuildCreateFloraAccountTx(keyList, 5.0, -1, "flora account")
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+keyList = hedera.key_list_with_threshold(2).Add(key1.PublicKey()).Add(key2.PublicKey())
+
+tx = hcs16.build_create_flora_account_tx(keyList, 5.0, -1, "flora account")
 ```
 
 </TabItem>
@@ -103,6 +120,13 @@ tx, err := hcs16.BuildMessageTx(
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs16.build_message_tx("0.0.600", "0.0.123", hcs16.FLORA_OPERATION_TRANSACTION, map[string]any{"schedule_id": "0.0.12345"})
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Flora Created
@@ -123,6 +147,13 @@ tx, err := hcs16.BuildFloraCreatedTx("0.0.600", "0.0.123", "0.0.500", hcs16.Flor
 	Transaction:   "0.0.602",
 	State:         "0.0.603",
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs16.build_flora_created_tx("0.0.600", "0.0.123", "0.0.500", communication="0.0.601", transaction="0.0.602", state="0.0.603")
 ```
 
 </TabItem>
@@ -155,6 +186,14 @@ tx, err := hcs16.BuildStateUpdateTx(
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+epoch = int64(1)
+tx = hcs16.build_state_update_tx("0.0.603","0.0.123","hash123","0.0.500","state memo","",
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Join Request / Vote / Accepted
@@ -181,6 +220,21 @@ tx, _ := hcs16.BuildFloraJoinVoteTx("0.0.601", "0.0.123", "0.0.456", true, 1, 1)
 // Join Accepted
 epoch := int64(2)
 tx, _ := hcs16.BuildFloraJoinAcceptedTx("0.0.601", "0.0.123", []string{"0.0.456"}, &epoch)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Join Request
+tx = hcs16.build_flora_join_request_tx("0.0.601", "0.0.123", "0.0.456", 1, "0.0.700", 1)
+
+# Join Vote
+tx = hcs16.build_flora_join_vote_tx("0.0.601", "0.0.123", "0.0.456", True, 1, 1)
+
+# Join Accepted
+epoch = int64(2)
+tx = hcs16.build_flora_join_accepted_tx("0.0.601", "0.0.123", [], epoch)
 ```
 
 </TabItem>

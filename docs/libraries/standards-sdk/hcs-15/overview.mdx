@@ -100,6 +100,19 @@ fmt.Printf("Base: %s, Petal: %s\n", base.AccountID, petal.AccountID)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+client = Hcs15Client(operator_id="0.0.123456", operator_private_key="<private-key>", network="testnet")
+
+base = client.create_base_account(initial_balance_hbar=10)
+
+petal = client.create_petal_account(base_private_key=base.PRIVATE_KEY_RAW)
+fmt.printf("Base: %s, Petal: %s\n", base.ACCOUNT_I_D, petal.ACCOUNT_I_D)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## FAQ

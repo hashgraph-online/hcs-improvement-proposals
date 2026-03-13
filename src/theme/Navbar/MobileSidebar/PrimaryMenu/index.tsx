@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {useThemeConfig} from '@docusaurus/theme-common';
 import {useNavbarMobileSidebar} from '@docusaurus/theme-common/internal';
 import Link from '@docusaurus/Link';
-import {useLocation} from '@docusaurus/router';
 
 const HOL_ORIGINS = ['https://hol.org', 'https://www.hol.org'];
 
@@ -22,7 +21,6 @@ function isExternalUrl(url: string): boolean {
 export default function NavbarMobilePrimaryMenu(): JSX.Element {
   const mobileSidebar = useNavbarMobileSidebar();
   const items = useThemeConfig().navbar.items;
-  const {pathname} = useLocation();
   const [expandedItems, setExpandedItems] = useState<Record<number, boolean>>({});
 
   const toggleItem = (index: number) => {
@@ -34,7 +32,6 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
 
   return (
     <div className="px-4 py-3 flex flex-col gap-1">
-      {/* Search bar */}
       <div className="mb-3">
         <div className="relative">
           <input
@@ -57,9 +54,7 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
         </div>
       </div>
 
-      {/* Navigation items */}
       {items.map((item: any, index: number) => {
-        // Handle dropdown items
         if (item.type === 'dropdown' && item.items) {
           const isExpanded = expandedItems[index];
           
@@ -82,65 +77,63 @@ export default function NavbarMobilePrimaryMenu(): JSX.Element {
                   />
                 </svg>
               </button>
-              
-              {/* Dropdown content */}
-              <div className={`overflow-hidden transition-all duration-200 ease-in-out ${isExpanded ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
-                {item.items.map((subItem: any, subIndex: number) => {
-                  if (subItem.type === 'html' && subItem.className === 'navbar-dropdown-header') {
+              {isExpanded ? (
+                <div>
+                  {item.items.map((subItem: any, subIndex: number) => {
+                    if (subItem.type === 'html' && subItem.className === 'navbar-dropdown-header') {
+                      return (
+                        <div
+                          key={subIndex}
+                          className="px-3 py-2 text-xs font-['Roboto_Mono'] font-bold text-white/50 uppercase tracking-wider mt-2 first:mt-0"
+                        >
+                          {subItem.label || subItem.value}
+                        </div>
+                      );
+                    }
+
+                    const linkClass = "block !px-3 !py-2 !pl-6 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-colors !duration-150 hover:!bg-white/10 hover:!text-white";
+
+                    const url = subItem.href || subItem.to;
+                    if (!url) return null;
+
+                    const isAbsoluteUrl = url.startsWith('http');
+                    const isExternal = isExternalUrl(url);
+
+                    if (isAbsoluteUrl) {
+                      return (
+                        <a
+                          key={subIndex}
+                          href={url}
+                          className={linkClass}
+                          target={isExternal ? '_blank' : '_self'}
+                          rel={isExternal ? 'noopener noreferrer' : undefined}
+                          onClick={() => {
+                            setTimeout(() => mobileSidebar.toggle(), 50);
+                          }}
+                        >
+                          {subItem.label}
+                        </a>
+                      );
+                    }
+
                     return (
-                      <div
+                      <Link
                         key={subIndex}
-                        className="px-3 py-2 text-xs font-['Roboto_Mono'] font-bold text-white/50 uppercase tracking-wider mt-2 first:mt-0"
-                      >
-                        {subItem.label || subItem.value}
-                      </div>
-                    );
-                  }
-
-                  const linkClass = "block !px-3 !py-2 !pl-6 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
-
-                  // Determine the destination URL
-                  const url = subItem.href || subItem.to;
-                  if (!url) return null;
-
-                  const isAbsoluteUrl = url.startsWith('http');
-                  const isExternal = isExternalUrl(url);
-
-                  if (isAbsoluteUrl) {
-                    return (
-                      <a
-                        key={subIndex}
-                        href={url}
+                        to={url}
                         className={linkClass}
-                        target={isExternal ? '_blank' : '_self'}
-                        rel={isExternal ? 'noopener noreferrer' : undefined}
-                        onClick={() => {
-                          setTimeout(() => mobileSidebar.toggle(), 50);
-                        }}
+                        onClick={() => mobileSidebar.toggle()}
                       >
                         {subItem.label}
-                      </a>
+                      </Link>
                     );
-                  }
-
-                  return (
-                    <Link
-                      key={subIndex}
-                      to={url}
-                      className={linkClass}
-                      onClick={() => mobileSidebar.toggle()}
-                    >
-                      {subItem.label}
-                    </Link>
-                  );
-                })}
-              </div>
+                  })}
+                </div>
+              ) : null}
             </div>
           );
         }
 
-        // Handle regular link items
-        const linkClass = "block !px-3 !py-2 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-all !duration-150 hover:!bg-white/10 hover:!text-white";
+        const linkClass = "block !px-3 !py-2 !rounded-md !text-white/95 !font-['Roboto_Mono'] !text-[14px] !no-underline hover:!no-underline !transition-colors !duration-150 hover:!bg-white/10 hover:!text-white";
 
         const url = item.href || item.to;
         if (!url) return null;

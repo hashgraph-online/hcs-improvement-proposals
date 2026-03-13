@@ -134,6 +134,19 @@ if err != nil {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# import "log"
+
+# Create an indexed registry (default)
+indexedResult = client.create_registry(registry_type=Hcs2RegistryType.INDEXED, ttl=86400)
+
+# Create a non-indexed registry
+nonIndexedResult = client.create_registry(registry_type=Hcs2RegistryType.NON_INDEXED, ttl=86400)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Getting Started
@@ -152,6 +165,13 @@ npm install @hashgraphonline/standards-sdk
 
 ```bash
 go get github.com/hashgraph-online/standards-sdk-go@latest
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+pip install standards-sdk-py
 ```
 
 </TabItem>
@@ -217,6 +237,21 @@ if err != nil {
 :::tip
 The Go SDK also supports environment variable auto-loading. Set `HEDERA_ACCOUNT_ID`, `HEDERA_PRIVATE_KEY`, and `HEDERA_NETWORK` in a `.env` file and the SDK will pick them up automatically.
 :::
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs2 import Hcs2Client
+
+
+client = Hcs2Client(
+    operator_id="0.0.1234",
+    operator_private_key="<private-key>",
+    network="testnet",
+)
+```
 
 </TabItem>
 </LanguageTabs>
@@ -290,6 +325,18 @@ nonIndexedResult, err := client.CreateRegistry(context.Background(), hcs2.Create
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+result = client.create_registry(registry_type=Hcs2RegistryType.INDEXED, ttl=3600, use_operator_as_admin=True, use_operator_as_submit=True)
+
+fmt.printf("Registry created with topic ID: %s\n", result.topic_id)
+
+# Create a non-indexed registry
+nonIndexedResult = client.create_registry(registry_type=Hcs2RegistryType.NON_INDEXED, ttl=3600)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ### 2. Registering Entries
@@ -346,6 +393,17 @@ if err != nil {
 }
 
 fmt.Printf("Entry registered. Sequence number: %d\n", registerResult.SequenceNumber)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+registry_topic_id = "0.0.12345"
+
+registerResult = client.register_entry(registryTopicID, target_topic_id="0.0.67890", metadata="https://example.com/metadata.json", memo="Initial registration")
+
+fmt.printf("Entry registered. Sequence number: %d\n", register_result.SEQUENCE_NUMBER)
 ```
 
 </TabItem>
@@ -408,6 +466,16 @@ fmt.Printf("Entry updated. New sequence number: %d\n", updateResult.SequenceNumb
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# This only works with indexed registries
+updateResult = client.update_entry(registryTopicID, uid="1", target_topic_id="0.0.98765", metadata="https://example.com/new-metadata.json", memo="Updated registration")
+
+fmt.printf("Entry updated. New sequence number: %d\n", update_result.SEQUENCE_NUMBER)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ### 4. Deleting Entries
@@ -460,6 +528,16 @@ if err != nil {
 }
 
 fmt.Printf("Entry deleted. Sequence number: %d\n", deleteResult.SequenceNumber)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# This only works with indexed registries
+deleteResult = client.delete_entry(registryTopicID, uid="1", memo="Entry deleted")
+
+fmt.printf("Entry deleted. Sequence number: %d\n", delete_result.SEQUENCE_NUMBER)
 ```
 
 </TabItem>
@@ -525,6 +603,18 @@ fmt.Printf("Registry migrated to: %s\n", newRegistryTopicID)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+old_registry_topic_id = "0.0.12345"
+new_registry_topic_id = "0.0.67890"
+
+migrateResult = client.migrate_registry(oldRegistryTopicID, target_topic_id=newRegistryTopicID, memo="Migrating to new registry topic")
+
+fmt.printf("Registry migrated to: %s\n", newRegistryTopicID)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Querying Registries
@@ -573,6 +663,17 @@ for _, entry := range registry.Entries {
 ```
 
 For non-indexed registries, only the latest entry per topic is returned.
+
+</TabItem>
+<TabItem value="python">
+
+```python
+registry = client.get_registry(registryTopicID)
+
+fmt.printf("Registry type: %d, entries: %d\n", registry.REGISTRY_TYPE, len(registry.Entries))
+for entry in registry.Entries :
+fmt.printf(" Topic: %s, Seq: %d\n", entry.Message.TopicID, entry.SEQUENCE)
+```
 
 </TabItem>
 </LanguageTabs>
@@ -798,6 +899,15 @@ type ClientConfig struct {
 	MirrorBaseURL      string
 	MirrorAPIKey       string
 }
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs2 import Hcs2Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

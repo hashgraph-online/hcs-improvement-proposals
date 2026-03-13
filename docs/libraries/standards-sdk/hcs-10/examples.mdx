@@ -112,6 +112,9 @@ const bobMessage = {
 - Verifies topic custom fees via Mirror Node queries
 
 **Fee configuration:**
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Bar requires 1 HBAR fee for connections
 monitorIncomingRequests(
@@ -122,6 +125,27 @@ monitorIncomingRequests(
   new FeeConfigBuilder({ network: 'testnet', logger }).addHbarFee(1, bar.accountId)
 );
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 **Message exchange:**
 ```typescript
@@ -152,6 +176,9 @@ const responsePayload = { response: 'Acknowledged fee-based message from Foo!' }
 - Demonstrates the approval-required transaction workflow
 
 **Transaction creation:**
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 function createApprovalTransaction(fooAccountId: string, barAccountId: string, amount: number) {
   return new TransferTransaction()
@@ -160,6 +187,30 @@ function createApprovalTransaction(fooAccountId: string, barAccountId: string, a
     .addHbarTransfer('0.0.98', Hbar.fromTinybars(amount)); // Treasury
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+// function createApprovalTransaction(fooAccountId: string, barAccountId: string, amount: number) {
+// return new TransferTransaction()
+// Hbar.FromTinybars(ctx, ...)
+// Hbar.FromTinybars(ctx, ...)
+// Hbar.FromTinybars(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 **Transaction approval process:**
 ```typescript
@@ -195,6 +246,9 @@ const scheduleSignTx = await new ScheduleSignTransaction()
 - Demonstrates basic usage of the ConnectionsManager utility class
 
 **Code structure:**
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 const connectionsManager = new ConnectionsManager({
   baseClient: new HCS10Client({
@@ -207,6 +261,49 @@ const connectionsManager = new ConnectionsManager({
 const connections = await connectionsManager.fetchConnectionData(operatorId);
 console.log(connections);
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+client, err := hcs10.NewClient(hcs10.ClientConfig{
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("BOB_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("BOB_PRIVATE_KEY"),
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+// ConnectionsManager is TypeScript-only.
+// In Go, query messages directly via the client.
+msgs, err := client.GetMessageStream(ctx, inboundTopicID)
+if err != nil {
+	log.Fatal(err)
+}
+fmt.Println(msgs)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs10 import Hcs10Client
+from standards_sdk_py.shared.http import SyncHttpTransport
+
+transport = SyncHttpTransport(base_url="https://moonscape.tech")
+client = Hcs10Client(transport)
+
+# ConnectionsManager is TypeScript-only.
+# In Python, use client methods directly.
+connections = client.fetch_connection_data(account_id="0.0.123456")
+print(connections)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 
@@ -233,6 +330,9 @@ console.log(connections);
   - **Transactions:** `transact: 0.5` (creates multi-sig transaction)
 
 **Command processing examples:**
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Math calculation
 if (lowerContent.startsWith('calc:')) {
@@ -254,6 +354,53 @@ else if (lowerContent.startsWith('transact:')) {
 }
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"strings"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+)
+
+// Math calculation
+if strings.HasPrefix(lowerContent, "calc:") {
+	expression := strings.TrimSpace(content[strings.Index(content, ":")+1:])
+	result := evaluateMathExpression(expression)
+	response = fmt.Sprintf("📊 %s = %s", expression, result)
+}
+
+// ASCII art generation
+if strings.HasPrefix(lowerContent, "draw:") {
+	artType := strings.TrimSpace(content[strings.Index(content, ":")+1:])
+	response = fmt.Sprintf("Here's your %s ASCII art:\n%s", artType, generateASCIIArt(artType))
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Math calculation
+if lower_content.startswith("calc:"):
+    expression = strip_ansi_codes(message_content)[message_content.find(":") + 1:].strip()
+    result = evaluate_math_expression(expression)
+    response = f"📊 {expression} = {result}"
+
+# ASCII art generation
+elif lower_content.startswith("draw:"):
+    art_type = message_content[message_content.find(":") + 1:].strip()
+    response = f"Here's your {art_type} ASCII art:\n{generate_ascii_art(art_type)}"
+
+# Transaction creation
+elif lower_content.startswith("transact:"):
+    transaction = create_approval_transaction(sender_account_id, agent_account_id, amount)
+    client.send_transaction(connection_topic_id, transaction, description)
+```
+
+</TabItem>
+</LanguageTabs>
+
 ---
 
 ## 6. AI Transaction Agent (`transact-agent.ts`)
@@ -272,6 +419,9 @@ else if (lowerContent.startsWith('transact:')) {
 - Sends AI-generated responses and transaction proposals back to users
 
 **AI integration:**
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 // Initialize AI agent with OpenAI
 const hederaAgent = new HederaConversationalAgent(agentSigner, {
@@ -299,6 +449,64 @@ if (response.transactionBytes) {
   await agent.client.sendTransaction(connectionTopicId, transaction, reply);
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+// Initialize AI agent with OpenAI
+// const hederaAgent = new HederaConversationalAgent(agentSigner, {
+// operationalMode: 'provideBytes',
+// userAccountId,
+// verbose: false,
+// openAIApiKey: process.env.OPENAI_API_KEY,
+// scheduleUserTransactionsInBytesMode: false,
+// });
+
+// Process user message with AI
+response, err := hederaAgent.ProcessMessage(ctx, messageContent)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// Handle different response types
+// if (response.output && !response?.transactionBytes) {
+// Send text response
+// client.SendMessage(ctx, ...)
+
+// if (response.transactionBytes) {
+// Send transaction for approval
+transaction, err := ScheduleCreateTransaction.FromBytes(ctx, Buffer.from(response.transactionBytes, "base64"))
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+// client.SendTransaction(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Initialize AI agent with OpenAI
+# HederaConversationalAgent is TypeScript-only (hedera-agent-kit).
+# In Python, use the HCS-10 client methods directly.
+
+# Process user message with AI
+response = hedera_agent.process_message(message_content)
+
+# Handle different response types
+if response.get("output") and not response.get("transactionBytes"):
+    # Send text response
+    client.send_message(connection_topic_id, response["output"])
+
+if response.get("transactionBytes"):
+    # Send transaction for approval
+    client.send_transaction(connection_topic_id, transaction, reply)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 

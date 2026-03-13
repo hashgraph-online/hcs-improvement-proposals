@@ -56,4 +56,28 @@ res, err := client.CreateAndInscribeProfile(ctx, profile, true)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs11 import Hcs11Client
+
+
+client = Hcs11Client(
+    network="testnet",
+    operator_id="0.0.123",
+    operator_private_key="302e…",
+)
+
+profile = hcs11.new_agent_builder().)
+# SetName("Agent").
+# SetBio("Demo").
+# SetCapabilities([][]).
+# SetInboundTopicType("public").
+# Build()
+
+res = client.create_and_inscribe_profile(profile, True)
+```
+
+</TabItem>
 </LanguageTabs>
