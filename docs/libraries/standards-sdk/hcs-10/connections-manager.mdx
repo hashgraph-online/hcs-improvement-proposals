@@ -142,14 +142,20 @@ async function showInbox() {
 <TabItem value="go">
 
 ```go
-
 import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
 
 client, err := hcs10.NewClient(hcs10.ClientConfig{
-	BaseClient: client });,
-	Pending: ', pending.map(c => c.targetAccountId));,
-	Active: ', established.map(c => c.targetAccountId));,
-	Closed: ', closed.map(c => c.targetAccountId));,
+	OperatorAccountID:  "0.0.123456",
+	OperatorPrivateKey: "KEY",
+	Network:            "testnet",
+})
+if err != nil {
+	log.Fatal(err)
+}
+
+// ConnectionsManager is a TypeScript-only helper.
+// In Go, use the client methods directly to manage connections.
+connections, err := client.GetMessageStream(ctx, inboundTopicID)
 if err != nil {
 	log.Fatal(err)
 }
@@ -159,15 +165,22 @@ if err != nil {
 <TabItem value="python">
 
 ```python
-import os
 from standards_sdk_py.hcs10 import Hcs10Client
+from standards_sdk_py.shared.http import SyncHttpTransport
 
+transport = SyncHttpTransport(base_url="https://moonscape.tech")
+client = Hcs10Client(transport)
 
-client = Hcs10Client(
-    base_client=client });,
-    pending=', pending.map(c => c.targetAccountId));,
-    active=', established.map(c => c.targetAccountId));,
-    closed=', closed.map(c => c.targetAccountId));,
+# ConnectionsManager is a TypeScript-only helper.
+# In Python, use the client methods directly to manage connections.
+connections = client.fetch_connection_data(account_id="0.0.123456")
+pending = [c for c in connections if c["status"] == "pending"]
+active = [c for c in connections if c["status"] == "established"]
+closed = [c for c in connections if c["status"] == "closed"]
+
+print("Pending:", [c["targetAccountId"] for c in pending])
+print("Active:", [c["targetAccountId"] for c in active])
+print("Closed:", [c["targetAccountId"] for c in closed])
 ```
 
 </TabItem>

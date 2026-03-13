@@ -266,42 +266,39 @@ console.log(connections);
 <TabItem value="go">
 
 ```go
-
 import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
-// const connectionsManager = new ConnectionsManager({
+
 client, err := hcs10.NewClient(hcs10.ClientConfig{
-	Network: "testnet",
-	OperatorAccountID: os.Getenv("BOB_ACCOUNT_ID"),
+	Network:            "testnet",
+	OperatorAccountID:  os.Getenv("BOB_ACCOUNT_ID"),
 	OperatorPrivateKey: os.Getenv("BOB_PRIVATE_KEY"),
 })
 if err != nil {
 	log.Fatal(err)
 }
-// });
 
-connections, err := connectionsManager.FetchConnectionData(ctx, operatorId)
+// ConnectionsManager is TypeScript-only.
+// In Go, query messages directly via the client.
+msgs, err := client.GetMessageStream(ctx, inboundTopicID)
 if err != nil {
-	log.Fatalf("failed: %v", err)
+	log.Fatal(err)
 }
-// console.Log(ctx, ...)
+fmt.Println(msgs)
 ```
 
 </TabItem>
 <TabItem value="python">
 
 ```python
-import os
 from standards_sdk_py.hcs10 import Hcs10Client
+from standards_sdk_py.shared.http import SyncHttpTransport
 
-# const connectionsManager = new ConnectionsManager({
-client = Hcs10Client(
-    network="testnet",
-    operator_id=os.environ["BOB_ACCOUNT_ID"],
-    operator_private_key=os.environ["BOB_PRIVATE_KEY"],
-)
-# });
+transport = SyncHttpTransport(base_url="https://moonscape.tech")
+client = Hcs10Client(transport)
 
-connections = connections_manager.fetch_connection_data(...)
+# ConnectionsManager is TypeScript-only.
+# In Python, use client methods directly.
+connections = client.fetch_connection_data(account_id="0.0.123456")
 print(connections)
 ```
 
@@ -361,25 +358,23 @@ else if (lowerContent.startsWith('transact:')) {
 <TabItem value="go">
 
 ```go
-import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+import (
+	"strings"
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+)
+
 // Math calculation
-// if (lowerContent.startsWith('calc:')) {
-// const expression = stripAnsiCodes(messageContent).substring(messageContent.indexOf(':') + 1).trim();
-// const result = evaluateMathExpression(expression);
-// response = `📊 ${expression} = ${result}`;
+if strings.HasPrefix(lowerContent, "calc:") {
+	expression := strings.TrimSpace(content[strings.Index(content, ":")+1:])
+	result := evaluateMathExpression(expression)
+	response = fmt.Sprintf("📊 %s = %s", expression, result)
+}
 
 // ASCII art generation
-// lowerContent.StartsWith(ctx, ...)
-artType, err := messageContent.Substring(ctx, messageContent.indexOf(":") + 1).trim()
-if err != nil {
-	log.Fatalf("failed: %v", err)
+if strings.HasPrefix(lowerContent, "draw:") {
+	artType := strings.TrimSpace(content[strings.Index(content, ":")+1:])
+	response = fmt.Sprintf("Here's your %s ASCII art:\n%s", artType, generateASCIIArt(artType))
 }
-// response = `Here's your ${artType} ASCII art:\n${generateASCIIArt(artType)}`;
-
-// Transaction creation
-// lowerContent.StartsWith(ctx, ...)
-// const transaction = createApprovalTransaction(senderAccountId, agent.accountId, amount);
-// client.SendTransaction(ctx, ...)
 ```
 
 </TabItem>
@@ -387,20 +382,20 @@ if err != nil {
 
 ```python
 # Math calculation
-if lowerContent.startsWith('calc:'):
-expression = stripAnsiCodes(messageContent).substring(messageContent.indexOf(":") + 1).trim()
-result = evaluateMathExpression(expression)
-# response = `📊 ${expression} = ${result}`;
+if lower_content.startswith("calc:"):
+    expression = strip_ansi_codes(message_content)[message_content.find(":") + 1:].strip()
+    result = evaluate_math_expression(expression)
+    response = f"📊 {expression} = {result}"
 
 # ASCII art generation
-# else if (lowerContent.startsWith('draw:')) {
-art_type = message_content.substring(...)
-# response = `Here's your ${artType} ASCII art:\n${generateASCIIArt(artType)}`;
+elif lower_content.startswith("draw:"):
+    art_type = message_content[message_content.find(":") + 1:].strip()
+    response = f"Here's your {art_type} ASCII art:\n{generate_ascii_art(art_type)}"
 
 # Transaction creation
-# else if (lowerContent.startsWith('transact:')) {
-transaction = createApprovalTransaction(senderAccountId, agent.accountId, amount)
-# await agent.client.sendTransaction(connectionTopicId, transaction, description, options);
+elif lower_content.startswith("transact:"):
+    transaction = create_approval_transaction(sender_account_id, agent_account_id, amount)
+    client.send_transaction(connection_topic_id, transaction, description)
 ```
 
 </TabItem>
@@ -494,26 +489,20 @@ if err != nil {
 
 ```python
 # Initialize AI agent with OpenAI
-# const hederaAgent = new HederaConversationalAgent(agentSigner, {
-# operationalMode: 'provideBytes',
-# userAccountId,
-# verbose: false,
-# openAIApiKey: process.env.OPENAI_API_KEY,
-# scheduleUserTransactionsInBytesMode: false,
-# });
+# HederaConversationalAgent is TypeScript-only (hedera-agent-kit).
+# In Python, use the HCS-10 client methods directly.
 
 # Process user message with AI
-response = hedera_agent.process_message(...)
+response = hedera_agent.process_message(message_content)
 
 # Handle different response types
-if response.output && !response?.transactionBytes:
-# Send text response
-# await agent.client.sendMessage(connectionTopicId, response.output);
+if response.get("output") and not response.get("transactionBytes"):
+    # Send text response
+    client.send_message(connection_topic_id, response["output"])
 
-if response.transactionBytes:
-# Send transaction for approval
-transaction = schedule_create_transaction.from_bytes(...)
-# await agent.client.sendTransaction(connectionTopicId, transaction, reply);
+if response.get("transactionBytes"):
+    # Send transaction for approval
+    client.send_transaction(connection_topic_id, transaction, reply)
 ```
 
 </TabItem>

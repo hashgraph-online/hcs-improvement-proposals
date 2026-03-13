@@ -758,27 +758,30 @@ fmt.Println(jsonStr)
 <TabItem value="python">
 
 ```python
-import os
 from standards_sdk_py.hcs11 import Hcs11Client
+from standards_sdk_py.shared.http import SyncHttpTransport
 
-
-client = Hcs11Client(
-    network="testnet",
-    auth=hcs11.Auth{,
-    operator_id="0.0.123456",
-    private_key="<private-key>",
-)
+transport = SyncHttpTransport(base_url="https://moonscape.tech")
+client = Hcs11Client(transport)
 
 # Create an AI agent profile
-profile = client.create_a_i_agent_profile("Market Analysis Agent", hcs11.A_I_AGENT_TYPE_AUTONOMOUS, []{hcs11.AIAgentCapabilityMarketIntelligence, hcs11.AIAgentCapabilityDataIntegration}, "GPT-4", map[string]any{ "bio": "Advanced AI for market analysis", "creator": "Hashgraph Online", })
+profile = client.create_ai_agent_profile(
+    name="Market Analysis Agent",
+    agent_type="autonomous",
+    capabilities=["market_intelligence", "data_integration"],
+    model="GPT-4",
+    bio="Advanced AI for market analysis",
+    creator="Hashgraph Online",
+)
 
 # Validate the profile
-validationResult = client.validate_profile(profile)
-fmt.printf("Valid: %v, Errors: %v\n", validation_result.VALID, validation_result.ERRORS)
+validation_result = client.validate_profile(profile)
+print(f"Valid: {validation_result['valid']}, Errors: {validation_result['errors']}")
 
 # Convert to JSON
-jsonStr = client.profile_to_j_s_o_n_string(profile)
-fmt.println(jsonStr)
+import json
+json_str = json.dumps(profile, indent=2)
+print(json_str)
 ```
 
 </TabItem>
