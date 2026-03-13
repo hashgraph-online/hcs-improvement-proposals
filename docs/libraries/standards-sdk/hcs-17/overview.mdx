@@ -127,6 +127,19 @@ fmt.Printf("State Hash: %s\n", result.StateHash)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+client = Hcs17Client(operator_id="0.0.123456", operator_private_key="<private-key>", network="testnet")
+
+topicID = client.create_state_topic(ttl=86400)
+
+result = client.compute_and_publish(account_id="0.0.123456", topics=[][], publish_topic_id=topicID, memo="state snapshot")
+fmt.printf("State Hash: %s\n", result.STATE_HASH)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## FAQ

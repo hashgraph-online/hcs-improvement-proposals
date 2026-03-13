@@ -117,6 +117,9 @@ type Connection = {
 
 ## Tangible Example: Multi-Agent Inbox
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 import { HCS10Client, ConnectionsManager } from '@hashgraphonline/standards-sdk';
 
@@ -134,6 +137,41 @@ async function showInbox() {
   console.log('Closed:', closed.map(c => c.targetAccountId));
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs10"
+
+client, err := hcs10.NewClient(hcs10.ClientConfig{
+	BaseClient: client });,
+	Pending: ', pending.map(c => c.targetAccountId));,
+	Active: ', established.map(c => c.targetAccountId));,
+	Closed: ', closed.map(c => c.targetAccountId));,
+if err != nil {
+	log.Fatal(err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs10 import Hcs10Client
+
+
+client = Hcs10Client(
+    base_client=client });,
+    pending=', pending.map(c => c.targetAccountId));,
+    active=', established.map(c => c.targetAccountId));,
+    closed=', closed.map(c => c.targetAccountId));,
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 

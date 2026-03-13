@@ -48,6 +48,22 @@ client, err := hcs18.NewClient(hcs18.ClientConfig{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs18 import Hcs18Client
+
+
+
+client = Hcs18Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create Discovery Topic (when you’re bootstrapping)
@@ -66,6 +82,13 @@ const { topicId } = await client.createDiscoveryTopic({ ttlSeconds: 300 });
 topicID, _, err := client.CreateDiscoveryTopic(ctx, hcs18.CreateDiscoveryTopicOptions{
 	TTLSeconds: 300,
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+client.create_discovery_topic(ttl_seconds=300)
 ```
 
 </TabItem>
@@ -104,6 +127,15 @@ _, err = client.Announce(ctx, topicID, hcs18.AnnounceData{
 	},
 	ValidFor: 10000,
 }, "ready")
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+client.announce(topicID, account=os.environ["HEDERA_ACCOUNT_ID"], petal={"name": "Petal-A", "priority": 700}, capabilities={"protocols": [][], }, valid_for=10000, "ready")
 ```
 
 </TabItem>
@@ -158,6 +190,18 @@ _, err = client.Respond(ctx, topicID, hcs18.RespondData{
 	ProposalSeq: proposalSeq,
 	Decision:    "accept",
 }, "")
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+receipt = client.propose(topicID, proposer="0.0.123", members=[]{"account": "0.0.123", "priority": 700}, {Account: "0.0.456", Priority: 600, AnnounceSeq: 101}, }, config={"name": "Demo Flora", "threshold": 2, "purpose": "testing"})
+
+# Get proposalSeq from mirror node later or use placeholder
+proposal_seq = int64(42)
+
+client.respond(topicID, responder="0.0.456", proposal_seq=proposalSeq, decision="accept")
 ```
 
 </TabItem>
@@ -227,6 +271,25 @@ _, err = client.Complete(ctx, topicID, hcs18.CompleteData{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+
+# After enough acceptances, create the Flora and emit `complete`
+hcs16Client = Hcs16Client(network="testnet", operator_id=os.environ["HEDERA_ACCOUNT_ID"], operator_private_key=os.environ["HEDERA_PRIVATE_KEY"])
+
+# Flora creation omitted for brevity, assuming we get back an account and topics:
+flora_account = "0.0.789"
+c_topic = "0.0.101"
+t_topic = "0.0.102"
+s_topic = "0.0.103"
+
+client.complete(topicID, proposer="0.0.123", proposal_seq=proposalSeq, flora_account=floraAccount, topics={"communication": cTopic, "transaction": tTopic, "state": sTopic})
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Reading Discovery State (keep it tidy)
@@ -248,6 +311,14 @@ messages, err := client.GetDiscoveryMessages(ctx, topicID, "gt:0", 100, "asc")
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+messages = client.get_discovery_messages(topicID, "gt:0", 100, "asc")
+# Filter by Operation and track locally
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Helper: Acceptance (a sensible default)
@@ -266,6 +337,15 @@ const ready = client.isProposalReady(proposal);
 ```go
 // Note: State tracking logic is implemented at the application level in Go.
 // You can iterate over members and track respond operations in a local struct.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs18 import Hcs18Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

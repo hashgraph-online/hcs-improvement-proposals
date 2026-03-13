@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Link from '@docusaurus/Link';
 import { useLocation } from '@docusaurus/router';
 
@@ -44,23 +44,16 @@ export default function CustomNavDropdown({ label, items }: NavDropdownProps) {
     (item) => item.to && pathname.startsWith(item.to),
   );
 
-  const handleMouseEnter = () => setIsOpen(true);
-  const handleMouseLeave = () => setIsOpen(false);
-
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen]);
+  const handleMouseEnter = useCallback(() => setIsOpen(true), []);
+  const handleMouseLeave = useCallback(() => setIsOpen(false), []);
+  const handleToggle = useCallback(() => {
+    setIsOpen((current) => !current);
+  }, []);
+  const handleBlur = useCallback((event: React.FocusEvent<HTMLDivElement>) => {
+    if (!dropdownRef.current?.contains(event.relatedTarget as Node | null)) {
+      setIsOpen(false);
+    }
+  }, []);
 
   return (
     <div
@@ -68,16 +61,17 @@ export default function CustomNavDropdown({ label, items }: NavDropdownProps) {
       className='relative flex items-center h-full'
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onBlur={handleBlur}
     >
       <button
         type='button'
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={`
           flex items-center px-3 py-1.5 gap-1 rounded-md
           text-white/95 font-['Roboto_Mono'] font-medium text-[15px]
           bg-transparent border-none cursor-pointer
           no-underline hover:no-underline
-          transition-all duration-200
+          transition-colors duration-200
           hover:text-white hover:bg-white/10
           focus:outline-none outline-none
           ${isActive ? 'text-white bg-white/15' : ''}
@@ -117,7 +111,7 @@ export default function CustomNavDropdown({ label, items }: NavDropdownProps) {
               const linkClass = `
                 block px-4 py-2 text-white/95 font-['Roboto_Mono'] text-[14px]
                 no-underline hover:no-underline
-                transition-all duration-150
+                transition-colors duration-150
                 hover:bg-white/10 hover:text-white
                 ${item.className || ''}
               `

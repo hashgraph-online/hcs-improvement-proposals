@@ -53,6 +53,21 @@ receipt, err := response.GetReceipt(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+# BuildHCS1HRL returns "hcs://1/<topicId>"
+hrl = hcs5.build_hcs1_h_r_l("0.0.700001")
+
+# BuildMintWithHRLTx builds a TokenMintTransaction with the HRL as metadata
+tx = hcs5.build_mint_with_h_r_l_tx("0.0.123456", "0.0.700001", "mint hashinal")
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Helper — BuildHCS1HRL
@@ -73,6 +88,14 @@ const hrl = buildHcs1Hrl('0.0.700001');
 ```go
 hrl := hcs5.BuildHCS1HRL("0.0.700001")
 // => "hcs://1/0.0.700001"
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+hrl = hcs5.build_hcs1_h_r_l("0.0.700001")
+# => "hcs://1/0.0.700001"
 ```
 
 </TabItem>

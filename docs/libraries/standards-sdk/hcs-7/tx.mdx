@@ -50,6 +50,14 @@ tx := hcs7.BuildCreateRegistryTx(hcs7.CreateRegistryTxParams{
 - Returns a `*hedera.TopicCreateTransaction`.
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs7.build_create_registry_tx(ttl=86400, submit_key=operatorPublicKey,
+```
+
+</TabItem>
 </LanguageTabs>
 
 ---
@@ -101,6 +109,13 @@ tx, err := hcs7.BuildSubmitMessageTx(
 ```
 
 Wraps the HCS‑7 payload with `p: "hcs-7"` before serializing.
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs7.build_submit_message_tx("0.0.10058300", op=hcs7.OPERATION_REGISTER_CONFIG, type=hcs7.CONFIG_TYPE_E_V_M, config={"contract_address": "0x1d67aaf7...", "abi": hcs7.AbiDefinition{ Name: "minted", "inputs": []hcs7.AbiIO{}, Outputs: []{"type": "uint64"}}, StateMutability: "view", Type: "function", }, }, memo="LaunchPage minted", "hcs7-config")
+```
 
 </TabItem>
 </LanguageTabs>
@@ -156,6 +171,14 @@ tx, err := hcs7.BuildSubmitMessageTx(
 	},
 	"hcs7-evm",
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# In Go, use BuildSubmitMessageTx with ConfigTypeEVM
+tx = hcs7.build_submit_message_tx("0.0.10058300", op=hcs7.OPERATION_REGISTER_CONFIG, type=hcs7.CONFIG_TYPE_E_V_M, config={"contract_address": "0x1d67aaf7f7e8d806bbeba24c4dea24808e1158b8", "abi": hcs7.AbiDefinition{ Name: "minted", "inputs": []hcs7.AbiIO{}, Outputs: []{"type": "uint64"}}, StateMutability: "view", Type: "function", }, }, memo="LaunchPage minted", "hcs7-evm")
 ```
 
 </TabItem>
@@ -233,6 +256,14 @@ tx, err := hcs7.BuildSubmitMessageTx(
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# In Go, use BuildSubmitMessageTx with ConfigTypeWASM
+tx = hcs7.build_submit_message_tx("0.0.10058300", op=hcs7.OPERATION_REGISTER_CONFIG, type=hcs7.CONFIG_TYPE_W_A_S_M, config={"wasm_topic_id": "0.0.5269810", "input_type": map[string]any{ "stateData": map[string]any{ "minted": "number", "tokensRemaining": "number"}, }, OutputType: map[string]any{ "type": "string", "format": "topic-id", }, }, memo="mint router", "hcs7-wasm")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ---
@@ -262,6 +293,19 @@ frozen, _ := tx.FreezeWith(hederaClient)
 frozen.Sign(operatorKey)
 response, _ := frozen.Execute(hederaClient)
 receipt, _ := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+hederaClient = hedera.client_for_testnet()
+hederaClient.set_operator(operatorID, operatorKey)
+
+frozen = tx.freeze_with(hederaClient)
+frozen.sign(operatorKey)
+response = frozen.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
 ```
 
 </TabItem>

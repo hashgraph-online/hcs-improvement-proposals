@@ -56,6 +56,17 @@ receipt, _ := response.GetReceipt(hederaClient)
 Memo is automatically set to `hcs-17:0:<ttl>`.
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs17.build_create_state_topic_tx(ttl_seconds=86400, admin_key=operatorPublicKey, submit_key=operatorPublicKey)
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Submit State Hash Message
@@ -97,6 +108,16 @@ response, _ := tx.Execute(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+msg = client.create_state_hash_message("ab…","0.0.1234","optional app memo", None,
+tx = hcs17.build_state_hash_message_tx("0.0.7777", msg, "HCS-17 publish")
+
+response = tx.execute(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 The builder constructs the canonical HCS‑17 payload internally:
@@ -130,6 +151,14 @@ if err != nil {
 	log.Fatal(err)
 }
 receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
 ```
 
 </TabItem>

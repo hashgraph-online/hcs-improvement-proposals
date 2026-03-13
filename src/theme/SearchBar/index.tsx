@@ -32,15 +32,24 @@ const SearchBar: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [noResults, setNoResults] = useState(false);
 
-  // The scroll prevention logic was removed as it was causing INP issues
-  // by running on every scroll event. The search input now relies on
-  // standard browser behavior which is more performant.
-
   const clearSearch = useCallback(() => {
     setQuery('');
     setHits([]);
     setNoResults(false);
   }, []);
+
+  const focusInput = useCallback(() => {
+    window.requestAnimationFrame(() => {
+      inputRef.current?.focus();
+    });
+  }, []);
+
+  const handleExpand = useCallback(() => {
+    if (!isExpanded) {
+      setIsExpanded(true);
+    }
+    focusInput();
+  }, [focusInput, isExpanded]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -85,9 +94,8 @@ const SearchBar: React.FC = () => {
         const data = await response.json();
         setHits(data.hits ?? []);
         setNoResults((data.hits ?? []).length === 0);
-      } catch (error) {
+      } catch {
         if (controller.signal.aborted) return;
-        console.error('Algolia search failed', error);
         setHits([]);
         setNoResults(true);
       } finally {
@@ -104,6 +112,9 @@ const SearchBar: React.FC = () => {
   }, [query, algoliaConfig]);
 
   useEffect(() => {
+    if (!isExpanded) {
+      return undefined;
+    }
     const handleClick = (event: MouseEvent) => {
       if (!containerRef.current?.contains(event.target as Node)) {
         setIsExpanded(false);
@@ -113,7 +124,7 @@ const SearchBar: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', handleClick);
     };
-  }, []);
+  }, [isExpanded]);
 
   const firstResultUrl = hits[0]?.url;
 
@@ -161,32 +172,24 @@ const SearchBar: React.FC = () => {
       ref={containerRef}
     >
       <form onSubmit={handleSubmit} className='search-input-shell'>
-        <span
+        <button
+          type='button'
           className='search-input-icon'
-          aria-hidden='true'
-          onClick={() => {
-            if (!isExpanded) {
-              setIsExpanded(true);
-              setTimeout(() => {
-                const input = containerRef.current?.querySelector('input');
-                if (input) input.focus();
-              }, 100);
-            }
-          }}
-          style={{ cursor: isExpanded ? 'default' : 'pointer' }}
+          aria-label='Open search'
+          onClick={handleExpand}
         >
           <svg viewBox='0 0 24 24' fill='none' stroke='currentColor' strokeWidth='2'>
             <circle cx='11' cy='11' r='7' />
             <line x1='16.65' y1='16.65' x2='21' y2='21' />
           </svg>
-        </span>
+        </button>
         <input
           ref={inputRef}
           type='search'
           className='search-input-field'
           placeholder='Search...'
           value={query}
-          onFocus={() => setIsExpanded(true)}
+          onFocus={handleExpand}
           onChange={(event) => {
             setQuery(event.target.value);
             if (!isExpanded) setIsExpanded(true);

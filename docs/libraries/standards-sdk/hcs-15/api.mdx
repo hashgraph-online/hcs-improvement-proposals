@@ -44,6 +44,18 @@ BuildPetalAccountCreateTx(PetalAccountCreateTxParams) (*hedera.AccountCreateTran
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# NewClient(config ClientConfig) (*Client, error)
+Client.create_base_account(BaseAccountCreateOptions) (BaseAccountCreateResult, error)
+Client.create_petal_account(PetalAccountCreateOptions) (PetalAccountCreateResult, error)
+Client.verify_petal_account(...)
+# BuildBaseAccountCreateTx(BaseAccountCreateTxParams) (*hedera.AccountCreateTransaction, error)
+# BuildPetalAccountCreateTx(PetalAccountCreateTxParams) (*hedera.AccountCreateTransaction, error)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Server Client (HCS15Client)
@@ -71,6 +83,15 @@ createPetalAccount(params: { basePrivateKey: string | import('@hashgraph/sdk').P
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs15 import Hcs15Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Browser Client (HCS15BrowserClient)
@@ -94,6 +115,15 @@ verifyPetalAccount(petalAccountId: string, baseAccountId: string): Promise<boole
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs15 import Hcs15Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Builders
@@ -112,6 +142,15 @@ function buildHcs15PetalAccountCreateTx(params: { publicKey: import('@hashgraph/
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs15 import Hcs15Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -138,6 +177,15 @@ await c.createPetalAccount({ basePrivateKey: base.privateKey });
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs15 import Hcs15Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

@@ -39,6 +39,9 @@ interface WasmInterface {
 
 The SDK provides a `WasmExecutor` for executing WASM modules:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 import { WasmExecutor } from '@hashgraphonline/standards-sdk';
 
@@ -55,6 +58,37 @@ const result = await wasmExecutor.execute(actionRegistration, {
   }
 });
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// Create WASM executor
+// const wasmExecutor = new WasmExecutor(logger, 'testnet');
+
+// Execute an action
+result, err := wasmExecutor.Execute(ctx, actionRegistration, { method: "POST", params: { action: "transfer", amount: 100, to: "0.0.987654" } })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+
+# Create WASM executor
+wasm_executor = new WasmExecutor(logger, "testnet")
+
+# Execute an action
+result = wasm_executor.execute(...)
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## JavaScript Wrapper Support
 
@@ -88,6 +122,9 @@ const result = await wasmExecutor.execute(actionRegistration, {
 
 The SDK can extract module info from WASM binaries:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 import { ActionBuilder, WasmValidator } from '@hashgraphonline/standards-sdk';
 
@@ -102,9 +139,51 @@ const infoHash = await new ActionBuilder(logger).generateInfoHash(moduleInfo);
 const wasmHash = await new ActionBuilder(logger).generateWasmHash(wasmData);
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// Extract metadata from WASM data
+// const validator = new WasmValidator(logger);
+moduleInfo, err := validator.ExtractMetadata(ctx, wasmData)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// Generate INFO hash
+// const infoHash = await new ActionBuilder(logger).generateInfoHash(moduleInfo);
+
+// Generate WASM hash
+// const wasmHash = await new ActionBuilder(logger).generateWasmHash(wasmData);
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+
+# Extract metadata from WASM data
+validator = new WasmValidator(logger)
+module_info = validator.extract_metadata(...)
+
+# Generate INFO hash
+info_hash = await new ActionBuilder(logger).generateInfoHash(moduleInfo)
+
+# Generate WASM hash
+wasm_hash = await new ActionBuilder(logger).generateWasmHash(wasmData)
+```
+
+</TabItem>
+</LanguageTabs>
+
 ## WASM Loading
 
 The executor handles WASM module loading from HCS-1 topics:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 // Load WASM module from topic
@@ -120,9 +199,44 @@ const jsResult = await hrlResolver.resolve(action.js_t_id!, {
 });
 ```
 
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// Load WASM module from topic
+wasmResult, err := hrlResolver.Resolve(ctx, action.t_id, { network: "testnet", returnRaw: true })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// Load JavaScript wrapper from topic
+jsResult, err := hrlResolver.Resolve(ctx, action.js_t_id!, { network: "testnet", returnRaw: false })
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Load WASM module from topic
+wasm_result = hrl_resolver.resolve(...)
+
+# Load JavaScript wrapper from topic
+js_result = hrl_resolver.resolve(...)
+```
+
+</TabItem>
+</LanguageTabs>
+
 ## Execution Context
 
 Actions receive execution context with network and memo information:
+
+<LanguageTabs>
+<TabItem value="typescript">
 
 ```typescript
 interface WasmExecutionContext {
@@ -134,6 +248,27 @@ interface WasmExecutionContext {
   state?: Record<string, any>;
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## Result Handling
 
@@ -167,6 +302,9 @@ const errorResult: WasmExecutionResult = {
 
 The WASM executor provides comprehensive error handling:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 try {
   const result = await wasmExecutor.execute(actionRegistration, context);
@@ -180,6 +318,42 @@ try {
   console.error('WASM execution error:', error.message);
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+// try {
+result, err := wasmExecutor.Execute(ctx, actionRegistration, context)
+if err != nil {
+	log.Fatalf("failed: %v", err)
+}
+
+// if (result.success) {
+// console.Log(ctx, ...)
+// } else {
+// console.Error(ctx, ...)
+// } catch (error) {
+// console.Error(ctx, ...)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# try {
+result = wasm_executor.execute(...)
+
+if result.success:
+print('Execution successful:', result.data)
+# console.error('Execution failed:', result.error);
+# } catch (error) {
+# console.error('WASM execution error:', error.message);
+```
+
+</TabItem>
+</LanguageTabs>
 
 ## Memory Management
 

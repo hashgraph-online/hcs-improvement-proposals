@@ -104,6 +104,47 @@ func main() {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs15 import Hcs15Client
+
+# package main
+
+# func main() {
+network = "testnet"
+operatorID = os.getenv("HEDERA_ACCOUNT_ID")
+operatorKey = os.getenv("HEDERA_PRIVATE_KEY")
+
+client = Hcs15Client(
+    network=network,
+    operator_id=operatorID,
+    operator_private_key=operatorKey,
+)
+
+ctx = context.background()
+
+base = client.create_base_account(initial_balance_hbar=1.0, account_memo="HCS-15 Base")
+
+petal = client.create_petal_account(base_private_key=base.PRIVATE_KEY, initial_balance_hbar=0.5, account_memo="HCS-15 Petal")
+
+linked = client.verify_petal_account(petal.ACCOUNT_I_D, base.ACCOUNT_I_D)
+fmt.println("Linked:", linked)
+
+hcs11Client = Hcs11Client(network=network, operator_id=base.ACCOUNT_I_D, operator_private_key=base.PRIVATE_KEY)
+
+profile = hcs11.new_agent_builder().)
+# SetName("Demo Petal").
+# SetBio("Per‑experience identity").
+# SetCapabilities([]{hcs11.AIAgentCapabilityTextGeneration}).
+# SetBaseAccount(base.AccountID).
+# Build()
+
+hcs11Client.create_and_inscribe_profile(profile, True)
+```
+
+</TabItem>
 </LanguageTabs>
 
 Key methods:

@@ -1,4 +1,4 @@
-import React, {type ReactNode} from 'react';
+import React, {type ReactNode, useEffect, useRef} from 'react';
 import {useNavbarSecondaryMenu} from '@docusaurus/theme-common/internal';
 
 export default function NavbarMobileSidebarLayout({
@@ -11,11 +11,44 @@ export default function NavbarMobileSidebarLayout({
   secondaryMenu: ReactNode;
 }): ReactNode {
   const {shown: secondaryMenuShown} = useNavbarSecondaryMenu();
-  
-  // We keep the outer 'navbar-sidebar' class ONLY for the Docusaurus transition logic (open/close state)
-  // But we override all its styles to ensure it acts as a full-screen fixed container
+  const sidebarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const clearInertPanels = () => {
+      const itemsContainer = sidebarRef.current?.querySelector('.navbar-sidebar__items');
+      if (!itemsContainer) {
+        return;
+      }
+      itemsContainer
+        .querySelectorAll<HTMLElement>('.navbar-sidebar__item[inert]')
+        .forEach((panel) => {
+          panel.removeAttribute('inert');
+        });
+    };
+
+    const frameId = window.requestAnimationFrame(() => {
+      clearInertPanels();
+      window.requestAnimationFrame(clearInertPanels);
+    });
+    const observer = new MutationObserver(clearInertPanels);
+    if (sidebarRef.current) {
+      observer.observe(sidebarRef.current, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['inert'],
+      });
+    }
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div
+      ref={sidebarRef}
       className="navbar-sidebar"
       style={{
         background: 'linear-gradient(135deg, rgb(98, 137, 213) 0%, rgb(80, 115, 184) 50%, rgb(63, 65, 116) 100%)',
@@ -26,8 +59,6 @@ export default function NavbarMobileSidebarLayout({
         top: 0,
         left: 0,
         zIndex: 1000,
-        backdropFilter: 'blur(10px)',
-        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
         padding: 0,
         margin: 0,
@@ -35,22 +66,18 @@ export default function NavbarMobileSidebarLayout({
         flexDirection: 'column',
       }}
     >
-      {/* Header Section */}
       <div className="flex-shrink-0">
         {header}
       </div>
 
-      {/* Content Section - Pure Tailwind, no Docusaurus classes */}
       <div className="flex-1 overflow-y-auto w-full">
         <div className="flex flex-col w-full">
-          {/* Primary Menu Container */}
           <div 
-            className="w-full border-t border-white/20 bg-white/[0.08] backdrop-blur-[8px]"
+            className="w-full border-t border-white/20 bg-white/[0.08]"
           >
             {primaryMenu}
           </div>
-          
-          {/* Secondary Menu (if any) */}
+
           {secondaryMenuShown && (
             <div className="w-full">
               {secondaryMenu}

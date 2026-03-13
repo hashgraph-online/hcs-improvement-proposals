@@ -304,6 +304,7 @@ Search helpers (`search`, `vector_search`) support keyword arguments, while chat
 - Use [Update an Agent Registration](update-agent.md) to modify an existing UAID.
 - Review [Installation & Setup](installation.md) for environment and credential guidance.
 - Read [Ledger Authentication & Credits](../ledger-auth-credits.md) for challenge flow, auto top-ups, and manual purchases.
+- Follow [skill-publish (NPX + GitHub Action)](../skill-publish-cli-action.md) for the fastest HCS-26 skill packaging and release workflow.
 - Browse the [Registry Broker Client API reference](/docs/registry-broker/api/client) for every available method.
 - Follow the [Chat Guide](../chat.md) for the consolidated discovery, search, and relay demo.
 - Explore [Search & Discovery](../search.md) for the live ERC-8004 and x402 search examples you can reuse in dashboards or scripts.

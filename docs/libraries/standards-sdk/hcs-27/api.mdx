@@ -28,6 +28,15 @@ import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Configuration
@@ -50,6 +59,15 @@ type ClientConfig struct {
 	MirrorBaseURL      string // Optional custom mirror node URL
 	MirrorAPIKey       string // Optional mirror node API key
 }
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -142,6 +160,15 @@ type CreateTopicOptions struct {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Client Methods
@@ -187,6 +214,15 @@ func (c *Client) ResolveHCS1Reference(
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Validation Functions
@@ -211,6 +247,15 @@ func ValidateCheckpointMessage(
 ) (CheckpointMetadata, error)
 
 func ValidateCheckpointChain(records []CheckpointRecord) error
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -262,6 +307,15 @@ func CanonicalizeJSON(value any) ([]byte, error)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Memo Helpers
@@ -285,6 +339,15 @@ func ParseTopicMemo(memo string) (*TopicMemo, bool)
 
 func BuildTransactionMemo() string
 // => "hcs-27:op:0:0"
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs27 import Hcs27Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

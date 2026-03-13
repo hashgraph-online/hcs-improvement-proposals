@@ -36,4 +36,15 @@ if err != nil {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+mirrorClient = MirrorClient("testnet", "")
+
+# Retrieve topic messages (HCS-1/HCS-3 content)
+messages = mirrorClient.get_topic_messages("0.0.12345", None)
+```
+
+</TabItem>
 </LanguageTabs>

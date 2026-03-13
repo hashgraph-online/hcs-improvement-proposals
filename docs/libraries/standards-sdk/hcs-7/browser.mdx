@@ -36,6 +36,14 @@ await hwc.connect(); // prompts the user to pick an account
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## 3. Instantiate `HCS7BrowserClient`
@@ -61,6 +69,14 @@ const hcs7 = new HCS7BrowserClient({
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 If no wallet session exists, `ensureConnected()` throws with `"No active wallet connection"` so you can show a reconnect button.
@@ -83,6 +99,14 @@ if (!registry.success) {
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>
@@ -130,6 +154,14 @@ await hcs7.registerMetadata({
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 Each call automatically validates the payload and sends `submitMessageToTopic` through WalletConnect. The wallet UI displays the topic memo + tx memo so users can verify what they are signing.
@@ -155,6 +187,14 @@ setState(registryView.entries);
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## 7. Pair With Bridges When Needed
@@ -177,6 +217,14 @@ const wasm = new WasmBridge();
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>

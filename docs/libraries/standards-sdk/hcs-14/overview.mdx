@@ -55,6 +55,18 @@ fmt.Printf("Resolved: %v, Profile: %s\n", result.Metadata.Resolved, result.Metad
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+client = Hcs14Client()
+
+# Resolve an existing UAID
+result = client.resolve("uaid:did:example:123")
+fmt.printf("Resolved: %v, Profile: %s\n", result.Metadata.Resolved, result.Metadata.Profile)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Visual Overview

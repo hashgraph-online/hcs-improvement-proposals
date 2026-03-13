@@ -55,6 +55,14 @@ Notes
 - Pass `AdminKey`/`SubmitKey` as `hedera.Key` values.
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+tx = hcs6.build_create_registry_tx(ttl=3600, admin_key=operatorPublicKey,
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Register Entry — buildHcs6RegisterEntryTx
@@ -91,6 +99,16 @@ if err != nil {
 
 response, err := tx.Execute(hederaClient)
 receipt, err := response.GetReceipt(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+tx = hcs6.build_register_entry_tx(registry_topic_id="0.0.111", target_topic_id="0.0.222", memo="register my dynamic inscription", analytics_memo="hcs-6 register")
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
 ```
 
 </TabItem>

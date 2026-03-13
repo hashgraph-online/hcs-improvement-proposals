@@ -34,6 +34,15 @@ const did = await hcs14.createDid({ method: 'hedera', client /* configured Heder
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs14 import Hcs14Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Issue and generate UAID together
@@ -58,6 +67,15 @@ const { did, uaid, parsed } = await hcs14.createDidWithUaid({
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs14 import Hcs14Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Resolve DID / UAID Profiles
@@ -78,6 +96,15 @@ const didDocument = await hcs14.getResolverRegistry().resolveUaid('uaid:did:z6Mk
 
 ```go
 // Go SDK implementation available
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs14 import Hcs14Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

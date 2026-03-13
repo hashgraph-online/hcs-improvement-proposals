@@ -57,4 +57,25 @@ _, err = client.RegisterEntry(ctx, reg.TopicID, hcs2.RegisterEntryOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs2 import Hcs2Client, Hcs2RegistryType
+
+client = Hcs2Client(
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_key=os.environ["HEDERA_PRIVATE_KEY"],
+    network="testnet",
+)
+
+reg = client.create_registry(registry_type=Hcs2RegistryType.INDEXED, ttl=86400)
+client.register_entry(
+    reg["topicId"],
+    target_topic_id="0.0.700123",
+    metadata="https://example.com/meta.json",
+)
+```
+
+</TabItem>
 </LanguageTabs>

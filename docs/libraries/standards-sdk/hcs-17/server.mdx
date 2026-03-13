@@ -44,6 +44,22 @@ client, err := hcs17.NewClient(hcs17.ClientConfig{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs17 import Hcs17Client
+
+
+
+client = Hcs17Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create a State Topic
@@ -68,6 +84,13 @@ topicID, err := client.CreateStateTopic(ctx, hcs17.CreateTopicOptions{
 	TTLSeconds: 86400,
 	// AdminKey / SubmitKey can be configured here
 })
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+topicID = client.create_state_topic(ttl_seconds=86400,
 ```
 
 </TabItem>
@@ -111,6 +134,14 @@ receipt, err := client.SubmitMessage(ctx, topicID, message, "transaction memo")
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+message = client.create_state_hash_message("abc123…","0.0.1234","optional memo",
+receipt = client.submit_message(topicID, message, "transaction memo")
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Compute and Publish
@@ -148,6 +179,15 @@ fmt.Println("Published state hash:", result.StateHash)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+result = client.compute_and_publish(account_id="0.0.1234", account_public_key="302a30…", topics=[], publish_topic_id=topicID, memo="app context")
+
+fmt.println("Published state hash:", result.STATE_HASH)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Read Latest Messages
@@ -168,6 +208,14 @@ const latest = await client.getLatestMessage(topicId);
 ```go
 recent, err := client.GetRecentMessages(ctx, topicID, 25, "desc")
 latest, err := client.GetLatestMessage(ctx, topicID)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+recent = client.get_recent_messages(topicID, 25, "desc")
+latest = client.get_latest_message(topicID)
 ```
 
 </TabItem>

@@ -45,4 +45,21 @@ reg, err := client.CreateDynamicRegistry(ctx, hcs6.CreateDynamicRegistryOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs6 import Hcs6Client
+
+
+client = Hcs6Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+)
+
+reg = client.create_dynamic_registry(ttl=86400)
+```
+
+</TabItem>
 </LanguageTabs>

@@ -1,6 +1,6 @@
 import React from 'react';
 import Tabs from '@theme/Tabs';
-import { SiTypescript, SiGo } from 'react-icons/si';
+import { SiTypescript, SiGo, SiPython } from 'react-icons/si';
 
 interface LanguageTabsProps {
   children: React.ReactNode;
@@ -8,7 +8,7 @@ interface LanguageTabsProps {
 
 /**
  * Wraps Docusaurus Tabs/TabItem to provide a consistent multi-language
- * code switcher (TypeScript / Go) across the docs.
+ * code switcher (TypeScript / Go / Python) across the docs.
  *
  * Usage in MDX:
  *
@@ -25,6 +25,11 @@ interface LanguageTabsProps {
  *   <TabItem value="go">
  *     ```go
  *     // Go code here
+ *     ```
+ *   </TabItem>
+ *   <TabItem value="python">
+ *     ```python
+ *     # Python code here
  *     ```
  *   </TabItem>
  * </LanguageTabs>
@@ -51,6 +56,14 @@ export default function LanguageTabs({ children }: LanguageTabsProps) {
           </div>
         ), 
         value: 'go' 
+      },
+      { 
+        label: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <SiPython color="#3776AB" /> Python
+          </div>
+        ), 
+        value: 'python' 
       },
     ]}>
       {children}

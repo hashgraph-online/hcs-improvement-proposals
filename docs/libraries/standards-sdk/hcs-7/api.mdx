@@ -64,6 +64,22 @@ Types: AbiIO, AbiDefinition, EvmConfigPayload, WasmConfigPayload, Message, Clien
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# NewClient(config ClientConfig) (*Client, error)
+Client.create_registry(CreateRegistryOptions) (CreateRegistryResult, error)
+Client.register_config(RegisterConfigOptions) (RegistryOperationResult, error)
+Client.register_metadata(RegisterMetadataOptions) (RegistryOperationResult, error)
+Client.get_registry(topicID string, QueryRegistryOptions) (RegistryTopic, error)
+# BuildCreateRegistryTx(CreateRegistryTxParams) *hedera.TopicCreateTransaction
+# BuildSubmitMessageTx(topicID string, Message, transactionMemo string) (*hedera.TopicMessageSubmitTransaction, error)
+
+# Types: AbiIO, AbiDefinition, EvmConfigPayload, WasmConfigPayload, Message, ClientConfig
+# RegisterConfigOptions, RegisterMetadataOptions
+```
+
+</TabItem>
 </LanguageTabs>
 
 ---
@@ -97,6 +113,15 @@ class HCS7Client {
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -156,6 +181,15 @@ interface HCS7RegisterMetadataOptions {
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -227,6 +261,15 @@ class RedisCache implements EVMCache { constructor(config?: RedisConfig); }
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ---
@@ -259,6 +302,15 @@ interface WASMConfig {
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs7 import Hcs7Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

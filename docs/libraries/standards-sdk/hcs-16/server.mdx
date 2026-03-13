@@ -82,6 +82,28 @@ client.SendFloraCreated(ctx, cTopic, os.Getenv("HEDERA_ACCOUNT_ID"), floraAccoun
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+
+
+client = Hcs16Client(network="testnet", operator_id=os.environ["HEDERA_ACCOUNT_ID"], operator_private_key=os.environ["HEDERA_PRIVATE_KEY"])
+
+ctx = context.background()
+flora_account_id = "0.0.12345"
+
+cTopic = client.create_flora_topic(flora_account_id=floraAccountID, topic_type=hcs16.FLORA_TOPIC_TYPE_COMMUNICATION)
+
+tTopic = client.create_flora_topic(flora_account_id=floraAccountID, topic_type=hcs16.FLORA_TOPIC_TYPE_TRANSACTION)
+
+sTopic = client.create_flora_topic(flora_account_id=floraAccountID, topic_type=hcs16.FLORA_TOPIC_TYPE_STATE)
+
+client.send_flora_created(cTopic, os.environ["HEDERA_ACCOUNT_ID"], floraAccountID, flora_topic_type_communication=cTopic, flora_topic_type_transaction=tTopic, flora_topic_type_state=sTopic, None)
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes:
@@ -116,6 +138,15 @@ client.SendTransaction(
 	"release funds for invoice #42",
 	nil,
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+client.send_transaction(ctx, tTopic, os.environ["HEDERA_ACCOUNT_ID"], "0.0.1234", "release funds for invoice #42", None)
 ```
 
 </TabItem>
@@ -156,6 +187,16 @@ client.SendStateUpdate(
 	"post‑proposal state",
 	nil,
 )
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+epoch = int64(7)
+client.send_state_update(ctx, sTopic, os.environ["HEDERA_ACCOUNT_ID"], "0x…", &epoch, "post‑proposal state", None)
 ```
 
 </TabItem>
@@ -222,6 +263,23 @@ client.SendFloraJoinAccepted(
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+
+connection_topic_id = "0.0.9012"
+connection_seq = int64(7)
+epoch = int64(8)
+
+client.send_flora_join_request(ctx, cTopic, os.environ["HEDERA_ACCOUNT_ID"], "0.0.2468", 42, &connectionTopicID, &connectionSeq, None)
+
+client.send_flora_join_vote(ctx, cTopic, os.environ["HEDERA_ACCOUNT_ID"], "0.0.2468", True, 42, &connectionSeq, None)
+
+client.send_flora_join_accepted(ctx, cTopic, os.environ["HEDERA_ACCOUNT_ID"], [][], &epoch, None)
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes:
@@ -246,6 +304,14 @@ const latest = await hcs16.getLatestMessage(cTopic, 'flora_created');
 ```go
 recent, _ := client.GetRecentMessages(ctx, cTopic, 25, "desc", hcs16.FloraOperationFloraCreated)
 latest, _ := client.GetLatestMessage(ctx, cTopic, hcs16.FloraOperationFloraCreated)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+recent = client.get_recent_messages(cTopic, 25, "desc", hcs16.FLORA_OPERATION_FLORA_CREATED)
+latest = client.get_latest_message(cTopic, hcs16.FLORA_OPERATION_FLORA_CREATED)
 ```
 
 </TabItem>

@@ -63,6 +63,22 @@ BuildStateHashMessageTx(topicID string, StateHashMessage, txMemo string) (*heder
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# NewClient(config ClientConfig) (*Client, error)
+Client.create_state_topic(...)
+Client.submit_message(...)
+Client.compute_and_publish(...)
+Client.validate_topic(topicID string) (bool, *TopicMemo, error)
+# Client.GetRecentMessages / GetLatestMessage
+Client.calculate_account_state_hash(AccountStateInput) (StateHashResult, error)
+Client.calculate_composite_state_hash(CompositeStateInput) (CompositeStateHashResult, error)
+# BuildCreateStateTopicTx(CreateTopicOptions) *hedera.TopicCreateTransaction
+# BuildStateHashMessageTx(topicID string, StateHashMessage, txMemo string) (*hedera.TopicMessageSubmitTransaction, error)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Topic Memo
@@ -85,6 +101,15 @@ function parseHCS17Memo(memo: string): { type: HCS17TopicType; ttl: number } | u
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -161,6 +186,15 @@ interface BrowserHCS17ClientConfig extends HCS17ClientConfig {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Enum
@@ -179,6 +213,15 @@ enum HCS17TopicType {
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -237,6 +280,15 @@ createStateHashMessage(stateHash: string, accountId: string, topicIds: string[],
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes
@@ -278,6 +330,15 @@ computeAndPublish(params: {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Throws
@@ -305,6 +366,15 @@ const { stateHash } = await c.computeAndPublish({
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -343,6 +413,15 @@ computeAndPublish(params: {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Throws
@@ -371,6 +450,15 @@ const out = await c.computeAndPublish({
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -407,6 +495,15 @@ function buildHcs17MessageTx(params: {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes
@@ -434,6 +531,15 @@ const latest = await client.getLatestMessage('0.0.7777');
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Validation Rules
@@ -458,6 +564,15 @@ class StateHashError extends Error {
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs17 import Hcs17Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

@@ -44,6 +44,14 @@ const logger = new Logger({ module: 'hcs-21-browser', level: 'info' });
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Create layered registry topics
@@ -87,6 +95,14 @@ const versionPointerTopicId =
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 `createRegistryTopic` and `createAdapterCategoryTopic` emit standard `hcs-21:<indexed>:<ttl>:<type>:<meta>` memos. The browser client automatically freezes/signs the topic creation transactions with the wallet account.
@@ -123,6 +139,14 @@ await browserClient.publishVersionPointer({
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>
@@ -174,6 +198,14 @@ console.log('Submitted declaration', publishResult.transactionId);
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
+```
+
+</TabItem>
 </LanguageTabs>
 
 `publishDeclaration` returns the Hedera transaction ID plus the sequence number assigned to the message, making it easy to reconcile with mirror-node logs.
@@ -208,6 +240,14 @@ latest.forEach(payload => {
 ```go
 // Browser/wallet operations are TypeScript-only.
 // In Go, use the server-side client directly — see the [Server](./server) page.
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+# Browser/wallet operations are TypeScript-only.
+# In Python, use the server-side client directly — see the Server page.
 ```
 
 </TabItem>

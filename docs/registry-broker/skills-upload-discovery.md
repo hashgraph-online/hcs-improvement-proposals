@@ -7,6 +7,8 @@ description: Publish HCS-26 skills with the Registry Broker and discover version
 
 Use the Registry Broker skill endpoints to publish `SKILL.md` + `skill.json` packages, then discover releases by name, version, and ownership.
 
+Prefer [`npx skill-publish`](skill-publish-cli-action.md) for day-to-day publishing DX and use the raw SDK flow below when you need direct control over payload construction.
+
 ## Publish a skill package
 
 The SDK exposes a quote → publish → job-status flow:

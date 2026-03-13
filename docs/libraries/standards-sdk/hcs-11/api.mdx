@@ -54,6 +54,22 @@ NewPersonBuilder() *PersonBuilder
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+# NewClient(config ClientConfig) (*Client, error)
+Client.create_and_inscribe_profile(HCS11Profile, waitForConfirmation bool)
+Client.inscribe_profile(...)
+Client.inscribe_image(...)
+Client.fetch_profile_by_account_id(...)
+Client.update_account_memo_with_profile(...)
+# NewAgentBuilder() *AgentBuilder
+# AgentBuilder.SetName/SetBio/SetAlias/SetDescription/SetCapabilities/SetType/SetModel/SetCreator/AddSocial/AddProperty/SetInboundTopicID/SetOutboundTopicID/SetBaseAccount(...)
+AgentBuilder.build() (HCS11Profile, error)
+# NewPersonBuilder() *PersonBuilder
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Types (selected)
@@ -83,6 +99,15 @@ interface HCS11ClientConfig {
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs11 import Hcs11Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Builders
@@ -101,6 +126,15 @@ new MCPServerBuilder();
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs11 import Hcs11Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>
@@ -149,6 +183,15 @@ fetchProfileByAccountId(accountId: string, network?: string): Promise<{ success:
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs11 import Hcs11Client
+
+# Equivalent Python usage — see Python SDK docs for details
+```
+
+</TabItem>
 </LanguageTabs>
 
 Notes
@@ -174,6 +217,15 @@ const res = await client.inscribeProfile(profile, { waitForConfirmation: true })
 
 ```go
 // See standards-sdk-go for full Go API types and methods
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs11 import Hcs11Client
+
+# Equivalent Python usage — see Python SDK docs for details
 ```
 
 </TabItem>

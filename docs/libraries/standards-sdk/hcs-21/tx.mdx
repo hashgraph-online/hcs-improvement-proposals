@@ -69,6 +69,19 @@ receipt, _ := response.GetReceipt(hederaClient)
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+
+memo = hcs21.build_registry_memo(3600, True, hcs21.TOPIC_TYPE_ADAPTER_REGISTRY)
+
+tx = hcs21.build_create_registry_topic_tx(memo=memo, admin_key=operatorPublicKey, submit_key=operatorPublicKey)
+
+response = tx.execute(hederaClient)
+receipt = response.get_receipt(hederaClient)
+```
+
+</TabItem>
 </LanguageTabs>
 
 ## Adapter Declaration Message
@@ -149,6 +162,29 @@ if err != nil {
 }
 
 response, _ := tx.Execute(hederaClient)
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+declaration = hcs21.AdapterDeclaration{
+# Protocol:  "hcs-21",
+# Op:        "register",
+# AdapterID: "oci/@hashgraphonline/x402-bazaar-adapter@1.3.2",
+# Entity:    "agent",
+# Package: hcs21.PackageInfo{
+# Registry:  "oci",
+# Name:      "@hashgraphonline/x402-bazaar-adapter",
+# Version:   "1.3.2",
+# Integrity: "sha384-demo-digest",
+# Manifest: "hcs://1/0.0.600777",
+# Config: map[string]any{
+# StateModel: "hcs-21.entity-consensus@1",
+
+tx = hcs21.build_declaration_message_tx("0.0.700999", declaration, "adapter declaration")
+
+response = tx.execute(hederaClient)
 ```
 
 </TabItem>

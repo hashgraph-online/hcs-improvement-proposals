@@ -25,6 +25,9 @@ The HCS-12 security system provides comprehensive protection for HashLinks appli
 
 The security system operates on multiple layers to provide defense in depth:
 
+<LanguageTabs>
+<TabItem value="typescript">
+
 ```typescript
 interface SecurityContext {
   permissions: AppPermissionEngine;     // Application-layer permission engine
@@ -41,6 +44,27 @@ enum SecurityLevel {
   CRITICAL = 'critical'  // Administrative functions
 }
 ```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs12"
+
+// See Go SDK examples for equivalent usage
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+from standards_sdk_py.hcs12 import Hcs12Client
+
+# Equivalent Python usage — see Python SDK docs
+```
+
+</TabItem>
+</LanguageTabs>
 
 ---
 

@@ -55,4 +55,21 @@ res, err := client.CreateHashinal(ctx, hcs5.CreateHashinalOptions{
 ```
 
 </TabItem>
+<TabItem value="python">
+
+```python
+import os
+from standards_sdk_py.hcs5 import Hcs5Client
+
+
+client = Hcs5Client(
+    network="testnet",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+)
+
+res = client.create_hashinal(token_id="0.0.123456", file_name="note.txt", mime_type="text/plain", data="hello".encode())
+```
+
+</TabItem>
 </LanguageTabs>
