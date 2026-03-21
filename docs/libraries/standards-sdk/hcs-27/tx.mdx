@@ -30,6 +30,12 @@ console.log(transactionMemo); // hcs-27:op:0:0
 <TabItem value="go">
 
 ```go
+import (
+	"fmt"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 topicMemo := hcs27.BuildTopicMemo(3600)
 parsedTopicMemo, ok := hcs27.ParseTopicMemo(topicMemo)
 transactionMemo := hcs27.BuildTransactionMemo()
@@ -77,6 +83,12 @@ console.log(leafHashHex, combinedHashHex);
 <TabItem value="go">
 
 ```go
+import (
+	"fmt"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 leafHash, err := hcs27.MerkleRootFromEntries([]any{
 	map[string]any{"id": "evt-1", "action": "append"},
 })
@@ -127,6 +139,8 @@ const canonicalRootHex = client.merkleRootFromCanonicalEntries([
 <TabItem value="go">
 
 ```go
+import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+
 rootFromEntries, err := hcs27.MerkleRootFromEntries([]any{
 	map[string]any{"id": "evt-1", "action": "append"},
 	map[string]any{"id": "evt-2", "action": "append"},
@@ -198,6 +212,12 @@ const consistencyOk = client.verifyConsistencyProof({
 <TabItem value="go">
 
 ```go
+import (
+	"fmt"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 ok, err := hcs27.VerifyInclusionProofObject(&hcs27.InclusionProof{
 	LeafHash:    "9f3d6b16d7f2c4b05678d91b5ee8aa2033f4dcb7dbf665a9a9f956c6882f5b9b",
 	LeafIndex:   "0",

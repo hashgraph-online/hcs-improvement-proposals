@@ -117,6 +117,10 @@ AsyncHCS27Client(
     operator_key="302e...",
     hedera_client=hedera_client,
     network="testnet",
+    mirror_base_url="https://testnet-public.mirrornode.hedera.com/api/v1",
+    cdn_base_url="https://your-inscription-cdn.example",
+    inscriber_base_url="https://your-inscriber-api.example",
+    mirror_client=mirror_client,
 )
 ```
 
@@ -155,6 +159,33 @@ interface HCS27CheckpointMessage {
 <TabItem value="go">
 
 ```go
+type StreamID struct {
+	Registry string `json:"registry"`
+	LogID    string `json:"log_id"`
+}
+
+type LogProfile struct {
+	Algorithm string `json:"alg"`
+	Leaf      string `json:"leaf"`
+	Merkle    string `json:"merkle"`
+}
+
+type RootCommitment struct {
+	TreeSize     string `json:"treeSize"`
+	RootHashB64u string `json:"rootHashB64u"`
+}
+
+type PreviousCommitment struct {
+	TreeSize     string `json:"treeSize"`
+	RootHashB64u string `json:"rootHashB64u"`
+}
+
+type Signature struct {
+	Algorithm string `json:"alg"`
+	KeyID     string `json:"kid"`
+	Signature string `json:"b64u"`
+}
+
 type CheckpointMetadata struct {
 	Type      string
 	Stream    StreamID
@@ -250,7 +281,7 @@ hcs27.VerifyConsistencyProofObject(proof)
 client.create_checkpoint_topic(options)
 client.publish_checkpoint(topic_id, metadata, message_memo=None, transaction_memo=None)
 client.get_checkpoints(topic_id)
-client.resolve_h_c_s1_reference(reference)
+client.resolveHCS1Reference(reference)
 client.validate_checkpoint_message(message)
 client.validate_checkpoint_chain(records)
 client.build_topic_memo({"ttl": 3600})

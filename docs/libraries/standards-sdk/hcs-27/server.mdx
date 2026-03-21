@@ -39,6 +39,7 @@ const client = new HCS27Client({
 
 ```go
 import (
+	"log"
 	"os"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
@@ -50,7 +51,7 @@ client, err := hcs27.NewClient(hcs27.ClientConfig{
 	Network:            "testnet",
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 ```
 
@@ -58,18 +59,20 @@ if err != nil {
 <TabItem value="python">
 
 ```python
+import os
+
 from hedera import Client as HederaClient, AccountId, PrivateKey
 from standards_sdk_py.hcs27 import HCS27Client
 
 hedera_client = HederaClient.forTestnet()
 hedera_client.setOperator(
-    AccountId.fromString("0.0.123456"),
-    PrivateKey.fromString("302e..."),
+    AccountId.fromString(os.environ["HEDERA_ACCOUNT_ID"]),
+    PrivateKey.fromString(os.environ["HEDERA_PRIVATE_KEY"]),
 )
 
 client = HCS27Client(
-    operator_id="0.0.123456",
-    operator_key="302e...",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_key=os.environ["HEDERA_PRIVATE_KEY"],
     network="testnet",
     hedera_client=hedera_client,
 )
@@ -97,13 +100,21 @@ console.log(topic.topicId, topic.transactionId);
 <TabItem value="go">
 
 ```go
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 topicID, transactionID, err := client.CreateCheckpointTopic(context.Background(), hcs27.CreateTopicOptions{
 	TTLSeconds:          3600,
 	UseOperatorAsAdmin:  true,
 	UseOperatorAsSubmit: true,
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 fmt.Println(topicID, transactionID)
@@ -160,6 +171,14 @@ await client.publishCheckpoint(
 <TabItem value="go">
 
 ```go
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 result, err := client.PublishCheckpoint(context.Background(), topicID, hcs27.CheckpointMetadata{
 	Type: "ans-checkpoint-v1",
 	Stream: hcs27.StreamID{
@@ -181,7 +200,7 @@ result, err := client.PublishCheckpoint(context.Background(), topicID, hcs27.Che
 	},
 }, "checkpoint 2", "")
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 fmt.Println(result.SequenceNumber, result.TransactionID)
@@ -253,6 +272,15 @@ console.log(checkpoints[0]?.message.metadata); // hcs://1/<topic>
 <TabItem value="go">
 
 ```go
+import (
+	"context"
+	"fmt"
+	"log"
+	"strings"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 _, err := client.PublishCheckpoint(context.Background(), topicID, hcs27.CheckpointMetadata{
 	Type: "ans-checkpoint-v1",
 	Stream: hcs27.StreamID{Registry: "ans", LogID: "overflow"},
@@ -267,12 +295,12 @@ _, err := client.PublishCheckpoint(context.Background(), topicID, hcs27.Checkpoi
 	},
 }, "overflow checkpoint", "")
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 records, err := client.GetCheckpoints(context.Background(), topicID, nil)
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 fmt.Println(string(records[0].Message.Metadata)) // "hcs://1/<topic>"
@@ -329,12 +357,20 @@ for (const checkpoint of checkpoints) {
 <TabItem value="go">
 
 ```go
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
 records, err := client.GetCheckpoints(context.Background(), topicID, nil)
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 if err := hcs27.ValidateCheckpointChain(records); err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 for _, record := range records {
@@ -374,9 +410,15 @@ console.log(metadataBytes.toString('utf8'));
 <TabItem value="go">
 
 ```go
+import (
+	"context"
+	"fmt"
+	"log"
+)
+
 payload, err := client.ResolveHCS1Reference(context.Background(), "hcs://1/0.0.123456")
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 fmt.Println(string(payload))
@@ -386,7 +428,7 @@ fmt.Println(string(payload))
 <TabItem value="python">
 
 ```python
-payload = client.resolve_h_c_s1_reference("hcs://1/0.0.123456")
+payload = client.resolveHCS1Reference("hcs://1/0.0.123456")
 print(payload.decode("utf-8"))
 ```
 

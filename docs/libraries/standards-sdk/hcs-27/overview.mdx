@@ -102,6 +102,7 @@ import (
 	"crypto/sha256"
 	"encoding/base64"
 	"log"
+	"os"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
 )
@@ -153,6 +154,7 @@ if err != nil {
 ```python
 import base64
 import hashlib
+import os
 
 from standards_sdk_py.hcs27 import HCS27Client
 
@@ -163,8 +165,8 @@ def root_hash(value: str) -> str:
 
 
 client = HCS27Client(
-    operator_id="0.0.123456",
-    operator_key="302e...",
+    operator_id=os.environ["HEDERA_ACCOUNT_ID"],
+    operator_key=os.environ["HEDERA_PRIVATE_KEY"],
     network="testnet",
 )
 
