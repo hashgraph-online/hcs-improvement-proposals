@@ -1,6 +1,6 @@
 ---
 title: Server — HCS‑27 Client
-description: Create checkpoint topics and publish Merkle-root commitments using Hedera account credentials.
+description: Create checkpoint topics, publish commitments, and resolve overflow metadata with direct Hedera credentials.
 sidebar_position: 3
 ---
 
@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 # Server Client
 
-The server client uses direct Hedera operator credentials to create checkpoint topics and publish checkpoint commitments.
+The server clients use Hedera operator credentials or an injected Hedera SDK client to create HCS-27 topics and publish checkpoints directly to the network.
 
 ## Create a Client
 
@@ -17,15 +17,33 @@ The server client uses direct Hedera operator credentials to create checkpoint t
 <TabItem value="typescript">
 
 ```ts
-// HCS-27 TypeScript support is not yet available.
-// Coming soon to @hashgraphonline/standards-sdk.
+import { Client as HederaClient } from '@hashgraph/sdk';
+import { HCS27Client } from '@hashgraphonline/standards-sdk';
+
+const hederaClient = HederaClient.forTestnet();
+hederaClient.setOperator(
+  process.env.HEDERA_ACCOUNT_ID!,
+  process.env.HEDERA_PRIVATE_KEY!,
+);
+
+const client = new HCS27Client({
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+  client: hederaClient,
+});
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+import (
+	"log"
+	"os"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
 
 client, err := hcs27.NewClient(hcs27.ClientConfig{
 	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
@@ -42,13 +60,21 @@ if err != nil {
 
 ```python
 import os
-from standards_sdk_py.hcs27 import Hcs27Client
 
+from hedera import Client as HederaClient, AccountId, PrivateKey
+from standards_sdk_py.hcs27 import HCS27Client
 
-client = Hcs27Client(
+hedera_client = HederaClient.forTestnet()
+hedera_client.setOperator(
+    AccountId.fromString(os.environ["HEDERA_ACCOUNT_ID"]),
+    PrivateKey.fromString(os.environ["HEDERA_PRIVATE_KEY"]),
+)
+
+client = HCS27Client(
     operator_id=os.environ["HEDERA_ACCOUNT_ID"],
-    operator_private_key=os.environ["HEDERA_PRIVATE_KEY"],
+    operator_key=os.environ["HEDERA_PRIVATE_KEY"],
     network="testnet",
+    hedera_client=hedera_client,
 )
 ```
 
@@ -61,30 +87,52 @@ client = Hcs27Client(
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+const topic = await client.createCheckpointTopic({
+  ttl: 3600,
+  adminKey: true,
+  submitKey: true,
+});
+
+console.log(topic.topicId, topic.transactionId);
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-topicID, txID, err := client.CreateCheckpointTopic(ctx, hcs27.CreateTopicOptions{
-	TTLSeconds:          86400,
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
+topicID, transactionID, err := client.CreateCheckpointTopic(context.Background(), hcs27.CreateTopicOptions{
+	TTLSeconds:          3600,
 	UseOperatorAsAdmin:  true,
 	UseOperatorAsSubmit: true,
 })
 if err != nil {
 	log.Fatal(err)
 }
-fmt.Printf("Created checkpoint topic: %s (tx: %s)\n", topicID, txID)
+
+fmt.Println(topicID, transactionID)
 ```
 
 </TabItem>
 <TabItem value="python">
 
 ```python
-txID = client.create_checkpoint_topic(ttl_seconds=86400, use_operator_as_admin=True, use_operator_as_submit=True)
-fmt.printf("Created checkpoint topic: %s (tx: %s)\n", topicID, txID)
+topic = client.create_checkpoint_topic(
+    {
+        "ttl": 3600,
+        "useOperatorAsAdmin": True,
+        "useOperatorAsSubmit": True,
+    }
+)
+
+print(topic["topicId"], topic["transactionId"])
 ```
 
 </TabItem>
@@ -96,93 +144,237 @@ fmt.printf("Created checkpoint topic: %s (tx: %s)\n", topicID, txID)
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+await client.publishCheckpoint(
+  topic.topicId,
+  {
+    type: 'ans-checkpoint-v1',
+    stream: { registry: 'ans', log_id: 'default' },
+    log: {
+      alg: 'sha-256',
+      leaf: 'sha256(jcs(event))',
+      merkle: 'rfc9162',
+    },
+    root: {
+      treeSize: '2',
+      rootHashB64u: 'mB6Q2Wv1hR2hRGYt3Ty1m9E0m7M1hB4wS-9DqR2xFZQ',
+    },
+    prev: {
+      treeSize: '1',
+      rootHashB64u: 'pD8Q2Wv1hR2hRGYt3Ty1m9E0m7M1hB4wS-9DqR2xFZA',
+    },
+  },
+  'checkpoint 2',
+);
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-metadata := hcs27.CheckpointMetadata{
-	Type:   "ans-checkpoint-v1",
-	Stream: hcs27.StreamID{Registry: "my-app", LogID: "events"},
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
+result, err := client.PublishCheckpoint(context.Background(), topicID, hcs27.CheckpointMetadata{
+	Type: "ans-checkpoint-v1",
+	Stream: hcs27.StreamID{
+		Registry: "ans",
+		LogID:    "default",
+	},
 	Log: &hcs27.LogProfile{
 		Algorithm: "sha-256",
-		Leaf:      "rfc6962-leaf",
-		Merkle:    "rfc6962-node",
+		Leaf:      "sha256(jcs(event))",
+		Merkle:    "rfc9162",
 	},
 	Root: hcs27.RootCommitment{
-		TreeSize:    150,
-		RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
+		TreeSize:     "2",
+		RootHashB64u: "mB6Q2Wv1hR2hRGYt3Ty1m9E0m7M1hB4wS-9DqR2xFZQ",
 	},
 	Previous: &hcs27.PreviousCommitment{
-		TreeSize:    100,
-		RootHashB64: "kZ4L2bPe1sX...",
+		TreeSize:     "1",
+		RootHashB64u: "pD8Q2Wv1hR2hRGYt3Ty1m9E0m7M1hB4wS-9DqR2xFZA",
 	},
-	BatchRange: hcs27.BatchRange{Start: 101, End: 150},
-}
-
-result, err := client.PublishCheckpoint(ctx, topicID, metadata, "batch 101-150", "")
+}, "checkpoint 2", "")
 if err != nil {
 	log.Fatal(err)
 }
-fmt.Printf("Published checkpoint (seq: %d, tx: %s)\n", result.SequenceNumber, result.TransactionID)
+
+fmt.Println(result.SequenceNumber, result.TransactionID)
 ```
 
 </TabItem>
 <TabItem value="python">
 
 ```python
-metadata = hcs27.CheckpointMetadata{
-# Type:   "ans-checkpoint-v1",
-# Stream: {"registry": "my-app", "log_id": "events"},
-# Log: &hcs27.LogProfile{
-# Algorithm: "sha-256",
-# Leaf:      "rfc6962-leaf",
-# Merkle:    "rfc6962-node",
-# Root: hcs27.RootCommitment{
-# TreeSize:    150,
-# RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
-# Previous: &hcs27.PreviousCommitment{
-# TreeSize:    100,
-# RootHashB64: "kZ4L2bPe1sX...",
-# BatchRange: {"start": 101, "end": 150},
+result = client.publish_checkpoint(
+    topic["topicId"],
+    {
+        "type": "ans-checkpoint-v1",
+        "stream": {"registry": "ans", "log_id": "default"},
+        "log": {
+            "alg": "sha-256",
+            "leaf": "sha256(jcs(event))",
+            "merkle": "rfc9162",
+        },
+        "root": {
+            "treeSize": "2",
+            "rootHashB64u": "mB6Q2Wv1hR2hRGYt3Ty1m9E0m7M1hB4wS-9DqR2xFZQ",
+        },
+        "prev": {
+            "treeSize": "1",
+            "rootHashB64u": "pD8Q2Wv1hR2hRGYt3Ty1m9E0m7M1hB4wS-9DqR2xFZA",
+        },
+    },
+    "checkpoint 2",
+)
 
-result = client.publish_checkpoint(topicID, metadata, "batch 101-150")
-fmt.printf("Published checkpoint (seq: %d, tx: %s)\n", result.SEQUENCE_NUMBER, result.TRANSACTION_I_D)
+print(result["sequenceNumber"], result["transactionId"])
 ```
 
 </TabItem>
 </LanguageTabs>
 
-Notes
-- If the serialized checkpoint exceeds **1024 bytes**, the SDK automatically publishes the metadata via HCS-1 and replaces the inline payload with an `hcs://1/<topicId>` reference plus a `metadata_digest` for integrity verification.
-- The message `memo` field must be under 300 characters.
+## Overflow Metadata Uses an Inscription Reference
 
-## Retrieve Checkpoints
+If the serialized HCS-27 payload exceeds 1024 bytes, `publishCheckpoint(...)` automatically stores the metadata as an inscription and publishes the smaller pointer message instead.
 
 <LanguageTabs>
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+const result = await client.publishCheckpoint(
+  topic.topicId,
+  {
+    type: 'ans-checkpoint-v1',
+    stream: { registry: 'ans', log_id: 'overflow' },
+    log: {
+      alg: 'sha-256',
+      leaf: 'sha256(jcs(event))-'.repeat(90),
+      merkle: 'rfc9162',
+    },
+    root: {
+      treeSize: '1',
+      rootHashB64u: 'A7K9uA5RUL9Ko_BIO8l7ON3W5gQw6B6yv2nM3xABjS8',
+    },
+  },
+  'overflow checkpoint',
+);
+
+const checkpoints = await client.getCheckpoints(topic.topicId);
+console.log(checkpoints[0]?.message.metadata); // hcs://1/<topic>
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-records, err := client.GetCheckpoints(ctx, topicID, nil)
+import (
+	"context"
+	"fmt"
+	"log"
+	"strings"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
+_, err := client.PublishCheckpoint(context.Background(), topicID, hcs27.CheckpointMetadata{
+	Type: "ans-checkpoint-v1",
+	Stream: hcs27.StreamID{Registry: "ans", LogID: "overflow"},
+	Log: &hcs27.LogProfile{
+		Algorithm: "sha-256",
+		Leaf:      strings.Repeat("sha256(jcs(event))-", 90),
+		Merkle:    "rfc9162",
+	},
+	Root: hcs27.RootCommitment{
+		TreeSize:     "1",
+		RootHashB64u: "A7K9uA5RUL9Ko_BIO8l7ON3W5gQw6B6yv2nM3xABjS8",
+	},
+}, "overflow checkpoint", "")
 if err != nil {
+	log.Fatal(err)
+}
+
+records, err := client.GetCheckpoints(context.Background(), topicID, nil)
+if err != nil {
+	log.Fatal(err)
+}
+
+fmt.Println(string(records[0].Message.Metadata)) // "hcs://1/<topic>"
+```
+
+</TabItem>
+<TabItem value="python">
+
+```python
+client.publish_checkpoint(
+    topic["topicId"],
+    {
+        "type": "ans-checkpoint-v1",
+        "stream": {"registry": "ans", "log_id": "overflow"},
+        "log": {
+            "alg": "sha-256",
+            "leaf": "sha256(jcs(event))-" * 90,
+            "merkle": "rfc9162",
+        },
+        "root": {
+            "treeSize": "1",
+            "rootHashB64u": "A7K9uA5RUL9Ko_BIO8l7ON3W5gQw6B6yv2nM3xABjS8",
+        },
+    },
+    "overflow checkpoint",
+)
+
+records = client.get_checkpoints(topic["topicId"])
+print(records[0]["message"]["metadata"])  # hcs://1/<topic>
+```
+
+</TabItem>
+</LanguageTabs>
+
+## Read and Validate a Checkpoint Chain
+
+<LanguageTabs>
+<TabItem value="typescript">
+
+```ts
+const checkpoints = await client.getCheckpoints(topic.topicId);
+client.validateCheckpointChain(checkpoints);
+
+for (const checkpoint of checkpoints) {
+  console.log(
+    checkpoint.sequence,
+    checkpoint.effectiveMetadata.root.treeSize,
+    checkpoint.effectiveMetadata.root.rootHashB64u,
+  );
+}
+```
+
+</TabItem>
+<TabItem value="go">
+
+```go
+import (
+	"context"
+	"fmt"
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
+
+records, err := client.GetCheckpoints(context.Background(), topicID, nil)
+if err != nil {
+	log.Fatal(err)
+}
+if err := hcs27.ValidateCheckpointChain(records); err != nil {
 	log.Fatal(err)
 }
 
 for _, record := range records {
-	fmt.Printf("Seq %d: root=%s treeSize=%d\n",
-		record.Sequence,
-		record.EffectiveMetadata.Root.RootHashB64,
-		record.EffectiveMetadata.Root.TreeSize,
-	)
+	fmt.Println(record.Sequence, record.EffectiveMetadata.Root.TreeSize, record.EffectiveMetadata.Root.RootHashB64u)
 }
 ```
 
@@ -190,75 +382,63 @@ for _, record := range records {
 <TabItem value="python">
 
 ```python
-records = client.get_checkpoints(topicID, None)
+records = client.get_checkpoints(topic["topicId"])
+client.validate_checkpoint_chain(records)
 
-for record in records :
-fmt.printf("Seq %d: root=%s treeSize=%d\n", record.SEQUENCE, record.EffectiveMetadata.Root.RootHashB64, record.EffectiveMetadata.Root.TreeSize)
+for record in records:
+    print(
+        record["sequence"],
+        record["effectiveMetadata"]["root"]["treeSize"],
+        record["effectiveMetadata"]["root"]["rootHashB64u"],
+    )
 ```
 
 </TabItem>
 </LanguageTabs>
 
-## Validate a Checkpoint Chain
+## Resolve an HCS-1 Reference Directly
 
 <LanguageTabs>
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+const metadataBytes = await client.resolveHCS1Reference('hcs://1/0.0.123456');
+console.log(metadataBytes.toString('utf8'));
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-if err := hcs27.ValidateCheckpointChain(records); err != nil {
-	log.Fatalf("Chain validation failed: %v", err)
-}
-fmt.Println("Checkpoint chain is valid")
-```
+import (
+	"context"
+	"fmt"
+	"log"
+)
 
-</TabItem>
-<TabItem value="python">
-
-```python
-err = hcs27.validate_checkpoint_chain(records); err != nil {)
-log.fatalf("Chain validation failed: %v", err)
-fmt.println("Checkpoint chain is valid")
-```
-
-</TabItem>
-</LanguageTabs>
-
-## Resolve HCS-1 References
-
-When checkpoint metadata overflows, the SDK stores it via HCS-1. You can resolve references manually:
-
-<LanguageTabs>
-<TabItem value="typescript">
-
-```ts
-// Not yet available.
-```
-
-</TabItem>
-<TabItem value="go">
-
-```go
-payload, err := client.ResolveHCS1Reference(ctx, "hcs://1/0.0.789012")
+payload, err := client.ResolveHCS1Reference(context.Background(), "hcs://1/0.0.123456")
 if err != nil {
 	log.Fatal(err)
 }
-fmt.Printf("Resolved %d bytes of metadata\n", len(payload))
+
+fmt.Println(string(payload))
 ```
 
 </TabItem>
 <TabItem value="python">
 
 ```python
-payload = client.resolve_h_c_s1_reference("hcs://1/0.0.789012")
-fmt.printf("Resolved %d bytes of metadata\n", len(payload))
+payload = client.resolveHCS1Reference("hcs://1/0.0.123456")
+print(payload.decode("utf-8"))
 ```
 
 </TabItem>
 </LanguageTabs>
+
+## Private Topics Created Elsewhere
+
+If you create the topic outside the TypeScript SDK and still want to publish to a private submit-key topic, register the submit signer before calling `publishCheckpoint(...)`:
+
+```ts
+client.registerTopicSubmitKey('0.0.123456', process.env.HCS27_SUBMIT_KEY!);
+```

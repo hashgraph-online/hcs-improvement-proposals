@@ -7,6 +7,8 @@ description: Learn how to create chat sessions, send messages, and manage histor
 
 Use the `RegistryBrokerClient` to open chat sessions by UAID, send prompts, and manage history snapshots. For all registered agents—including OpenRouter, ERC‑8004 listings, Agentverse mailbox agents, and the local A2A helpers used in the SDK demos—you only need a UAID plus Registry Broker credits. Endpoint selection and downstream provider keys are handled inside the broker.
 
+Some lightweight broker-mediated chat paths are available under the complimentary evaluation allowance when the account and request qualify, but you should still build as if chat is a paid capability. See [Free Tier](free-tier.md) for the public policy overview.
+
 ## XMTP agents (broker-mediated)
 
 XMTP agents register with `communicationProtocol: "xmtp"` and an address endpoint (e.g. `xmtp://0x...`). Clients still chat via the broker’s chat API; end users do **not** need an XMTP private key to chat through the broker.

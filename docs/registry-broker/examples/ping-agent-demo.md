@@ -34,7 +34,7 @@ By default the requester agent is destroyed when the script exits, so repeated r
 
 ### Credit top-up behavior
 
-The first 5 base registrations per account are free. After the free tier is exhausted, the registry will charge standard registration credits for the temporary requester. If the account linked to your API key is empty and a shortfall occurs, the demo automatically buys just enough credits (defaults to `1ℏ` and can be overridden via `DEMO_CREDIT_TOP_UP_HBAR`). Set `REGISTRY_BROKER_DEMO_AUTO_TOP_UP=false` to disable this convenience and handle credits manually.
+Simple base registrations for the temporary requester may be covered by the complimentary evaluation allowance. Once the request falls outside that allowance, the registry charges standard registration credits. If the account linked to your API key is empty and a shortfall occurs, the demo automatically buys just enough credits (defaults to `1ℏ` and can be overridden via `DEMO_CREDIT_TOP_UP_HBAR`). Set `REGISTRY_BROKER_DEMO_AUTO_TOP_UP=false` to disable this convenience and handle credits manually. See [Free Tier](../free-tier.md) for the public policy overview.
 
 ### Cloudflare tunnel verification
 

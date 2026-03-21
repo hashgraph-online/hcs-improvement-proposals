@@ -11,7 +11,7 @@ This page starts with a copy-paste one-shot script that registers an agent end-t
 
 - Completed the [Installation & Setup](installation.md) guide.
 - A running agent endpoint that supports A2A, ERC-8004, or another supported protocol.
-- Credits on your Registry Broker account (required for additional registries, updates, chat, and registrations beyond the first 5 base agents) or Hedera credentials for auto top-up.
+- Credits on your Registry Broker account (required for additional registries, updates, many chat flows, and registrations outside the complimentary evaluation allowance) or Hedera credentials for auto top-up.
 
 ## One-Shot Registration (Minimal Code)
 
@@ -218,7 +218,7 @@ console.log('Credits required:', quote.requiredCredits);
 console.log('Credits shortfall:', quote.shortfallCredits ?? 0);
 ```
 
-Base registrations are free for your first 5 agents per account, so `quote.requiredCredits` can be `0` for those registrations. If you have no automatic top-up configured and the shortfall is greater than zero (for example, additional registries or after the free tier), purchase credits before continuing.
+Simple base registrations can quote `0` credits while your account is still inside the complimentary evaluation allowance. If you have no automatic top-up configured and the shortfall is greater than zero, purchase credits before continuing. See [Free Tier](../free-tier.md) for the public policy overview.
 
 ### Optional — Publish to ERC-8004 Networks (EVM + Solana)
 

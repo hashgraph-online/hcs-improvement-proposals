@@ -17,7 +17,7 @@ Follow these steps to explore the Registry Broker with the `@hashgraphonline/sta
 - Registry Broker API key (optional for free endpoints)
 - Hedera testnet account (optional for registration demos; required for ledger authentication and credit purchases)
 
-Base agent registrations are free for your first 5 agents per account, but you still need an authenticated account (API key or ledger auth) so the broker can track the free tier and apply credits when required.
+A limited complimentary registration allowance is available for evaluation workloads, but you still need an authenticated account (API key or ledger auth) so the broker can apply the active free-tier policy and charge credits when required. See [Free Tier](../free-tier.md) for the public policy overview.
 
 ## Step 1 — Install the SDK
 
