@@ -8,14 +8,16 @@ import TabItem from '@theme/TabItem';
 
 # HCS-27: Transparency Log Checkpoints
 
-HCS-27 anchors append-only transparency logs to Hedera by publishing periodic checkpoint commitments (`tree_size`, `root_hash`, and batch range metadata).
+HCS-27 anchors append-only transparency logs to Hedera by publishing signed or unsigned checkpoint commitments. The Standards SDK now exposes draft-aligned HCS-27 clients in TypeScript, Go, and Python, including topic creation, checkpoint publication, mirror-node reads, Merkle helpers, proof verification, and automatic overflow metadata inscription when a checkpoint payload exceeds the Hedera message size limit.
 
-## What HCS-27 Does
+## What the SDK Covers
 
-- Creates checkpoint topics with standard HCS-27 memo conventions.
-- Publishes checkpoint messages with root commitments and optional overflow metadata pointers.
-- Validates checkpoint message payloads and metadata digests.
-- Resolves and verifies checkpoint streams from mirror-node data.
+- Draft-aligned checkpoint message and metadata shapes.
+- Topic memo and transaction memo helpers for HCS-27 topics.
+- Checkpoint publication with `root.treeSize`, `rootHashB64u`, and optional `prev` linkage.
+- Mirror-node checkpoint reads with resolved effective metadata.
+- Inclusion and consistency proof verification helpers.
+- Automatic HCS-1 metadata references plus `metadata_digest` when the serialized checkpoint exceeds 1024 bytes.
 
 ## Installation
 
@@ -23,10 +25,9 @@ HCS-27 anchors append-only transparency logs to Hedera by publishing periodic ch
 <TabItem value="typescript">
 
 ```bash
-npm install @hashgraphonline/standards-sdk
+pnpm add @hashgraphonline/standards-sdk
+# npm install @hashgraphonline/standards-sdk
 ```
-
-TypeScript HCS-27 support is not yet available in `@hashgraphonline/standards-sdk`.
 
 </TabItem>
 <TabItem value="go">
@@ -38,7 +39,7 @@ go get github.com/hashgraph-online/standards-sdk-go@latest
 </TabItem>
 <TabItem value="python">
 
-```python
+```bash
 pip install standards-sdk-py
 ```
 
@@ -51,7 +52,45 @@ pip install standards-sdk-py
 <TabItem value="typescript">
 
 ```typescript
-// HCS-27 TypeScript client is not yet implemented in standards-sdk.
+import { createHash } from 'node:crypto';
+import { HCS27Client } from '@hashgraphonline/standards-sdk';
+
+const rootHash = (value: string): string =>
+  createHash('sha256').update(value).digest('base64url');
+
+const client = new HCS27Client({
+  operatorId: process.env.HEDERA_ACCOUNT_ID!,
+  operatorKey: process.env.HEDERA_PRIVATE_KEY!,
+  network: 'testnet',
+});
+
+const topic = await client.createCheckpointTopic({
+  ttl: 3600,
+  adminKey: true,
+  submitKey: true,
+});
+
+await client.publishCheckpoint(
+  topic.topicId,
+  {
+    type: 'ans-checkpoint-v1',
+    stream: { registry: 'ans', log_id: 'typescript-example' },
+    log: {
+      alg: 'sha-256',
+      leaf: 'sha256(jcs(event))',
+      merkle: 'rfc9162',
+    },
+    root: {
+      treeSize: '1',
+      rootHashB64u: rootHash('ts-sdk-hcs27-root-1'),
+    },
+  },
+  'typescript checkpoint 1',
+);
+
+const checkpoints = await client.getCheckpoints(topic.topicId);
+client.validateCheckpointChain(checkpoints);
+console.log(checkpoints[0]?.effectiveMetadata.root.rootHashB64u);
 ```
 
 </TabItem>
@@ -60,14 +99,21 @@ pip install standards-sdk-py
 ```go
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/base64"
 	"log"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
 )
 
+rootHash := func(value string) string {
+	sum := sha256.Sum256([]byte(value))
+	return base64.RawURLEncoding.EncodeToString(sum[:])
+}
+
 client, err := hcs27.NewClient(hcs27.ClientConfig{
-	OperatorAccountID:  "0.0.123456",
-	OperatorPrivateKey: "<private-key>",
+	OperatorAccountID:  os.Getenv("HEDERA_ACCOUNT_ID"),
+	OperatorPrivateKey: os.Getenv("HEDERA_PRIVATE_KEY"),
 	Network:            "testnet",
 })
 if err != nil {
@@ -75,7 +121,7 @@ if err != nil {
 }
 
 topicID, _, err := client.CreateCheckpointTopic(context.Background(), hcs27.CreateTopicOptions{
-	TTLSeconds:          300,
+	TTLSeconds:          3600,
 	UseOperatorAsAdmin:  true,
 	UseOperatorAsSubmit: true,
 })
@@ -83,17 +129,19 @@ if err != nil {
 	log.Fatal(err)
 }
 
-metadata := hcs27.CheckpointMetadata{
-	Type:   "ans-checkpoint-v1",
-	Stream: hcs27.StreamID{Registry: "ans", LogID: "default"},
-	Root: hcs27.RootCommitment{
-		TreeSize:    671,
-		RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
+_, err = client.PublishCheckpoint(context.Background(), topicID, hcs27.CheckpointMetadata{
+	Type: "ans-checkpoint-v1",
+	Stream: hcs27.StreamID{Registry: "ans", LogID: "go-example"},
+	Log: &hcs27.LogProfile{
+		Algorithm: "sha-256",
+		Leaf:      "sha256(jcs(event))",
+		Merkle:    "rfc9162",
 	},
-	BatchRange: hcs27.BatchRange{Start: 661, End: 671},
-}
-
-_, err = client.PublishCheckpoint(context.Background(), topicID, metadata, "go-sdk checkpoint publish", "")
+	Root: hcs27.RootCommitment{
+		TreeSize:     "1",
+		RootHashB64u: rootHash("go-sdk-hcs27-root-1"),
+	},
+}, "go checkpoint 1", "")
 if err != nil {
 	log.Fatal(err)
 }
@@ -103,35 +151,68 @@ if err != nil {
 <TabItem value="python">
 
 ```python
-import os
-from standards_sdk_py.hcs27 import Hcs27Client
+import base64
+import hashlib
+
+from standards_sdk_py.hcs27 import HCS27Client
 
 
+def root_hash(value: str) -> str:
+    digest = hashlib.sha256(value.encode("utf-8")).digest()
+    return base64.urlsafe_b64encode(digest).decode("utf-8").rstrip("=")
 
-client = Hcs27Client(
+
+client = HCS27Client(
     operator_id="0.0.123456",
-    operator_private_key="<private-key>",
+    operator_key="302e...",
     network="testnet",
 )
 
-client.create_checkpoint_topic(ttl_seconds=300, use_operator_as_admin=True, use_operator_as_submit=True)
+topic = client.create_checkpoint_topic(
+    {
+        "ttl": 3600,
+        "useOperatorAsAdmin": True,
+        "useOperatorAsSubmit": True,
+    }
+)
 
-metadata = hcs27.CheckpointMetadata{
-# Type:   "ans-checkpoint-v1",
-# Stream: {"registry": "ans", "log_id": "default"},
-# Root: hcs27.RootCommitment{
-# TreeSize:    671,
-# RootHashB64: "8zVIY3QJBOdTYR8dnLOzedEfym4Jl7f1xy8pciLEMew",
-# BatchRange: {"start": 661, "end": 671},
+client.publish_checkpoint(
+    topic["topicId"],
+    {
+        "type": "ans-checkpoint-v1",
+        "stream": {"registry": "ans", "log_id": "python-example"},
+        "log": {
+            "alg": "sha-256",
+            "leaf": "sha256(jcs(event))",
+            "merkle": "rfc9162",
+        },
+        "root": {
+            "treeSize": "1",
+            "rootHashB64u": root_hash("py-sdk-hcs27-root-1"),
+        },
+    },
+    "python checkpoint 1",
+)
 
-client.publish_checkpoint(topicID, metadata, "go-sdk checkpoint publish")
+checkpoints = client.get_checkpoints(topic["topicId"])
+client.validate_checkpoint_chain(checkpoints)
+print(checkpoints[0]["effectiveMetadata"]["root"]["rootHashB64u"])
 ```
 
 </TabItem>
 </LanguageTabs>
 
+## Automatic Overflow Inscription
+
+When a serialized checkpoint message would exceed the Hedera `TopicMessageSubmitTransaction` payload limit, the SDK automatically stores the full metadata as an inscription and publishes an HCS-27 message with:
+
+- `metadata: "hcs://1/<topicId>"`
+- `metadata_digest: { alg: "sha-256", b64u: "..." }`
+
+You do not need to chunk or assemble the HCS-1 payload manually. `getCheckpoints(...)` resolves the effective metadata for you, and `resolveHCS1Reference(...)` is available if you want the raw bytes directly.
+
 ## References
 
 - [HCS-27 Standard](/docs/standards/hcs-27)
-- [HCS-27 Merkle Tree Profile](/docs/standards/hcs-27/merkle-tree-profile)
-- [Go SDK Overview](/docs/libraries/go-sdk/overview)
+- [Inscription Utilities](/docs/libraries/standards-sdk/inscribe)
+- [HCS-27 API Reference](/docs/libraries/standards-sdk/hcs-27/api)

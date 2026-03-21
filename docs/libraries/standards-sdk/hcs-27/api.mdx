@@ -1,14 +1,15 @@
 ---
 title: HCS‑27 API Reference
-description: Complete reference for HCS‑27 checkpoint types, client methods, validation, and Merkle utilities.
+description: Import paths, core types, and client methods for the HCS-27 SDK modules.
 sidebar_position: 5
 ---
 
 import LanguageTabs from '@site/src/components/LanguageTabs';
 import TabItem from '@theme/TabItem';
 
-Sources
-- Go module: https://github.com/hashgraph-online/standards-sdk-go/tree/main/pkg/hcs27
+# API Reference
+
+This page summarizes the public HCS-27 surfaces exposed by the Standards SDK family after the draft-alignment work.
 
 ## Import Paths
 
@@ -16,8 +17,18 @@ Sources
 <TabItem value="typescript">
 
 ```ts
-// HCS-27 TypeScript support is not yet available.
-// Coming soon to @hashgraphonline/standards-sdk.
+import {
+  HCS27Client,
+  type HCS27CheckpointMetadata,
+  type HCS27CheckpointMessage,
+  type HCS27CheckpointRecord,
+  type HCS27CreateCheckpointTopicOptions,
+  type HCS27CreateCheckpointTopicResult,
+  type HCS27PublishCheckpointResult,
+  type HCS27InclusionProof,
+  type HCS27ConsistencyProof,
+  type HCS27TopicMemo,
+} from '@hashgraphonline/standards-sdk';
 ```
 
 </TabItem>
@@ -31,131 +42,134 @@ import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
 <TabItem value="python">
 
 ```python
-from standards_sdk_py.hcs27 import Hcs27Client
-
-# Equivalent Python usage — see Python SDK docs for details
+from standards_sdk_py.hcs27 import (
+    AsyncHCS27Client,
+    HCS27Client,
+    Hcs27CheckpointMetadata,
+    Hcs27CheckpointMessage,
+    Hcs27CheckpointRecord,
+    Hcs27ConsistencyProof,
+    Hcs27CreateCheckpointTopicOptions,
+    Hcs27CreateCheckpointTopicResult,
+    Hcs27InclusionProof,
+    Hcs27PublishCheckpointResult,
+    Hcs27TopicMemo,
+)
 ```
 
 </TabItem>
 </LanguageTabs>
 
-## Configuration
+## Client Construction
 
 <LanguageTabs>
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+new HCS27Client({
+  operatorId,
+  operatorKey,
+  network: 'testnet' | 'mainnet',
+  client,
+  keyType,
+  mirrorNode,
+  cdnEndpoint,
+  logger,
+});
 ```
+
+- `client` lets you inject an existing `@hashgraph/sdk` client.
+- `cdnEndpoint` controls HCS-1 reference resolution for overflow metadata.
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-type ClientConfig struct {
-	OperatorAccountID  string // Required – e.g. "0.0.12345"
-	OperatorPrivateKey string // Required – DER-hex or raw Ed25519/ECDSA key
-	Network            string // "mainnet" | "testnet"
-	MirrorBaseURL      string // Optional custom mirror node URL
-	MirrorAPIKey       string // Optional mirror node API key
-}
+hcs27.NewClient(hcs27.ClientConfig{
+	OperatorAccountID:  "...",
+	OperatorPrivateKey: "...",
+	Network:            "testnet",
+	MirrorBaseURL:      "",
+	MirrorAPIKey:       "",
+	InscriberAuthURL:   "",
+	InscriberAPIURL:    "",
+	HederaClient:       nil,
+})
 ```
 
 </TabItem>
 <TabItem value="python">
 
 ```python
-from standards_sdk_py.hcs27 import Hcs27Client
+HCS27Client(
+    operator_id="0.0.123456",
+    operator_key="302e...",
+    hedera_client=hedera_client,
+    network="testnet",
+    mirror_base_url="https://testnet-public.mirrornode.hedera.com/api/v1",
+    cdn_base_url="https://your-inscription-cdn.example",
+    inscriber_base_url="https://your-inscriber-api.example",
+    mirror_client=mirror_client,
+)
 
-# Equivalent Python usage — see Python SDK docs for details
+AsyncHCS27Client(
+    operator_id="0.0.123456",
+    operator_key="302e...",
+    hedera_client=hedera_client,
+    network="testnet",
+)
 ```
+
+- `hedera_client` lets you reuse an existing `hedera-sdk-py` client.
+- `cdn_base_url` controls overflow metadata resolution.
+- Both camelCase and snake_case method aliases are exposed on the sync client.
 
 </TabItem>
 </LanguageTabs>
 
-## Types
+## Core Types
 
 <LanguageTabs>
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+interface HCS27CheckpointMetadata {
+  type: 'ans-checkpoint-v1';
+  stream: { registry: string; log_id: string };
+  log: { alg: string; leaf: string; merkle: string };
+  root: { treeSize: string; rootHashB64u: string };
+  prev?: { treeSize: string; rootHashB64u: string };
+  sig?: { alg: string; kid: string; b64u: string };
+}
+
+interface HCS27CheckpointMessage {
+  p: 'hcs-27';
+  op: 'register';
+  metadata: HCS27CheckpointMetadata | string;
+  metadata_digest?: { alg: 'sha-256'; b64u: string };
+  m?: string;
+}
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-type StreamID struct {
-	Registry string `json:"registry"`
-	LogID    string `json:"log_id"`
-}
-
-type LogProfile struct {
-	Algorithm string `json:"alg"`    // "sha-256"
-	Leaf      string `json:"leaf"`   // leaf domain separator
-	Merkle    string `json:"merkle"` // node domain separator
-}
-
-type RootCommitment struct {
-	TreeSize    uint64 `json:"treeSize"`
-	RootHashB64 string `json:"rootHashB64u"` // base64url-encoded
-}
-
-type PreviousCommitment struct {
-	TreeSize    uint64 `json:"treeSize"`
-	RootHashB64 string `json:"rootHashB64u"`
-}
-
-type BatchRange struct {
-	Start uint64 `json:"start"`
-	End   uint64 `json:"end"`
-}
-
-type Signature struct {
-	Algorithm string `json:"alg"`
-	KeyID     string `json:"kid"`
-	Signature string `json:"b64u"` // base64url-encoded
-}
-
 type CheckpointMetadata struct {
-	Type       string              `json:"type"`
-	Stream     StreamID            `json:"stream"`
-	Log        *LogProfile         `json:"log,omitempty"`
-	Root       RootCommitment      `json:"root"`
-	Previous   *PreviousCommitment `json:"prev,omitempty"`
-	BatchRange BatchRange          `json:"batch_range"`
-	Signature  *Signature          `json:"sig,omitempty"`
+	Type      string
+	Stream    StreamID
+	Log       *LogProfile
+	Root      RootCommitment
+	Previous  *PreviousCommitment
+	Signature *Signature
 }
 
 type CheckpointMessage struct {
-	Protocol       string          `json:"p"`
-	Operation      string          `json:"op"`
-	Metadata       json.RawMessage `json:"metadata"`
-	MetadataDigest *MetadataDigest `json:"metadata_digest,omitempty"`
-	Memo           string          `json:"m,omitempty"`
-}
-
-type CheckpointRecord struct {
-	TopicID            string             `json:"topic_id"`
-	Sequence           int64              `json:"sequence"`
-	ConsensusTimestamp string             `json:"consensus_timestamp"`
-	Payer              string             `json:"payer"`
-	Message            CheckpointMessage  `json:"message"`
-	EffectiveMetadata  CheckpointMetadata `json:"effective_metadata"`
-}
-
-type PublishResult struct {
-	TransactionID  string `json:"transaction_id"`
-	SequenceNumber int64  `json:"sequence_number"`
-}
-
-type CreateTopicOptions struct {
-	TTLSeconds          int64
-	UseOperatorAsAdmin  bool
-	UseOperatorAsSubmit bool
-	AdminKey            string
-	SubmitKey           string
+	Protocol       string
+	Operation      string
+	Metadata       json.RawMessage
+	MetadataDigest *MetadataDigest
+	Memo           string
 }
 ```
 
@@ -163,204 +177,103 @@ type CreateTopicOptions struct {
 <TabItem value="python">
 
 ```python
-from standards_sdk_py.hcs27 import Hcs27Client
+class Hcs27CheckpointMetadata(BaseModel):
+    type: Literal["ans-checkpoint-v1"]
+    stream: Hcs27StreamId
+    log: Hcs27LogProfile
+    root: Hcs27RootCommitment
+    prev: Hcs27PreviousCommitment | None = None
+    sig: Hcs27Signature | None = None
 
-# Equivalent Python usage — see Python SDK docs for details
+
+class Hcs27CheckpointMessage(BaseModel):
+    p: Literal["hcs-27"]
+    op: Literal["register"]
+    metadata: dict[str, object] | str
+    metadata_digest: Hcs27MetadataDigest | None = None
+    m: str | None = None
 ```
 
 </TabItem>
 </LanguageTabs>
 
-## Client Methods
+## Main Client Methods
 
 <LanguageTabs>
 <TabItem value="typescript">
 
 ```ts
-// Not yet available.
+createCheckpointTopic(options?): Promise<HCS27CreateCheckpointTopicResult>
+publishCheckpoint(topicId, metadata, messageMemo?, transactionMemo?): Promise<HCS27PublishCheckpointResult>
+registerTopicSubmitKey(topicId, submitKey): void
+getCheckpoints(topicId): Promise<HCS27CheckpointRecord[]>
+resolveHCS1Reference(reference): Promise<Buffer>
+validateCheckpointMessage(message, resolver?): Promise<HCS27CheckpointMetadata>
+validateCheckpointChain(records): void
+buildTopicMemo(ttl?): string
+parseTopicMemo(memo): HCS27TopicMemo | null
+buildTransactionMemo(): string
+emptyRoot(): Buffer
+hashLeaf(...)
+hashNode(...)
+merkleRootFromEntries(entries): string
+merkleRootFromCanonicalEntries(entries): string
+verifyInclusionProof(proof): boolean
+verifyConsistencyProof(proof): boolean
 ```
 
 </TabItem>
 <TabItem value="go">
 
 ```go
-func NewClient(config ClientConfig) (*Client, error)
-
-func (c *Client) MirrorClient() *mirror.Client
-
-func (c *Client) CreateCheckpointTopic(
-	ctx context.Context,
-	options CreateTopicOptions,
-) (topicID string, transactionID string, err error)
-
-func (c *Client) PublishCheckpoint(
-	ctx context.Context,
-	topicID string,
-	metadata CheckpointMetadata,
-	messageMemo string,
-	transactionMemo string,
-) (PublishResult, error)
-
-func (c *Client) GetCheckpoints(
-	ctx context.Context,
-	topicID string,
-	resolver HCS1ResolverFunc,
-) ([]CheckpointRecord, error)
-
-func (c *Client) ResolveHCS1Reference(
-	ctx context.Context,
-	hcs1Reference string,
-) ([]byte, error)
+client.CreateCheckpointTopic(ctx, options)
+client.PublishCheckpoint(ctx, topicID, metadata, messageMemo, transactionMemo)
+client.GetCheckpoints(ctx, topicID, options)
+client.ResolveHCS1Reference(ctx, hcs1Reference)
+hcs27.ValidateCheckpointChain(records)
+hcs27.BuildTopicMemo(ttlSeconds)
+hcs27.ParseTopicMemo(memo)
+hcs27.BuildTransactionMemo()
+hcs27.EmptyRoot()
+hcs27.HashLeaf(canonicalEntry)
+hcs27.HashNode(left, right)
+hcs27.MerkleRootFromEntries(entries)
+hcs27.MerkleRootFromCanonicalEntries(entries)
+hcs27.VerifyInclusionProofObject(proof)
+hcs27.VerifyConsistencyProofObject(proof)
 ```
 
 </TabItem>
 <TabItem value="python">
 
 ```python
-from standards_sdk_py.hcs27 import Hcs27Client
-
-# Equivalent Python usage — see Python SDK docs for details
+client.create_checkpoint_topic(options)
+client.publish_checkpoint(topic_id, metadata, message_memo=None, transaction_memo=None)
+client.get_checkpoints(topic_id)
+client.resolve_h_c_s1_reference(reference)
+client.validate_checkpoint_message(message)
+client.validate_checkpoint_chain(records)
+client.build_topic_memo({"ttl": 3600})
+client.parse_topic_memo(memo)
+client.build_transaction_memo()
+client.empty_root()
+client.hash_leaf(...)
+client.hash_node(...)
+client.merkle_root_from_entries({"entries": [...]})
+client.merkle_root_from_canonical_entries({"entries": [...]})
+client.verify_inclusion_proof({"proof": ...})
+client.verify_consistency_proof({"proof": ...})
 ```
 
 </TabItem>
 </LanguageTabs>
 
-## Validation Functions
+## Overflow Metadata Behavior
 
-<LanguageTabs>
-<TabItem value="typescript">
+All three SDKs publish the checkpoint metadata inline when it fits inside the Hedera message payload budget. When it does not fit, they automatically:
 
-```ts
-// Not yet available.
-```
+1. Store the metadata as an inscription.
+2. Publish an HCS-27 checkpoint with an `hcs://1/<topicId>` metadata reference.
+3. Attach a `metadata_digest` so the resolved bytes can be validated on read.
 
-</TabItem>
-<TabItem value="go">
-
-```go
-type HCS1ResolverFunc func(ctx context.Context, hcs1Reference string) ([]byte, error)
-
-func ValidateCheckpointMessage(
-	ctx context.Context,
-	message CheckpointMessage,
-	resolver HCS1ResolverFunc,
-) (CheckpointMetadata, error)
-
-func ValidateCheckpointChain(records []CheckpointRecord) error
-```
-
-</TabItem>
-<TabItem value="python">
-
-```python
-from standards_sdk_py.hcs27 import Hcs27Client
-
-# Equivalent Python usage — see Python SDK docs for details
-```
-
-</TabItem>
-</LanguageTabs>
-
-Notes
-- `ValidateCheckpointMessage` handles both inline and HCS-1-referenced metadata payloads.
-- When metadata exceeds 1024 bytes, the SDK automatically publishes it via HCS-1 and attaches a `metadata_digest` for integrity verification.
-- `ValidateCheckpointChain` verifies monotonic tree growth and `prev` linkage across a sequence of records.
-
-## Merkle Tree Utilities
-
-<LanguageTabs>
-<TabItem value="typescript">
-
-```ts
-// Not yet available.
-```
-
-</TabItem>
-<TabItem value="go">
-
-```go
-func EmptyRoot() []byte
-func HashLeaf(canonicalEntry []byte) []byte
-func HashNode(left, right []byte) []byte
-
-func MerkleRootFromCanonicalEntries(entries [][]byte) []byte
-func MerkleRootFromEntries(entries []any) ([]byte, error)
-func LeafHashHexFromEntry(entry any) (string, error)
-
-func VerifyInclusionProof(
-	leafIndex uint64,
-	treeSize uint64,
-	leafHashHex string,
-	path []string,
-	expectedRootB64 string,
-) (bool, error)
-
-func VerifyConsistencyProof(
-	oldTreeSize uint64,
-	newTreeSize uint64,
-	oldRootB64 string,
-	newRootB64 string,
-	consistencyPath []string,
-) (bool, error)
-
-func CanonicalizeJSON(value any) ([]byte, error)
-```
-
-</TabItem>
-<TabItem value="python">
-
-```python
-from standards_sdk_py.hcs27 import Hcs27Client
-
-# Equivalent Python usage — see Python SDK docs for details
-```
-
-</TabItem>
-</LanguageTabs>
-
-## Memo Helpers
-
-<LanguageTabs>
-<TabItem value="typescript">
-
-```ts
-// Not yet available.
-```
-
-</TabItem>
-<TabItem value="go">
-
-```go
-func BuildTopicMemo(ttlSeconds int64) string
-// => "hcs-27:0:<ttl>:0"
-
-func ParseTopicMemo(memo string) (*TopicMemo, bool)
-// Parses "hcs-27:<indexed>:<ttl>:<type>"
-
-func BuildTransactionMemo() string
-// => "hcs-27:op:0:0"
-```
-
-</TabItem>
-<TabItem value="python">
-
-```python
-from standards_sdk_py.hcs27 import Hcs27Client
-
-# Equivalent Python usage — see Python SDK docs for details
-```
-
-</TabItem>
-</LanguageTabs>
-
-## Error Conditions
-
-| Error | Cause |
-|---|---|
-| `invalid protocol "…"` | Message `p` field is not `hcs-27` |
-| `metadata.type must be ans-checkpoint-v1` | Unsupported checkpoint type |
-| `metadata.stream.registry is required` | Missing stream identifier |
-| `metadata.root.rootHashB64u must be base64url` | Malformed root hash |
-| `metadata digest does not match resolved payload` | Integrity check failure for HCS-1 overflow metadata |
-| `tree size decreased for stream …` | Chain validation detected non-monotonic growth |
-| `prev.treeSize mismatch for stream …` | Chain linkage broken |
+That means the checkpoint read APIs always return both the raw message and the resolved `effectiveMetadata`, while `resolveHCS1Reference(...)` remains available if you need the raw overflow payload yourself.
