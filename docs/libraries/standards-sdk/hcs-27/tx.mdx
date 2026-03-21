@@ -277,4 +277,5 @@ consistency_ok = client.verify_consistency_proof(
 
 - `treeSize`, `leafIndex`, `oldTreeSize`, and `newTreeSize` are canonical base-10 strings in the draft-aligned object forms.
 - `rootHashB64u` is base64url in checkpoint metadata, while proof helpers use the base64 shapes defined by the proof objects.
+- Proof helpers reject malformed base64 siblings (`path` / `consistencyPath`) instead of treating invalid entries as empty bytes.
 - Overflow metadata inscription is automatic inside `publishCheckpoint(...)`; the Merkle helpers themselves only operate on the checkpoint data you pass in.

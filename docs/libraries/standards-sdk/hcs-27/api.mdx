@@ -299,6 +299,13 @@ client.verify_consistency_proof({"proof": ...})
 </TabItem>
 </LanguageTabs>
 
+## Topic Key Signing Rules
+
+- `createCheckpointTopic(...)` accepts topic-key inputs as booleans, private keys, and public key material.
+- `true` means "reuse operator key" for that topic key.
+- If you pass public key material without a private signer, the SDK only accepts it when the configured operator can satisfy that key at execution time.
+- If the operator cannot satisfy the key, pass a private key signer for that key instead.
+
 ## Overflow Metadata Behavior
 
 All three SDKs publish the checkpoint metadata inline when it fits inside the Hedera message payload budget. When it does not fit, they automatically:
