@@ -3,7 +3,7 @@ title: Building a Decentralized Registry in Go with HCS-2 on Hedera
 authors: [kantorcodes]
 tags: [go, golang, hedera, blockchain, hcs-2, tutorial, decentralized-registry]
 description: Learn how to build and operate a decentralized topic registry using the new Hashgraph Online Standards SDK for Go.
-image: /img/social-cards/invalid-image-force-fallback.jpg
+image: /img/social-cards/go-sdk-hcs2.jpg
 keywords:
   - golang hedera
   - go blockchain sdk
