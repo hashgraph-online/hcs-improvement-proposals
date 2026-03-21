@@ -32,6 +32,7 @@ console.log(transactionMemo); // hcs-27:op:0:0
 ```go
 import (
 	"fmt"
+	"log"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
 )
@@ -93,7 +94,7 @@ leafHash, err := hcs27.MerkleRootFromEntries([]any{
 	map[string]any{"id": "evt-1", "action": "append"},
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 nodeHash := hcs27.HashNode(leafHash, leafHash)
@@ -139,14 +140,18 @@ const canonicalRootHex = client.merkleRootFromCanonicalEntries([
 <TabItem value="go">
 
 ```go
-import "github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+import (
+	"log"
+
+	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
+)
 
 rootFromEntries, err := hcs27.MerkleRootFromEntries([]any{
 	map[string]any{"id": "evt-1", "action": "append"},
 	map[string]any{"id": "evt-2", "action": "append"},
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 rootFromCanonical := hcs27.MerkleRootFromCanonicalEntries([][]byte{
@@ -214,6 +219,7 @@ const consistencyOk = client.verifyConsistencyProof({
 ```go
 import (
 	"fmt"
+	"log"
 
 	"github.com/hashgraph-online/standards-sdk-go/pkg/hcs27"
 )
@@ -227,7 +233,7 @@ ok, err := hcs27.VerifyInclusionProofObject(&hcs27.InclusionProof{
 	TreeVersion: 1,
 })
 if err != nil {
-	panic(err)
+	log.Fatal(err)
 }
 
 fmt.Println(ok)
