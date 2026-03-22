@@ -102,7 +102,7 @@ await client.authenticateWithLedgerCredentials({
 Authentication method summary:
 
 - **Hedera auth**: use `accountId` + `hederaPrivateKey` (or a Hedera `Signer`).
-- **EVM auth**: use `accountId` + `evmPrivateKey` on a supported `EVM_LEDGER_NETWORK` / `eip155:<chainId>`.
+- **EVM auth**: use `accountId` (wallet address, typically derived from `evmPrivateKey`) + `evmPrivateKey` on a supported `EVM_LEDGER_NETWORK` / `eip155:<chainId>`.
 - In both cases, the broker returns a ledger API key and scopes account-level actions the same way.
 
 ### Supported x402 EVM networks
