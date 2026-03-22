@@ -1,11 +1,11 @@
 ---
 title: Ledger Authentication & Credits
-description: Authenticate with the Registry Broker using Hedera ledger credentials, manage auto top-ups, and purchase credits safely.
+description: Authenticate with the Registry Broker using Hedera or EVM ledger credentials, manage top-ups, and purchase credits safely.
 ---
 
 # Ledger Authentication & Credits
 
-Use ledger authentication when you need account-scoped access (registration, credits, dashboards) without issuing long-lived API keys. This guide explains the required environment variables, how `RegistryBrokerClient` performs the challenge/verify dance, and the different ways to fund credits.
+Use ledger authentication when you need account-scoped access (registration, credits, dashboards) without issuing long-lived API keys. You can authenticate with either a Hedera account/private key pair or an EVM wallet private key. This guide explains the required environment variables, how `RegistryBrokerClient` performs the challenge/verify dance, and the different ways to fund credits.
 
 > Canonical ledger identifiers follow the CAIP-2 format. Prefer `hedera:mainnet`, `hedera:testnet`, and `eip155:<chainId>` when authenticating; legacy aliases (`mainnet`, `testnet`, `base`, …) remain accepted for backwards compatibility.
 
@@ -19,7 +19,14 @@ Use API keys for public discovery-only workloads; use ledger auth when an operat
 
 ## Required Environment Variables
 
-### Hedera credentials
+Choose one primary authentication path:
+
+- **Hedera path**: provide Hedera account credentials.
+- **EVM path**: provide `ETH_PK` and an EVM ledger network.
+
+You do not need Hedera credentials when you are authenticating purely with EVM credentials.
+
+### Hedera credentials (optional when using EVM auth)
 
 | Variable | Description |
 | --- | --- |
@@ -28,7 +35,7 @@ Use API keys for public discovery-only workloads; use ledger auth when an operat
 | `MAINNET_HEDERA_ACCOUNT_ID` / `MAINNET_HEDERA_PRIVATE_KEY` | Optional overrides consumed when `HEDERA_NETWORK=mainnet`. |
 | `TESTNET_HEDERA_ACCOUNT_ID` / `TESTNET_HEDERA_PRIVATE_KEY` | Optional overrides consumed when `HEDERA_NETWORK=testnet`. |
 
-### EVM credentials
+### EVM credentials (optional when using Hedera auth)
 
 | Variable | Description |
 | --- | --- |
@@ -91,6 +98,12 @@ await client.authenticateWithLedgerCredentials({
 ```
 
 `authenticateWithLedgerCredentials` wraps `createLedgerChallenge` + `verifyLedgerChallenge`, validates the canonical identifier, and stores the issued key on the client under `x-api-key` (preferred). `x-ledger-api-key` remains a deprecated alias for backwards compatibility. Subsequent requests automatically include the key, and `networkCanonical` / `ledgerNetworkCanonical` are populated so downstream services can see the exact CAIP-2 identifier regardless of the alias you supplied.
+
+Authentication method summary:
+
+- **Hedera auth**: use `accountId` + `hederaPrivateKey` (or a Hedera `Signer`).
+- **EVM auth**: use `accountId` (wallet address, typically derived from `evmPrivateKey`) + `evmPrivateKey` on a supported `EVM_LEDGER_NETWORK` / `eip155:<chainId>`.
+- In both cases, the broker returns a ledger API key and scopes account-level actions the same way.
 
 ### Supported x402 EVM networks
 
