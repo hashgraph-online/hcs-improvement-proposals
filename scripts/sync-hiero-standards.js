@@ -140,6 +140,21 @@ function fixStaticJsonSchemaLinks(content) {
   );
 }
 
+function fixMermaidBlocks(content) {
+  // Ironclad regex matching only verified Mermaid syntax signatures that occupy the entire line 
+  // (e.g. "sequenceDiagram", or "flowchart LR"), immediately followed by a carriage return.
+  const regex = /^```\r?\n((?:sequenceDiagram|classDiagram|stateDiagram(?:-v2)?|erDiagram|gantt|pie|gitGraph)\s*\r?\n|flowchart\s+(?:TB|TD|BT|RL|LR)\s*\r?\n)/gm;
+  return content.replace(regex, '```mermaid\n$1');
+}
+
+function fixHcs27(content) {
+  return content.replace(/hcs-27:0:&lt;ttl&gt;:0/g, 'hcs-27:0:0')
+    .replace(
+      /Where `0` indicates indexed topic behavior, `&lt;ttl&gt;` is cache TTL in seconds, and the final `:0` is the HCS-27 topic enum \(`checkpoint`\)\./g,
+      'Where the first `0` indicates indexed topic behavior, the middle `0` is the cache TTL in seconds, and the final `0` is the HCS-27 topic enum (`checkpoint`).'
+    );
+}
+
 function ensureDescriptionFrontmatter(content, description) {
   const quotedDescription = JSON.stringify(description);
   const replaceExisting = arguments.length > 2 ? Boolean(arguments[2]?.replace) : false;
@@ -403,6 +418,11 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
 
         escapedContent = escapeNumericOperatorIdAtSign(escapedContent);
         escapedContent = replaceEmptyIdAnchors(escapedContent);
+        escapedContent = fixMermaidBlocks(escapedContent);
+
+        if (extractHcsIdFromPath(destPath) === 'hcs-27') {
+          escapedContent = fixHcs27(escapedContent);
+        }
 
         fs.writeFileSync(destPath, escapedContent, 'utf8');
       } else {

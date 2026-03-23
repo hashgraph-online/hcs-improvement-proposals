@@ -7,7 +7,6 @@ module.exports = function (context, options) {
           {
             tagName: 'script',
             innerHTML: `
-              // Defer GTM loading until after page is interactive to improve INP
               function loadGTM() {
                 if (window.gtmLoaded) return;
                 window.gtmLoaded = true;
@@ -22,21 +21,26 @@ module.exports = function (context, options) {
                   f.parentNode.insertBefore(j,f);
                 })(window, document, 'script', 'dataLayer', 'GTM-P83WH82S');
               }
-              // Load GTM after first user interaction or after 5 seconds
-              if (typeof requestIdleCallback !== 'undefined') {
-                requestIdleCallback(function() { setTimeout(loadGTM, 3000); });
-              } else {
-                setTimeout(loadGTM, 5000);
+              function scheduleGTM() {
+                if (document.readyState === 'complete') {
+                  window.setTimeout(loadGTM, 3500);
+                  return;
+                }
+                window.addEventListener('load', function onLoad() {
+                  window.removeEventListener('load', onLoad);
+                  window.setTimeout(loadGTM, 3500);
+                }, { once: true });
               }
-              ['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(function(e) {
-                document.addEventListener(e, loadGTM, { once: true, passive: true });
-              });
+              if (typeof requestIdleCallback !== 'undefined') {
+                requestIdleCallback(scheduleGTM, { timeout: 4000 });
+              } else {
+                scheduleGTM();
+              }
             `,
           },
           {
             tagName: 'script',
             innerHTML: `
-              // Defer analytics (tier.bot) loading until after page is interactive
               function loadAnalytics() {
                 if (window.analyticsLoaded) return;
                 window.analyticsLoaded = true;
@@ -47,15 +51,21 @@ module.exports = function (context, options) {
                 s.setAttribute('data-domains', 'hol.org');
                 document.head.appendChild(s);
               }
-              // Load after first interaction or idle
-              if (typeof requestIdleCallback !== 'undefined') {
-                requestIdleCallback(function() { setTimeout(loadAnalytics, 2000); });
-              } else {
-                setTimeout(loadAnalytics, 4000);
+              function scheduleAnalytics() {
+                if (document.readyState === 'complete') {
+                  window.setTimeout(loadAnalytics, 2500);
+                  return;
+                }
+                window.addEventListener('load', function onLoad() {
+                  window.removeEventListener('load', onLoad);
+                  window.setTimeout(loadAnalytics, 2500);
+                }, { once: true });
               }
-              ['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(function(e) {
-                document.addEventListener(e, loadAnalytics, { once: true, passive: true });
-              });
+              if (typeof requestIdleCallback !== 'undefined') {
+                requestIdleCallback(scheduleAnalytics, { timeout: 3500 });
+              } else {
+                scheduleAnalytics();
+              }
             `,
           },
         ],
