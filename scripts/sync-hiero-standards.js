@@ -148,13 +148,11 @@ function fixMermaidBlocks(content) {
 }
 
 function fixHcs27(content) {
-  let updated = content;
-  updated = updated.replace(/hcs-27:0:&lt;ttl&gt;:0/g, 'hcs-27:0:0');
-  updated = updated.replace(
-    /Where `0` indicates indexed topic behavior, `&lt;ttl&gt;` is cache TTL in seconds, and the final `:0` is the HCS-27 topic enum \(`checkpoint`\)\./g,
-    'Where the first `0` indicates indexed topic behavior, the middle `0` is the cache TTL in seconds, and the final `0` is the HCS-27 topic enum (`checkpoint`).'
-  );
-  return updated;
+  return content.replace(/hcs-27:0:&lt;ttl&gt;:0/g, 'hcs-27:0:0')
+    .replace(
+      /Where `0` indicates indexed topic behavior, `&lt;ttl&gt;` is cache TTL in seconds, and the final `:0` is the HCS-27 topic enum \(`checkpoint`\)\./g,
+      'Where the first `0` indicates indexed topic behavior, the middle `0` is the cache TTL in seconds, and the final `0` is the HCS-27 topic enum (`checkpoint`).'
+    );
 }
 
 function ensureDescriptionFrontmatter(content, description) {
@@ -422,7 +420,7 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
         escapedContent = replaceEmptyIdAnchors(escapedContent);
         escapedContent = fixMermaidBlocks(escapedContent);
 
-        if (destPath.includes(path.join('docs', 'standards', 'hcs-27'))) {
+        if (extractHcsIdFromPath(destPath) === 'hcs-27') {
           escapedContent = fixHcs27(escapedContent);
         }
 
