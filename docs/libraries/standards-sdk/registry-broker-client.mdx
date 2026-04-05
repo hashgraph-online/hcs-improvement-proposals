@@ -602,6 +602,65 @@ const domainProof = await client.verifySkillDomainProof({
 console.log(status.verified, domainProof.signal.ok);
 ```
 
+## Skill Lifecycle and Preview Status
+
+Use these methods when you need the machine-readable lifecycle contract behind validate-first GitHub Actions, preview pages, and canonical `name@version` status lookups.
+
+```typescript
+const status = await client.getSkillStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+const statusByRepo = await client.getSkillStatusByRepo({
+  repo: 'https://github.com/hashgraph-online/demo-skill',
+  skillDir: '.',
+  ref: 'refs/pull/42/merge',
+});
+
+const preview = await client.getSkillPreview({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+const previewByRepo = await client.getSkillPreviewByRepo({
+  repo: 'https://github.com/hashgraph-online/demo-skill',
+  skillDir: '.',
+  ref: 'refs/pull/42/merge',
+});
+
+const previewById = await client.getSkillPreviewById('preview_demo');
+
+console.log(status.trustTier, statusByRepo.found, preview.found, previewByRepo.found, previewById.found);
+```
+
+These map to:
+
+- `GET /api/v1/skills/status`
+- `GET /api/v1/skills/status/by-repo`
+- `GET /api/v1/skills/preview`
+- `GET /api/v1/skills/preview/by-repo`
+- `GET /api/v1/skills/preview/{previewId}`
+
+Use the repo-based methods for pull request validation because they resolve state against `repo`, `skillDir`, and an optional Git `ref` before falling back to published `name@version` records.
+
+### Secretless GitHub OIDC preview upload
+
+Validate-only workflows can upload preview reports without `RB_API_KEY` when the workflow grants `id-token: write`.
+
+```typescript
+const previewUpload = await client.uploadSkillPreviewFromGithubOidc({
+  token: process.env.GITHUB_TOKEN ?? '',
+  report: previewReport,
+});
+
+console.log(previewUpload.previewId, previewUpload.statusUrl);
+```
+
+This maps to:
+
+- `POST /api/v1/skills/preview/github-oidc`
+
 ## UAID DNS Verification (HCS-14)
 
 Use these methods to validate that a UAID is correctly bound to a DNS TXT record (`_uaid.<nativeId>`).

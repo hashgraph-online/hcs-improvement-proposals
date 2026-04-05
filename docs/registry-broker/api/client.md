@@ -957,7 +957,181 @@ if attempt_id:
 </Tabs>
 ## Skill Registry
 
-The `RegistryBrokerClient` also includes skill-specific APIs for quote/publish, discovery, ownership, voting, and verification workflows.
+The `RegistryBrokerClient` also includes skill-specific APIs for validate-first previews, lifecycle status, quote/publish, discovery, ownership, voting, and verification workflows.
+
+### Lifecycle Status and Preview Resolution
+
+These methods are the machine-facing contract behind validate-first pull request workflows and canonical skill lifecycle pages.
+
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+const status = await client.getSkillStatus({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+const statusByRepo = await client.getSkillStatusByRepo({
+  repo: 'https://github.com/hashgraph-online/demo-skill',
+  skillDir: '.',
+  ref: 'refs/pull/42/merge',
+});
+
+const preview = await client.getSkillPreview({
+  name: 'demo-skill',
+  version: '1.0.0',
+});
+
+const previewByRepo = await client.getSkillPreviewByRepo({
+  repo: 'https://github.com/hashgraph-online/demo-skill',
+  skillDir: '.',
+  ref: 'refs/pull/42/merge',
+});
+
+const previewById = await client.getSkillPreviewById('preview_demo');
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+status, err := client.GetSkillStatus(context.Background(), registrybroker.GetSkillStatusOptions{
+	Name:    "demo-skill",
+	Version: "1.0.0",
+})
+if err != nil {
+	panic(err)
+}
+
+statusByRepo, err := client.GetSkillStatusByRepo(context.Background(), registrybroker.GetSkillStatusByRepoOptions{
+	Repo:     "https://github.com/hashgraph-online/demo-skill",
+	SkillDir: ".",
+	Ref:      "refs/pull/42/merge",
+})
+if err != nil {
+	panic(err)
+}
+
+preview, err := client.GetSkillPreview(context.Background(), registrybroker.GetSkillPreviewOptions{
+	Name:    "demo-skill",
+	Version: "1.0.0",
+})
+if err != nil {
+	panic(err)
+}
+
+previewByRepo, err := client.GetSkillPreviewByRepo(context.Background(), registrybroker.GetSkillPreviewByRepoOptions{
+	Repo:     "https://github.com/hashgraph-online/demo-skill",
+	SkillDir: ".",
+	Ref:      "refs/pull/42/merge",
+})
+if err != nil {
+	panic(err)
+}
+
+previewByID, err := client.GetSkillPreviewByID(context.Background(), "preview_demo")
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(status.TrustTier, statusByRepo.Found, preview.Found, previewByRepo.Found, previewByID.Found)
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+status = client.get_skill_status(name="demo-skill", version="1.0.0")
+
+status_by_repo = client.get_skill_status_by_repo(
+    repo="https://github.com/hashgraph-online/demo-skill",
+    skill_dir=".",
+    ref="refs/pull/42/merge",
+)
+
+preview = client.get_skill_preview(name="demo-skill", version="1.0.0")
+
+preview_by_repo = client.get_skill_preview_by_repo(
+    repo="https://github.com/hashgraph-online/demo-skill",
+    skill_dir=".",
+    ref="refs/pull/42/merge",
+)
+
+preview_by_id = client.get_skill_preview_by_id("preview_demo")
+
+print(
+    status.trust_tier,
+    status_by_repo.found,
+    preview.found,
+    preview_by_repo.found,
+    preview_by_id.found,
+)
+```
+
+  </TabItem>
+</Tabs>
+
+These map to:
+
+- `GET /api/v1/skills/status`
+- `GET /api/v1/skills/status/by-repo`
+- `GET /api/v1/skills/preview`
+- `GET /api/v1/skills/preview/by-repo`
+- `GET /api/v1/skills/preview/{previewId}`
+
+Use the repo-based methods for pull request flows because they resolve lifecycle state against a repository URL, optional `skillDir`, and optional Git ref before falling back to `name@version` lookups.
+
+### GitHub OIDC Preview Upload
+
+Validate-only GitHub Actions can upload preview reports without a long-lived API key when the workflow grants `id-token: write`.
+
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+const previewUpload = await client.uploadSkillPreviewFromGithubOidc({
+  report: previewReport,
+  token: process.env.GITHUB_TOKEN ?? '',
+});
+
+console.log(previewUpload.previewId, previewUpload.statusUrl);
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+upload, err := client.UploadSkillPreviewFromGitHubOIDC(
+	context.Background(),
+	os.Getenv("GITHUB_TOKEN"),
+	previewReport,
+)
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(upload.PreviewID, upload.StatusURL)
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+upload = client.upload_skill_preview_from_github_oidc(
+    token=os.getenv("GITHUB_TOKEN", ""),
+    report=preview_report,
+)
+
+print(upload.preview_id, upload.status_url)
+```
+
+  </TabItem>
+</Tabs>
+
+This maps to:
+
+- `POST /api/v1/skills/preview/github-oidc`
 
 ### Quote and Publish
 
