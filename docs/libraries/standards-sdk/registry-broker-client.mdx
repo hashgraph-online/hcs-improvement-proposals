@@ -649,8 +649,21 @@ Use the repo-based methods for pull request validation because they resolve stat
 Validate-only workflows can upload preview reports without `RB_API_KEY` when the workflow grants `id-token: write`.
 
 ```typescript
+const previewReport = {
+  schemaVersion: 'skill-preview.v1',
+  repository: {
+    url: 'https://github.com/hashgraph-online/demo-skill',
+    ref: 'refs/pull/42/merge',
+  },
+  skill: {
+    name: 'demo-skill',
+    version: '1.0.0',
+    skillDir: '.',
+  },
+};
+
 const previewUpload = await client.uploadSkillPreviewFromGithubOidc({
-  token: process.env.GITHUB_TOKEN ?? '',
+  token: process.env.ACTIONS_ID_TOKEN ?? '',
   report: previewReport,
 });
 

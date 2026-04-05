@@ -1090,9 +1090,22 @@ Validate-only GitHub Actions can upload preview reports without a long-lived API
 <TabItem value="typescript" label="TypeScript">
 
 ```ts
+const previewReport = {
+  schemaVersion: 'skill-preview.v1',
+  repository: {
+    url: 'https://github.com/hashgraph-online/demo-skill',
+    ref: 'refs/pull/42/merge',
+  },
+  skill: {
+    name: 'demo-skill',
+    version: '1.0.0',
+    skillDir: '.',
+  },
+};
+
 const previewUpload = await client.uploadSkillPreviewFromGithubOidc({
   report: previewReport,
-  token: process.env.GITHUB_TOKEN ?? '',
+  token: process.env.ACTIONS_ID_TOKEN ?? '',
 });
 
 console.log(previewUpload.previewId, previewUpload.statusUrl);
@@ -1102,9 +1115,11 @@ console.log(previewUpload.previewId, previewUpload.statusUrl);
 <TabItem value="go" label="Go">
 
 ```go
+token := os.Getenv("ACTIONS_ID_TOKEN")
+
 upload, err := client.UploadSkillPreviewFromGitHubOIDC(
 	context.Background(),
-	os.Getenv("GITHUB_TOKEN"),
+	token,
 	previewReport,
 )
 if err != nil {
@@ -1118,8 +1133,21 @@ fmt.Println(upload.PreviewID, upload.StatusURL)
 <TabItem value="python" label="Python">
 
 ```python
+preview_report = {
+    "schemaVersion": "skill-preview.v1",
+    "repository": {
+        "url": "https://github.com/hashgraph-online/demo-skill",
+        "ref": "refs/pull/42/merge",
+    },
+    "skill": {
+        "name": "demo-skill",
+        "version": "1.0.0",
+        "skillDir": ".",
+    },
+}
+
 upload = client.upload_skill_preview_from_github_oidc(
-    token=os.getenv("GITHUB_TOKEN", ""),
+    token=os.getenv("ACTIONS_ID_TOKEN", ""),
     report=preview_report,
 )
 
@@ -1132,6 +1160,8 @@ print(upload.preview_id, upload.status_url)
 This maps to:
 
 - `POST /api/v1/skills/preview/github-oidc`
+
+The current Go client keeps this helper as `UploadSkillPreviewFromGitHubOIDC(ctx, token, report)`, so the example below uses an explicit `token` variable before calling the method.
 
 ### Quote and Publish
 
