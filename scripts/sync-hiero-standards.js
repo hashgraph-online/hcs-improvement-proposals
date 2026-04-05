@@ -122,6 +122,13 @@ function fixHcs25InternalLinks(content) {
   return updated;
 }
 
+function fixHcs25MdxFence(content) {
+  return content.replace(
+    "```text\n{adapterId}.score\n\n#### Weights\n",
+    "```text\n{adapterId}.score\n```\n\n#### Weights\n",
+  );
+}
+
 function fixHcs9InternalLinks(content) {
   return content
     .replace(/\]\(base-schema\)/g, '](../base-schema)')
@@ -383,6 +390,7 @@ function copyRecursive(srcDir, destDir, stats = { copied: 0, skipped: 0 }) {
 
         if (destPath.endsWith(path.join('docs', 'standards', 'hcs-25.md'))) {
           escapedContent = fixHcs25InternalLinks(escapedContent);
+          escapedContent = fixHcs25MdxFence(escapedContent);
         }
 
         if (
