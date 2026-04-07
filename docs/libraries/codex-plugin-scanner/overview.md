@@ -154,7 +154,7 @@ The scanner scores plugins across 7 categories. The raw points are converted to 
 🔗 Codex Plugin Scanner v1.4.0
 Scanning: ./my-plugin
 
-── Manifest Validation (81/81) ──
+── Manifest Validation (31/81) ──
   ✅ plugin.json exists                           +4
   ✅ Valid JSON                                   +4
   ✅ Required fields present                      +5
@@ -165,7 +165,7 @@ Scanning: ./my-plugin
   ✅ Interface links and assets valid             +3
   ✅ Declared paths are safe                      +3
 
-── Security (58/58) ──
+── Security (24/58) ──
   ✅ SECURITY.md found                            +3
   ✅ LICENSE found                                +3
   ✅ No hardcoded secrets                         +7
@@ -173,11 +173,18 @@ Scanning: ./my-plugin
   ✅ MCP transports hardened                      +4
   ✅ No approval bypass defaults                  +4
 
+── Best Practices (24/24) ──
+  ✅ README.md found                              +3
+  ✅ Skills directory present                     +3
+  ✅ SKILL.md frontmatter valid                   +3
+
 Findings: critical:0, high:0, medium:0, low:0, info:0
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Final Score: 100/100 (A - Excellent)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Note: Categories show (earned/max). The example displays a subset of checks for brevity.
 ```
 
 ## Trust Score Provenance
@@ -190,9 +197,9 @@ The scanner emits explicit trust provenance alongside quality grades:
 
 Local specs:
 
-- [Skill Trust Local Draft](../../trust/skill-trust-local.md)
-- [MCP Trust Draft](../../trust/mcp-trust-draft.md)
-- [Plugin Trust Draft](../../trust/plugin-trust-draft.md)
+- [Skill Trust Local Draft](https://github.com/hashgraph-online/codex-plugin-scanner/blob/main/docs/trust/skill-trust-local.md)
+- [MCP Trust Draft](https://github.com/hashgraph-online/codex-plugin-scanner/blob/main/docs/trust/mcp-trust-draft.md)
+- [Plugin Trust Draft](https://github.com/hashgraph-online/codex-plugin-scanner/blob/main/docs/trust/plugin-trust-draft.md)
 
 ## Config File
 
@@ -237,7 +244,7 @@ docker run --rm \
 | License | Apache-2.0 |
 | Latest Release | See [PyPI](https://pypi.org/project/codex-plugin-scanner/) |
 | Supported Versions | 1.x (current stable) |
-| Security Policy | [SECURITY.md](./SECURITY.md) |
+| Security Policy | [SECURITY.md](https://github.com/hashgraph-online/codex-plugin-scanner/blob/main/SECURITY.md) |
 
 ## Security
 
