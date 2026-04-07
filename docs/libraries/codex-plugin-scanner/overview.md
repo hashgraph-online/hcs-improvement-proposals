@@ -183,3 +183,35 @@ docker run --rm \
 - [PyPI Package](https://pypi.org/project/codex-plugin-scanner/)
 - [HOL Plugin Registry](https://hol.org/registry/plugins)
 - [GitHub Repository](https://github.com/hashgraph-online/codex-plugin-scanner)
+
+## Project Basics
+
+| Aspect | Status |
+| :--- | :--- |
+| License | Apache-2.0 |
+| Latest Release | See [PyPI](https://pypi.org/project/codex-plugin-scanner/) |
+| Supported Versions | 1.x (current stable) |
+| Security Policy | [SECURITY.md](./SECURITY.md) |
+
+## Security
+
+The scanner itself follows security best practices:
+
+- **SECURITY.md** - Vulnerability reporting process with 48h acknowledgment, 7-day resolution target
+- **No hardcoded secrets** - Scanned and detected in plugins
+- **Dependency scanning** - Checks for dependency vulnerabilities via Dependabot
+- **PyPI Attestations** - Published packages include provenance verification
+
+## CI/CD
+
+- **Matrix CI** - Tests across Python 3.10, 3.11, 3.12, 3.13
+- **OpenSSF Scorecard** - Automated security posture assessment
+- **Published Action** - GitHub Action for plugin CI gating
+- **SARIF Export** - Integration with GitHub code scanning
+
+## Code Quality
+
+- **Ruff** - Fast Python linter with auto-fixes
+- **Type stubs** - Full type annotations
+- **pytest** - Test suite with coverage
+- **pre-commit hooks** - Enforced code standards
