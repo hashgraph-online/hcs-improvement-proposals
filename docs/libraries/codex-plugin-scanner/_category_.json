@@ -1,0 +1,8 @@
+{
+  "label": "Codex Plugin Scanner",
+  "position": 8,
+  "link": {
+    "type": "doc",
+    "id": "libraries/codex-plugin-scanner/index"
+  }
+}

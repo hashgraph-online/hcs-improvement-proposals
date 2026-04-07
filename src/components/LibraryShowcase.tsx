@@ -44,6 +44,12 @@ const libraryData = [
     description: 'Conversational AI agent implementing HCS-10 communication, HCS-2 registries, and content inscription',
     icon: '💬',
   },
+  {
+    title: 'Codex Plugin Scanner',
+    href: '/docs/libraries/codex-plugin-scanner',
+    description: 'Quality gate for Codex plugins - lint, verify, and scan for security and publishability',
+    icon: '🔍',
+  },
 ];
 
 export default function LibraryShowcase(): JSX.Element {
