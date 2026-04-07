@@ -395,6 +395,16 @@ const sidebars: SidebarsConfig = {
             'libraries/recursion-sdk/advanced-examples',
           ],
         },
+        {
+          type: 'category',
+          label: 'Codex Plugin Scanner',
+          link: { type: 'doc', id: 'libraries/codex-plugin-scanner/index' },
+          collapsible: true,
+          collapsed: true,
+          items: [
+            'libraries/codex-plugin-scanner/overview',
+          ],
+        },
       ],
     },
     {
