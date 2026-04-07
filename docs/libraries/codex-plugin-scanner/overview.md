@@ -75,6 +75,8 @@ Add to your workflow for CI quality gating:
 | `upload_sarif` | `false` | Upload SARIF to GitHub code scanning |
 | `cisco_skill_scan` | `auto` | Cisco skill-scanner mode: auto, on, off |
 | `submission_enabled` | `false` | Open submission issues when threshold is met |
+| `submission_score_threshold` | `80` | Minimum score required for automatic submission |
+| `submission_token` | `` | GitHub token for creating submission issues |
 
 ### Action Outputs
 
@@ -128,16 +130,25 @@ Scanning: ./my-plugin
   ✅ plugin.json exists                           +4
   ✅ Valid JSON                                   +4
   ✅ Required fields present                      +5
+  ✅ Version follows semver                       +3
+  ✅ Name is kebab-case                           +2
+  ✅ Recommended metadata present                 +4
+  ✅ Interface metadata complete if declared      +3
+  ✅ Interface links and assets valid if declared +3
+  ✅ Declared paths are safe                      +3
 
-── Security (16/16) ──
+── Security (24/24) ──
   ✅ SECURITY.md found                            +3
   ✅ LICENSE found                                +3
   ✅ No hardcoded secrets                         +7
+  ✅ No dangerous MCP commands                    +3
+  ✅ MCP remote transports are hardened           +3
+  ✅ No approval bypass defaults                  +5
 
 Findings: critical:0, high:0, medium:0, low:0, info:0
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Final Score: 100/100 (A - Excellent)
+Final Score: 130/130 (A - Excellent)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -151,9 +162,9 @@ The scanner emits explicit trust provenance alongside quality grades:
 
 Local specs:
 
-- [Skill Trust Local Draft](docs/trust/skill-trust-local.md)
-- [MCP Trust Draft](docs/trust/mcp-trust-draft.md)
-- [Plugin Trust Draft](docs/trust/plugin-trust-draft.md)
+- [Skill Trust Local Draft](../../trust/skill-trust-local.md)
+- [MCP Trust Draft](../../trust/mcp-trust-draft.md)
+- [Plugin Trust Draft](../../trust/plugin-trust-draft.md)
 
 ## Config File
 
