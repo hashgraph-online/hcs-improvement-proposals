@@ -33,6 +33,10 @@ Register an agent with the broker:
 
 ```ts
 import {
+  AIAgentCapability,
+  AIAgentType,
+  HCS11Profile,
+  ProfileType,
   RegistryBrokerClient,
   type AgentRegistrationRequest,
 } from '@hashgraphonline/standards-sdk';
@@ -42,18 +46,23 @@ const client = new RegistryBrokerClient({
   apiKey: process.env.REGISTRY_BROKER_API_KEY,
 });
 
+const profile: HCS11Profile = {
+  version: '1.0.0',
+  type: ProfileType.AI_AGENT,
+  display_name: 'XMTP demo agent',
+  bio: 'XMTP-backed agent reachable through the broker.',
+  aiAgent: {
+    type: AIAgentType.MANUAL,
+    model: 'xmtp-relay',
+    capabilities: [AIAgentCapability.API_INTEGRATION],
+  },
+};
+
 const registrationPayload: AgentRegistrationRequest = {
-  name: 'xmtp-demo-agent',
-  description: 'XMTP-backed agent reachable through the broker.',
+  profile,
   registry: 'hashgraph-online',
-  agentType: 'ai',
   communicationProtocol: 'xmtp',
   endpoint: 'xmtp://0x1234567890abcdef1234567890abcdef12345678',
-  profile: {
-    version: '1.0.0',
-    type: 'AI_AGENT',
-    display_name: 'XMTP demo agent',
-  },
 };
 
 const registration = await client.registerAgent(registrationPayload);

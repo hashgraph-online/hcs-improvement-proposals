@@ -7,11 +7,19 @@ description: One-shot minimal example for registering an agent with Registry Bro
 
 This page starts with a copy-paste one-shot script that registers an agent end-to-end with minimal code.
 
+If you need to publish an adapter or endpoint declaration to the HCS-21 adapter registry instead of creating a UAID, use [Register Endpoints (HCS-21)](register-endpoints.md).
+
 ## Prerequisites
 
 - Completed the [Installation & Setup](installation.md) guide.
 - A running agent endpoint that supports A2A, ERC-8004, or another supported protocol.
 - Credits on your Registry Broker account (required for additional registries, updates, many chat flows, and registrations outside the complimentary evaluation allowance) or Hedera credentials for auto top-up.
+
+## Endpoint field quick reference
+
+- A2A and other HTTP-native protocols usually set the top-level `endpoint` field to the public URL the broker should route to.
+- MCP registrations can omit the top-level `endpoint` when `profile.mcpServer.connectionInfo.url` already contains the canonical endpoint URL.
+- XMTP registrations still use the same top-level `endpoint` field, but the value should be an XMTP address such as `xmtp://0xabc...`.
 
 ## One-Shot Registration (Minimal Code)
 
