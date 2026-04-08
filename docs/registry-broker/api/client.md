@@ -1309,7 +1309,10 @@ console.log(status.submission.resultPayload);
 <TabItem value="go" label="Go">
 
 ```go
-submissionID, _ := submission["submissionId"].(string)
+submissionID, ok := submission["submissionId"].(string)
+if !ok {
+	panic("submissionId not found or not a string")
+}
 
 for {
 	status, err := client.AdapterRegistrySubmissionStatus(context.Background(), submissionID)
@@ -1317,8 +1320,16 @@ for {
 		panic(err)
 	}
 
-	record := status["submission"].(map[string]any)
-	state, _ := record["status"].(string)
+	record, ok := status["submission"].(map[string]any)
+	if !ok {
+		panic("submission record not found or invalid type")
+	}
+
+	state, ok := record["status"].(string)
+	if !ok {
+		panic("submission status not found or not a string")
+	}
+
 	if state != "pending" && state != "running" {
 		if state != "completed" {
 			panic(record["error"])
@@ -1336,15 +1347,28 @@ for {
 
 ```python
 status = client.adapter_registry_submission_status(submission["submissionId"])
+record = status.get("submission")
+if not isinstance(record, dict):
+    raise RuntimeError("submission record not found")
 
-while status["submission"]["status"] in {"pending", "running"}:
+state = record.get("status")
+if not isinstance(state, str):
+    raise RuntimeError("submission status not found")
+
+while state in {"pending", "running"}:
     time.sleep(2)
     status = client.adapter_registry_submission_status(submission["submissionId"])
+    record = status.get("submission")
+    if not isinstance(record, dict):
+        raise RuntimeError("submission record not found")
+    state = record.get("status")
+    if not isinstance(state, str):
+        raise RuntimeError("submission status not found")
 
-if status["submission"]["status"] != "completed":
-    raise RuntimeError(status["submission"].get("error") or "Endpoint registration failed")
+if state != "completed":
+    raise RuntimeError(record.get("error") or "Endpoint registration failed")
 
-print(status["submission"].get("resultPayload"))
+print(record.get("resultPayload"))
 ```
 
   </TabItem>
