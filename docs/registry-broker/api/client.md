@@ -955,6 +955,427 @@ if attempt_id:
 
   </TabItem>
 </Tabs>
+## Endpoint Registration (HCS-21 Adapter Registry)
+
+Use these methods when you need to publish adapter or endpoint declarations to the HCS-21 adapter registry. This is a separate API surface from `registerAgent(...)`.
+
+### Categories and Existing Entries
+
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+const categories = await client.adapterRegistryCategories();
+const adapters = await client.adapterRegistryAdapters({
+  query: 'customer support',
+  limit: 5,
+});
+
+console.log(categories.categories.map(category => category.slug));
+console.log(adapters.adapters.map(adapter => adapter.adapterId));
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+limit := 5
+
+categories, err := client.AdapterRegistryCategories(context.Background())
+if err != nil {
+	panic(err)
+}
+
+adapters, err := client.AdapterRegistryAdapters(
+	context.Background(),
+	registrybroker.AdapterRegistryFilters{
+		Query: "customer support",
+		Limit: &limit,
+	},
+)
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(categories["categories"])
+fmt.Println(adapters["adapters"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+categories = client.adapter_registry_categories()
+adapters = client.adapter_registry_adapters(
+    query="customer support",
+    limit=5,
+)
+
+print(categories.get("categories", []))
+print(adapters.get("adapters", []))
+```
+
+  </TabItem>
+</Tabs>
+
+### Create a Category
+
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+const category = await client.createAdapterRegistryCategory({
+  name: 'Customer Support',
+  slug: 'customer-support',
+  description: 'Adapters that expose customer support routing endpoints.',
+  type: 'custom',
+});
+
+console.log(category.slug, category.topicId);
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+category, err := client.CreateAdapterRegistryCategory(
+	context.Background(),
+	registrybroker.CreateAdapterRegistryCategoryRequest{
+		"name":        "Customer Support",
+		"slug":        "customer-support",
+		"description": "Adapters that expose customer support routing endpoints.",
+		"type":        "custom",
+	},
+)
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(category["category"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+category = client.create_adapter_registry_category(
+    {
+        "name": "Customer Support",
+        "slug": "customer-support",
+        "description": "Adapters that expose customer support routing endpoints.",
+        "type": "custom",
+    }
+)
+
+print(category.get("category"))
+```
+
+  </TabItem>
+</Tabs>
+
+### Submit an Adapter Declaration
+
+The OpenAPI request body for `POST /api/v1/adapters/registry/adapters` requires `adapterId`, `adapterName`, `entity`, `package`, `config`, and `manifest`. Optional fields include `stateModel`, `signature`, `manifestPointer`, `manifestSequence`, `keywords`, `categorySlug`, and `newCategory`.
+
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+import type {
+  AdapterManifest,
+  SubmitAdapterRegistryAdapterRequest,
+} from '@hashgraphonline/standards-sdk';
+
+const manifest: AdapterManifest = {
+  meta: {
+    spec_version: '1.0.0',
+    adapter_version: '1.0.0',
+    generated: new Date().toISOString(),
+  },
+  adapter: {
+    name: 'Customer Support HTTP Adapter',
+    id: 'customer-support-http',
+    maintainers: [{ name: 'Example Labs', contact: 'hello@example.com' }],
+    license: 'Apache-2.0',
+  },
+  package: {
+    registry: 'npm',
+    artifacts: [
+      {
+        url: 'https://registry.npmjs.org/@example/customer-support-http/-/customer-support-http-1.0.0.tgz',
+        digest: 'sha384-REPLACE_WITH_REAL_DIGEST',
+      },
+    ],
+  },
+  runtime: {
+    platforms: ['nodejs'],
+    primary: 'nodejs',
+    entry: 'dist/index.js',
+  },
+  capabilities: {
+    discovery: true,
+    communication: true,
+    protocols: ['a2a'],
+  },
+  consensus: {
+    required_fields: ['adapter.id', 'runtime.entry'],
+    hashing: 'sha384',
+  },
+};
+
+const payload: SubmitAdapterRegistryAdapterRequest = {
+  adapterId: 'customer-support-http',
+  adapterName: 'Customer Support HTTP Adapter',
+  entity: 'agent-endpoint',
+  package: {
+    registry: 'npm',
+    name: '@example/customer-support-http',
+    version: '1.0.0',
+    integrity: 'sha512-REPLACE_WITH_REAL_INTEGRITY',
+  },
+  config: {
+    type: 'http',
+    endpoint: 'https://agent.example.com/a2a',
+  },
+  manifest,
+  categorySlug: 'customer-support',
+  keywords: ['support', 'a2a', 'customer-service'],
+};
+
+const submission = await client.submitAdapterRegistryAdapter(payload);
+console.log(submission.submissionId, submission.status);
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+payload := registrybroker.SubmitAdapterRegistryAdapterRequest{
+	"adapterId":   "customer-support-http",
+	"adapterName": "Customer Support HTTP Adapter",
+	"entity":      "agent-endpoint",
+	"package": map[string]any{
+		"registry":  "npm",
+		"name":      "@example/customer-support-http",
+		"version":   "1.0.0",
+		"integrity": "sha512-REPLACE_WITH_REAL_INTEGRITY",
+	},
+	"config": map[string]any{
+		"type":     "http",
+		"endpoint": "https://agent.example.com/a2a",
+	},
+	"manifest": map[string]any{
+		"meta": map[string]any{
+			"spec_version":    "1.0.0",
+			"adapter_version": "1.0.0",
+			"generated":       time.Now().UTC().Format(time.RFC3339),
+		},
+		"adapter": map[string]any{
+			"name": "Customer Support HTTP Adapter",
+			"id":   "customer-support-http",
+			"maintainers": []map[string]any{
+				{"name": "Example Labs", "contact": "hello@example.com"},
+			},
+			"license": "Apache-2.0",
+		},
+		"package": map[string]any{
+			"registry": "npm",
+			"artifacts": []map[string]any{
+				{
+					"url":    "https://registry.npmjs.org/@example/customer-support-http/-/customer-support-http-1.0.0.tgz",
+					"digest": "sha384-REPLACE_WITH_REAL_DIGEST",
+				},
+			},
+		},
+		"runtime": map[string]any{
+			"platforms": []string{"nodejs"},
+			"primary":   "nodejs",
+			"entry":     "dist/index.js",
+		},
+		"capabilities": map[string]any{
+			"discovery":     true,
+			"communication": true,
+			"protocols":     []string{"a2a"},
+		},
+		"consensus": map[string]any{
+			"required_fields": []string{"adapter.id", "runtime.entry"},
+			"hashing":         "sha384",
+		},
+	},
+	"categorySlug": "customer-support",
+	"keywords":     []string{"support", "a2a", "customer-service"},
+}
+
+submission, err := client.SubmitAdapterRegistryAdapter(context.Background(), payload)
+if err != nil {
+	panic(err)
+}
+
+fmt.Println(submission["submissionId"], submission["status"])
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+submission = client.submit_adapter_registry_adapter(
+    {
+        "adapterId": "customer-support-http",
+        "adapterName": "Customer Support HTTP Adapter",
+        "entity": "agent-endpoint",
+        "package": {
+            "registry": "npm",
+            "name": "@example/customer-support-http",
+            "version": "1.0.0",
+            "integrity": "sha512-REPLACE_WITH_REAL_INTEGRITY",
+        },
+        "config": {
+            "type": "http",
+            "endpoint": "https://agent.example.com/a2a",
+        },
+        "manifest": {
+            "meta": {
+                "spec_version": "1.0.0",
+                "adapter_version": "1.0.0",
+                "generated": "2026-01-01T00:00:00Z",
+            },
+            "adapter": {
+                "name": "Customer Support HTTP Adapter",
+                "id": "customer-support-http",
+                "maintainers": [
+                    {"name": "Example Labs", "contact": "hello@example.com"},
+                ],
+                "license": "Apache-2.0",
+            },
+            "package": {
+                "registry": "npm",
+                "artifacts": [
+                    {
+                        "url": "https://registry.npmjs.org/@example/customer-support-http/-/customer-support-http-1.0.0.tgz",
+                        "digest": "sha384-REPLACE_WITH_REAL_DIGEST",
+                    }
+                ],
+            },
+            "runtime": {
+                "platforms": ["nodejs"],
+                "primary": "nodejs",
+                "entry": "dist/index.js",
+            },
+            "capabilities": {
+                "discovery": True,
+                "communication": True,
+                "protocols": ["a2a"],
+            },
+            "consensus": {
+                "required_fields": ["adapter.id", "runtime.entry"],
+                "hashing": "sha384",
+            },
+        },
+        "categorySlug": "customer-support",
+        "keywords": ["support", "a2a", "customer-service"],
+    }
+)
+
+print(submission["submissionId"], submission["status"])
+```
+
+  </TabItem>
+</Tabs>
+
+### Poll Submission Status
+
+<Tabs groupId="registry-broker-client-language" defaultValue="typescript">
+<TabItem value="typescript" label="TypeScript">
+
+```ts
+let status = await client.adapterRegistrySubmissionStatus(submission.submissionId);
+
+while (
+  status.submission.status === 'pending' ||
+  status.submission.status === 'running'
+) {
+  await new Promise(resolve => setTimeout(resolve, 2000));
+  status = await client.adapterRegistrySubmissionStatus(submission.submissionId);
+}
+
+if (status.submission.status !== 'completed') {
+  throw new Error(status.submission.error ?? 'Endpoint registration failed');
+}
+
+console.log(status.submission.resultPayload);
+```
+
+  </TabItem>
+<TabItem value="go" label="Go">
+
+```go
+submissionID, ok := submission["submissionId"].(string)
+if !ok {
+	panic("submissionId not found or not a string")
+}
+
+for {
+	status, err := client.AdapterRegistrySubmissionStatus(context.Background(), submissionID)
+	if err != nil {
+		panic(err)
+	}
+
+	record, ok := status["submission"].(map[string]any)
+	if !ok {
+		panic("submission record not found or invalid type")
+	}
+
+	state, ok := record["status"].(string)
+	if !ok {
+		panic("submission status not found or not a string")
+	}
+
+	if state != "pending" && state != "running" {
+		if state != "completed" {
+			panic(record["error"])
+		}
+		fmt.Println(record["resultPayload"])
+		break
+	}
+
+	time.Sleep(2 * time.Second)
+}
+```
+
+  </TabItem>
+<TabItem value="python" label="Python">
+
+```python
+status = client.adapter_registry_submission_status(submission["submissionId"])
+record = status.get("submission")
+if not isinstance(record, dict):
+    raise RuntimeError("submission record not found")
+
+state = record.get("status")
+if not isinstance(state, str):
+    raise RuntimeError("submission status not found")
+
+while state in {"pending", "running"}:
+    time.sleep(2)
+    status = client.adapter_registry_submission_status(submission["submissionId"])
+    record = status.get("submission")
+    if not isinstance(record, dict):
+        raise RuntimeError("submission record not found")
+    state = record.get("status")
+    if not isinstance(state, str):
+        raise RuntimeError("submission status not found")
+
+if state != "completed":
+    raise RuntimeError(record.get("error") or "Endpoint registration failed")
+
+print(record.get("resultPayload"))
+```
+
+  </TabItem>
+</Tabs>
+
+See [Register Endpoints (HCS-21)](../getting-started/register-endpoints.md) for the full end-to-end guide and category-creation flow.
+
 ## Skill Registry
 
 The `RegistryBrokerClient` also includes skill-specific APIs for validate-first previews, lifecycle status, quote/publish, discovery, ownership, voting, and verification workflows.

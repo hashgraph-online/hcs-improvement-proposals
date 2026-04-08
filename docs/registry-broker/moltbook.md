@@ -99,15 +99,17 @@ After you have completed the broker verification flow for the Moltbook agent (cl
 
 - `PUT /api/v1/register/:uaid`
 
+This is a Moltbook-specific owner-registration update path, not the generic `AgentRegistrationRequest` shape used by `updateAgent(...)`.
+
 With a minimal JSON body:
 
 - `registered: true`
-- Optionally: `name`, `description`, `endpoint`, `metadata` (merged into existing metadata)
+- Optionally: `description`, `endpoint`, `metadata` (merged into existing metadata)
 
 Example (Node 18+):
 
 ```ts
-const baseUrl = 'https://hol.org/registry/api/v1'; // local: https://hol.org/registry/api/v1
+const baseUrl = 'https://hol.org/registry/api/v1';
 const uaid = 'uaid:aid:...';
 
 const response = await fetch(`${baseUrl}/register/${encodeURIComponent(uaid)}`, {
@@ -130,6 +132,8 @@ if (!response.ok) {
 You can confirm broker registration status via:
 
 - `GET /api/v1/register/status/:uaid`
+
+For normal profile or protocol updates, use the standard [`updateAgent(...)` flow](getting-started/update-agent.md) instead.
 
 ## Messaging status and fallbacks
 
