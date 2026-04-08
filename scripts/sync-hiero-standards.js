@@ -119,6 +119,16 @@ function fixHcs25InternalLinks(content) {
     '- Reference: (txn id or final tally link)',
   );
 
+  updated = updated.replace(
+    /```text\s*\n\{adapterId\}\.score\s*\n(?=#### Weights)/m,
+    '```text\n{adapterId}.score\n```\n\n',
+  );
+
+  updated = updated.replace(
+    /```\s*\n\{adapterId\}\.\{componentName\}\s*\n(?=Examples:)/m,
+    '```\n{adapterId}.{componentName}\n```\n\n',
+  );
+
   return updated;
 }
 
