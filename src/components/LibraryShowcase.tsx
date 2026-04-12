@@ -45,9 +45,9 @@ const libraryData = [
     icon: '💬',
   },
   {
-    title: 'Codex Plugin Scanner',
-    href: '/docs/libraries/codex-plugin-scanner',
-    description: 'Quality gate for Codex plugins - lint, verify, and scan for security and publishability',
+    title: 'AI Plugin Scanner',
+    href: '/docs/libraries/ai-plugin-scanner',
+    description: 'Repo for HOL Guard and plugin-scanner across Codex, Claude, Gemini, and OpenCode ecosystems',
     icon: '🔍',
   },
 ];

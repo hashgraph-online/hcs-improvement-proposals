@@ -397,12 +397,12 @@ const sidebars: SidebarsConfig = {
         },
         {
           type: 'category',
-          label: 'Codex Plugin Scanner',
-          link: { type: 'doc', id: 'libraries/codex-plugin-scanner/index' },
+          label: 'AI Plugin Scanner',
+          link: { type: 'doc', id: 'libraries/ai-plugin-scanner/index' },
           collapsible: true,
           collapsed: true,
           items: [
-            'libraries/codex-plugin-scanner/overview',
+            'libraries/ai-plugin-scanner/overview',
           ],
         },
       ],

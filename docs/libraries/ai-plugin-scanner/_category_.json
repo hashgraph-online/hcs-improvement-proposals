@@ -1,0 +1,8 @@
+{
+  "label": "AI Plugin Scanner",
+  "position": 8,
+  "link": {
+    "type": "doc",
+    "id": "libraries/ai-plugin-scanner/index"
+  }
+}
