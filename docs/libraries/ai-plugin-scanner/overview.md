@@ -125,7 +125,7 @@ High-value action capabilities:
 
 For the full action contract, use the upstream action documentation:
 
-- [AI Plugin Scanner Action README](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/action/README.md)
+- [AI Plugin Scanner Action README](https://github.com/hashgraph-online/ai-plugin-scanner-action/blob/main/README.md)
 - [Marketplace action repository](https://github.com/hashgraph-online/ai-plugin-scanner-action)
 
 ## Trust Score Provenance
