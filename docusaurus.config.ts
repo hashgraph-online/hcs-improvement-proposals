@@ -242,6 +242,7 @@ const config: Config = {
             { label: 'Hashnet MCP Server', href: 'https://hol.org/mcp' },
             { label: 'Standards SDK', to: '/docs/libraries/standards-sdk' },
             { label: 'Conversational Agent', to: '/docs/libraries/conversational-agent' },
+            { label: 'AI Plugin Scanner', to: '/docs/libraries/ai-plugin-scanner' },
             { type: 'html', className: 'navbar-dropdown-header', value: 'Resources' },
             { label: 'Tutorials', to: '/tutorials' },
           ],
