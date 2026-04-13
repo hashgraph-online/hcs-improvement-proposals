@@ -51,7 +51,11 @@ Start with these Guard guides:
 
 - [Guard get started](./guard/get-started.md)
 - [Local-first runtime and approvals](./guard/local-first-and-approvals.md)
+- [Local-first and optional cloud](./guard/local-first-vs-cloud.md)
+- [Approval center and audit trail](./guard/approval-center-and-audit.md)
+- [Guard architecture](./guard/architecture.md)
 - [Harness support matrix](./guard/harness-support.md)
+- [Testing and validation](./guard/testing-and-validation.md)
 
 ## plugin-scanner
 
@@ -106,35 +110,20 @@ It supports policy profiles (`default`, `public-marketplace`, `strict-security`)
 Start with these scanner guides:
 
 - [Scanner quick start](./plugin-scanner/quick-start.md)
+- [Ecosystems and repository mode](./plugin-scanner/ecosystems-and-repo-mode.md)
+- [Quality suite commands](./plugin-scanner/quality-suite-commands.md)
 - [Policies, output, and trust provenance](./plugin-scanner/policies-and-output.md)
-- [GitHub Action quality gate](./plugin-scanner/github-action.md)
+- [Trust provenance guide](./plugin-scanner/trust-provenance.md)
+- [Report formats and CI automation](./plugin-scanner/report-formats-and-ci.md)
 
 ## GitHub Action
 
-Use the Marketplace wrapper when you want the scanner in GitHub Actions:
+The Marketplace wrapper lives in the dedicated [`hashgraph-online/ai-plugin-scanner-action`](https://github.com/hashgraph-online/ai-plugin-scanner-action) repository. Use it when you want scanner checks in pull requests, release workflows, submission intake, or code-scanning automation without installing the CLI yourself.
 
-```yaml
-- name: AI plugin quality gate
-  uses: hashgraph-online/ai-plugin-scanner-action@v1
-  with:
-    plugin_dir: "."
-    mode: scan
-    fail_on_severity: high
-    min_score: 80
-```
+Start with these action guides:
 
-High-value action capabilities:
-
-- `mode: scan | lint | verify | submit`
-- SARIF upload to GitHub code scanning
-- policy outputs like `score`, `grade`, `policy_pass`, `verify_pass`, and `max_severity`
-- optional submission flows and registry payload export
-- default package installation from the reviewed `plugin-scanner` PyPI release
-
-For the full action contract, use the upstream action documentation:
-
-- [AI Plugin Scanner Action README](https://github.com/hashgraph-online/ai-plugin-scanner-action/blob/main/README.md)
-- [Marketplace action repository](https://github.com/hashgraph-online/ai-plugin-scanner-action)
+- [GitHub Action quality gate](./plugin-scanner/github-action.md)
+- [Submission and registry payloads](./plugin-scanner/submission-and-registry-payloads.md)
 
 ## Trust Score Provenance
 

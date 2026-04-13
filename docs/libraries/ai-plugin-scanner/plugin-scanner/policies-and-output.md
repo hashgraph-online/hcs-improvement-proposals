@@ -99,6 +99,8 @@ docker run --rm \
 ## Next guides
 
 - [Scanner quick start](./quick-start.md)
+- [Quality suite commands](./quality-suite-commands.md)
+- [Report formats and CI automation](./report-formats-and-ci.md)
 - [Trust provenance guide](./trust-provenance.md)
 - [GitHub Action quality gate](./github-action.md)
 - [Local-first runtime and approvals](../guard/local-first-and-approvals.md)
