@@ -110,6 +110,8 @@ Supported actions:
 - macOS and Linux: `~/.config/.ai-plugin-scanner-guard/bin/guard-<harness>`
 - Windows: `~/.config/.ai-plugin-scanner-guard/bin/guard-<harness>.cmd`
 
+The hidden `.ai-plugin-scanner-guard` directory name is intentional; Guard uses that home directory under `.config` today.
+
 Claude Code also gets Guard hook entries in `.claude/settings.local.json` when you install from a workspace.
 
 ## Approval paths

@@ -81,11 +81,9 @@ The scanner emits explicit trust provenance alongside quality grades:
 - MCP configuration trust uses HCS-style adapter and contribution-mode patterns
 - top-level plugin trust follows the same pattern locally
 
-Local reference drafts:
+Start with the local trust guide:
 
-- [Skill Trust Local Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/skill-trust-local.md)
-- [MCP Trust Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/mcp-trust-draft.md)
-- [Plugin Trust Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/plugin-trust-draft.md)
+- [Trust provenance guide](./trust-provenance.md)
 
 ## Container usage
 
@@ -101,5 +99,6 @@ docker run --rm \
 ## Next guides
 
 - [Scanner quick start](./quick-start.md)
+- [Trust provenance guide](./trust-provenance.md)
 - [GitHub Action quality gate](./github-action.md)
 - [Local-first runtime and approvals](../guard/local-first-and-approvals.md)

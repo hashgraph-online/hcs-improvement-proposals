@@ -422,6 +422,7 @@ const sidebars: SidebarsConfig = {
               items: [
                 'libraries/ai-plugin-scanner/plugin-scanner/quick-start',
                 'libraries/ai-plugin-scanner/plugin-scanner/policies-and-output',
+                'libraries/ai-plugin-scanner/plugin-scanner/trust-provenance',
                 'libraries/ai-plugin-scanner/plugin-scanner/github-action',
               ],
             },

@@ -36,7 +36,7 @@ hol-guard run codex
 hol-guard approvals
 hol-guard receipts
 hol-guard status
-hol-guard doctor codex --json
+hol-guard detect codex --json
 ```
 
 Supported harnesses today:
@@ -144,11 +144,9 @@ The scanner emits explicit trust provenance alongside quality grades:
 - MCP configuration trust uses HCS-style adapter and contribution-mode patterns
 - top-level plugin trust follows the same pattern locally
 
-Local specs:
+Start with the local trust guide:
 
-- [Skill Trust Local Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/skill-trust-local.md)
-- [MCP Trust Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/mcp-trust-draft.md)
-- [Plugin Trust Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/plugin-trust-draft.md)
+- [Trust provenance guide](./plugin-scanner/trust-provenance.md)
 
 ## Config File
 
