@@ -78,6 +78,7 @@ The common split is:
 
 ## Next guides
 
+- [Submission and registry payloads](./submission-and-registry-payloads.md)
+- [Report formats and CI automation](./report-formats-and-ci.md)
 - [Scanner quick start](./quick-start.md)
-- [Policies, output, and trust provenance](./policies-and-output.md)
 - [Guard get started](../guard/get-started.md)

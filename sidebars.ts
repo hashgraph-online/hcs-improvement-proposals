@@ -411,7 +411,11 @@ const sidebars: SidebarsConfig = {
               items: [
                 'libraries/ai-plugin-scanner/guard/get-started',
                 'libraries/ai-plugin-scanner/guard/local-first-and-approvals',
+                'libraries/ai-plugin-scanner/guard/local-first-vs-cloud',
+                'libraries/ai-plugin-scanner/guard/approval-center-and-audit',
+                'libraries/ai-plugin-scanner/guard/architecture',
                 'libraries/ai-plugin-scanner/guard/harness-support',
+                'libraries/ai-plugin-scanner/guard/testing-and-validation',
               ],
             },
             {
@@ -421,9 +425,21 @@ const sidebars: SidebarsConfig = {
               collapsed: true,
               items: [
                 'libraries/ai-plugin-scanner/plugin-scanner/quick-start',
+                'libraries/ai-plugin-scanner/plugin-scanner/ecosystems-and-repo-mode',
+                'libraries/ai-plugin-scanner/plugin-scanner/quality-suite-commands',
                 'libraries/ai-plugin-scanner/plugin-scanner/policies-and-output',
                 'libraries/ai-plugin-scanner/plugin-scanner/trust-provenance',
+                'libraries/ai-plugin-scanner/plugin-scanner/report-formats-and-ci',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'GitHub Action',
+              collapsible: true,
+              collapsed: true,
+              items: [
                 'libraries/ai-plugin-scanner/plugin-scanner/github-action',
+                'libraries/ai-plugin-scanner/plugin-scanner/submission-and-registry-payloads',
               ],
             },
           ],

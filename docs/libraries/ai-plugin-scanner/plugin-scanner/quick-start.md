@@ -95,6 +95,8 @@ If your repository uses a Codex marketplace root like `.agents/plugins/marketpla
 
 ## Next guides
 
+- [Ecosystems and repository mode](./ecosystems-and-repo-mode.md)
+- [Quality suite commands](./quality-suite-commands.md)
 - [Policies, output, and trust provenance](./policies-and-output.md)
 - [GitHub Action quality gate](./github-action.md)
 - [Guard get started](../guard/get-started.md)
