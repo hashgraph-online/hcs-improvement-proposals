@@ -403,6 +403,28 @@ const sidebars: SidebarsConfig = {
           collapsed: true,
           items: [
             'libraries/ai-plugin-scanner/overview',
+            {
+              type: 'category',
+              label: 'HOL Guard',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/ai-plugin-scanner/guard/get-started',
+                'libraries/ai-plugin-scanner/guard/local-first-and-approvals',
+                'libraries/ai-plugin-scanner/guard/harness-support',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'plugin-scanner',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/ai-plugin-scanner/plugin-scanner/quick-start',
+                'libraries/ai-plugin-scanner/plugin-scanner/policies-and-output',
+                'libraries/ai-plugin-scanner/plugin-scanner/github-action',
+              ],
+            },
           ],
         },
       ],
