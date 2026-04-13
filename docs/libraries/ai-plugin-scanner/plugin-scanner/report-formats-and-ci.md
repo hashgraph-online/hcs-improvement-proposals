@@ -67,7 +67,7 @@ jobs:
   scan-plugin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
       - name: Install scanner
         run: pip install plugin-scanner
       - name: Scan plugin

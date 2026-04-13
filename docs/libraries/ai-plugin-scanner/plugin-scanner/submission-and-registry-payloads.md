@@ -27,7 +27,7 @@ jobs:
   scan-plugin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Scan and submit if eligible
         id: scan
@@ -67,7 +67,7 @@ jobs:
   scan-plugin:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Scan plugin
         id: scan
@@ -79,7 +79,7 @@ jobs:
           registry_payload_output: ai-plugin-registry-payload.json
 
       - name: Upload registry payload
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: ai-plugin-registry-payload
           path: ${{ steps.scan.outputs.registry_payload_path }}
