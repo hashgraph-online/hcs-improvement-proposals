@@ -36,7 +36,7 @@ hol-guard run codex
 hol-guard approvals
 hol-guard receipts
 hol-guard status
-hol-guard doctor codex --json
+hol-guard detect codex --json
 ```
 
 Supported harnesses today:
@@ -47,10 +47,11 @@ Supported harnesses today:
 - `gemini`
 - `opencode`
 
-Guard-specific documentation lives in the upstream repo:
+Start with these Guard guides:
 
-- [Guard get started](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/guard/get-started.md)
-- [Guard repository](https://github.com/hashgraph-online/ai-plugin-scanner)
+- [Guard get started](./guard/get-started.md)
+- [Local-first runtime and approvals](./guard/local-first-and-approvals.md)
+- [Harness support matrix](./guard/harness-support.md)
 
 ## plugin-scanner
 
@@ -72,6 +73,7 @@ Current built-in ecosystem adapters:
 ### Scanner quick start
 
 ```bash
+pip install plugin-scanner
 plugin-scanner lint .
 plugin-scanner verify .
 plugin-scanner scan . --format json
@@ -100,6 +102,12 @@ plugin-scanner doctor . --component mcp --bundle dist/doctor.zip
 - trust provenance for skills, MCP configuration, and top-level plugin packages
 
 It supports policy profiles (`default`, `public-marketplace`, `strict-security`), baseline suppressions, config files like `.plugin-scanner.toml`, JSON/Markdown/SARIF output, and repository-mode scanning for marketplace roots that enumerate local plugins under `./plugins/...`.
+
+Start with these scanner guides:
+
+- [Scanner quick start](./plugin-scanner/quick-start.md)
+- [Policies, output, and trust provenance](./plugin-scanner/policies-and-output.md)
+- [GitHub Action quality gate](./plugin-scanner/github-action.md)
 
 ## GitHub Action
 
@@ -136,11 +144,9 @@ The scanner emits explicit trust provenance alongside quality grades:
 - MCP configuration trust uses HCS-style adapter and contribution-mode patterns
 - top-level plugin trust follows the same pattern locally
 
-Local specs:
+Start with the local trust guide:
 
-- [Skill Trust Local Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/skill-trust-local.md)
-- [MCP Trust Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/mcp-trust-draft.md)
-- [Plugin Trust Draft](https://github.com/hashgraph-online/ai-plugin-scanner/blob/main/docs/trust/plugin-trust-draft.md)
+- [Trust provenance guide](./plugin-scanner/trust-provenance.md)
 
 ## Config File
 
@@ -178,6 +184,7 @@ docker run --rm \
 - [plugin-scanner on PyPI](https://pypi.org/project/plugin-scanner/)
 - [HOL Plugin Registry](https://hol.org/registry/plugins)
 - [GitHub Repository](https://github.com/hashgraph-online/ai-plugin-scanner)
+- [AI Plugin Scanner Action](https://github.com/hashgraph-online/ai-plugin-scanner-action)
 
 ## Project Basics
 
