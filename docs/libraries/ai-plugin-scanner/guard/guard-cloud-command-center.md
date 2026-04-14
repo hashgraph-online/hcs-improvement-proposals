@@ -24,8 +24,10 @@ Guard Cloud takes the local runtime evidence you already trust and turns it into
 | `/guard/dashboard` | What needs attention right now, what Guard already handled, and what to do next |
 | `/guard/devices` | Which devices and harnesses are protected, connected, and syncing |
 | `/guard/changes` | Which approved artifacts drifted and now need review |
+| `/guard/history` | Long-term timeline and drift patterns for artifacts |
 | `/guard/alerts` | Which risky changes should interrupt you and which can stay in digest form |
 | `/guard/artifacts` | What lives in shared inventory and how artifact trust looks right now |
+| `/guard/abom` | The artifact bill of materials view for the broader trust estate |
 | `/guard/receipts` | What the latest synced receipts say before you open long-term history |
 | `/guard/policy` | Which shared defaults should apply across the team |
 | `/guard/exceptions` | Which temporary bypass windows are still active or expiring |
@@ -38,7 +40,7 @@ The signed-in dashboard is easier to understand if you treat it as a state-aware
 
 1. **Onboarding** — signed in, but no protected runtime has shown up yet
 2. **Solo local-only** — Guard is protecting one machine, but trust history still stops there
-3. **Solo synced** — receipts are syncing, so Home can highlight changed artifacts instead of setup chores
+3. **Solo synced** — receipts are syncing, so the dashboard can highlight changed artifacts instead of setup chores
 4. **Team admin** — the shared queue matters more than one laptop, so policy and exceptions move to the center
 5. **Workspace operator** — delegated approvals and managed agents become the primary operating surface
 

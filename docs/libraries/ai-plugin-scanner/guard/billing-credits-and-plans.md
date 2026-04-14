@@ -4,7 +4,7 @@ title: Billing, credits, and plans
 
 # Billing, credits, and plans
 
-Use this guide when you need to explain what stays free in local Guard, what Guard Cloud adds later, and why plan pressure should feel like pain relief instead of random upsell.
+Use this guide when you want to understand what stays free in local Guard, what Guard Cloud adds later, and why plan pressure should feel like pain relief instead of random upsell.
 
 ## What stays local and unmetered
 

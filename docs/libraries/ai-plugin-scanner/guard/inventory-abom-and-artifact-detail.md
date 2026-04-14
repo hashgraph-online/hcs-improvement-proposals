@@ -22,7 +22,7 @@ Keeping those layers separate makes it easier to answer whether something is mer
 | :--- | :--- |
 | `/guard/artifacts` or `/guard/inventory` | What is in shared trust memory right now? |
 | `/guard/abom` | What does the broader artifact estate look like at a system level? |
-| `/guard/artifacts/<id>` | What happened to this one artifact over time? |
+| `/guard/artifacts/:id` | What happened to this one artifact over time? |
 
 ## What belongs in inventory
 
