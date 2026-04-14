@@ -146,4 +146,7 @@ hol-guard receipts
 - [Harness support matrix](./harness-support.md)
 - [Codex harness](./codex-harness.md)
 - [Claude Code harness](./claude-code-harness.md)
+- [Cursor harness](./cursor-harness.md)
+- [Gemini harness](./gemini-harness.md)
+- [OpenCode harness](./opencode-harness.md)
 - [Scanner quick start](../plugin-scanner/quick-start.md)

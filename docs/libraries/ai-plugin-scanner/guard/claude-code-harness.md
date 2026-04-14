@@ -78,3 +78,4 @@ Use a workspace that already has `.claude` config or agents, then confirm:
 - [Cursor harness](./cursor-harness.md)
 - [Local-first runtime and approvals](./local-first-and-approvals.md)
 - [Approval center and audit trail](./approval-center-and-audit.md)
+- [Testing and validation](./testing-and-validation.md)

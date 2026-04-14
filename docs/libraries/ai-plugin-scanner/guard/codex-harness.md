@@ -41,6 +41,7 @@ hol-guard detect codex --json
 hol-guard install codex
 hol-guard run codex --dry-run
 hol-guard run codex
+hol-guard approvals
 ```
 
 `hol-guard install codex` creates a local Guard shim and keeps Codex launch interception outside your repository config. Guard does not rewrite the Codex config itself.
