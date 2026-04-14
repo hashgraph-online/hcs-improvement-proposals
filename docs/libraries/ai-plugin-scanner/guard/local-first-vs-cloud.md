@@ -68,6 +68,6 @@ Cloud features start to matter when you need:
 
 ## Next guides
 
-- [Local-first runtime and approvals](./local-first-and-approvals.md)
-- [Approval center and audit trail](./approval-center-and-audit.md)
-- [Guard get started](./get-started.md)
+- [Guard Cloud command center](./guard-cloud-command-center.md)
+- [Devices and shared trust memory](./devices-and-shared-trust.md)
+- [Billing, credits, and plans](./billing-credits-and-plans.md)

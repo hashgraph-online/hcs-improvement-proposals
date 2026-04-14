@@ -425,6 +425,22 @@ const sidebars: SidebarsConfig = {
             },
             {
               type: 'category',
+              label: 'Guard Cloud',
+              collapsible: true,
+              collapsed: true,
+              items: [
+                'libraries/ai-plugin-scanner/guard/guard-cloud-command-center',
+                'libraries/ai-plugin-scanner/guard/devices-and-shared-trust',
+                'libraries/ai-plugin-scanner/guard/inventory-abom-and-artifact-detail',
+                'libraries/ai-plugin-scanner/guard/receipts-changes-and-history',
+                'libraries/ai-plugin-scanner/guard/alerts-watchlists-and-advisories',
+                'libraries/ai-plugin-scanner/guard/team-policy-and-delegated-approvals',
+                'libraries/ai-plugin-scanner/guard/exceptions-and-expiring-windows',
+                'libraries/ai-plugin-scanner/guard/billing-credits-and-plans',
+              ],
+            },
+            {
+              type: 'category',
               label: 'plugin-scanner',
               collapsible: true,
               collapsed: true,
