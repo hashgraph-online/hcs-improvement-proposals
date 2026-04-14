@@ -66,6 +66,6 @@ These surfaces are functional but still feel operational rather than productized
 
 ## Next guides
 
-- [Guard get started](./get-started.md)
-- [Testing and validation](./testing-and-validation.md)
-- [Guard architecture](./architecture.md)
+- [Receipts, changes, and history](./receipts-changes-and-history.md)
+- [Inventory, ABOM, and artifact detail](./inventory-abom-and-artifact-detail.md)
+- [Exceptions and expiring windows](./exceptions-and-expiring-windows.md)

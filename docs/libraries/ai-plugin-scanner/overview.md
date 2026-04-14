@@ -62,6 +62,17 @@ Start with these Guard guides:
 - [OpenCode harness](./guard/opencode-harness.md)
 - [Testing and validation](./guard/testing-and-validation.md)
 
+When local Guard is already working and you want the signed-in operating model:
+
+- [Guard Cloud command center](./guard/guard-cloud-command-center.md)
+- [Devices and shared trust memory](./guard/devices-and-shared-trust.md)
+- [Inventory, ABOM, and artifact detail](./guard/inventory-abom-and-artifact-detail.md)
+- [Receipts, changes, and history](./guard/receipts-changes-and-history.md)
+- [Alerts, watchlists, and advisories](./guard/alerts-watchlists-and-advisories.md)
+- [Team policy and delegated approvals](./guard/team-policy-and-delegated-approvals.md)
+- [Exceptions and expiring windows](./guard/exceptions-and-expiring-windows.md)
+- [Billing, credits, and plans](./guard/billing-credits-and-plans.md)
+
 ## plugin-scanner
 
 `plugin-scanner` is the CI and maintainer-facing quality suite. It scans plugin manifests, marketplace metadata, skills, MCP configuration, apps, assets, and repository security posture. It can work against a single plugin or auto-detect supported plugin ecosystems inside a repository root.
