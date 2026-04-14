@@ -55,6 +55,11 @@ Start with these Guard guides:
 - [Approval center and audit trail](./guard/approval-center-and-audit.md)
 - [Guard architecture](./guard/architecture.md)
 - [Harness support matrix](./guard/harness-support.md)
+- [Codex harness](./guard/codex-harness.md)
+- [Claude Code harness](./guard/claude-code-harness.md)
+- [Cursor harness](./guard/cursor-harness.md)
+- [Gemini harness](./guard/gemini-harness.md)
+- [OpenCode harness](./guard/opencode-harness.md)
 - [Testing and validation](./guard/testing-and-validation.md)
 
 ## plugin-scanner

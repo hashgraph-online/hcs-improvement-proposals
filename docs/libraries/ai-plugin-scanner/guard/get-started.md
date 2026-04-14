@@ -144,4 +144,6 @@ hol-guard receipts
 
 - [Local-first runtime and approvals](./local-first-and-approvals.md)
 - [Harness support matrix](./harness-support.md)
+- [Codex harness](./codex-harness.md)
+- [Claude Code harness](./claude-code-harness.md)
 - [Scanner quick start](../plugin-scanner/quick-start.md)
