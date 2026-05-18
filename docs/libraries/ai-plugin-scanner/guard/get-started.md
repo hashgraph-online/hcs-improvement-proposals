@@ -29,15 +29,15 @@ pipx install hol-guard
    hol-guard init
    ```
 
-   `hol-guard init` opens the local dashboard, finds supported harnesses, installs Guard-managed app commands where possible, starts the Guard Cloud connect flow when you want shared history, and runs desktop notification setup so approval prompts can reach you outside the terminal.
+   `hol-guard init` opens the local dashboard, discovers supported harnesses, installs managed commands, optionally connects to Guard Cloud for shared history, and configures desktop notifications so approval prompts reach you outside the terminal.
 
-2. Use the manual discovery path only when you want to inspect each setup step yourself.
+2. **Alternative:** Use the manual discovery path if you prefer to inspect each setup step individually.
 
    ```bash
    hol-guard bootstrap
    ```
 
-3. Install Guard in front of the harness you use most when you are not using `hol-guard init`.
+3. **Manual path:** If you skipped `hol-guard init`, install Guard in front of the harness you use most.
 
    ```bash
    hol-guard install codex
