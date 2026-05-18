@@ -23,37 +23,45 @@ pipx install hol-guard
 
 ## The everyday flow
 
-1. Detect the harnesses Guard can manage on this machine.
+1. Run the guided first-install flow.
+
+   ```bash
+   hol-guard init
+   ```
+
+   `hol-guard init` opens the local dashboard, finds supported harnesses, installs Guard-managed app commands where possible, starts the Guard Cloud connect flow when you want shared history, and runs desktop notification setup so approval prompts can reach you outside the terminal.
+
+2. Use the manual discovery path only when you want to inspect each setup step yourself.
 
    ```bash
    hol-guard bootstrap
    ```
 
-2. Install Guard in front of the harness you use most.
+3. Install Guard in front of the harness you use most when you are not using `hol-guard init`.
 
    ```bash
    hol-guard install codex
    ```
 
-3. Record a baseline once before you trust the current artifact set.
+4. Record a baseline once before you trust the current artifact set.
 
    ```bash
    hol-guard run codex --dry-run
    ```
 
-4. Launch through Guard after that.
+5. Launch through Guard after that.
 
    ```bash
    hol-guard run codex
    ```
 
-5. If Guard cannot pause inline, resolve the queued request in the local approval center.
+6. If Guard cannot pause inline, resolve the queued request in the local approval center.
 
    ```bash
    hol-guard approvals
    ```
 
-6. Inspect receipts, diffs, and current managed state.
+7. Inspect receipts, diffs, and current managed state.
 
    ```bash
    hol-guard receipts
