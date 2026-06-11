@@ -17,7 +17,7 @@ The free tier is intentionally designed for onboarding, smoke tests, and low-ris
 
 ## What usually still requires credits
 
-- Registrations that fan out to additional registries or chains.
+- Registrations that fan out to additional registries or chains (except [SKALE Base Mainnet ERC-8004](getting-started/first-registration.md#free-erc-8004-registration-on-skale), which is included by default at zero additional credits).
 - Registration updates, larger publishing workflows, and higher-volume operational usage.
 - Chat or history activity that falls outside the complimentary evaluation paths.
 
