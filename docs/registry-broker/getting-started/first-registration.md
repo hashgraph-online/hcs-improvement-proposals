@@ -137,6 +137,60 @@ pnpm tsx register-agent.ts
 
 If this script prints a UAID, your registration flow is complete. The rest of this page is optional detail.
 
+## Free ERC-8004 Registration on SKALE
+
+Registry Broker publishes every new agent to **SKALE Base Mainnet** ERC-8004 at **zero additional credits**. When you omit `additionalRegistries`, the broker automatically includes `erc-8004:skale-base-mainnet` in the same registration attempt.
+
+### What is free
+
+- **SKALE ERC-8004 on-chain registration** costs `0` additional credits. The broker covers gas for the SKALE identity-registry transaction.
+- **Default behavior**: omit `additionalRegistries` and SKALE is included automatically at no extra charge.
+- **Explicit SKALE selection**: set `additionalRegistries: ['erc-8004:skale-base-mainnet']` to target SKALE directly.
+
+### What may still require credits
+
+- The primary **HCS UAID inscription** (`registry: 'hashgraph-online'`) may still quote base credits unless your account is inside the [complimentary evaluation allowance](../free-tier.md).
+- **Other ERC-8004 networks** (for example Ethereum Sepolia, Base, or Polygon) still charge additional credits when included alongside SKALE.
+
+### Quote and register with SKALE
+
+Discover the enabled SKALE network from the catalog, then confirm the quote shows zero additional credits before registering:
+
+```typescript
+const catalog = await client.getAdditionalRegistries();
+const skaleKey =
+  catalog.registries
+    .flatMap((registry) => registry.networks)
+    .find((network) => network.key === 'erc-8004:skale-base-mainnet')?.key ??
+  'erc-8004:skale-base-mainnet';
+
+const skalePayload: AgentRegistrationRequest = {
+  profile,
+  registry: 'hashgraph-online',
+  communicationProtocol: 'a2a',
+  endpoint: 'https://your-agent.example.com/a2a',
+  additionalRegistries: [skaleKey],
+};
+
+const quote = await client.getRegistrationQuote(skalePayload);
+console.log('Base credits:', quote.baseCredits);
+console.log('Additional credits (SKALE):', quote.additionalCredits ?? 0);
+
+if ((quote.additionalCredits ?? 0) !== 0) {
+  throw new Error(`Expected SKALE additional credits to be 0, received ${quote.additionalCredits}`);
+}
+
+const registration = await client.registerAgent(skalePayload);
+```
+
+To rely on the broker default instead of passing `additionalRegistries`, use the same payload shape as the one-shot example above. The registration response includes `additionalRegistries` with the resolved SKALE network and `credits.additional: 0`.
+
+After `waitForRegistrationCompletion`, inspect `final.additional` (or the progress payload) and confirm the SKALE entry reports `status: "completed"` with an on-chain `agentId`.
+
+### Standards SDK demo
+
+The standards-sdk ships a focused SKALE walkthrough at `demo/registry-broker/register-agent-erc8004-skale.ts`. It resolves the SKALE catalog entry, asserts `additionalCredits === 0`, and prints the resulting UAID plus on-chain registration metadata.
+
 ## Advanced Registration Flow (Optional)
 
 ## Step 1 — Prepare the Agent Profile
@@ -230,7 +284,7 @@ Simple base registrations can quote `0` credits while your account is still insi
 
 ### Optional — Publish to ERC-8004 Networks (EVM + Solana)
 
-The Registry Broker multiplexes on-chain ERC-8004 deployments behind the `additionalRegistries` array (including Solana devnet). Discover the currently enabled networks and extend your payload before you register:
+The Registry Broker multiplexes on-chain ERC-8004 deployments behind the `additionalRegistries` array (including Solana devnet). **SKALE Base Mainnet is free** — see [Free ERC-8004 Registration on SKALE](#free-erc-8004-registration-on-skale) for the default zero-credit path. Discover the currently enabled networks and extend your payload before you register:
 
 ```typescript
 const catalog = await client.getAdditionalRegistries();

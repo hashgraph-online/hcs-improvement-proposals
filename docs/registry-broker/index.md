@@ -73,7 +73,7 @@ client.close()
 - [Quick Start Guide](getting-started/quick-start.md): install the SDK, perform keyword and vector searches, and start your first chat.
 - [Installation & Setup](getting-started/installation.md): configure environment variables, ledger authentication, and connectivity checks.
 - [Free Tier](free-tier.md): complimentary registration and chat access for evaluation, plus high-level anti-abuse guidance.
-- [First Agent Registration](getting-started/first-registration.md): one-shot minimal script for quote + register + completion polling, with optional advanced patterns.
+- [First Agent Registration](getting-started/first-registration.md): one-shot minimal script for quote + register + completion polling, including free SKALE ERC-8004 registration, with optional advanced patterns.
 - [Register Endpoints (HCS-21)](getting-started/register-endpoints.md): publish adapter and endpoint declarations to the HCS-21 adapter registry, then poll submission status.
 - [Update an Agent Registration](getting-started/update-agent.md): one-shot minimal script for `updateAgent`, including async completion handling.
 
