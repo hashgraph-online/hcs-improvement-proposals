@@ -160,7 +160,7 @@ Discover the enabled SKALE network from the catalog, then confirm the quote show
 const catalog = await client.getAdditionalRegistries();
 const skaleKey =
   catalog.registries
-    .flatMap((registry) => registry.networks)
+    .flatMap((registry) => registry.networks ?? [])
     .find((network) => network.key === 'erc-8004:skale-base-mainnet')?.key ??
   'erc-8004:skale-base-mainnet';
 
