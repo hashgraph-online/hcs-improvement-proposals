@@ -69,6 +69,21 @@ pipx install hol-guard
    hol-guard diff codex
    ```
 
+8. Inspect how Guard classifies commands before running them.
+
+   ```bash
+   hol-guard command test 'git push --force'
+   hol-guard command explain 'grep "rm -rf" README.md'
+   hol-guard command extensions
+   ```
+
+9. Scan supply-chain dependencies for known vulnerabilities.
+
+   ```bash
+   hol-guard supply-chain scan
+   hol-guard supply-chain explain minimist@1.2.5 --ecosystem npm
+   ```
+
 ## Fine-tune local policy
 
 Guard resolves decisions in this order:
@@ -157,4 +172,5 @@ hol-guard receipts
 - [Cursor harness](./cursor-harness.md)
 - [Gemini harness](./gemini-harness.md)
 - [OpenCode harness](./opencode-harness.md)
+- [Command activity tracking](./command-activity.md)
 - [Scanner quick start](../plugin-scanner/quick-start.md)
