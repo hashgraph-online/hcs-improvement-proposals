@@ -69,6 +69,20 @@ pipx install hol-guard
    hol-guard diff codex
    ```
 
+8. Track command activity — every command Guard evaluates is recorded with its decision, proof level, and outcome.
+
+   ```bash
+   hol-guard command list --harness codex
+   hol-guard command explain 'git push --force'
+   ```
+
+9. Use verified reads and contained writes to reduce approval prompts for safe operations.
+
+   ```bash
+   hol-guard verified-read local cat README.md
+   hol-guard contained-write patch-apply changes.patch
+   ```
+
 ## Fine-tune local policy
 
 Guard resolves decisions in this order:
@@ -157,4 +171,8 @@ hol-guard receipts
 - [Cursor harness](./cursor-harness.md)
 - [Gemini harness](./gemini-harness.md)
 - [OpenCode harness](./opencode-harness.md)
+- [Command activity tracking](./command-activity.md)
+- [GitHub command classification](./github-command-classification.md)
+- [Verified reads](./verified-reads.md)
+- [Contained writes](./contained-writes.md)
 - [Scanner quick start](../plugin-scanner/quick-start.md)

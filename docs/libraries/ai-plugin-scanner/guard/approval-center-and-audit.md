@@ -64,8 +64,28 @@ These surfaces are functional but still feel operational rather than productized
 4. inspect receipts and diffs only when something changes
 5. tune policy after repeated approvals show a stable pattern
 
+## Action-aware approval scopes
+
+Approval scopes now understand *which action* triggered the review — `PreToolUse`, `PostToolUse`, or other hook events. The approval center only shows scopes that are actionable for the current request type. PreToolUse scopes appear when a tool is about to execute; PostToolUse scopes appear after execution for result inspection. Irrelevant scopes are hidden, reducing cognitive load.
+
+## Browser MCP approvals
+
+Browser MCP interactions (Playwright, Puppeteer) have bounded, granular approval. Each browser action target is individually labeled — you approve "navigate to `https://example.com`" and "click element `.submit-button`" separately, not the entire browser session. This reduces blanket-approval risk while keeping the approval flow fast for repeated navigation.
+
+## Compound command handling
+
+When an AI agent runs a compound shell command (multiple commands chained with `&&`, `|`, or `;`), Guard evaluates each segment independently:
+
+- **Safe segments** (e.g., `git fetch origin`, `git log --oneline -5`) are allowed without approval
+- **Risky segments** (e.g., `git push --force`, `rm -rf`) require approval
+- **Compound Git inspections** — deterministic `cd` + safe Git operations — are recognized as low-risk chains and allowed without approval noise
+
+If any segment is unresolved (Guard can't statically prove safety), the entire compound command is queued for review with a clear explanation of which part needs attention.
+
 ## Next guides
 
 - [Receipts, changes, and history](./receipts-changes-and-history.md)
 - [Inventory, ABOM, and artifact detail](./inventory-abom-and-artifact-detail.md)
 - [Exceptions and expiring windows](./exceptions-and-expiring-windows.md)
+- [Command activity tracking](./command-activity.md)
+- [GitHub command classification](./github-command-classification.md)
