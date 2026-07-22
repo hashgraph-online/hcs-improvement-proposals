@@ -88,4 +88,3 @@ If any segment is unresolved (Guard can't statically prove safety), the entire c
 - [Inventory, ABOM, and artifact detail](./inventory-abom-and-artifact-detail.md)
 - [Exceptions and expiring windows](./exceptions-and-expiring-windows.md)
 - [Command activity tracking](./command-activity.md)
-- [GitHub command classification](./github-command-classification.md)

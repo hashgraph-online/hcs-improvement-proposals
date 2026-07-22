@@ -23,11 +23,12 @@ Guard does not meter local safety features. You can detect harnesses, install la
 
 Command activity tracking also works fully offline — every command Guard evaluates is recorded locally with its decision, proof level, and outcome. Command activity evidence is not synced to Cloud by default.
 
-## Advisory sync privacy
+## Supply-chain sync privacy
 
-Advisory database updates are optional and pull-only. When you run `hol-guard advisories sync`, Guard fetches a signed advisory list from `advisories.hol.org`. No local file paths, harness configs, receipt data, or workspace identifiers are sent to any server during sync.
+Supply-chain intelligence updates are optional and pull-only. When you run `hol-guard supply-chain sync` or `hol-guard cloud sync-intel`, Guard fetches a signed supply-chain bundle from Guard Cloud. No local file paths, harness configs, receipt data, or workspace identifiers are sent to any server during sync.
 
-If you haven't signed in to Guard Cloud, advisory sync is skipped and Guard continues using the locally bundled advisory database.
+If you haven't signed in to Guard Cloud, sync is skipped and Guard continues using the locally bundled supply-chain database.
+
 ## What cloud adds later
 
 Optional cloud features include:

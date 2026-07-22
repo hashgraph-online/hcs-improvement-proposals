@@ -5,67 +5,74 @@ sidebar_position: 6
 
 # Command activity tracking
 
-Every command Guard evaluates is recorded with its decision, proof level, and outcome — queryable via CLI and dashboard. This provides tamper-evident evidence without exposing matcher internals.
+Guard records every command it evaluates — the decision, the reason, and the proof level — as tamper-evident evidence. This evidence is viewable in the dashboard and via CLI inspection commands.
 
 ## What gets recorded
 
-Each command activity record includes:
+Each command evaluation includes:
 
 - **Command** — the evaluated command text
 - **Harness** — which AI agent submitted it (Codex, Claude, etc.)
 - **Decision** — allowed, blocked, or queued for approval
-- **Proof level** — how Guard verified the outcome (static proof, runtime observation, or unverified)
-- **Prompted** — whether the user was prompted for approval
-- **Extension ID** — which command extension handled it, if any
+- **Reason** — the policy rule that triggered the decision
 - **Timestamp** — when the command was evaluated
 
 ## Dashboard views
 
 ### Evidence workbench
 
-Navigate to `/evidence?view=commands` to see all command activity across harnesses. Filter by harness, status, proof level, or extension. Cursor-paginated for performance.
+The dashboard's evidence views show command activity across harnesses. Filter by harness, status, or risk category.
 
-### Per-harness activity
+### Analytics
 
-On any harness detail page (`/apps/{harness}?tab=activity&activity=commands`), three modes are available:
-
-- **Recorded actions** — all commands Guard evaluated for this harness
-- **Command protection** — commands that were blocked or queued
-- **Pending reviews** — commands still awaiting your decision
-
-### Home dashboard
-
-When command activity exists, a summary card appears on the home dashboard showing total commands checked.
-
-## Analytics
-
-The command activity dashboard provides:
+The evidence insights surface provides:
 
 - **Day-by-day breakdown** — commands evaluated per day
-- **Top-N commands** — most frequently evaluated commands
-- **Dimension breakdown** — by harness, proof level, extension, and status
-- **Extension catalog** — which extensions handled which commands
+- **Top apps by activity count** — most active harnesses
+- **Activity heatmap** — visual command volume over time
 
 A health indicator states when counts may be incomplete (e.g., after a daemon restart or evidence recovery).
 
-## CLI commands
+## CLI inspection commands
+
+### Test a command against current policy
 
 ```bash
-# List command activity for a harness
-hol-guard command list --harness codex
+hol-guard command test 'git push --force'
+```
 
-# Explain what Guard would do with a command
-hol-guard command explain 'git push --force'
+Shows what Guard would do with the command — allow, block, or queue for approval — without executing it.
 
-# Test a command against current policy
-hol-guard command test 'git reset --hard HEAD~1'
+### Explain a command's classification
 
-# List installed command extensions
+```bash
+hol-guard command explain 'grep "rm -rf" README.md'
+```
+
+Explains how Guard classifies the command and which rules apply.
+
+### List installed command extensions
+
+```bash
 hol-guard command extensions
 ```
 
-## Privacy
+Shows built-in command safety extensions that Guard uses to classify commands.
 
-Command activity evidence can be purged without breaking other evidence lifecycles. Purging command activity does not affect receipts or approval records.
+### Detect command ecosystems
 
-Feedback labels (marking a command as "correctly blocked" or "incorrectly blocked") are single-use — they don't auto-change policy. They're used for improvement, not automatic rule changes.
+```bash
+hol-guard command setup --detect --workspace .
+```
+
+Detects command ecosystems in the current workspace and previews recommended protection coverage.
+
+## Compound command pipelines
+
+Guard evaluates compound shell commands (chained with `&&`, `|`, or `;`) by splitting them into segments and evaluating each independently:
+
+- **Pipeline segments** — each segment gets a `pipeline_index` so Guard can track producer-to-consumer data flow
+- **PipelineMatcher** — detects when a pipeline sends sensitive data (like secrets) from a producer to a network consumer
+- **Per-segment decisions** — safe segments (like `git log`) are allowed; risky segments (like `git push --force`) require approval
+
+If any segment is unresolved (Guard can't statically prove safety), the entire compound command is queued for review.

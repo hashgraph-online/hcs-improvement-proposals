@@ -69,18 +69,19 @@ pipx install hol-guard
    hol-guard diff codex
    ```
 
-8. Track command activity — every command Guard evaluates is recorded with its decision, proof level, and outcome.
+8. Inspect how Guard classifies commands before running them.
 
    ```bash
-   hol-guard command list --harness codex
-   hol-guard command explain 'git push --force'
+   hol-guard command test 'git push --force'
+   hol-guard command explain 'grep "rm -rf" README.md'
+   hol-guard command extensions
    ```
 
-9. Use verified reads and contained writes to reduce approval prompts for safe operations.
+9. Scan supply-chain dependencies for known vulnerabilities.
 
    ```bash
-   hol-guard verified-read local cat README.md
-   hol-guard contained-write patch-apply changes.patch
+   hol-guard supply-chain scan
+   hol-guard supply-chain explain minimist@1.2.5 --ecosystem npm
    ```
 
 ## Fine-tune local policy
@@ -172,7 +173,4 @@ hol-guard receipts
 - [Gemini harness](./gemini-harness.md)
 - [OpenCode harness](./opencode-harness.md)
 - [Command activity tracking](./command-activity.md)
-- [GitHub command classification](./github-command-classification.md)
-- [Verified reads](./verified-reads.md)
-- [Contained writes](./contained-writes.md)
 - [Scanner quick start](../plugin-scanner/quick-start.md)
