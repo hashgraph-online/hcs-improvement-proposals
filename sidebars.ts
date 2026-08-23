@@ -412,6 +412,8 @@ const sidebars: SidebarsConfig = {
                 'libraries/ai-plugin-scanner/guard/get-started',
                 'libraries/ai-plugin-scanner/guard/local-first-and-approvals',
                 'libraries/ai-plugin-scanner/guard/local-first-vs-cloud',
+                'libraries/ai-plugin-scanner/guard/managed-controls-and-extensions',
+                'libraries/ai-plugin-scanner/guard/managed-controls-support-and-recovery',
                 'libraries/ai-plugin-scanner/guard/approval-center-and-audit',
                 'libraries/ai-plugin-scanner/guard/architecture',
                 'libraries/ai-plugin-scanner/guard/harness-support',
