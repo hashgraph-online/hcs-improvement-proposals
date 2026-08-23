@@ -29,6 +29,8 @@ That is why Guard can feel useful before sign-in.
 - powering alerts and watchlists
 - sharing policy across a team
 - supporting delegated approvals and managed workspaces
+- versioning, simulating, rolling out, and rolling back Control Sets
+- governing managed restrictions and fleet compatibility for Team and Enterprise
 
 ## Read billing as operator pressure
 
@@ -58,3 +60,4 @@ The strongest upgrade moments are operational, not cosmetic:
 - [Guard Cloud command center](./guard-cloud-command-center.md)
 - [Devices and shared trust memory](./devices-and-shared-trust.md)
 - [Local-first and optional cloud](./local-first-vs-cloud.md)
+- [Managed Controls and Extensions](./managed-controls-and-extensions.md)

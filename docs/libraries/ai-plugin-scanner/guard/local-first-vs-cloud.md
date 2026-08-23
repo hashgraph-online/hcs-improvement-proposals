@@ -38,8 +38,12 @@ Optional cloud features include:
 - revocation feeds
 - billing and entitlements
 - shared team policy
+- versioned Control Sets that target stable Extension and permission identities
+- capability-gated managed restrictions for supported Team and Enterprise devices
 
 `hol-guard login` and `hol-guard sync` extend the local runtime. They do not unlock the core safety workflow.
+
+When a managed device goes offline, Guard retains its last authenticated, compatible managed projection. Managed restrictions keep the last-known-good restrictive posture until a valid successor or authenticated unenrollment arrives; an outage does not silently weaken protection.
 
 ## Recommended rollout order
 
@@ -79,3 +83,4 @@ Cloud features start to matter when you need:
 - [Guard Cloud command center](./guard-cloud-command-center.md)
 - [Devices and shared trust memory](./devices-and-shared-trust.md)
 - [Billing, credits, and plans](./billing-credits-and-plans.md)
+- [Managed Controls and Extensions](./managed-controls-and-extensions.md)

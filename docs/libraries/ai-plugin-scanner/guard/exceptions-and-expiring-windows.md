@@ -42,6 +42,8 @@ Exceptions are a poor substitute for:
 
 Exceptions work best when a team policy pack already exists. Otherwise the queue becomes person-to-person friction instead of a controlled operating system.
 
+In Guard 3.0, contextual exceptions do not weaken a managed-restrictive floor. A future delegated-authority contract may allow bounded exceptions, but ordinary workspace rules and local exceptions never imply that authority.
+
 ## See it in product
 
 - [Guard exceptions](https://hol.org/guard/exceptions)
@@ -52,3 +54,4 @@ Exceptions work best when a team policy pack already exists. Otherwise the queue
 - [Team policy and delegated approvals](./team-policy-and-delegated-approvals.md)
 - [Receipts, changes, and history](./receipts-changes-and-history.md)
 - [Approval center and audit trail](./approval-center-and-audit.md)
+- [Managed Controls and Extensions](./managed-controls-and-extensions.md)
